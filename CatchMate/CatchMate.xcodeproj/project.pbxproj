@@ -10,12 +10,13 @@
 		536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAD2C189B230043B1DA /* AppDelegate.swift */; };
 		536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAF2C189B230043B1DA /* SceneDelegate.swift */; };
 		536BDDB22C189B230043B1DA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDB12C189B230043B1DA /* ViewController.swift */; };
-		536BDDB52C189B230043B1DA /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 536BDDB42C189B230043B1DA /* Base */; };
 		536BDDB72C189B240043B1DA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 536BDDB62C189B240043B1DA /* Assets.xcassets */; };
 		536BDDBA2C189B240043B1DA /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 536BDDB92C189B240043B1DA /* Base */; };
 		536BDDC52C189B240043B1DA /* CatchMateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDC42C189B240043B1DA /* CatchMateTests.swift */; };
 		536BDDCF2C189B240043B1DA /* CatchMateUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDCE2C189B240043B1DA /* CatchMateUITests.swift */; };
 		536BDDD12C189B240043B1DA /* CatchMateUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDD02C189B240043B1DA /* CatchMateUITestsLaunchTests.swift */; };
+		536BDDE02C196C380043B1DA /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 536BDDDF2C196C380043B1DA /* APIKeys.plist */; };
+		536BDDE22C196F510043B1DA /* Bundle+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDE12C196F510043B1DA /* Bundle+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,7 +41,6 @@
 		536BDDAD2C189B230043B1DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		536BDDAF2C189B230043B1DA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		536BDDB12C189B230043B1DA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		536BDDB42C189B230043B1DA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		536BDDB62C189B240043B1DA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		536BDDB92C189B240043B1DA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		536BDDBB2C189B240043B1DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -49,6 +49,8 @@
 		536BDDCA2C189B240043B1DA /* CatchMateUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CatchMateUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		536BDDCE2C189B240043B1DA /* CatchMateUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchMateUITests.swift; sourceTree = "<group>"; };
 		536BDDD02C189B240043B1DA /* CatchMateUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchMateUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		536BDDDF2C196C380043B1DA /* APIKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
+		536BDDE12C196F510043B1DA /* Bundle+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				536BDDAC2C189B230043B1DA /* CatchMate */,
+				536BDDB12C189B230043B1DA /* ViewController.swift */,
 				536BDDC32C189B240043B1DA /* CatchMateTests */,
 				536BDDCD2C189B240043B1DA /* CatchMateUITests */,
 				536BDDAB2C189B230043B1DA /* Products */,
@@ -99,13 +102,9 @@
 		536BDDAC2C189B230043B1DA /* CatchMate */ = {
 			isa = PBXGroup;
 			children = (
-				536BDDAD2C189B230043B1DA /* AppDelegate.swift */,
-				536BDDAF2C189B230043B1DA /* SceneDelegate.swift */,
-				536BDDB12C189B230043B1DA /* ViewController.swift */,
-				536BDDB32C189B230043B1DA /* Main.storyboard */,
-				536BDDB62C189B240043B1DA /* Assets.xcassets */,
-				536BDDB82C189B240043B1DA /* LaunchScreen.storyboard */,
-				536BDDBB2C189B240043B1DA /* Info.plist */,
+				536BDDDD2C1969370043B1DA /* APP */,
+				536BDDDE2C196BEB0043B1DA /* Resources */,
+				536BDDE32C196FD10043B1DA /* Utilities */,
 			);
 			path = CatchMate;
 			sourceTree = "<group>";
@@ -125,6 +124,42 @@
 				536BDDD02C189B240043B1DA /* CatchMateUITestsLaunchTests.swift */,
 			);
 			path = CatchMateUITests;
+			sourceTree = "<group>";
+		};
+		536BDDDD2C1969370043B1DA /* APP */ = {
+			isa = PBXGroup;
+			children = (
+				536BDDAD2C189B230043B1DA /* AppDelegate.swift */,
+				536BDDAF2C189B230043B1DA /* SceneDelegate.swift */,
+			);
+			path = APP;
+			sourceTree = "<group>";
+		};
+		536BDDDE2C196BEB0043B1DA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				536BDDB62C189B240043B1DA /* Assets.xcassets */,
+				536BDDB82C189B240043B1DA /* LaunchScreen.storyboard */,
+				536BDDBB2C189B240043B1DA /* Info.plist */,
+				536BDDDF2C196C380043B1DA /* APIKeys.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		536BDDE32C196FD10043B1DA /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				536BDDE42C196FFD0043B1DA /* Extensions */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		536BDDE42C196FFD0043B1DA /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				536BDDE12C196F510043B1DA /* Bundle+Extension.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -231,9 +266,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				536BDDE02C196C380043B1DA /* APIKeys.plist in Resources */,
 				536BDDB72C189B240043B1DA /* Assets.xcassets in Resources */,
 				536BDDBA2C189B240043B1DA /* Base in Resources */,
-				536BDDB52C189B230043B1DA /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,6 +296,7 @@
 				536BDDB22C189B230043B1DA /* ViewController.swift in Sources */,
 				536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */,
 				536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */,
+				536BDDE22C196F510043B1DA /* Bundle+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,14 +333,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		536BDDB32C189B230043B1DA /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				536BDDB42C189B230043B1DA /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		536BDDB82C189B240043B1DA /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -444,10 +472,9 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 977J65FA28;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CatchMate/Info.plist;
+				INFOPLIST_FILE = CatchMate/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -477,10 +504,9 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 977J65FA28;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CatchMate/Info.plist;
+				INFOPLIST_FILE = CatchMate/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
