@@ -17,6 +17,15 @@
 		536BDDD12C189B240043B1DA /* CatchMateUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDD02C189B240043B1DA /* CatchMateUITestsLaunchTests.swift */; };
 		536BDDE02C196C380043B1DA /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 536BDDDF2C196C380043B1DA /* APIKeys.plist */; };
 		536BDDE22C196F510043B1DA /* Bundle+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDE12C196F510043B1DA /* Bundle+Extension.swift */; };
+		536BDDE92C1971C70043B1DA /* LoginReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDE82C1971C70043B1DA /* LoginReactor.swift */; };
+		536BDDEC2C19720E0043B1DA /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDEB2C19720E0043B1DA /* User.swift */; };
+		536BDDF02C1972360043B1DA /* LoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDEF2C1972360043B1DA /* LoginUseCase.swift */; };
+		536BDDF32C1972530043B1DA /* LoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDF22C1972530043B1DA /* LoginRepository.swift */; };
+		536BDDF62C1972740043B1DA /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDF52C1972740043B1DA /* UserDTO.swift */; };
+		536BDDF92C1972880043B1DA /* UserMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDF82C1972880043B1DA /* UserMapper.swift */; };
+		536BDDFC2C1972A00043B1DA /* UserRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDFB2C1972A00043B1DA /* UserRepositoryImpl.swift */; };
+		536BDDFF2C1972D30043B1DA /* UserDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDFE2C1972D30043B1DA /* UserDataSource.swift */; };
+		536BDE022C1973050043B1DA /* TeamButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE012C1973050043B1DA /* TeamButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +60,15 @@
 		536BDDD02C189B240043B1DA /* CatchMateUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchMateUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		536BDDDF2C196C380043B1DA /* APIKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
 		536BDDE12C196F510043B1DA /* Bundle+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extension.swift"; sourceTree = "<group>"; };
+		536BDDE82C1971C70043B1DA /* LoginReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginReactor.swift; sourceTree = "<group>"; };
+		536BDDEB2C19720E0043B1DA /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		536BDDEF2C1972360043B1DA /* LoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUseCase.swift; sourceTree = "<group>"; };
+		536BDDF22C1972530043B1DA /* LoginRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepository.swift; sourceTree = "<group>"; };
+		536BDDF52C1972740043B1DA /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
+		536BDDF82C1972880043B1DA /* UserMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMapper.swift; sourceTree = "<group>"; };
+		536BDDFB2C1972A00043B1DA /* UserRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepositoryImpl.swift; sourceTree = "<group>"; };
+		536BDDFE2C1972D30043B1DA /* UserDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataSource.swift; sourceTree = "<group>"; };
+		536BDE012C1973050043B1DA /* TeamButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,7 +100,6 @@
 			isa = PBXGroup;
 			children = (
 				536BDDAC2C189B230043B1DA /* CatchMate */,
-				536BDDB12C189B230043B1DA /* ViewController.swift */,
 				536BDDC32C189B240043B1DA /* CatchMateTests */,
 				536BDDCD2C189B240043B1DA /* CatchMateUITests */,
 				536BDDAB2C189B230043B1DA /* Products */,
@@ -105,6 +122,10 @@
 				536BDDDD2C1969370043B1DA /* APP */,
 				536BDDDE2C196BEB0043B1DA /* Resources */,
 				536BDDE32C196FD10043B1DA /* Utilities */,
+				536BDDE52C1971830043B1DA /* Presentaions */,
+				536BDDEA2C1971D20043B1DA /* Domain */,
+				536BDDF42C1972590043B1DA /* Data */,
+				536BDE032C1973090043B1DA /* DesignSystem */,
 			);
 			path = CatchMate;
 			sourceTree = "<group>";
@@ -160,6 +181,124 @@
 				536BDDE12C196F510043B1DA /* Bundle+Extension.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		536BDDE52C1971830043B1DA /* Presentaions */ = {
+			isa = PBXGroup;
+			children = (
+				536BDDE72C1971AF0043B1DA /* ViewModel */,
+				536BDDE62C1971950043B1DA /* View */,
+			);
+			path = Presentaions;
+			sourceTree = "<group>";
+		};
+		536BDDE62C1971950043B1DA /* View */ = {
+			isa = PBXGroup;
+			children = (
+				536BDDB12C189B230043B1DA /* ViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		536BDDE72C1971AF0043B1DA /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				536BDDE82C1971C70043B1DA /* LoginReactor.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		536BDDEA2C1971D20043B1DA /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				536BDDF12C19723B0043B1DA /* Repositories */,
+				536BDDEE2C1972230043B1DA /* UseCases */,
+				536BDDED2C1972120043B1DA /* Model */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		536BDDED2C1972120043B1DA /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				536BDDEB2C19720E0043B1DA /* User.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		536BDDEE2C1972230043B1DA /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+				536BDDEF2C1972360043B1DA /* LoginUseCase.swift */,
+			);
+			path = UseCases;
+			sourceTree = "<group>";
+		};
+		536BDDF12C19723B0043B1DA /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				536BDDF22C1972530043B1DA /* LoginRepository.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		536BDDF42C1972590043B1DA /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				536BDDF72C1972780043B1DA /* DTO */,
+				536BDDFA2C19728C0043B1DA /* Mapper */,
+				536BDDFD2C1972A40043B1DA /* Repositories */,
+				536BDE002C1972D80043B1DA /* DataSources */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		536BDDF72C1972780043B1DA /* DTO */ = {
+			isa = PBXGroup;
+			children = (
+				536BDDF52C1972740043B1DA /* UserDTO.swift */,
+			);
+			path = DTO;
+			sourceTree = "<group>";
+		};
+		536BDDFA2C19728C0043B1DA /* Mapper */ = {
+			isa = PBXGroup;
+			children = (
+				536BDDF82C1972880043B1DA /* UserMapper.swift */,
+			);
+			path = Mapper;
+			sourceTree = "<group>";
+		};
+		536BDDFD2C1972A40043B1DA /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				536BDDFB2C1972A00043B1DA /* UserRepositoryImpl.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		536BDE002C1972D80043B1DA /* DataSources */ = {
+			isa = PBXGroup;
+			children = (
+				536BDDFE2C1972D30043B1DA /* UserDataSource.swift */,
+			);
+			path = DataSources;
+			sourceTree = "<group>";
+		};
+		536BDE032C1973090043B1DA /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				536BDE042C1973140043B1DA /* Components */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		536BDE042C1973140043B1DA /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				536BDE012C1973050043B1DA /* TeamButton.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -294,7 +433,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				536BDDB22C189B230043B1DA /* ViewController.swift in Sources */,
+				536BDDF92C1972880043B1DA /* UserMapper.swift in Sources */,
+				536BDDFC2C1972A00043B1DA /* UserRepositoryImpl.swift in Sources */,
+				536BDDF32C1972530043B1DA /* LoginRepository.swift in Sources */,
 				536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */,
+				536BDDFF2C1972D30043B1DA /* UserDataSource.swift in Sources */,
+				536BDDEC2C19720E0043B1DA /* User.swift in Sources */,
+				536BDDE92C1971C70043B1DA /* LoginReactor.swift in Sources */,
+				536BDE022C1973050043B1DA /* TeamButton.swift in Sources */,
+				536BDDF02C1972360043B1DA /* LoginUseCase.swift in Sources */,
+				536BDDF62C1972740043B1DA /* UserDTO.swift in Sources */,
 				536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */,
 				536BDDE22C196F510043B1DA /* Bundle+Extension.swift in Sources */,
 			);
