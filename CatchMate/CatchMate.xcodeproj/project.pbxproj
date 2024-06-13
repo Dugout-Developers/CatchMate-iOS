@@ -389,6 +389,14 @@
 				Base,
 			);
 			mainGroup = 536BDDA12C189B230043B1DA;
+			packageReferences = (
+				536BDE092C1B4F1F0043B1DA /* XCRemoteSwiftPackageReference "PinLayout" */,
+				536BDE0A2C1B4F910043B1DA /* XCRemoteSwiftPackageReference "FlexLayout" */,
+				536BDE0B2C1B4F9E0043B1DA /* XCRemoteSwiftPackageReference "SnapKit" */,
+				536BDE0D2C1B50BC0043B1DA /* XCRemoteSwiftPackageReference "RxSwift" */,
+				536BDE0E2C1B50CB0043B1DA /* XCRemoteSwiftPackageReference "ReactorKit" */,
+				536BDE0F2C1B51440043B1DA /* XCRemoteSwiftPackageReference "RxAlamofire" */,
+			);
 			productRefGroup = 536BDDAB2C189B230043B1DA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -791,6 +799,57 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		536BDE092C1B4F1F0043B1DA /* XCRemoteSwiftPackageReference "PinLayout" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/layoutBox/PinLayout.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.10.5;
+			};
+		};
+		536BDE0A2C1B4F910043B1DA /* XCRemoteSwiftPackageReference "FlexLayout" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/layoutBox/FlexLayout";
+			requirement = {
+				kind = exactVersion;
+				version = 2.0.6;
+			};
+		};
+		536BDE0B2C1B4F9E0043B1DA /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+		536BDE0D2C1B50BC0043B1DA /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.6.0;
+			};
+		};
+		536BDE0E2C1B50CB0043B1DA /* XCRemoteSwiftPackageReference "ReactorKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactorKit/ReactorKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.2.0;
+			};
+		};
+		536BDE0F2C1B51440043B1DA /* XCRemoteSwiftPackageReference "RxAlamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxAlamofire.git";
+			requirement = {
+				kind = exactVersion;
+				version = 6.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = 536BDDA22C189B230043B1DA /* Project object */;
 }
