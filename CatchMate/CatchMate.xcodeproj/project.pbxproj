@@ -41,6 +41,7 @@
 		536BDE2D2C1B55080043B1DA /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE2C2C1B55080043B1DA /* AddViewController.swift */; };
 		536BDE2F2C1B55240043B1DA /* NotiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE2E2C1B55240043B1DA /* NotiViewController.swift */; };
 		536BDE312C1B55440043B1DA /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE302C1B55440043B1DA /* MyPageViewController.swift */; };
+		536BDE342C1B57B10043B1DA /* HomeFilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE332C1B57B10043B1DA /* HomeFilterButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +92,7 @@
 		536BDE2C2C1B55080043B1DA /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		536BDE2E2C1B55240043B1DA /* NotiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiViewController.swift; sourceTree = "<group>"; };
 		536BDE302C1B55440043B1DA /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
+		536BDE332C1B57B10043B1DA /* HomeFilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFilterButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -228,7 +230,7 @@
 			isa = PBXGroup;
 			children = (
 				536BDE102C1B51DE0043B1DA /* TabBar */,
-				536BDDB12C189B230043B1DA /* HomeViewController.swift */,
+				536BDE322C1B578C0043B1DA /* Home */,
 				536BDE2A2C1B54C80043B1DA /* ChatListViewController.swift */,
 				536BDE2C2C1B55080043B1DA /* AddViewController.swift */,
 				536BDE2E2C1B55240043B1DA /* NotiViewController.swift */,
@@ -360,6 +362,15 @@
 				536BDE282C1B53860043B1DA /* Color.swift */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		536BDE322C1B578C0043B1DA /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				536BDDB12C189B230043B1DA /* HomeViewController.swift */,
+				536BDE332C1B57B10043B1DA /* HomeFilterButton.swift */,
+			);
+			path = Home;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -522,6 +533,7 @@
 				536BDDFF2C1972D30043B1DA /* UserDataSource.swift in Sources */,
 				536BDDEC2C19720E0043B1DA /* User.swift in Sources */,
 				536BDDE92C1971C70043B1DA /* LoginReactor.swift in Sources */,
+				536BDE342C1B57B10043B1DA /* HomeFilterButton.swift in Sources */,
 				536BDE022C1973050043B1DA /* TeamButton.swift in Sources */,
 				536BDE272C1B53150043B1DA /* UIColor+Extension.swift in Sources */,
 				536BDDF02C1972360043B1DA /* LoginUseCase.swift in Sources */,

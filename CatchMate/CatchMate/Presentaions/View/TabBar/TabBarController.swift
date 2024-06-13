@@ -13,7 +13,7 @@ final class TabBarController: UITabBarController {
         super.viewDidLoad()
         configureTabBar()
         UITabBar.appearance().backgroundColor = .white
-        UITabBar.appearance().tintColor = .CmPrimaryColor
+        UITabBar.appearance().tintColor = .cmPrimaryColor
     }
     
     private func configureTabBar() {

@@ -8,5 +8,6 @@
 import UIKit
 
 extension UIColor {
-    static let CmPrimaryColor = UIColor(hex: "#FD5E5E")
+    static let cmBackgroundColor = UIColor(hex: "#F7F8FA")
+    static let cmPrimaryColor = UIColor(hex: "#FD5E5E")
 }
