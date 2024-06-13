@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAD2C189B230043B1DA /* AppDelegate.swift */; };
 		536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAF2C189B230043B1DA /* SceneDelegate.swift */; };
-		536BDDB22C189B230043B1DA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDB12C189B230043B1DA /* ViewController.swift */; };
+		536BDDB22C189B230043B1DA /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDB12C189B230043B1DA /* HomeViewController.swift */; };
 		536BDDB72C189B240043B1DA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 536BDDB62C189B240043B1DA /* Assets.xcassets */; };
 		536BDDBA2C189B240043B1DA /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 536BDDB92C189B240043B1DA /* Base */; };
 		536BDDC52C189B240043B1DA /* CatchMateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDC42C189B240043B1DA /* CatchMateTests.swift */; };
@@ -26,6 +26,21 @@
 		536BDDFC2C1972A00043B1DA /* UserRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDFB2C1972A00043B1DA /* UserRepositoryImpl.swift */; };
 		536BDDFF2C1972D30043B1DA /* UserDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDFE2C1972D30043B1DA /* UserDataSource.swift */; };
 		536BDE022C1973050043B1DA /* TeamButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE012C1973050043B1DA /* TeamButton.swift */; };
+		536BDE122C1B51FD0043B1DA /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE112C1B51FD0043B1DA /* TabBarController.swift */; };
+		536BDE152C1B52510043B1DA /* PinLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 536BDE142C1B52510043B1DA /* PinLayout */; };
+		536BDE172C1B52510043B1DA /* FlexLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 536BDE162C1B52510043B1DA /* FlexLayout */; };
+		536BDE192C1B52510043B1DA /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 536BDE182C1B52510043B1DA /* SnapKit */; };
+		536BDE1B2C1B52510043B1DA /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 536BDE1A2C1B52510043B1DA /* RxCocoa */; };
+		536BDE1D2C1B52510043B1DA /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 536BDE1C2C1B52510043B1DA /* RxRelay */; };
+		536BDE1F2C1B52510043B1DA /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 536BDE1E2C1B52510043B1DA /* RxSwift */; };
+		536BDE212C1B52510043B1DA /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 536BDE202C1B52510043B1DA /* ReactorKit */; };
+		536BDE232C1B52510043B1DA /* RxAlamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 536BDE222C1B52510043B1DA /* RxAlamofire */; };
+		536BDE272C1B53150043B1DA /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE262C1B53150043B1DA /* UIColor+Extension.swift */; };
+		536BDE292C1B53860043B1DA /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE282C1B53860043B1DA /* Color.swift */; };
+		536BDE2B2C1B54C80043B1DA /* ChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE2A2C1B54C80043B1DA /* ChatListViewController.swift */; };
+		536BDE2D2C1B55080043B1DA /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE2C2C1B55080043B1DA /* AddViewController.swift */; };
+		536BDE2F2C1B55240043B1DA /* NotiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE2E2C1B55240043B1DA /* NotiViewController.swift */; };
+		536BDE312C1B55440043B1DA /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE302C1B55440043B1DA /* MyPageViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,7 +64,7 @@
 		536BDDAA2C189B230043B1DA /* CatchMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CatchMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		536BDDAD2C189B230043B1DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		536BDDAF2C189B230043B1DA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		536BDDB12C189B230043B1DA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		536BDDB12C189B230043B1DA /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		536BDDB62C189B240043B1DA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		536BDDB92C189B240043B1DA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		536BDDBB2C189B240043B1DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -69,6 +84,13 @@
 		536BDDFB2C1972A00043B1DA /* UserRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepositoryImpl.swift; sourceTree = "<group>"; };
 		536BDDFE2C1972D30043B1DA /* UserDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataSource.swift; sourceTree = "<group>"; };
 		536BDE012C1973050043B1DA /* TeamButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamButton.swift; sourceTree = "<group>"; };
+		536BDE112C1B51FD0043B1DA /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		536BDE262C1B53150043B1DA /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		536BDE282C1B53860043B1DA /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		536BDE2A2C1B54C80043B1DA /* ChatListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListViewController.swift; sourceTree = "<group>"; };
+		536BDE2C2C1B55080043B1DA /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
+		536BDE2E2C1B55240043B1DA /* NotiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiViewController.swift; sourceTree = "<group>"; };
+		536BDE302C1B55440043B1DA /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +98,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				536BDE1F2C1B52510043B1DA /* RxSwift in Frameworks */,
+				536BDE1D2C1B52510043B1DA /* RxRelay in Frameworks */,
+				536BDE212C1B52510043B1DA /* ReactorKit in Frameworks */,
+				536BDE192C1B52510043B1DA /* SnapKit in Frameworks */,
+				536BDE152C1B52510043B1DA /* PinLayout in Frameworks */,
+				536BDE232C1B52510043B1DA /* RxAlamofire in Frameworks */,
+				536BDE1B2C1B52510043B1DA /* RxCocoa in Frameworks */,
+				536BDE172C1B52510043B1DA /* FlexLayout in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,6 +133,7 @@
 				536BDDC32C189B240043B1DA /* CatchMateTests */,
 				536BDDCD2C189B240043B1DA /* CatchMateUITests */,
 				536BDDAB2C189B230043B1DA /* Products */,
+				536BDE132C1B52510043B1DA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -179,6 +210,7 @@
 			isa = PBXGroup;
 			children = (
 				536BDDE12C196F510043B1DA /* Bundle+Extension.swift */,
+				536BDE262C1B53150043B1DA /* UIColor+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -195,7 +227,12 @@
 		536BDDE62C1971950043B1DA /* View */ = {
 			isa = PBXGroup;
 			children = (
-				536BDDB12C189B230043B1DA /* ViewController.swift */,
+				536BDE102C1B51DE0043B1DA /* TabBar */,
+				536BDDB12C189B230043B1DA /* HomeViewController.swift */,
+				536BDE2A2C1B54C80043B1DA /* ChatListViewController.swift */,
+				536BDE2C2C1B55080043B1DA /* AddViewController.swift */,
+				536BDE2E2C1B55240043B1DA /* NotiViewController.swift */,
+				536BDE302C1B55440043B1DA /* MyPageViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -288,6 +325,7 @@
 		536BDE032C1973090043B1DA /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
+				536BDE252C1B52FB0043B1DA /* Resources */,
 				536BDE042C1973140043B1DA /* Components */,
 			);
 			path = DesignSystem;
@@ -299,6 +337,29 @@
 				536BDE012C1973050043B1DA /* TeamButton.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		536BDE102C1B51DE0043B1DA /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				536BDE112C1B51FD0043B1DA /* TabBarController.swift */,
+			);
+			path = TabBar;
+			sourceTree = "<group>";
+		};
+		536BDE132C1B52510043B1DA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		536BDE252C1B52FB0043B1DA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				536BDE282C1B53860043B1DA /* Color.swift */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -317,6 +378,16 @@
 			dependencies = (
 			);
 			name = CatchMate;
+			packageProductDependencies = (
+				536BDE142C1B52510043B1DA /* PinLayout */,
+				536BDE162C1B52510043B1DA /* FlexLayout */,
+				536BDE182C1B52510043B1DA /* SnapKit */,
+				536BDE1A2C1B52510043B1DA /* RxCocoa */,
+				536BDE1C2C1B52510043B1DA /* RxRelay */,
+				536BDE1E2C1B52510043B1DA /* RxSwift */,
+				536BDE202C1B52510043B1DA /* ReactorKit */,
+				536BDE222C1B52510043B1DA /* RxAlamofire */,
+			);
 			productName = CatchMate;
 			productReference = 536BDDAA2C189B230043B1DA /* CatchMate.app */;
 			productType = "com.apple.product-type.application";
@@ -440,17 +511,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				536BDDB22C189B230043B1DA /* ViewController.swift in Sources */,
+				536BDDB22C189B230043B1DA /* HomeViewController.swift in Sources */,
 				536BDDF92C1972880043B1DA /* UserMapper.swift in Sources */,
+				536BDE2D2C1B55080043B1DA /* AddViewController.swift in Sources */,
 				536BDDFC2C1972A00043B1DA /* UserRepositoryImpl.swift in Sources */,
 				536BDDF32C1972530043B1DA /* LoginRepository.swift in Sources */,
 				536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */,
+				536BDE292C1B53860043B1DA /* Color.swift in Sources */,
+				536BDE2F2C1B55240043B1DA /* NotiViewController.swift in Sources */,
 				536BDDFF2C1972D30043B1DA /* UserDataSource.swift in Sources */,
 				536BDDEC2C19720E0043B1DA /* User.swift in Sources */,
 				536BDDE92C1971C70043B1DA /* LoginReactor.swift in Sources */,
 				536BDE022C1973050043B1DA /* TeamButton.swift in Sources */,
+				536BDE272C1B53150043B1DA /* UIColor+Extension.swift in Sources */,
 				536BDDF02C1972360043B1DA /* LoginUseCase.swift in Sources */,
+				536BDE2B2C1B54C80043B1DA /* ChatListViewController.swift in Sources */,
+				536BDE312C1B55440043B1DA /* MyPageViewController.swift in Sources */,
 				536BDDF62C1972740043B1DA /* UserDTO.swift in Sources */,
+				536BDE122C1B51FD0043B1DA /* TabBarController.swift in Sources */,
 				536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */,
 				536BDDE22C196F510043B1DA /* Bundle+Extension.swift in Sources */,
 			);
@@ -850,6 +928,49 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		536BDE142C1B52510043B1DA /* PinLayout */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 536BDE092C1B4F1F0043B1DA /* XCRemoteSwiftPackageReference "PinLayout" */;
+			productName = PinLayout;
+		};
+		536BDE162C1B52510043B1DA /* FlexLayout */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 536BDE0A2C1B4F910043B1DA /* XCRemoteSwiftPackageReference "FlexLayout" */;
+			productName = FlexLayout;
+		};
+		536BDE182C1B52510043B1DA /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 536BDE0B2C1B4F9E0043B1DA /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		536BDE1A2C1B52510043B1DA /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 536BDE0D2C1B50BC0043B1DA /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		536BDE1C2C1B52510043B1DA /* RxRelay */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 536BDE0D2C1B50BC0043B1DA /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxRelay;
+		};
+		536BDE1E2C1B52510043B1DA /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 536BDE0D2C1B50BC0043B1DA /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
+		536BDE202C1B52510043B1DA /* ReactorKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 536BDE0E2C1B50CB0043B1DA /* XCRemoteSwiftPackageReference "ReactorKit" */;
+			productName = ReactorKit;
+		};
+		536BDE222C1B52510043B1DA /* RxAlamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 536BDE0F2C1B51440043B1DA /* XCRemoteSwiftPackageReference "RxAlamofire" */;
+			productName = RxAlamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 536BDDA22C189B230043B1DA /* Project object */;
 }
