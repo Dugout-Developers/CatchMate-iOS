@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		531786532C1C8BFB00ACEF6A /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786522C1C8BFB00ACEF6A /* BaseViewController.swift */; };
+		531786552C1C8E7800ACEF6A /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786542C1C8E7800ACEF6A /* UIImage+Extension.swift */; };
+		531786572C1C8F1900ACEF6A /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786562C1C8F1900ACEF6A /* UIView+Extension.swift */; };
+		531786592C1C934A00ACEF6A /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786582C1C934A00ACEF6A /* UIViewController+Extension.swift */; };
 		536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAD2C189B230043B1DA /* AppDelegate.swift */; };
 		536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAF2C189B230043B1DA /* SceneDelegate.swift */; };
 		536BDDB22C189B230043B1DA /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDB12C189B230043B1DA /* HomeViewController.swift */; };
@@ -65,6 +69,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		531786522C1C8BFB00ACEF6A /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		531786542C1C8E7800ACEF6A /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		531786562C1C8F1900ACEF6A /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		531786582C1C934A00ACEF6A /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		536BDDAA2C189B230043B1DA /* CatchMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CatchMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		536BDDAD2C189B230043B1DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		536BDDAF2C189B230043B1DA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -219,6 +227,9 @@
 			children = (
 				536BDDE12C196F510043B1DA /* Bundle+Extension.swift */,
 				536BDE262C1B53150043B1DA /* UIColor+Extension.swift */,
+				531786542C1C8E7800ACEF6A /* UIImage+Extension.swift */,
+				531786562C1C8F1900ACEF6A /* UIView+Extension.swift */,
+				531786582C1C934A00ACEF6A /* UIViewController+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -241,6 +252,7 @@
 				536BDE2C2C1B55080043B1DA /* AddViewController.swift */,
 				536BDE2E2C1B55240043B1DA /* NotiViewController.swift */,
 				536BDE302C1B55440043B1DA /* MyPageViewController.swift */,
+				531786522C1C8BFB00ACEF6A /* BaseViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -535,6 +547,7 @@
 				536BDDF92C1972880043B1DA /* UserMapper.swift in Sources */,
 				536BDE2D2C1B55080043B1DA /* AddViewController.swift in Sources */,
 				536BDDFC2C1972A00043B1DA /* UserRepositoryImpl.swift in Sources */,
+				531786592C1C934A00ACEF6A /* UIViewController+Extension.swift in Sources */,
 				536BDDF32C1972530043B1DA /* LoginRepository.swift in Sources */,
 				536BDE3A2C1C1F210043B1DA /* HomeReactor.swift in Sources */,
 				536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */,
@@ -543,7 +556,9 @@
 				536BDE362C1BEC870043B1DA /* ListCardViewTableViewCell.swift in Sources */,
 				536BDDFF2C1972D30043B1DA /* UserDataSource.swift in Sources */,
 				536BDDEC2C19720E0043B1DA /* User.swift in Sources */,
+				531786572C1C8F1900ACEF6A /* UIView+Extension.swift in Sources */,
 				536BDDE92C1971C70043B1DA /* LoginReactor.swift in Sources */,
+				531786552C1C8E7800ACEF6A /* UIImage+Extension.swift in Sources */,
 				536BDE342C1B57B10043B1DA /* HomeFilterButton.swift in Sources */,
 				536BDE022C1973050043B1DA /* TeamButton.swift in Sources */,
 				536BDE272C1B53150043B1DA /* UIColor+Extension.swift in Sources */,
@@ -551,6 +566,7 @@
 				536BDE382C1C07990043B1DA /* PaddingLabel.swift in Sources */,
 				536BDE2B2C1B54C80043B1DA /* ChatListViewController.swift in Sources */,
 				536BDE312C1B55440043B1DA /* MyPageViewController.swift in Sources */,
+				531786532C1C8BFB00ACEF6A /* BaseViewController.swift in Sources */,
 				536BDDF62C1972740043B1DA /* UserDTO.swift in Sources */,
 				536BDE122C1B51FD0043B1DA /* TabBarController.swift in Sources */,
 				536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */,
