@@ -17,7 +17,7 @@ enum Filter {
     case none
 }
 
-final class HomeViewController: UIViewController, View {
+final class HomeViewController: BaseViewController, View {
     var disposeBag: DisposeBag = DisposeBag()
     private let reactor: HomeReactor
     private let viewWillAppearPublisher = PublishSubject<Void>().asObserver()
