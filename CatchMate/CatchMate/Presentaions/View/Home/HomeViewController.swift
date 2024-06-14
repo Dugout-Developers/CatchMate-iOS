@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
+import ReactorKit
 
 enum Filter {
     case all
@@ -14,26 +17,75 @@ enum Filter {
     case none
 }
 
-final class HomeViewController: UIViewController {
+final class HomeViewController: UIViewController, View {
+    var disposeBag: DisposeBag = DisposeBag()
+    private let reactor: HomeReactor
+    private let viewWillAppearPublisher = PublishSubject<Void>().asObserver()
+    
     private let filterContainerView = UIView()
     private let allFilterButton = HomeFilterButton(icon: UIImage(systemName: "list.bullet"), title: "전체", filter: .all)
     private let dateFilterButton = HomeFilterButton(icon: UIImage(systemName: "calendar"), title: "경기 날짜", filter: .date)
     private let teamFilterButton = HomeFilterButton(icon: UIImage(systemName: "person.3.fill"), title: "응원 구단", filter: .team)
     
+    private let tableView = UITableView()
+    
+    init(reactor: HomeReactor) {
+        self.reactor = reactor
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        viewWillAppearPublisher.onNext(())
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .cmBackgroundColor
         setupUI()
         setupButton()
+        bind(reactor: self.reactor)
+        setupTableView()
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        filterContainerView.pin.top(view.pin.safeArea.top).left(view.pin.safeArea.left).right(view.pin.safeArea.right).height(50)
-        filterContainerView.flex.layout()
+    private func setupTableView() {
+        // MARK: - 임시 (바인드 시 지우기)
+        tableView.dataSource = self
+        tableView.delegate = self
+        
+        tableView.register(ListCardViewTableViewCell.self, forCellReuseIdentifier: "ListCardViewTableViewCell")
+        tableView.tableHeaderView = UIView()
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 178
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
     }
 }
+// MARK: - 임시: 와이어프레임 확인용 테이블 뷰 데이터소스 및 델리게이트
+extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ListCardViewTableViewCell", for: indexPath) as? ListCardViewTableViewCell else { return UITableViewCell() }
+        cell.backgroundColor = .clear
+        cell.selectionStyle = .none
+        return cell
+    }
+    
+    
+}
 
+// MARK: - Bind
+extension HomeViewController {
+    func bind(reactor: HomeReactor) {
+        
+    }
+}
 // MARK: - Button Event
 extension HomeViewController {
     private func setupButton() {
@@ -63,12 +115,20 @@ extension HomeViewController {
     func setupUI() {
         // 필터 컨테이너 뷰 추가
         view.addSubview(filterContainerView)
+        view.addSubview(tableView)
         
         filterContainerView.flex.direction(.row).justifyContent(.start).alignItems(.center).paddingHorizontal(18).paddingVertical(11).define { flex in
             flex.addItem(allFilterButton).marginRight(8)
             flex.addItem(dateFilterButton).marginRight(8)
             flex.addItem(teamFilterButton)
         }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        filterContainerView.pin.top(view.pin.safeArea.top).left(view.pin.safeArea.left).right(view.pin.safeArea.right).height(50)
+        tableView.pin.below(of: filterContainerView).marginTop(12).bottom(view.pin.safeArea.bottom).left().right()
+        filterContainerView.flex.layout()
     }
 }
 

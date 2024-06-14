@@ -17,7 +17,7 @@ final class TabBarController: UITabBarController {
     }
     
     private func configureTabBar() {
-        let homeViewController = UINavigationController(rootViewController: HomeViewController())
+        let homeViewController = UINavigationController(rootViewController: HomeViewController(reactor: HomeReactor()))
         let chatViewController = UINavigationController(rootViewController: ChatListViewController())
         let addViewController = UINavigationController(rootViewController: AddViewController())
         let notiViewController = UINavigationController(rootViewController: NotiViewController())
