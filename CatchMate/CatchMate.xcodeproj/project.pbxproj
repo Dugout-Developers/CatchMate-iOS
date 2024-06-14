@@ -42,6 +42,9 @@
 		536BDE2F2C1B55240043B1DA /* NotiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE2E2C1B55240043B1DA /* NotiViewController.swift */; };
 		536BDE312C1B55440043B1DA /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE302C1B55440043B1DA /* MyPageViewController.swift */; };
 		536BDE342C1B57B10043B1DA /* HomeFilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE332C1B57B10043B1DA /* HomeFilterButton.swift */; };
+		536BDE362C1BEC870043B1DA /* ListCardViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE352C1BEC870043B1DA /* ListCardViewTableViewCell.swift */; };
+		536BDE382C1C07990043B1DA /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE372C1C07990043B1DA /* PaddingLabel.swift */; };
+		536BDE3A2C1C1F210043B1DA /* HomeReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE392C1C1F210043B1DA /* HomeReactor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +96,9 @@
 		536BDE2E2C1B55240043B1DA /* NotiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiViewController.swift; sourceTree = "<group>"; };
 		536BDE302C1B55440043B1DA /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
 		536BDE332C1B57B10043B1DA /* HomeFilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFilterButton.swift; sourceTree = "<group>"; };
+		536BDE352C1BEC870043B1DA /* ListCardViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCardViewTableViewCell.swift; sourceTree = "<group>"; };
+		536BDE372C1C07990043B1DA /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
+		536BDE392C1C1F210043B1DA /* HomeReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeReactor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -243,6 +249,7 @@
 			isa = PBXGroup;
 			children = (
 				536BDDE82C1971C70043B1DA /* LoginReactor.swift */,
+				536BDE392C1C1F210043B1DA /* HomeReactor.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -337,6 +344,7 @@
 			isa = PBXGroup;
 			children = (
 				536BDE012C1973050043B1DA /* TeamButton.swift */,
+				536BDE372C1C07990043B1DA /* PaddingLabel.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -369,6 +377,7 @@
 			children = (
 				536BDDB12C189B230043B1DA /* HomeViewController.swift */,
 				536BDE332C1B57B10043B1DA /* HomeFilterButton.swift */,
+				536BDE352C1BEC870043B1DA /* ListCardViewTableViewCell.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -527,9 +536,11 @@
 				536BDE2D2C1B55080043B1DA /* AddViewController.swift in Sources */,
 				536BDDFC2C1972A00043B1DA /* UserRepositoryImpl.swift in Sources */,
 				536BDDF32C1972530043B1DA /* LoginRepository.swift in Sources */,
+				536BDE3A2C1C1F210043B1DA /* HomeReactor.swift in Sources */,
 				536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */,
 				536BDE292C1B53860043B1DA /* Color.swift in Sources */,
 				536BDE2F2C1B55240043B1DA /* NotiViewController.swift in Sources */,
+				536BDE362C1BEC870043B1DA /* ListCardViewTableViewCell.swift in Sources */,
 				536BDDFF2C1972D30043B1DA /* UserDataSource.swift in Sources */,
 				536BDDEC2C19720E0043B1DA /* User.swift in Sources */,
 				536BDDE92C1971C70043B1DA /* LoginReactor.swift in Sources */,
@@ -537,6 +548,7 @@
 				536BDE022C1973050043B1DA /* TeamButton.swift in Sources */,
 				536BDE272C1B53150043B1DA /* UIColor+Extension.swift in Sources */,
 				536BDDF02C1972360043B1DA /* LoginUseCase.swift in Sources */,
+				536BDE382C1C07990043B1DA /* PaddingLabel.swift in Sources */,
 				536BDE2B2C1B54C80043B1DA /* ChatListViewController.swift in Sources */,
 				536BDE312C1B55440043B1DA /* MyPageViewController.swift in Sources */,
 				536BDDF62C1972740043B1DA /* UserDTO.swift in Sources */,
