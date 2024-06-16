@@ -76,8 +76,6 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         cell.selectionStyle = .none
         return cell
     }
-    
-    
 }
 
 // MARK: - Bind
@@ -100,11 +98,7 @@ extension HomeViewController {
         case .all:
             print("전체 필터 선택")
         case .date:
-            print("날짜 필터 선택")
-            let detentIdentifier = UISheetPresentationController.Detent.Identifier("customDetent")
-            let customDetent = UISheetPresentationController.Detent.custom(identifier: detentIdentifier) { _ in
-                return Screen.height / 2.0 + 50.0
-            }
+            let customDetent = returnCustomDetent(height: Screen.height / 2.0 + 50.0, identifier: "DateFilter")
             let dateFilterVC = DateFilterViewController()
             if let sheet = dateFilterVC.sheetPresentationController {
                 sheet.detents = [customDetent]
@@ -112,11 +106,25 @@ extension HomeViewController {
             }
             present(dateFilterVC, animated: true)
         case .team:
-            print("팀 필터 선택")
+            let teamFilterVC = TeamFilterViewController()
+            let customDetent = returnCustomDetent(height: Screen.height * 3/4, identifier: "TeamFilter")
+            if let sheet = teamFilterVC.sheetPresentationController {
+                sheet.detents = [customDetent]
+                sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            }
+            present(teamFilterVC, animated: true)
         case .none:
             // 잘못된 필터 값
             break
         }
+    }
+    
+    private func returnCustomDetent(height: CGFloat, identifier: String) -> UISheetPresentationController.Detent {
+        let detentIdentifier = UISheetPresentationController.Detent.Identifier(identifier)
+        let customDetent = UISheetPresentationController.Detent.custom(identifier: detentIdentifier) { _ in
+            return height
+        }
+        return customDetent
     }
 }
 
