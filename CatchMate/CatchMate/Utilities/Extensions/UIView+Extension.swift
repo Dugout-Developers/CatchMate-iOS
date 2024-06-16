@@ -18,4 +18,10 @@ extension UIView {
     @objc private func dismissKeyboard() {
         self.endEditing(true)
     }
+    
+    func addSubviews(views: [UIView]) {
+        views.forEach {
+            self.addSubview($0)
+        }
+    }
 }

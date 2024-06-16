@@ -101,6 +101,16 @@ extension HomeViewController {
             print("전체 필터 선택")
         case .date:
             print("날짜 필터 선택")
+            let detentIdentifier = UISheetPresentationController.Detent.Identifier("customDetent")
+            let customDetent = UISheetPresentationController.Detent.custom(identifier: detentIdentifier) { _ in
+                return Screen.height / 2.0 + 50.0
+            }
+            let dateFilterVC = DateFilterViewController()
+            if let sheet = dateFilterVC.sheetPresentationController {
+                sheet.detents = [customDetent]
+                sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            }
+            present(dateFilterVC, animated: true)
         case .team:
             print("팀 필터 선택")
         case .none:
