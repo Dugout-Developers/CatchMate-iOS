@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class DateFilterViewController: UIViewController {
+final class DateFilterViewController: BasePickerViewController {
     private let datePicker = UIDatePicker()
     private let saveButton: UIButton = {
         let button = UIButton(configuration: .plain())
@@ -19,16 +19,30 @@ final class DateFilterViewController: UIViewController {
         button.tintColor = .clear
         return button
     }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupUI()
         setupDatePicker()
+        setupButton()
     }
+    
     private func setupDatePicker() {
         datePicker.tintColor = .cmPrimaryColor
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .inline
+    }
+    
+    private func setupButton() {
+        saveButton.addTarget(self, action: #selector(clickSaveButton), for: .touchUpInside)
+    }
+    @objc
+    private func clickSaveButton(_ sender: UIButton) {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        let dateString = formatter.string(from: datePicker.date)
+        itemSelected(dateString)
     }
 }
 

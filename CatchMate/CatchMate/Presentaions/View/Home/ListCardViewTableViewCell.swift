@@ -49,7 +49,7 @@ final class ListCardViewTableViewCell: UITableViewCell {
         label.numberOfLines = 1
         label.adjustsFontForContentSizeCategory = true
         label.font = UIFont.systemFont(ofSize: 16)
-        label.textColor = .cmTextGeay
+        label.textColor = .cmTextGray
         return label
     }()
     
@@ -70,7 +70,7 @@ final class ListCardViewTableViewCell: UITableViewCell {
     private let homeTeamLabel: UILabel = {
         let label = UILabel()
         label.text = "자이언츠"
-        label.textColor = .cmTextGeay
+        label.textColor = .cmTextGray
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         return label
@@ -78,7 +78,7 @@ final class ListCardViewTableViewCell: UITableViewCell {
     private let vsLabel: UILabel = {
         let label = UILabel()
         label.text = "VS"
-        label.textColor = .cmTextGeay
+        label.textColor = .cmTextGray
         label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         return label
     }()
@@ -93,7 +93,7 @@ final class ListCardViewTableViewCell: UITableViewCell {
         let label = UILabel()
         label.text = "랜더스"
         label.textAlignment = .center
-        label.textColor = .cmTextGeay
+        label.textColor = .cmTextGray
         label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         return label
     }()

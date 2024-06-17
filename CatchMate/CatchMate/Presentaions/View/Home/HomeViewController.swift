@@ -97,6 +97,8 @@ extension HomeViewController {
         switch sender.filterType {
         case .all:
             print("전체 필터 선택")
+            let allFilterVC = AllFilterViewController()
+            navigationController?.pushViewController(allFilterVC, animated: true)
         case .date:
             let customDetent = returnCustomDetent(height: Screen.height / 2.0 + 50.0, identifier: "DateFilter")
             let dateFilterVC = DateFilterViewController()
@@ -149,6 +151,3 @@ extension HomeViewController {
         filterContainerView.flex.layout()
     }
 }
-
-
-

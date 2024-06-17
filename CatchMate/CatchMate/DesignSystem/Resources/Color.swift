@@ -10,5 +10,5 @@ import UIKit
 extension UIColor {
     static let cmBackgroundColor = UIColor(hex: "#F7F8FA")
     static let cmPrimaryColor = UIColor(hex: "#FD5E5E")
-    static let cmTextGeay = UIColor(hex: "#414141")
+    static let cmTextGray = UIColor(hex: "#414141")
 }
