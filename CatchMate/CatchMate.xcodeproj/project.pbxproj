@@ -24,6 +24,7 @@
 		531786742C202F1B00ACEF6A /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786732C202F1B00ACEF6A /* NetworkService.swift */; };
 		531786762C20494500ACEF6A /* HomeRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786752C20494500ACEF6A /* HomeRepository.swift */; };
 		531786782C20498800ACEF6A /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786772C20498800ACEF6A /* Post.swift */; };
+		5317867B2C2077EC00ACEF6A /* NotiViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317867A2C2077EC00ACEF6A /* NotiViewTableViewCell.swift */; };
 		536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAD2C189B230043B1DA /* AppDelegate.swift */; };
 		536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAF2C189B230043B1DA /* SceneDelegate.swift */; };
 		536BDDB22C189B230043B1DA /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDB12C189B230043B1DA /* HomeViewController.swift */; };
@@ -99,6 +100,7 @@
 		531786732C202F1B00ACEF6A /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		531786752C20494500ACEF6A /* HomeRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRepository.swift; sourceTree = "<group>"; };
 		531786772C20498800ACEF6A /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		5317867A2C2077EC00ACEF6A /* NotiViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiViewTableViewCell.swift; sourceTree = "<group>"; };
 		536BDDAA2C189B230043B1DA /* CatchMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CatchMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		536BDDAD2C189B230043B1DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		536BDDAF2C189B230043B1DA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -192,6 +194,15 @@
 				531786732C202F1B00ACEF6A /* NetworkService.swift */,
 			);
 			path = Service;
+			sourceTree = "<group>";
+		};
+		531786792C20777000ACEF6A /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				536BDE2E2C1B55240043B1DA /* NotiViewController.swift */,
+				5317867A2C2077EC00ACEF6A /* NotiViewTableViewCell.swift */,
+			);
+			path = Notification;
 			sourceTree = "<group>";
 		};
 		536BDDA12C189B230043B1DA = {
@@ -305,7 +316,7 @@
 				536BDE322C1B578C0043B1DA /* Home */,
 				536BDE2A2C1B54C80043B1DA /* ChatListViewController.swift */,
 				536BDE2C2C1B55080043B1DA /* AddViewController.swift */,
-				536BDE2E2C1B55240043B1DA /* NotiViewController.swift */,
+				531786792C20777000ACEF6A /* Notification */,
 				536BDE302C1B55440043B1DA /* MyPageViewController.swift */,
 			);
 			path = View;
@@ -642,6 +653,7 @@
 				536BDE122C1B51FD0043B1DA /* TabBarController.swift in Sources */,
 				536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */,
 				531786642C1EF30F00ACEF6A /* Team.swift in Sources */,
+				5317867B2C2077EC00ACEF6A /* NotiViewTableViewCell.swift in Sources */,
 				531786662C1F014E00ACEF6A /* CMTextField.swift in Sources */,
 				5317866B2C200D6000ACEF6A /* BasePickerViewController.swift in Sources */,
 				536BDDE22C196F510043B1DA /* Bundle+Extension.swift in Sources */,
