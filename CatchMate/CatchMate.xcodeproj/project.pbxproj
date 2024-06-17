@@ -22,6 +22,8 @@
 		5317866D2C200EDB00ACEF6A /* AllFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317866C2C200EDB00ACEF6A /* AllFilterViewController.swift */; };
 		531786712C202EF500ACEF6A /* DIContainerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786702C202EF500ACEF6A /* DIContainerService.swift */; };
 		531786742C202F1B00ACEF6A /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786732C202F1B00ACEF6A /* NetworkService.swift */; };
+		531786762C20494500ACEF6A /* HomeRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786752C20494500ACEF6A /* HomeRepository.swift */; };
+		531786782C20498800ACEF6A /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786772C20498800ACEF6A /* Post.swift */; };
 		536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAD2C189B230043B1DA /* AppDelegate.swift */; };
 		536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAF2C189B230043B1DA /* SceneDelegate.swift */; };
 		536BDDB22C189B230043B1DA /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDB12C189B230043B1DA /* HomeViewController.swift */; };
@@ -95,6 +97,8 @@
 		5317866C2C200EDB00ACEF6A /* AllFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllFilterViewController.swift; sourceTree = "<group>"; };
 		531786702C202EF500ACEF6A /* DIContainerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainerService.swift; sourceTree = "<group>"; };
 		531786732C202F1B00ACEF6A /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		531786752C20494500ACEF6A /* HomeRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRepository.swift; sourceTree = "<group>"; };
+		531786772C20498800ACEF6A /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		536BDDAA2C189B230043B1DA /* CatchMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CatchMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		536BDDAD2C189B230043B1DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		536BDDAF2C189B230043B1DA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -331,6 +335,7 @@
 			children = (
 				531786632C1EF30F00ACEF6A /* Team.swift */,
 				536BDDEB2C19720E0043B1DA /* User.swift */,
+				531786772C20498800ACEF6A /* Post.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -347,6 +352,7 @@
 			isa = PBXGroup;
 			children = (
 				536BDDF22C1972530043B1DA /* LoginRepository.swift */,
+				531786752C20494500ACEF6A /* HomeRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -600,8 +606,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				531786762C20494500ACEF6A /* HomeRepository.swift in Sources */,
 				536BDDB22C189B230043B1DA /* HomeViewController.swift in Sources */,
 				536BDDF92C1972880043B1DA /* UserMapper.swift in Sources */,
+				531786782C20498800ACEF6A /* Post.swift in Sources */,
 				536BDE2D2C1B55080043B1DA /* AddViewController.swift in Sources */,
 				531786602C1EB24D00ACEF6A /* TeamFilterViewController.swift in Sources */,
 				536BDDFC2C1972A00043B1DA /* UserRepositoryImpl.swift in Sources */,

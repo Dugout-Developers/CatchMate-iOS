@@ -5,4 +5,12 @@
 //  Created by 방유빈 on 6/12/24.
 //
 
-import Foundation
+import UIKit
+
+struct User {
+    var id: String = UUID().uuidString
+    var nickName: String
+    var age: UInt
+    var team: Team
+}
+
