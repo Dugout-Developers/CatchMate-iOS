@@ -8,6 +8,15 @@
 import Foundation
 
 extension Bundle {
+    var baseURL: String? {
+           guard let file = self.path(forResource: "APIKeys", ofType: "plist"),
+                 let resource = NSDictionary(contentsOfFile: file),
+                 let key = resource["BASE_URL"] as? String else {
+               print("baseURL 얻기 실패")
+               return nil
+           }
+           return key
+       }
     var kakaoLoginKey: String? {
            guard let file = self.path(forResource: "APIKeys", ofType: "plist"),
                  let resource = NSDictionary(contentsOfFile: file),
