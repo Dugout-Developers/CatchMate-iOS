@@ -20,6 +20,8 @@ final class TeamFilterCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(clickImage))
+        addGestureRecognizer(tapGesture)
     }
     
     @available(*, unavailable)
@@ -31,8 +33,8 @@ final class TeamFilterCollectionViewCell: UICollectionViewCell {
         self.team = team
         teamLogoImage.image = team.getDefaultsImage
     }
-    
-    func clickImage() {
+    @objc
+    private func clickImage() {
         isSelect.toggle()
         if isSelect {
             teamLogoImage.image = team?.getFillImage
