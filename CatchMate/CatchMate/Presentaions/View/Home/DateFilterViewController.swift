@@ -28,6 +28,11 @@ final class DateFilterViewController: BasePickerViewController {
         setupButton()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        disable()
+    }
+    
     private func setupDatePicker() {
         datePicker.tintColor = .cmPrimaryColor
         datePicker.datePickerMode = .date

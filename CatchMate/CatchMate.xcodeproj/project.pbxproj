@@ -25,6 +25,7 @@
 		531786762C20494500ACEF6A /* HomeRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786752C20494500ACEF6A /* HomeRepository.swift */; };
 		531786782C20498800ACEF6A /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786772C20498800ACEF6A /* Post.swift */; };
 		5317867B2C2077EC00ACEF6A /* NotiViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317867A2C2077EC00ACEF6A /* NotiViewTableViewCell.swift */; };
+		5317867D2C216CBE00ACEF6A /* NumberPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317867C2C216CBE00ACEF6A /* NumberPickerViewController.swift */; };
 		536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAD2C189B230043B1DA /* AppDelegate.swift */; };
 		536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAF2C189B230043B1DA /* SceneDelegate.swift */; };
 		536BDDB22C189B230043B1DA /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDB12C189B230043B1DA /* HomeViewController.swift */; };
@@ -101,6 +102,7 @@
 		531786752C20494500ACEF6A /* HomeRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRepository.swift; sourceTree = "<group>"; };
 		531786772C20498800ACEF6A /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		5317867A2C2077EC00ACEF6A /* NotiViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiViewTableViewCell.swift; sourceTree = "<group>"; };
+		5317867C2C216CBE00ACEF6A /* NumberPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberPickerViewController.swift; sourceTree = "<group>"; };
 		536BDDAA2C189B230043B1DA /* CatchMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CatchMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		536BDDAD2C189B230043B1DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		536BDDAF2C189B230043B1DA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -464,6 +466,7 @@
 				5317865F2C1EB24D00ACEF6A /* TeamFilterViewController.swift */,
 				531786612C1EE6C500ACEF6A /* TeamFilterTableViewCell.swift */,
 				5317866C2C200EDB00ACEF6A /* AllFilterViewController.swift */,
+				5317867C2C216CBE00ACEF6A /* NumberPickerViewController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -653,6 +656,7 @@
 				536BDE122C1B51FD0043B1DA /* TabBarController.swift in Sources */,
 				536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */,
 				531786642C1EF30F00ACEF6A /* Team.swift in Sources */,
+				5317867D2C216CBE00ACEF6A /* NumberPickerViewController.swift in Sources */,
 				5317867B2C2077EC00ACEF6A /* NotiViewTableViewCell.swift in Sources */,
 				531786662C1F014E00ACEF6A /* CMTextField.swift in Sources */,
 				5317866B2C200D6000ACEF6A /* BasePickerViewController.swift in Sources */,
