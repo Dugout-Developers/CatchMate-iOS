@@ -11,8 +11,8 @@ class ChatListViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .blue
-        // Do any additional setup after loading the view.
+        view.backgroundColor = .cmBackgroundColor
+        configNavigationLeftTitle("채팅 목록")
     }
 
 

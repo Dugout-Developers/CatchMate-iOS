@@ -8,8 +8,22 @@
 import UIKit
 
 extension UIViewController {
+    /// Title leftBarButton
+    func configNavigationLeftTitle(_ title: String) {
+        let label = UILabel()
+        label.text = title
+        label.font = .systemFont(ofSize: 20)
+        label.textColor = .cmTextGray
+        
+        let leftItem = UIBarButtonItem(customView: label)
+        let height: CGFloat = 24
+        leftItem.customView?.snp.makeConstraints({ make in
+            make.height.equalTo(height)
+        })
+        
+        self.navigationItem.leftBarButtonItem = leftItem
+    }
     /// logo leftBarButton
-    /// -> navigationItem.configNavigationLogo() 호출
     func configNavigationLogo() {
         let image = UIImage(named: "navigationLogo")
         let logoView = UIImageView(image: image)
