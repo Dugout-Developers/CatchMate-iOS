@@ -9,10 +9,17 @@ import UIKit
 
 protocol BasePickerViewControllerDelegate: AnyObject {
     func didSelectItem(_ item: String)
+    /// 시트가 선택 없이 내려서 사라질때 호출
+    func disable()
 }
 
 class BasePickerViewController: UIViewController {
     weak var delegate: BasePickerViewControllerDelegate?
+    
+    func disable() {
+        delegate?.disable()
+        dismiss(animated: true)
+    }
     
     func itemSelected(_ item: String) {
         delegate?.didSelectItem(item)
@@ -29,4 +36,5 @@ extension BasePickerViewController {
         return customDetent
     }
 }
+
 
