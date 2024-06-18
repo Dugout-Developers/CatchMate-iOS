@@ -27,7 +27,13 @@ final class AllFilterViewController: UIViewController {
         return label
     }()
     
-    private let teamCollectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private let teamCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 10
+        return UICollectionView(frame: .zero, collectionViewLayout: layout)
+    }()
     
     private let peopleNumLabel: UILabel = {
         let label = UILabel()
@@ -50,14 +56,21 @@ final class AllFilterViewController: UIViewController {
         view.backgroundColor = .cmBackgroundColor
         setupUI()
         setupPickerView()
+        setupCollectionView()
         setupToolBar()
-        teamCollectionView.backgroundColor = .red
     }
     
     private func setupToolBar() {
         let saveButton = UIBarButtonItem(title: "저장", style: .plain, target: self, action: #selector(clickSaveButton))
         saveButton.tintColor = .cmPrimaryColor
         navigationItem.rightBarButtonItem = saveButton
+    }
+    
+    private func setupCollectionView() {
+        teamCollectionView.delegate = self
+        teamCollectionView.dataSource = self
+        teamCollectionView.register(TeamFilterCollectionViewCell.self, forCellWithReuseIdentifier: "TeamFilterCollectionViewCell")
+        teamCollectionView.backgroundColor = .clear
     }
     
     private func setupPickerView() {
@@ -76,6 +89,44 @@ final class AllFilterViewController: UIViewController {
     private func clickSaveButton(_ sender: UIBarButtonItem) {
         print("저장")
         navigationController?.popViewController(animated: true)
+    }
+}
+
+// MARK: - Team Collection View
+extension AllFilterViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return Team.allTeam.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TeamFilterCollectionViewCell", for: indexPath) as? TeamFilterCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        cell.setupData(team: Team.allTeam[indexPath.row])
+        return cell
+    }
+
+    
+    // UICollectionViewDelegateFlowLayout
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        guard let layout = collectionViewLayout as? UICollectionViewFlowLayout else {
+            return CGSize(width: 100, height: 100) 
+        }
+
+        let itemsPerRow: CGFloat = 4
+        let paddingSpace = layout.minimumInteritemSpacing * (itemsPerRow - 1)
+        let availableWidth = collectionView.frame.width - paddingSpace
+        let widthPerItem = availableWidth / itemsPerRow
+        return CGSize(width: widthPerItem, height: widthPerItem)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
     }
 }
 

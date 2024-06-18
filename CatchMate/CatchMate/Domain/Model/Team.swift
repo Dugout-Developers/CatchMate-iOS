@@ -68,4 +68,6 @@ enum Team: String, CaseIterable {
             return UIImage(named: "giants_fill")
         }
     }
+    
+    static var allTeam: [Team] = Team.allCases
 }
