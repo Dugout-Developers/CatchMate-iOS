@@ -27,6 +27,7 @@
 		5317867B2C2077EC00ACEF6A /* NotiViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317867A2C2077EC00ACEF6A /* NotiViewTableViewCell.swift */; };
 		5317867D2C216CBE00ACEF6A /* NumberPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317867C2C216CBE00ACEF6A /* NumberPickerViewController.swift */; };
 		5317867F2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317867E2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift */; };
+		531786822C21D3F700ACEF6A /* ChatListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786812C21D3F700ACEF6A /* ChatListTableViewCell.swift */; };
 		536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAD2C189B230043B1DA /* AppDelegate.swift */; };
 		536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAF2C189B230043B1DA /* SceneDelegate.swift */; };
 		536BDDB22C189B230043B1DA /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDB12C189B230043B1DA /* HomeViewController.swift */; };
@@ -45,7 +46,6 @@
 		536BDDF92C1972880043B1DA /* UserMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDF82C1972880043B1DA /* UserMapper.swift */; };
 		536BDDFC2C1972A00043B1DA /* UserRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDFB2C1972A00043B1DA /* UserRepositoryImpl.swift */; };
 		536BDDFF2C1972D30043B1DA /* UserDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDFE2C1972D30043B1DA /* UserDataSource.swift */; };
-		536BDE022C1973050043B1DA /* TeamButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE012C1973050043B1DA /* TeamButton.swift */; };
 		536BDE122C1B51FD0043B1DA /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE112C1B51FD0043B1DA /* TabBarController.swift */; };
 		536BDE152C1B52510043B1DA /* PinLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 536BDE142C1B52510043B1DA /* PinLayout */; };
 		536BDE172C1B52510043B1DA /* FlexLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 536BDE162C1B52510043B1DA /* FlexLayout */; };
@@ -105,6 +105,7 @@
 		5317867A2C2077EC00ACEF6A /* NotiViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiViewTableViewCell.swift; sourceTree = "<group>"; };
 		5317867C2C216CBE00ACEF6A /* NumberPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberPickerViewController.swift; sourceTree = "<group>"; };
 		5317867E2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamFilterCollectionViewCell.swift; sourceTree = "<group>"; };
+		531786812C21D3F700ACEF6A /* ChatListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListTableViewCell.swift; sourceTree = "<group>"; };
 		536BDDAA2C189B230043B1DA /* CatchMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CatchMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		536BDDAD2C189B230043B1DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		536BDDAF2C189B230043B1DA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -127,7 +128,6 @@
 		536BDDF82C1972880043B1DA /* UserMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMapper.swift; sourceTree = "<group>"; };
 		536BDDFB2C1972A00043B1DA /* UserRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepositoryImpl.swift; sourceTree = "<group>"; };
 		536BDDFE2C1972D30043B1DA /* UserDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataSource.swift; sourceTree = "<group>"; };
-		536BDE012C1973050043B1DA /* TeamButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamButton.swift; sourceTree = "<group>"; };
 		536BDE112C1B51FD0043B1DA /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		536BDE262C1B53150043B1DA /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		536BDE282C1B53860043B1DA /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
@@ -207,6 +207,15 @@
 				5317867A2C2077EC00ACEF6A /* NotiViewTableViewCell.swift */,
 			);
 			path = Notification;
+			sourceTree = "<group>";
+		};
+		531786802C21D3E400ACEF6A /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				536BDE2A2C1B54C80043B1DA /* ChatListViewController.swift */,
+				531786812C21D3F700ACEF6A /* ChatListTableViewCell.swift */,
+			);
+			path = Chat;
 			sourceTree = "<group>";
 		};
 		536BDDA12C189B230043B1DA = {
@@ -318,7 +327,7 @@
 			children = (
 				536BDE102C1B51DE0043B1DA /* TabBar */,
 				536BDE322C1B578C0043B1DA /* Home */,
-				536BDE2A2C1B54C80043B1DA /* ChatListViewController.swift */,
+				531786802C21D3E400ACEF6A /* Chat */,
 				536BDE2C2C1B55080043B1DA /* AddViewController.swift */,
 				531786792C20777000ACEF6A /* Notification */,
 				536BDE302C1B55440043B1DA /* MyPageViewController.swift */,
@@ -427,7 +436,6 @@
 		536BDE042C1973140043B1DA /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				536BDE012C1973050043B1DA /* TeamButton.swift */,
 				536BDE372C1C07990043B1DA /* PaddingLabel.swift */,
 				531786652C1F014E00ACEF6A /* CMTextField.swift */,
 				531786672C20048B00ACEF6A /* CMPickerTextField.swift */,
@@ -629,6 +637,7 @@
 				531786782C20498800ACEF6A /* Post.swift in Sources */,
 				536BDE2D2C1B55080043B1DA /* AddViewController.swift in Sources */,
 				531786602C1EB24D00ACEF6A /* TeamFilterViewController.swift in Sources */,
+				531786822C21D3F700ACEF6A /* ChatListTableViewCell.swift in Sources */,
 				536BDDFC2C1972A00043B1DA /* UserRepositoryImpl.swift in Sources */,
 				531786592C1C934A00ACEF6A /* UIViewController+Extension.swift in Sources */,
 				5317865D2C1EAC4700ACEF6A /* Screen.swift in Sources */,
@@ -646,7 +655,6 @@
 				536BDDE92C1971C70043B1DA /* LoginReactor.swift in Sources */,
 				531786552C1C8E7800ACEF6A /* UIImage+Extension.swift in Sources */,
 				536BDE342C1B57B10043B1DA /* HomeFilterButton.swift in Sources */,
-				536BDE022C1973050043B1DA /* TeamButton.swift in Sources */,
 				536BDE272C1B53150043B1DA /* UIColor+Extension.swift in Sources */,
 				536BDDF02C1972360043B1DA /* LoginUseCase.swift in Sources */,
 				536BDE382C1C07990043B1DA /* PaddingLabel.swift in Sources */,

@@ -15,7 +15,7 @@ final class NotiViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .cmBackgroundColor
-        navigationItem.title = "알림"
+        configNavigationLeftTitle("알림")
         setupUI()
         setupTableView()
         setupEditTableView()
