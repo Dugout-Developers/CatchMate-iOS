@@ -9,7 +9,11 @@ import UIKit
 
 class CMTextField: UITextField {
     private let padding = UIEdgeInsets(top: 17, left: 16, bottom: 17, right: 30)
-    
+    var isRequiredMark: Bool = false {
+        didSet {
+            updatePlaceholder()
+        }
+    }
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -97,5 +101,17 @@ class CMTextField: UITextField {
     @objc private func clearButtonTapped() {
         text = ""
         sendActions(for: .editingChanged)
+    }
+    
+    private func updatePlaceholder() {
+        let placeholderText = placeholder ?? ""
+        let attributedString = NSMutableAttributedString(string: placeholderText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+        
+        if isRequiredMark {
+            let requiredMark = NSAttributedString(string: " *", attributes: [NSAttributedString.Key.foregroundColor: UIColor.red])
+            attributedString.append(requiredMark)
+        }
+        
+        attributedPlaceholder = attributedString
     }
 }

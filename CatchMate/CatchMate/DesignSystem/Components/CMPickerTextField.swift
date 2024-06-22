@@ -9,6 +9,12 @@ import UIKit
 
 final class CMPickerTextField: UIView {
     private let padding = UIEdgeInsets(top: 17, left: 16, bottom: 17, right: 16)
+    private let isFlexLayout: Bool
+    var isRequiredMark: Bool = false {
+        didSet {
+            updatePlaceholder()
+        }
+    }
     
     private let rightAccessoryView: UIView?
     weak var parentViewController: UIViewController?
@@ -32,11 +38,17 @@ final class CMPickerTextField: UIView {
         return view
     }()
     
-    init(rightAccessoryView: UIView, placeHolder: String = "") {
+    init(rightAccessoryView: UIView? = nil, placeHolder: String = "", isFlex: Bool = false) {
         self.rightAccessoryView = rightAccessoryView
         self.textField.placeholder = placeHolder
+        self.isFlexLayout = isFlex
         super.init(frame: .zero)
-        setupUI()
+        if isFlex {
+            setupFlexUI()
+        } else {
+            setupUI()
+        }
+        setupGesture()
     }
     
     @available (*, unavailable)
@@ -63,10 +75,24 @@ final class CMPickerTextField: UIView {
         
         parentViewController?.present(pickerViewController, animated: true, completion: nil)
     }
+    
+    private func setupGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(textFieldTapped))
+        addGestureRecognizer(tapGesture)
+    }
 }
 
 // MARK: - UI
 extension CMPickerTextField {
+    private func setupFlexUI() {
+        addSubview(borderView)
+        borderView.flex.direction(.row).justifyContent(.spaceBetween).alignItems(.center).define { flex in
+            flex.addItem(textField).margin(padding).grow(1)
+            if let accessoryView = rightAccessoryView {
+                flex.addItem(accessoryView).size(24).marginHorizontal(padding.right)
+            }
+        }
+    }
     private func setupUI() {
         addSubviews(views: [borderView, textField])
         if let accessoryView = rightAccessoryView {
@@ -93,9 +119,18 @@ extension CMPickerTextField {
             make.centerY.equalToSuperview()
             make.width.height.equalTo(24)
         }
+    }
+    
+    private func updatePlaceholder() {
+        let placeholderText = textField.placeholder ?? ""
+        let attributedString = NSMutableAttributedString(string: placeholderText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(textFieldTapped))
-        addGestureRecognizer(tapGesture)
+        if isRequiredMark {
+            let requiredMark = NSAttributedString(string: " *", attributes: [NSAttributedString.Key.foregroundColor: UIColor.red])
+            attributedString.append(requiredMark)
+        }
+        
+        textField.attributedPlaceholder = attributedString
     }
 }
 
