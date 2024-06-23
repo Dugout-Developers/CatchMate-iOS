@@ -69,5 +69,30 @@ enum Team: String, CaseIterable {
         }
     }
     
+    var getTeamColor: UIColor {
+        switch self {
+        case .nc:
+            return UIColor(hex: "#0C1C3A")
+        case .ssg:
+            return UIColor(hex: "#BD272C")
+        case .kia:
+            return UIColor(hex: "#D62E34")
+        case .dosun:
+            return UIColor(hex: "#12122E")
+        case .hanhwa:
+            return UIColor(hex: "#ED702D")
+        case .lg:
+            return UIColor(hex: "#B2243B")
+        case .samsung:
+            return UIColor(hex: "#2559A6")
+        case .kiwoom:
+            return UIColor(hex: "#761426")
+        case .kt:
+            return UIColor(hex: "#2B2A29")
+        case .lotte:
+            return UIColor(hex: "#0A1D3F")
+        }
+    }
+    
     static var allTeam: [Team] = Team.allCases
 }

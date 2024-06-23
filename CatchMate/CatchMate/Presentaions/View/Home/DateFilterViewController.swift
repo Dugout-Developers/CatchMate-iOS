@@ -10,13 +10,9 @@ import SnapKit
 
 final class DateFilterViewController: BasePickerViewController {
     private let datePicker = UIDatePicker()
-    private let saveButton: UIButton = {
-        let button = UIButton(configuration: .plain())
-        button.layer.cornerRadius = 4
-        button.backgroundColor = .cmPrimaryColor
-        button.setTitleColor(.white, for: .normal)
+    private let saveButton: CMDefaultFilledButton = {
+        let button = CMDefaultFilledButton()
         button.setTitle("저장", for: .normal)
-        button.tintColor = .clear
         return button
     }()
     
