@@ -9,6 +9,7 @@ import UIKit
 
 final class AddViewController: UIViewController {
     private var selectedGenderLabel: PaddingLabel?
+    private var seletedAgeLabel: PaddingLabel?
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
@@ -131,6 +132,7 @@ final class AddViewController: UIViewController {
         setupPickerView()
         setupRequiredMark()
         setupGenderButton()
+        setupAgeButton()
     }
     
     override func viewDidLayoutSubviews() {
@@ -164,27 +166,21 @@ final class AddViewController: UIViewController {
         view.backgroundColor = .white
         let saveButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.down"), style: .plain, target: self, action: #selector(clickSaveButton))
         navigationItem.rightBarButtonItem = saveButton
+        registerButton.addTarget(self, action: #selector(clickRegisterButton), for: .touchUpInside)
         view.tappedDismissKeyboard()
     }
-    
-    
-    @objc
-    private func clickSaveButton(_ sender: UIBarButtonItem) {
-
-    }
-    
-    private func createItem(_ title: String) -> UIView {
-            let view = UIView()
-            view.backgroundColor = .white
-            view.layer.borderWidth = 1
-            view.layer.borderColor = UIColor.black.cgColor
-            view.layer.cornerRadius = 5
-            
-            return view
-        }
 }
 // MARK: - Button
 extension AddViewController {
+    @objc
+    private func clickSaveButton(_ sender: UIBarButtonItem) {
+        print("임시 저장")
+    }
+    
+    @objc
+    func clickRegisterButton(_ sender: UIButton) {
+        print("등록")
+    }
     private func setupGenderButton() {
         let tapGesture1 = UITapGestureRecognizer(target: self, action: #selector(clickGenderButton))
         womanButton.addGestureRecognizer(tapGesture1)
@@ -194,21 +190,45 @@ extension AddViewController {
     }
     
     @objc private func clickGenderButton(_ gesture: UITapGestureRecognizer) {
-           guard let tappedLabel = gesture.view as? PaddingLabel else { return }
-           
-           if selectedGenderLabel != nil {
-               selectedGenderLabel?.backgroundColor = UIColor(hex: "#F7F8FA")
-               selectedGenderLabel?.textColor = .cmTextGray
-           }
-           
-           if selectedGenderLabel == tappedLabel {
-               selectedGenderLabel = nil
-           } else {
-               tappedLabel.backgroundColor = .cmPrimaryColor
-               tappedLabel.textColor = .white
-               selectedGenderLabel = tappedLabel
-           }
-       }
+        guard let tappedLabel = gesture.view as? PaddingLabel else { return }
+        
+        if selectedGenderLabel != nil {
+            selectedGenderLabel?.backgroundColor = UIColor(hex: "#F7F8FA")
+            selectedGenderLabel?.textColor = .cmTextGray
+        }
+        
+        if selectedGenderLabel == tappedLabel {
+            selectedGenderLabel = nil
+        } else {
+            tappedLabel.backgroundColor = .cmPrimaryColor
+            tappedLabel.textColor = .white
+            selectedGenderLabel = tappedLabel
+        }
+    }
+    
+    private func setupAgeButton() {
+        ageButtons.forEach { ageButton in
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(clickGenderButton))
+            ageButton.addGestureRecognizer(tapGesture)
+        }
+    }
+    
+    @objc private func clicAgeButton(_ gesture: UITapGestureRecognizer) {
+        guard let tappedLabel = gesture.view as? PaddingLabel else { return }
+        
+        if selectedGenderLabel != nil {
+            selectedGenderLabel?.backgroundColor = UIColor(hex: "#F7F8FA")
+            selectedGenderLabel?.textColor = .cmTextGray
+        }
+        
+        if selectedGenderLabel == tappedLabel {
+            selectedGenderLabel = nil
+        } else {
+            tappedLabel.backgroundColor = .cmPrimaryColor
+            tappedLabel.textColor = .white
+            selectedGenderLabel = tappedLabel
+        }
+    }
 }
 // MARK: - UI
 extension AddViewController {
