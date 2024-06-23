@@ -12,13 +12,9 @@ final class NumberPickerViewController: BasePickerViewController {
     private var selectedNum: Int = 1
     private let numberArr: [Int] = [1,2,3,4,5,6,7,8]
 
-    private let saveButton: UIButton = {
-        let button = UIButton(configuration: .plain())
-        button.layer.cornerRadius = 4
-        button.backgroundColor = .cmPrimaryColor
-        button.setTitleColor(.white, for: .normal)
+    private let saveButton: CMDefaultFilledButton = {
+        let button = CMDefaultFilledButton()
         button.setTitle("저장", for: .normal)
-        button.tintColor = .clear
         return button
     }()
     

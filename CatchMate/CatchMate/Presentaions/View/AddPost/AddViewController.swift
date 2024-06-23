@@ -94,6 +94,36 @@ final class AddViewController: UIViewController {
         label.isUserInteractionEnabled = true
         return label
     }()
+    
+    private let ageLabel: UILabel = {
+        let label = UILabel()
+        label.text = "선호 나이대"
+        label.textColor = .cmTextGray
+        label.font = .systemFont(ofSize: 14)
+        return label
+    }()
+    private let ageContainer = UIView()
+    private let ageButtons: [PaddingLabel] = {
+        var labels = [PaddingLabel]()
+        ["10대", "20대", "30대", "40대", "50대 이상"].forEach { age in
+            let label = PaddingLabel()
+            label.backgroundColor = UIColor(hex: "#F7F8FA")
+            label.textColor = .cmTextGray
+            label.text = age
+            label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+            label.layer.cornerRadius = 15
+            label.clipsToBounds = true
+            label.isUserInteractionEnabled = true
+            labels.append(label)
+        }
+        return labels
+    }()
+    
+    private let registerButton: CMDefaultFilledButton = {
+        let button = CMDefaultFilledButton()
+        button.setTitle("등록", for: .normal)
+        return button
+    }()
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -137,10 +167,21 @@ final class AddViewController: UIViewController {
         view.tappedDismissKeyboard()
     }
     
+    
     @objc
     private func clickSaveButton(_ sender: UIBarButtonItem) {
 
     }
+    
+    private func createItem(_ title: String) -> UIView {
+            let view = UIView()
+            view.backgroundColor = .white
+            view.layer.borderWidth = 1
+            view.layer.borderColor = UIColor.black.cgColor
+            view.layer.cornerRadius = 5
+            
+            return view
+        }
 }
 // MARK: - Button
 extension AddViewController {
@@ -193,7 +234,14 @@ extension AddViewController {
                 flex.addItem(genderButtonContainer).direction(.row).justifyContent(.start).alignItems(.start).define { flex in
                     flex.addItem(womanButton).marginRight(12)
                     flex.addItem(manButton)
-                }
+                }.marginBottom(32)
+                flex.addItem(ageLabel).marginBottom(12)
+                flex.addItem(ageContainer).direction(.row).wrap(.wrap).justifyContent(.start).define { flex in
+                    ageButtons.forEach { ageButton in
+                        flex.addItem(ageButton).marginRight(12).marginBottom(12)
+                    }
+                }.marginBottom(60)
+                flex.addItem(registerButton).height(50).marginBottom(27)
             }
         }
     }
