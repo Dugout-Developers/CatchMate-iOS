@@ -58,9 +58,9 @@ final class AddViewController: UIViewController {
         label.attributedText = attributedString
         return label
     }()
-    private let textview: UITextView = {
-        let textView = UITextView()
-        textView.text = "(임시)TextView 자리"
+    private let textview: CMTextView = {
+        let textView = CMTextView()
+        textView.placeholder = "내용을 입력해주세요."
         return textView
     }()
     
@@ -134,6 +134,7 @@ final class AddViewController: UIViewController {
         view.backgroundColor = .white
         let saveButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.down"), style: .plain, target: self, action: #selector(clickSaveButton))
         navigationItem.rightBarButtonItem = saveButton
+        view.tappedDismissKeyboard()
     }
     
     @objc
