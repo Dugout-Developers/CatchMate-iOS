@@ -28,7 +28,6 @@ class CMDefaultFilledButton: UIButton {
         layer.cornerRadius = 4
         setTitleColor(.white, for: .normal)
         setTitleColor(.white, for: .disabled)
-        heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         addTarget(self, action: #selector(updateBackgroundColor), for: .allEvents)
         updateBackgroundColor()
