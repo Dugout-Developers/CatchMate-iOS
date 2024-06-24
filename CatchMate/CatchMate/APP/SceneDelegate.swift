@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        window?.rootViewController = tabViewController
         let signInViewController = SignInViewController()
 
-        window?.rootViewController = signInViewController
+        window?.rootViewController = UINavigationController(rootViewController: signInViewController)
         window?.makeKeyAndVisible()
     }
     

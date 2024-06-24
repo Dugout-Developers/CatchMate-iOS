@@ -9,7 +9,7 @@ import UIKit
 import FlexLayout
 import PinLayout
 
-final class SignInViewController: UIViewController {
+final class SignInViewController: BaseViewController {
     private let containerView = UIView()
     private let logoContainerView = UIView()
     private let logoImageView: UIImageView = {
@@ -51,7 +51,7 @@ final class SignInViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupUI()
-        
+        setupButton()
     }
     
     override func viewDidLayoutSubviews() {
@@ -62,6 +62,18 @@ final class SignInViewController: UIViewController {
     
     private func setupView() {
         view.backgroundColor = .white
+    }
+}
+
+// MARK: - Button
+extension SignInViewController {
+    private func setupButton() {
+        kakaoLoginButton.addTarget(self, action: #selector(clickKakaoLoginButton), for: .touchUpInside)
+    }
+    @objc
+    private func clickKakaoLoginButton(_ sender: UIButton) {
+        let signUpViewController = SignUpViewController()
+        navigationController?.pushViewController(signUpViewController, animated: true)
     }
 }
 
