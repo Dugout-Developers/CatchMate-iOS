@@ -122,7 +122,9 @@ final class SignUpViewController: UIViewController, View {
         super.viewDidLoad()
         setupView()
         setupUI()
+        setupButton()
         bind(reactor: reactor)
+        configNavigationBackButton()
     }
     
     override func viewDidLayoutSubviews() {
@@ -139,19 +141,12 @@ final class SignUpViewController: UIViewController, View {
 // MARK: - Button
 extension SignUpViewController {
     private func setupButton() {
-        womanButton.addTarget(self, action: #selector(clickGenderButton), for: .touchUpInside)
-        manButton.addTarget(self, action: #selector(clickGenderButton), for: .touchUpInside)
+        nextButton.addTarget(self, action: #selector(clickNextButton), for: .touchUpInside)
     }
-    @objc private func clickGenderButton(_ sender: CMDefaultBorderedButton) {
-        if sender.tag == 1 {
-            // 여자
-            womanButton.isSelecte = true
-            manButton.isSelecte = false
-        } else {
-            // 남자
-            womanButton.isSelecte = false
-            manButton.isSelecte = true
-        }
+    
+    @objc
+    private func clickNextButton(_ sender: UIButton) {
+        navigationController?.pushViewController(InputFavoriteTeamViewContoller(reactor: reactor), animated: true)
     }
 }
 // MARK: - bind

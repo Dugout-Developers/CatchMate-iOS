@@ -35,6 +35,7 @@
 		533A2B2A2C2859D600A59340 /* CMImageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B292C2859D600A59340 /* CMImageButton.swift */; };
 		533A2B2C2C29485E00A59340 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B2B2C29485E00A59340 /* SignUpViewController.swift */; };
 		533A2B2E2C29B56200A59340 /* CMDefaultBorderedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B2D2C29B56100A59340 /* CMDefaultBorderedButton.swift */; };
+		533A2B302C2AC5C400A59340 /* InputFavoriteTeamViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B2F2C2AC5C400A59340 /* InputFavoriteTeamViewContoller.swift */; };
 		536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAD2C189B230043B1DA /* AppDelegate.swift */; };
 		536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAF2C189B230043B1DA /* SceneDelegate.swift */; };
 		536BDDB22C189B230043B1DA /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDB12C189B230043B1DA /* HomeViewController.swift */; };
@@ -120,6 +121,7 @@
 		533A2B292C2859D600A59340 /* CMImageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMImageButton.swift; sourceTree = "<group>"; };
 		533A2B2B2C29485E00A59340 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		533A2B2D2C29B56100A59340 /* CMDefaultBorderedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMDefaultBorderedButton.swift; sourceTree = "<group>"; };
+		533A2B2F2C2AC5C400A59340 /* InputFavoriteTeamViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputFavoriteTeamViewContoller.swift; sourceTree = "<group>"; };
 		536BDDAA2C189B230043B1DA /* CatchMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CatchMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		536BDDAD2C189B230043B1DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		536BDDAF2C189B230043B1DA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -246,6 +248,7 @@
 			children = (
 				533A2B262C28558600A59340 /* SignInViewController.swift */,
 				533A2B2B2C29485E00A59340 /* SignUpViewController.swift */,
+				533A2B2F2C2AC5C400A59340 /* InputFavoriteTeamViewContoller.swift */,
 			);
 			path = Sign;
 			sourceTree = "<group>";
@@ -699,6 +702,7 @@
 				536BDE382C1C07990043B1DA /* PaddingLabel.swift in Sources */,
 				533A2B232C27FF6A00A59340 /* CMTextView.swift in Sources */,
 				536BDE2B2C1B54C80043B1DA /* ChatListViewController.swift in Sources */,
+				533A2B302C2AC5C400A59340 /* InputFavoriteTeamViewContoller.swift in Sources */,
 				536BDE312C1B55440043B1DA /* MyPageViewController.swift in Sources */,
 				531786682C20048B00ACEF6A /* CMPickerTextField.swift in Sources */,
 				531786532C1C8BFB00ACEF6A /* BaseViewController.swift in Sources */,

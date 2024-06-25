@@ -14,6 +14,7 @@ final class SignReactor: Reactor {
         case updateNickname(String)
         case updateBirth(String)
         case updateGender(Gender)
+        case updateTeam(Team)
     }
     enum Mutation {
         case setNickname(String)
@@ -21,15 +22,19 @@ final class SignReactor: Reactor {
         case setBirth(String)
         case setGender(Gender)
         case setError(Error)
+        case setTeam(Team)
         case validateForm
+        case validateTeam
     }
     struct State {
         var nickName: String = ""
         var nicknameCount: Int = 0
         var birth: String = ""
         var gender: Gender?
+        var team: Team?
         var signUpViewNextButtonState: Bool = false
         var isFormValid: Bool = false
+        var isTeamSelected: Bool = false
         var error: Error?
     }
     
@@ -58,6 +63,11 @@ final class SignReactor: Reactor {
                 Observable.just(Mutation.setGender(gender)),
                 Observable.just(Mutation.validateForm)
             ])
+        case .updateTeam(let team):
+            return Observable.concat([
+                Observable.just(Mutation.setTeam(team)),
+                Observable.just(Mutation.validateTeam)
+            ])
         }
     }
     
@@ -76,6 +86,10 @@ final class SignReactor: Reactor {
             newState.nicknameCount = count
         case .validateForm:
             newState.isFormValid = !newState.nickName.isEmpty && newState.birth.count == 6 && newState.gender != nil
+        case .setTeam(let team):
+            newState.team = team
+        case .validateTeam:
+            newState.isTeamSelected = !(newState.team == nil)
         }
         return newState
     }
