@@ -45,9 +45,9 @@
 		536BDDD12C189B240043B1DA /* CatchMateUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDD02C189B240043B1DA /* CatchMateUITestsLaunchTests.swift */; };
 		536BDDE02C196C380043B1DA /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 536BDDDF2C196C380043B1DA /* APIKeys.plist */; };
 		536BDDE22C196F510043B1DA /* Bundle+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDE12C196F510043B1DA /* Bundle+Extension.swift */; };
-		536BDDE92C1971C70043B1DA /* LoginReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDE82C1971C70043B1DA /* LoginReactor.swift */; };
+		536BDDE92C1971C70043B1DA /* SignReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDE82C1971C70043B1DA /* SignReactor.swift */; };
 		536BDDEC2C19720E0043B1DA /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDEB2C19720E0043B1DA /* User.swift */; };
-		536BDDF02C1972360043B1DA /* LoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDEF2C1972360043B1DA /* LoginUseCase.swift */; };
+		536BDDF02C1972360043B1DA /* SignUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDEF2C1972360043B1DA /* SignUseCase.swift */; };
 		536BDDF32C1972530043B1DA /* LoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDF22C1972530043B1DA /* LoginRepository.swift */; };
 		536BDDF62C1972740043B1DA /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDF52C1972740043B1DA /* UserDTO.swift */; };
 		536BDDF92C1972880043B1DA /* UserMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDF82C1972880043B1DA /* UserMapper.swift */; };
@@ -134,9 +134,9 @@
 		536BDDD02C189B240043B1DA /* CatchMateUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchMateUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		536BDDDF2C196C380043B1DA /* APIKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
 		536BDDE12C196F510043B1DA /* Bundle+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extension.swift"; sourceTree = "<group>"; };
-		536BDDE82C1971C70043B1DA /* LoginReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginReactor.swift; sourceTree = "<group>"; };
+		536BDDE82C1971C70043B1DA /* SignReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignReactor.swift; sourceTree = "<group>"; };
 		536BDDEB2C19720E0043B1DA /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		536BDDEF2C1972360043B1DA /* LoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUseCase.swift; sourceTree = "<group>"; };
+		536BDDEF2C1972360043B1DA /* SignUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUseCase.swift; sourceTree = "<group>"; };
 		536BDDF22C1972530043B1DA /* LoginRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepository.swift; sourceTree = "<group>"; };
 		536BDDF52C1972740043B1DA /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
 		536BDDF82C1972880043B1DA /* UserMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMapper.swift; sourceTree = "<group>"; };
@@ -371,7 +371,7 @@
 		536BDDE72C1971AF0043B1DA /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				536BDDE82C1971C70043B1DA /* LoginReactor.swift */,
+				536BDDE82C1971C70043B1DA /* SignReactor.swift */,
 				536BDE392C1C1F210043B1DA /* HomeReactor.swift */,
 			);
 			path = ViewModel;
@@ -380,9 +380,9 @@
 		536BDDEA2C1971D20043B1DA /* Domain */ = {
 			isa = PBXGroup;
 			children = (
-				536BDDF12C19723B0043B1DA /* Repositories */,
-				536BDDEE2C1972230043B1DA /* UseCases */,
 				536BDDED2C1972120043B1DA /* Model */,
+				536BDDEE2C1972230043B1DA /* UseCases */,
+				536BDDF12C19723B0043B1DA /* Repositories */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -400,7 +400,7 @@
 		536BDDEE2C1972230043B1DA /* UseCases */ = {
 			isa = PBXGroup;
 			children = (
-				536BDDEF2C1972360043B1DA /* LoginUseCase.swift */,
+				536BDDEF2C1972360043B1DA /* SignUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -691,11 +691,11 @@
 				536BDDFF2C1972D30043B1DA /* UserDataSource.swift in Sources */,
 				536BDDEC2C19720E0043B1DA /* User.swift in Sources */,
 				531786572C1C8F1900ACEF6A /* UIView+Extension.swift in Sources */,
-				536BDDE92C1971C70043B1DA /* LoginReactor.swift in Sources */,
+				536BDDE92C1971C70043B1DA /* SignReactor.swift in Sources */,
 				531786552C1C8E7800ACEF6A /* UIImage+Extension.swift in Sources */,
 				536BDE342C1B57B10043B1DA /* HomeFilterButton.swift in Sources */,
 				536BDE272C1B53150043B1DA /* UIColor+Extension.swift in Sources */,
-				536BDDF02C1972360043B1DA /* LoginUseCase.swift in Sources */,
+				536BDDF02C1972360043B1DA /* SignUseCase.swift in Sources */,
 				536BDE382C1C07990043B1DA /* PaddingLabel.swift in Sources */,
 				533A2B232C27FF6A00A59340 /* CMTextView.swift in Sources */,
 				536BDE2B2C1B54C80043B1DA /* ChatListViewController.swift in Sources */,

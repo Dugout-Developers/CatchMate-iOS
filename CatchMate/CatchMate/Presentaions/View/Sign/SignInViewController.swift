@@ -72,7 +72,7 @@ extension SignInViewController {
     }
     @objc
     private func clickKakaoLoginButton(_ sender: UIButton) {
-        let signUpViewController = SignUpViewController()
+        let signUpViewController = SignUpViewController(reactor: SignReactor())
         navigationController?.pushViewController(signUpViewController, animated: true)
     }
 }

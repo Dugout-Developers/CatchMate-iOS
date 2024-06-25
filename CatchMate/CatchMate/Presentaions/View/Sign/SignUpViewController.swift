@@ -8,8 +8,14 @@
 import UIKit
 import FlexLayout
 import PinLayout
+import ReactorKit
+import RxSwift
+import RxCocoa
 
-final class SignUpViewController: UIViewController {
+final class SignUpViewController: UIViewController, View {
+    var disposeBag = DisposeBag()
+    var reactor: SignReactor
+
     private let containerView = UIView()
     private let titleLabel1: UILabel = {
         let label = UILabel()
@@ -46,6 +52,7 @@ final class SignUpViewController: UIViewController {
     private let countLabel: UILabel = {
         let label = UILabel()
         label.text = "0/10"
+        label.textAlignment = .right
         label.font = .systemFont(ofSize: 14)
         label.textColor = .cmNonImportantTextColor
         return label
@@ -83,26 +90,39 @@ final class SignUpViewController: UIViewController {
     private let womanButton: CMDefaultBorderedButton = {
         let button = CMDefaultBorderedButton()
         button.setTitle("여성", for: .normal)
+        button.tag = 1
         return button
     }()
     
     private let manButton: CMDefaultBorderedButton = {
         let button = CMDefaultBorderedButton()
         button.setTitle("남성", for: .normal)
+        button.tag = 2
         return button
     }()
     
     private let nextButton: CMDefaultFilledButton = {
         let button = CMDefaultFilledButton()
         button.setTitle("다음", for: .normal)
-//        button.isEnabled = false
+        button.isEnabled = false
         return button
     }()
+    
+    init(reactor: SignReactor) {
+        self.reactor = reactor
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupUI()
+        bind(reactor: reactor)
     }
     
     override func viewDidLayoutSubviews() {
@@ -114,6 +134,84 @@ final class SignUpViewController: UIViewController {
     private func setupView() {
         view.backgroundColor = .white
         view.tappedDismissKeyboard()
+    }
+}
+// MARK: - Button
+extension SignUpViewController {
+    private func setupButton() {
+        womanButton.addTarget(self, action: #selector(clickGenderButton), for: .touchUpInside)
+        manButton.addTarget(self, action: #selector(clickGenderButton), for: .touchUpInside)
+    }
+    @objc private func clickGenderButton(_ sender: CMDefaultBorderedButton) {
+        if sender.tag == 1 {
+            // 여자
+            womanButton.isSelecte = true
+            manButton.isSelecte = false
+        } else {
+            // 남자
+            womanButton.isSelecte = false
+            manButton.isSelecte = true
+        }
+    }
+}
+// MARK: - bind
+extension SignUpViewController {
+    func bind(reactor: SignReactor) {
+        // action (View -> Reactor)
+        nickNameTextField.rx.text.orEmpty
+            .withUnretained(self)
+            .map { vc, text in
+                let string = String(text.trimmingCharacters(in: .whitespaces).prefix(10))
+                vc.nickNameTextField.text = string
+                return string
+            }
+            .map { Reactor.Action.updateNickname($0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        birthTextField.rx.text.orEmpty
+            .withUnretained(self)
+            .map { vc, text in
+                let string = String(text.replacingOccurrences(of: " ", with: "").prefix(6))
+                vc.birthTextField.text = string
+                return string
+            }
+            .map { Reactor.Action.updateBirth($0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        manButton.rx.tap
+            .withUnretained(self)
+            .map { vc, _ in
+                vc.manButton.isSelecte = true
+                vc.womanButton.isSelecte = false
+                return Gender.man
+            }
+            .map { Reactor.Action.updateGender($0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        womanButton.rx.tap
+            .withUnretained(self)
+            .map { vc, _ in
+                vc.manButton.isSelecte = false
+                vc.womanButton.isSelecte = true
+                return Gender.woman
+            }
+            .map { Reactor.Action.updateGender($0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        // state (Reactor -> View)
+        reactor.state
+            .map {"\($0.nicknameCount)/10"}
+            .bind(to: countLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        reactor.state.map { $0.isFormValid }
+            .bind(to: nextButton.rx.isEnabled)
+            .disposed(by: disposeBag)
+
     }
 }
 
@@ -131,8 +229,8 @@ extension SignUpViewController {
                 flex.addItem(requiredMark).size(6)
             }.marginBottom(40)
             flex.addItem().direction(.row).width(100%).justifyContent(.spaceBetween).define { flex in
-                flex.addItem(nickNameLabel)
-                flex.addItem(countLabel)
+                flex.addItem(nickNameLabel).grow(1)
+                flex.addItem(countLabel).grow(1)
             }.marginBottom(itemMargin)
             flex.addItem(nickNameTextField).width(100%).marginBottom(sectionMargin)
             flex.addItem(birthLabel).marginBottom(itemMargin)
