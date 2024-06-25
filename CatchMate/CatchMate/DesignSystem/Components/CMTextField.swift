@@ -8,7 +8,9 @@
 import UIKit
 
 class CMTextField: UITextField {
-    private let padding = UIEdgeInsets(top: 17, left: 16, bottom: 17, right: 30)
+    private let padding = UIEdgeInsets(top: 17, left: 16, bottom: 17, right: 36)
+    private let clearButtonSize = CGSize(width: 20, height: 20)
+    
     var isRequiredMark: Bool = false {
         didSet {
             updatePlaceholder()
@@ -60,10 +62,10 @@ class CMTextField: UITextField {
         return bounds.inset(by: padding)
     }
     
-    // Clear button rect
-    override func clearButtonRect(forBounds bounds: CGRect) -> CGRect {
-        let buttonSize = CGSize(width: 20, height: 20)
-        return CGRect(x: bounds.maxX - buttonSize.width - 10, y: (bounds.height - buttonSize.height) / 2, width: buttonSize.width, height: buttonSize.height)
+    override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
+            var rightViewRect = super.rightViewRect(forBounds: bounds)
+            rightViewRect.origin.x -= 16;
+            return rightViewRect
     }
     
     @objc private func textFieldDidChange() {
@@ -92,9 +94,16 @@ class CMTextField: UITextField {
     
     private func createClearButton() -> UIButton {
         let clearButton = UIButton(type: .custom)
-        clearButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
-        clearButton.tintColor = .gray
+        if let image = UIImage(named: "close")?.withRenderingMode(.alwaysTemplate) {
+            clearButton.setImage(image, for: .normal)
+        }
+        clearButton.tintColor = .grayScale500
+        clearButton.frame = CGRect(x: 0, y: 0, width: clearButtonSize.width, height: clearButtonSize.height)
         clearButton.addTarget(self, action: #selector(clearButtonTapped), for: .touchUpInside)
+        
+        
+        clearButton.imageView?.contentMode = .scaleAspectFit
+        
         return clearButton
     }
     
