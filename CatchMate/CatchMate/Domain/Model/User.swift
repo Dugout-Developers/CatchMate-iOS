@@ -14,3 +14,7 @@ struct User {
     var team: Team
 }
 
+enum Gender: String {
+    case woman = "여성"
+    case man = "남성"
+}

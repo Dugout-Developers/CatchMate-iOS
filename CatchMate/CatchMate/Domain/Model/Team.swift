@@ -18,6 +18,8 @@ enum Team: String, CaseIterable {
     case kiwoom = "히어로즈"
     case kt = "위즈"
     case lotte = "자이언츠"
+    case allTeamLove = "평화주의자"
+    case yarine = "야린이"
     
     var getDefaultsImage: UIImage? {
         switch self {
@@ -41,6 +43,10 @@ enum Team: String, CaseIterable {
             return UIImage(named: "ktwiz")
         case .lotte:
             return UIImage(named: "giants")
+        case .allTeamLove:
+            return UIImage(named: "EmptyDisable")
+        case .yarine:
+            return UIImage(named: "EmptyDisable")
         }
     }
     
@@ -66,6 +72,39 @@ enum Team: String, CaseIterable {
             return UIImage(named: "ktwiz_fill")
         case .lotte:
             return UIImage(named: "giants_fill")
+        case .allTeamLove:
+            return UIImage(named: "EmptyPrimary")
+        case .yarine:
+            return UIImage(named: "EmptyPrimary")
+        }
+    }
+    
+    var getLogoImage: UIImage? {
+        switch self {
+        case .nc:
+            return UIImage(named: "dinos_logo")
+        case .ssg:
+            return UIImage(named: "landers_logo")
+        case .kia:
+            return UIImage(named: "tigers_logo")
+        case .dosun:
+            return UIImage(named: "bears_logo")
+        case .hanhwa:
+            return UIImage(named: "eagles_logo")
+        case .lg:
+            return UIImage(named: "twins_logo")
+        case .samsung:
+            return UIImage(named: "lions_logo")
+        case .kiwoom:
+            return UIImage(named: "kiwoom_logo")
+        case .kt:
+            return UIImage(named: "wiz_logo")
+        case .lotte:
+            return UIImage(named: "giants_logo")
+        case .allTeamLove:
+            return UIImage(named: "EmptyPrimary")
+        case .yarine:
+            return UIImage(named: "EmptyPrimary")
         }
     }
     
@@ -91,8 +130,14 @@ enum Team: String, CaseIterable {
             return UIColor(hex: "#2B2A29")
         case .lotte:
             return UIColor(hex: "#0A1D3F")
+        case .allTeamLove:
+            return .cmPrimaryColor
+        case .yarine:
+            return .cmPrimaryColor
         }
     }
     
-    static var allTeam: [Team] = Team.allCases
+    static var allTeam: [Team] = Team.allCases.filter { $0 != .allTeamLove && $0 != .yarine }
+    
+    static var allTeamFull: [Team] = Team.allCases
 }
