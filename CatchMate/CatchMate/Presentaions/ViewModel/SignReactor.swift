@@ -9,12 +9,19 @@ import UIKit
 import ReactorKit
 import RxSwift
 
+enum SignUpError: Error {
+    case apiError
+    case ageError
+    case dataError
+}
 final class SignReactor: Reactor {
     enum Action {
         case updateNickname(String)
         case updateBirth(String)
         case updateGender(Gender)
         case updateTeam(Team)
+        case updateCheerStyle(CheerStyles?)
+        case signUpUser
     }
     enum Mutation {
         case setNickname(String)
@@ -23,6 +30,8 @@ final class SignReactor: Reactor {
         case setGender(Gender)
         case setError(Error)
         case setTeam(Team)
+        case setCheerStyle(CheerStyles?)
+        case validateSignUp
         case validateForm
         case validateTeam
     }
@@ -32,8 +41,11 @@ final class SignReactor: Reactor {
         var birth: String = ""
         var gender: Gender?
         var team: Team?
+        var cheerStyle: CheerStyles?
+        var user: User?
         var signUpViewNextButtonState: Bool = false
         var isFormValid: Bool = false
+        var isSignUp: Bool?
         var isTeamSelected: Bool = false
         var error: Error?
     }
@@ -68,6 +80,10 @@ final class SignReactor: Reactor {
                 Observable.just(Mutation.setTeam(team)),
                 Observable.just(Mutation.validateTeam)
             ])
+        case .updateCheerStyle(let cheerStyle):
+            return Observable.just(Mutation.setCheerStyle(cheerStyle))
+        case .signUpUser:
+            return Observable.just(Mutation.validateSignUp)
         }
     }
     
@@ -90,7 +106,53 @@ final class SignReactor: Reactor {
             newState.team = team
         case .validateTeam:
             newState.isTeamSelected = !(newState.team == nil)
+        case .setCheerStyle(let cheerStyle):
+            newState.cheerStyle = cheerStyle
+        case .validateSignUp:
+            if !newState.nickName.isEmpty, !newState.birth.isEmpty, let gender = newState.gender, let team = newState.team {
+                if let age = birthToAge(newState.birth) {
+                    newState.user = User(nickName: newState.nickName, age: age, team: team, gener: gender, cheerStyle: newState.cheerStyle)
+                    newState.isSignUp = true
+                    print(newState.user ?? "Error")
+                } else {
+                    newState.isSignUp = false
+                    newState.error = SignUpError.ageError
+                }
+            } else {
+                newState.isSignUp = false
+                newState.error = SignUpError.dataError
+            }
         }
         return newState
+    }
+    
+    private func birthToAge(_ birth: String) -> UInt? {
+        guard birth.count == 6 else { return nil }
+        
+        let yearString = String(birth.prefix(2))
+        let monthString = String(birth.dropFirst(2).prefix(2))
+        let dayString = String(birth.dropFirst(4))
+        
+        guard let year = Int(yearString), let month = Int(monthString), let day = Int(dayString) else { return nil }
+        
+        
+        let currentYear = Calendar.current.component(.year, from: Date())
+        let currentCentury = currentYear / 100
+        let birthYear = (year <= currentYear % 100) ? (currentCentury * 100 + year) : ((currentCentury - 1) * 100 + year)
+        
+        var birthDateComponents = DateComponents()
+        birthDateComponents.year = birthYear
+        birthDateComponents.month = month
+        birthDateComponents.day = day
+        
+        let calendar = Calendar.current
+        guard let birthDate = calendar.date(from: birthDateComponents) else { return nil }
+        
+        let ageComponents = calendar.dateComponents([.year], from: birthDate, to: Date())
+        if let age = ageComponents.year, age >= 0 {
+            return UInt(age)
+        } else {
+            return nil
+        }
     }
 }
