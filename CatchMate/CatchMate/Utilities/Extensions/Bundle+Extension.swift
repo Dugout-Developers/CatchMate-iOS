@@ -17,10 +17,19 @@ extension Bundle {
            }
            return key
        }
-    var kakaoLoginKey: String? {
+    var kakaoLoginAPPKey: String? {
            guard let file = self.path(forResource: "APIKeys", ofType: "plist"),
                  let resource = NSDictionary(contentsOfFile: file),
                  let key = resource["KAKAO_LOGIN_API"] as? String else {
+               print("Kakao API Key 얻기 실패")
+               return nil
+           }
+           return key
+       }
+    var kakaoLoginRESTKey: String? {
+           guard let file = self.path(forResource: "APIKeys", ofType: "plist"),
+                 let resource = NSDictionary(contentsOfFile: file),
+                 let key = resource["KAKAO_LOGIN_REST_API"] as? String else {
                print("Kakao API Key 얻기 실패")
                return nil
            }

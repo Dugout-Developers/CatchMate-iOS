@@ -6,10 +6,16 @@
 //
 
 import UIKit
+import RxSwift
+import ReactorKit
+import RxKakaoSDKUser
 import FlexLayout
 import PinLayout
 
-final class SignInViewController: BaseViewController {
+final class SignInViewController: BaseViewController, View {
+    var disposeBag = DisposeBag()
+    var reactor: SignReactor
+    
     private let containerView = UIView()
     private let logoContainerView = UIView()
     private let logoImageView: UIImageView = {
@@ -47,11 +53,22 @@ final class SignInViewController: BaseViewController {
         return button
     }()
     
+    init(reactor: SignReactor) {
+        self.reactor = reactor
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupUI()
         setupButton()
+        bind(reactor: reactor)
     }
     
     override func viewDidLayoutSubviews() {
@@ -64,7 +81,15 @@ final class SignInViewController: BaseViewController {
         view.backgroundColor = .white
     }
 }
-
+// MARK: - Bind
+extension SignInViewController {
+    func bind(reactor: SignReactor) {
+        naverLoginButton.rx.tap
+            .map { Reactor.Action.kakaoLogin }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+}
 // MARK: - Button
 extension SignInViewController {
     private func setupButton() {
@@ -72,7 +97,7 @@ extension SignInViewController {
     }
     @objc
     private func clickKakaoLoginButton(_ sender: UIButton) {
-        let signUpViewController = SignUpViewController(reactor: SignReactor())
+        let signUpViewController = SignUpViewController(reactor: reactor)
         navigationController?.pushViewController(signUpViewController, animated: true)
     }
 }
