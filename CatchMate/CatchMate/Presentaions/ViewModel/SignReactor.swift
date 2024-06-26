@@ -16,6 +16,7 @@ enum SignUpError: Error {
 }
 final class SignReactor: Reactor {
     enum Action {
+        case kakaoLogin
         case updateNickname(String)
         case updateBirth(String)
         case updateGender(Gender)
@@ -24,6 +25,7 @@ final class SignReactor: Reactor {
         case signUpUser
     }
     enum Mutation {
+        case getkakaoLoginInfo(LoginModel)
         case setNickname(String)
         case setCount(Int)
         case setBirth(String)
@@ -36,6 +38,7 @@ final class SignReactor: Reactor {
         case validateTeam
     }
     struct State {
+        var loginModel: LoginModel?
         var nickName: String = ""
         var nicknameCount: Int = 0
         var birth: String = ""
@@ -51,10 +54,11 @@ final class SignReactor: Reactor {
     }
     
     var initialState: State
-    
-    init() {
+    private let kakaoLoginUseCase: KakaoLoginUseCase
+    init(kakaoUsecase: KakaoLoginUseCase) {
         //usecase 추가하기
         self.initialState = State()
+        self.kakaoLoginUseCase = kakaoUsecase
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
@@ -84,6 +88,12 @@ final class SignReactor: Reactor {
             return Observable.just(Mutation.setCheerStyle(cheerStyle))
         case .signUpUser:
             return Observable.just(Mutation.validateSignUp)
+        case .kakaoLogin:
+            return kakaoLoginUseCase.login()
+                .map { Mutation.getkakaoLoginInfo($0) }
+                .catch { error in
+                    Observable.just(Mutation.setError(error))
+                }
         }
     }
     
@@ -122,6 +132,9 @@ final class SignReactor: Reactor {
                 newState.isSignUp = false
                 newState.error = SignUpError.dataError
             }
+        case .getkakaoLoginInfo(let loginInfo):
+            print(loginInfo)
+            newState.loginModel = loginInfo
         }
         return newState
     }

@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import RxKakaoSDKAuth
+import KakaoSDKAuth
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
@@ -18,7 +20,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        let tabViewController = TabBarController()
 //        
 //        window?.rootViewController = tabViewController
-        let signInViewController = SignInViewController()
+        let repository = SignRepositoryImpl(remoteDataSource: SignDataSourceImpl())
+        let kakaoUsecase = KakaoLoginUseCaseImpl(repository: repository)
+        let reactor = SignReactor(kakaoUsecase: kakaoUsecase)
+        let signInViewController = SignInViewController(reactor: reactor)
 
         window?.rootViewController = UINavigationController(rootViewController: signInViewController)
         window?.makeKeyAndVisible()
@@ -70,5 +75,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     
+}
+// MARK: - SNS Login
+extension SceneDelegate {
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        if let url = URLContexts.first?.url {
+            if (AuthApi.isKakaoTalkLoginUrl(url)) {
+                _ = AuthController.rx.handleOpenUrl(url: url)
+            }
+        }
+    }
 }
 
