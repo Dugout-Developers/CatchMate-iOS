@@ -1,8 +1,8 @@
 //
-//  InputFavoriteTeamViewContoller.swift
+//  InputCheerStyleViewController.swift
 //  CatchMate
 //
-//  Created by 방유빈 on 6/25/24.
+//  Created by 방유빈 on 6/26/24.
 //
 
 import UIKit
@@ -12,13 +12,13 @@ import ReactorKit
 import RxSwift
 import RxCocoa
 
-final class InputFavoriteTeamViewContoller: UIViewController, View {
+final class InputCheerStyleViewController: UIViewController, View {
     var disposeBag = DisposeBag()
     var reactor: SignReactor
     
     private let scrollView = UIScrollView()
     private let containerView = UIView()
-    private let teamButtonTapPublisher = PublishSubject<Team>().asObserver()
+    private let styleButtonTapPublisher = PublishSubject<CheerStyles?>().asObserver()
     
     private let titleLabel1: UILabel = {
         let label = UILabel()
@@ -32,24 +32,27 @@ final class InputFavoriteTeamViewContoller: UIViewController, View {
     private let titleLabel2: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
-        label.text = "응원구단을 알려주세요."
+        label.text = "응원스타일을 알려주세요."
         label.adjustsFontSizeToFitWidth = true
         label.font = .systemFont(ofSize: 28)
         label.textColor = .cmHeadLineTextColor
         return label
     }()
     
-    private let requiredMark: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "requiredMark")
-        imageView.contentMode = .scaleAspectFit
-        return imageView
+    private let requiredMark: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 1
+        label.text = "선택"
+        label.adjustsFontSizeToFitWidth = true
+        label.font = .systemFont(ofSize: 11)
+        label.textColor = .cmNonImportantTextColor
+        return label
     }()
     
-    private let teamButtons: [SignSelectedButton<Team>] = {
-        var buttons: [SignSelectedButton<Team>] = []
-        Team.allTeamFull.forEach { team in
-            let teamButton = SignSelectedButton<Team>(item: team)
+    private let styleButtons: [SignSelectedButton<CheerStyles>] = {
+        var buttons: [SignSelectedButton<CheerStyles>] = []
+        CheerStyles.allCheerStyles.forEach { team in
+            let teamButton = SignSelectedButton(item: team)
             buttons.append(teamButton)
         }
         return buttons
@@ -58,7 +61,6 @@ final class InputFavoriteTeamViewContoller: UIViewController, View {
     private let nextButton: CMDefaultFilledButton = {
         let button = CMDefaultFilledButton()
         button.setTitle("다음", for: .normal)
-        button.isEnabled = false
         return button
     }()
 
@@ -97,36 +99,30 @@ final class InputFavoriteTeamViewContoller: UIViewController, View {
         reactor.state
             .withUnretained(self)
             .subscribe(onNext: { vc, state in
-                vc.teamButtons.forEach { teamButton in
-                    if teamButton.item == state.team {
-                        teamButton.isSelected = true
+                vc.styleButtons.forEach { style in
+                    if style.item == state.cheerStyle {
+                        style.isSelected = true
                     }
                 }
             }).disposed(by: disposeBag)
     }
 }
 // MARK: - Button
-extension InputFavoriteTeamViewContoller {
+extension InputCheerStyleViewController {
     private func setupButton() {
-        nextButton.addTarget(self, action: #selector(clickNextButton), for: .touchUpInside)
-        teamButtons.forEach { button in
-            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(clickTeamButton))
+        styleButtons.forEach { button in
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(clickStyleButton))
             button.addGestureRecognizer(tapGesture)
         }
     }
     
     @objc
-    private func clickNextButton(_ sender: UIButton) {
-        navigationController?.pushViewController(InputCheerStyleViewController(reactor: reactor), animated: true)
-    }
-    
-    @objc
-    private func clickTeamButton(_ sender: UITapGestureRecognizer) {
-        guard let teamButton = sender.view as? SignSelectedButton<Team> else { return }
-        teamButtons.forEach { button in
-            if teamButton == button {
-                button.isSelected = true
-                teamButtonTapPublisher.onNext(button.item)
+    private func clickStyleButton(_ sender: UITapGestureRecognizer) {
+        guard let styleButton = sender.view as? SignSelectedButton<CheerStyles> else { return }
+        styleButtons.forEach { button in
+            if styleButton == button {
+                button.isSelected = !button.isSelected
+                styleButtonTapPublisher.onNext(button.isSelected ? button.item : nil)
             } else {
                 button.isSelected = false
             }
@@ -135,26 +131,53 @@ extension InputFavoriteTeamViewContoller {
 }
 
 // MARK: - bind
-extension InputFavoriteTeamViewContoller {
+extension InputCheerStyleViewController {
     func bind(reactor: SignReactor) {
-        teamButtonTapPublisher
-            .map { Reactor.Action.updateTeam($0) }
+        styleButtonTapPublisher
+            .map { Reactor.Action.updateCheerStyle($0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        nextButton.rx.tap
+            .map { Reactor.Action.signUpUser }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
         reactor.state
             .map {"\($0.nickName)님의"}
             .bind(to: titleLabel1.rx.text)
             .disposed(by: disposeBag)
         
-        reactor.state.map { $0.isTeamSelected }
-            .bind(to: nextButton.rx.isEnabled)
+        
+        reactor.state
+            .map { $0.isSignUp }
+            .distinctUntilChanged()
+            .subscribe(onNext: { [weak self] isSignUp in
+                if isSignUp == true {
+                    self?.navigateToNextPage()
+                } else if isSignUp == false {
+                    self?.showErrorAlert()
+                }
+            })
             .disposed(by: disposeBag)
 
     }
+    
+    private func navigateToNextPage() {
+            // Logic to navigate to the next page
+            let nextViewController = SignUpFinishedViewController(reactor: reactor)
+            navigationController?.pushViewController(nextViewController, animated: true)
+        }
+        
+        private func showErrorAlert() {
+            let alert = UIAlertController(title: "Error", message: "Sign up failed.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alert, animated: true, completion: nil)
+        }
 }
 
 // MARK: - UI
-extension InputFavoriteTeamViewContoller {
+extension InputCheerStyleViewController {
     private func setupUI() {
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
@@ -163,12 +186,12 @@ extension InputFavoriteTeamViewContoller {
                 flex.addItem(titleLabel1).marginTop(48).marginBottom(4)
                 flex.addItem().direction(.row).alignItems(.center).define { flex in
                     flex.addItem(titleLabel2).marginRight(6)
-                    flex.addItem(requiredMark).size(6)
+                    flex.addItem(requiredMark)
                 }.marginBottom(40)
-                for i in stride(from: 0, to: teamButtons.count, by: 3) {
+                for i in stride(from: 0, to: styleButtons.count, by: 2) {
                     flex.addItem().width(100%).direction(.row).justifyContent(.spaceBetween).define { flex in
-                        for j in i..<min(i+3, teamButtons.count) {
-                            flex.addItem(teamButtons[j]).grow(1).shrink(1).basis(0%).marginHorizontal(j % 3 == 1 ? 9 : 0)
+                        for j in i..<min(i+2, styleButtons.count) {
+                            flex.addItem(styleButtons[j]).grow(1).shrink(1).basis(0%).marginHorizontal(j % 2 == 1 ? 9 : 0)
                         }
                     }.marginBottom(12)
                 }
@@ -177,6 +200,3 @@ extension InputFavoriteTeamViewContoller {
         }
     }
 }
-
-
-                                                                            
