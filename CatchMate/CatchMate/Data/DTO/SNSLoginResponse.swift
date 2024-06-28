@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct KakaoLoginResponse {
+struct SNSLoginResponse {
     let id: String
     let name: String
     let email: String

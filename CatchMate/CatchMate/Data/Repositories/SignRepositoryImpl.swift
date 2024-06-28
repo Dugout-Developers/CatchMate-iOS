@@ -22,4 +22,11 @@ class SignRepositoryImpl: SignRepository {
                 return LoginModel(id: response.id, name: response.name, email: response.email)
             }
     }
+    
+    func appleLogin() -> Observable<LoginModel> {
+        return remoteDataSource.getAppleLoginToken()
+            .map { response in
+                return LoginModel(id: response.id, name: response.name, email: response.email)
+            }
+    }
 }

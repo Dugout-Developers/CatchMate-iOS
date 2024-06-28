@@ -88,6 +88,11 @@ extension SignInViewController {
             .map { Reactor.Action.kakaoLogin }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        appleLoginButton.rx.tap
+            .map { Reactor.Action.appleLogin }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }
 // MARK: - Button

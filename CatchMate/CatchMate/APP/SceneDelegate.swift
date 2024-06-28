@@ -22,7 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        window?.rootViewController = tabViewController
         let repository = SignRepositoryImpl(remoteDataSource: SignDataSourceImpl())
         let kakaoUsecase = KakaoLoginUseCaseImpl(repository: repository)
-        let reactor = SignReactor(kakaoUsecase: kakaoUsecase)
+        let appleUsecase = AppleLoginUseCaseImpl(repository: repository)
+        let reactor = SignReactor(kakaoUsecase: kakaoUsecase, appleUsecase: appleUsecase)
         let signInViewController = SignInViewController(reactor: reactor)
 
         window?.rootViewController = UINavigationController(rootViewController: signInViewController)

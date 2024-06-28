@@ -17,6 +17,7 @@ enum SignUpError: Error {
 final class SignReactor: Reactor {
     enum Action {
         case kakaoLogin
+        case appleLogin
         case updateNickname(String)
         case updateBirth(String)
         case updateGender(Gender)
@@ -25,7 +26,7 @@ final class SignReactor: Reactor {
         case signUpUser
     }
     enum Mutation {
-        case getkakaoLoginInfo(LoginModel)
+        case getSNSLoginInfo(LoginModel)
         case setNickname(String)
         case setCount(Int)
         case setBirth(String)
@@ -55,10 +56,13 @@ final class SignReactor: Reactor {
     
     var initialState: State
     private let kakaoLoginUseCase: KakaoLoginUseCase
-    init(kakaoUsecase: KakaoLoginUseCase) {
+    private let appleLoginUseCase: AppleLoginUseCase
+    
+    init(kakaoUsecase: KakaoLoginUseCase, appleUsecase: AppleLoginUseCase) {
         //usecase 추가하기
         self.initialState = State()
         self.kakaoLoginUseCase = kakaoUsecase
+        self.appleLoginUseCase = appleUsecase
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
@@ -90,7 +94,13 @@ final class SignReactor: Reactor {
             return Observable.just(Mutation.validateSignUp)
         case .kakaoLogin:
             return kakaoLoginUseCase.login()
-                .map { Mutation.getkakaoLoginInfo($0) }
+                .map { Mutation.getSNSLoginInfo($0) }
+                .catch { error in
+                    Observable.just(Mutation.setError(error))
+                }
+        case .appleLogin:
+            return appleLoginUseCase.login()
+                .map { Mutation.getSNSLoginInfo($0) }
                 .catch { error in
                     Observable.just(Mutation.setError(error))
                 }
@@ -132,7 +142,7 @@ final class SignReactor: Reactor {
                 newState.isSignUp = false
                 newState.error = SignUpError.dataError
             }
-        case .getkakaoLoginInfo(let loginInfo):
+        case .getSNSLoginInfo(let loginInfo):
             print(loginInfo)
             newState.loginModel = loginInfo
         }
