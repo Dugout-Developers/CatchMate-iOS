@@ -9,11 +9,14 @@ import UIKit
 
 struct User {
     var id: String = UUID().uuidString
+    let snsID: String
+    let email: String
     let nickName: String
     let age: UInt
     let team: Team
     let gener: Gender
     let cheerStyle: CheerStyles?
+    let profilePicture: String?
 }
 
 enum Gender: String {

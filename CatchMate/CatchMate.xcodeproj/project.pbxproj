@@ -81,6 +81,7 @@
 		536BDE382C1C07990043B1DA /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE372C1C07990043B1DA /* PaddingLabel.swift */; };
 		536BDE3A2C1C1F210043B1DA /* HomeReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE392C1C1F210043B1DA /* HomeReactor.swift */; };
 		5382490E2C2E79A90074B583 /* AppleLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */; };
+		538249102C3139C80074B583 /* LoginUserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -172,6 +173,7 @@
 		536BDE372C1C07990043B1DA /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		536BDE392C1C1F210043B1DA /* HomeReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeReactor.swift; sourceTree = "<group>"; };
 		5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginUseCase.swift; sourceTree = "<group>"; };
+		5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUserDefaultsService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -231,6 +233,7 @@
 			children = (
 				531786702C202EF500ACEF6A /* DIContainerService.swift */,
 				531786732C202F1B00ACEF6A /* NetworkService.swift */,
+				5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -712,6 +715,7 @@
 				531786822C21D3F700ACEF6A /* ChatListTableViewCell.swift in Sources */,
 				531786592C1C934A00ACEF6A /* UIViewController+Extension.swift in Sources */,
 				5317865D2C1EAC4700ACEF6A /* Screen.swift in Sources */,
+				538249102C3139C80074B583 /* LoginUserDefaultsService.swift in Sources */,
 				531786622C1EE6C500ACEF6A /* TeamFilterTableViewCell.swift in Sources */,
 				536BDE3A2C1C1F210043B1DA /* HomeReactor.swift in Sources */,
 				536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */,

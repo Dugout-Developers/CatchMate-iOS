@@ -13,7 +13,9 @@ enum SignUpError: Error {
     case apiError
     case ageError
     case dataError
+    case loginDataError
 }
+
 final class SignReactor: Reactor {
     enum Action {
         case kakaoLogin
@@ -129,9 +131,9 @@ final class SignReactor: Reactor {
         case .setCheerStyle(let cheerStyle):
             newState.cheerStyle = cheerStyle
         case .validateSignUp:
-            if !newState.nickName.isEmpty, !newState.birth.isEmpty, let gender = newState.gender, let team = newState.team {
+            if !newState.nickName.isEmpty, !newState.birth.isEmpty, let gender = newState.gender, let team = newState.team, let snsId = newState.loginModel?.id, let email = newState.loginModel?.email {
                 if let age = birthToAge(newState.birth) {
-                    newState.user = User(nickName: newState.nickName, age: age, team: team, gener: gender, cheerStyle: newState.cheerStyle)
+                    newState.user = User(snsID: snsId, email: email, nickName: newState.nickName, age: age, team: team, gener: gender, cheerStyle: newState.cheerStyle, profilePicture: nil)
                     newState.isSignUp = true
                     print(newState.user ?? "Error")
                 } else {

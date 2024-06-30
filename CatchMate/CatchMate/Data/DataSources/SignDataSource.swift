@@ -26,19 +26,20 @@ class SignDataSourceImpl: NSObject, SignDataSource, ASAuthorizationControllerDel
                 if let error = error {
                     observer.onError(error)
                 } else if oauthToken != nil {
-                    print("============================")
-                    print("얍\(String(describing: oauthToken))")
+                    print("Token : \(String(describing: oauthToken))")
                     // 사용자 정보 요청
                     UserApi.shared.me { (user, error) in
                         if let error = error {
                             observer.onError(error)
                         } else if let user = user {
-                            // 필요한 정보를 KakaoLoginResponse로 변환하여 observer에 전달
-                            print("user:\(user)")
+                            print("User: \(user)")
                             print("============================")
-                            let response = SNSLoginResponse(id: "\(String(describing: user.id))",
-                                                              name: user.kakaoAccount?.profile?.nickname ?? "",
-                                                              email: user.kakaoAccount?.email ?? "")
+                            // 필요한 정보를 KakaoLoginResponse로 변환하여 observer에 전달
+                            guard let userid = user.id else {
+                                return
+                            }
+                            let email = user.kakaoAccount?.email ?? "kakao" + String(userid)
+                            let response = SNSLoginResponse(id: String(userid), email: email, loginType: .kakao)
                             observer.onNext(response)
                             observer.onCompleted()
                         }
@@ -52,7 +53,7 @@ class SignDataSourceImpl: NSObject, SignDataSource, ASAuthorizationControllerDel
     // MARK: - APPLE LOGIN
     private var loginSubject = PublishSubject<SNSLoginResponse>()
 
-    func getAppleLoginToken() -> RxSwift.Observable<SNSLoginResponse> {
+    func getAppleLoginToken() -> Observable<SNSLoginResponse> {
         let provider = ASAuthorizationAppleIDProvider()
         let request = provider.createRequest()
         request.requestedScopes = [.fullName, .email]
@@ -66,18 +67,26 @@ class SignDataSourceImpl: NSObject, SignDataSource, ASAuthorizationControllerDel
     
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential,
+           let email = appleIDCredential.email {
             print("APPLE Token: \(String(describing: appleIDCredential.identityToken))")
             let userId = appleIDCredential.user
-            let fullName = appleIDCredential.fullName?.givenName ?? ""
-            let email = appleIDCredential.email ?? ""
-            let response = SNSLoginResponse(id: userId, name: fullName, email: email)
+            let response = SNSLoginResponse(id: userId, email: email, loginType: .apple)
             print("responseMapping:\(response)")
             print("============================")
+            LoginUserDefaultsService.shared.setTempStorage(type: .apple, id: response.id, email: response.email)
             loginSubject.onNext(response)
             loginSubject.onCompleted()
         } else {
-            loginSubject.onError(NSError(domain: "AppleLogin", code: -1, userInfo: [NSLocalizedDescriptionKey: "Authorization failed"]))
+            if let loginData = LoginUserDefaultsService.shared.getLoginData() {
+                let response = SNSLoginResponse(id: loginData.id, email: loginData.email, loginType: .apple)
+                print("UserDefaults:\(response)")
+                print("============================")
+                loginSubject.onNext(response)
+                loginSubject.onCompleted()
+            } else {
+                loginSubject.onError(NSError(domain: "AppleLogin", code: -1, userInfo: [NSLocalizedDescriptionKey: "Authorization failed"]))
+            }
         }
     }
     

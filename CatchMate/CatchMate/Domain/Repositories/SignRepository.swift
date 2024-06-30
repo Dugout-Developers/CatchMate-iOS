@@ -11,8 +11,7 @@ import RxSwift
 // MARK: - Domain Model (확정 X - Test 버전)
 struct LoginModel {
     let id: String
-        let name: String
-        let email: String
+    let email: String
 }
 
 protocol SignRepository {

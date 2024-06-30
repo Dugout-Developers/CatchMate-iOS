@@ -84,10 +84,15 @@ final class SignInViewController: BaseViewController, View {
 // MARK: - Bind
 extension SignInViewController {
     func bind(reactor: SignReactor) {
-        naverLoginButton.rx.tap
-            .map { Reactor.Action.kakaoLogin }
+        kakaoLoginButton.rx.tap
+            .map{ Reactor.Action.kakaoLogin }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+//        naverLoginButton.rx.tap
+//            .map { Reactor.Action. }
+//            .bind(to: reactor.action)
+//            .disposed(by: disposeBag)
         
         appleLoginButton.rx.tap
             .map { Reactor.Action.appleLogin }
@@ -98,7 +103,7 @@ extension SignInViewController {
 // MARK: - Button
 extension SignInViewController {
     private func setupButton() {
-        kakaoLoginButton.addTarget(self, action: #selector(clickKakaoLoginButton), for: .touchUpInside)
+        naverLoginButton.addTarget(self, action: #selector(clickKakaoLoginButton), for: .touchUpInside)
     }
     @objc
     private func clickKakaoLoginButton(_ sender: UIButton) {

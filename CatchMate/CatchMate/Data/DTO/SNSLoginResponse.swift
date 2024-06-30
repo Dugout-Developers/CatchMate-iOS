@@ -7,8 +7,14 @@
 
 import UIKit
 
+enum LoginType: String {
+    case kakao
+    case naver
+    case apple
+}
+
 struct SNSLoginResponse {
     let id: String
-    let name: String
     let email: String
+    let loginType: LoginType
 }

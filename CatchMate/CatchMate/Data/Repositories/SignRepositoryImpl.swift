@@ -19,14 +19,14 @@ class SignRepositoryImpl: SignRepository {
         return remoteDataSource.getKakaoLoginToken()
             .map { response in
                 // response를 User로 매핑
-                return LoginModel(id: response.id, name: response.name, email: response.email)
+                return LoginModel(id: response.id, email: response.email)
             }
     }
     
     func appleLogin() -> Observable<LoginModel> {
         return remoteDataSource.getAppleLoginToken()
             .map { response in
-                return LoginModel(id: response.id, name: response.name, email: response.email)
+                return LoginModel(id: response.id, email: response.email)
             }
     }
 }
