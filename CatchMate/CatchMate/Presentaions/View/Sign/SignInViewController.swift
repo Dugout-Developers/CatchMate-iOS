@@ -67,7 +67,6 @@ final class SignInViewController: BaseViewController, View {
         super.viewDidLoad()
         setupView()
         setupUI()
-        setupButton()
         bind(reactor: reactor)
     }
     
@@ -98,19 +97,30 @@ extension SignInViewController {
             .map { Reactor.Action.appleLogin }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        reactor.state
+            .map { state -> Bool in
+                if state.loginModel != nil {
+                    return true
+                } else {
+                    return false
+                }
+            }
+            .distinctUntilChanged()
+            .filter { $0 }
+            .withUnretained(self)
+            .bind { vc, _ in
+                vc.pushNextView()
+            }
+            .disposed(by: disposeBag)
     }
-}
-// MARK: - Button
-extension SignInViewController {
-    private func setupButton() {
-        naverLoginButton.addTarget(self, action: #selector(clickKakaoLoginButton), for: .touchUpInside)
-    }
-    @objc
-    private func clickKakaoLoginButton(_ sender: UIButton) {
+    
+    private func pushNextView() {
         let signUpViewController = SignUpViewController(reactor: reactor)
         navigationController?.pushViewController(signUpViewController, animated: true)
     }
 }
+
 
 // MARK: - UI
 extension SignInViewController {
