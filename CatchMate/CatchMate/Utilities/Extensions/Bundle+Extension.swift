@@ -35,12 +35,20 @@ extension Bundle {
            }
            return key
        }
-    
+    var naverUrlScheme: String? {
+           guard let file = self.path(forResource: "APIKeys", ofType: "plist"),
+                 let resource = NSDictionary(contentsOfFile: file),
+                 let key = resource["NAVER_URL_SCHEME"] as? String else {
+               print("naver UrlScheme 얻기 실패")
+               return nil
+           }
+           return key
+       }
     var naverLoginClientID: String? {
            guard let file = self.path(forResource: "APIKeys", ofType: "plist"),
                  let resource = NSDictionary(contentsOfFile: file),
                  let key = resource["NAVER_LOGIN_API_ClientID"] as? String else {
-               print("Kakao API Key 얻기 실패")
+               print("naver Login ID 얻기 실패")
                return nil
            }
            return key
@@ -50,7 +58,7 @@ extension Bundle {
            guard let file = self.path(forResource: "APIKeys", ofType: "plist"),
                  let resource = NSDictionary(contentsOfFile: file),
                  let key = resource["NAVER_LOGIN_API_ClientSecret"] as? String else {
-               print("Kakao API Key 얻기 실패")
+               print("Naver Login Key 얻기 실패")
                return nil
            }
            return key

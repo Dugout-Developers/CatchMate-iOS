@@ -12,17 +12,13 @@ class DIContainerService {
 
     private init() {}
 
-//    func makeUserReactor() -> UserReactor {
-//        let userRepository = UserRepositoryImpl()
-//        let getUserUseCase = GetUserUseCaseImpl(userRepository: userRepository)
-//        let addUserUseCase = AddUserUseCaseImpl(userRepository: userRepository)
-//        let deleteUserUseCase = DeleteUserUseCaseImpl(userRepository: userRepository)
-//        return UserReactor(getUserUseCase: getUserUseCase, addUserUseCase: addUserUseCase, deleteUserUseCase: deleteUserUseCase)
-//    }
-//
-//    func makeUserViewController() -> UserViewController {
-//        let viewController = UserViewController()
-//        viewController.reactor = makeUserReactor()
-//        return viewController
-//    }
+    func makeSignReactor() -> SignReactor {
+        let repository = SignRepositoryImpl(remoteDataSource: SignDataSourceImpl())
+        let kakaoUsecase = KakaoLoginUseCaseImpl(repository: repository)
+        let appleUsecase = AppleLoginUseCaseImpl(repository: repository)
+        let naverUsecase = NaverLoginUseCaseeImpl(repository: repository)
+        let reactor = SignReactor(kakaoUsecase: kakaoUsecase, appleUsecase: appleUsecase, naverUsecase: naverUsecase)
+        
+        return reactor
+    }
 }

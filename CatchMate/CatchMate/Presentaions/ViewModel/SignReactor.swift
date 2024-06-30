@@ -13,10 +13,14 @@ enum SignUpError: Error {
     case apiError
     case ageError
     case dataError
+    case loginDataError
 }
+
 final class SignReactor: Reactor {
     enum Action {
         case kakaoLogin
+        case appleLogin
+        case naverLogin
         case updateNickname(String)
         case updateBirth(String)
         case updateGender(Gender)
@@ -25,7 +29,7 @@ final class SignReactor: Reactor {
         case signUpUser
     }
     enum Mutation {
-        case getkakaoLoginInfo(LoginModel)
+        case getSNSLoginInfo(LoginModel)
         case setNickname(String)
         case setCount(Int)
         case setBirth(String)
@@ -55,10 +59,15 @@ final class SignReactor: Reactor {
     
     var initialState: State
     private let kakaoLoginUseCase: KakaoLoginUseCase
-    init(kakaoUsecase: KakaoLoginUseCase) {
+    private let appleLoginUseCase: AppleLoginUseCase
+    private let naverLoginUseCase: NaverLoginUseCase
+    
+    init(kakaoUsecase: KakaoLoginUseCase, appleUsecase: AppleLoginUseCase, naverUsecase: NaverLoginUseCase) {
         //usecase 추가하기
         self.initialState = State()
         self.kakaoLoginUseCase = kakaoUsecase
+        self.appleLoginUseCase = appleUsecase
+        self.naverLoginUseCase = naverUsecase
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
@@ -90,7 +99,19 @@ final class SignReactor: Reactor {
             return Observable.just(Mutation.validateSignUp)
         case .kakaoLogin:
             return kakaoLoginUseCase.login()
-                .map { Mutation.getkakaoLoginInfo($0) }
+                .map { Mutation.getSNSLoginInfo($0) }
+                .catch { error in
+                    Observable.just(Mutation.setError(error))
+                }
+        case .appleLogin:
+            return appleLoginUseCase.login()
+                .map { Mutation.getSNSLoginInfo($0) }
+                .catch { error in
+                    Observable.just(Mutation.setError(error))
+                }
+        case .naverLogin:
+            return naverLoginUseCase.login()
+                .map { Mutation.getSNSLoginInfo($0) }
                 .catch { error in
                     Observable.just(Mutation.setError(error))
                 }
@@ -119,9 +140,9 @@ final class SignReactor: Reactor {
         case .setCheerStyle(let cheerStyle):
             newState.cheerStyle = cheerStyle
         case .validateSignUp:
-            if !newState.nickName.isEmpty, !newState.birth.isEmpty, let gender = newState.gender, let team = newState.team {
+            if !newState.nickName.isEmpty, !newState.birth.isEmpty, let gender = newState.gender, let team = newState.team, let snsId = newState.loginModel?.id, let email = newState.loginModel?.email {
                 if let age = birthToAge(newState.birth) {
-                    newState.user = User(nickName: newState.nickName, age: age, team: team, gener: gender, cheerStyle: newState.cheerStyle)
+                    newState.user = User(snsID: snsId, email: email, nickName: newState.nickName, age: age, team: team, gener: gender, cheerStyle: newState.cheerStyle, profilePicture: nil)
                     newState.isSignUp = true
                     print(newState.user ?? "Error")
                 } else {
@@ -132,9 +153,17 @@ final class SignReactor: Reactor {
                 newState.isSignUp = false
                 newState.error = SignUpError.dataError
             }
-        case .getkakaoLoginInfo(let loginInfo):
-            print(loginInfo)
+        case .getSNSLoginInfo(let loginInfo):
             newState.loginModel = loginInfo
+            if let gender = newState.loginModel?.gender {
+                newState.gender = gender
+            }
+            if let nickname = newState.loginModel?.nickName {
+                newState.nickName = nickname
+            }
+            if let birth = newState.loginModel?.birth {
+                newState.birth = birth
+            }
         }
         return newState
     }
