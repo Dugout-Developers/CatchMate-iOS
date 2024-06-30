@@ -136,6 +136,40 @@ final class SignUpViewController: UIViewController, View {
     private func setupView() {
         view.backgroundColor = .white
         view.tappedDismissKeyboard()
+        
+        reactor.state
+            .map {$0.nickName}
+            .compactMap { $0 }
+            .withUnretained(self)
+            .bind(onNext: { vc, nickName in
+                vc.nickNameTextField.text = nickName
+            })
+            .disposed(by: disposeBag)
+        
+        reactor.state
+            .map {$0.birth}
+            .compactMap { $0 }
+            .withUnretained(self)
+            .bind(onNext: { vc, birth in
+                vc.birthTextField.text = birth
+            })
+            .disposed(by: disposeBag)
+        
+        reactor.state
+            .map {$0.gender}
+            .compactMap { $0 }
+            .withUnretained(self)
+            .bind(onNext: { vc, gender in
+                switch gender {
+                case .woman:
+                    vc.manButton.isSelecte = false
+                    vc.womanButton.isSelecte = true
+                case .man:
+                    vc.manButton.isSelecte = true
+                    vc.womanButton.isSelecte = false
+                }
+            })
+            .disposed(by: disposeBag)
     }
 }
 // MARK: - Button
@@ -206,7 +240,6 @@ extension SignUpViewController {
         reactor.state.map { $0.isFormValid }
             .bind(to: nextButton.rx.isEnabled)
             .disposed(by: disposeBag)
-
     }
 }
 

@@ -12,6 +12,9 @@ import RxSwift
 struct LoginModel {
     let id: String
     let email: String
+    let nickName: String?
+    let gender: Gender?
+    let birth: String?
 }
 
 protocol SignRepository {

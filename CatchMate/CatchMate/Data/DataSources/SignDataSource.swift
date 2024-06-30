@@ -138,8 +138,41 @@ class SignDataSourceImpl: NSObject, SignDataSource, ASAuthorizationControllerDel
                 guard let id = response["id"] as? String else {
                     return Observable.error(NSError(domain: "NaverAPI", code: 104, userInfo: [NSLocalizedDescriptionKey: "빈 응답 필드가 전달되었습니다."]))
                 }
-                return Observable.just(SNSLoginResponse(id: id, email: "naver\(id)", loginType: .naver))
+                var birthResult: String? = nil
+                if let birthday = response["birthday"] as? String,
+                   let birthyear = response["birthyear"] as? String,
+                   let birth = self.convertBirth(birthday: birthday, birthYear: birthyear) {
+                    birthResult = birth
+                }
+                
+                var genderResult: String? = nil
+                if let gender = response["gender"] as? String {
+                    if gender == "F" { genderResult = "여성" }
+                    else if gender == "M" { genderResult = "남성" }
+                }
+                if let nickname = response["nickname"] as? String {
+                    return Observable.just(SNSLoginResponse(id: id, email: "naver\(id)", loginType: .naver, birth: birthResult, nickName: nickname, gender: genderResult))
+                }
+                return Observable.just(SNSLoginResponse(id: id, email: "naver\(id)", loginType: .naver, birth: birthResult, gender: genderResult))
             }
+    }
+    
+    private func convertBirth(birthday: String, birthYear: String) -> String? {
+        let yearSubstring = birthYear.suffix(2)
+        guard let yearLastTwoDigits = Int(yearSubstring) else {
+            return nil
+        }
+        let yearString = String(format: "%02d", yearLastTwoDigits)
+        
+        let components = birthday.split(separator: "-")
+        guard components.count == 2,
+              let month = Int(components[0]),
+              let day = Int(components[1]) else {
+            return nil
+        }
+        let monthDayString = String(format: "%02d%02d", month, day)
+
+        return yearString + monthDayString
     }
     
     private func refreshAccessToken() -> Observable<Void> {

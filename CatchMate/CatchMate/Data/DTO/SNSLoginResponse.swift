@@ -17,7 +17,16 @@ struct SNSLoginResponse {
     let id: String
     let email: String
     let loginType: LoginType
-    let age: UInt? = nil
-    let nickName: String? = nil
-    let gender: String? = nil
+    let birth: String?
+    let nickName: String?
+    let gender: String?
+    
+    init(id: String, email: String, loginType: LoginType, birth: String? = nil, nickName: String? = nil, gender: String? = nil) {
+        self.id = id
+        self.email = email
+        self.loginType = loginType
+        self.birth = birth
+        self.nickName = nickName
+        self.gender = gender
+    }
 }

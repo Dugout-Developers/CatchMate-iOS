@@ -113,13 +113,6 @@ extension SignInViewController {
                 vc.pushNextView()
             }
             .disposed(by: disposeBag)
-        
-        reactor.state
-            .map {"\($0.error.debugDescription)"}
-            .subscribe(onNext: { text in
-                print(text)
-            })
-            .disposed(by: disposeBag)
     }
     
     private func pushNextView() {

@@ -154,8 +154,16 @@ final class SignReactor: Reactor {
                 newState.error = SignUpError.dataError
             }
         case .getSNSLoginInfo(let loginInfo):
-            print(loginInfo)
             newState.loginModel = loginInfo
+            if let gender = newState.loginModel?.gender {
+                newState.gender = gender
+            }
+            if let nickname = newState.loginModel?.nickName {
+                newState.nickName = nickname
+            }
+            if let birth = newState.loginModel?.birth {
+                newState.birth = birth
+            }
         }
         return newState
     }
