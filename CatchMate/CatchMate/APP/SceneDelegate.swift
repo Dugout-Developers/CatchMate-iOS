@@ -8,6 +8,7 @@
 import UIKit
 import RxKakaoSDKAuth
 import KakaoSDKAuth
+import NaverThirdPartyLogin
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
@@ -20,11 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        let tabViewController = TabBarController()
 //        
 //        window?.rootViewController = tabViewController
-        let repository = SignRepositoryImpl(remoteDataSource: SignDataSourceImpl())
-        let kakaoUsecase = KakaoLoginUseCaseImpl(repository: repository)
-        let appleUsecase = AppleLoginUseCaseImpl(repository: repository)
-        let reactor = SignReactor(kakaoUsecase: kakaoUsecase, appleUsecase: appleUsecase)
-        let signInViewController = SignInViewController(reactor: reactor)
+        let signInViewController = SignInViewController(reactor: DIContainerService.shared.makeSignReactor())
 
         window?.rootViewController = UINavigationController(rootViewController: signInViewController)
         window?.makeKeyAndVisible()
@@ -84,7 +81,13 @@ extension SceneDelegate {
             if (AuthApi.isKakaoTalkLoginUrl(url)) {
                 _ = AuthController.rx.handleOpenUrl(url: url)
             }
+            
+            if url.absoluteString.hasPrefix("catchmate") {
+                _ = NaverThirdPartyLoginConnection.getSharedInstance()?.application(UIApplication.shared, open: url, options: [:])
+            }
+
         }
+        
     }
 }
 

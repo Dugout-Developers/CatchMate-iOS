@@ -17,4 +17,5 @@ struct LoginModel {
 protocol SignRepository {
     func kakaoLogin() -> Observable<LoginModel>
     func appleLogin() -> Observable<LoginModel>
+    func naverLogin() -> Observable<LoginModel>
 }

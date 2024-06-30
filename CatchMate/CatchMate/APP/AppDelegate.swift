@@ -7,6 +7,7 @@
 
 import UIKit
 import RxKakaoSDKCommon
+import NaverThirdPartyLogin
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,6 +18,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         guard let kakaoAppKey = Bundle.main.kakaoLoginAPPKey else { return true }
         RxKakaoSDK.initSDK(appKey: kakaoAppKey)
+        
+        let instance = NaverThirdPartyLoginConnection.getSharedInstance()
+        
+        instance?.isNaverAppOauthEnable = true
+        instance?.isInAppOauthEnable = true
+        instance?.serviceUrlScheme = Bundle.main.naverUrlScheme
+        instance?.consumerKey = Bundle.main.naverLoginClientID
+        instance?.consumerSecret = Bundle.main.naverLoginClientSecret
+        instance?.appName = "CatchMate"
         return true
     }
 

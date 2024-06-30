@@ -20,6 +20,7 @@ final class SignReactor: Reactor {
     enum Action {
         case kakaoLogin
         case appleLogin
+        case naverLogin
         case updateNickname(String)
         case updateBirth(String)
         case updateGender(Gender)
@@ -59,12 +60,14 @@ final class SignReactor: Reactor {
     var initialState: State
     private let kakaoLoginUseCase: KakaoLoginUseCase
     private let appleLoginUseCase: AppleLoginUseCase
+    private let naverLoginUseCase: NaverLoginUseCase
     
-    init(kakaoUsecase: KakaoLoginUseCase, appleUsecase: AppleLoginUseCase) {
+    init(kakaoUsecase: KakaoLoginUseCase, appleUsecase: AppleLoginUseCase, naverUsecase: NaverLoginUseCase) {
         //usecase 추가하기
         self.initialState = State()
         self.kakaoLoginUseCase = kakaoUsecase
         self.appleLoginUseCase = appleUsecase
+        self.naverLoginUseCase = naverUsecase
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
@@ -102,6 +105,12 @@ final class SignReactor: Reactor {
                 }
         case .appleLogin:
             return appleLoginUseCase.login()
+                .map { Mutation.getSNSLoginInfo($0) }
+                .catch { error in
+                    Observable.just(Mutation.setError(error))
+                }
+        case .naverLogin:
+            return naverLoginUseCase.login()
                 .map { Mutation.getSNSLoginInfo($0) }
                 .catch { error in
                     Observable.just(Mutation.setError(error))

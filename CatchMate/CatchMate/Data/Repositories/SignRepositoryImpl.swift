@@ -29,4 +29,11 @@ class SignRepositoryImpl: SignRepository {
                 return LoginModel(id: response.id, email: response.email)
             }
     }
+    
+    func naverLogin() -> Observable<LoginModel> {
+        return remoteDataSource.getNaverLoginToken()
+            .map { response in
+                return LoginModel(id: response.id, email: response.email)
+            }
+    }
 }

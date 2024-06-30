@@ -88,10 +88,10 @@ extension SignInViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-//        naverLoginButton.rx.tap
-//            .map { Reactor.Action. }
-//            .bind(to: reactor.action)
-//            .disposed(by: disposeBag)
+        naverLoginButton.rx.tap
+            .map { Reactor.Action.naverLogin }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
         
         appleLoginButton.rx.tap
             .map { Reactor.Action.appleLogin }
@@ -112,6 +112,13 @@ extension SignInViewController {
             .bind { vc, _ in
                 vc.pushNextView()
             }
+            .disposed(by: disposeBag)
+        
+        reactor.state
+            .map {"\($0.error.debugDescription)"}
+            .subscribe(onNext: { text in
+                print(text)
+            })
             .disposed(by: disposeBag)
     }
     

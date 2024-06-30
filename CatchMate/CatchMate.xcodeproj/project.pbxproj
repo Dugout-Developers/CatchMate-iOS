@@ -82,6 +82,8 @@
 		536BDE3A2C1C1F210043B1DA /* HomeReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE392C1C1F210043B1DA /* HomeReactor.swift */; };
 		5382490E2C2E79A90074B583 /* AppleLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */; };
 		538249102C3139C80074B583 /* LoginUserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */; };
+		538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538249122C3196AD0074B583 /* NaverLoginUseCase.swift */; };
+		538249152C319C020074B583 /* naveridlogin-ios-sp in Frameworks */ = {isa = PBXBuildFile; productRef = 538249142C319C020074B583 /* naveridlogin-ios-sp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -174,6 +176,7 @@
 		536BDE392C1C1F210043B1DA /* HomeReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeReactor.swift; sourceTree = "<group>"; };
 		5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginUseCase.swift; sourceTree = "<group>"; };
 		5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUserDefaultsService.swift; sourceTree = "<group>"; };
+		538249122C3196AD0074B583 /* NaverLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverLoginUseCase.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,6 +187,7 @@
 				536BDE1F2C1B52510043B1DA /* RxSwift in Frameworks */,
 				536BDE1D2C1B52510043B1DA /* RxRelay in Frameworks */,
 				536BDE212C1B52510043B1DA /* ReactorKit in Frameworks */,
+				538249152C319C020074B583 /* naveridlogin-ios-sp in Frameworks */,
 				536BDE192C1B52510043B1DA /* SnapKit in Frameworks */,
 				536BDE152C1B52510043B1DA /* PinLayout in Frameworks */,
 				536BDE232C1B52510043B1DA /* RxAlamofire in Frameworks */,
@@ -432,6 +436,7 @@
 			children = (
 				533A2B452C2C638100A59340 /* KakaoLoginUseCase.swift */,
 				5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */,
+				538249122C3196AD0074B583 /* NaverLoginUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -578,6 +583,7 @@
 				536BDE202C1B52510043B1DA /* ReactorKit */,
 				536BDE222C1B52510043B1DA /* RxAlamofire */,
 				533A2B3A2C2C590400A59340 /* RxKakaoSDK */,
+				538249142C319C020074B583 /* naveridlogin-ios-sp */,
 			);
 			productName = CatchMate;
 			productReference = 536BDDAA2C189B230043B1DA /* CatchMate.app */;
@@ -659,6 +665,7 @@
 				536BDE0E2C1B50CB0043B1DA /* XCRemoteSwiftPackageReference "ReactorKit" */,
 				536BDE0F2C1B51440043B1DA /* XCRemoteSwiftPackageReference "RxAlamofire" */,
 				533A2B392C2C581300A59340 /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */,
+				538249112C31881D0074B583 /* XCRemoteSwiftPackageReference "naveridlogin-ios-sp" */,
 			);
 			productRefGroup = 536BDDAB2C189B230043B1DA /* Products */;
 			projectDirPath = "";
@@ -750,6 +757,7 @@
 				536BDE122C1B51FD0043B1DA /* TabBarController.swift in Sources */,
 				536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */,
 				531786642C1EF30F00ACEF6A /* Team.swift in Sources */,
+				538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */,
 				5317867D2C216CBE00ACEF6A /* NumberPickerViewController.swift in Sources */,
 				5317867F2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift in Sources */,
 				5317867B2C2077EC00ACEF6A /* NotiViewTableViewCell.swift in Sources */,
@@ -1177,6 +1185,14 @@
 				version = 6.1.0;
 			};
 		};
+		538249112C31881D0074B583 /* XCRemoteSwiftPackageReference "naveridlogin-ios-sp" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kyungkoo/naveridlogin-ios-sp.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.2.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1224,6 +1240,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 536BDE0F2C1B51440043B1DA /* XCRemoteSwiftPackageReference "RxAlamofire" */;
 			productName = RxAlamofire;
+		};
+		538249142C319C020074B583 /* naveridlogin-ios-sp */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 538249112C31881D0074B583 /* XCRemoteSwiftPackageReference "naveridlogin-ios-sp" */;
+			productName = "naveridlogin-ios-sp";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

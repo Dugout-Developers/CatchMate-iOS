@@ -11,13 +11,24 @@ import RxKakaoSDKCommon
 import RxKakaoSDKUser
 import KakaoSDKUser
 import AuthenticationServices
+import NaverThirdPartyLogin
+import RxAlamofire
+import Alamofire
 
 protocol SignDataSource {
     func getKakaoLoginToken() -> Observable<SNSLoginResponse>
     func getAppleLoginToken() -> Observable<SNSLoginResponse>
 }
 
-class SignDataSourceImpl: NSObject, SignDataSource, ASAuthorizationControllerDelegate {
+class SignDataSourceImpl: NSObject, SignDataSource, ASAuthorizationControllerDelegate, NaverThirdPartyLoginConnectionDelegate {
+    
+    private let loginInstance: NaverThirdPartyLoginConnection
+    
+    override init() {
+        self.loginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
+        super.init()
+        self.loginInstance.delegate = self
+    }
     
     // MARK: - KAKAO LOGIN
     func getKakaoLoginToken() -> Observable<SNSLoginResponse> {
@@ -52,7 +63,7 @@ class SignDataSourceImpl: NSObject, SignDataSource, ASAuthorizationControllerDel
     
     // MARK: - APPLE LOGIN
     private var loginSubject = PublishSubject<SNSLoginResponse>()
-
+    
     func getAppleLoginToken() -> Observable<SNSLoginResponse> {
         let provider = ASAuthorizationAppleIDProvider()
         let request = provider.createRequest()
@@ -93,5 +104,73 @@ class SignDataSourceImpl: NSObject, SignDataSource, ASAuthorizationControllerDel
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         loginSubject.onError(error)
     }
-
+    
+    // MARK: - NAVER LOGIN
+    private var naverLoginSubject: AnyObserver<SNSLoginResponse>?
+    
+    func getNaverLoginToken() -> Observable<SNSLoginResponse> {
+        loginInstance.requestThirdPartyLogin()
+        return Observable.create { observer in
+            self.naverLoginSubject = observer
+            return Disposables.create()
+        }
+    }
+    
+    private func fetchUserDataWithValidToken() -> Observable<SNSLoginResponse> {
+        guard let tokenType = loginInstance.tokenType,
+              let accessToken = loginInstance.accessToken else {
+            return Observable.error(NSError(domain: "NaverAPI", code: 102, userInfo: [NSLocalizedDescriptionKey: "토큰이 없습니다."]))
+        }
+        
+        let headers: HTTPHeaders = [
+            "Authorization": "\(tokenType) \(accessToken)"
+        ]
+        
+        let url = "https://openapi.naver.com/v1/nid/me"
+        
+        return RxAlamofire.requestJSON(.get, url, headers: headers)
+            .flatMap { (response, json) -> Observable<SNSLoginResponse> in
+                guard let json = json as? [String: Any], let response = json["response"] as? [String: Any] else {
+                    return Observable.error(NSError(domain: "NaverAPI", code: 103, userInfo: [NSLocalizedDescriptionKey: "응답 형식이 잘못되었습니다."]))
+                }
+                print("==========================")
+                print("response: \(response)")
+                guard let id = response["id"] as? String else {
+                    return Observable.error(NSError(domain: "NaverAPI", code: 104, userInfo: [NSLocalizedDescriptionKey: "빈 응답 필드가 전달되었습니다."]))
+                }
+                return Observable.just(SNSLoginResponse(id: id, email: "naver\(id)", loginType: .naver))
+            }
+    }
+    
+    private func refreshAccessToken() -> Observable<Void> {
+        return Observable.create { observer in
+            self.loginInstance.requestAccessTokenWithRefreshToken()
+            observer.onNext(())
+            observer.onCompleted()
+            
+            return Disposables.create()
+        }
+    }
+    
+    func oauth20ConnectionDidFinishRequestACTokenWithAuthCode() {
+        print("Access Token Request Successful")
+    }
+    
+    func oauth20ConnectionDidFinishRequestACTokenWithRefreshToken() {
+        print("Access Token Refresh Successful")
+        if let observer = naverLoginSubject {
+            _ = fetchUserDataWithValidToken().subscribe(observer)
+        }
+    }
+    
+    func oauth20ConnectionDidFinishDeleteToken() {
+        print("Token Deleted")
+    }
+    
+    func oauth20Connection(_ connection: NaverThirdPartyLoginConnection!, didFailWithError error: Error!) {
+        print("Error: \(error.localizedDescription)")
+        if let observer = naverLoginSubject {
+            observer.onError(error)
+        }
+    }
 }

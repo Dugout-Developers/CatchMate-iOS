@@ -1,5 +1,5 @@
 {
-  "originHash" : "31fbed5d9b476c4e205b34122c0b111344da3a2dffb126f20ab95d38f19edadf",
+  "originHash" : "33fb6c661340e57b060fd9734daf8b7a53472f4022d8b0b13e4e4d4fe98e4772",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -35,6 +35,15 @@
       "state" : {
         "branch" : "master",
         "revision" : "37ac7e289fea5f62b3b1f62d06290a18a202a5b0"
+      }
+    },
+    {
+      "identity" : "naveridlogin-ios-sp",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kyungkoo/naveridlogin-ios-sp.git",
+      "state" : {
+        "revision" : "7874f1550e6b210d7f54759ba2da74287f209a8a",
+        "version" : "4.2.1"
       }
     },
     {
