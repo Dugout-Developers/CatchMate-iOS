@@ -13,20 +13,28 @@ import NaverThirdPartyLogin
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        guard let kakaoAppKey = Bundle.main.kakaoLoginAPPKey else { return true }
-        RxKakaoSDK.initSDK(appKey: kakaoAppKey)
         
-        let instance = NaverThirdPartyLoginConnection.getSharedInstance()
-        
-        instance?.isNaverAppOauthEnable = true
-        instance?.isInAppOauthEnable = true
-        instance?.serviceUrlScheme = Bundle.main.naverUrlScheme
-        instance?.consumerKey = Bundle.main.naverLoginClientID
-        instance?.consumerSecret = Bundle.main.naverLoginClientSecret
-        instance?.appName = "CatchMate"
+        DispatchQueue.global(qos: .background).async {
+            if let kakaoAppKey = Bundle.main.kakaoLoginAPPKey {
+                RxKakaoSDK.initSDK(appKey: kakaoAppKey)
+            }
+            
+            if let instance = NaverThirdPartyLoginConnection.getSharedInstance() {
+                instance.isNaverAppOauthEnable = true
+                instance.isInAppOauthEnable = true
+                instance.serviceUrlScheme = Bundle.main.naverUrlScheme
+                instance.consumerKey = Bundle.main.naverLoginClientID
+                instance.consumerSecret = Bundle.main.naverLoginClientSecret
+                instance.appName = "CatchMate"
+            }
+            
+            DispatchQueue.main.async {
+                // 메인 작업이 필요할 경우
+            }
+        }
         return true
     }
 
