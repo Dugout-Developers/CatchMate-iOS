@@ -76,7 +76,7 @@ final class SignSelectedButton<T: CaseIterable>: UIView {
     private func setupUI() {
         addSubview(containerView)
         containerView.flex.backgroundColor(.grayScale50).cornerRadius(8).direction(.column).justifyContent(.start).alignItems(.center).define { flex in
-            flex.addItem(itemImage).marginTop(15).marginBottom(5).marginHorizontal(7).shrink(1)
+            flex.addItem(itemImage).marginTop(15).marginBottom(18).marginHorizontal(7).shrink(1)
             flex.addItem(label).marginBottom(30)
         }.height(contentHeight)
     }
