@@ -9,6 +9,18 @@ import UIKit
 import SnapKit
 
 final class TabBarController: UITabBarController {
+    private let isNonMember: Bool
+    
+    init(isNonMember: Bool = false) {
+        self.isNonMember = isNonMember
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureTabBar()
@@ -18,10 +30,10 @@ final class TabBarController: UITabBarController {
     
     private func configureTabBar() {
         let homeViewController = UINavigationController(rootViewController: HomeViewController(reactor: HomeReactor()))
-        let chatViewController = UINavigationController(rootViewController: ChatListViewController())
-        let addViewController = UINavigationController(rootViewController: AddViewController())
-        let notiViewController = UINavigationController(rootViewController: NotiViewController())
-        let mypageViewController = UINavigationController(rootViewController: MyPageViewController())
+        let chatViewController = isNonMember ? UINavigationController(rootViewController: NonMembersAccessViewController(title: "채팅 목록")) : UINavigationController(rootViewController: ChatListViewController())
+        let addViewController = isNonMember ? UINavigationController(rootViewController: NonMembersAccessViewController(title: "게시글 등록")) : UINavigationController(rootViewController: AddViewController())
+        let notiViewController = isNonMember ? UINavigationController(rootViewController: NonMembersAccessViewController(title: "알림")) : UINavigationController(rootViewController: NotiViewController())
+        let mypageViewController = isNonMember ? UINavigationController(rootViewController: NonMembersAccessViewController(title: "내 정보")) : UINavigationController(rootViewController: MyPageViewController())
         
         homeViewController.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house.fill"), tag: 0)
         chatViewController.tabBarItem = UITabBarItem(title: "채팅", image: UIImage(systemName: "message.fill"), tag: 1)

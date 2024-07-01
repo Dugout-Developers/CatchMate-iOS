@@ -78,6 +78,12 @@ final class SignInViewController: BaseViewController, View {
     
     private func setupView() {
         view.backgroundColor = .white
+        exploreButton.rx.tap
+            .withUnretained(self)
+            .subscribe(onNext: { _, _ in
+                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(TabBarController(isNonMember: true), animated: true)
+            })
+            .disposed(by: disposeBag)
     }
 }
 // MARK: - Bind
