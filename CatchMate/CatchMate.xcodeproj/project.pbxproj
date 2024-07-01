@@ -84,6 +84,7 @@
 		538249102C3139C80074B583 /* LoginUserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */; };
 		538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538249122C3196AD0074B583 /* NaverLoginUseCase.swift */; };
 		538249152C319C020074B583 /* naveridlogin-ios-sp in Frameworks */ = {isa = PBXBuildFile; productRef = 538249142C319C020074B583 /* naveridlogin-ios-sp */; };
+		5383BE852C327FF9008940F1 /* NonMembersAccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5383BE842C327FF9008940F1 /* NonMembersAccessViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -177,6 +178,7 @@
 		5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginUseCase.swift; sourceTree = "<group>"; };
 		5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUserDefaultsService.swift; sourceTree = "<group>"; };
 		538249122C3196AD0074B583 /* NaverLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverLoginUseCase.swift; sourceTree = "<group>"; };
+		5383BE842C327FF9008940F1 /* NonMembersAccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonMembersAccessViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -522,6 +524,7 @@
 			isa = PBXGroup;
 			children = (
 				536BDE112C1B51FD0043B1DA /* TabBarController.swift */,
+				5383BE842C327FF9008940F1 /* NonMembersAccessViewController.swift */,
 			);
 			path = TabBar;
 			sourceTree = "<group>";
@@ -748,6 +751,7 @@
 				536BDE312C1B55440043B1DA /* MyPageViewController.swift in Sources */,
 				531786682C20048B00ACEF6A /* CMPickerTextField.swift in Sources */,
 				531786532C1C8BFB00ACEF6A /* BaseViewController.swift in Sources */,
+				5383BE852C327FF9008940F1 /* NonMembersAccessViewController.swift in Sources */,
 				536BDDF62C1972740043B1DA /* UserDTO.swift in Sources */,
 				531786712C202EF500ACEF6A /* DIContainerService.swift in Sources */,
 				533A2B3F2C2C5DBC00A59340 /* SNSLoginResponse.swift in Sources */,
@@ -953,8 +957,9 @@
 				INFOPLIST_FILE = CatchMate/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -987,8 +992,9 @@
 				INFOPLIST_FILE = CatchMate/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
