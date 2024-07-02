@@ -13,7 +13,6 @@ import FlexLayout
 import PinLayout
 
 final class SignInViewController: BaseViewController, View {
-    var disposeBag = DisposeBag()
     var reactor: SignReactor
     
     private let containerView = UIView()

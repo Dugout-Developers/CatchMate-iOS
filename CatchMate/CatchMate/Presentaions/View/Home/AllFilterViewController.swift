@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class AllFilterViewController: UIViewController {
+final class AllFilterViewController: BaseViewController {
     private let dateLabel: UILabel = {
         let label = UILabel()
         label.text = "날짜"

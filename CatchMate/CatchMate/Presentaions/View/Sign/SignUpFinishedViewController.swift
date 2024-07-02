@@ -12,8 +12,7 @@ import ReactorKit
 import RxSwift
 import RxCocoa
 
-final class SignUpFinishedViewController: UIViewController , View {
-    var disposeBag = DisposeBag()
+final class SignUpFinishedViewController: BaseViewController, View {
     var reactor: SignReactor
     
     private let containerView = UIView()

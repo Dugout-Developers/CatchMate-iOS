@@ -9,7 +9,7 @@ import UIKit
 
 extension UIColor {
     // MARK: - Semantic Color
-    static let cmBackgroundColor = UIColor(hex: "#F7F8FA")
+    static let cmBackgroundColor = UIColor(hex: "#FFFFFF")
     static let cmPrimaryColor = brandColor500
     
     // MARK: - 와이어프레임 모두 수정 시 삭제

@@ -9,22 +9,26 @@ import UIKit
 import RxSwift
 import SnapKit
 
-class ChatListViewController: UIViewController {
-    private let disposeBag = DisposeBag()
+final class ChatListViewController: BaseViewController {
     private let chatListTableView = UITableView()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupUI()
         setupTableView()
         setupEditTableView()
+        setupNavigationBar()
     }
     
     private func setupView() {
         view.backgroundColor = .cmBackgroundColor
-        configNavigationLeftTitle("채팅 목록")
+    }
+    
+    private func setupNavigationBar() {
         let editButton = UIBarButtonItem(image: UIImage(systemName: "slider.horizontal.3"), style: .plain, target: self, action: #selector(clickEditButton))
         navigationItem.rightBarButtonItem = editButton
+        setupLeftTitle("채팅목록")
     }
     
     private func setupTableView() {

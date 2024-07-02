@@ -12,8 +12,7 @@ import ReactorKit
 import RxSwift
 import RxCocoa
 
-final class InputFavoriteTeamViewContoller: UIViewController, View {
-    var disposeBag = DisposeBag()
+final class InputFavoriteTeamViewContoller: BaseViewController, View {
     var reactor: SignReactor
     
     private let scrollView = UIScrollView()
@@ -79,7 +78,6 @@ final class InputFavoriteTeamViewContoller: UIViewController, View {
         setupUI()
         setupButton()
         bind(reactor: reactor)
-        configNavigationBackButton()
     }
     
     override func viewDidLayoutSubviews() {
@@ -93,7 +91,6 @@ final class InputFavoriteTeamViewContoller: UIViewController, View {
     
     private func setupView() {
         view.backgroundColor = .white
-        view.tappedDismissKeyboard()
         reactor.state
             .withUnretained(self)
             .subscribe(onNext: { vc, state in

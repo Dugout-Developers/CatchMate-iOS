@@ -10,4 +10,5 @@ import UIKit
 struct Screen {
     static let height = UIScreen.main.bounds.height
     static let width = UIScreen.main.bounds.width
+    static let navigationBarHeight = 44.0
 }

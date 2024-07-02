@@ -360,7 +360,6 @@
 		536BDDE32C196FD10043B1DA /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				531786692C200D4700ACEF6A /* Base */,
 				536BDDE42C196FFD0043B1DA /* Extensions */,
 				5317865E2C1EAC4B00ACEF6A /* Constraints */,
 				531786722C202F0300ACEF6A /* Service */,
@@ -500,6 +499,7 @@
 		536BDE032C1973090043B1DA /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
+				531786692C200D4700ACEF6A /* Base */,
 				536BDE252C1B52FB0043B1DA /* Resources */,
 				536BDE042C1973140043B1DA /* Components */,
 			);

@@ -12,8 +12,7 @@ import ReactorKit
 import RxSwift
 import RxCocoa
 
-final class SignUpViewController: UIViewController, View {
-    var disposeBag = DisposeBag()
+final class SignUpViewController: BaseViewController, View {
     var reactor: SignReactor
 
     private let containerView = UIView()
@@ -124,7 +123,7 @@ final class SignUpViewController: UIViewController, View {
         setupUI()
         setupButton()
         bind(reactor: reactor)
-        configNavigationBackButton()
+
     }
     
     override func viewDidLayoutSubviews() {
@@ -134,9 +133,6 @@ final class SignUpViewController: UIViewController, View {
     }
     
     private func setupView() {
-        view.backgroundColor = .white
-        view.tappedDismissKeyboard()
-        
         reactor.state
             .map {$0.nickName}
             .compactMap { $0 }

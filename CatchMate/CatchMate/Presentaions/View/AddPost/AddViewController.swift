@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class AddViewController: UIViewController {
+final class AddViewController: BaseViewController {
     private var selectedGenderLabel: PaddingLabel?
     private var seletedAgeLabel: PaddingLabel?
     private let scrollView = UIScrollView()
@@ -125,6 +125,7 @@ final class AddViewController: UIViewController {
         button.setTitle("등록", for: .normal)
         return button
     }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -133,6 +134,7 @@ final class AddViewController: UIViewController {
         setupRequiredMark()
         setupGenderButton()
         setupAgeButton()
+        setupNavigationBar()
     }
     
     override func viewDidLayoutSubviews() {
@@ -164,10 +166,13 @@ final class AddViewController: UIViewController {
     
     private func setupView() {
         view.backgroundColor = .white
-        let saveButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.down"), style: .plain, target: self, action: #selector(clickSaveButton))
-        navigationItem.rightBarButtonItem = saveButton
         registerButton.addTarget(self, action: #selector(clickRegisterButton), for: .touchUpInside)
-        view.tappedDismissKeyboard()
+    }
+    
+    private func setupNavigationBar() {
+        let saveButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.down"), style: .plain, target: self, action: #selector(clickSaveButton))
+        title = "등록"
+        navigationItem.rightBarButtonItem = saveButton
     }
 }
 // MARK: - Button

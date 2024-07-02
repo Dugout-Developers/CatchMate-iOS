@@ -7,13 +7,14 @@
 
 import UIKit
 
-class MyPageViewController: UIViewController {
-
+class MyPageViewController: BaseViewController {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupLeftTitle("내정보")
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .cmBackgroundColor
-        configNavigationLeftTitle("내 정보")
+//        setupLeftTitle("내정보")
     }
-
-
 }

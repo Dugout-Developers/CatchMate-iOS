@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import RxSwift
 import RxCocoa
 import ReactorKit
 
@@ -18,7 +17,6 @@ enum Filter {
 }
 
 final class HomeViewController: BaseViewController, View {
-    var disposeBag: DisposeBag = DisposeBag()
     private let reactor: HomeReactor
     private let viewWillAppearPublisher = PublishSubject<Void>().asObserver()
     
@@ -48,6 +46,7 @@ final class HomeViewController: BaseViewController, View {
         view.backgroundColor = .cmBackgroundColor
         setupUI()
         setupButton()
+        setupLogo()
         bind(reactor: self.reactor)
         setupTableView()
     }
