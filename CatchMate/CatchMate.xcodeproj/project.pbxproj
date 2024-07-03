@@ -85,6 +85,9 @@
 		538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538249122C3196AD0074B583 /* NaverLoginUseCase.swift */; };
 		538249152C319C020074B583 /* naveridlogin-ios-sp in Frameworks */ = {isa = PBXBuildFile; productRef = 538249142C319C020074B583 /* naveridlogin-ios-sp */; };
 		5383BE852C327FF9008940F1 /* NonMembersAccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5383BE842C327FF9008940F1 /* NonMembersAccessViewController.swift */; };
+		5383BE8D2C34D595008940F1 /* FontUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5383BE8C2C34D594008940F1 /* FontUtility.swift */; };
+		5383BE8F2C34DF27008940F1 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5383BE8E2C34DF27008940F1 /* Font.swift */; };
+		5383BE902C34ECD1008940F1 /* PretendardVariable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5383BE8A2C34D543008940F1 /* PretendardVariable.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -179,6 +182,9 @@
 		5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUserDefaultsService.swift; sourceTree = "<group>"; };
 		538249122C3196AD0074B583 /* NaverLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverLoginUseCase.swift; sourceTree = "<group>"; };
 		5383BE842C327FF9008940F1 /* NonMembersAccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonMembersAccessViewController.swift; sourceTree = "<group>"; };
+		5383BE8A2C34D543008940F1 /* PretendardVariable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = PretendardVariable.ttf; sourceTree = "<group>"; };
+		5383BE8C2C34D594008940F1 /* FontUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontUtility.swift; sourceTree = "<group>"; };
+		5383BE8E2C34DF27008940F1 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -360,6 +366,7 @@
 		536BDDE32C196FD10043B1DA /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				5383BE8B2C34D54B008940F1 /* Font */,
 				536BDDE42C196FFD0043B1DA /* Extensions */,
 				5317865E2C1EAC4B00ACEF6A /* Constraints */,
 				531786722C202F0300ACEF6A /* Service */,
@@ -540,6 +547,7 @@
 			isa = PBXGroup;
 			children = (
 				536BDE282C1B53860043B1DA /* Color.swift */,
+				5383BE8E2C34DF27008940F1 /* Font.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -558,6 +566,15 @@
 				5317867E2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		5383BE8B2C34D54B008940F1 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				5383BE8A2C34D543008940F1 /* PretendardVariable.ttf */,
+				5383BE8C2C34D594008940F1 /* FontUtility.swift */,
+			);
+			path = Font;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -687,6 +704,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				536BDDE02C196C380043B1DA /* APIKeys.plist in Resources */,
+				5383BE902C34ECD1008940F1 /* PretendardVariable.ttf in Resources */,
 				536BDDB72C189B240043B1DA /* Assets.xcassets in Resources */,
 				536BDDBA2C189B240043B1DA /* Base in Resources */,
 			);
@@ -753,6 +771,7 @@
 				531786532C1C8BFB00ACEF6A /* BaseViewController.swift in Sources */,
 				5383BE852C327FF9008940F1 /* NonMembersAccessViewController.swift in Sources */,
 				536BDDF62C1972740043B1DA /* UserDTO.swift in Sources */,
+				5383BE8D2C34D595008940F1 /* FontUtility.swift in Sources */,
 				531786712C202EF500ACEF6A /* DIContainerService.swift in Sources */,
 				533A2B3F2C2C5DBC00A59340 /* SNSLoginResponse.swift in Sources */,
 				533A2B252C280E0500A59340 /* CMDefaultFilledButton.swift in Sources */,
@@ -772,6 +791,7 @@
 				533A2B272C28558600A59340 /* SignInViewController.swift in Sources */,
 				531786742C202F1B00ACEF6A /* NetworkService.swift in Sources */,
 				5317865B2C1C956400ACEF6A /* DateFilterViewController.swift in Sources */,
+				5383BE8F2C34DF27008940F1 /* Font.swift in Sources */,
 				531786852C23261200ACEF6A /* SheetHeight.swift in Sources */,
 				533A2B442C2C62C700A59340 /* SignRepositoryImpl.swift in Sources */,
 				533A2B342C2BE98D00A59340 /* SignSelectedButton.swift in Sources */,
