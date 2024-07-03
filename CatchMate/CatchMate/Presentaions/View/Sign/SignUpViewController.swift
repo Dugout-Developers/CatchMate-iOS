@@ -58,7 +58,12 @@ final class SignUpViewController: BaseViewController, View {
     }()
     
     private let nickNameTextField = CMTextField(placeHolder: "닉네임을 입력해주세요")
-    
+    private let vaildateLabel: UILabel = {
+        let label = UILabel()
+        label.text = ""
+        label.applyStyle(textStyle: FontSystem.caption01_semiBold)
+        return label
+    }()
     private let birthLabel: UILabel = {
         let label = UILabel()
         label.text = "생년월일"
@@ -122,7 +127,10 @@ final class SignUpViewController: BaseViewController, View {
     
     private func setupView() {
         reactor.state
-            .map {$0.nickName}
+            .filter({
+                !$0.nickName.isEmpty
+            })
+            .map{$0.nickName}
             .compactMap { $0 }
             .withUnretained(self)
             .bind(onNext: { vc, nickName in
@@ -179,6 +187,10 @@ extension SignUpViewController {
                 return string
             }
             .map { Reactor.Action.updateNickname($0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        nickNameTextField.rx.controlEvent(.editingDidEnd)
+            .map { Reactor.Action.endEditNickname }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
@@ -243,6 +255,23 @@ extension SignUpViewController {
         reactor.state.map { $0.isFormValid }
             .bind(to: nextButton.rx.isEnabled)
             .disposed(by: disposeBag)
+
+        reactor.state.map { $0.nickNameValidate}
+            .withUnretained(self)
+            .bind (onNext: { vc, validateCase in
+                vc.vaildateLabel.text = validateCase.rawValue
+                switch validateCase {
+                case .none:
+                    vc.vaildateLabel.textColor = .white
+                case .success:
+                    vc.vaildateLabel.textColor = .cmSystemBule
+                case .failed:
+                    vc.vaildateLabel.textColor = .cmSystemRed
+                }
+                vc.vaildateLabel.applyStyle(textStyle: FontSystem.caption01_semiBold)
+            })
+            .disposed(by: disposeBag)
+            
     }
 }
 
@@ -263,7 +292,8 @@ extension SignUpViewController {
                 flex.addItem(nickNameLabel).grow(1)
                 flex.addItem(countLabel).grow(1)
             }.marginBottom(itemMargin)
-            flex.addItem(nickNameTextField).width(100%).marginBottom(sectionMargin)
+            flex.addItem(nickNameTextField).width(100%).marginBottom(4)
+            flex.addItem(vaildateLabel).height(UIFont.caption01_semiBold.pointSize).width(100%).marginBottom(13)
             flex.addItem(birthLabel).marginBottom(itemMargin)
             flex.addItem(birthTextField).width(100%).marginBottom(sectionMargin)
             flex.addItem(genderLabel).marginBottom(itemMargin)

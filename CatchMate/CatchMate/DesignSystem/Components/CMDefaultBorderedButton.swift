@@ -28,7 +28,7 @@ class CMDefaultBorderedButton: UIButton {
     }
     
     private func setupButton(_ title: String, _ isRound: Bool) {
-        layer.cornerRadius = isRound ? 8 : 20
+        layer.cornerRadius = isRound ? 20 : 8
         layer.borderWidth = 1
         layer.borderColor = UIColor.grayScale400.cgColor
         setTitle(title, for: .normal)

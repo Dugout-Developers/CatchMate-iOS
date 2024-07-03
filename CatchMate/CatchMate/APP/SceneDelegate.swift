@@ -18,12 +18,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        let tabViewController = TabBarController()
-        
-        window?.rootViewController = tabViewController
-//        let signInViewController = SignInViewController(reactor: DIContainerService.shared.makeSignReactor())
-//
-//        window?.rootViewController = UINavigationController(rootViewController: signInViewController)
+//        let tabViewController = TabBarController()
+//        
+//        window?.rootViewController = tabViewController
+        let signInViewController = SignInViewController(reactor: DIContainerService.shared.makeSignReactor())
+
+        window?.rootViewController = UINavigationController(rootViewController: signInViewController)
         window?.makeKeyAndVisible()
     }
     
