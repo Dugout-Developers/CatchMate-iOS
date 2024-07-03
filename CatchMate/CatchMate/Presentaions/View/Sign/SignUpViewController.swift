@@ -21,7 +21,7 @@ final class SignUpViewController: BaseViewController, View {
         label.numberOfLines = 1
         label.text = "딱맞는 직관 친구를 구하기 위해"
         label.adjustsFontForContentSizeCategory = true
-        label.font = .systemFont(ofSize: 28)
+        label.applyStyle(textStyle: FontSystem.highlight)
         label.textColor = .cmHeadLineTextColor
         return label
     }()
@@ -30,7 +30,7 @@ final class SignUpViewController: BaseViewController, View {
         label.numberOfLines = 1
         label.text = "정보를 입력해주세요."
         label.adjustsFontForContentSizeCategory = true
-        label.font = .systemFont(ofSize: 28)
+        label.applyStyle(textStyle: FontSystem.highlight)
         label.textColor = .cmHeadLineTextColor
         return label
     }()
@@ -44,24 +44,20 @@ final class SignUpViewController: BaseViewController, View {
     private let nickNameLabel: UILabel = {
         let label = UILabel()
         label.text = "닉네임"
-        label.font = .systemFont(ofSize: 14)
+        label.applyStyle(textStyle: FontSystem.contents)
         label.textColor = .cmNonImportantTextColor
         return label
     }()
     private let countLabel: UILabel = {
         let label = UILabel()
         label.text = "0/10"
+        label.applyStyle(textStyle: FontSystem.contents)
         label.textAlignment = .right
-        label.font = .systemFont(ofSize: 14)
         label.textColor = .cmNonImportantTextColor
         return label
     }()
     
-    private let nickNameTextField: CMTextField = {
-        let textField = CMTextField()
-        textField.placeholder = "닉네임을 입력해주세요"
-        return textField
-    }()
+    private let nickNameTextField = CMTextField(placeHolder: "닉네임을 입력해주세요")
     
     private let birthLabel: UILabel = {
         let label = UILabel()
@@ -72,8 +68,7 @@ final class SignUpViewController: BaseViewController, View {
     }()
     
     private let birthTextField: CMTextField = {
-        let textField = CMTextField()
-        textField.placeholder = "생년월일을 입력해주세요 예) 000000"
+        let textField = CMTextField(placeHolder: "생년월일을 입력해주세요 예) 000000")
         textField.keyboardType = .numberPad
         return textField
     }()
@@ -87,25 +82,18 @@ final class SignUpViewController: BaseViewController, View {
     }()
     
     private let womanButton: CMDefaultBorderedButton = {
-        let button = CMDefaultBorderedButton()
-        button.setTitle("여성", for: .normal)
+        let button = CMDefaultBorderedButton(title: "여성")
         button.tag = 1
         return button
     }()
     
     private let manButton: CMDefaultBorderedButton = {
-        let button = CMDefaultBorderedButton()
-        button.setTitle("남성", for: .normal)
+        let button = CMDefaultBorderedButton(title: "남성")
         button.tag = 2
         return button
     }()
     
-    private let nextButton: CMDefaultFilledButton = {
-        let button = CMDefaultFilledButton()
-        button.setTitle("다음", for: .normal)
-        button.isEnabled = false
-        return button
-    }()
+    private let nextButton = CMDefaultFilledButton(title: "다음")
     
     init(reactor: SignReactor) {
         self.reactor = reactor
@@ -226,7 +214,26 @@ extension SignUpViewController {
             .map { Reactor.Action.updateGender($0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-
+        // 텍스트 필드 폰트 바인딩
+        reactor.state
+                .map { $0.nickName }
+                .compactMap { $0 }
+                .withUnretained(self)
+                .bind(onNext: { vc, nickName in
+                    vc.nickNameTextField.text = nickName
+                    vc.nickNameTextField.applyStyle(textStyle: FontSystem.body02_semiBold)
+                })
+                .disposed(by: disposeBag)
+        reactor.state
+            .map { $0.birth }
+            .compactMap{ $0 }
+            .withUnretained(self)
+            .bind(onNext: { vc, birth in
+                vc.birthTextField.text = birth
+                vc.birthTextField.applyStyle(textStyle: FontSystem.body02_semiBold)
+            })
+            .disposed(by: disposeBag)
+        
         // state (Reactor -> View)
         reactor.state
             .map {"\($0.nicknameCount)/10"}

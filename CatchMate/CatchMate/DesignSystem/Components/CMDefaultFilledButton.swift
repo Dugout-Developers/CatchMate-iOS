@@ -14,21 +14,22 @@ class CMDefaultFilledButton: UIButton {
         }
     }
     
-    override init(frame: CGRect) {
+    init(frame: CGRect = .zero, title: String) {
         super.init(frame: frame)
-        setupButton()
+        setupButton(title)
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupButton()
     }
     
-    private func setupButton() {
+    private func setupButton(_ title: String) {
         layer.cornerRadius = 8
+        setTitle(title, for: .normal)
         setTitleColor(.white, for: .normal)
         setTitleColor(.white, for: .disabled)
-        
+        applyStyle(textStyle: FontSystem.body02_semiBold)
         addTarget(self, action: #selector(updateBackgroundColor), for: .allEvents)
         updateBackgroundColor()
     }
@@ -52,5 +53,4 @@ class CMDefaultFilledButton: UIButton {
             self.transform = CGAffineTransform(scaleX: scale, y: scale)
         })
     }
-    
 }

@@ -11,11 +11,7 @@ import SnapKit
 final class TeamFilterViewController: UIViewController {
     private let allTeams: [Team] = Team.allCases
     private let tableView: UITableView = UITableView()
-    private let saveButton: CMDefaultFilledButton = {
-        let button = CMDefaultFilledButton()
-        button.setTitle("저장", for: .normal)
-        return button
-    }()
+    private let saveButton = CMDefaultFilledButton(title: "저장")
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white

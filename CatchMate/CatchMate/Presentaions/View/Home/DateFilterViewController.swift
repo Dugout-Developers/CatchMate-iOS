@@ -10,11 +10,7 @@ import SnapKit
 
 final class DateFilterViewController: BasePickerViewController {
     private let datePicker = UIDatePicker()
-    private let saveButton: CMDefaultFilledButton = {
-        let button = CMDefaultFilledButton()
-        button.setTitle("저장", for: .normal)
-        return button
-    }()
+    private let saveButton = CMDefaultFilledButton(title: "저장")
     
     override func viewDidLoad() {
         super.viewDidLoad()

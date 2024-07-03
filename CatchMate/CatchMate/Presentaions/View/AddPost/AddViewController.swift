@@ -13,11 +13,7 @@ final class AddViewController: BaseViewController {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
-    private let titleTextField: CMTextField = {
-        let textField = CMTextField()
-        textField.placeholder = "제목을 입력해주세요."
-        return textField
-    }()
+    private let titleTextField = CMTextField(placeHolder: "제목을 입력해주세요.")
     private let numberPickerTextField = CMPickerTextField(rightAccessoryView: {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16)
@@ -120,11 +116,7 @@ final class AddViewController: BaseViewController {
         return labels
     }()
     
-    private let registerButton: CMDefaultFilledButton = {
-        let button = CMDefaultFilledButton()
-        button.setTitle("등록", for: .normal)
-        return button
-    }()
+    private let registerButton = CMDefaultFilledButton(title: "등록")
     
     override func viewDidLoad() {
         super.viewDidLoad()

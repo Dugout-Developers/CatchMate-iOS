@@ -23,7 +23,6 @@ final class InputCheerStyleViewController: BaseViewController, View {
         let label = UILabel()
         label.numberOfLines = 1
         label.adjustsFontSizeToFitWidth = true
-        label.font = .systemFont(ofSize: 28)
         label.textColor = .cmHeadLineTextColor
         return label
     }()
@@ -33,7 +32,7 @@ final class InputCheerStyleViewController: BaseViewController, View {
         label.numberOfLines = 1
         label.text = "응원스타일을 알려주세요."
         label.adjustsFontSizeToFitWidth = true
-        label.font = .systemFont(ofSize: 28)
+        label.applyStyle(textStyle: FontSystem.highlight)
         label.textColor = .cmHeadLineTextColor
         return label
     }()
@@ -43,7 +42,7 @@ final class InputCheerStyleViewController: BaseViewController, View {
         label.numberOfLines = 1
         label.text = "선택"
         label.adjustsFontSizeToFitWidth = true
-        label.font = .systemFont(ofSize: 11)
+        label.applyStyle(textStyle: FontSystem.caption01_semiBold)
         label.textColor = .cmNonImportantTextColor
         return label
     }()
@@ -57,11 +56,7 @@ final class InputCheerStyleViewController: BaseViewController, View {
         return buttons
     }()
     
-    private let nextButton: CMDefaultFilledButton = {
-        let button = CMDefaultFilledButton()
-        button.setTitle("다음", for: .normal)
-        return button
-    }()
+    private let nextButton = CMDefaultFilledButton(title: "다음")
 
     
     init(reactor: SignReactor) {
@@ -142,7 +137,11 @@ extension InputCheerStyleViewController {
         
         reactor.state
             .map {"\($0.nickName)님의"}
-            .bind(to: titleLabel1.rx.text)
+            .withUnretained(self)
+            .bind(onNext: { vc, text in
+                vc.titleLabel1.text = text
+                vc.titleLabel1.applyStyle(textStyle: FontSystem.highlight)
+            })
             .disposed(by: disposeBag)
         
         

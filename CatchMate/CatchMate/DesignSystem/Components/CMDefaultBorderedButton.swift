@@ -17,21 +17,23 @@ class CMDefaultBorderedButton: UIButton {
         }
     }
     
-    override init(frame: CGRect) {
+    init(frame: CGRect = .zero, title: String) {
         super.init(frame: frame)
-        setupButton()
+        setupButton(title)
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupButton()
     }
     
-    private func setupButton() {
+    private func setupButton(_ title: String) {
         layer.cornerRadius = 8
         layer.borderWidth = 1
         layer.borderColor = UIColor.grayScale400.cgColor
+        setTitle(title, for: .normal)
         setTitleColor(.grayScale400, for: .normal)
+        applyStyle(textStyle: FontSystem.body01_semiBold)
         
         addTarget(self, action: #selector(updateBorderColor), for: .allEvents)
         updateBorderColor()

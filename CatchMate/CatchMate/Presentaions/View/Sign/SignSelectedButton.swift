@@ -35,10 +35,10 @@ final class SignSelectedButton<T: CaseIterable>: UIView {
         let label = UILabel()
         label.textColor = .cmBodyTextColor
         label.numberOfLines = 0
-        label.textAlignment = .center
         label.adjustsFontSizeToFitWidth = true
         label.text = "팀명"
-        label.font = .systemFont(ofSize: 14, weight: .semibold)
+        label.applyStyle(textStyle: FontSystem.body02_semiBold)
+        label.textAlignment = .center
         return label
     }()
     
