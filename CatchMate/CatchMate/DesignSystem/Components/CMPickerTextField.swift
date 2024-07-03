@@ -33,7 +33,7 @@ final class CMPickerTextField: UIView {
         view.layer.cornerRadius = 8
         view.backgroundColor = .white
         view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor.lightGray.cgColor
+        view.layer.borderColor = UIColor.cmBorderColor.cgColor
         view.clipsToBounds = true
         return view
     }()
@@ -43,6 +43,7 @@ final class CMPickerTextField: UIView {
         self.textField.placeholder = placeHolder
         self.isFlexLayout = isFlex
         super.init(frame: .zero)
+        textField.applyStyle(textStyle: FontSystem.body02_semiBold, placeholdeAttr: [NSAttributedString.Key.foregroundColor: UIColor.grayScale400])
         if isFlex {
             setupFlexUI()
         } else {
@@ -123,14 +124,14 @@ extension CMPickerTextField {
     
     private func updatePlaceholder() {
         let placeholderText = textField.placeholder ?? ""
-        let attributedString = NSMutableAttributedString(string: placeholderText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-        
+        var fontAtrribute = FontSystem.body02_semiBold.getAttributes()
+        fontAtrribute[.foregroundColor] = UIColor.grayScale400
+        let attributedString = NSAttributedString(string: placeholderText, attributes: fontAtrribute)
         if isRequiredMark {
-            let requiredMark = NSAttributedString(string: " *", attributes: [NSAttributedString.Key.foregroundColor: UIColor.red])
-            attributedString.append(requiredMark)
+            let requiredMark = NSMutableAttributedString(string: " *", attributes: [NSAttributedString.Key.foregroundColor: UIColor.cmPrimaryColor])
+            requiredMark.insert(attributedString, at: 0)
+            textField.attributedPlaceholder =  requiredMark
         }
-        
-        textField.attributedPlaceholder = attributedString
     }
 }
 

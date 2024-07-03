@@ -11,8 +11,7 @@ import SnapKit
 class CMTextView: UITextView {
     private let placeholderLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .lightGray
-        label.font = .systemFont(ofSize: 14)
+        label.textColor = .grayScale400
         label.numberOfLines = 0
         return label
     }()
@@ -20,6 +19,7 @@ class CMTextView: UITextView {
     var placeholder: String? {
         didSet {
             placeholderLabel.text = placeholder
+            placeholderLabel.applyStyle(textStyle: FontSystem.body02_semiBold)
             setNeedsLayout()
         }
     }
@@ -65,7 +65,7 @@ class CMTextView: UITextView {
     override func resignFirstResponder() -> Bool {
         let didResignFirstResponder = super.resignFirstResponder()
         if didResignFirstResponder {
-            layer.borderColor = UIColor.lightGray.cgColor
+            layer.borderColor = UIColor.cmBorderColor.cgColor
         }
         return didResignFirstResponder
     }
