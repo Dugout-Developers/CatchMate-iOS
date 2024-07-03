@@ -14,9 +14,9 @@ class CMDefaultFilledButton: UIButton {
         }
     }
     
-    init(frame: CGRect = .zero, title: String) {
+    init(frame: CGRect = .zero, title: String, isRound: Bool = false) {
         super.init(frame: frame)
-        setupButton(title)
+        setupButton(title, isRound)
     }
     
     @available(*, unavailable)
@@ -24,8 +24,9 @@ class CMDefaultFilledButton: UIButton {
         super.init(coder: coder)
     }
     
-    private func setupButton(_ title: String) {
-        layer.cornerRadius = 8
+    private func setupButton(_ title: String, _ isRound: Bool) {
+        clipsToBounds = true
+        layer.cornerRadius = isRound ? 20 : 8
         setTitle(title, for: .normal)
         setTitleColor(.white, for: .normal)
         setTitleColor(.white, for: .disabled)

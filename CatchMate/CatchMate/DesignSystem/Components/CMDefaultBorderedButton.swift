@@ -17,9 +17,9 @@ class CMDefaultBorderedButton: UIButton {
         }
     }
     
-    init(frame: CGRect = .zero, title: String) {
+    init(frame: CGRect = .zero, title: String, isRound: Bool = false) {
         super.init(frame: frame)
-        setupButton(title)
+        setupButton(title, isRound)
     }
     
     @available(*, unavailable)
@@ -27,8 +27,8 @@ class CMDefaultBorderedButton: UIButton {
         super.init(coder: coder)
     }
     
-    private func setupButton(_ title: String) {
-        layer.cornerRadius = 8
+    private func setupButton(_ title: String, _ isRound: Bool) {
+        layer.cornerRadius = isRound ? 8 : 20
         layer.borderWidth = 1
         layer.borderColor = UIColor.grayScale400.cgColor
         setTitle(title, for: .normal)
