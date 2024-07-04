@@ -1,25 +1,26 @@
 //
-//  HomeFilterButton.swift
+//  OptionButtonView.swift
 //  CatchMate
 //
-//  Created by 방유빈 on 6/14/24.
+//  Created by 방유빈 on 7/4/24.
 //
 
 import UIKit
+import RxSwift
 import FlexLayout
 import PinLayout
 
-final class HomeFilterButton: UIButton {
+final class OptionButtonView: UIView {
     private let containerView = UIView()
     private let iconImageView = UIImageView()
     private let filterTitleLabel = UILabel()
-    private let valueLabel = UILabel()
+    private(set) var valueLabel = UILabel()
+    private(set) var filterType: Filter
     var filterValue: String? {
         didSet {
             setupValue(filterValue)
         }
     }
-    private(set) var filterType: Filter
     
     init(icon: UIImage?, title: String, filter: Filter) {
         self.filterType = filter
@@ -45,17 +46,14 @@ final class HomeFilterButton: UIButton {
         valueLabel.text = value
         valueLabel.textColor = .cmPrimaryColor
         valueLabel.applyStyle(textStyle: FontSystem.body03_medium)
-        setNeedsLayout()
-        layoutIfNeeded()
     }
     
     private func setupButton() {
         // 버튼 스타일 설정
         backgroundColor = UIColor.white
         layer.cornerRadius = 8
-        tintColor = .cmPrimaryColor
-        self.addTarget(self, action: #selector(buttonPressed), for: [.touchDown, .touchDragInside])
-        self.addTarget(self, action: #selector(buttonReleased), for: [.touchUpInside, .touchUpOutside, .touchCancel])
+//        tintColor = .cmPrimaryColor
+
     }
     
     private func setupData(icon: UIImage?, title: String) {
@@ -66,7 +64,7 @@ final class HomeFilterButton: UIButton {
         
         // 타이틀 설정
         filterTitleLabel.text = title
-        filterTitleLabel.textColor = .cmHeadLineTextColor
+        filterTitleLabel.textColor = .cmBodyTextColor
         filterTitleLabel.applyStyle(textStyle: FontSystem.body03_medium)
     }
     
@@ -80,16 +78,17 @@ final class HomeFilterButton: UIButton {
         }
     }
     
-    @objc 
-    private func buttonPressed() {
+    @objc
+    private func viewTapped() {
         iconImageView.tintColor = .cmPrimaryColor // 눌렸을 때 색상
-        filterTitleLabel.textColor = .cmPrimaryColor
+        filterTitleLabel.textColor = .cmBodyTextColor
     }
     
-    @objc 
+    @objc
     private func buttonReleased() {
         iconImageView.tintColor = .grayScale700 // 기본 상태로 복원
-        filterTitleLabel.textColor = .black
+        filterTitleLabel.textColor = .grayScale700
     }
-    
+
 }
+

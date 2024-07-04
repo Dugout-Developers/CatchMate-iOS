@@ -17,9 +17,10 @@ enum Filter {
 }
 
 final class HomeViewController: BaseViewController, View {
+
     private let reactor: HomeReactor
     private let viewWillAppearPublisher = PublishSubject<Void>().asObserver()
-    
+    private let filterScrollView = UIScrollView()
     private let filterContainerView = UIView()
     private let allFilterButton = HomeFilterButton(icon: UIImage(systemName: "list.bullet"), title: "전체", filter: .all)
     private let dateFilterButton = HomeFilterButton(icon: UIImage(systemName: "calendar"), title: "경기 날짜", filter: .date)
@@ -50,6 +51,7 @@ final class HomeViewController: BaseViewController, View {
         bind(reactor: self.reactor)
         setupTableView()
     }
+    
     private func setupTableView() {
         // MARK: - 임시 (바인드 시 지우기)
         tableView.dataSource = self
@@ -80,7 +82,12 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: - Bind
 extension HomeViewController {
     func bind(reactor: HomeReactor) {
-        
+        reactor.state.map{$0.dateFilterValue}
+            .withUnretained(self)
+            .bind { vc, date in
+                vc.dateFilterButton.filterValue = date?.toString(format: "MM.dd")
+            }
+            .disposed(by: disposeBag)
     }
 }
 // MARK: - Button Event
@@ -100,7 +107,7 @@ extension HomeViewController {
             navigationController?.pushViewController(allFilterVC, animated: true)
         case .date:
             let customDetent = returnCustomDetent(height: Screen.height / 2.0 + 50.0, identifier: "DateFilter")
-            let dateFilterVC = DateFilterViewController()
+            let dateFilterVC = DateFilterViewController(reactor: reactor, disposeBag: disposeBag)
             if let sheet = dateFilterVC.sheetPresentationController {
                 sheet.detents = [customDetent]
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false
@@ -133,20 +140,26 @@ extension HomeViewController {
 extension HomeViewController {
     func setupUI() {
         // 필터 컨테이너 뷰 추가
-        view.addSubview(filterContainerView)
+        view.addSubview(filterScrollView)
         view.addSubview(tableView)
-        
-        filterContainerView.flex.direction(.row).justifyContent(.start).alignItems(.center).paddingHorizontal(18).paddingVertical(11).define { flex in
+        filterScrollView.addSubview(filterContainerView)
+        filterContainerView.flex.direction(.row).paddingHorizontal(18).paddingVertical(11).justifyContent(.start).alignItems(.center).define { flex in
             flex.addItem(allFilterButton).marginRight(8)
             flex.addItem(dateFilterButton).marginRight(8)
             flex.addItem(teamFilterButton)
         }
     }
     
-    override func viewDidLayoutSubviews() {
+
+override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        filterContainerView.pin.top(view.pin.safeArea.top).left(view.pin.safeArea.left).right(view.pin.safeArea.right).height(50)
+        filterScrollView.pin.top(view.pin.safeArea.top).left(view.pin.safeArea.left).right(view.pin.safeArea.right).height(50)
+        filterContainerView.pin.all()
+        
+        filterContainerView.flex.layout(mode: .adjustWidth)
+        filterScrollView.contentSize = filterContainerView.frame.size
         tableView.pin.below(of: filterContainerView).marginTop(12).bottom(view.pin.safeArea.bottom).left().right()
         filterContainerView.flex.layout()
     }
 }
+
