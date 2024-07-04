@@ -7,16 +7,18 @@
 
 import UIKit
 
+/// reactor 에 text 값을 state로 관리하여 state와 바인딩하여 applyStyle 호출해야함.
 class CMTextField: UITextField {
     private let padding = UIEdgeInsets(top: 17, left: 16, bottom: 17, right: 36)
     private let clearButtonSize = CGSize(width: 20, height: 20)
-    
+    var cmPlaceholder: String?
     var isRequiredMark: Bool = false {
         didSet {
             updatePlaceholder()
         }
     }
-    override init(frame: CGRect) {
+    init(frame: CGRect = .zero, placeHolder: String?) {
+        self.cmPlaceholder = placeHolder
         super.init(frame: frame)
         setup()
     }
@@ -30,14 +32,11 @@ class CMTextField: UITextField {
     private func setup() {
         layer.cornerRadius = 8.0
         layer.borderWidth = 1.0
-        layer.borderColor = UIColor.lightGray.cgColor
-        textColor = .black
+        layer.borderColor = UIColor.cmBorderColor.cgColor
+        textColor = .cmHeadLineTextColor
         backgroundColor = .white
-        font = UIFont.systemFont(ofSize: 16)
-        
-        // Placeholder
-        attributedPlaceholder = NSAttributedString(string: placeholder ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-        
+        placeholder = cmPlaceholder
+        applyStyle(textStyle: FontSystem.body02_semiBold, placeholdeAttr: [NSAttributedString.Key.foregroundColor: UIColor.grayScale400])
         // Clear button
         clearButtonMode = .never
         
@@ -46,7 +45,6 @@ class CMTextField: UITextField {
         addTarget(self, action: #selector(textFieldDidBeginEditing), for: .editingDidBegin)
         addTarget(self, action: #selector(textFieldDidEndEditing), for: .editingDidEnd)
     }
-    
     // Text Rect
     override func textRect(forBounds bounds: CGRect) -> CGRect {
         return bounds.inset(by: padding)
@@ -70,6 +68,9 @@ class CMTextField: UITextField {
     
     @objc private func textFieldDidChange() {
         updateClearButtonVisibility()
+        if let currentText = self.text {
+            self.attributedText = NSAttributedString(string: currentText, attributes: FontSystem.body02_semiBold.getAttributes())
+        }
     }
     
     @objc private func textFieldDidBeginEditing() {
@@ -80,6 +81,9 @@ class CMTextField: UITextField {
     @objc private func textFieldDidEndEditing() {
         layer.borderColor = UIColor.lightGray.cgColor
         updateClearButtonVisibility()
+        if let currentText = self.text {
+            self.attributedText = NSAttributedString(string: currentText, attributes: FontSystem.body02_semiBold.getAttributes())
+        }
     }
     
     private func updateClearButtonVisibility() {
@@ -101,7 +105,6 @@ class CMTextField: UITextField {
         clearButton.frame = CGRect(x: 0, y: 0, width: clearButtonSize.width, height: clearButtonSize.height)
         clearButton.addTarget(self, action: #selector(clearButtonTapped), for: .touchUpInside)
         
-        
         clearButton.imageView?.contentMode = .scaleAspectFit
         
         return clearButton
@@ -114,13 +117,14 @@ class CMTextField: UITextField {
     
     private func updatePlaceholder() {
         let placeholderText = placeholder ?? ""
-        let attributedString = NSMutableAttributedString(string: placeholderText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-        
+        var fontAtrribute = FontSystem.body02_semiBold.getAttributes()
+        fontAtrribute[.foregroundColor] = UIColor.grayScale400
+        let attributedString = NSAttributedString(string: placeholderText, attributes: fontAtrribute)
         if isRequiredMark {
-            let requiredMark = NSAttributedString(string: " *", attributes: [NSAttributedString.Key.foregroundColor: UIColor.red])
-            attributedString.append(requiredMark)
+            let requiredMark = NSMutableAttributedString(string: " *", attributes: [NSAttributedString.Key.foregroundColor: UIColor.cmPrimaryColor])
+            requiredMark.insert(attributedString, at: 0)
+            attributedPlaceholder =  requiredMark
         }
-        
-        attributedPlaceholder = attributedString
     }
 }
+

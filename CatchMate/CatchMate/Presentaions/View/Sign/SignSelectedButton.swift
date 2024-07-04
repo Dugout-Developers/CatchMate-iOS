@@ -35,10 +35,10 @@ final class SignSelectedButton<T: CaseIterable>: UIView {
         let label = UILabel()
         label.textColor = .cmBodyTextColor
         label.numberOfLines = 0
-        label.textAlignment = .center
         label.adjustsFontSizeToFitWidth = true
         label.text = "팀명"
-        label.font = .systemFont(ofSize: 14, weight: .semibold)
+        label.applyStyle(textStyle: FontSystem.body02_semiBold)
+        label.textAlignment = .center
         return label
     }()
     
@@ -76,7 +76,7 @@ final class SignSelectedButton<T: CaseIterable>: UIView {
     private func setupUI() {
         addSubview(containerView)
         containerView.flex.backgroundColor(.grayScale50).cornerRadius(8).direction(.column).justifyContent(.start).alignItems(.center).define { flex in
-            flex.addItem(itemImage).marginTop(15).marginBottom(5).marginHorizontal(7).shrink(1)
+            flex.addItem(itemImage).marginTop(15).marginBottom(18).marginHorizontal(7).shrink(1)
             flex.addItem(label).marginBottom(30)
         }.height(contentHeight)
     }

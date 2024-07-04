@@ -16,12 +16,19 @@ enum SignUpError: Error {
     case loginDataError
 }
 
+enum ValidatCase: String {
+    case none = ""
+    case success = "사용 가능한 닉네임입니다"
+    case failed = "이미 사용 중인 닉네임입니다"
+}
+
 final class SignReactor: Reactor {
     enum Action {
         case kakaoLogin
         case appleLogin
         case naverLogin
         case updateNickname(String)
+        case endEditNickname
         case updateBirth(String)
         case updateGender(Gender)
         case updateTeam(Team)
@@ -31,6 +38,8 @@ final class SignReactor: Reactor {
     enum Mutation {
         case getSNSLoginInfo(LoginModel)
         case setNickname(String)
+        case setValidateCase
+        case setIsEditingNickName(Bool)
         case setCount(Int)
         case setBirth(String)
         case setGender(Gender)
@@ -44,6 +53,8 @@ final class SignReactor: Reactor {
     struct State {
         var loginModel: LoginModel?
         var nickName: String = ""
+        var nickNameValidate: ValidatCase = .none
+        var isEditingNickname: Bool = false
         var nicknameCount: Int = 0
         var birth: String = ""
         var gender: Gender?
@@ -74,10 +85,17 @@ final class SignReactor: Reactor {
         switch action {
         case .updateNickname(let nickName):
             return Observable.concat([
+                Observable.just(Mutation.setIsEditingNickName(true)),
+                Observable.just(Mutation.setValidateCase),
                 Observable.just(Mutation.setNickname(nickName)),
                 Observable.just(Mutation.setCount(nickName.count)),
                 Observable.just(Mutation.validateForm)
             ])
+        case .endEditNickname:
+            return Observable.concat([
+                Observable.just(Mutation.setIsEditingNickName(false)),
+                Observable.just(Mutation.setValidateCase)
+                ])
         case .updateBirth(let birth):
             return Observable.concat([
                 Observable.just(Mutation.setBirth(birth)),
@@ -123,6 +141,19 @@ final class SignReactor: Reactor {
         switch mutation {
         case .setNickname(let nickname):
             newState.nickName = nickname
+        case .setValidateCase:
+            // TODO: - 서버 Validate 통신 결과에 맞춰 상태 바꾸기 (임시결과로 대체)
+            if newState.isEditingNickname {
+                // 닉네임 작성중일때
+                if newState.nicknameCount == 0 { newState.nickNameValidate = .none }
+                else if newState.nicknameCount < 4 {  newState.nickNameValidate = .failed }
+                else {  newState.nickNameValidate = .success }
+            } else {
+                // 작성이 끝났을 때 -> 중복이면 failed 중복이 아니면 none
+                if newState.nicknameCount >= 4 { newState.nickNameValidate = .none }
+            }
+        case .setIsEditingNickName(let isEditing):
+            newState.isEditingNickname = isEditing
         case .setBirth(let birth):
             newState.birth = birth
         case .setGender(let gender):
@@ -132,7 +163,7 @@ final class SignReactor: Reactor {
         case .setCount(let count):
             newState.nicknameCount = count
         case .validateForm:
-            newState.isFormValid = !newState.nickName.isEmpty && newState.birth.count == 6 && newState.gender != nil
+            newState.isFormValid = !newState.nickName.isEmpty && newState.birth.count == 6 && newState.gender != nil && newState.nickNameValidate == .none
         case .setTeam(let team):
             newState.team = team
         case .validateTeam:
@@ -140,7 +171,7 @@ final class SignReactor: Reactor {
         case .setCheerStyle(let cheerStyle):
             newState.cheerStyle = cheerStyle
         case .validateSignUp:
-            if !newState.nickName.isEmpty, !newState.birth.isEmpty, let gender = newState.gender, let team = newState.team, let snsId = newState.loginModel?.id, let email = newState.loginModel?.email {
+            if !newState.nickName.isEmpty, !newState.birth.isEmpty, let gender = newState.gender, let team = newState.team, let snsId = newState.loginModel?.id, let email = newState.loginModel?.email{
                 if let age = birthToAge(newState.birth) {
                     newState.user = User(snsID: snsId, email: email, nickName: newState.nickName, age: age, team: team, gener: gender, cheerStyle: newState.cheerStyle, profilePicture: nil)
                     newState.isSignUp = true

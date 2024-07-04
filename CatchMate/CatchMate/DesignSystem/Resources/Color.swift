@@ -9,21 +9,33 @@ import UIKit
 
 extension UIColor {
     // MARK: - Semantic Color
-    static let cmBackgroundColor = UIColor(hex: "#F7F8FA")
+    static let cmBackgroundColor = UIColor(hex: "#FFFFFF")
     static let cmPrimaryColor = brandColor500
     
+    // MARK: - 와이어프레임 모두 수정 시 삭제
     static let cmTextGray = UIColor(hex: "#414141")
+    // MARK: - Text Color
+    /// gray800
     static let cmHeadLineTextColor = grayScale800
+    /// gray700
     static let cmBodyTextColor = grayScale700
+    /// gray600
     static let cmSubTextColor = grayScale600
+    /// gray500
     static let cmNonImportantTextColor = grayScale500
     
+    /// brand50
     static let cmDisabledButtonColor = brandColor50
+    /// brand500
     static let cmEnabledButtonColor = brandColor500
+    /// brand600
     static let cmPressedButtonColor = brandColor600
+    /// brand100
     static let cmWeakButtonColor = brandColor100
     
+    /// gray200
     static let cmBorderColor = grayScale200
+    /// gray100
     static let cmStrokeColor = grayScale100
     
     // MARK: - SystemColor
@@ -44,10 +56,10 @@ extension UIColor {
     
     // MARK: - GrayScale
     static let grayScale50 = UIColor(hex: "#FCFAFA")
-    static let grayScale100 = UIColor(hex: "#F5F2F2")
-    static let grayScale200 = UIColor(hex: "#EEE9E9")
-    static let grayScale300 = UIColor(hex: "#D0CCCE")
-    static let grayScale400 = UIColor(hex: "#B2AFB2")
+    static let grayScale100 = UIColor(hex: "#F2F2F5")
+    static let grayScale200 = UIColor(hex: "#E9E9EE")
+    static let grayScale300 = UIColor(hex: "#CCCCD0")
+    static let grayScale400 = UIColor(hex: "#AFAFB2")
     static let grayScale500 = UIColor(hex: "#949297")
     static let grayScale600 = UIColor(hex: "#76747B")
     static let grayScale700 = UIColor(hex: "#595860")

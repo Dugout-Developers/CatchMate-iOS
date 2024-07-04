@@ -42,15 +42,32 @@ extension UIViewController {
     
     /// 네비게이션 뒤로가기 버튼
     /// -> 사용방법: a에서 b로 이동한다면 a에서 선언
-    func configNavigationBackButton() {
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .semibold)
-        let backImage = UIImage(systemName: "chevron.left", withConfiguration: imageConfig)
-        navigationController?.navigationBar.backIndicatorImage = backImage
-        backImage?.accessibilityLabel = "뒤로가기"
-        navigationController?.navigationBar.backIndicatorTransitionMaskImage = backImage
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        self.navigationItem.backBarButtonItem?.tintColor = .cmPrimaryColor
+    func configNavigationBackButton(_ text: String = "") {
+        let backImage = UIImage(named: "left")
+        let backButton = UIButton(type: .custom)
+        backButton.setImage(backImage, for: .normal)
+        backButton.setTitle(text, for: .normal)
+        backButton.setTitleColor(.cmHeadLineTextColor, for: .normal)
+        backButton.sizeToFit()
+        
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+
+        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: backButton.frame.width + 18, height: 20))
+        backButton.frame.origin.x = 18
+        // 기본 바버튼 여백 제거 = 기본 iOS 백버튼 여백 16
+        let negativeSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        negativeSpacer.width = -16
+        containerView.addSubview(backButton)
+        
+        let backBarButtonItem = UIBarButtonItem(customView: containerView)
+        
+        self.navigationItem.leftBarButtonItems = [negativeSpacer, backBarButtonItem]
     }
+    // 백 버튼의 액션
+    @objc func backButtonTapped() {
+        self.navigationController?.popViewController(animated: true)
+    }
+
     
     /// 네비게이션 뒤로가기 버튼 숨기기
     /// -> 사용방법: a에서 b로 이동한다면 a에서 선언

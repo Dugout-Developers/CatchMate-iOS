@@ -12,11 +12,7 @@ final class NumberPickerViewController: BasePickerViewController {
     private var selectedNum: Int = 1
     private let numberArr: [Int] = [1,2,3,4,5,6,7,8]
 
-    private let saveButton: CMDefaultFilledButton = {
-        let button = CMDefaultFilledButton()
-        button.setTitle("저장", for: .normal)
-        return button
-    }()
+    private let saveButton = CMDefaultFilledButton(title: "저장")
     
     override func viewDidLoad() {
         super.viewDidLoad()

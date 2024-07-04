@@ -9,15 +9,15 @@ import UIKit
 
 enum Team: String, CaseIterable {
     case nc = "다이노스"
-    case ssg = "랜더스"
-    case kia = "타이거즈"
-    case dosun = "베어스"
-    case hanhwa = "이글스"
-    case lg = "트윈스"
     case samsung = "라이온즈"
-    case kiwoom = "히어로즈"
+    case ssg = "랜더스"
+    case dosun = "베어스"
     case kt = "위즈"
+    case hanhwa = "이글스"
     case lotte = "자이언츠"
+    case kia = "타이거즈"
+    case lg = "트윈스"
+    case kiwoom = "히어로즈"
     case allTeamLove = "평화주의자"
     case yarine = "야린이"
     

@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class AllFilterViewController: UIViewController {
+final class AllFilterViewController: BaseViewController {
     private let dateLabel: UILabel = {
         let label = UILabel()
         label.text = "날짜"
@@ -76,7 +76,7 @@ final class AllFilterViewController: UIViewController {
     private func setupPickerView() {
         // datePicker Setup
         datePickerTextField.parentViewController = self
-        datePickerTextField.pickerViewController = DateFilterViewController()
+        datePickerTextField.pickerViewController = DateFilterViewController(reactor: HomeReactor(), disposeBag: disposeBag)
         datePickerTextField.customDetent = BasePickerViewController.returnCustomDetent(height: Screen.height / 2.0 + 50.0, identifier: "DateFilter")
         
         // numberPicker Setup

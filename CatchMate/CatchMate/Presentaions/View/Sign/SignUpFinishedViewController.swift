@@ -12,8 +12,7 @@ import ReactorKit
 import RxSwift
 import RxCocoa
 
-final class SignUpFinishedViewController: UIViewController , View {
-    var disposeBag = DisposeBag()
+final class SignUpFinishedViewController: BaseViewController, View {
     var reactor: SignReactor
     
     private let containerView = UIView()
@@ -28,25 +27,21 @@ final class SignUpFinishedViewController: UIViewController , View {
         let label = UILabel()
         label.text = "회원가입 완료"
         label.textColor = .cmHeadLineTextColor
-        label.font = .systemFont(ofSize: 24, weight: .semibold)
+        label.applyStyle(textStyle: FontSystem.pageTitle)
         return label
     }()
     
     private let subLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .center
         label.numberOfLines = 2
         label.text = "함께 할수록 더 재미있는 야구 직관\n캐치메이트에서 구해보세요!"
         label.textColor = .cmNonImportantTextColor
-        label.font = .systemFont(ofSize: 14, weight: .semibold)
+        label.applyStyle(textStyle: FontSystem.body02_semiBold)
+        label.textAlignment = .center
         return label
     }()
     
-    private let nextButton: CMDefaultFilledButton = {
-        let button = CMDefaultFilledButton()
-        button.setTitle("다음", for: .normal)
-        return button
-    }()
+    private let nextButton = CMDefaultFilledButton(title: "다음")
 
     
     init(reactor: SignReactor) {

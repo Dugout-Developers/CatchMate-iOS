@@ -8,19 +8,17 @@
 import UIKit
 import RxSwift
 
-final class NotiViewController: UIViewController {
-    private let disposeBag = DisposeBag()
+final class NotiViewController: BaseViewController {
     private let tableView = UITableView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .cmBackgroundColor
-        configNavigationLeftTitle("알림")
         setupUI()
         setupTableView()
         setupEditTableView()
+        setupLeftTitle("알림")
     }
-    
 }
 
 // MARK: - TableView 임시: 와이어프레임 확인용 테이블 뷰 데이터소스 및 델리게이트 -> Rx 적용 후 수정 필수

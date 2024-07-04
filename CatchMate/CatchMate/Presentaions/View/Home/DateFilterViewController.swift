@@ -7,14 +7,24 @@
 
 import UIKit
 import SnapKit
+import ReactorKit
 
-final class DateFilterViewController: BasePickerViewController {
+final class DateFilterViewController: BasePickerViewController, View {
     private let datePicker = UIDatePicker()
-    private let saveButton: CMDefaultFilledButton = {
-        let button = CMDefaultFilledButton()
-        button.setTitle("저장", for: .normal)
-        return button
-    }()
+    private let saveButton = CMDefaultFilledButton(title: "저장")
+    var disposeBag: DisposeBag
+    private let reactor: HomeReactor
+    
+    init(reactor: HomeReactor, disposeBag: DisposeBag) {
+        self.reactor = reactor
+        self.disposeBag = disposeBag
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +32,7 @@ final class DateFilterViewController: BasePickerViewController {
         setupUI()
         setupDatePicker()
         setupButton()
+        bind(reactor: reactor)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -44,6 +55,16 @@ final class DateFilterViewController: BasePickerViewController {
         formatter.dateStyle = .medium
         let dateString = formatter.string(from: datePicker.date)
         itemSelected(dateString)
+    }
+    func bind(reactor: HomeReactor) {
+        saveButton.rx.tap
+            .withUnretained(self)
+            .map { ( vc, _ ) -> Date? in
+                return vc.datePicker.date
+            }
+            .map { Reactor.Action.updateDateFilter($0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }
 

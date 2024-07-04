@@ -13,7 +13,6 @@ import FlexLayout
 import PinLayout
 
 final class SignInViewController: BaseViewController, View {
-    var disposeBag = DisposeBag()
     var reactor: SignReactor
     
     private let containerView = UIView()
@@ -37,23 +36,23 @@ final class SignInViewController: BaseViewController, View {
     private let orLabel: UILabel = {
         let label = UILabel()
         label.text = "또는"
-        label.font = .systemFont(ofSize: 12)
+        label.applyStyle(textStyle: FontSystem.body03_medium)
         label.textColor = .cmNonImportantTextColor
         return label
     }()
     private let exploreButton: UIButton = {
         let button = UIButton(configuration: .plain())
-        let buttonText = "일단 둘러볼게요."
+        button.setTitle("일단 둘러볼게요.", for: .normal)
         let attributes: [NSAttributedString.Key: Any] = [
             .underlineStyle: NSUnderlineStyle.single.rawValue,
             .foregroundColor: UIColor.cmNonImportantTextColor
         ]
-        let attributedString = NSAttributedString(string: buttonText, attributes: attributes)
-        button.setAttributedTitle(attributedString, for: .normal)
+        button.applyStyle(textStyle:  FontSystem.body03_medium, anyAttr: attributes)
+
         return button
     }()
     
-    init(reactor: SignReactor) {
+    init (reactor: SignReactor) {
         self.reactor = reactor
         super.init(nibName: nil, bundle: nil)
     }

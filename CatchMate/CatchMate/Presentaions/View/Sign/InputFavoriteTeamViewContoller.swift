@@ -12,8 +12,7 @@ import ReactorKit
 import RxSwift
 import RxCocoa
 
-final class InputFavoriteTeamViewContoller: UIViewController, View {
-    var disposeBag = DisposeBag()
+final class InputFavoriteTeamViewContoller: BaseViewController, View {
     var reactor: SignReactor
     
     private let scrollView = UIScrollView()
@@ -24,7 +23,6 @@ final class InputFavoriteTeamViewContoller: UIViewController, View {
         let label = UILabel()
         label.numberOfLines = 1
         label.adjustsFontSizeToFitWidth = true
-        label.font = .systemFont(ofSize: 28)
         label.textColor = .cmHeadLineTextColor
         return label
     }()
@@ -34,7 +32,7 @@ final class InputFavoriteTeamViewContoller: UIViewController, View {
         label.numberOfLines = 1
         label.text = "응원구단을 알려주세요."
         label.adjustsFontSizeToFitWidth = true
-        label.font = .systemFont(ofSize: 28)
+        label.applyStyle(textStyle: FontSystem.highlight)
         label.textColor = .cmHeadLineTextColor
         return label
     }()
@@ -55,12 +53,7 @@ final class InputFavoriteTeamViewContoller: UIViewController, View {
         return buttons
     }()
     
-    private let nextButton: CMDefaultFilledButton = {
-        let button = CMDefaultFilledButton()
-        button.setTitle("다음", for: .normal)
-        button.isEnabled = false
-        return button
-    }()
+    private let nextButton = CMDefaultFilledButton(title: "다음")
 
     
     init(reactor: SignReactor) {
@@ -79,7 +72,6 @@ final class InputFavoriteTeamViewContoller: UIViewController, View {
         setupUI()
         setupButton()
         bind(reactor: reactor)
-        configNavigationBackButton()
     }
     
     override func viewDidLayoutSubviews() {
@@ -93,7 +85,6 @@ final class InputFavoriteTeamViewContoller: UIViewController, View {
     
     private func setupView() {
         view.backgroundColor = .white
-        view.tappedDismissKeyboard()
         reactor.state
             .withUnretained(self)
             .subscribe(onNext: { vc, state in
@@ -143,7 +134,11 @@ extension InputFavoriteTeamViewContoller {
             .disposed(by: disposeBag)
         reactor.state
             .map {"\($0.nickName)님의"}
-            .bind(to: titleLabel1.rx.text)
+            .withUnretained(self)
+            .bind(onNext: { vc, text in
+                vc.titleLabel1.text = text
+                vc.titleLabel1.applyStyle(textStyle: FontSystem.highlight)
+            })
             .disposed(by: disposeBag)
         
         reactor.state.map { $0.isTeamSelected }

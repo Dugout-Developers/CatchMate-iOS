@@ -7,17 +7,13 @@
 
 import UIKit
 
-final class AddViewController: UIViewController {
+final class AddViewController: BaseViewController {
     private var selectedGenderLabel: PaddingLabel?
     private var seletedAgeLabel: PaddingLabel?
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
-    private let titleTextField: CMTextField = {
-        let textField = CMTextField()
-        textField.placeholder = "제목을 입력해주세요."
-        return textField
-    }()
+    private let titleTextField = CMTextField(placeHolder: "제목을 입력해주세요.")
     private let numberPickerTextField = CMPickerTextField(rightAccessoryView: {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16)
@@ -120,11 +116,8 @@ final class AddViewController: UIViewController {
         return labels
     }()
     
-    private let registerButton: CMDefaultFilledButton = {
-        let button = CMDefaultFilledButton()
-        button.setTitle("등록", for: .normal)
-        return button
-    }()
+    private let registerButton = CMDefaultFilledButton(title: "등록")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -133,6 +126,7 @@ final class AddViewController: UIViewController {
         setupRequiredMark()
         setupGenderButton()
         setupAgeButton()
+        setupNavigationBar()
     }
     
     override func viewDidLayoutSubviews() {
@@ -152,7 +146,7 @@ final class AddViewController: UIViewController {
     private func setupPickerView() {
         // datePicker Setup
         datePickerTextField.parentViewController = self
-        datePickerTextField.pickerViewController = DateFilterViewController()
+        datePickerTextField.pickerViewController = DateFilterViewController(reactor: HomeReactor(), disposeBag: disposeBag)
         datePickerTextField.customDetent = BasePickerViewController.returnCustomDetent(height: Screen.height / 2.0 + 50.0, identifier: "DateFilter")
         
         // numberPicker Setup
@@ -164,10 +158,13 @@ final class AddViewController: UIViewController {
     
     private func setupView() {
         view.backgroundColor = .white
-        let saveButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.down"), style: .plain, target: self, action: #selector(clickSaveButton))
-        navigationItem.rightBarButtonItem = saveButton
         registerButton.addTarget(self, action: #selector(clickRegisterButton), for: .touchUpInside)
-        view.tappedDismissKeyboard()
+    }
+    
+    private func setupNavigationBar() {
+        let saveButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.down"), style: .plain, target: self, action: #selector(clickSaveButton))
+        title = "등록"
+        navigationItem.rightBarButtonItem = saveButton
     }
 }
 // MARK: - Button
