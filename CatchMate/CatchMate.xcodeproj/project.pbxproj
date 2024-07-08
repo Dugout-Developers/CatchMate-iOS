@@ -54,7 +54,6 @@
 		536BDDC52C189B240043B1DA /* CatchMateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDC42C189B240043B1DA /* CatchMateTests.swift */; };
 		536BDDCF2C189B240043B1DA /* CatchMateUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDCE2C189B240043B1DA /* CatchMateUITests.swift */; };
 		536BDDD12C189B240043B1DA /* CatchMateUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDD02C189B240043B1DA /* CatchMateUITestsLaunchTests.swift */; };
-		536BDDE02C196C380043B1DA /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 536BDDDF2C196C380043B1DA /* APIKeys.plist */; };
 		536BDDE22C196F510043B1DA /* Bundle+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDE12C196F510043B1DA /* Bundle+Extension.swift */; };
 		536BDDE92C1971C70043B1DA /* SignReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDE82C1971C70043B1DA /* SignReactor.swift */; };
 		536BDDEC2C19720E0043B1DA /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDEB2C19720E0043B1DA /* User.swift */; };
@@ -91,6 +90,8 @@
 		53BE7ACF2C367008002FC64F /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7ACE2C367008002FC64F /* DateHelper.swift */; };
 		53BE7AD22C367181002FC64F /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7AD12C367181002FC64F /* Date+Extension.swift */; };
 		53BE7AD42C369A35002FC64F /* OptionButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7AD32C369A35002FC64F /* OptionButtonView.swift */; };
+		53F08BBF2C3C1EAD00B1B37A /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53F08BBE2C3C1EAD00B1B37A /* APIKeys.plist */; };
+		53F08BC62C3C294C00B1B37A /* APIKEY.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 53F08BC52C3C294C00B1B37A /* APIKEY.xcconfig */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -191,6 +192,9 @@
 		53BE7ACE2C367008002FC64F /* DateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
 		53BE7AD12C367181002FC64F /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		53BE7AD32C369A35002FC64F /* OptionButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionButtonView.swift; sourceTree = "<group>"; };
+		53F08BBE2C3C1EAD00B1B37A /* APIKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
+		53F08BC52C3C294C00B1B37A /* APIKEY.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = APIKEY.xcconfig; sourceTree = "<group>"; };
+		53F08BC92C3C2B2A00B1B37A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -361,6 +365,9 @@
 			children = (
 				536BDDAD2C189B230043B1DA /* AppDelegate.swift */,
 				536BDDAF2C189B230043B1DA /* SceneDelegate.swift */,
+				53F08BC92C3C2B2A00B1B37A /* Info.plist */,
+				53F08BC52C3C294C00B1B37A /* APIKEY.xcconfig */,
+				53F08BBE2C3C1EAD00B1B37A /* APIKeys.plist */,
 			);
 			path = APP;
 			sourceTree = "<group>";
@@ -728,9 +735,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				536BDDE02C196C380043B1DA /* APIKeys.plist in Resources */,
 				5383BE902C34ECD1008940F1 /* PretendardVariable.ttf in Resources */,
 				536BDDB72C189B240043B1DA /* Assets.xcassets in Resources */,
+				53F08BBF2C3C1EAD00B1B37A /* APIKeys.plist in Resources */,
+				53F08BC62C3C294C00B1B37A /* APIKEY.xcconfig in Resources */,
 				536BDDBA2C189B240043B1DA /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -872,7 +880,7 @@
 /* Begin XCBuildConfiguration section */
 		536BDDD22C189B240043B1DA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 533A2B402C2C5EEE00A59340 /* APPKEY.xcconfig */;
+			baseConfigurationReference = 53F08BC52C3C294C00B1B37A /* APIKEY.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -936,7 +944,7 @@
 		};
 		536BDDD32C189B240043B1DA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 533A2B402C2C5EEE00A59340 /* APPKEY.xcconfig */;
+			baseConfigurationReference = 53F08BC52C3C294C00B1B37A /* APIKEY.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -993,7 +1001,7 @@
 		};
 		536BDDD52C189B240043B1DA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 533A2B402C2C5EEE00A59340 /* APPKEY.xcconfig */;
+			baseConfigurationReference = 53F08BC52C3C294C00B1B37A /* APIKEY.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1002,7 +1010,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 977J65FA28;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CatchMate/Resources/Info.plist;
+				INFOPLIST_FILE = CatchMate/APP/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -1028,7 +1036,7 @@
 		};
 		536BDDD62C189B240043B1DA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 533A2B402C2C5EEE00A59340 /* APPKEY.xcconfig */;
+			baseConfigurationReference = 53F08BC52C3C294C00B1B37A /* APIKEY.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1037,7 +1045,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 977J65FA28;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CatchMate/Resources/Info.plist;
+				INFOPLIST_FILE = CatchMate/APP/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -1063,7 +1071,7 @@
 		};
 		536BDDD82C189B240043B1DA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 533A2B402C2C5EEE00A59340 /* APPKEY.xcconfig */;
+			baseConfigurationReference = 53F08BC52C3C294C00B1B37A /* APIKEY.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1084,7 +1092,7 @@
 		};
 		536BDDD92C189B240043B1DA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 533A2B402C2C5EEE00A59340 /* APPKEY.xcconfig */;
+			baseConfigurationReference = 53F08BC52C3C294C00B1B37A /* APIKEY.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1105,7 +1113,7 @@
 		};
 		536BDDDB2C189B240043B1DA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 533A2B402C2C5EEE00A59340 /* APPKEY.xcconfig */;
+			baseConfigurationReference = 53F08BC52C3C294C00B1B37A /* APIKEY.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -1124,7 +1132,7 @@
 		};
 		536BDDDC2C189B240043B1DA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 533A2B402C2C5EEE00A59340 /* APPKEY.xcconfig */;
+			baseConfigurationReference = 53F08BC52C3C294C00B1B37A /* APIKEY.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -1151,7 +1159,7 @@
 				536BDDD32C189B240043B1DA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		536BDDD42C189B240043B1DA /* Build configuration list for PBXNativeTarget "CatchMate" */ = {
 			isa = XCConfigurationList;
@@ -1160,7 +1168,7 @@
 				536BDDD62C189B240043B1DA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		536BDDD72C189B240043B1DA /* Build configuration list for PBXNativeTarget "CatchMateTests" */ = {
 			isa = XCConfigurationList;
@@ -1169,7 +1177,7 @@
 				536BDDD92C189B240043B1DA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		536BDDDA2C189B240043B1DA /* Build configuration list for PBXNativeTarget "CatchMateUITests" */ = {
 			isa = XCConfigurationList;
@@ -1178,7 +1186,7 @@
 				536BDDDC2C189B240043B1DA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 

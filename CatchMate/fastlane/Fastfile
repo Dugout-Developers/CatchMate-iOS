@@ -1,0 +1,37 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Deploy to Firebase"
+  lane :deploy_firebase do
+    build_app(scheme: "CatchMate", configuration: "Debug")
+    firebase_app_distribution(
+      app: ENV['FIREBASE_APP_ID'],
+      groups: "Dugout-TeckNeck", 
+      release_notes: ENV['CHANGELOG']
+    )
+  end
+
+  desc "Deploy to TestFlight"
+  lane :deploy_testflight do
+    build_app(scheme: "CatchMate", configuration: "Release")
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true,
+      changelog: ENV['CHANGELOG']
+    )
+  end
+end
