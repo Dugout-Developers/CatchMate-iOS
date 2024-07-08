@@ -16,10 +16,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v1
 
-      - name: ruby/setup-ruby@v1
-        uses: actions/setup-ruby
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1 
         with:
-          ruby-version: 3.2.2
+          ruby-version: '3.2.2'
 
       - name: Install dependencies
         run: bundle install
@@ -36,9 +36,9 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Set up Ruby
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1 
         with:
-          ruby-version: 3.2.2
+          ruby-version: '3.2.2'
 
       - name: Install dependencies
         run: bundle install
