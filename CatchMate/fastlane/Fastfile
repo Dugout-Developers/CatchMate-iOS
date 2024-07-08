@@ -23,7 +23,7 @@ platform :ios do
       device: "iPhone 15 Pro" 
     )
   end
-platform :ios do
+
   desc "Deploy to Firebase"
   lane :deploy_firebase do
     build_app(scheme: "CatchMate", configuration: "Debug")
@@ -33,13 +33,4 @@ platform :ios do
       release_notes: ENV['CHANGELOG']
     )
   end
-
-  #desc "Deploy to TestFlight"
-  #lane :deploy_testflight do
-   # build_app(scheme: "CatchMate", configuration: "Release")
-   # upload_to_testflight(
-  #    skip_waiting_for_build_processing: true,
-   #   changelog: ENV['CHANGELOG']
-  #  )
- # end
 end
