@@ -1,12 +1,7 @@
 # .github/workflows/deploy.yml
 name: CI/CD Pipeline
 
-on:
-  push:
-    branches:
-      - dev
-#      - release/*
-      - main
+
 on:
   pull_request:
     types: [closed]
