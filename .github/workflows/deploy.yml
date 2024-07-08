@@ -28,7 +28,7 @@ jobs:
       #   working-directory: CatchMate
 
   deploy_firebase:
-    if: github.event.pull_request.merged == true && github.ref == 'refs/heads/develop'
+    if: github.event.pull_request.merged == true && github.ref == 'refs/heads/dev'
     runs-on: macos-latest
 
     steps:
