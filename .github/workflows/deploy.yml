@@ -7,9 +7,13 @@ on:
       - dev
 #      - release/*
       - main
-
+on:
+  pull_request:
+    types: [closed]
+    
 jobs:
   build:
+    if: github.event.pull_request.merged == true
     runs-on: macos-latest
 
     steps:
@@ -30,7 +34,7 @@ jobs:
       #   working-directory: CatchMate
 
   deploy_firebase:
-    if: github.ref == 'refs/heads/develop'
+    if: github.event.pull_request.merged == true && github.ref == 'refs/heads/develop'
     runs-on: macos-latest
 
     steps:
