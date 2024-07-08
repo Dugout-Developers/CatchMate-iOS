@@ -28,6 +28,7 @@ platform :ios do
 
   desc "Deploy to Firebase"
   lane :deploy_firebase do
+    sh "xcodebuild clean -project ./CatchMate.xcodeproj -scheme CatchMate -configuration Debug"
     build_app(scheme: "CatchMate", configuration: "Debug")
     firebase_app_distribution(
       app: ENV['FIREBASE_APP_ID'],
