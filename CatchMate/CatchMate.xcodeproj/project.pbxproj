@@ -29,10 +29,10 @@
 		5317867F2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317867E2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift */; };
 		531786822C21D3F700ACEF6A /* ChatListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786812C21D3F700ACEF6A /* ChatListTableViewCell.swift */; };
 		531786852C23261200ACEF6A /* SheetHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786842C23261200ACEF6A /* SheetHeight.swift */; };
-		53241F382C3C50E500F468E1 /* APIKEY.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 53241F352C3C50E500F468E1 /* APIKEY.xcconfig */; };
-		53241F392C3C50E500F468E1 /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53241F362C3C50E500F468E1 /* APIKeys.plist */; };
 		53241F3C2C3C517600F468E1 /* GridSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F3B2C3C517600F468E1 /* GridSystem.swift */; };
 		53241F3E2C3C589100F468E1 /* DesignAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */; };
+		53241F432C3C637000F468E1 /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53241F402C3C637000F468E1 /* APIKeys.plist */; };
+		53241F442C3C637000F468E1 /* APIKEY.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 53241F412C3C637000F468E1 /* APIKEY.xcconfig */; };
 		533A2B232C27FF6A00A59340 /* CMTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B222C27FF6A00A59340 /* CMTextView.swift */; };
 		533A2B252C280E0500A59340 /* CMDefaultFilledButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B242C280E0500A59340 /* CMDefaultFilledButton.swift */; };
 		533A2B272C28558600A59340 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B262C28558600A59340 /* SignInViewController.swift */; };
@@ -136,11 +136,11 @@
 		5317867E2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamFilterCollectionViewCell.swift; sourceTree = "<group>"; };
 		531786812C21D3F700ACEF6A /* ChatListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListTableViewCell.swift; sourceTree = "<group>"; };
 		531786842C23261200ACEF6A /* SheetHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetHeight.swift; sourceTree = "<group>"; };
-		53241F352C3C50E500F468E1 /* APIKEY.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = APIKEY.xcconfig; sourceTree = "<group>"; };
-		53241F362C3C50E500F468E1 /* APIKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
-		53241F372C3C50E500F468E1 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		53241F3B2C3C517600F468E1 /* GridSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSystem.swift; sourceTree = "<group>"; };
 		53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DesignAssets.xcassets; sourceTree = "<group>"; };
+		53241F3F2C3C637000F468E1 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		53241F402C3C637000F468E1 /* APIKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
+		53241F412C3C637000F468E1 /* APIKEY.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = APIKEY.xcconfig; sourceTree = "<group>"; };
 		533A2B222C27FF6A00A59340 /* CMTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMTextView.swift; sourceTree = "<group>"; };
 		533A2B242C280E0500A59340 /* CMDefaultFilledButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMDefaultFilledButton.swift; sourceTree = "<group>"; };
 		533A2B262C28558600A59340 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
@@ -364,9 +364,9 @@
 		536BDDDD2C1969370043B1DA /* APP */ = {
 			isa = PBXGroup;
 			children = (
-				53241F352C3C50E500F468E1 /* APIKEY.xcconfig */,
-				53241F362C3C50E500F468E1 /* APIKeys.plist */,
-				53241F372C3C50E500F468E1 /* Info.plist */,
+				53241F412C3C637000F468E1 /* APIKEY.xcconfig */,
+				53241F402C3C637000F468E1 /* APIKeys.plist */,
+				53241F3F2C3C637000F468E1 /* Info.plist */,
 				536BDDAD2C189B230043B1DA /* AppDelegate.swift */,
 				536BDDAF2C189B230043B1DA /* SceneDelegate.swift */,
 			);
@@ -735,11 +735,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53241F442C3C637000F468E1 /* APIKEY.xcconfig in Resources */,
 				53241F3E2C3C589100F468E1 /* DesignAssets.xcassets in Resources */,
 				5383BE902C34ECD1008940F1 /* PretendardVariable.ttf in Resources */,
-				53241F392C3C50E500F468E1 /* APIKeys.plist in Resources */,
-				53241F382C3C50E500F468E1 /* APIKEY.xcconfig in Resources */,
 				536BDDB72C189B240043B1DA /* Assets.xcassets in Resources */,
+				53241F432C3C637000F468E1 /* APIKeys.plist in Resources */,
 				536BDDBA2C189B240043B1DA /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
