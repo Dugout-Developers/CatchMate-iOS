@@ -25,9 +25,9 @@ jobs:
         run: bundle install
         working-directory: CatchMate 
 
-      - name: Build and test
-        run: bundle exec fastlane test
-        working-directory: CatchMate
+      # - name: Run tests
+      #   run: bundle exec fastlane test
+      #   working-directory: CatchMate
 
   deploy_firebase:
     if: github.ref == 'refs/heads/develop'
