@@ -14,12 +14,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Set up Ruby
-        uses: actions/setup-ruby@v1
+      - name: ruby/setup-ruby@v1
+        uses: actions/setup-ruby
         with:
-          ruby-version: 2.7
+          ruby-version: 3.2.2
 
       - name: Install dependencies
         run: bundle install
@@ -33,12 +33,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Ruby
         uses: actions/setup-ruby@v1
         with:
-          ruby-version: 2.7
+          ruby-version: 3.2.2
 
       - name: Install dependencies
         run: bundle install
@@ -61,28 +61,3 @@ jobs:
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
           FIREBASE_API_TOKEN: ${{ secrets.FIREBASE_API_TOKEN }}
         run: bundle exec fastlane deploy_firebase
-
-  deploy_testflight:
-    if: startsWith(github.ref, 'refs/heads/release/')
-    runs-on: macos-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Ruby
-        uses: actions/setup-ruby@v1
-        with:
-          ruby-version: 2.7
-
-      - name: Install dependencies
-        run: bundle install
-
-      - name: Get Commit Message
-        id: get_commit
-        run: echo "::set-output name=msg::$(git log -1 --pretty=format:'%s')"
-
-      - name: Deploy to TestFlight
-        env:
-          CHANGELOG: ${{ steps.get_commit.outputs.msg }}
-        run: bundle exec fastlane deploy_testflight
