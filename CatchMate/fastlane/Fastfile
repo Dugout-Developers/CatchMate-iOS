@@ -28,10 +28,8 @@ platform :ios do
 
   desc "Deploy to Firebase"
   lane :deploy_firebase do
-    sh "xcodebuild clean -project ../CatchMate/CatchMate.xcodeproj -scheme CatchMate -configuration Debug"
     # Build the app
     build_app(
-      project: "../CatchMate/CatchMate.xcodeproj",
       scheme: "CatchMate",
       configuration: "Debug"
     )

@@ -35,10 +35,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v1
 
-      - name: Delete Package.resolved
-        run: rm -f ./CatchMate.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
-
-
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1 
         with:
@@ -51,10 +47,6 @@ jobs:
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
         
-      - name: Clean and build the app
-      run: |
-        xcodebuild clean -project ./CatchMate/CatchMate.xcodeproj -scheme CatchMate -configuration Debug
-        bundle exec fastlane deploy_firebase
         
       - name: Set up environment variables
         run: |
