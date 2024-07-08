@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         DispatchQueue.global(qos: .background).async {
             if let kakaoAppKey = Bundle.main.kakaoLoginAPPKey {
+                print("Kakao Login API Key: \(kakaoAppKey)")
                 RxKakaoSDK.initSDK(appKey: kakaoAppKey)
             }
             
