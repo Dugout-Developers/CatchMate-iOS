@@ -38,7 +38,7 @@ final class TabBarController: UITabBarController {
         homeViewController.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house.fill"), tag: 0)
         chatViewController.tabBarItem = UITabBarItem(title: "채팅", image: UIImage(systemName: "message.fill"), tag: 1)
         addViewController.tabBarItem = UITabBarItem(title: "등록", image: UIImage(systemName: "plus.app"), tag: 2)
-        notiViewController.tabBarItem = UITabBarItem(title: "알림", image: UIImage(systemName: "bell.fill"), tag: 3)
+        notiViewController.tabBarItem = UITabBarItem(title: "찜", image: UIImage(systemName: "bell.fill"), tag: 3)
         mypageViewController.tabBarItem = UITabBarItem(title: "마이", image: UIImage(systemName: "person.fill"), tag: 4)
         
         homeViewController.navigationBar.prefersLargeTitles = false
