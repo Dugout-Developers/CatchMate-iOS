@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v1
 
       - name: ruby/setup-ruby@v1
         uses: actions/setup-ruby
@@ -33,7 +33,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v1
 
       - name: Set up Ruby
         uses: actions/setup-ruby@v1
