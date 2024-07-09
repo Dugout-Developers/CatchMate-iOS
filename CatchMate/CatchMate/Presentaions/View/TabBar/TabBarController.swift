@@ -41,6 +41,7 @@ final class TabBarController: UITabBarController {
         notiViewController.tabBarItem = UITabBarItem(title: "알림", image: UIImage(systemName: "bell.fill"), tag: 3)
         mypageViewController.tabBarItem = UITabBarItem(title: "마이", image: UIImage(systemName: "person.fill"), tag: 4)
         
+        
         homeViewController.navigationBar.prefersLargeTitles = false
         chatViewController.navigationBar.prefersLargeTitles = false
         addViewController.navigationBar.prefersLargeTitles = false
