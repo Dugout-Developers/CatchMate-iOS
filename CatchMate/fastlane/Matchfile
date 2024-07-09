@@ -1,4 +1,4 @@
-git_url("https://github.com/Dugout-Developers/ios-certificates.git")
+git_url("git@github.com:Dugout-Developers/ios-certificates.git")
 
 storage_mode("git")
 
