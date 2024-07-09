@@ -51,6 +51,8 @@ jobs:
         run: |
           echo "MATCH_PASSWORD=${{ secrets.MATCH_PASSWORD }}" >> $GITHUB_ENV
           echo "MATCH_GIT_URL=${{ secrets.MATCH_GIT_URL }}" >> $GITHUB_ENV
+          echo "KEYCHAIN_NAME=${{ secrets.KEYCHAIN_NAME }}" >> $GITHUB_ENV
+          echo "KEYCHAIN_PASSWORD=${{ secrets.KEYCHAIN_PASSWORD }}" >> $GITHUB_ENV
           echo "FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}" >> $GITHUB_ENV
           echo "FIREBASE_API_TOKEN=${{ secrets.FIREBASE_API_TOKEN }}" >> $GITHUB_ENV
 
@@ -65,6 +67,8 @@ jobs:
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+          KEYCHAIN_NAME: ${{ secrets.KEYCHAIN_NAME }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
           CHANGELOG: ${{ steps.get_commit.outputs.msg }}
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
           FIREBASE_API_TOKEN: ${{ secrets.FIREBASE_API_TOKEN }}
