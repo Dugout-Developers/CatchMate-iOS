@@ -60,6 +60,7 @@ jobs:
           echo "FIREBASE_API_TOKEN=${{ secrets.FIREBASE_API_TOKEN }}" >> $GITHUB_ENV
           echo "KEYCHAIN_NAME=${{ secrets.KEYCHAIN_NAME }}" >> $GITHUB_ENV
           echo "KEYCHAIN_PASSWORD=${{ secrets.KEYCHAIN_PASSWORD }}" >> $GITHUB_ENV
+          echo "FASTLANE_PASSWORD=${{ secrets.FASTLANE_PASSWORD }}" >> $GITHUB_ENV
 
       - name: Get Commit Message
         id: get_commit
@@ -76,5 +77,6 @@ jobs:
           FIREBASE_API_TOKEN: ${{ secrets.FIREBASE_API_TOKEN }}
           KEYCHAIN_NAME: ${{ secrets.KEYCHAIN_NAME }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
           CHANGELOG: ${{ steps.get_commit.outputs.msg }}
         working-directory: CatchMate
