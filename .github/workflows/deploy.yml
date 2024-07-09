@@ -12,16 +12,16 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: Set up Ruby
-        uses: ruby/setup-ruby@v1 
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2.2'
 
       - name: Install dependencies
         run: bundle install
-        working-directory: CatchMate 
+        working-directory: CatchMate
 
       # - name: Run tests
       #   run: bundle exec fastlane test
@@ -33,10 +33,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: Set up Ruby
-        uses: ruby/setup-ruby@v1 
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2.2'
 
@@ -46,21 +46,26 @@ jobs:
 
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
-        
-        
+
       - name: Set up environment variables
         run: |
+          echo "MATCH_PASSWORD=${{ secrets.MATCH_PASSWORD }}" >> $GITHUB_ENV
+          echo "MATCH_GIT_URL=${{ secrets.MATCH_GIT_URL }}" >> $GITHUB_ENV
           echo "FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}" >> $GITHUB_ENV
           echo "FIREBASE_API_TOKEN=${{ secrets.FIREBASE_API_TOKEN }}" >> $GITHUB_ENV
 
       - name: Get Commit Message
         id: get_commit
         run: echo "::set-output name=msg::$(git log -1 --pretty=format:'%s')"
+        working-directory: CatchMate
 
-      - name: Deploy to Firebase
+      - name: Build and deploy the app
+        run: |
+          bundle exec fastlane deploy_firebase
         env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
           CHANGELOG: ${{ steps.get_commit.outputs.msg }}
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
           FIREBASE_API_TOKEN: ${{ secrets.FIREBASE_API_TOKEN }}
-        run: bundle exec fastlane deploy_firebase
-        working-directory: CatchMate 
+        working-directory: CatchMate
