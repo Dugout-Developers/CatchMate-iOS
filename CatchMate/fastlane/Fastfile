@@ -28,15 +28,29 @@ platform :ios do
 
   desc "Deploy to Firebase"
   lane :deploy_firebase do
+    match(
+      type: "development", # "development", "adhoc", "appstore", or "enterprise"
+      readonly: false,
+      git_url: ENV['MATCH_GIT_URL'],
+      password: ENV['MATCH_PASSWORD']
+    )
     # Build the app
     build_app(
+      project: "../CatchMate.xcodeproj",
       scheme: "CatchMate",
-      configuration: "Debug"
+      configuration: "Debug",
+      export_options: {
+        provisioningProfiles: {
+          "com.tori.CatchMate" => "match Development com.tori.CatchMate"
+        },
+        allowProvisioningUpdates: true
+      }
     )
     firebase_app_distribution(
       app: ENV['FIREBASE_APP_ID'],
       groups: "Dugout-TeckNeck", 
       release_notes: ENV['CHANGELOG']
+      firebase_cli_token: ENV['FIREBASE_API_TOKEN']
     )
   end
 end
