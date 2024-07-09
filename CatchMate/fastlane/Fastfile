@@ -49,7 +49,7 @@ platform :ios do
     firebase_app_distribution(
       app: ENV['FIREBASE_APP_ID'],
       groups: "Dugout-TeckNeck", 
-      release_notes: ENV['CHANGELOG']
+      release_notes: ENV['CHANGELOG'],
       firebase_cli_token: ENV['FIREBASE_API_TOKEN']
     )
   end
