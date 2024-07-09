@@ -40,7 +40,7 @@ final class TabBarController: UITabBarController {
         addViewController.tabBarItem = UITabBarItem(title: "등록", image: UIImage(systemName: "plus.app"), tag: 2)
         notiViewController.tabBarItem = UITabBarItem(title: "알림", image: UIImage(systemName: "bell.fill"), tag: 3)
         mypageViewController.tabBarItem = UITabBarItem(title: "마이", image: UIImage(systemName: "person.fill"), tag: 4)
-        print("제발")
+
         homeViewController.navigationBar.prefersLargeTitles = false
         chatViewController.navigationBar.prefersLargeTitles = false
         addViewController.navigationBar.prefersLargeTitles = false
