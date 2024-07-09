@@ -32,7 +32,9 @@ platform :ios do
       type: "development", # "development", "adhoc", "appstore", or "enterprise"
       readonly: false,
       git_url: ENV['MATCH_GIT_URL'],
-      password: ENV['MATCH_PASSWORD']
+      password: ENV['MATCH_PASSWORD'],
+      keychain_name: ENV['KEYCHAIN_NAME'],
+      keychain_password: ENV['KEYCHAIN_PASSWORD']
     )
     # Build the app
     build_app(
