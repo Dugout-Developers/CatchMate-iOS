@@ -13,20 +13,20 @@ final class HomeReactor: Reactor {
     enum Action {
         case willAppear
         case updateDateFilter(Date?)
-        case updateTeamFilter([Team])
+        case toggleTeamSelection(Team?)
     }
     enum Mutation {
         // Action과 State 사이의 다리역할이다.
         // action stream을 변환하여 state에 전달한다.
         case loadPost([Post])
         case setDateFilter(Date?)
-        case setTeamFilter([Team])
+        case setSelectedTeams([Team])
     }
     struct State {
         // View의 state를 관리한다.
         var posts: [Post] = []
         var dateFilterValue: Date?
-        var teamFilterValue: [Team] = []
+        var selectedTeams: [Team] = []
         var error: Error?
     }
     
@@ -40,9 +40,19 @@ final class HomeReactor: Reactor {
         switch action {
         case .updateDateFilter(let date):
             return Observable.just(Mutation.setDateFilter(date))
+            
+        case let .toggleTeamSelection(team):
+            var updatedTeams = currentState.selectedTeams
+            guard let team = team else {
+                return Observable.just(Mutation.setSelectedTeams([]))
+            }
+            if let index = updatedTeams.firstIndex(of: team) {
+                updatedTeams.remove(at: index)
+            } else {
+                updatedTeams.append(team)
+            }
+            return Observable.just(Mutation.setSelectedTeams(updatedTeams))
 
-        case .updateTeamFilter(let team):
-            return Observable.just(Mutation.setTeamFilter(team))
         case .willAppear:
             return Observable.just(Mutation.loadPost(Post.dummyPostData))
         }
@@ -53,8 +63,8 @@ final class HomeReactor: Reactor {
         switch mutation {
         case .setDateFilter(let date):
             newState.dateFilterValue = date
-        case .setTeamFilter(let team):
-            newState.teamFilterValue = team
+        case let .setSelectedTeams(selectedTeams):
+            newState.selectedTeams = selectedTeams
         case .loadPost(let posts):
             newState.posts = posts
         }

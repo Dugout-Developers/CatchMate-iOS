@@ -75,6 +75,7 @@ extension HomeViewController {
             .withUnretained(self)
             .bind { vc, date in
                 vc.dateFilterButton.filterValue = date?.toString(format: "MM.dd")
+                vc.updateFilterContainerLayout()
             }
             .disposed(by: disposeBag)
         
@@ -85,6 +86,21 @@ extension HomeViewController {
                 cell.setupData(item)
             }
             .disposed(by: disposeBag)
+        
+        reactor.state.map { $0.selectedTeams }
+            .withUnretained(self)
+            .bind { vc, teams in
+                let teamNames = teams.map { $0.rawValue }.joined(separator: ", ")
+                vc.teamFilterButton.filterValue = teamNames.isEmpty ? "None" : teamNames
+                vc.teamFilterButton.flex.markDirty()
+                vc.updateFilterContainerLayout()
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func updateFilterContainerLayout() {
+        filterContainerView.flex.layout(mode: .adjustWidth)
+        filterScrollView.contentSize = filterContainerView.frame.size
     }
 }
 // MARK: - Button Event
@@ -111,7 +127,7 @@ extension HomeViewController {
             }
             present(dateFilterVC, animated: true)
         case .team:
-            let teamFilterVC = TeamFilterViewController()
+            let teamFilterVC = TeamFilterViewController(reactor: reactor)
             let customDetent = returnCustomDetent(height: Screen.height * 3/4, identifier: "TeamFilter")
             if let sheet = teamFilterVC.sheetPresentationController {
                 sheet.detents = [customDetent]
