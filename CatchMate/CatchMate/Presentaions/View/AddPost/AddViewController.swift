@@ -128,7 +128,14 @@ final class AddViewController: BaseViewController {
         setupAgeButton()
         setupNavigationBar()
     }
-    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if let tabBarController = tabBarController as? TabBarController {
+            tabBarController.isAddView = false
+            tabBarController.selectedIndex = tabBarController.preViewControllerIndex
+        }
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         scrollView.pin.all()
@@ -176,6 +183,7 @@ extension AddViewController {
     
     @objc
     func clickRegisterButton(_ sender: UIButton) {
+        navigationController?.popViewController(animated: true)
         print("등록")
     }
     private func setupGenderButton() {
