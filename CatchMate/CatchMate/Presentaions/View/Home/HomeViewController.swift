@@ -22,9 +22,9 @@ final class HomeViewController: BaseViewController, View {
     private let viewWillAppearPublisher = PublishSubject<Void>().asObserver()
     private let filterScrollView = UIScrollView()
     private let filterContainerView = UIView()
-    private let allFilterButton = HomeFilterButton(icon: UIImage(systemName: "list.bullet"), title: "전체", filter: .all)
-    private let dateFilterButton = HomeFilterButton(icon: UIImage(systemName: "calendar"), title: "경기 날짜", filter: .date)
-    private let teamFilterButton = HomeFilterButton(icon: UIImage(systemName: "person.3.fill"), title: "응원 구단", filter: .team)
+    private let allFilterButton = HomeFilterButton(icon: UIImage(named: "cm20hamburger")?.withTintColor(.grayScale700, renderingMode: .alwaysOriginal), title: "전체", filter: .all)
+    private let dateFilterButton = HomeFilterButton(icon: UIImage(named: "cm20down")?.withTintColor(.grayScale700, renderingMode: .alwaysOriginal), title: "경기 날짜", filter: .date)
+    private let teamFilterButton = HomeFilterButton(icon: UIImage(named: "cm20down")?.withTintColor(.grayScale700, renderingMode: .alwaysOriginal), title: "응원 구단", filter: .team)
     
     private let tableView = UITableView()
     
@@ -50,11 +50,11 @@ final class HomeViewController: BaseViewController, View {
         setupButton()
         setupLogo()
         bind(reactor: self.reactor)
+        filterScrollView.showsHorizontalScrollIndicator = false
     }
     
     private func setupTableView() {
         tableView.register(ListCardViewTableViewCell.self, forCellReuseIdentifier: "ListCardViewTableViewCell")
-        tableView.tableHeaderView = UIView()
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 178
         tableView.backgroundColor = .clear
@@ -75,7 +75,6 @@ extension HomeViewController {
             .withUnretained(self)
             .bind { vc, date in
                 vc.dateFilterButton.filterValue = date?.toString(format: "MM.dd")
-                vc.updateFilterContainerLayout()
             }
             .disposed(by: disposeBag)
         
@@ -91,16 +90,9 @@ extension HomeViewController {
             .withUnretained(self)
             .bind { vc, teams in
                 let teamNames = teams.map { $0.rawValue }.joined(separator: ", ")
-                vc.teamFilterButton.filterValue = teamNames.isEmpty ? "None" : teamNames
-                vc.teamFilterButton.flex.markDirty()
-                vc.updateFilterContainerLayout()
+                vc.teamFilterButton.filterValue = teamNames.isEmpty ? nil : teamNames
             }
             .disposed(by: disposeBag)
-    }
-    
-    private func updateFilterContainerLayout() {
-        filterContainerView.flex.layout(mode: .adjustWidth)
-        filterScrollView.contentSize = filterContainerView.frame.size
     }
 }
 // MARK: - Button Event
