@@ -582,9 +582,9 @@
 			isa = PBXGroup;
 			children = (
 				536BDDB12C189B230043B1DA /* HomeViewController.swift */,
+				536BDE352C1BEC870043B1DA /* ListCardViewTableViewCell.swift */,
 				536BDE332C1B57B10043B1DA /* HomeFilterButton.swift */,
 				53BE7AD32C369A35002FC64F /* OptionButtonView.swift */,
-				536BDE352C1BEC870043B1DA /* ListCardViewTableViewCell.swift */,
 				5317865A2C1C956400ACEF6A /* DateFilterViewController.swift */,
 				5317865F2C1EB24D00ACEF6A /* TeamFilterViewController.swift */,
 				531786612C1EE6C500ACEF6A /* TeamFilterTableViewCell.swift */,
