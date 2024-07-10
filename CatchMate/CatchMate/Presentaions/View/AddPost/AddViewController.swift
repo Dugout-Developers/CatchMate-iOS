@@ -178,7 +178,15 @@ final class AddViewController: BaseViewController {
 extension AddViewController {
     @objc
     private func clickSaveButton(_ sender: UIBarButtonItem) {
-        print("임시 저장")
+        showCMAlert(titleText: "작성 중인 글을 임시저장할까요?", importantButtonText: "임시저장", commonButtonText: "나가기") { [weak self] in
+            print("임시저장")
+            self?.dismiss(animated: true)
+        } commonAction: { [weak self] in
+            self?.dismiss(animated: true, completion: {
+                self?.navigationController?.popViewController(animated: true)
+            })
+        }
+
     }
     
     @objc

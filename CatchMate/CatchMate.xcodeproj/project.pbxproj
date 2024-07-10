@@ -33,7 +33,7 @@
 		53241F3E2C3C589100F468E1 /* DesignAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */; };
 		53241F482C3D879200F468E1 /* APIKEY.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 53241F452C3D879100F468E1 /* APIKEY.xcconfig */; };
 		53241F492C3D879200F468E1 /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53241F462C3D879200F468E1 /* APIKeys.plist */; };
-		53241F4C2C3D89A200F468E1 /* FavoriteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F4B2C3D89A200F468E1 /* FavoriteListViewController.swift */; };
+		53241F4E2C3EE58E00F468E1 /* CMPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */; };
 		533A2B232C27FF6A00A59340 /* CMTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B222C27FF6A00A59340 /* CMTextView.swift */; };
 		533A2B252C280E0500A59340 /* CMDefaultFilledButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B242C280E0500A59340 /* CMDefaultFilledButton.swift */; };
 		533A2B272C28558600A59340 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B262C28558600A59340 /* SignInViewController.swift */; };
@@ -51,6 +51,7 @@
 		533A2B422C2C624D00A59340 /* SignRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B412C2C624D00A59340 /* SignRepository.swift */; };
 		533A2B442C2C62C700A59340 /* SignRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B432C2C62C700A59340 /* SignRepositoryImpl.swift */; };
 		533A2B462C2C638100A59340 /* KakaoLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B452C2C638100A59340 /* KakaoLoginUseCase.swift */; };
+		536548A32C3EF3B700C2309A /* FavoriteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536548A22C3EF3B700C2309A /* FavoriteListViewController.swift */; };
 		536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAD2C189B230043B1DA /* AppDelegate.swift */; };
 		536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAF2C189B230043B1DA /* SceneDelegate.swift */; };
 		536BDDB22C189B230043B1DA /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDB12C189B230043B1DA /* HomeViewController.swift */; };
@@ -142,7 +143,7 @@
 		53241F452C3D879100F468E1 /* APIKEY.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = APIKEY.xcconfig; sourceTree = "<group>"; };
 		53241F462C3D879200F468E1 /* APIKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
 		53241F472C3D879200F468E1 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		53241F4B2C3D89A200F468E1 /* FavoriteListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FavoriteListViewController.swift; path = "../../../../../../Library/Mobile Documents/.Trash/CatchMate-iOS 오전 3.09.33/CatchMate/CatchMate/Presentaions/View/FavoriteListViewController.swift"; sourceTree = "<group>"; };
+		53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMPopupViewController.swift; sourceTree = "<group>"; };
 		533A2B222C27FF6A00A59340 /* CMTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMTextView.swift; sourceTree = "<group>"; };
 		533A2B242C280E0500A59340 /* CMDefaultFilledButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMDefaultFilledButton.swift; sourceTree = "<group>"; };
 		533A2B262C28558600A59340 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
@@ -160,6 +161,7 @@
 		533A2B432C2C62C700A59340 /* SignRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignRepositoryImpl.swift; sourceTree = "<group>"; };
 		533A2B452C2C638100A59340 /* KakaoLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginUseCase.swift; sourceTree = "<group>"; };
 		533A2B472C2D606600A59340 /* CatchMate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CatchMate.entitlements; sourceTree = "<group>"; };
+		536548A22C3EF3B700C2309A /* FavoriteListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteListViewController.swift; sourceTree = "<group>"; };
 		536BDDAA2C189B230043B1DA /* CatchMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CatchMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		536BDDAD2C189B230043B1DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		536BDDAF2C189B230043B1DA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -429,7 +431,7 @@
 				531786832C23248B00ACEF6A /* AddPost */,
 				531786792C20777000ACEF6A /* Notification */,
 				531173202C36AD1300FF787D /* MyPage */,
-				53241F4B2C3D89A200F468E1 /* FavoriteListViewController.swift */,
+				536548A22C3EF3B700C2309A /* FavoriteListViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -549,6 +551,7 @@
 				533A2B242C280E0500A59340 /* CMDefaultFilledButton.swift */,
 				533A2B292C2859D600A59340 /* CMImageButton.swift */,
 				533A2B2D2C29B56100A59340 /* CMDefaultBorderedButton.swift */,
+				53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -775,6 +778,7 @@
 				536BDDF92C1972880043B1DA /* UserMapper.swift in Sources */,
 				531786782C20498800ACEF6A /* Post.swift in Sources */,
 				533A2B2C2C29485E00A59340 /* SignUpViewController.swift in Sources */,
+				53241F4E2C3EE58E00F468E1 /* CMPopupViewController.swift in Sources */,
 				536BDE2D2C1B55080043B1DA /* AddViewController.swift in Sources */,
 				533A2B462C2C638100A59340 /* KakaoLoginUseCase.swift in Sources */,
 				531786602C1EB24D00ACEF6A /* TeamFilterViewController.swift in Sources */,
@@ -833,10 +837,10 @@
 				5317865B2C1C956400ACEF6A /* DateFilterViewController.swift in Sources */,
 				53BE7ACF2C367008002FC64F /* DateHelper.swift in Sources */,
 				5383BE8F2C34DF27008940F1 /* Font.swift in Sources */,
+				536548A32C3EF3B700C2309A /* FavoriteListViewController.swift in Sources */,
 				531786852C23261200ACEF6A /* SheetHeight.swift in Sources */,
 				533A2B442C2C62C700A59340 /* SignRepositoryImpl.swift in Sources */,
 				533A2B342C2BE98D00A59340 /* SignSelectedButton.swift in Sources */,
-				53241F4C2C3D89A200F468E1 /* FavoriteListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
