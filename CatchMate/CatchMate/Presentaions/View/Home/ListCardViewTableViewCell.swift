@@ -97,7 +97,7 @@ extension ListCardViewTableViewCell {
                 flex.addItem(awayTeamImageView).width(50).height(67).marginRight(16)
                 flex.addItem(infoContainer).direction(.column).justifyContent(.spaceBetween).alignItems(.start).height(67).define { flex in
                     flex.addItem(partyNumLabel)
-                    flex.addItem(postTitleLabel).grow(1).shrink(1)
+                    flex.addItem(postTitleLabel).width(100%)
                     flex.addItem(infoLabel)
                 }.grow(1).shrink(1)
             }.marginBottom(20)
