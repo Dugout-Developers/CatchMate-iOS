@@ -6,24 +6,52 @@
 //
 
 import UIKit
+import RxSwift
+import ReactorKit
 import SnapKit
 
-final class TeamFilterViewController: UIViewController {
-    private let allTeams: [Team] = Team.allCases
+final class TeamFilterViewController: BasePickerViewController, View, UIScrollViewDelegate {
+    private let allTeams: [Team] = Team.allTeam
     private let tableView: UITableView = UITableView()
     private let saveButton = CMDefaultFilledButton(title: "저장")
+    
+    var reactor: HomeReactor
+    var disposeBag = DisposeBag()
+    
+    init(reactor: HomeReactor) {
+        self.reactor = reactor
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        bind(reactor: reactor)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupUI()
         setupTableView()
+        settupButton()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        disable()
+    }
+    
+    private func settupButton() {
+        saveButton.addTarget(self, action: #selector(clickedSaveButton), for: .touchUpInside)
+    }
+    @objc private func clickedSaveButton(_ sender: UIButton) {
+        dismiss(animated: true)
+    }
     private func setupTableView() {
-        // MARK: - 임시 (바인드 시 지우기)
-        tableView.dataSource = self
-        tableView.delegate = self
-        
         tableView.register(TeamFilterTableViewCell.self, forCellReuseIdentifier: "TeamFilterTableViewCell")
         tableView.tableHeaderView = UIView()
         tableView.rowHeight = UITableView.automaticDimension
@@ -31,23 +59,43 @@ final class TeamFilterViewController: UIViewController {
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
     }
-}
-
-// MARK: - 임시: 와이어프레임 확인용 테이블 뷰 데이터소스 및 델리게이트
-extension TeamFilterViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return allTeams.count
+    
+    func bind(reactor: HomeReactor) {
+        reactor.state.map { $0.selectedTeams }
+            .bind(onNext: updateSelectedTeams)
+            .disposed(by: disposeBag)
+        
+        tableView.rx.itemSelected
+            .map { indexPath in
+                let team = self.allTeams[indexPath.row]
+                return Reactor.Action.toggleTeamSelection(team)
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        tableView.rx.setDelegate(self)
+            .disposed(by: disposeBag)
+        
+        Observable.just(allTeams)
+            .bind(to: tableView.rx.items(cellIdentifier: "TeamFilterTableViewCell", cellType: TeamFilterTableViewCell.self)) { row, team, cell in
+                let isSelected = reactor.currentState.selectedTeams.contains(team)
+                cell.configure(with: team, isClicked: isSelected)
+                cell.checkButton.rx.tap
+                    .map { Reactor.Action.toggleTeamSelection(team) }
+                    .bind(to: reactor.action)
+                    .disposed(by: cell.disposeBag)
+            }
+            .disposed(by: disposeBag)
+        
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "TeamFilterTableViewCell", for: indexPath) as? TeamFilterTableViewCell else { return UITableViewCell() }
-        cell.backgroundColor = .clear
-        cell.selectionStyle = .none
-        cell.setupData(team: allTeams[indexPath.row])
-        return cell
+    private func updateSelectedTeams(_ selectedTeams: [Team]) {
+        guard let cells = tableView.visibleCells as? [TeamFilterTableViewCell] else { return }
+        for cell in cells {
+            guard let team = cell.team else { continue }
+            cell.isClicked = selectedTeams.contains(team)
+        }
     }
-    
-    
 }
 
 // MARK: - UI

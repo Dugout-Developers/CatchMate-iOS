@@ -6,11 +6,19 @@
 //
 
 import UIKit
+import RxSwift
 import PinLayout
 import FlexLayout
-import SwiftUI
 
-final class TeamFilterTableViewCell: UITableViewCell {
+final class TeamFilterTableViewCell: UITableViewCell{
+    var disposeBag = DisposeBag()
+
+    var team: Team?
+    var isClicked: Bool = false {
+        didSet {
+            checkTeam()
+        }
+    }
     private let containerView = UIView()
     private let teamImageView: UIImageView = {
         let imageView = UIImageView()
@@ -24,9 +32,9 @@ final class TeamFilterTableViewCell: UITableViewCell {
         label.textAlignment = .left
         return label
     }()
-    private let checkButton: UIButton = {
-        let button = UIButton(configuration: .plain())
-        button.setImage(UIImage(systemName: "circle"), for: .normal)
+    let checkButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "circle_default")?.withTintColor(.grayScale300, renderingMode: .alwaysOriginal), for: .normal)
         return button
     }()
     
@@ -34,6 +42,7 @@ final class TeamFilterTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setUI()
+        bind()
     }
     
     @available(*, unavailable)
@@ -51,9 +60,28 @@ final class TeamFilterTableViewCell: UITableViewCell {
         return CGSize(width: size.width, height: containerView.frame.height)
     }
     
-    func setupData(team: Team) {
-        teamImageView.image = team.getDefaultsImage
+    private func checkTeam() {
+        if isClicked {
+            checkButton.setImage(UIImage(named: "circle_check")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        } else {
+            checkButton.setImage(UIImage(named: "circle_default")?.withTintColor(.grayScale300, renderingMode: .alwaysOriginal), for: .normal)
+        }
+    }
+    
+    func configure(with team: Team, isClicked: Bool) {
+        self.team = team
+        self.isClicked = isClicked
+        teamImageView.image = team.getLogoImage
         teamNameLabel.text = team.rawValue
+        teamNameLabel.applyStyle(textStyle: FontSystem.bodyTitle)
+    }
+
+    private func bind() {
+        checkButton.rx.tap
+            .subscribe(onNext: { [weak self] in
+                self?.isClicked.toggle()
+            })
+            .disposed(by: disposeBag)
     }
 }
 
@@ -63,7 +91,7 @@ extension TeamFilterTableViewCell {
         addSubview(containerView)
         
         containerView.flex.direction(.row).justifyContent(.spaceBetween).alignContent(.center).padding(10).define { flex in
-            flex.addItem(teamImageView).size(48)
+            flex.addItem(teamImageView).size(50).backgroundColor(.grayScale50).cornerRadius(8)
             flex.addItem(teamNameLabel).marginHorizontal(16).grow(1)
             flex.addItem(checkButton).size(20).alignSelf(.center)
         }

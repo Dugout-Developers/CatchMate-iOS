@@ -13,6 +13,7 @@ import PinLayout
 class NonMembersAccessViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let containerView = UIView()
+    private var isAdd: Bool
     
     private let infoLabel: UILabel = {
         let label = UILabel()
@@ -31,8 +32,17 @@ class NonMembersAccessViewController: UIViewController {
         button.tintColor = .clear
         return button
     }()
-    
-    init(title: String) {
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if isAdd {
+            if let tabBarController = tabBarController as? TabBarController {
+                tabBarController.isAddView = false
+                tabBarController.selectedIndex = tabBarController.preViewControllerIndex
+            }
+        }
+    }
+    init(title: String, isAdd: Bool = false) {
+        self.isAdd = isAdd
         super.init(nibName: nil, bundle: nil)
         setupView(title: title)
     }

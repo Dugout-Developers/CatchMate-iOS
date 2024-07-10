@@ -12,6 +12,10 @@ struct MainGridSystem {
     static private let gutter: CGFloat = 9
     static private let column: Int = 6
     
+    static func getMargin() -> CGFloat {
+        return margin
+    }
+    
     static func getGridSystem(totalWidht:CGFloat, startIndex: Int, columnCount: Int) -> (startPosition: CGFloat, length: CGFloat){
         let columnWidth = (totalWidht - (margin * 2) - (gutter * CGFloat(column-1))) / CGFloat(column)
         let startPosition = margin + (CGFloat((startIndex-1))*(gutter+columnWidth))
@@ -25,6 +29,10 @@ struct SubGridSystem {
     static private let margin: CGFloat = 24
     static private let gutter: CGFloat = 9
     static private let column: Int = 6
+    
+    static func getMargin() -> CGFloat {
+        return margin
+    }
     
     static func getGridSystem(totalWidht:CGFloat, startIndex: Int, columnCount: Int) -> (startPosition: CGFloat, length: CGFloat){
         let columnWidth = (totalWidht - (margin * 2) - (gutter * CGFloat(column-1))) / CGFloat(column)

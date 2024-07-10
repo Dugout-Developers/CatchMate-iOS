@@ -45,18 +45,14 @@ final class HomeViewController: BaseViewController, View {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .cmBackgroundColor
+        setupTableView()
         setupUI()
         setupButton()
         setupLogo()
         bind(reactor: self.reactor)
-        setupTableView()
     }
     
     private func setupTableView() {
-        // MARK: - 임시 (바인드 시 지우기)
-        tableView.dataSource = self
-        tableView.delegate = self
-        
         tableView.register(ListCardViewTableViewCell.self, forCellReuseIdentifier: "ListCardViewTableViewCell")
         tableView.tableHeaderView = UIView()
         tableView.rowHeight = UITableView.automaticDimension
@@ -65,29 +61,46 @@ final class HomeViewController: BaseViewController, View {
         tableView.separatorStyle = .none
     }
 }
-// MARK: - 임시: 와이어프레임 확인용 테이블 뷰 데이터소스 및 델리게이트
-extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ListCardViewTableViewCell", for: indexPath) as? ListCardViewTableViewCell else { return UITableViewCell() }
-        cell.backgroundColor = .clear
-        cell.selectionStyle = .none
-        return cell
-    }
-}
+
 
 // MARK: - Bind
 extension HomeViewController {
     func bind(reactor: HomeReactor) {
+        viewWillAppearPublisher            
+            .map { Reactor.Action.willAppear }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
         reactor.state.map{$0.dateFilterValue}
             .withUnretained(self)
             .bind { vc, date in
                 vc.dateFilterButton.filterValue = date?.toString(format: "MM.dd")
+                vc.updateFilterContainerLayout()
             }
             .disposed(by: disposeBag)
+        
+        reactor.state.map{ $0.posts }
+            .bind(to: tableView.rx.items(cellIdentifier: "ListCardViewTableViewCell", cellType: ListCardViewTableViewCell.self)) {  (row, item, cell) in
+                cell.backgroundColor = .clear
+                cell.selectionStyle = .none
+                cell.setupData(item)
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map { $0.selectedTeams }
+            .withUnretained(self)
+            .bind { vc, teams in
+                let teamNames = teams.map { $0.rawValue }.joined(separator: ", ")
+                vc.teamFilterButton.filterValue = teamNames.isEmpty ? "None" : teamNames
+                vc.teamFilterButton.flex.markDirty()
+                vc.updateFilterContainerLayout()
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func updateFilterContainerLayout() {
+        filterContainerView.flex.layout(mode: .adjustWidth)
+        filterScrollView.contentSize = filterContainerView.frame.size
     }
 }
 // MARK: - Button Event
@@ -114,7 +127,7 @@ extension HomeViewController {
             }
             present(dateFilterVC, animated: true)
         case .team:
-            let teamFilterVC = TeamFilterViewController()
+            let teamFilterVC = TeamFilterViewController(reactor: reactor)
             let customDetent = returnCustomDetent(height: Screen.height * 3/4, identifier: "TeamFilter")
             if let sheet = teamFilterVC.sheetPresentationController {
                 sheet.detents = [customDetent]

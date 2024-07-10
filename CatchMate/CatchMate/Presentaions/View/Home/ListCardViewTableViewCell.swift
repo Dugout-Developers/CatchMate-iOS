@@ -15,88 +15,30 @@ final class ListCardViewTableViewCell: UITableViewCell {
         let view = UIView()
         view.backgroundColor = .white
         view.layer.cornerRadius = 12
-        view.layer.shadowColor = UIColor.black.withAlphaComponent(0.04).cgColor
-        view.layer.shadowOpacity = 0.1
-        view.layer.shadowOffset = CGSize(width: 0, height: 4)
-        view.layer.shadowRadius = 10
         return view
     }()
     
-    private let topInfoContainer = UIView()
-    private let infoLabel: UILabel = {
-        let label = UILabel()
-        label.text = "06.09 | 17:00 | 사직"
-        label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        label.textColor = .black
-        return label
-    }()
+    private let divider = UIView()
     
-    private let titleContainer = UIView()
-    private let partyNumLabel: PaddingLabel = {
-        let label = PaddingLabel(padding: UIEdgeInsets(top: 3.0, left: 8.0, bottom: 3.0, right: 8.0))
-        label.text = "3/4"
-        label.textColor = .cmPrimaryColor
-        label.backgroundColor = UIColor(hex: "#FFF2F2")
-        label.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
-        label.layer.cornerRadius = 10
-        label.clipsToBounds = true
-        return label
-    }()
+    private let infoContainer = UIView()
+    private let partyNumLabel: UILabel  = UILabel()
     
     private let postTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "카리나 시구 보러 같이 가실 분"
         label.numberOfLines = 1
-        label.adjustsFontForContentSizeCategory = true
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.textColor = .cmTextGray
         return label
     }()
     
-    private let teamContainer: UIView = {
-        let view = UIView()
-        view.backgroundColor = .cmBackgroundColor
-        view.layer.cornerRadius = 8
-        return view
+    private let infoLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .cmNonImportantTextColor
+        return label
     }()
+
     
-    private let teamInfoContainer = UIView()
-    private let homeTeamContainer = UIView()
-    private let homeTeamImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "giants_fill")
-        return imageView
-    }()
-    private let homeTeamLabel: UILabel = {
-        let label = UILabel()
-        label.text = "자이언츠"
-        label.textColor = .cmTextGray
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        return label
-    }()
-    private let vsLabel: UILabel = {
-        let label = UILabel()
-        label.text = "VS"
-        label.textColor = .cmTextGray
-        label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        return label
-    }()
-    
-    private let awayTeamContainer = UIView()
-    private let awayTeamImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "landers_fill")
-        return imageView
-    }()
-    private let awayTeamLabel: UILabel = {
-        let label = UILabel()
-        label.text = "랜더스"
-        label.textAlignment = .center
-        label.textColor = .cmTextGray
-        label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        return label
-    }()
+    private let homeTeamImageView: ListTeamImageView = ListTeamImageView()
+    private let awayTeamImageView: ListTeamImageView = ListTeamImageView()
+   
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -117,37 +59,89 @@ final class ListCardViewTableViewCell: UITableViewCell {
         cardContainerView.flex.layout(mode: .adjustHeight)
         return CGSize(width: size.width, height: cardContainerView.frame.height)
     }
+    
+    func setupData(_ post: Post) {
+        self.homeTeamImageView.setupTeam(team:  post.homeTeam, isMyTeam: post.writer.team == post.homeTeam)
+        self.awayTeamImageView .setupTeam(team:  post.awayTeam, isMyTeam: post.writer.team == post.awayTeam)
+        
+        //info
+        postTitleLabel.text = post.title
+        infoLabel.text = "\(post.date) | \(post.playTime) | \(post.location)"
+        if post.isFinished {
+            partyNumLabel.text = "\(post.currentPerson)/\(post.maxPerson) 인원 마감"
+            partyNumLabel.textColor = .cmNonImportantTextColor
+            postTitleLabel.textColor = .cmNonImportantTextColor
+        } else {
+            partyNumLabel.text = "\(post.currentPerson)/\(post.maxPerson)"
+            partyNumLabel.textColor = .cmPrimaryColor
+            postTitleLabel.textColor = .cmHeadLineTextColor
+        }
+        
+        // Font
+        partyNumLabel.applyStyle(textStyle: FontSystem.body03_semiBold)
+        postTitleLabel.applyStyle(textStyle: FontSystem.bodyTitle)
+        postTitleLabel.lineBreakMode = .byTruncatingTail
+        infoLabel.applyStyle(textStyle: FontSystem.body02_medium)
+    }
 }
 
 // MARK: - UI
 extension ListCardViewTableViewCell {
     private func setUI() {
+        let margin = MainGridSystem.getMargin()
         addSubview(cardContainerView)
         
-        cardContainerView.flex.direction(.column).justifyContent(.start).alignContent(.start).padding(16).marginHorizontal(18).marginBottom(8).define { flex in
-            flex.addItem(infoLabel)
-            flex.addItem(titleContainer).marginVertical(8).direction(.row).justifyContent(.start).define { flex in
-                flex.addItem(partyNumLabel).marginRight(6)
-                flex.addItem(postTitleLabel)
-            }
-            flex.addItem(teamContainer).direction(.column).justifyContent(.center).alignContent(.center).define { flex in
-                flex.addItem(teamInfoContainer).direction(.row).justifyContent(.center).alignContent(.center).paddingVertical(12).define { flex in
-                    flex.addItem(homeTeamContainer).direction(.column).justifyContent(.start).alignContent(.center).define { flex in
-                        flex.addItem(homeTeamImageView)
-                            .size(48)
-                            .marginBottom(6)
-                        flex.addItem(homeTeamLabel)
-                    }
-                    flex.addItem(vsLabel).marginHorizontal(24)
-                    flex.addItem(awayTeamContainer).direction(.column).justifyContent(.start).alignContent(.center).define { flex in
-                        flex.addItem(awayTeamImageView)
-                            .size(48)
-                            .marginBottom(6)
-                        flex.addItem(awayTeamLabel)
-                    }
-                }
-            }
+        cardContainerView.flex.direction(.column).paddingTop(20).marginHorizontal(margin).define { flex in
+            flex.addItem().direction(.row).width(100%).justifyContent(.start).alignItems(.start).define { flex in
+                flex.addItem(homeTeamImageView).width(50).height(67).marginRight(4)
+                flex.addItem(awayTeamImageView).width(50).height(67).marginRight(16)
+                flex.addItem(infoContainer).direction(.column).justifyContent(.spaceBetween).alignItems(.start).height(67).define { flex in
+                    flex.addItem(partyNumLabel)
+                    flex.addItem(postTitleLabel).grow(1).shrink(1)
+                    flex.addItem(infoLabel)
+                }.grow(1).shrink(1)
+            }.marginBottom(20)
+            flex.addItem(divider).width(100%).height(1).backgroundColor(.grayScale50)
+
         }
     }
 }
 
+
+final class ListTeamImageView: UIView {
+    private let containerView: UIView = UIView()
+    private let imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
+    
+    init() {
+        super.init(frame: .zero)
+        settupUI()
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        containerView.pin.all()
+        containerView.flex.layout()
+    }
+    
+    func setupTeam(team: Team, isMyTeam: Bool) {
+        imageView.image = team.getLogoImage
+        containerView.backgroundColor = isMyTeam ? team.getTeamColor : .grayScale50
+    }
+    
+    private func settupUI() {
+        addSubview(containerView)
+        containerView.flex.direction(.column).justifyContent(.center).alignItems(.center).cornerRadius(8).define { flex in
+            flex.addItem(imageView).width(100%).aspectRatio(1)
+        }
+    }
+}

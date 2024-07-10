@@ -45,8 +45,8 @@ final class HomeFilterButton: UIButton {
         valueLabel.text = value
         valueLabel.textColor = .cmPrimaryColor
         valueLabel.applyStyle(textStyle: FontSystem.body03_medium)
-        setNeedsLayout()
-        layoutIfNeeded()
+        valueLabel.flex.markDirty()
+        containerView.flex.layout()
     }
     
     private func setupButton() {
