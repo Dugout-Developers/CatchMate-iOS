@@ -841,6 +841,7 @@
 				531786852C23261200ACEF6A /* SheetHeight.swift in Sources */,
 				533A2B442C2C62C700A59340 /* SignRepositoryImpl.swift in Sources */,
 				533A2B342C2BE98D00A59340 /* SignSelectedButton.swift in Sources */,
+				53241F4C2C3D89A200F468E1 /* FavoriteListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

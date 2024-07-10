@@ -75,6 +75,7 @@ extension HomeViewController {
             .withUnretained(self)
             .bind { vc, date in
                 vc.dateFilterButton.filterValue = date?.toString(format: "MM.dd")
+                vc.updateFilterContainerLayout()
             }
             .disposed(by: disposeBag)
         
