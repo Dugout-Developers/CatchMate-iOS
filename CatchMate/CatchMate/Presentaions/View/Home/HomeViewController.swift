@@ -75,6 +75,23 @@ extension HomeViewController {
             .withUnretained(self)
             .bind { vc, date in
                 vc.dateFilterButton.filterValue = date?.toString(format: "MM.dd")
+                vc.updateFilterContainerLayout()
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{ $0.posts }
+            .bind(to: tableView.rx.items(cellIdentifier: "ListCardViewTableViewCell", cellType: ListCardViewTableViewCell.self)) {  (row, item, cell) in
+                cell.backgroundColor = .clear
+                cell.selectionStyle = .none
+                cell.setupData(item)
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map { $0.selectedTeams }
+            .withUnretained(self)
+            .bind { vc, teams in
+                let teamNames = teams.map { $0.rawValue }.joined(separator: ", ")
+                vc.teamFilterButton.filterValue = teamNames.isEmpty ? nil : teamNames
             }
             .disposed(by: disposeBag)
         
