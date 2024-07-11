@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RxSwift
 import RxCocoa
 import ReactorKit
 
@@ -66,7 +67,8 @@ final class HomeViewController: BaseViewController, View {
 // MARK: - Bind
 extension HomeViewController {
     func bind(reactor: HomeReactor) {
-        viewWillAppearPublisher            
+
+        viewWillAppearPublisher
             .map { Reactor.Action.willAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -92,24 +94,13 @@ extension HomeViewController {
             .bind { vc, teams in
                 let teamNames = teams.map { $0.rawValue }.joined(separator: ", ")
                 vc.teamFilterButton.filterValue = teamNames.isEmpty ? nil : teamNames
+                vc.updateFilterContainerLayout()
             }
             .disposed(by: disposeBag)
-        
-        reactor.state.map{ $0.posts }
-            .bind(to: tableView.rx.items(cellIdentifier: "ListCardViewTableViewCell", cellType: ListCardViewTableViewCell.self)) {  (row, item, cell) in
-                cell.backgroundColor = .clear
-                cell.selectionStyle = .none
-                cell.setupData(item)
-            }
-            .disposed(by: disposeBag)
-        
-        reactor.state.map { $0.selectedTeams }
-            .withUnretained(self)
-            .bind { vc, teams in
-                let teamNames = teams.map { $0.rawValue }.joined(separator: ", ")
-                vc.teamFilterButton.filterValue = teamNames.isEmpty ? nil : teamNames
-            }
-            .disposed(by: disposeBag)
+    }
+    private func updateFilterContainerLayout() {
+        filterContainerView.flex.layout(mode: .adjustWidth)
+        filterScrollView.contentSize = filterContainerView.frame.size
     }
 }
 // MARK: - Button Event
