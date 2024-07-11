@@ -58,9 +58,9 @@ class CMDatePicker: UIView {
         titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
         updateTitleLabel()
         
-        headerView.flex.direction(.row).justifyContent(.spaceBetween).alignItems(.center).padding(10).define { (flex) in
+        headerView.flex.direction(.row).justifyContent(.center).alignItems(.center).padding(10).define { (flex) in
             flex.addItem(previousButton)
-            flex.addItem(titleLabel).grow(1)
+            flex.addItem(titleLabel).marginHorizontal(12)
             flex.addItem(nextButton)
         }
         
@@ -130,6 +130,8 @@ class CMDatePicker: UIView {
         currentDate = calendar.date(byAdding: .month, value: value, to: currentDate) ?? Date()
         updateTitleLabel()
         setupDaysInMonth()
+        titleLabel.flex.markDirty()
+        headerView.flex.layout()
         collectionView.reloadData()
     }
     
