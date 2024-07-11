@@ -14,6 +14,7 @@ final class DateHelper {
     
     private init() {
         dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ko_KR")
     }
     
     func toString(from date: Date, format: String) -> String {

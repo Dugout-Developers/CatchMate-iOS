@@ -79,7 +79,7 @@ class CMTextField: UITextField {
     }
     
     @objc private func textFieldDidEndEditing() {
-        layer.borderColor = UIColor.lightGray.cgColor
+        layer.borderColor = UIColor.cmBorderColor.cgColor
         updateClearButtonVisibility()
         if let currentText = self.text {
             self.attributedText = NSAttributedString(string: currentText, attributes: FontSystem.body02_semiBold.getAttributes())

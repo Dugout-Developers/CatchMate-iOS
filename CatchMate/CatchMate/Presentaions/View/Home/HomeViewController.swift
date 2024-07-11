@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RxSwift
 import RxCocoa
 import ReactorKit
 
@@ -17,7 +18,7 @@ enum Filter {
 }
 
 final class HomeViewController: BaseViewController, View {
-
+    
     private let reactor: HomeReactor
     private let viewWillAppearPublisher = PublishSubject<Void>().asObserver()
     private let filterScrollView = UIScrollView()
@@ -66,7 +67,8 @@ final class HomeViewController: BaseViewController, View {
 // MARK: - Bind
 extension HomeViewController {
     func bind(reactor: HomeReactor) {
-        viewWillAppearPublisher            
+        
+        viewWillAppearPublisher
             .map { Reactor.Action.willAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -92,8 +94,13 @@ extension HomeViewController {
             .bind { vc, teams in
                 let teamNames = teams.map { $0.rawValue }.joined(separator: ", ")
                 vc.teamFilterButton.filterValue = teamNames.isEmpty ? nil : teamNames
+                vc.updateFilterContainerLayout()
             }
             .disposed(by: disposeBag)
+    }
+    private func updateFilterContainerLayout() {
+        filterContainerView.flex.layout(mode: .adjustWidth)
+        filterScrollView.contentSize = filterContainerView.frame.size
     }
 }
 // MARK: - Button Event
@@ -109,7 +116,7 @@ extension HomeViewController {
         switch sender.filterType {
         case .all:
             print("전체 필터 선택")
-            let allFilterVC = AllFilterViewController()
+            let allFilterVC = AllFilterViewController(reactor: reactor)
             navigationController?.pushViewController(allFilterVC, animated: true)
         case .date:
             let customDetent = returnCustomDetent(height: Screen.height / 2.0 + 50.0, identifier: "DateFilter")
