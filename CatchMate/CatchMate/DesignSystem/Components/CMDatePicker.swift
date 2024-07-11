@@ -8,9 +8,10 @@
 import UIKit
 import FlexLayout
 import PinLayout
+import RxSwift
 
 class CMDatePicker: UIView {
-    
+    fileprivate var _selectedDate = PublishSubject<Date?>()
     private let rootFlexContainer = UIView()
     private let headerView = UIView()
     private let previousButton = UIButton()
@@ -18,7 +19,11 @@ class CMDatePicker: UIView {
     private let titleLabel = UILabel()
     
     private var currentDate = Date()
-    var selectedDate: Date? = Date()
+    var selectedDate: Date? = Date() {
+        didSet {
+            _selectedDate.onNext(selectedDate)
+        }
+    }
     var minimumDate: Date? {
         didSet {
             collectionView.reloadData()
@@ -177,6 +182,12 @@ extension CMDatePicker: UICollectionViewDataSource, UICollectionViewDelegate {
         guard let date = date, let selectedDate = selectedDate else { return false }
         let calendar = Calendar.current
         return calendar.isDate(date, inSameDayAs: selectedDate)
+    }
+}
+
+extension Reactive where Base: CMDatePicker {
+    var selectedDate: Observable<Date?> {
+        return base._selectedDate.asObservable()
     }
 }
 

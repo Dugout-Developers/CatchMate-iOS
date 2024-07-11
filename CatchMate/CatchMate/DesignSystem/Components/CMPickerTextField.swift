@@ -52,6 +52,14 @@ final class CMPickerTextField: UIView {
         setupGesture()
     }
     
+    func updateDateText(_ text: String) {
+        textField.text = text
+        textField.textColor = .cmHeadLineTextColor
+        borderView.layer.borderColor = UIColor.lightGray.cgColor
+        if let currentText = self.textField.text {
+            self.textField.attributedText = NSAttributedString(string: currentText, attributes: FontSystem.body02_medium.getAttributes())
+        }
+    }
     @available (*, unavailable)
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

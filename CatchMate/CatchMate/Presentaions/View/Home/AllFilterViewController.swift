@@ -12,6 +12,8 @@ import RxSwift
 
 final class AllFilterViewController: BaseViewController, View {
     private let allTeams: [Team] = Team.allTeam
+    private var selectedTeam: [Team] = []
+    private var selectedDate: Date?
     var reactor: HomeReactor
     private let dateLabel: UILabel = {
         let label = UILabel()
@@ -108,25 +110,56 @@ final class AllFilterViewController: BaseViewController, View {
 // MARK: - Bind
 extension AllFilterViewController {
     func bind(reactor: HomeReactor) {
+        guard let pickerView = datePickerTextField.pickerViewController as? DateFilterViewController else { return }
+        pickerView.cmDatePicker.rx.selectedDate
+            .withUnretained(self)
+            .subscribe(onNext: { vc, date in
+                vc.selectedDate = date
+            })
+            .disposed(by: disposeBag)
         reactor.state.map{$0.selectedTeams}
-            .bind(onNext: updateSelectedTeams)
+            .withUnretained(self)
+            .subscribe(onNext: { vc, teams in
+                vc.updateSelectedTeams(teams)
+            })
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.dateFilterValue}
+            .withUnretained(self)
+            .subscribe(onNext: { vc, date in
+                vc.selectedDate = date
+                if let date = date, let pickerview =  vc.datePickerTextField.pickerViewController as? DateFilterViewController {
+                    vc.datePickerTextField.updateDateText(DateHelper.shared.toString(from: date, format: "M월 d일 EEEE"))
+                    pickerview.cmDatePicker.selectedDate = date
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        saveButton.rx.tap
+            .withUnretained(self)
+            .flatMapLatest { vc, _ -> Observable<(teams: [Team], date: Date?)> in
+                return Observable.just((vc.selectedTeam, vc.selectedDate))
+            }
+            .flatMap { result -> Observable<Reactor.Action> in
+                let dateAction = Reactor.Action.updateDateFilter(result.date)
+                let teamAction = Reactor.Action.updateTeamFilter(result.teams)
+                return Observable.of(dateAction, teamAction)
+            }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
         Observable.just(allTeams)
             .bind(to: teamCollectionView.rx.items(cellIdentifier: "TeamFilterCollectionViewCell", cellType: TeamFilterCollectionViewCell.self)) { row, team, cell in
-                let isSelected = reactor.currentState.selectedTeams.contains(team)
+                let isSelected = self.selectedTeam.contains(team)
                 cell.setupData(team: team, isSelect: isSelected)
             }
             .disposed(by: disposeBag)
         
         teamCollectionView.rx.itemSelected
             .withUnretained(self)
-            .map { vc, indexPath in
+            .subscribe(onNext: { vc, indexPath in
                 vc.tapTeamImage(vc.allTeams[indexPath.row])
-                let team = vc.allTeams[indexPath.row]
-                return Reactor.Action.toggleTeamSelection(team)
-            }
-            .bind(to: reactor.action)
+            })
             .disposed(by: disposeBag)
         
         teamCollectionView.rx.setDelegate(self)
@@ -134,21 +167,17 @@ extension AllFilterViewController {
     }
     
     private func tapTeamImage(_ team: Team) {
-        guard let cells = teamCollectionView.visibleCells as? [TeamFilterCollectionViewCell] else { return }
-        for cell in cells {
-            guard let team = cell.team else { continue }
-            if cell.team == team {
-                cell.isSelect.toggle()
-            }
+        if let index = selectedTeam.firstIndex(of: team) {
+            selectedTeam.remove(at: index)
+        } else {
+            selectedTeam.append(team)
         }
+        teamCollectionView.reloadData()
     }
     
     private func updateSelectedTeams(_ selectedTeams: [Team]) {
-        guard let cells = teamCollectionView.visibleCells as? [TeamFilterCollectionViewCell] else { return }
-        for cell in cells {
-            guard let team = cell.team else { continue }
-            cell.isSelect = selectedTeams.contains(team)
-        }
+        self.selectedTeam = selectedTeams
+        teamCollectionView.reloadData()
     }
 }
 
@@ -161,7 +190,6 @@ extension AllFilterViewController: UICollectionViewDelegateFlowLayout {
             return CGSize(width: 52, height: 52)
         }
 
-        let itemsPerRow: CGFloat = CGFloat(MainGridSystem.getColumn())
         let widthPerItem = MainGridSystem.getColumnWidth(totalWidht: Screen.width)
         return CGSize(width: widthPerItem, height: widthPerItem)
     }

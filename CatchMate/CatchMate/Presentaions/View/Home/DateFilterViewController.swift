@@ -10,7 +10,7 @@ import SnapKit
 import ReactorKit
 
 final class DateFilterViewController: BasePickerViewController, View {
-    private let cmDatePicker = CMDatePicker()
+    let cmDatePicker = CMDatePicker()
     private let saveButton = CMDefaultFilledButton(title: "저장")
     var disposeBag: DisposeBag
     private let reactor: HomeReactor
@@ -47,6 +47,7 @@ final class DateFilterViewController: BasePickerViewController, View {
     private func setupButton() {
         saveButton.addTarget(self, action: #selector(clickSaveButton), for: .touchUpInside)
     }
+
     @objc private func clickSaveButton(_ sender: UIButton) {
         if let selectedDate = cmDatePicker.selectedDate {
             itemSelected(DateHelper.shared.toString(from: selectedDate, format: "M월 d일 EEEE"))
@@ -55,6 +56,14 @@ final class DateFilterViewController: BasePickerViewController, View {
         }
     }
     func bind(reactor: HomeReactor) {
+        reactor.state.map{$0.dateFilterValue}
+            .withUnretained(self)
+            .subscribe(onNext: { vc, date in
+                if let date = date {
+                    vc.cmDatePicker.selectedDate = date
+                }
+            })
+            .disposed(by: disposeBag)
         saveButton.rx.tap
             .withUnretained(self)
             .map { ( vc, _ ) -> Date? in
