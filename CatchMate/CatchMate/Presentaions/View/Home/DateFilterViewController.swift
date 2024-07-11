@@ -51,10 +51,8 @@ final class DateFilterViewController: BasePickerViewController, View {
     }
     @objc
     private func clickSaveButton(_ sender: UIButton) {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        let dateString = formatter.string(from: datePicker.date)
-        itemSelected(dateString)
+        let string = DateHelper.shared.toString(from: datePicker.date, format: "M월 d일 EEEE")
+        itemSelected(string)
     }
     func bind(reactor: HomeReactor) {
         saveButton.rx.tap

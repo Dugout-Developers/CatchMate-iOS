@@ -143,6 +143,10 @@ extension CMPickerTextField: BasePickerViewControllerDelegate {
     
     func didSelectItem(_ item: String) {
         textField.text = item
+        textField.textColor = .cmHeadLineTextColor
         borderView.layer.borderColor = UIColor.lightGray.cgColor
+        if let currentText = self.textField.text {
+            self.textField.attributedText = NSAttributedString(string: currentText, attributes: FontSystem.body02_medium.getAttributes())
+        }
     }
 }

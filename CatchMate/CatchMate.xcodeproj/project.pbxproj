@@ -257,6 +257,7 @@
 		531786692C200D4700ACEF6A /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				53241F3B2C3C517600F468E1 /* GridSystem.swift */,
 				531786522C1C8BFB00ACEF6A /* BaseViewController.swift */,
 				5317866A2C200D6000ACEF6A /* BasePickerViewController.swift */,
 			);
@@ -536,7 +537,6 @@
 				531786692C200D4700ACEF6A /* Base */,
 				536BDE252C1B52FB0043B1DA /* Resources */,
 				536BDE042C1973140043B1DA /* Components */,
-				53241F3B2C3C517600F468E1 /* GridSystem.swift */,
 			);
 			path = DesignSystem;
 			sourceTree = "<group>";
@@ -841,7 +841,6 @@
 				531786852C23261200ACEF6A /* SheetHeight.swift in Sources */,
 				533A2B442C2C62C700A59340 /* SignRepositoryImpl.swift in Sources */,
 				533A2B342C2BE98D00A59340 /* SignSelectedButton.swift in Sources */,
-				53241F4C2C3D89A200F468E1 /* FavoriteListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

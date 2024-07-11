@@ -13,10 +13,14 @@ final class TeamFilterCollectionViewCell: UICollectionViewCell {
     private var isSelect: Bool = false
     private let teamLogoImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = .clear
-        imageView.contentMode = .scaleToFill
+        imageView.backgroundColor = .grayScale50
+        imageView.contentMode = .scaleAspectFit
+        imageView.layer.cornerRadius = 8
+        imageView.clipsToBounds = true
+        imageView.layer.borderColor = UIColor.cmPrimaryColor.cgColor
         return imageView
     }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -31,15 +35,15 @@ final class TeamFilterCollectionViewCell: UICollectionViewCell {
     
     func setupData(team: Team) {
         self.team = team
-        teamLogoImage.image = team.getDefaultsImage
+        teamLogoImage.image = team.getLogoImage
     }
     @objc
     private func clickImage() {
         isSelect.toggle()
         if isSelect {
-            teamLogoImage.image = team?.getFillImage
+            teamLogoImage.layer.borderWidth = 1
         } else {
-            teamLogoImage.image = team?.getDefaultsImage
+            teamLogoImage.layer.borderWidth = 0
         }
     }
     
