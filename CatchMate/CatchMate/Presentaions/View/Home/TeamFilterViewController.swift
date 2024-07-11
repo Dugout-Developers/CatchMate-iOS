@@ -80,6 +80,7 @@ final class TeamFilterViewController: BasePickerViewController, View, UIScrollVi
             .bind(to: tableView.rx.items(cellIdentifier: "TeamFilterTableViewCell", cellType: TeamFilterTableViewCell.self)) { row, team, cell in
                 let isSelected = reactor.currentState.selectedTeams.contains(team)
                 cell.configure(with: team, isClicked: isSelected)
+                cell.selectionStyle = .none
                 cell.checkButton.rx.tap
                     .map { Reactor.Action.toggleTeamSelection(team) }
                     .bind(to: reactor.action)
