@@ -7,8 +7,12 @@
 
 import UIKit
 import SnapKit
+import ReactorKit
+import RxSwift
 
-final class AllFilterViewController: BaseViewController {
+final class AllFilterViewController: BaseViewController, View {
+    private let allTeams: [Team] = Team.allTeam
+    var reactor: HomeReactor
     private let dateLabel: UILabel = {
         let label = UILabel()
         label.text = "경기 날짜"
@@ -53,6 +57,16 @@ final class AllFilterViewController: BaseViewController {
     
     private let saveButton = CMDefaultFilledButton(title: "저장")
     
+    init(reactor: HomeReactor) {
+        self.reactor = reactor
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .cmBackgroundColor
@@ -60,6 +74,7 @@ final class AllFilterViewController: BaseViewController {
         setupPickerView()
         setupCollectionView()
         setupButton()
+        bind(reactor: reactor)
     }
     
     private func setupButton() {
@@ -67,8 +82,6 @@ final class AllFilterViewController: BaseViewController {
     }
     
     private func setupCollectionView() {
-        teamCollectionView.delegate = self
-        teamCollectionView.dataSource = self
         teamCollectionView.register(TeamFilterCollectionViewCell.self, forCellWithReuseIdentifier: "TeamFilterCollectionViewCell")
         teamCollectionView.backgroundColor = .clear
     }
@@ -92,25 +105,59 @@ final class AllFilterViewController: BaseViewController {
     }
 }
 
-// MARK: - Team Collection View
-extension AllFilterViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return Team.allTeam.count
+// MARK: - Bind
+extension AllFilterViewController {
+    func bind(reactor: HomeReactor) {
+        reactor.state.map{$0.selectedTeams}
+            .bind(onNext: updateSelectedTeams)
+            .disposed(by: disposeBag)
+        
+        Observable.just(allTeams)
+            .bind(to: teamCollectionView.rx.items(cellIdentifier: "TeamFilterCollectionViewCell", cellType: TeamFilterCollectionViewCell.self)) { row, team, cell in
+                let isSelected = reactor.currentState.selectedTeams.contains(team)
+                cell.setupData(team: team, isSelect: isSelected)
+            }
+            .disposed(by: disposeBag)
+        
+        teamCollectionView.rx.itemSelected
+            .withUnretained(self)
+            .map { vc, indexPath in
+                vc.tapTeamImage(vc.allTeams[indexPath.row])
+                let team = vc.allTeams[indexPath.row]
+                return Reactor.Action.toggleTeamSelection(team)
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        teamCollectionView.rx.setDelegate(self)
+            .disposed(by: disposeBag)
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TeamFilterCollectionViewCell", for: indexPath) as? TeamFilterCollectionViewCell else {
-            return UICollectionViewCell()
+    private func tapTeamImage(_ team: Team) {
+        guard let cells = teamCollectionView.visibleCells as? [TeamFilterCollectionViewCell] else { return }
+        for cell in cells {
+            guard let team = cell.team else { continue }
+            if cell.team == team {
+                cell.isSelect.toggle()
+            }
         }
-        cell.setupData(team: Team.allTeam[indexPath.row])
-        return cell
     }
-
     
+    private func updateSelectedTeams(_ selectedTeams: [Team]) {
+        guard let cells = teamCollectionView.visibleCells as? [TeamFilterCollectionViewCell] else { return }
+        for cell in cells {
+            guard let team = cell.team else { continue }
+            cell.isSelect = selectedTeams.contains(team)
+        }
+    }
+}
+
+// MARK: - Team Collection View 
+extension AllFilterViewController: UICollectionViewDelegateFlowLayout {
     // UICollectionViewDelegateFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        guard let layout = collectionViewLayout as? UICollectionViewFlowLayout else {
+        guard collectionViewLayout is UICollectionViewFlowLayout else {
             return CGSize(width: 52, height: 52)
         }
 

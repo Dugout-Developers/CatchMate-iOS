@@ -10,7 +10,7 @@ import SnapKit
 import ReactorKit
 
 final class DateFilterViewController: BasePickerViewController, View {
-    private let datePicker = UIDatePicker()
+    private let cmDatePicker = CMDatePicker()
     private let saveButton = CMDefaultFilledButton(title: "저장")
     var disposeBag: DisposeBag
     private let reactor: HomeReactor
@@ -41,24 +41,24 @@ final class DateFilterViewController: BasePickerViewController, View {
     }
     
     private func setupDatePicker() {
-        datePicker.tintColor = .cmPrimaryColor
-        datePicker.datePickerMode = .date
-        datePicker.preferredDatePickerStyle = .inline
+        cmDatePicker.minimumDate = Date()
     }
     
     private func setupButton() {
         saveButton.addTarget(self, action: #selector(clickSaveButton), for: .touchUpInside)
     }
-    @objc
-    private func clickSaveButton(_ sender: UIButton) {
-        let string = DateHelper.shared.toString(from: datePicker.date, format: "M월 d일 EEEE")
-        itemSelected(string)
+    @objc private func clickSaveButton(_ sender: UIButton) {
+        if let selectedDate = cmDatePicker.selectedDate {
+            itemSelected(DateHelper.shared.toString(from: selectedDate, format: "M월 d일 EEEE"))
+        } else {
+            itemSelected("")
+        }
     }
     func bind(reactor: HomeReactor) {
         saveButton.rx.tap
             .withUnretained(self)
             .map { ( vc, _ ) -> Date? in
-                return vc.datePicker.date
+                return vc.cmDatePicker.selectedDate
             }
             .map { Reactor.Action.updateDateFilter($0) }
             .bind(to: reactor.action)
@@ -69,15 +69,15 @@ final class DateFilterViewController: BasePickerViewController, View {
 // MARK: - UI
 extension DateFilterViewController {
     private func setupUI() {
-        view.addSubviews(views: [datePicker, saveButton])
+        view.addSubviews(views: [cmDatePicker, saveButton])
         
-        datePicker.snp.makeConstraints { make in
+        cmDatePicker.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(30)
             make.leading.trailing.equalToSuperview().inset(12)
         }
         saveButton.snp.makeConstraints { make in
-            make.top.equalTo(datePicker.snp.bottom).offset(30)
-            make.leading.trailing.equalTo(datePicker)
+            make.top.equalTo(cmDatePicker.snp.bottom).offset(30)
+            make.leading.trailing.equalTo(cmDatePicker)
             make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
             make.height.equalTo(50)
         }

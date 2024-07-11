@@ -11,4 +11,8 @@ extension Date {
     func toString(format: String) -> String {
         return DateHelper.shared.toString(from: self, format: format)
     }
+    
+    func startOfDay() -> Date {
+        return Calendar.current.startOfDay(for: self)
+    }
 }
