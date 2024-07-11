@@ -18,7 +18,7 @@ enum Filter {
 }
 
 final class HomeViewController: BaseViewController, View {
-
+    
     private let reactor: HomeReactor
     private let viewWillAppearPublisher = PublishSubject<Void>().asObserver()
     private let filterScrollView = UIScrollView()
@@ -67,7 +67,7 @@ final class HomeViewController: BaseViewController, View {
 // MARK: - Bind
 extension HomeViewController {
     func bind(reactor: HomeReactor) {
-
+        
         viewWillAppearPublisher
             .map { Reactor.Action.willAppear }
             .bind(to: reactor.action)
