@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct Post: Identifiable {
+struct Post: Identifiable, Equatable {
     var id: String
     let title: String
     let writer: User
@@ -28,6 +28,10 @@ struct Post: Identifiable {
         } else {
             return false
         }
+    }
+    
+    static func == (lhs: Post, rhs: Post) -> Bool {
+        return lhs.id == rhs.id
     }
     
     init(id: String = UUID().uuidString, title: String, writer: User, homeTeam: Team, awayTeam: Team, date: String, playTime: String, location: String, maxPerson: Int, currentPerson: Int, preferGender: Gender? = nil, preferAge: [Int]? = nil, addInfo: String? = nil) {
