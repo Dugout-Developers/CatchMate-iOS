@@ -60,10 +60,9 @@ class CMDatePicker: UIView {
         nextButton.addTarget(self, action: #selector(nextMonthTapped), for: .touchUpInside)
         
         titleLabel.textAlignment = .center
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
         updateTitleLabel()
         
-        headerView.flex.direction(.row).justifyContent(.center).alignItems(.center).padding(10).define { (flex) in
+        headerView.flex.direction(.row).justifyContent(.center).alignItems(.center).height(80).padding(10).define { (flex) in
             flex.addItem(previousButton)
             flex.addItem(titleLabel).marginHorizontal(12)
             flex.addItem(nextButton)

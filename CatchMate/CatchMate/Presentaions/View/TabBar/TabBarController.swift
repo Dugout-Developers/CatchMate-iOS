@@ -91,7 +91,7 @@ final class TabBarController: UITabBarController, UITabBarControllerDelegate {
            let index = viewControllers.firstIndex(of: viewController) {
             if index == 2 {
                 if isAddView { return false }
-                let postVC = isNonMember ? NonMembersAccessViewController(title: "등록 하기", isAdd: true) : AddViewController()
+                let postVC = isNonMember ? NonMembersAccessViewController(title: "등록 하기", isAdd: true) : AddViewController(reactor: AddReactor())
                 if let navVC = viewControllers[2] as? UINavigationController {
                     isAddView = true
                     navVC.pushViewController(postVC, animated: true)

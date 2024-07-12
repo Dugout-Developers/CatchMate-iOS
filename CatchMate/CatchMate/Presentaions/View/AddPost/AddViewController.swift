@@ -6,10 +6,37 @@
 //
 
 import UIKit
+import RxSwift
+import ReactorKit
 
-final class AddViewController: BaseViewController {
-    private var selectedGenderLabel: PaddingLabel?
-    private var seletedAgeLabel: PaddingLabel?
+extension Reactive where Base: AddViewController {
+    var selectedDate: Observable<Gender?> {
+        return base._selectedGender.asObservable()
+    }
+    var selectedAge: Observable<[Int]> {
+        return base._selectedAge.asObservable()
+    }
+}
+final class AddViewController: BaseViewController, View {
+    private let reactor: AddReactor
+    fileprivate var _selectedGender = PublishSubject<Gender?>()
+    fileprivate var _selectedAge = PublishSubject<[Int]>()
+    private var selectedGenderLabel: PaddingLabel? {
+        didSet {
+            if selectedGenderLabel == manButton {
+                _selectedGender.onNext(.man)
+            } else if selectedGenderLabel == womanButton {
+                _selectedGender.onNext(.woman)
+            } else {
+                _selectedGender.onNext(nil)
+            }
+        }
+    }
+    private var selectedAges: [Int] = [] {
+        didSet {
+            _selectedAge.onNext(selectedAges)
+        }
+    }
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
@@ -29,7 +56,7 @@ final class AddViewController: BaseViewController {
         label.font = .systemFont(ofSize: 16)
         return label
     }()
-    private let datePickerTextField = CMPickerTextField(rightAccessoryView: UIImageView(image: UIImage(systemName: "calendar")), placeHolder: "날짜 선택", isFlex: true)
+    private let datePickerTextField = CMPickerTextField(placeHolder: "날짜 선택", isFlex: true)
     private let teamSelectedContainerView = UIView()
     private let homeTeamPicker = CMPickerTextField(placeHolder: "홈 팀",isFlex: true)
     private let vsLabel: UILabel = {
@@ -69,28 +96,9 @@ final class AddViewController: BaseViewController {
         return label
     }()
     private let genderButtonContainer = UIView()
-    private let womanButton: PaddingLabel = {
-        let label = PaddingLabel()
-        label.backgroundColor = UIColor(hex: "#F7F8FA")
-        label.textColor = .cmTextGray
-        label.text = "여성"
-        label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        label.layer.cornerRadius = 15
-        label.clipsToBounds = true
-        label.isUserInteractionEnabled = true
-        return label
-    }()
-    private let manButton: PaddingLabel = {
-        let label = PaddingLabel()
-        label.backgroundColor = UIColor(hex: "#F7F8FA")
-        label.textColor = .cmTextGray
-        label.text = "남성"
-        label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        label.layer.cornerRadius = 15
-        label.clipsToBounds = true
-        label.isUserInteractionEnabled = true
-        return label
-    }()
+    private let noGenderButton: PaddingLabel = PaddingLabel(title: "성별 무관")
+    private let womanButton: PaddingLabel = PaddingLabel(title: "여성")
+    private let manButton: PaddingLabel = PaddingLabel(title: "남성")
     
     private let ageLabel: UILabel = {
         let label = UILabel()
@@ -102,21 +110,23 @@ final class AddViewController: BaseViewController {
     private let ageContainer = UIView()
     private let ageButtons: [PaddingLabel] = {
         var labels = [PaddingLabel]()
-        ["10대", "20대", "30대", "40대", "50대 이상"].forEach { age in
-            let label = PaddingLabel()
-            label.backgroundColor = UIColor(hex: "#F7F8FA")
-            label.textColor = .cmTextGray
-            label.text = age
-            label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-            label.layer.cornerRadius = 15
-            label.clipsToBounds = true
-            label.isUserInteractionEnabled = true
+        ["전연령", "10대", "20대", "30대", "40대", "50대 이상"].enumerated().forEach { i, age in
+            let label = PaddingLabel(title: age)
+            label.tag = i
             labels.append(label)
         }
         return labels
     }()
     
     private let registerButton = CMDefaultFilledButton(title: "등록")
+    init(reactor: AddReactor) {
+        self.reactor = reactor
+        super.init(nibName: nil, bundle: nil)
+    }
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -127,6 +137,7 @@ final class AddViewController: BaseViewController {
         setupGenderButton()
         setupAgeButton()
         setupNavigationBar()
+        bind(reactor: reactor)
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -153,14 +164,13 @@ final class AddViewController: BaseViewController {
     private func setupPickerView() {
         // datePicker Setup
         datePickerTextField.parentViewController = self
-        datePickerTextField.pickerViewController = DateFilterViewController(reactor: HomeReactor(), disposeBag: disposeBag)
-        datePickerTextField.customDetent = BasePickerViewController.returnCustomDetent(height: Screen.height / 2.0 + 50.0, identifier: "DateFilter")
+        datePickerTextField.pickerViewController = DateFilterViewController(reactor: HomeReactor(), disposeBag: disposeBag, isAddView: true)
+        datePickerTextField.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.large, identifier: "DateFilter")
         
         // numberPicker Setup
         numberPickerTextField.parentViewController = self
         numberPickerTextField.pickerViewController = NumberPickerViewController()
         numberPickerTextField.customDetent = BasePickerViewController.returnCustomDetent(height: Screen.height / 3.0 + 10.0, identifier: "NumberFilter")
-        
     }
     
     private func setupView() {
@@ -172,6 +182,20 @@ final class AddViewController: BaseViewController {
         let saveButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.down"), style: .plain, target: self, action: #selector(clickSaveButton))
         title = "등록"
         navigationItem.rightBarButtonItem = saveButton
+    }
+}
+// MARK: - Bind
+extension AddViewController {
+    func bind(reactor: AddReactor) {
+        _selectedGender
+            .map{Reactor.Action.changeGender($0)}
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        _selectedAge
+            .map{Reactor.Action.changeAge($0)}
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }
 // MARK: - Button
@@ -196,50 +220,57 @@ extension AddViewController {
     }
     private func setupGenderButton() {
         let tapGesture1 = UITapGestureRecognizer(target: self, action: #selector(clickGenderButton))
-        womanButton.addGestureRecognizer(tapGesture1)
-        
         let tapGesture2 = UITapGestureRecognizer(target: self, action: #selector(clickGenderButton))
-        manButton.addGestureRecognizer(tapGesture2)
+        let tapGesture3 = UITapGestureRecognizer(target: self, action: #selector(clickGenderButton))
+        noGenderButton.addGestureRecognizer(tapGesture1)
+        womanButton.addGestureRecognizer(tapGesture2)
+        manButton.addGestureRecognizer(tapGesture3)
     }
     
     @objc private func clickGenderButton(_ gesture: UITapGestureRecognizer) {
         guard let tappedLabel = gesture.view as? PaddingLabel else { return }
-        
-        if selectedGenderLabel != nil {
-            selectedGenderLabel?.backgroundColor = UIColor(hex: "#F7F8FA")
-            selectedGenderLabel?.textColor = .cmTextGray
-        }
-        
-        if selectedGenderLabel == tappedLabel {
-            selectedGenderLabel = nil
+        if tappedLabel == noGenderButton || selectedGenderLabel == tappedLabel {
+            // 선택 없음이 곧 전연령?
+            selectedGenderLabel = noGenderButton
         } else {
-            tappedLabel.backgroundColor = .cmPrimaryColor
-            tappedLabel.textColor = .white
             selectedGenderLabel = tappedLabel
         }
+        noGenderButton.isSelected = (selectedGenderLabel == noGenderButton)
+        manButton.isSelected = (selectedGenderLabel == manButton)
+        womanButton.isSelected = (selectedGenderLabel == womanButton)
     }
     
     private func setupAgeButton() {
         ageButtons.forEach { ageButton in
-            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(clickGenderButton))
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(clickAgeButton))
             ageButton.addGestureRecognizer(tapGesture)
         }
     }
     
-    @objc private func clicAgeButton(_ gesture: UITapGestureRecognizer) {
+    @objc private func clickAgeButton(_ gesture: UITapGestureRecognizer) {
         guard let tappedLabel = gesture.view as? PaddingLabel else { return }
-        
-        if selectedGenderLabel != nil {
-            selectedGenderLabel?.backgroundColor = UIColor(hex: "#F7F8FA")
-            selectedGenderLabel?.textColor = .cmTextGray
-        }
-        
-        if selectedGenderLabel == tappedLabel {
-            selectedGenderLabel = nil
-        } else {
-            tappedLabel.backgroundColor = .cmPrimaryColor
-            tappedLabel.textColor = .white
-            selectedGenderLabel = tappedLabel
+        if tappedLabel.tag == 0 {
+            selectedAges = []
+            ageButtons[0].isSelected = true
+            ageButtons[1...].forEach { label in
+                label.isSelected = false
+            }
+        }else {
+            ageButtons[0].isSelected = false
+            if let index = selectedAges.firstIndex(of: tappedLabel.tag * 10) {
+                tappedLabel.isSelected = false
+                selectedAges.remove(at: index)
+            } else {
+                tappedLabel.isSelected = true
+                selectedAges.append(tappedLabel.tag * 10)
+                if selectedAges.count == 5 {
+                    selectedAges = []
+                    ageButtons[0].isSelected = true
+                    ageButtons[1...].forEach { label in
+                        label.isSelected = false
+                    }
+                }
+            }
         }
     }
 }
@@ -265,7 +296,8 @@ extension AddViewController {
                 flex.addItem(textview).height(156).marginBottom(16)
                 flex.addItem(genderLabel).marginBottom(12)
                 flex.addItem(genderButtonContainer).direction(.row).justifyContent(.start).alignItems(.start).define { flex in
-                    flex.addItem(womanButton).marginRight(12)
+                    flex.addItem(noGenderButton)
+                    flex.addItem(womanButton).marginHorizontal(12)
                     flex.addItem(manButton)
                 }.marginBottom(32)
                 flex.addItem(ageLabel).marginBottom(12)

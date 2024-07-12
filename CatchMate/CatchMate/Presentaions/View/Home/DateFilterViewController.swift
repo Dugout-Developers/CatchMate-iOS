@@ -10,12 +10,30 @@ import SnapKit
 import ReactorKit
 
 final class DateFilterViewController: BasePickerViewController, View {
+    var isAddViewFilter: Bool = false
+    var selectedTime: Int? = nil
     let cmDatePicker = CMDatePicker()
     private let saveButton = CMDefaultFilledButton(title: "저장")
+    private let timeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "경기 시간"
+        label.textColor = .cmNonImportantTextColor
+        label.applyStyle(textStyle: FontSystem.body02_medium)
+        return label
+    }()
+    private let timeButton: [PaddingLabel] = {
+        let times = ["14:00", "17:00", "18:00" ,"18:30"]
+        var paddingLabels = [PaddingLabel]()
+        times.forEach { time in
+            paddingLabels.append(PaddingLabel(title: time))
+        }
+        return paddingLabels
+    }()
     var disposeBag: DisposeBag
     private let reactor: HomeReactor
     
-    init(reactor: HomeReactor, disposeBag: DisposeBag) {
+    init(reactor: HomeReactor, disposeBag: DisposeBag, isAddView: Bool = false) {
+        self.isAddViewFilter = isAddView
         self.reactor = reactor
         self.disposeBag = disposeBag
         super.init(nibName: nil, bundle: nil)
@@ -79,16 +97,41 @@ final class DateFilterViewController: BasePickerViewController, View {
 extension DateFilterViewController {
     private func setupUI() {
         view.addSubviews(views: [cmDatePicker, saveButton])
-        
+
         cmDatePicker.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(30)
-            make.leading.trailing.equalToSuperview().inset(12)
+            make.leading.trailing.equalToSuperview().inset(MainGridSystem.getMargin())
         }
-        saveButton.snp.makeConstraints { make in
-            make.top.equalTo(cmDatePicker.snp.bottom).offset(30)
-            make.leading.trailing.equalTo(cmDatePicker)
-            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
-            make.height.equalTo(50)
+        if isAddViewFilter {
+            let stackView = UIStackView()
+            view.addSubviews(views: [timeLabel, stackView])
+            timeLabel.snp.makeConstraints { make in
+                make.top.equalTo(cmDatePicker.snp.bottom).offset(30)
+                make.leading.trailing.equalTo(cmDatePicker)
+            }
+            stackView.axis = .horizontal
+            stackView.distribution = .equalSpacing
+            stackView.spacing = 8
+            timeButton.forEach { button in
+                stackView.addArrangedSubview(button)
+            }
+            stackView.snp.makeConstraints { make in
+                make.top.equalTo(timeLabel.snp.bottom).offset(12)
+                make.leading.equalTo(cmDatePicker)
+            }
+            saveButton.snp.makeConstraints { make in
+                make.top.equalTo(stackView.snp.bottom).offset(36)
+                make.leading.trailing.equalToSuperview().inset(12)
+                make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-34)
+                make.height.equalTo(52)
+            }
+        } else {
+            saveButton.snp.makeConstraints { make in
+                make.top.equalTo(cmDatePicker.snp.bottom).offset(30)
+                make.leading.trailing.equalToSuperview().inset(12)
+                make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-34)
+                make.height.equalTo(52)
+            }
         }
     }
 }

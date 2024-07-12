@@ -86,6 +86,7 @@
 		536BDE382C1C07990043B1DA /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE372C1C07990043B1DA /* PaddingLabel.swift */; };
 		536BDE3A2C1C1F210043B1DA /* HomeReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE392C1C1F210043B1DA /* HomeReactor.swift */; };
 		53716BC02C400B3E0044AD2A /* FavoriteReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BBF2C400B3E0044AD2A /* FavoriteReactor.swift */; };
+		53716BC22C4053430044AD2A /* AddReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BC12C4053430044AD2A /* AddReactor.swift */; };
 		5382490E2C2E79A90074B583 /* AppleLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */; };
 		538249102C3139C80074B583 /* LoginUserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */; };
 		538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538249122C3196AD0074B583 /* NaverLoginUseCase.swift */; };
@@ -193,6 +194,7 @@
 		536BDE372C1C07990043B1DA /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		536BDE392C1C1F210043B1DA /* HomeReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeReactor.swift; sourceTree = "<group>"; };
 		53716BBF2C400B3E0044AD2A /* FavoriteReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteReactor.swift; sourceTree = "<group>"; };
+		53716BC12C4053430044AD2A /* AddReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddReactor.swift; sourceTree = "<group>"; };
 		5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginUseCase.swift; sourceTree = "<group>"; };
 		5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUserDefaultsService.swift; sourceTree = "<group>"; };
 		538249122C3196AD0074B583 /* NaverLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverLoginUseCase.swift; sourceTree = "<group>"; };
@@ -347,7 +349,6 @@
 				536BDDE32C196FD10043B1DA /* Utilities */,
 				536BDDE52C1971830043B1DA /* Presentaions */,
 				536BDDEA2C1971D20043B1DA /* Domain */,
-				536BDDF42C1972590043B1DA /* Data */,
 				536BDE032C1973090043B1DA /* DesignSystem */,
 			);
 			path = CatchMate;
@@ -447,6 +448,7 @@
 				536BDDE82C1971C70043B1DA /* SignReactor.swift */,
 				536BDE392C1C1F210043B1DA /* HomeReactor.swift */,
 				53716BBF2C400B3E0044AD2A /* FavoriteReactor.swift */,
+				53716BC12C4053430044AD2A /* AddReactor.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -457,6 +459,7 @@
 				536BDDED2C1972120043B1DA /* Model */,
 				536BDDEE2C1972230043B1DA /* UseCases */,
 				536BDDF12C19723B0043B1DA /* Repositories */,
+				536BDDF42C1972590043B1DA /* Data */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -803,6 +806,7 @@
 				531786622C1EE6C500ACEF6A /* TeamFilterTableViewCell.swift in Sources */,
 				536BDE3A2C1C1F210043B1DA /* HomeReactor.swift in Sources */,
 				536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */,
+				53716BC22C4053430044AD2A /* AddReactor.swift in Sources */,
 				536BDE292C1B53860043B1DA /* Color.swift in Sources */,
 				5317866D2C200EDB00ACEF6A /* AllFilterViewController.swift in Sources */,
 				533A2B2A2C2859D600A59340 /* CMImageButton.swift in Sources */,
