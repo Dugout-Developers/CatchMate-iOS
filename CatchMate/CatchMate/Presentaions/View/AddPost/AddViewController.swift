@@ -165,7 +165,7 @@ final class AddViewController: BaseViewController, View {
         // datePicker Setup
         datePickerTextField.parentViewController = self
         datePickerTextField.pickerViewController = DateFilterViewController(reactor: HomeReactor(), disposeBag: disposeBag, isAddView: true)
-        datePickerTextField.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.large, identifier: "DateFilter")
+        datePickerTextField.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.medium + 50, identifier: "DateFilter")
         
         // numberPicker Setup
         numberPickerTextField.parentViewController = self

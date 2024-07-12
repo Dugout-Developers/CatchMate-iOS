@@ -57,6 +57,7 @@ class CMTextView: UITextView {
     override func becomeFirstResponder() -> Bool {
         let didBecomeFirstResponder = super.becomeFirstResponder()
         if didBecomeFirstResponder {
+            resignOtherResponders(in: superview, except: self)
             layer.borderColor = UIColor.cmPrimaryColor.cgColor
         }
         return didBecomeFirstResponder
@@ -74,7 +75,24 @@ class CMTextView: UITextView {
     @objc private func textDidChange() {
         placeholderLabel.isHidden = !text.isEmpty
     }
-
+    
+    // 다른 응답자 포기
+    private func resignOtherResponders(in view: UIView?, except responder: UIResponder) {
+        guard let view = view else { return }
+        
+        for subview in view.subviews {
+            if let textView = subview as? UITextView, textView != responder {
+                textView.resignFirstResponder()
+            } else if let textField = subview as? UITextField, textField != responder {
+                textField.resignFirstResponder()
+            } else if let pickerview = subview as? CMPickerTextField, pickerview != responder {
+                pickerview.unFocusing()
+            } else {
+                resignOtherResponders(in: subview, except: responder)
+            }
+        }
+    }
+    
     // Remove observer
     deinit {
         NotificationCenter.default.removeObserver(self)
