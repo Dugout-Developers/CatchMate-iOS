@@ -11,7 +11,7 @@ import PinLayout
 import RxSwift
 
 class CMDatePicker: UIView {
-    fileprivate var _selectedDate = PublishSubject<Date?>()
+    var _selectedDate = PublishSubject<Date?>()
     private let rootFlexContainer = UIView()
     private let headerView = UIView()
     private let previousButton = UIButton()

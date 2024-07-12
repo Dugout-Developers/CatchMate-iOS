@@ -9,9 +9,25 @@ import UIKit
 import SnapKit
 import ReactorKit
 
+extension Reactive where Base: DateFilterViewController {
+    var selectedTime: Observable<PlayTime> {
+        return base._selectedTime.asObservable()
+    }
+}
 final class DateFilterViewController: BasePickerViewController, View {
+    private let playTime = PlayTime.allCases
     var isAddViewFilter: Bool = false
-    var selectedTime: Int? = nil
+    fileprivate var _selectedTime = PublishSubject<PlayTime>()
+    private var selectedTimeIndex: Int? {
+        didSet {
+            if let index = selectedTimeIndex {
+                timeButton.forEach { button in
+                    button.isSelected = (button.tag == index)
+                }
+                _selectedTime.onNext(playTime[index])
+            }
+        }
+    }
     let cmDatePicker = CMDatePicker()
     private let saveButton = CMDefaultFilledButton(title: "저장")
     private let timeLabel: UILabel = {
@@ -22,21 +38,30 @@ final class DateFilterViewController: BasePickerViewController, View {
         return label
     }()
     private let timeButton: [PaddingLabel] = {
-        let times = ["14:00", "17:00", "18:00" ,"18:30"]
+        let times = PlayTime.allCases
         var paddingLabels = [PaddingLabel]()
-        times.forEach { time in
-            paddingLabels.append(PaddingLabel(title: time))
+        for i in 0..<times.count {
+            let label = PaddingLabel(title: times[i].rawValue)
+            label.tag = i
+            paddingLabels.append(label)
         }
         return paddingLabels
     }()
     var disposeBag: DisposeBag
-    private let reactor: HomeReactor
+    var reactor: HomeReactor?
+    var addReactor: AddReactor?
     
-    init(reactor: HomeReactor, disposeBag: DisposeBag, isAddView: Bool = false) {
+    init(reactor: any Reactor, disposeBag: DisposeBag, isAddView: Bool = false) {
         self.isAddViewFilter = isAddView
-        self.reactor = reactor
         self.disposeBag = disposeBag
         super.init(nibName: nil, bundle: nil)
+        if let homeReactor = reactor as? HomeReactor {
+            self.reactor = homeReactor
+            bind(reactor: homeReactor)
+        } else if let addReactor = reactor as? AddReactor {
+            self.addReactor = addReactor
+            bind(reactor: addReactor)
+        }
     }
     
     @available(*, unavailable)
@@ -50,7 +75,6 @@ final class DateFilterViewController: BasePickerViewController, View {
         setupUI()
         setupDatePicker()
         setupButton()
-        bind(reactor: reactor)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -63,7 +87,20 @@ final class DateFilterViewController: BasePickerViewController, View {
     }
     
     private func setupButton() {
-        saveButton.addTarget(self, action: #selector(clickSaveButton), for: .touchUpInside)
+        saveButton.isEnabled = !isAddViewFilter
+        if isAddViewFilter {
+            timeButton.forEach { button in
+                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(clickTimeButton))
+                button.addGestureRecognizer(tapGesture)
+            }
+        } else {
+            saveButton.addTarget(self, action: #selector(clickSaveButton), for: .touchUpInside)
+        }
+    }
+    
+    @objc private func clickTimeButton(_ gesture: UITapGestureRecognizer) {
+        guard let tapLabel = gesture.view as? PaddingLabel else { return }
+        selectedTimeIndex = tapLabel.tag
     }
 
     @objc private func clickSaveButton(_ sender: UIButton) {
@@ -73,6 +110,59 @@ final class DateFilterViewController: BasePickerViewController, View {
             itemSelected("")
         }
     }
+}
+
+// MARK: -
+extension DateFilterViewController {
+    func bind(reactor: AddReactor) {
+        reactor.state.map{$0.datePickerSaveButtonState}
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .subscribe(onNext: { vc, state in
+                vc.saveButton.isEnabled = state
+            })
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.selecteDate}
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .subscribe(onNext: { vc, date in
+                if let date = date {
+                    vc.cmDatePicker.selectedDate = date
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.selecteTime}            
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .subscribe { vc, time in
+                if let time = time {
+                    vc.selectedTimeIndex = PlayTime.allCases.firstIndex(of: time)
+                }
+            }
+            .disposed(by: disposeBag)
+        saveButton.rx.tap
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                vc.dismiss(animated: true)
+            }
+            .disposed(by: disposeBag)
+        _selectedTime
+            .map{AddReactor.Action.changeTime($0)}
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        cmDatePicker._selectedDate
+            .map{AddReactor.Action.changeDate($0)}
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
     func bind(reactor: HomeReactor) {
         reactor.state.map{$0.dateFilterValue}
             .withUnretained(self)

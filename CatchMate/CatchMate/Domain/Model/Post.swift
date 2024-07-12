@@ -20,7 +20,7 @@ struct Post: Identifiable, Equatable {
     let maxPerson: Int
     let currentPerson: Int
     let preferGender: Gender?
-    let preferAge: [Int]?
+    let preferAge: [Int]
     let addInfo: String?
     var isFinished: Bool {
         if currentPerson == maxPerson {
@@ -34,7 +34,7 @@ struct Post: Identifiable, Equatable {
         return lhs.id == rhs.id
     }
     
-    init(id: String = UUID().uuidString, title: String, writer: User, homeTeam: Team, awayTeam: Team, date: String, playTime: String, location: String, maxPerson: Int, currentPerson: Int, preferGender: Gender? = nil, preferAge: [Int]? = nil, addInfo: String? = nil) {
+    init(id: String = UUID().uuidString, title: String, writer: User, homeTeam: Team, awayTeam: Team, date: String, playTime: String, location: String, maxPerson: Int, currentPerson: Int, preferGender: Gender? = nil, preferAge: [Int] = [], addInfo: String? = nil) {
         self.id = id
         self.title = title
         self.writer = writer

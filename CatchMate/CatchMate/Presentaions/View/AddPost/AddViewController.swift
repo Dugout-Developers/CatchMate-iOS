@@ -40,6 +40,13 @@ final class AddViewController: BaseViewController, View {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
+    private let infoLabel: UILabel = {
+        let label = UILabel()
+        label.text = "기본 정보"
+        label.textColor = .cmNonImportantTextColor
+        label.applyStyle(textStyle: FontSystem.body02_medium)
+        return label
+    }()
     private let titleTextField = CMTextField(placeHolder: "제목을 입력해주세요.")
     private let numberPickerTextField = CMPickerTextField(rightAccessoryView: {
         let label = UILabel()
@@ -52,34 +59,29 @@ final class AddViewController: BaseViewController, View {
     private let matchInfoLabel: UILabel = {
         let label = UILabel()
         label.text = "경기 정보"
-        label.textColor = .cmTextGray
-        label.font = .systemFont(ofSize: 16)
+        label.textColor = .cmNonImportantTextColor
+        label.applyStyle(textStyle: FontSystem.body02_medium)
         return label
     }()
     private let datePickerTextField = CMPickerTextField(placeHolder: "날짜 선택", isFlex: true)
     private let teamSelectedContainerView = UIView()
     private let homeTeamPicker = CMPickerTextField(placeHolder: "홈 팀",isFlex: true)
-    private let vsLabel: UILabel = {
-        let label = UILabel()
-        label.text = "VS"
-        label.font = .systemFont(ofSize: 14, weight: .semibold)
-        label.textColor = .lightGray
-        return label
-    }()
     private let awayTeamPicker = CMPickerTextField(placeHolder: "원정 팀",isFlex: true)
-    private let placePicker = CMPickerTextField(placeHolder: "위치", isFlex: true)
+    private let placePicker = CMPickerTextField(placeHolder: "구장 위치", isFlex: true)
     
     private let textInfoLabel: UILabel = {
         let label = UILabel()
-        let text = "추가 정보 *"
-        let attributedString = NSMutableAttributedString(string: text)
-        attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 16), range: NSRange(location: 0, length: attributedString.length))
-        attributedString.addAttribute(.foregroundColor, value: UIColor.cmTextGray, range: NSRange(location: 0, length: text.count-1))
-        if let lastCharacterRange = text.range(of: String(text.last!)) {
-            let nsRange = NSRange(lastCharacterRange, in: text)
-            attributedString.addAttribute(.foregroundColor, value: UIColor.cmPrimaryColor, range: nsRange)
-        }
-        label.attributedText = attributedString
+        label.text = "추가 정보"
+        label.applyStyle(textStyle: FontSystem.body02_medium)
+        label.textColor = .cmNonImportantTextColor
+        return label
+    }()
+    
+    private let addTextCount: UILabel = {
+        let label = UILabel()
+        label.text = "0/300"
+        label.textColor = .cmNonImportantTextColor
+        label.applyStyle(textStyle: FontSystem.body02_medium)
         return label
     }()
     private let textview: CMTextView = {
@@ -164,13 +166,27 @@ final class AddViewController: BaseViewController, View {
     private func setupPickerView() {
         // datePicker Setup
         datePickerTextField.parentViewController = self
-        datePickerTextField.pickerViewController = DateFilterViewController(reactor: HomeReactor(), disposeBag: disposeBag, isAddView: true)
-        datePickerTextField.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.medium + 50, identifier: "DateFilter")
+        datePickerTextField.pickerViewController = DateFilterViewController(reactor: reactor, disposeBag: disposeBag, isAddView: true)
+        datePickerTextField.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.medium + 70, identifier: "DateFilter")
         
         // numberPicker Setup
         numberPickerTextField.parentViewController = self
         numberPickerTextField.pickerViewController = NumberPickerViewController()
         numberPickerTextField.customDetent = BasePickerViewController.returnCustomDetent(height: Screen.height / 3.0 + 10.0, identifier: "NumberFilter")
+        
+        // TeamPicker Setup
+        homeTeamPicker.parentViewController = self
+        let homeTeamPickerView = TeamFilterViewController(reactor: reactor)
+        homeTeamPickerView.isHomeTeam = true
+        homeTeamPicker.pickerViewController = homeTeamPickerView
+        homeTeamPicker.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.large, identifier: "HomeTeamFilter")
+        
+        // TeamPicker Setup
+        awayTeamPicker.parentViewController = self
+        let awayteamPickerView = TeamFilterViewController(reactor: reactor)
+        awayteamPickerView.isHomeTeam = false
+        awayTeamPicker.pickerViewController = awayteamPickerView
+        awayTeamPicker.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.large, identifier: "AwayTeamFilter")
     }
     
     private func setupView() {
@@ -195,6 +211,35 @@ extension AddViewController {
         _selectedAge
             .map{Reactor.Action.changeAge($0)}
             .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.dateInfoString}
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .subscribe { vc, text in
+                print(text)
+                vc.datePickerTextField.updateDateText(text)
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.homeTeam}
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .subscribe { vc, team in
+                if let team = team {
+                    vc.homeTeamPicker.didSelectItem(team.rawValue)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.awayTeam}
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .subscribe { vc, team in
+                if let team = team {
+                    vc.awayTeamPicker.didSelectItem(team.rawValue)
+                }
+            }
             .disposed(by: disposeBag)
     }
 }
@@ -281,18 +326,37 @@ extension AddViewController {
         scrollView.addSubview(contentView)
         contentView.flex.paddingHorizontal(18).define { flex in
             flex.addItem().direction(.column).define { flex in
+                flex.addItem().direction(.row).justifyContent(.start).alignItems(.center).define { flex in
+                    let requiredMark = UIImageView(image: UIImage(named: "requiredMark"))
+                    requiredMark.contentMode = .scaleAspectFit
+                    flex.addItem(infoLabel).marginRight(3)
+                    flex.addItem(requiredMark).size(6)
+                }
                 flex.addItem(titleTextField).marginVertical(12)
                 flex.addItem(numberPickerTextField).marginBottom(32)
                 flex.addItem(numberPickerTextField).marginBottom(32)
                 
-                flex.addItem(matchInfoLabel).marginBottom(16)
-                flex.addItem(datePickerTextField).marginBottom(12)
+                flex.addItem().direction(.row).justifyContent(.start).alignItems(.center).define { flex in
+                    let requiredMark = UIImageView(image: UIImage(named: "requiredMark"))
+                    requiredMark.contentMode = .scaleAspectFit
+                    flex.addItem(matchInfoLabel).marginRight(3)
+                    flex.addItem(requiredMark).size(6)
+                }.marginBottom(12)
+                flex.addItem(datePickerTextField).marginBottom(8)
                 flex.addItem(teamSelectedContainerView).direction(.row).justifyContent(.spaceBetween).alignItems(.center).define { flex in
-                    flex.addItem(homeTeamPicker).grow(1)
-                    flex.addItem(vsLabel).marginHorizontal(17)
+                    flex.addItem(homeTeamPicker).grow(1).marginRight(9)
                     flex.addItem(awayTeamPicker).grow(1)
-                }.marginBottom(32)
-                flex.addItem(textInfoLabel).marginBottom(12)
+                }.marginBottom(8)
+                flex.addItem(placePicker).marginBottom(32)
+                flex.addItem().direction(.row).justifyContent(.spaceBetween).alignItems(.center).define {flex in
+                    flex.addItem().direction(.row).justifyContent(.start).alignItems(.center).define { flex in
+                        let requiredMark = UIImageView(image: UIImage(named: "requiredMark"))
+                        requiredMark.contentMode = .scaleAspectFit
+                        flex.addItem(textInfoLabel).marginRight(3)
+                        flex.addItem(requiredMark).size(6)
+                    }
+                    flex.addItem(addTextCount)
+                }.marginBottom(12)
                 flex.addItem(textview).height(156).marginBottom(16)
                 flex.addItem(genderLabel).marginBottom(12)
                 flex.addItem(genderButtonContainer).direction(.row).justifyContent(.start).alignItems(.start).define { flex in

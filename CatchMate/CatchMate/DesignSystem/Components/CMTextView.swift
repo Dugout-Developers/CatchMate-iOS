@@ -42,7 +42,7 @@ class CMTextView: UITextView {
         layer.cornerRadius = 12.0
         
         textContainerInset = UIEdgeInsets(top: 15, left: 12, bottom: 15, right: 12)
-        self.font = .systemFont(ofSize: 14)
+        textColor = .cmHeadLineTextColor
         NotificationCenter.default.addObserver(self, selector: #selector(textDidChange), name: UITextView.textDidChangeNotification, object: self)
     }
     
@@ -74,6 +74,9 @@ class CMTextView: UITextView {
     
     @objc private func textDidChange() {
         placeholderLabel.isHidden = !text.isEmpty
+        if let currentText = self.text {
+            self.attributedText = NSAttributedString(string: currentText, attributes: FontSystem.body02_medium.getAttributes())
+        }
     }
     
     // 다른 응답자 포기
