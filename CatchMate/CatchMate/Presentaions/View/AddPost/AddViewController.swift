@@ -151,7 +151,7 @@ final class AddViewController: BaseViewController, View {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        scrollView.pin.all()
+        scrollView.pin.all(view.pin.safeArea)
         contentView.pin.top().left().right()
         
         contentView.flex.layout(mode: .adjustHeight)

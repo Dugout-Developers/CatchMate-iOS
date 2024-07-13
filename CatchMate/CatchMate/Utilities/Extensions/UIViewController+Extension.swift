@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import SnapKit
 extension UIViewController {
     /// Title leftBarButton
     func configNavigationLeftTitle(_ title: String) {
@@ -39,15 +39,35 @@ extension UIViewController {
         leftItem.isEnabled = false
         self.navigationItem.leftBarButtonItem = leftItem
     }
-    
+    func setupBackButton(title: String? = nil) {
+        let backbuttonItem = UIView()
+        let backbuttonImage = UIImageView(image: UIImage(named: "left"))
+        let titleLabel = UILabel()
+        titleLabel.text = title
+        titleLabel.textColor = .cmHeadLineTextColor
+        titleLabel.applyStyle(textStyle: FontSystem.headline03_medium)
+        backbuttonItem.addSubviews(views: [backbuttonImage, titleLabel])
+        backbuttonImage.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(2)
+            make.centerY.equalToSuperview()
+            make.size.equalTo(20)
+        }
+        titleLabel.snp.makeConstraints { make in
+            make.leading.equalTo(backbuttonImage.snp.trailing).offset(12)
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
+        navigationItem.backBarButtonItem = UIBarButtonItem(customView: backbuttonItem)
+        navigationItem.backBarButtonItem?.tintColor = .cmHeadLineTextColor
+        
+    }
     /// 네비게이션 뒤로가기 버튼
     /// -> 사용방법: a에서 b로 이동한다면 a에서 선언
     func configNavigationBackButton(_ text: String = "") {
-        let backImage = UIImage(named: "left")
+        let backImage = UIImage(named: "left")?.withTintColor(.cmHeadLineTextColor, renderingMode: .alwaysOriginal)
         let backButton = UIButton(type: .custom)
         backButton.setImage(backImage, for: .normal)
         backButton.setTitle(text, for: .normal)
-        backButton.setTitleColor(.cmHeadLineTextColor, for: .normal)
         backButton.sizeToFit()
         
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)

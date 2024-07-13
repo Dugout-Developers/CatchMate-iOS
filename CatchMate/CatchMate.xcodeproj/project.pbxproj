@@ -87,6 +87,7 @@
 		536BDE3A2C1C1F210043B1DA /* HomeReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE392C1C1F210043B1DA /* HomeReactor.swift */; };
 		53716BC02C400B3E0044AD2A /* FavoriteReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BBF2C400B3E0044AD2A /* FavoriteReactor.swift */; };
 		53716BC22C4053430044AD2A /* AddReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BC12C4053430044AD2A /* AddReactor.swift */; };
+		53716BC42C42B72F0044AD2A /* CMNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BC32C42B72F0044AD2A /* CMNavigationBar.swift */; };
 		5382490E2C2E79A90074B583 /* AppleLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */; };
 		538249102C3139C80074B583 /* LoginUserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */; };
 		538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538249122C3196AD0074B583 /* NaverLoginUseCase.swift */; };
@@ -195,6 +196,7 @@
 		536BDE392C1C1F210043B1DA /* HomeReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeReactor.swift; sourceTree = "<group>"; };
 		53716BBF2C400B3E0044AD2A /* FavoriteReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteReactor.swift; sourceTree = "<group>"; };
 		53716BC12C4053430044AD2A /* AddReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddReactor.swift; sourceTree = "<group>"; };
+		53716BC32C42B72F0044AD2A /* CMNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMNavigationBar.swift; sourceTree = "<group>"; };
 		5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginUseCase.swift; sourceTree = "<group>"; };
 		5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUserDefaultsService.swift; sourceTree = "<group>"; };
 		538249122C3196AD0074B583 /* NaverLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverLoginUseCase.swift; sourceTree = "<group>"; };
@@ -561,6 +563,7 @@
 				533A2B2D2C29B56100A59340 /* CMDefaultBorderedButton.swift */,
 				53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */,
 				538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */,
+				53716BC32C42B72F0044AD2A /* CMNavigationBar.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -827,6 +830,7 @@
 				536BDE342C1B57B10043B1DA /* HomeFilterButton.swift in Sources */,
 				536BDE272C1B53150043B1DA /* UIColor+Extension.swift in Sources */,
 				536BDE382C1C07990043B1DA /* PaddingLabel.swift in Sources */,
+				53716BC42C42B72F0044AD2A /* CMNavigationBar.swift in Sources */,
 				533A2B232C27FF6A00A59340 /* CMTextView.swift in Sources */,
 				536BDE2B2C1B54C80043B1DA /* ChatListViewController.swift in Sources */,
 				533A2B302C2AC5C400A59340 /* InputFavoriteTeamViewContoller.swift in Sources */,
