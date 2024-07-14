@@ -21,6 +21,34 @@ enum Team: String, CaseIterable {
     case allTeamLove = "평화주의자"
     case yarine = "야린이"
     
+    var place: [String]? {
+        switch self {
+        case .nc:
+            return ["창원"]
+        case .samsung:
+            return ["대구, 포항"]
+        case .ssg:
+            return ["인천"]
+        case .dosun:
+            return ["잠실"]
+        case .kt:
+            return ["수원"]
+        case .hanhwa:
+            return ["대전", "청주"]
+        case .lotte:
+            return ["사직", "울산"]
+        case .kia:
+            return ["광주"]
+        case .lg:
+            return ["잠실"]
+        case .kiwoom:
+            return ["고척"]
+        case .allTeamLove:
+            return nil
+        case .yarine:
+            return nil
+        }
+    }
     var getDefaultsImage: UIImage? {
         switch self {
         case .nc:

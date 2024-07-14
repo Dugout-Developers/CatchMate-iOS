@@ -187,6 +187,11 @@ final class AddViewController: BaseViewController, View {
         awayteamPickerView.isHomeTeam = false
         awayTeamPicker.pickerViewController = awayteamPickerView
         awayTeamPicker.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.large, identifier: "AwayTeamFilter")
+        
+        // PlacePicker Setup
+        placePicker.parentViewController = self
+        placePicker.pickerViewController = PlaceFilterViewController(reactor: reactor)
+        placePicker.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.tiny, identifier: "PlaceFilter")
     }
     
     private func setupView() {
@@ -228,6 +233,7 @@ extension AddViewController {
             .subscribe { vc, team in
                 if let team = team {
                     vc.homeTeamPicker.didSelectItem(team.rawValue)
+                    vc.placePicker.didSelectItem(team.place?[0] ?? "")
                 }
             }
             .disposed(by: disposeBag)

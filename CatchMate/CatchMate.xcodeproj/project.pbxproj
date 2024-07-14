@@ -88,6 +88,7 @@
 		53716BC02C400B3E0044AD2A /* FavoriteReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BBF2C400B3E0044AD2A /* FavoriteReactor.swift */; };
 		53716BC22C4053430044AD2A /* AddReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BC12C4053430044AD2A /* AddReactor.swift */; };
 		53716BC42C42B72F0044AD2A /* CMNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BC32C42B72F0044AD2A /* CMNavigationBar.swift */; };
+		53716BC62C42D19A0044AD2A /* PlaceFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BC52C42D19A0044AD2A /* PlaceFilterViewController.swift */; };
 		5382490E2C2E79A90074B583 /* AppleLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */; };
 		538249102C3139C80074B583 /* LoginUserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */; };
 		538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538249122C3196AD0074B583 /* NaverLoginUseCase.swift */; };
@@ -197,6 +198,7 @@
 		53716BBF2C400B3E0044AD2A /* FavoriteReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteReactor.swift; sourceTree = "<group>"; };
 		53716BC12C4053430044AD2A /* AddReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddReactor.swift; sourceTree = "<group>"; };
 		53716BC32C42B72F0044AD2A /* CMNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMNavigationBar.swift; sourceTree = "<group>"; };
+		53716BC52C42D19A0044AD2A /* PlaceFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceFilterViewController.swift; sourceTree = "<group>"; };
 		5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginUseCase.swift; sourceTree = "<group>"; };
 		5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUserDefaultsService.swift; sourceTree = "<group>"; };
 		538249122C3196AD0074B583 /* NaverLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverLoginUseCase.swift; sourceTree = "<group>"; };
@@ -304,6 +306,7 @@
 			isa = PBXGroup;
 			children = (
 				536BDE2C2C1B55080043B1DA /* AddViewController.swift */,
+				53716BC52C42D19A0044AD2A /* PlaceFilterViewController.swift */,
 			);
 			path = AddPost;
 			sourceTree = "<group>";
@@ -850,6 +853,7 @@
 				531786642C1EF30F00ACEF6A /* Team.swift in Sources */,
 				538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */,
 				5317867D2C216CBE00ACEF6A /* NumberPickerViewController.swift in Sources */,
+				53716BC62C42D19A0044AD2A /* PlaceFilterViewController.swift in Sources */,
 				5317867F2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift in Sources */,
 				5317867B2C2077EC00ACEF6A /* NotiViewTableViewCell.swift in Sources */,
 				531786662C1F014E00ACEF6A /* CMTextField.swift in Sources */,

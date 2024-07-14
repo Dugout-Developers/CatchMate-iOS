@@ -26,6 +26,7 @@ final class AddReactor: Reactor {
         case changeAwayTeam(Team)
         case changeAddText(String)
         case changePartyNumber(Int)
+        case changePlcase(String)
         case updatePost
     }
     enum Mutation {
@@ -42,6 +43,7 @@ final class AddReactor: Reactor {
         case updateAddText(String)
         case updatePartyNumber(Int)
         case updateSaveButton
+        case updatePlcase(String)
         case updatePost
     }
     struct State {
@@ -54,6 +56,7 @@ final class AddReactor: Reactor {
         var selectedAge: [Int] = []
         var datePickerSaveButtonState: Bool = false
         var homeTeam: Team?
+        var place: String? = ""
         var awayTeam: Team?
         var addText: String = ""
         var partyNumber: Int?
@@ -118,6 +121,11 @@ final class AddReactor: Reactor {
                 Observable.just(Mutation.updateTitle(title)),
                 Observable.just(Mutation.updateSaveButton)
             ])
+        case .changePlcase(let place):
+            return Observable.concat([
+                Observable.just(Mutation.updatePlcase(place)),
+                Observable.just(Mutation.updateSaveButton)
+            ])
         }
     }
     
@@ -141,6 +149,7 @@ final class AddReactor: Reactor {
             }
         case .updateHomeTeam(let team):
             newState.homeTeam = team
+            newState.place = team.place?[0] ?? ""
         case .updageAwayTeam(let team):
             newState.awayTeam = team
         case .updateAddText(let text):
@@ -151,13 +160,15 @@ final class AddReactor: Reactor {
             // TODO: - UseCase upload 시스템 서버 연결
             break
         case .updateSaveButton:
-            if let date = newState.selecteDate, let time = newState.selecteTime, let home = newState.homeTeam, let away = newState.awayTeam, newState.addText.trimmingCharacters(in: .whitespaces).isEmpty, newState.title.trimmingCharacters(in: .whitespaces).isEmpty {
+            if newState.selecteDate != nil , newState.selecteTime != nil , newState.homeTeam != nil, newState.awayTeam != nil, newState.place != nil, newState.addText.trimmingCharacters(in: .whitespaces).isEmpty, newState.title.trimmingCharacters(in: .whitespaces).isEmpty {
                 newState.saveButtonState = true
             } else {
                 newState.saveButtonState = false
             }
         case .updateTitle(let title):
             newState.title = title
+        case .updatePlcase(let place):
+            newState.place = place
         }
         return newState
     }
