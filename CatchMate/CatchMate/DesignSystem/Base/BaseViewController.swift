@@ -26,11 +26,14 @@ class BaseViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 //        setupbackButton()
-//        self.tabBarController?.tabBar.isHidden = false
+        if let tabBarController = tabBarController, tabBarController.selectedIndex != 2 {
+            tabBarController.tabBar.isHidden = false
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+//        tabBarController?.tabBar.isHidden = false
     }
     
     override func viewDidLayoutSubviews() {
@@ -56,13 +59,13 @@ class BaseViewController: UIViewController {
     private func setupbackButton() {
         if let navigationController = navigationController, navigationController.viewControllers.count > 1 {
             customNavigationBar.isBackButtonHidden = false
-            customNavigationBar.setBackButtonAction(target: self, action: #selector(backButtonTapped))
+            customNavigationBar.setBackButtonAction(target: self, action: #selector(cmBackButtonTapped))
         } else {
             customNavigationBar.isBackButtonHidden = true
         }
     }
     
-    @objc internal override func backButtonTapped() {
+    @objc private func cmBackButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
     

@@ -7,102 +7,52 @@
 
 import UIKit
 import SnapKit
+import FlexLayout
+import PinLayout
+
 extension UIViewController {
-    /// Title leftBarButton
-    func configNavigationLeftTitle(_ title: String) {
-        let label = UILabel()
-        label.text = title
-        label.font = .systemFont(ofSize: 20)
-        label.textColor = .cmTextGray
-        
-        let leftItem = UIBarButtonItem(customView: label)
-        let height: CGFloat = 24
-        leftItem.customView?.snp.makeConstraints({ make in
-            make.height.equalTo(height)
-        })
-        
-        self.navigationItem.leftBarButtonItem = leftItem
-    }
-    /// logo leftBarButton
-    func configNavigationLogo() {
-        let image = UIImage(named: "navigationLogo")
-        let logoView = UIImageView(image: image)
-        
-        
-        let leftItem = UIBarButtonItem(customView: logoView)
-        let height: CGFloat = 24
-        leftItem.customView?.snp.makeConstraints({ make in
-            make.height.equalTo(height)
-            make.width.equalTo(image?.getRatio(height: height) ?? 0)
-        })
-        
-        leftItem.isEnabled = false
-        self.navigationItem.leftBarButtonItem = leftItem
-    }
-    func setupBackButton(title: String? = nil) {
-        let backbuttonItem = UIView()
-        let backbuttonImage = UIImageView(image: UIImage(named: "left"))
-        let titleLabel = UILabel()
-        titleLabel.text = title
-        titleLabel.textColor = .cmHeadLineTextColor
-        titleLabel.applyStyle(textStyle: FontSystem.headline03_medium)
-        backbuttonItem.addSubviews(views: [backbuttonImage, titleLabel])
-        backbuttonImage.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(2)
-            make.centerY.equalToSuperview()
-            make.size.equalTo(20)
-        }
-        titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(backbuttonImage.snp.trailing).offset(12)
-            make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview()
-        }
-        navigationItem.backBarButtonItem = UIBarButtonItem(customView: backbuttonItem)
-        navigationItem.backBarButtonItem?.tintColor = .cmHeadLineTextColor
-        
-    }
-    /// 네비게이션 뒤로가기 버튼
-    /// -> 사용방법: a에서 b로 이동한다면 a에서 선언
-    func configNavigationBackButton(_ text: String = "") {
-        let backImage = UIImage(named: "left")?.withTintColor(.cmHeadLineTextColor, renderingMode: .alwaysOriginal)
-        let backButton = UIButton(type: .custom)
-        backButton.setImage(backImage, for: .normal)
-        backButton.setTitle(text, for: .normal)
-        backButton.sizeToFit()
-        
-        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
-
-        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: backButton.frame.width + 18, height: 20))
-        backButton.frame.origin.x = 18
-        // 기본 바버튼 여백 제거 = 기본 iOS 백버튼 여백 16
-        let negativeSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        negativeSpacer.width = -16
-        containerView.addSubview(backButton)
-        
-        let backBarButtonItem = UIBarButtonItem(customView: containerView)
-        
-        self.navigationItem.leftBarButtonItems = [negativeSpacer, backBarButtonItem]
-    }
-    // 백 버튼의 액션
-    @objc func backButtonTapped() {
-        self.navigationController?.popViewController(animated: true)
-    }
-
     
-    /// 네비게이션 뒤로가기 버튼 숨기기
-    /// -> 사용방법: a에서 b로 이동한다면 a에서 선언
-    func hideNavigationBackButton() {
-        self.navigationItem.hidesBackButton = true
-    }
-    
-    /// 네비게이션 safeArea 까지의 배경색 설정
-    func configNavigationBgColor(backgroundColor: UIColor = .cmBackgroundColor) {
-        let navigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.backgroundColor = backgroundColor
-        navigationBarAppearance.shadowColor = .clear // 밑줄 제거
-        navigationBarAppearance.shadowImage = UIImage() // 밑줄 제거
-        navigationController?.navigationBar.standardAppearance = navigationBarAppearance
-        navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+    func showToast(message: String, relativeTo view: UIView, using layoutLibrary: LayoutLibrary, anchorPosition: AnchorPosition) {
+        let toastLabel = CMToastMessageLabel(message: message)
+        let labelWidth = ButtonGridSystem.getGridSystem(totalWidht: Screen.width, startIndex: 1, columnCount: 5).length
+        
+        // 토스트 메시지 레이블을 뷰에 추가
+        self.view.addSubview(toastLabel)
+        
+        switch layoutLibrary {
+        case .flexLayout:
+            toastLabel.pin.width(Screen.width - (2*ButtonGridSystem.getMargin()))
+            toastLabel.pin.minHeight(40)
+            switch anchorPosition {
+            case .top:
+                toastLabel.pin.bottom(to: view.edge.top).marginBottom(12).hCenter()
+            case .bottom:
+                toastLabel.pin.bottom(to: view.edge.bottom).marginBottom(12).hCenter()
+            }
+            
+            toastLabel.superview?.flex.markDirty()
+            self.view.flex.layout()
+            
+        case .snapKit:
+            toastLabel.snp.makeConstraints { make in
+                make.leading.trailing.equalToSuperview().inset(ButtonGridSystem.getMargin())
+                switch anchorPosition {
+                case .top:
+                    make.top.equalTo(view.snp.top).offset(12)
+                case .bottom:
+                    make.bottom.equalTo(view.snp.bottom).offset(-12)
+                }
+            }
+        }
+        
+        
+        
+        // 1초 동안 표시된 후 사라지도록 애니메이션 적용
+        UIView.animate(withDuration: 1.0, delay: 1.0, options: .curveEaseOut, animations: {
+            toastLabel.alpha = 0.0
+        }, completion: { (isCompleted) in
+            toastLabel.removeFromSuperview()
+        })
     }
     
     /// 알림창 띄우기
@@ -122,3 +72,12 @@ extension UIViewController {
     }
 }
 
+enum LayoutLibrary {
+    case flexLayout
+    case snapKit
+}
+
+enum AnchorPosition {
+    case top
+    case bottom
+}

@@ -200,9 +200,14 @@ final class AddViewController: BaseViewController, View {
     }
     
     private func setupNavigationBar() {
-        let saveButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.down"), style: .plain, target: self, action: #selector(clickSaveButton))
-        title = "등록"
-        navigationItem.rightBarButtonItem = saveButton
+        customNavigationBar.title = "등록"
+        
+        let saveButton = UIButton()
+        saveButton.setTitle("임시저장", for: .normal)
+        saveButton.applyStyle(textStyle: FontSystem.body02_medium)
+        saveButton.setTitleColor(.cmHeadLineTextColor, for: .normal)
+        saveButton.addTarget(self, action: #selector(clickSaveButton), for: .touchUpInside)
+        customNavigationBar.addRightItems(items: [saveButton])
     }
 }
 // MARK: - Bind
@@ -251,11 +256,12 @@ extension AddViewController {
 }
 // MARK: - Button
 extension AddViewController {
-    @objc
-    private func clickSaveButton(_ sender: UIBarButtonItem) {
+    @objc private func clickSaveButton(_ sender: UIButton) {
         showCMAlert(titleText: "작성 중인 글을 임시저장할까요?", importantButtonText: "임시저장", commonButtonText: "나가기") { [weak self] in
+            guard let self = self else { return }
             print("임시저장")
-            self?.dismiss(animated: true)
+            dismiss(animated: true)
+            showToast(message: "임시저장이 완료되었어요", relativeTo: scrollView, using: .flexLayout, anchorPosition: .bottom)
         } commonAction: { [weak self] in
             self?.dismiss(animated: true, completion: {
                 self?.navigationController?.popViewController(animated: true)

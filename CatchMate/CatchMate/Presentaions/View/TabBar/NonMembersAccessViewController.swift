@@ -10,8 +10,7 @@ import RxSwift
 import FlexLayout
 import PinLayout
 
-class NonMembersAccessViewController: UIViewController {
-    private let disposeBag = DisposeBag()
+class NonMembersAccessViewController: BaseViewController {
     private let containerView = UIView()
     private var isAdd: Bool
     
@@ -60,7 +59,7 @@ class NonMembersAccessViewController: UIViewController {
     
     private func setupView(title: String) {
         view.backgroundColor = .cmBackgroundColor
-        configNavigationLeftTitle(title)
+        setupLeftTitle(title)
     }
     
     override func viewDidLayoutSubviews() {

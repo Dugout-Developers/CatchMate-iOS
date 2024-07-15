@@ -94,6 +94,7 @@ final class TabBarController: UITabBarController, UITabBarControllerDelegate {
                 let postVC = isNonMember ? NonMembersAccessViewController(title: "등록 하기", isAdd: true) : AddViewController(reactor: AddReactor())
                 if let navVC = viewControllers[2] as? UINavigationController {
                     isAddView = true
+                    tabBarController.tabBar.isHidden = true
                     navVC.pushViewController(postVC, animated: true)
                 }
 
