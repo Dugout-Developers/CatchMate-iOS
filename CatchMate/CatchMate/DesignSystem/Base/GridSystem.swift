@@ -87,4 +87,3 @@ struct ButtonGridSystem {
         return (startPosition, length)
     }
 }
-

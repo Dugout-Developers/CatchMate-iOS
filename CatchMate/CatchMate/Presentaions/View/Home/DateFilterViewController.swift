@@ -97,7 +97,6 @@ final class DateFilterViewController: BasePickerViewController, View {
             saveButton.addTarget(self, action: #selector(clickSaveButton), for: .touchUpInside)
         }
     }
-    
     @objc private func clickTimeButton(_ gesture: UITapGestureRecognizer) {
         guard let tapLabel = gesture.view as? PaddingLabel else { return }
         selectedTimeIndex = tapLabel.tag
@@ -187,7 +186,6 @@ extension DateFilterViewController {
 extension DateFilterViewController {
     private func setupUI() {
         view.addSubviews(views: [cmDatePicker, saveButton])
-
         cmDatePicker.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(30)
             make.leading.trailing.equalToSuperview().inset(MainGridSystem.getMargin())

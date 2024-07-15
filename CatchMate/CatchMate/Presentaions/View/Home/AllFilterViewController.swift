@@ -189,7 +189,6 @@ extension AllFilterViewController: UICollectionViewDelegateFlowLayout {
         guard collectionViewLayout is UICollectionViewFlowLayout else {
             return CGSize(width: 52, height: 52)
         }
-
         let widthPerItem = MainGridSystem.getColumnWidth(totalWidht: Screen.width)
         return CGSize(width: widthPerItem, height: widthPerItem)
     }
