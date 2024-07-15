@@ -14,7 +14,7 @@ import PinLayout
 
 final class SignInViewController: BaseViewController, View {
     var reactor: SignReactor
-    
+    private let viewWillAppearPublisher = PublishSubject<Void>().asObserver()
     private let containerView = UIView()
     private let logoContainerView = UIView()
     private let logoImageView: UIImageView = {
@@ -69,6 +69,11 @@ final class SignInViewController: BaseViewController, View {
         bind(reactor: reactor)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewWillAppearPublisher.onNext(())
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         containerView.pin.all()
@@ -88,6 +93,11 @@ final class SignInViewController: BaseViewController, View {
 // MARK: - Bind
 extension SignInViewController {
     func bind(reactor: SignReactor) {
+        viewWillAppearPublisher
+            .map{ Reactor.Action.reloadSignInView }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
         kakaoLoginButton.rx.tap
             .map{ Reactor.Action.kakaoLogin }
             .bind(to: reactor.action)
@@ -112,11 +122,12 @@ extension SignInViewController {
                 }
             }
             .distinctUntilChanged()
-            .filter { $0 }
             .withUnretained(self)
-            .bind { vc, _ in
-                vc.pushNextView()
-            }
+            .subscribe(onNext: { vc, state in
+                if state {
+                    vc.pushNextView()
+                }
+            })
             .disposed(by: disposeBag)
     }
     
