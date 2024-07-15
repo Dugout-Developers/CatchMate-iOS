@@ -31,8 +31,6 @@
 		531786852C23261200ACEF6A /* SheetHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786842C23261200ACEF6A /* SheetHeight.swift */; };
 		53241F3C2C3C517600F468E1 /* GridSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F3B2C3C517600F468E1 /* GridSystem.swift */; };
 		53241F3E2C3C589100F468E1 /* DesignAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */; };
-		53241F482C3D879200F468E1 /* APIKEY.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 53241F452C3D879100F468E1 /* APIKEY.xcconfig */; };
-		53241F492C3D879200F468E1 /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53241F462C3D879200F468E1 /* APIKeys.plist */; };
 		53241F4E2C3EE58E00F468E1 /* CMPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */; };
 		533A2B232C27FF6A00A59340 /* CMTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B222C27FF6A00A59340 /* CMTextView.swift */; };
 		533A2B252C280E0500A59340 /* CMDefaultFilledButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B242C280E0500A59340 /* CMDefaultFilledButton.swift */; };
@@ -90,6 +88,8 @@
 		53716BC42C42B72F0044AD2A /* CMNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BC32C42B72F0044AD2A /* CMNavigationBar.swift */; };
 		53716BC62C42D19A0044AD2A /* PlaceFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BC52C42D19A0044AD2A /* PlaceFilterViewController.swift */; };
 		53716BC82C43EEB50044AD2A /* CMToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BC72C43EEB50044AD2A /* CMToastMessage.swift */; };
+		53716BCD2C44F1250044AD2A /* APIKEY.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 53716BCA2C44F1250044AD2A /* APIKEY.xcconfig */; };
+		53716BCE2C44F1250044AD2A /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53716BCB2C44F1250044AD2A /* APIKeys.plist */; };
 		5382490E2C2E79A90074B583 /* AppleLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */; };
 		538249102C3139C80074B583 /* LoginUserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */; };
 		538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538249122C3196AD0074B583 /* NaverLoginUseCase.swift */; };
@@ -146,9 +146,6 @@
 		531786842C23261200ACEF6A /* SheetHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetHeight.swift; sourceTree = "<group>"; };
 		53241F3B2C3C517600F468E1 /* GridSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSystem.swift; sourceTree = "<group>"; };
 		53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DesignAssets.xcassets; sourceTree = "<group>"; };
-		53241F452C3D879100F468E1 /* APIKEY.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = APIKEY.xcconfig; sourceTree = "<group>"; };
-		53241F462C3D879200F468E1 /* APIKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
-		53241F472C3D879200F468E1 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMPopupViewController.swift; sourceTree = "<group>"; };
 		533A2B222C27FF6A00A59340 /* CMTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMTextView.swift; sourceTree = "<group>"; };
 		533A2B242C280E0500A59340 /* CMDefaultFilledButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMDefaultFilledButton.swift; sourceTree = "<group>"; };
@@ -201,6 +198,9 @@
 		53716BC32C42B72F0044AD2A /* CMNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMNavigationBar.swift; sourceTree = "<group>"; };
 		53716BC52C42D19A0044AD2A /* PlaceFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceFilterViewController.swift; sourceTree = "<group>"; };
 		53716BC72C43EEB50044AD2A /* CMToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMToastMessage.swift; sourceTree = "<group>"; };
+		53716BC92C44F1250044AD2A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		53716BCA2C44F1250044AD2A /* APIKEY.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = APIKEY.xcconfig; sourceTree = "<group>"; };
+		53716BCB2C44F1250044AD2A /* APIKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
 		5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginUseCase.swift; sourceTree = "<group>"; };
 		5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUserDefaultsService.swift; sourceTree = "<group>"; };
 		538249122C3196AD0074B583 /* NaverLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverLoginUseCase.swift; sourceTree = "<group>"; };
@@ -381,9 +381,9 @@
 		536BDDDD2C1969370043B1DA /* APP */ = {
 			isa = PBXGroup;
 			children = (
-				53241F452C3D879100F468E1 /* APIKEY.xcconfig */,
-				53241F462C3D879200F468E1 /* APIKeys.plist */,
-				53241F472C3D879200F468E1 /* Info.plist */,
+				53716BCA2C44F1250044AD2A /* APIKEY.xcconfig */,
+				53716BCB2C44F1250044AD2A /* APIKeys.plist */,
+				53716BC92C44F1250044AD2A /* Info.plist */,
 				536BDDAD2C189B230043B1DA /* AppDelegate.swift */,
 				536BDDAF2C189B230043B1DA /* SceneDelegate.swift */,
 			);
@@ -769,9 +769,9 @@
 			files = (
 				53241F3E2C3C589100F468E1 /* DesignAssets.xcassets in Resources */,
 				5383BE902C34ECD1008940F1 /* PretendardVariable.ttf in Resources */,
+				53716BCE2C44F1250044AD2A /* APIKeys.plist in Resources */,
 				536BDDB72C189B240043B1DA /* Assets.xcassets in Resources */,
-				53241F492C3D879200F468E1 /* APIKeys.plist in Resources */,
-				53241F482C3D879200F468E1 /* APIKEY.xcconfig in Resources */,
+				53716BCD2C44F1250044AD2A /* APIKEY.xcconfig in Resources */,
 				536BDDBA2C189B240043B1DA /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -44,7 +44,6 @@ final class FavoriteReactor: Reactor {
         case .setFavoritePost(let posts):
             newState.favoritePost = posts
         case .removeFavoritePost(let post):
-            var tempState = state
             if let index = state.favoritePost.firstIndex(of: post) {
                 newState.favoritePost.remove(at: index)
             }
