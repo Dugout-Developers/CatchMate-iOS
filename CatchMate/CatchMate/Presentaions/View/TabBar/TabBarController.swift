@@ -40,8 +40,8 @@ final class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
     private func settupTabbar() {
         let homeViewController = UINavigationController(rootViewController: HomeViewController(reactor: HomeReactor()))
-        let favoriteViewController = isNonMember ? UINavigationController(rootViewController: NonMembersAccessViewController(title: "찜 목록")) : UINavigationController(rootViewController: FavoriteListViewController())
-        let addViewController = UINavigationController(rootViewController: UIViewController()) // 네비게이션으로 연결할거기에 탭에는 빈 뷰컨트롤러 연결
+        let favoriteViewController = isNonMember ? UINavigationController(rootViewController: NonMembersAccessViewController(title: "찜 목록")) : UINavigationController(rootViewController: FavoriteListViewController(reactor: FavoriteReactor()))
+        let addViewController = UINavigationController(rootViewController: BaseViewController()) // 네비게이션으로 연결할거기에 탭에는 빈 뷰컨트롤러 연결
         let chatViewController = isNonMember ? UINavigationController(rootViewController: NonMembersAccessViewController(title: "채팅 목록")) : UINavigationController(rootViewController: ChatListViewController())
         let mypageViewController = isNonMember ? UINavigationController(rootViewController: NonMembersAccessViewController(title: "내 정보")) : UINavigationController(rootViewController: MyPageViewController())
         
@@ -91,9 +91,10 @@ final class TabBarController: UITabBarController, UITabBarControllerDelegate {
            let index = viewControllers.firstIndex(of: viewController) {
             if index == 2 {
                 if isAddView { return false }
-                let postVC = isNonMember ? NonMembersAccessViewController(title: "등록 하기", isAdd: true) : AddViewController()
+                let postVC = isNonMember ? NonMembersAccessViewController(title: "등록 하기", isAdd: true) : AddViewController(reactor: AddReactor())
                 if let navVC = viewControllers[2] as? UINavigationController {
                     isAddView = true
+                    tabBarController.tabBar.isHidden = true
                     navVC.pushViewController(postVC, animated: true)
                 }
 

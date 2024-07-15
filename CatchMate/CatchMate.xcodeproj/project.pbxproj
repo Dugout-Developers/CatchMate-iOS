@@ -85,6 +85,11 @@
 		536BDE362C1BEC870043B1DA /* ListCardViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE352C1BEC870043B1DA /* ListCardViewTableViewCell.swift */; };
 		536BDE382C1C07990043B1DA /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE372C1C07990043B1DA /* PaddingLabel.swift */; };
 		536BDE3A2C1C1F210043B1DA /* HomeReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE392C1C1F210043B1DA /* HomeReactor.swift */; };
+		53716BC02C400B3E0044AD2A /* FavoriteReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BBF2C400B3E0044AD2A /* FavoriteReactor.swift */; };
+		53716BC22C4053430044AD2A /* AddReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BC12C4053430044AD2A /* AddReactor.swift */; };
+		53716BC42C42B72F0044AD2A /* CMNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BC32C42B72F0044AD2A /* CMNavigationBar.swift */; };
+		53716BC62C42D19A0044AD2A /* PlaceFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BC52C42D19A0044AD2A /* PlaceFilterViewController.swift */; };
+		53716BC82C43EEB50044AD2A /* CMToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BC72C43EEB50044AD2A /* CMToastMessage.swift */; };
 		5382490E2C2E79A90074B583 /* AppleLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */; };
 		538249102C3139C80074B583 /* LoginUserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */; };
 		538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538249122C3196AD0074B583 /* NaverLoginUseCase.swift */; };
@@ -191,6 +196,11 @@
 		536BDE352C1BEC870043B1DA /* ListCardViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCardViewTableViewCell.swift; sourceTree = "<group>"; };
 		536BDE372C1C07990043B1DA /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		536BDE392C1C1F210043B1DA /* HomeReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeReactor.swift; sourceTree = "<group>"; };
+		53716BBF2C400B3E0044AD2A /* FavoriteReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteReactor.swift; sourceTree = "<group>"; };
+		53716BC12C4053430044AD2A /* AddReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddReactor.swift; sourceTree = "<group>"; };
+		53716BC32C42B72F0044AD2A /* CMNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMNavigationBar.swift; sourceTree = "<group>"; };
+		53716BC52C42D19A0044AD2A /* PlaceFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceFilterViewController.swift; sourceTree = "<group>"; };
+		53716BC72C43EEB50044AD2A /* CMToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMToastMessage.swift; sourceTree = "<group>"; };
 		5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginUseCase.swift; sourceTree = "<group>"; };
 		5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUserDefaultsService.swift; sourceTree = "<group>"; };
 		538249122C3196AD0074B583 /* NaverLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverLoginUseCase.swift; sourceTree = "<group>"; };
@@ -298,6 +308,7 @@
 			isa = PBXGroup;
 			children = (
 				536BDE2C2C1B55080043B1DA /* AddViewController.swift */,
+				53716BC52C42D19A0044AD2A /* PlaceFilterViewController.swift */,
 			);
 			path = AddPost;
 			sourceTree = "<group>";
@@ -345,7 +356,6 @@
 				536BDDE32C196FD10043B1DA /* Utilities */,
 				536BDDE52C1971830043B1DA /* Presentaions */,
 				536BDDEA2C1971D20043B1DA /* Domain */,
-				536BDDF42C1972590043B1DA /* Data */,
 				536BDE032C1973090043B1DA /* DesignSystem */,
 			);
 			path = CatchMate;
@@ -430,11 +440,11 @@
 				533A2B282C28558D00A59340 /* Sign */,
 				536BDE102C1B51DE0043B1DA /* TabBar */,
 				536BDE322C1B578C0043B1DA /* Home */,
-				531786802C21D3E400ACEF6A /* Chat */,
+				53716BBE2C40093D0044AD2A /* Favorite */,
 				531786832C23248B00ACEF6A /* AddPost */,
+				531786802C21D3E400ACEF6A /* Chat */,
 				531786792C20777000ACEF6A /* Notification */,
 				531173202C36AD1300FF787D /* MyPage */,
-				536548A22C3EF3B700C2309A /* FavoriteListViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -444,6 +454,8 @@
 			children = (
 				536BDDE82C1971C70043B1DA /* SignReactor.swift */,
 				536BDE392C1C1F210043B1DA /* HomeReactor.swift */,
+				53716BBF2C400B3E0044AD2A /* FavoriteReactor.swift */,
+				53716BC12C4053430044AD2A /* AddReactor.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -454,6 +466,7 @@
 				536BDDED2C1972120043B1DA /* Model */,
 				536BDDEE2C1972230043B1DA /* UseCases */,
 				536BDDF12C19723B0043B1DA /* Repositories */,
+				536BDDF42C1972590043B1DA /* Data */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -555,6 +568,8 @@
 				533A2B2D2C29B56100A59340 /* CMDefaultBorderedButton.swift */,
 				53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */,
 				538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */,
+				53716BC32C42B72F0044AD2A /* CMNavigationBar.swift */,
+				53716BC72C43EEB50044AD2A /* CMToastMessage.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -599,6 +614,14 @@
 				5317867E2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		53716BBE2C40093D0044AD2A /* Favorite */ = {
+			isa = PBXGroup;
+			children = (
+				536548A22C3EF3B700C2309A /* FavoriteListViewController.swift */,
+			);
+			path = Favorite;
 			sourceTree = "<group>";
 		};
 		5383BE8B2C34D54B008940F1 /* Font */ = {
@@ -792,6 +815,7 @@
 				531786622C1EE6C500ACEF6A /* TeamFilterTableViewCell.swift in Sources */,
 				536BDE3A2C1C1F210043B1DA /* HomeReactor.swift in Sources */,
 				536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */,
+				53716BC22C4053430044AD2A /* AddReactor.swift in Sources */,
 				536BDE292C1B53860043B1DA /* Color.swift in Sources */,
 				5317866D2C200EDB00ACEF6A /* AllFilterViewController.swift in Sources */,
 				533A2B2A2C2859D600A59340 /* CMImageButton.swift in Sources */,
@@ -806,11 +830,13 @@
 				533A2B322C2BE7E600A59340 /* CheerStyles.swift in Sources */,
 				531786572C1C8F1900ACEF6A /* UIView+Extension.swift in Sources */,
 				538EB92F2C3FA27600ABA40E /* CMDatePicker.swift in Sources */,
+				53716BC02C400B3E0044AD2A /* FavoriteReactor.swift in Sources */,
 				536BDDE92C1971C70043B1DA /* SignReactor.swift in Sources */,
 				531786552C1C8E7800ACEF6A /* UIImage+Extension.swift in Sources */,
 				536BDE342C1B57B10043B1DA /* HomeFilterButton.swift in Sources */,
 				536BDE272C1B53150043B1DA /* UIColor+Extension.swift in Sources */,
 				536BDE382C1C07990043B1DA /* PaddingLabel.swift in Sources */,
+				53716BC42C42B72F0044AD2A /* CMNavigationBar.swift in Sources */,
 				533A2B232C27FF6A00A59340 /* CMTextView.swift in Sources */,
 				536BDE2B2C1B54C80043B1DA /* ChatListViewController.swift in Sources */,
 				533A2B302C2AC5C400A59340 /* InputFavoriteTeamViewContoller.swift in Sources */,
@@ -830,6 +856,7 @@
 				531786642C1EF30F00ACEF6A /* Team.swift in Sources */,
 				538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */,
 				5317867D2C216CBE00ACEF6A /* NumberPickerViewController.swift in Sources */,
+				53716BC62C42D19A0044AD2A /* PlaceFilterViewController.swift in Sources */,
 				5317867F2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift in Sources */,
 				5317867B2C2077EC00ACEF6A /* NotiViewTableViewCell.swift in Sources */,
 				531786662C1F014E00ACEF6A /* CMTextField.swift in Sources */,
@@ -841,6 +868,7 @@
 				5317865B2C1C956400ACEF6A /* DateFilterViewController.swift in Sources */,
 				53BE7ACF2C367008002FC64F /* DateHelper.swift in Sources */,
 				5383BE8F2C34DF27008940F1 /* Font.swift in Sources */,
+				53716BC82C43EEB50044AD2A /* CMToastMessage.swift in Sources */,
 				536548A32C3EF3B700C2309A /* FavoriteListViewController.swift in Sources */,
 				531786852C23261200ACEF6A /* SheetHeight.swift in Sources */,
 				533A2B442C2C62C700A59340 /* SignRepositoryImpl.swift in Sources */,

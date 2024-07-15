@@ -9,8 +9,15 @@ import UIKit
 import PinLayout
 import FlexLayout
 import SwiftUI
+import RxSwift
+import RxCocoa
 
 final class ListCardViewTableViewCell: UITableViewCell {
+    var post: Post?
+    var tapEvent: ControlEvent<Void> {
+        return favoriteButton.rx.tap
+    }
+    var disposeBag = DisposeBag()
     private let cardContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -22,7 +29,11 @@ final class ListCardViewTableViewCell: UITableViewCell {
     
     private let infoContainer = UIView()
     private let partyNumLabel: UILabel  = UILabel()
-    
+    let favoriteButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "cmFavorite_filled")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        return button
+    }()
     private let postTitleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
@@ -45,6 +56,11 @@ final class ListCardViewTableViewCell: UITableViewCell {
         setUI()
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+    }
+    
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -60,9 +76,13 @@ final class ListCardViewTableViewCell: UITableViewCell {
         return CGSize(width: size.width, height: cardContainerView.frame.height)
     }
     
-    func setupData(_ post: Post) {
-        self.homeTeamImageView.setupTeam(team:  post.homeTeam, isMyTeam: post.writer.team == post.homeTeam)
-        self.awayTeamImageView .setupTeam(team:  post.awayTeam, isMyTeam: post.writer.team == post.awayTeam)
+
+    
+    func setupData(_ post: Post, isFavoriteCell: Bool = false) {
+        self.post = post
+        favoriteButton.isHidden = !isFavoriteCell
+        homeTeamImageView.setupTeam(team:  post.homeTeam, isMyTeam: post.writer.team == post.homeTeam)
+        awayTeamImageView .setupTeam(team:  post.awayTeam, isMyTeam: post.writer.team == post.awayTeam)
         
         //info
         postTitleLabel.text = post.title
@@ -89,14 +109,17 @@ final class ListCardViewTableViewCell: UITableViewCell {
 extension ListCardViewTableViewCell {
     private func setUI() {
         let margin = MainGridSystem.getMargin()
-        addSubview(cardContainerView)
+        contentView.addSubview(cardContainerView)
         
         cardContainerView.flex.direction(.column).paddingTop(20).marginHorizontal(margin).define { flex in
             flex.addItem().direction(.row).width(100%).justifyContent(.start).alignItems(.start).define { flex in
                 flex.addItem(homeTeamImageView).width(50).height(67).marginRight(4)
                 flex.addItem(awayTeamImageView).width(50).height(67).marginRight(16)
                 flex.addItem(infoContainer).direction(.column).justifyContent(.spaceBetween).alignItems(.start).height(67).define { flex in
-                    flex.addItem(partyNumLabel)
+                    flex.addItem().direction(.row).justifyContent(.spaceBetween).width(100%).alignItems(.center).define { flex in
+                        flex.addItem(partyNumLabel)
+                        flex.addItem(favoriteButton).width(20).aspectRatio(1)
+                    }
                     flex.addItem(postTitleLabel).width(100%)
                     flex.addItem(infoLabel)
                 }.grow(1).shrink(1)

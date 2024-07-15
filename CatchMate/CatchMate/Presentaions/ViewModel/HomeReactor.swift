@@ -14,6 +14,7 @@ final class HomeReactor: Reactor {
         case willAppear
         case updateDateFilter(Date?)
         case toggleTeamSelection(Team?)
+        case updateTeamFilter([Team])
     }
     enum Mutation {
         // Action과 State 사이의 다리역할이다.
@@ -52,9 +53,11 @@ final class HomeReactor: Reactor {
                 updatedTeams.append(team)
             }
             return Observable.just(Mutation.setSelectedTeams(updatedTeams))
-
+        case .updateTeamFilter(let teams):
+            return Observable.just(Mutation.setSelectedTeams(teams))
         case .willAppear:
             return Observable.just(Mutation.loadPost(Post.dummyPostData))
+
         }
     }
     

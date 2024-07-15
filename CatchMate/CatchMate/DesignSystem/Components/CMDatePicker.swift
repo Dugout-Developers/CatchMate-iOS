@@ -8,9 +8,10 @@
 import UIKit
 import FlexLayout
 import PinLayout
+import RxSwift
 
 class CMDatePicker: UIView {
-    
+    var _selectedDate = PublishSubject<Date?>()
     private let rootFlexContainer = UIView()
     private let headerView = UIView()
     private let previousButton = UIButton()
@@ -18,7 +19,11 @@ class CMDatePicker: UIView {
     private let titleLabel = UILabel()
     
     private var currentDate = Date()
-    var selectedDate: Date? = Date()
+    var selectedDate: Date? = Date() {
+        didSet {
+            _selectedDate.onNext(selectedDate)
+        }
+    }
     var minimumDate: Date? {
         didSet {
             collectionView.reloadData()
@@ -55,12 +60,11 @@ class CMDatePicker: UIView {
         nextButton.addTarget(self, action: #selector(nextMonthTapped), for: .touchUpInside)
         
         titleLabel.textAlignment = .center
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
         updateTitleLabel()
         
-        headerView.flex.direction(.row).justifyContent(.spaceBetween).alignItems(.center).padding(10).define { (flex) in
+        headerView.flex.direction(.row).justifyContent(.center).alignItems(.center).height(80).padding(10).define { (flex) in
             flex.addItem(previousButton)
-            flex.addItem(titleLabel).grow(1)
+            flex.addItem(titleLabel).marginHorizontal(12)
             flex.addItem(nextButton)
         }
         
@@ -130,6 +134,8 @@ class CMDatePicker: UIView {
         currentDate = calendar.date(byAdding: .month, value: value, to: currentDate) ?? Date()
         updateTitleLabel()
         setupDaysInMonth()
+        titleLabel.flex.markDirty()
+        headerView.flex.layout()
         collectionView.reloadData()
     }
     
@@ -175,6 +181,12 @@ extension CMDatePicker: UICollectionViewDataSource, UICollectionViewDelegate {
         guard let date = date, let selectedDate = selectedDate else { return false }
         let calendar = Calendar.current
         return calendar.isDate(date, inSameDayAs: selectedDate)
+    }
+}
+
+extension Reactive where Base: CMDatePicker {
+    var selectedDate: Observable<Date?> {
+        return base._selectedDate.asObservable()
     }
 }
 

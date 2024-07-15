@@ -10,86 +10,76 @@ import RxSwift
 import SnapKit
 
 class BaseViewController: UIViewController {
+    
     var disposeBag: DisposeBag = DisposeBag()
+    let customNavigationBar = CMNavigationBar()
+    private let navigationBarHeight: CGFloat = 44.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViewController()
-        setupBackbutton()
+        setupCustomNavigationBar()
+        setupbackButton()
         view.backgroundColor = .cmBackgroundColor
-//        navigationItem.backBarButtonItem?.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.tabBarController?.tabBar.isHidden = false
+//        setupbackButton()
+        if let tabBarController = tabBarController, tabBarController.selectedIndex != 2 {
+            tabBarController.tabBar.isHidden = false
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+//        tabBarController?.tabBar.isHidden = false
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if additionalSafeAreaInsets.top != navigationBarHeight {
+            additionalSafeAreaInsets.top = navigationBarHeight
+        }
+    }
+    private func setupCustomNavigationBar() {
+        view.addSubview(customNavigationBar)
+        customNavigationBar.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(-navigationBarHeight)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(navigationBarHeight)
+        }
     }
     
     private func setupViewController() {
+        navigationController?.isNavigationBarHidden = true
         view.tappedDismissKeyboard()
-        configNavigationBgColor()
     }
     
-    private let contentHeight: CGFloat = 24
+    private func setupbackButton() {
+        if let navigationController = navigationController, navigationController.viewControllers.count > 1 {
+            customNavigationBar.isBackButtonHidden = false
+            customNavigationBar.setBackButtonAction(target: self, action: #selector(cmBackButtonTapped))
+        } else {
+            customNavigationBar.isBackButtonHidden = true
+        }
+    }
+    
+    @objc private func cmBackButtonTapped() {
+        navigationController?.popViewController(animated: true)
+    }
     
     func setupLeftTitle(_ title: String) {
-        self.navigationItem.leftBarButtonItem = nil
-        let leftViewContainer = UIView()
-        let label = UILabel()
-        label.text = title
-        label.font = .systemFont(ofSize: 20)
-        label.textColor = .cmTextGray
-        leftViewContainer.addSubview(label)
-        label.snp.makeConstraints({ make in
-            make.leading.equalToSuperview().offset(self.navigationItem.backBarButtonItem == nil ? 18 : 12)
-            make.top.bottom.equalToSuperview()
-            make.height.equalTo(contentHeight)
-        })
-        
-        let leftItem = UIBarButtonItem(customView: leftViewContainer)
-        self.navigationItem.leftBarButtonItem = leftItem
+        let titlLabel = UILabel()
+        titlLabel.text = title
+        titlLabel.textColor = .cmHeadLineTextColor
+        titlLabel.applyStyle(textStyle: FontSystem.headline03_medium)
+        customNavigationBar.addLeftItems(items: [titlLabel])
     }
     
     func setupLogo() {
-        self.navigationItem.leftBarButtonItem = nil
-        let leftViewContainer = UIView()
-        let image = UIImage(named: "navigationLogo")
-        let logoView = UIImageView(image: image)
-        
-
-        leftViewContainer.addSubview(logoView)
-        logoView.snp.makeConstraints({ make in
-            make.leading.equalToSuperview().offset(self.navigationItem.backBarButtonItem == nil ? 18 : 12)
-            make.top.bottom.equalToSuperview()
-            make.height.equalTo(contentHeight)
-            make.width.equalTo(image?.getRatio(height: contentHeight) ?? 0)
-        })
-        
-        let leftItem = UIBarButtonItem(customView: leftViewContainer)
-        leftItem.isEnabled = false
-        
-        self.navigationItem.leftBarButtonItem = leftItem
-    }
-    private let containerView = UIView()
-    private func setupBackbutton() {
-        let backImage = UIImageView(image: UIImage(named: "left"))
-        backImage.contentMode = .scaleAspectFit
-        containerView.addSubview(backImage)
-        backImage.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(18)
-            make.height.equalTo(20)
-            make.centerY.equalToSuperview()
-        }
-        
-        let backBarButtonItem = UIBarButtonItem(customView: containerView)
-        navigationItem.backBarButtonItem?.tintColor = .cmHeadLineTextColor
-    }
-    
-    @objc override func backButtonTapped() {
-        navigationController?.popViewController(animated: true)
+        let logoImageView = UIImageView(image: UIImage(named: "navigationLogo"))
+        logoImageView.contentMode = .scaleAspectFit
+        customNavigationBar.addLeftItems(items: [logoImageView])
     }
 }

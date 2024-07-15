@@ -53,18 +53,21 @@ final class SignUpFinishedViewController: BaseViewController, View {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+            }
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupUI()
         bind(reactor: reactor)
-        hideNavigationBackButton()
+        customNavigationBar.isBackButtonHidden = true
+
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        containerView.pin.all()
+        containerView.pin.all(view.pin.safeArea)
         containerView.flex.layout()
     }
     

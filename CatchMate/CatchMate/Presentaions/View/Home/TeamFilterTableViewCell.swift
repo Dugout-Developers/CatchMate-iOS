@@ -19,6 +19,11 @@ final class TeamFilterTableViewCell: UITableViewCell{
             checkTeam()
         }
     }
+    var isUnable: Bool = false {
+        didSet {
+            checkUnable()
+        }
+    }
     private let containerView = UIView()
     private let teamImageView: UIImageView = {
         let imageView = UIImageView()
@@ -28,10 +33,11 @@ final class TeamFilterTableViewCell: UITableViewCell{
     private let teamNameLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 14, weight: .semibold)
-        label.textColor = .black
+        label.textColor = .cmHeadLineTextColor
         label.textAlignment = .left
         return label
     }()
+    
     let checkButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "circle_default")?.withTintColor(.grayScale300, renderingMode: .alwaysOriginal), for: .normal)
@@ -67,12 +73,23 @@ final class TeamFilterTableViewCell: UITableViewCell{
             checkButton.setImage(UIImage(named: "circle_default")?.withTintColor(.grayScale300, renderingMode: .alwaysOriginal), for: .normal)
         }
     }
+    func checkUnable() {
+        if isUnable {
+            checkButton.isEnabled = false
+            teamNameLabel.textColor = .cmNonImportantTextColor
+            self.isClicked = false
+        } else {
+            checkButton.isEnabled = true
+            teamNameLabel.textColor = .cmHeadLineTextColor
+        }
+    }
     
-    func configure(with team: Team, isClicked: Bool) {
+    func configure(with team: Team, isClicked: Bool, isUnable: Bool = false) {
         self.team = team
         self.isClicked = isClicked
         teamImageView.image = team.getLogoImage
         teamNameLabel.text = team.rawValue
+        self.isUnable = isUnable
         teamNameLabel.applyStyle(textStyle: FontSystem.bodyTitle)
     }
 
@@ -88,7 +105,7 @@ final class TeamFilterTableViewCell: UITableViewCell{
 // MARK: - UI
 extension TeamFilterTableViewCell {
     private func setUI() {
-        addSubview(containerView)
+        contentView.addSubview(containerView)
         
         containerView.flex.direction(.row).justifyContent(.spaceBetween).alignContent(.center).padding(10).define { flex in
             flex.addItem(teamImageView).size(50).backgroundColor(.grayScale50).cornerRadius(8)

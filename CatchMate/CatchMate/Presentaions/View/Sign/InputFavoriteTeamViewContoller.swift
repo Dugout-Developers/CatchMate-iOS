@@ -76,7 +76,7 @@ final class InputFavoriteTeamViewContoller: BaseViewController, View {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        scrollView.pin.all()
+        scrollView.pin.all(view.pin.safeArea)
         containerView.pin.top().left().right()
         
         containerView.flex.layout(mode: .adjustHeight)

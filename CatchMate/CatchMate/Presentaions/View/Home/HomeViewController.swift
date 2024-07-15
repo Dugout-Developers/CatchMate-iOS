@@ -48,12 +48,18 @@ final class HomeViewController: BaseViewController, View {
         view.backgroundColor = .cmBackgroundColor
         setupTableView()
         setupUI()
+        setupNavigation()
         setupButton()
         setupLogo()
         bind(reactor: self.reactor)
         filterScrollView.showsHorizontalScrollIndicator = false
     }
-    
+    private func setupNavigation() {
+        let notiButton = UIButton()
+        notiButton.setImage(UIImage(named: "notification")?.withTintColor(.cmHeadLineTextColor, renderingMode: .alwaysOriginal), for: .normal)
+        notiButton.addTarget(self, action: #selector(clickNotiButton), for: .touchUpInside)
+        customNavigationBar.addRightItems(items: [notiButton])
+    }
     private func setupTableView() {
         tableView.register(ListCardViewTableViewCell.self, forCellReuseIdentifier: "ListCardViewTableViewCell")
         tableView.rowHeight = UITableView.automaticDimension
@@ -111,8 +117,12 @@ extension HomeViewController {
         teamFilterButton.addTarget(self, action: #selector(clickFilterButton(_:)), for: .touchUpInside)
     }
     
-    @objc
-    private func clickFilterButton(_ sender: HomeFilterButton) {
+    @objc private func clickNotiButton(_ sender: UIButton) {
+        let notiViewController = NotiViewController()
+        navigationController?.pushViewController(notiViewController, animated: true)
+    }
+    
+    @objc private func clickFilterButton(_ sender: HomeFilterButton) {
         switch sender.filterType {
         case .all:
             print("전체 필터 선택")
