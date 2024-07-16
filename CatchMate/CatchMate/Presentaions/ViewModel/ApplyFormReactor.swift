@@ -1,15 +1,15 @@
 //
-//  PostReactor.swift
+//  ApplyFormReactor.swift
 //  CatchMate
 //
-//  Created by 방유빈 on 7/15/24.
+//  Created by 방유빈 on 7/17/24.
 //
 
 import UIKit
 import RxSwift
 import ReactorKit
 
-final class PostReactor: Reactor {
+final class ApplyFormReactor: Reactor {
     enum Action {
         case loadPostDetails
     }

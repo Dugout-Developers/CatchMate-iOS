@@ -94,6 +94,9 @@
 		53716BD42C4558780044AD2A /* PostReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BD32C4558780044AD2A /* PostReactor.swift */; };
 		53716BD62C4562AB0044AD2A /* TeamPaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BD52C4562AB0044AD2A /* TeamPaddingLabel.swift */; };
 		53716BD82C4564700044AD2A /* DefaultsPaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BD72C4564700044AD2A /* DefaultsPaddingLabel.swift */; };
+		537598062C46C0B0003BD8AE /* ApplyPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537598052C46C0B0003BD8AE /* ApplyPopupViewController.swift */; };
+		537598082C46C3D2003BD8AE /* DefaultsTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537598072C46C3D2003BD8AE /* DefaultsTextView.swift */; };
+		5375980A2C46D6D7003BD8AE /* ApplyFormReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537598092C46D6D7003BD8AE /* ApplyFormReactor.swift */; };
 		5382490E2C2E79A90074B583 /* AppleLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */; };
 		538249102C3139C80074B583 /* LoginUserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */; };
 		538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538249122C3196AD0074B583 /* NaverLoginUseCase.swift */; };
@@ -209,6 +212,9 @@
 		53716BD32C4558780044AD2A /* PostReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostReactor.swift; sourceTree = "<group>"; };
 		53716BD52C4562AB0044AD2A /* TeamPaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamPaddingLabel.swift; sourceTree = "<group>"; };
 		53716BD72C4564700044AD2A /* DefaultsPaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsPaddingLabel.swift; sourceTree = "<group>"; };
+		537598052C46C0B0003BD8AE /* ApplyPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyPopupViewController.swift; sourceTree = "<group>"; };
+		537598072C46C3D2003BD8AE /* DefaultsTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsTextView.swift; sourceTree = "<group>"; };
+		537598092C46D6D7003BD8AE /* ApplyFormReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyFormReactor.swift; sourceTree = "<group>"; };
 		5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginUseCase.swift; sourceTree = "<group>"; };
 		5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUserDefaultsService.swift; sourceTree = "<group>"; };
 		538249122C3196AD0074B583 /* NaverLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverLoginUseCase.swift; sourceTree = "<group>"; };
@@ -465,6 +471,7 @@
 				53716BBF2C400B3E0044AD2A /* FavoriteReactor.swift */,
 				53716BC12C4053430044AD2A /* AddReactor.swift */,
 				53716BD32C4558780044AD2A /* PostReactor.swift */,
+				537598092C46D6D7003BD8AE /* ApplyFormReactor.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -581,6 +588,7 @@
 				53716BC72C43EEB50044AD2A /* CMToastMessage.swift */,
 				53716BD52C4562AB0044AD2A /* TeamPaddingLabel.swift */,
 				53716BD72C4564700044AD2A /* DefaultsPaddingLabel.swift */,
+				537598072C46C3D2003BD8AE /* DefaultsTextView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -624,6 +632,7 @@
 				5317867C2C216CBE00ACEF6A /* NumberPickerViewController.swift */,
 				5317867E2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift */,
 				53716BD12C45567C0044AD2A /* PostDetailViewController.swift */,
+				537598052C46C0B0003BD8AE /* ApplyPopupViewController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -812,6 +821,7 @@
 				531786762C20494500ACEF6A /* HomeRepository.swift in Sources */,
 				536BDDB22C189B230043B1DA /* HomeViewController.swift in Sources */,
 				533A2B362C2BEA3900A59340 /* InputCheerStyleViewController.swift in Sources */,
+				537598062C46C0B0003BD8AE /* ApplyPopupViewController.swift in Sources */,
 				53BE7AD42C369A35002FC64F /* OptionButtonView.swift in Sources */,
 				53716BD82C4564700044AD2A /* DefaultsPaddingLabel.swift in Sources */,
 				536BDDF92C1972880043B1DA /* UserMapper.swift in Sources */,
@@ -819,6 +829,7 @@
 				533A2B2C2C29485E00A59340 /* SignUpViewController.swift in Sources */,
 				53241F4E2C3EE58E00F468E1 /* CMPopupViewController.swift in Sources */,
 				536BDE2D2C1B55080043B1DA /* AddViewController.swift in Sources */,
+				537598082C46C3D2003BD8AE /* DefaultsTextView.swift in Sources */,
 				533A2B462C2C638100A59340 /* KakaoLoginUseCase.swift in Sources */,
 				531786602C1EB24D00ACEF6A /* TeamFilterViewController.swift in Sources */,
 				531786822C21D3F700ACEF6A /* ChatListTableViewCell.swift in Sources */,
@@ -845,6 +856,7 @@
 				533A2B322C2BE7E600A59340 /* CheerStyles.swift in Sources */,
 				531786572C1C8F1900ACEF6A /* UIView+Extension.swift in Sources */,
 				538EB92F2C3FA27600ABA40E /* CMDatePicker.swift in Sources */,
+				5375980A2C46D6D7003BD8AE /* ApplyFormReactor.swift in Sources */,
 				53716BC02C400B3E0044AD2A /* FavoriteReactor.swift in Sources */,
 				536BDDE92C1971C70043B1DA /* SignReactor.swift in Sources */,
 				531786552C1C8E7800ACEF6A /* UIImage+Extension.swift in Sources */,

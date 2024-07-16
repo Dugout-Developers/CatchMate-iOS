@@ -12,6 +12,11 @@ import RxSwift
 import ReactorKit
 
 final class PostDetailViewController: BaseViewController, View {
+    private var isFavorite: Bool = false {
+        didSet {
+            toggleFavoriteButton()
+        }
+    }
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let partyNumberLabel: UILabel = {
@@ -146,10 +151,6 @@ final class PostDetailViewController: BaseViewController, View {
         contentView.flex.layout(mode: .adjustHeight)
         buttonContainer.flex.layout()
         scrollView.contentSize = contentView.frame.size
-        
-        // 디버깅용 출력
-                print("favoriteButton frame: \(favoriteButton.frame)")
-                print("applyButton frame: \(applyButton.frame)")
     }
     
     private func setupNavigation() {
@@ -224,6 +225,14 @@ final class PostDetailViewController: BaseViewController, View {
         label.layer.cornerRadius = 18
         return label
     }
+    
+    private func toggleFavoriteButton() {
+        if isFavorite {
+            favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withTintColor(.cmPrimaryColor, renderingMode: .alwaysOriginal), for: .normal)
+        } else {
+            favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        }
+    }
 }
 
 // MARK: - bind
@@ -233,6 +242,15 @@ extension PostDetailViewController {
             .compactMap{$0}
             .bind(onNext: setupData)
             .disposed(by: disposeBag)
+        
+        favoriteButton.rx.tap
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                vc.isFavorite.toggle()
+            }
+            .disposed(by: disposeBag)
+        
+        
     }
 }
 
