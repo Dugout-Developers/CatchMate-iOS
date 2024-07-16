@@ -90,6 +90,10 @@
 		53716BC82C43EEB50044AD2A /* CMToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BC72C43EEB50044AD2A /* CMToastMessage.swift */; };
 		53716BCD2C44F1250044AD2A /* APIKEY.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 53716BCA2C44F1250044AD2A /* APIKEY.xcconfig */; };
 		53716BCE2C44F1250044AD2A /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53716BCB2C44F1250044AD2A /* APIKeys.plist */; };
+		53716BD22C45567C0044AD2A /* PostDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BD12C45567C0044AD2A /* PostDetailViewController.swift */; };
+		53716BD42C4558780044AD2A /* PostReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BD32C4558780044AD2A /* PostReactor.swift */; };
+		53716BD62C4562AB0044AD2A /* TeamPaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BD52C4562AB0044AD2A /* TeamPaddingLabel.swift */; };
+		53716BD82C4564700044AD2A /* DefaultsPaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BD72C4564700044AD2A /* DefaultsPaddingLabel.swift */; };
 		5382490E2C2E79A90074B583 /* AppleLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */; };
 		538249102C3139C80074B583 /* LoginUserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */; };
 		538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538249122C3196AD0074B583 /* NaverLoginUseCase.swift */; };
@@ -201,6 +205,10 @@
 		53716BC92C44F1250044AD2A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		53716BCA2C44F1250044AD2A /* APIKEY.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = APIKEY.xcconfig; sourceTree = "<group>"; };
 		53716BCB2C44F1250044AD2A /* APIKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
+		53716BD12C45567C0044AD2A /* PostDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailViewController.swift; sourceTree = "<group>"; };
+		53716BD32C4558780044AD2A /* PostReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostReactor.swift; sourceTree = "<group>"; };
+		53716BD52C4562AB0044AD2A /* TeamPaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamPaddingLabel.swift; sourceTree = "<group>"; };
+		53716BD72C4564700044AD2A /* DefaultsPaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsPaddingLabel.swift; sourceTree = "<group>"; };
 		5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginUseCase.swift; sourceTree = "<group>"; };
 		5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUserDefaultsService.swift; sourceTree = "<group>"; };
 		538249122C3196AD0074B583 /* NaverLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverLoginUseCase.swift; sourceTree = "<group>"; };
@@ -456,6 +464,7 @@
 				536BDE392C1C1F210043B1DA /* HomeReactor.swift */,
 				53716BBF2C400B3E0044AD2A /* FavoriteReactor.swift */,
 				53716BC12C4053430044AD2A /* AddReactor.swift */,
+				53716BD32C4558780044AD2A /* PostReactor.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -570,6 +579,8 @@
 				538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */,
 				53716BC32C42B72F0044AD2A /* CMNavigationBar.swift */,
 				53716BC72C43EEB50044AD2A /* CMToastMessage.swift */,
+				53716BD52C4562AB0044AD2A /* TeamPaddingLabel.swift */,
+				53716BD72C4564700044AD2A /* DefaultsPaddingLabel.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -612,6 +623,7 @@
 				5317866C2C200EDB00ACEF6A /* AllFilterViewController.swift */,
 				5317867C2C216CBE00ACEF6A /* NumberPickerViewController.swift */,
 				5317867E2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift */,
+				53716BD12C45567C0044AD2A /* PostDetailViewController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -801,6 +813,7 @@
 				536BDDB22C189B230043B1DA /* HomeViewController.swift in Sources */,
 				533A2B362C2BEA3900A59340 /* InputCheerStyleViewController.swift in Sources */,
 				53BE7AD42C369A35002FC64F /* OptionButtonView.swift in Sources */,
+				53716BD82C4564700044AD2A /* DefaultsPaddingLabel.swift in Sources */,
 				536BDDF92C1972880043B1DA /* UserMapper.swift in Sources */,
 				531786782C20498800ACEF6A /* Post.swift in Sources */,
 				533A2B2C2C29485E00A59340 /* SignUpViewController.swift in Sources */,
@@ -817,10 +830,12 @@
 				536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */,
 				53716BC22C4053430044AD2A /* AddReactor.swift in Sources */,
 				536BDE292C1B53860043B1DA /* Color.swift in Sources */,
+				53716BD62C4562AB0044AD2A /* TeamPaddingLabel.swift in Sources */,
 				5317866D2C200EDB00ACEF6A /* AllFilterViewController.swift in Sources */,
 				533A2B2A2C2859D600A59340 /* CMImageButton.swift in Sources */,
 				536BDE2F2C1B55240043B1DA /* NotiViewController.swift in Sources */,
 				533A2B382C2BFD4B00A59340 /* SignUpFinishedViewController.swift in Sources */,
+				53716BD42C4558780044AD2A /* PostReactor.swift in Sources */,
 				536BDE362C1BEC870043B1DA /* ListCardViewTableViewCell.swift in Sources */,
 				536BDDFF2C1972D30043B1DA /* UserDataSource.swift in Sources */,
 				53BE7AD22C367181002FC64F /* Date+Extension.swift in Sources */,
@@ -839,6 +854,7 @@
 				53716BC42C42B72F0044AD2A /* CMNavigationBar.swift in Sources */,
 				533A2B232C27FF6A00A59340 /* CMTextView.swift in Sources */,
 				536BDE2B2C1B54C80043B1DA /* ChatListViewController.swift in Sources */,
+				53716BD22C45567C0044AD2A /* PostDetailViewController.swift in Sources */,
 				533A2B302C2AC5C400A59340 /* InputFavoriteTeamViewContoller.swift in Sources */,
 				536BDE312C1B55440043B1DA /* MyPageViewController.swift in Sources */,
 				531786682C20048B00ACEF6A /* CMPickerTextField.swift in Sources */,

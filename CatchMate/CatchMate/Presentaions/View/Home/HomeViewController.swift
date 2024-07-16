@@ -42,6 +42,7 @@ final class HomeViewController: BaseViewController, View {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         viewWillAppearPublisher.onNext(())
+        reactor.action.onNext(.selectPost(nil))
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,6 +80,23 @@ extension HomeViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
+        tableView.rx.itemSelected
+            .map { indexPath in
+                let post = reactor.currentState.posts[indexPath.row]
+                return HomeReactor.Action.selectPost(post)
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.selectedPost}
+            .distinctUntilChanged()
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, post in
+                let postDetailVC = PostDetailViewController(postID: post.id)
+                vc.navigationController?.pushViewController(postDetailVC, animated: true)
+            }
+            .disposed(by: disposeBag)
         reactor.state.map{$0.dateFilterValue}
             .withUnretained(self)
             .bind { vc, date in
@@ -103,6 +121,7 @@ extension HomeViewController {
                 vc.updateFilterContainerLayout()
             }
             .disposed(by: disposeBag)
+    
     }
     private func updateFilterContainerLayout() {
         filterContainerView.flex.layout(mode: .adjustWidth)
