@@ -97,6 +97,7 @@
 		537598062C46C0B0003BD8AE /* ApplyPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537598052C46C0B0003BD8AE /* ApplyPopupViewController.swift */; };
 		537598082C46C3D2003BD8AE /* DefaultsTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537598072C46C3D2003BD8AE /* DefaultsTextView.swift */; };
 		5375980A2C46D6D7003BD8AE /* ApplyFormReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537598092C46D6D7003BD8AE /* ApplyFormReactor.swift */; };
+		5375980C2C46DC45003BD8AE /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375980B2C46DC45003BD8AE /* ChatRoomViewController.swift */; };
 		5382490E2C2E79A90074B583 /* AppleLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */; };
 		538249102C3139C80074B583 /* LoginUserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */; };
 		538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538249122C3196AD0074B583 /* NaverLoginUseCase.swift */; };
@@ -215,6 +216,7 @@
 		537598052C46C0B0003BD8AE /* ApplyPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyPopupViewController.swift; sourceTree = "<group>"; };
 		537598072C46C3D2003BD8AE /* DefaultsTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsTextView.swift; sourceTree = "<group>"; };
 		537598092C46D6D7003BD8AE /* ApplyFormReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyFormReactor.swift; sourceTree = "<group>"; };
+		5375980B2C46DC45003BD8AE /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
 		5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginUseCase.swift; sourceTree = "<group>"; };
 		5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUserDefaultsService.swift; sourceTree = "<group>"; };
 		538249122C3196AD0074B583 /* NaverLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverLoginUseCase.swift; sourceTree = "<group>"; };
@@ -314,6 +316,7 @@
 			children = (
 				536BDE2A2C1B54C80043B1DA /* ChatListViewController.swift */,
 				531786812C21D3F700ACEF6A /* ChatListTableViewCell.swift */,
+				5375980B2C46DC45003BD8AE /* ChatRoomViewController.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -853,6 +856,7 @@
 				536BDDEC2C19720E0043B1DA /* User.swift in Sources */,
 				53241F3C2C3C517600F468E1 /* GridSystem.swift in Sources */,
 				533A2B422C2C624D00A59340 /* SignRepository.swift in Sources */,
+				5375980C2C46DC45003BD8AE /* ChatRoomViewController.swift in Sources */,
 				533A2B322C2BE7E600A59340 /* CheerStyles.swift in Sources */,
 				531786572C1C8F1900ACEF6A /* UIView+Extension.swift in Sources */,
 				538EB92F2C3FA27600ABA40E /* CMDatePicker.swift in Sources */,
