@@ -194,7 +194,7 @@ final class PostDetailViewController: BaseViewController, View {
             addInfoText.textColor = .cmNonImportantTextColor
         }
         if post.preferAge.isEmpty {
-            ageOptionLabel.append(makePreferAgeLabel(ageText: "성별무관"))
+            ageOptionLabel.append(makePreferAgeLabel(ageText: "전연령"))
         } else {
             post.preferAge.forEach { age in
                 ageOptionLabel.append(makePreferAgeLabel(ageText: String(age)))
@@ -233,14 +233,6 @@ final class PostDetailViewController: BaseViewController, View {
         label.layer.cornerRadius = 18
         return label
     }
-    
-//    private func toggleFavoriteButton() {
-//        if isFavorite {
-//            favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withTintColor(.cmPrimaryColor, renderingMode: .alwaysOriginal), for: .normal)
-//        } else {
-//            favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withRenderingMode(.alwaysOriginal), for: .normal)
-//        }
-//    }
 }
 
 // MARK: - bind
@@ -248,6 +240,7 @@ extension PostDetailViewController {
     func bind(reactor: PostReactor) {
         reactor.state.map{ $0.post }
             .compactMap{$0}
+            .distinctUntilChanged()
             .bind(onNext: setupData)
             .disposed(by: disposeBag)
         

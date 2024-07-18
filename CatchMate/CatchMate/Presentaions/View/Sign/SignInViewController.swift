@@ -14,7 +14,6 @@ import PinLayout
 
 final class SignInViewController: BaseViewController, View {
     var reactor: SignReactor
-    private let viewWillAppearPublisher = PublishSubject<Void>().asObserver()
     private let containerView = UIView()
     private let logoContainerView = UIView()
     private let logoImageView: UIImageView = {
@@ -71,7 +70,7 @@ final class SignInViewController: BaseViewController, View {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewWillAppearPublisher.onNext(())
+        reactor.action.onNext(.reloadSignInView)
     }
     
     override func viewDidLayoutSubviews() {
@@ -93,11 +92,6 @@ final class SignInViewController: BaseViewController, View {
 // MARK: - Bind
 extension SignInViewController {
     func bind(reactor: SignReactor) {
-        viewWillAppearPublisher
-            .map{ Reactor.Action.reloadSignInView }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
         kakaoLoginButton.rx.tap
             .map{ Reactor.Action.kakaoLogin }
             .bind(to: reactor.action)
@@ -124,6 +118,7 @@ extension SignInViewController {
             .distinctUntilChanged()
             .withUnretained(self)
             .subscribe(onNext: { vc, state in
+                print("State changed: \(state)")  // 로그 추가
                 if state {
                     vc.pushNextView()
                 }
