@@ -34,6 +34,7 @@ final class SignReactor: Reactor {
         case updateTeam(Team)
         case updateCheerStyle(CheerStyles?)
         case signUpUser
+        case reloadSignInView
     }
     enum Mutation {
         case getSNSLoginInfo(LoginModel)
@@ -49,6 +50,7 @@ final class SignReactor: Reactor {
         case validateSignUp
         case validateForm
         case validateTeam
+        case resetLoginModel
     }
     struct State {
         var loginModel: LoginModel?
@@ -133,6 +135,8 @@ final class SignReactor: Reactor {
                 .catch { error in
                     Observable.just(Mutation.setError(error))
                 }
+        case .reloadSignInView:
+            return Observable.just(Mutation.resetLoginModel)
         }
     }
     
@@ -195,6 +199,8 @@ final class SignReactor: Reactor {
             if let birth = newState.loginModel?.birth {
                 newState.birth = birth
             }
+        case .resetLoginModel:
+            newState.loginModel = nil
         }
         return newState
     }

@@ -167,4 +167,8 @@ final class ListTeamImageView: UIView {
             flex.addItem(imageView).width(100%).aspectRatio(1)
         }
     }
+    
+    func setBacgroundColor(_ color: UIColor) {
+        containerView.backgroundColor = color
+    }
 }

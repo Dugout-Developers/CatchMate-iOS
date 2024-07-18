@@ -14,7 +14,6 @@ extension UIViewController {
     
     func showToast(message: String, relativeTo view: UIView, using layoutLibrary: LayoutLibrary, anchorPosition: AnchorPosition) {
         let toastLabel = CMToastMessageLabel(message: message)
-        let labelWidth = ButtonGridSystem.getGridSystem(totalWidht: Screen.width, startIndex: 1, columnCount: 5).length
         
         // 토스트 메시지 레이블을 뷰에 추가
         self.view.addSubview(toastLabel)

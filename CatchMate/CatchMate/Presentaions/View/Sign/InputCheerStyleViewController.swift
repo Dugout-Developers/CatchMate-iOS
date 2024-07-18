@@ -74,6 +74,7 @@ final class InputCheerStyleViewController: BaseViewController, View {
         setupView()
         setupUI()
         setupButton()
+        setupNavigation()
         bind(reactor: reactor)
     }
     
@@ -84,6 +85,22 @@ final class InputCheerStyleViewController: BaseViewController, View {
         
         containerView.flex.layout(mode: .adjustHeight)
         scrollView.contentSize = containerView.frame.size
+    }
+    
+    private func setupNavigation() {
+        let indicatorImage = UIImage(named: "indicator03")
+        let indicatorImageView = UIImageView(image: indicatorImage)
+        indicatorImageView.contentMode = .scaleAspectFit
+        
+        indicatorImageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // UIImageView의 높이 제약 조건을 설정
+        NSLayoutConstraint.activate([
+            indicatorImageView.heightAnchor.constraint(equalToConstant: 6),
+            indicatorImageView.widthAnchor.constraint(equalToConstant: indicatorImage?.getRatio(height: 6) ?? 30.0) // width도 설정해주는 것이 좋습니다.
+        ])
+        
+        customNavigationBar.addRightItems(items: [indicatorImageView])
     }
     
     private func setupView() {

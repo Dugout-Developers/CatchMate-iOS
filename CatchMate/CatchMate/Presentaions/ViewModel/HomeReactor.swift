@@ -15,6 +15,7 @@ final class HomeReactor: Reactor {
         case updateDateFilter(Date?)
         case toggleTeamSelection(Team?)
         case updateTeamFilter([Team])
+        case selectPost(Post?)
     }
     enum Mutation {
         // Action과 State 사이의 다리역할이다.
@@ -22,12 +23,14 @@ final class HomeReactor: Reactor {
         case loadPost([Post])
         case setDateFilter(Date?)
         case setSelectedTeams([Team])
+        case setSelectedPost(Post?)
     }
     struct State {
         // View의 state를 관리한다.
         var posts: [Post] = []
         var dateFilterValue: Date?
         var selectedTeams: [Team] = []
+        var selectedPost: Post?
         var error: Error?
     }
     
@@ -58,6 +61,8 @@ final class HomeReactor: Reactor {
         case .willAppear:
             return Observable.just(Mutation.loadPost(Post.dummyPostData))
 
+        case .selectPost(let post):
+            return Observable.just(Mutation.setSelectedPost(post))
         }
     }
     
@@ -70,6 +75,8 @@ final class HomeReactor: Reactor {
             newState.selectedTeams = selectedTeams
         case .loadPost(let posts):
             newState.posts = posts
+        case .setSelectedPost(let post):
+            newState.selectedPost = post
         }
         return newState
     }

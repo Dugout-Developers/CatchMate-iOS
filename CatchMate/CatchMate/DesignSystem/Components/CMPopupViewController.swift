@@ -74,10 +74,6 @@ final class CMPopupViewController: UIViewController {
         commonButton.setTitle(commonButtonText, for: .normal)
         commonButton.setTitleColor(.cmHeadLineTextColor, for: .normal)
         commonButton.applyStyle(textStyle: FontSystem.body02_medium)
-        
-//        importantButton.flex.markDirty()
-//        commonButton.flex.markDirty()
-//        dimView.flex.layout()
     }
     private func setupButtons() {
         importantButton.addTarget(self, action: #selector(clickedImportantButton), for: .touchUpInside)

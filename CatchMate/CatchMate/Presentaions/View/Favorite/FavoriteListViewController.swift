@@ -13,8 +13,29 @@ import SnapKit
 final class FavoriteListViewController: BaseViewController ,View {
     private let tableView = UITableView()
     private let reactor: FavoriteReactor
-    private let viewWillAppearPublisher = PublishSubject<Void>().asObserver()
-
+    private let emptyViewContainer = UIView()
+    private let imageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "EmptyDisable"))
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    private let emptyTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "찜한 게시글이 없어요"
+        label.textColor = .cmHeadLineTextColor
+        label.applyStyle(textStyle: FontSystem.headline03_semiBold)
+        return label
+    }()
+    private let emptySubLabel: UILabel = {
+        let label = UILabel()
+        label.text = "야구 팬들이 올린 다양한 글을 둘러보고\n마음에 드는 직관 글을 저장해보세요!"
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.textColor = .cmNonImportantTextColor
+        label.applyStyle(textStyle: FontSystem.contents)
+        return label
+    }()
+    
     init(reactor: FavoriteReactor) {
         self.reactor = reactor
         super.init(nibName: nil, bundle: nil)
@@ -26,7 +47,7 @@ final class FavoriteListViewController: BaseViewController ,View {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewWillAppearPublisher.onNext(())
+        reactor.action.onNext(.loadFavoritePost)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +55,7 @@ final class FavoriteListViewController: BaseViewController ,View {
         setupTableview()
         setupUI()
         bind(reactor: reactor)
+        reactor.action.onNext(.loadFavoritePost)
     }
     
     private func setupTableview() {
@@ -45,9 +67,22 @@ final class FavoriteListViewController: BaseViewController ,View {
     }
     
     func bind(reactor: FavoriteReactor) {
-        viewWillAppearPublisher
-            .map { Reactor.Action.loadFavoritePost }
+        tableView.rx.itemSelected
+            .map { indexPath in
+                let post = reactor.currentState.favoritePost[indexPath.row]
+                return Reactor.Action.selectPost(post)
+            }
             .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.selectedPost}
+            .distinctUntilChanged()
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, post in
+                let postDetailVC = PostDetailViewController(postID: post.id)
+                vc.navigationController?.pushViewController(postDetailVC, animated: true)
+            }
             .disposed(by: disposeBag)
         
         reactor.state.map{$0.favoritePost}
@@ -66,13 +101,47 @@ final class FavoriteListViewController: BaseViewController ,View {
                     .disposed(by: cell.disposeBag)
             }
             .disposed(by: disposeBag)
+        reactor.state.map{$0.favoritePost.count == 0}
+            .withUnretained(self)
+            .subscribe { vc, isEmpty in
+                vc.changeView(isEmpty)
+            }
+            .disposed(by: disposeBag)
         
     }
     
+    private func changeView(_ isEmpty: Bool) {
+        if isEmpty {
+            tableView.isHidden = true
+            emptyViewContainer.isHidden = false
+        } else {
+            tableView.isHidden = false
+            emptyViewContainer.isHidden = true
+        }
+    }
+    
     private func setupUI() {
-        view.addSubview(tableView)
+        view.addSubviews(views: [tableView, emptyViewContainer])
         tableView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        emptyViewContainer.addSubviews(views: [imageView, emptyTitleLabel, emptySubLabel])
+        emptyViewContainer.snp.makeConstraints { make in
+            make.center.equalTo(view.safeAreaLayoutGuide)
+        }
+        imageView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.size.equalTo(88)
+        }
+        emptyTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(imageView.snp.bottom).offset(48)
+            make.centerX.equalToSuperview()
+        }
+        emptySubLabel.snp.makeConstraints { make in
+            make.top.equalTo(emptyTitleLabel.snp.bottom).offset(20)
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
     }
 }

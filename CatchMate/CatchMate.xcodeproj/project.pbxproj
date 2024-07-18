@@ -31,8 +31,6 @@
 		531786852C23261200ACEF6A /* SheetHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786842C23261200ACEF6A /* SheetHeight.swift */; };
 		53241F3C2C3C517600F468E1 /* GridSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F3B2C3C517600F468E1 /* GridSystem.swift */; };
 		53241F3E2C3C589100F468E1 /* DesignAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */; };
-		53241F482C3D879200F468E1 /* APIKEY.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 53241F452C3D879100F468E1 /* APIKEY.xcconfig */; };
-		53241F492C3D879200F468E1 /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53241F462C3D879200F468E1 /* APIKeys.plist */; };
 		53241F4E2C3EE58E00F468E1 /* CMPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */; };
 		533A2B232C27FF6A00A59340 /* CMTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B222C27FF6A00A59340 /* CMTextView.swift */; };
 		533A2B252C280E0500A59340 /* CMDefaultFilledButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B242C280E0500A59340 /* CMDefaultFilledButton.swift */; };
@@ -90,6 +88,16 @@
 		53716BC42C42B72F0044AD2A /* CMNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BC32C42B72F0044AD2A /* CMNavigationBar.swift */; };
 		53716BC62C42D19A0044AD2A /* PlaceFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BC52C42D19A0044AD2A /* PlaceFilterViewController.swift */; };
 		53716BC82C43EEB50044AD2A /* CMToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BC72C43EEB50044AD2A /* CMToastMessage.swift */; };
+		53716BCD2C44F1250044AD2A /* APIKEY.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 53716BCA2C44F1250044AD2A /* APIKEY.xcconfig */; };
+		53716BCE2C44F1250044AD2A /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53716BCB2C44F1250044AD2A /* APIKeys.plist */; };
+		53716BD22C45567C0044AD2A /* PostDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BD12C45567C0044AD2A /* PostDetailViewController.swift */; };
+		53716BD42C4558780044AD2A /* PostReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BD32C4558780044AD2A /* PostReactor.swift */; };
+		53716BD62C4562AB0044AD2A /* TeamPaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BD52C4562AB0044AD2A /* TeamPaddingLabel.swift */; };
+		53716BD82C4564700044AD2A /* DefaultsPaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BD72C4564700044AD2A /* DefaultsPaddingLabel.swift */; };
+		537598062C46C0B0003BD8AE /* ApplyPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537598052C46C0B0003BD8AE /* ApplyPopupViewController.swift */; };
+		537598082C46C3D2003BD8AE /* DefaultsTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537598072C46C3D2003BD8AE /* DefaultsTextView.swift */; };
+		5375980A2C46D6D7003BD8AE /* ApplyFormReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537598092C46D6D7003BD8AE /* ApplyFormReactor.swift */; };
+		5375980C2C46DC45003BD8AE /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375980B2C46DC45003BD8AE /* ChatRoomViewController.swift */; };
 		5382490E2C2E79A90074B583 /* AppleLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */; };
 		538249102C3139C80074B583 /* LoginUserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */; };
 		538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538249122C3196AD0074B583 /* NaverLoginUseCase.swift */; };
@@ -102,6 +110,7 @@
 		53BE7ACF2C367008002FC64F /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7ACE2C367008002FC64F /* DateHelper.swift */; };
 		53BE7AD22C367181002FC64F /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7AD12C367181002FC64F /* Date+Extension.swift */; };
 		53BE7AD42C369A35002FC64F /* OptionButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7AD32C369A35002FC64F /* OptionButtonView.swift */; };
+		53F1E8C62C47A46400A962F3 /* Apply.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F1E8C52C47A46400A962F3 /* Apply.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -146,9 +155,6 @@
 		531786842C23261200ACEF6A /* SheetHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetHeight.swift; sourceTree = "<group>"; };
 		53241F3B2C3C517600F468E1 /* GridSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSystem.swift; sourceTree = "<group>"; };
 		53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DesignAssets.xcassets; sourceTree = "<group>"; };
-		53241F452C3D879100F468E1 /* APIKEY.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = APIKEY.xcconfig; sourceTree = "<group>"; };
-		53241F462C3D879200F468E1 /* APIKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
-		53241F472C3D879200F468E1 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMPopupViewController.swift; sourceTree = "<group>"; };
 		533A2B222C27FF6A00A59340 /* CMTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMTextView.swift; sourceTree = "<group>"; };
 		533A2B242C280E0500A59340 /* CMDefaultFilledButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMDefaultFilledButton.swift; sourceTree = "<group>"; };
@@ -201,6 +207,17 @@
 		53716BC32C42B72F0044AD2A /* CMNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMNavigationBar.swift; sourceTree = "<group>"; };
 		53716BC52C42D19A0044AD2A /* PlaceFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceFilterViewController.swift; sourceTree = "<group>"; };
 		53716BC72C43EEB50044AD2A /* CMToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMToastMessage.swift; sourceTree = "<group>"; };
+		53716BC92C44F1250044AD2A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		53716BCA2C44F1250044AD2A /* APIKEY.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = APIKEY.xcconfig; sourceTree = "<group>"; };
+		53716BCB2C44F1250044AD2A /* APIKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
+		53716BD12C45567C0044AD2A /* PostDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailViewController.swift; sourceTree = "<group>"; };
+		53716BD32C4558780044AD2A /* PostReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostReactor.swift; sourceTree = "<group>"; };
+		53716BD52C4562AB0044AD2A /* TeamPaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamPaddingLabel.swift; sourceTree = "<group>"; };
+		53716BD72C4564700044AD2A /* DefaultsPaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsPaddingLabel.swift; sourceTree = "<group>"; };
+		537598052C46C0B0003BD8AE /* ApplyPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyPopupViewController.swift; sourceTree = "<group>"; };
+		537598072C46C3D2003BD8AE /* DefaultsTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsTextView.swift; sourceTree = "<group>"; };
+		537598092C46D6D7003BD8AE /* ApplyFormReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyFormReactor.swift; sourceTree = "<group>"; };
+		5375980B2C46DC45003BD8AE /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
 		5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginUseCase.swift; sourceTree = "<group>"; };
 		5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUserDefaultsService.swift; sourceTree = "<group>"; };
 		538249122C3196AD0074B583 /* NaverLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverLoginUseCase.swift; sourceTree = "<group>"; };
@@ -212,6 +229,7 @@
 		53BE7ACE2C367008002FC64F /* DateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
 		53BE7AD12C367181002FC64F /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		53BE7AD32C369A35002FC64F /* OptionButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionButtonView.swift; sourceTree = "<group>"; };
+		53F1E8C52C47A46400A962F3 /* Apply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Apply.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -300,6 +318,7 @@
 			children = (
 				536BDE2A2C1B54C80043B1DA /* ChatListViewController.swift */,
 				531786812C21D3F700ACEF6A /* ChatListTableViewCell.swift */,
+				5375980B2C46DC45003BD8AE /* ChatRoomViewController.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -381,9 +400,9 @@
 		536BDDDD2C1969370043B1DA /* APP */ = {
 			isa = PBXGroup;
 			children = (
-				53241F452C3D879100F468E1 /* APIKEY.xcconfig */,
-				53241F462C3D879200F468E1 /* APIKeys.plist */,
-				53241F472C3D879200F468E1 /* Info.plist */,
+				53716BCA2C44F1250044AD2A /* APIKEY.xcconfig */,
+				53716BCB2C44F1250044AD2A /* APIKeys.plist */,
+				53716BC92C44F1250044AD2A /* Info.plist */,
 				536BDDAD2C189B230043B1DA /* AppDelegate.swift */,
 				536BDDAF2C189B230043B1DA /* SceneDelegate.swift */,
 			);
@@ -456,6 +475,8 @@
 				536BDE392C1C1F210043B1DA /* HomeReactor.swift */,
 				53716BBF2C400B3E0044AD2A /* FavoriteReactor.swift */,
 				53716BC12C4053430044AD2A /* AddReactor.swift */,
+				53716BD32C4558780044AD2A /* PostReactor.swift */,
+				537598092C46D6D7003BD8AE /* ApplyFormReactor.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -478,6 +499,7 @@
 				536BDDEB2C19720E0043B1DA /* User.swift */,
 				531786772C20498800ACEF6A /* Post.swift */,
 				533A2B312C2BE7E600A59340 /* CheerStyles.swift */,
+				53F1E8C52C47A46400A962F3 /* Apply.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -570,6 +592,9 @@
 				538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */,
 				53716BC32C42B72F0044AD2A /* CMNavigationBar.swift */,
 				53716BC72C43EEB50044AD2A /* CMToastMessage.swift */,
+				53716BD52C4562AB0044AD2A /* TeamPaddingLabel.swift */,
+				53716BD72C4564700044AD2A /* DefaultsPaddingLabel.swift */,
+				537598072C46C3D2003BD8AE /* DefaultsTextView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -612,6 +637,8 @@
 				5317866C2C200EDB00ACEF6A /* AllFilterViewController.swift */,
 				5317867C2C216CBE00ACEF6A /* NumberPickerViewController.swift */,
 				5317867E2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift */,
+				537598052C46C0B0003BD8AE /* ApplyPopupViewController.swift */,
+				53716BD12C45567C0044AD2A /* PostDetailViewController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -769,9 +796,9 @@
 			files = (
 				53241F3E2C3C589100F468E1 /* DesignAssets.xcassets in Resources */,
 				5383BE902C34ECD1008940F1 /* PretendardVariable.ttf in Resources */,
+				53716BCE2C44F1250044AD2A /* APIKeys.plist in Resources */,
 				536BDDB72C189B240043B1DA /* Assets.xcassets in Resources */,
-				53241F492C3D879200F468E1 /* APIKeys.plist in Resources */,
-				53241F482C3D879200F468E1 /* APIKEY.xcconfig in Resources */,
+				53716BCD2C44F1250044AD2A /* APIKEY.xcconfig in Resources */,
 				536BDDBA2C189B240043B1DA /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -800,12 +827,15 @@
 				531786762C20494500ACEF6A /* HomeRepository.swift in Sources */,
 				536BDDB22C189B230043B1DA /* HomeViewController.swift in Sources */,
 				533A2B362C2BEA3900A59340 /* InputCheerStyleViewController.swift in Sources */,
+				537598062C46C0B0003BD8AE /* ApplyPopupViewController.swift in Sources */,
 				53BE7AD42C369A35002FC64F /* OptionButtonView.swift in Sources */,
+				53716BD82C4564700044AD2A /* DefaultsPaddingLabel.swift in Sources */,
 				536BDDF92C1972880043B1DA /* UserMapper.swift in Sources */,
 				531786782C20498800ACEF6A /* Post.swift in Sources */,
 				533A2B2C2C29485E00A59340 /* SignUpViewController.swift in Sources */,
 				53241F4E2C3EE58E00F468E1 /* CMPopupViewController.swift in Sources */,
 				536BDE2D2C1B55080043B1DA /* AddViewController.swift in Sources */,
+				537598082C46C3D2003BD8AE /* DefaultsTextView.swift in Sources */,
 				533A2B462C2C638100A59340 /* KakaoLoginUseCase.swift in Sources */,
 				531786602C1EB24D00ACEF6A /* TeamFilterViewController.swift in Sources */,
 				531786822C21D3F700ACEF6A /* ChatListTableViewCell.swift in Sources */,
@@ -817,19 +847,23 @@
 				536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */,
 				53716BC22C4053430044AD2A /* AddReactor.swift in Sources */,
 				536BDE292C1B53860043B1DA /* Color.swift in Sources */,
+				53716BD62C4562AB0044AD2A /* TeamPaddingLabel.swift in Sources */,
 				5317866D2C200EDB00ACEF6A /* AllFilterViewController.swift in Sources */,
 				533A2B2A2C2859D600A59340 /* CMImageButton.swift in Sources */,
 				536BDE2F2C1B55240043B1DA /* NotiViewController.swift in Sources */,
 				533A2B382C2BFD4B00A59340 /* SignUpFinishedViewController.swift in Sources */,
+				53716BD42C4558780044AD2A /* PostReactor.swift in Sources */,
 				536BDE362C1BEC870043B1DA /* ListCardViewTableViewCell.swift in Sources */,
 				536BDDFF2C1972D30043B1DA /* UserDataSource.swift in Sources */,
 				53BE7AD22C367181002FC64F /* Date+Extension.swift in Sources */,
 				536BDDEC2C19720E0043B1DA /* User.swift in Sources */,
 				53241F3C2C3C517600F468E1 /* GridSystem.swift in Sources */,
 				533A2B422C2C624D00A59340 /* SignRepository.swift in Sources */,
+				5375980C2C46DC45003BD8AE /* ChatRoomViewController.swift in Sources */,
 				533A2B322C2BE7E600A59340 /* CheerStyles.swift in Sources */,
 				531786572C1C8F1900ACEF6A /* UIView+Extension.swift in Sources */,
 				538EB92F2C3FA27600ABA40E /* CMDatePicker.swift in Sources */,
+				5375980A2C46D6D7003BD8AE /* ApplyFormReactor.swift in Sources */,
 				53716BC02C400B3E0044AD2A /* FavoriteReactor.swift in Sources */,
 				536BDDE92C1971C70043B1DA /* SignReactor.swift in Sources */,
 				531786552C1C8E7800ACEF6A /* UIImage+Extension.swift in Sources */,
@@ -839,6 +873,7 @@
 				53716BC42C42B72F0044AD2A /* CMNavigationBar.swift in Sources */,
 				533A2B232C27FF6A00A59340 /* CMTextView.swift in Sources */,
 				536BDE2B2C1B54C80043B1DA /* ChatListViewController.swift in Sources */,
+				53716BD22C45567C0044AD2A /* PostDetailViewController.swift in Sources */,
 				533A2B302C2AC5C400A59340 /* InputFavoriteTeamViewContoller.swift in Sources */,
 				536BDE312C1B55440043B1DA /* MyPageViewController.swift in Sources */,
 				531786682C20048B00ACEF6A /* CMPickerTextField.swift in Sources */,
@@ -847,6 +882,7 @@
 				536BDDF62C1972740043B1DA /* UserDTO.swift in Sources */,
 				5383BE8D2C34D595008940F1 /* FontUtility.swift in Sources */,
 				531786712C202EF500ACEF6A /* DIContainerService.swift in Sources */,
+				53F1E8C62C47A46400A962F3 /* Apply.swift in Sources */,
 				533A2B3F2C2C5DBC00A59340 /* SNSLoginResponse.swift in Sources */,
 				533A2B252C280E0500A59340 /* CMDefaultFilledButton.swift in Sources */,
 				533A2B2E2C29B56200A59340 /* CMDefaultBorderedButton.swift in Sources */,
