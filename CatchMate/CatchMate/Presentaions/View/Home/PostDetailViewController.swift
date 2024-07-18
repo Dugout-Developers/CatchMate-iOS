@@ -138,6 +138,7 @@ final class PostDetailViewController: BaseViewController, View {
         super.viewDidLoad()
         bind(reactor: reactor)
         reactor.action.onNext(.loadPostDetails)
+//        reactor.action.onNext(.loadIsApplied)
         setupUI()
         setupNavigation()
         setTextStyle()
@@ -242,15 +243,58 @@ extension PostDetailViewController {
             .compactMap{$0}
             .bind(onNext: setupData)
             .disposed(by: disposeBag)
-        
+
         favoriteButton.rx.tap
             .withUnretained(self)
             .subscribe { vc, _ in
                 vc.isFavorite.toggle()
             }
             .disposed(by: disposeBag)
+        applyButton.rx.tap
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                guard let post = vc.reactor.currentState.post else { return }
+                let applyVC = ApplyPopupViewController(post: post, reactor: reactor)
+                applyVC.modalPresentationStyle = .overFullScreen
+                applyVC.modalTransitionStyle = .crossDissolve
+                vc.present(applyVC, animated: true)
+            }
+            .disposed(by: disposeBag)
         
+        reactor.state.map{$0.isApplied}
+            .withUnretained(self)
+            .subscribe(onNext: { vc, state in
+                vc.updateApplyButton(state)
+            })
+            .disposed(by: disposeBag)
         
+        reactor.state.map{$0.isFinished}
+            .withUnretained(self)
+            .subscribe(onNext: { vc, state in
+                vc.updateApplyButtonFinished(state)
+            })
+            .disposed(by: disposeBag)
+        
+    }
+    
+    private func updateApplyButton(_ state: Bool) {
+        if state {
+            applyButton.isEnabled = false
+            applyButton.setTitle("신청 완료", for: .normal)
+            applyButton.applyStyle(textStyle: FontSystem.body02_semiBold)
+        } else {
+            applyButton.isEnabled = true
+            applyButton.setTitle("직관 신청", for: .normal)
+            applyButton.applyStyle(textStyle: FontSystem.body02_semiBold)
+        }
+    }
+    
+    private func updateApplyButtonFinished(_ state: Bool) {
+        if state {
+            applyButton.isEnabled = false
+            applyButton.setTitle("신청 마감", for: .normal)
+            applyButton.applyStyle(textStyle: FontSystem.body02_semiBold)
+        }
     }
 }
 

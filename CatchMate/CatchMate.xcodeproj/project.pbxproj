@@ -110,6 +110,7 @@
 		53BE7ACF2C367008002FC64F /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7ACE2C367008002FC64F /* DateHelper.swift */; };
 		53BE7AD22C367181002FC64F /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7AD12C367181002FC64F /* Date+Extension.swift */; };
 		53BE7AD42C369A35002FC64F /* OptionButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7AD32C369A35002FC64F /* OptionButtonView.swift */; };
+		53F1E8C62C47A46400A962F3 /* Apply.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F1E8C52C47A46400A962F3 /* Apply.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -228,6 +229,7 @@
 		53BE7ACE2C367008002FC64F /* DateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
 		53BE7AD12C367181002FC64F /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		53BE7AD32C369A35002FC64F /* OptionButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionButtonView.swift; sourceTree = "<group>"; };
+		53F1E8C52C47A46400A962F3 /* Apply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Apply.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -457,7 +459,6 @@
 				533A2B282C28558D00A59340 /* Sign */,
 				536BDE102C1B51DE0043B1DA /* TabBar */,
 				536BDE322C1B578C0043B1DA /* Home */,
-				53716BBE2C40093D0044AD2A /* Favorite */,
 				531786832C23248B00ACEF6A /* AddPost */,
 				531786802C21D3E400ACEF6A /* Chat */,
 				531786792C20777000ACEF6A /* Notification */,
@@ -497,6 +498,7 @@
 				536BDDEB2C19720E0043B1DA /* User.swift */,
 				531786772C20498800ACEF6A /* Post.swift */,
 				533A2B312C2BE7E600A59340 /* CheerStyles.swift */,
+				53F1E8C52C47A46400A962F3 /* Apply.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -634,8 +636,9 @@
 				5317866C2C200EDB00ACEF6A /* AllFilterViewController.swift */,
 				5317867C2C216CBE00ACEF6A /* NumberPickerViewController.swift */,
 				5317867E2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift */,
-				53716BD12C45567C0044AD2A /* PostDetailViewController.swift */,
 				537598052C46C0B0003BD8AE /* ApplyPopupViewController.swift */,
+				53716BD12C45567C0044AD2A /* PostDetailViewController.swift */,
+				53716BBE2C40093D0044AD2A /* Favorite */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -879,6 +882,7 @@
 				536BDDF62C1972740043B1DA /* UserDTO.swift in Sources */,
 				5383BE8D2C34D595008940F1 /* FontUtility.swift in Sources */,
 				531786712C202EF500ACEF6A /* DIContainerService.swift in Sources */,
+				53F1E8C62C47A46400A962F3 /* Apply.swift in Sources */,
 				533A2B3F2C2C5DBC00A59340 /* SNSLoginResponse.swift in Sources */,
 				533A2B252C280E0500A59340 /* CMDefaultFilledButton.swift in Sources */,
 				533A2B2E2C29B56200A59340 /* CMDefaultBorderedButton.swift in Sources */,

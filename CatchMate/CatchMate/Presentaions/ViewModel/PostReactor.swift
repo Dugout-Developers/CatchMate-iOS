@@ -12,14 +12,19 @@ import ReactorKit
 final class PostReactor: Reactor {
     enum Action {
         case loadPostDetails
+        case loadIsApplied
+        case changeIsApplied(Bool)
     }
     enum Mutation {
         case setPost(Post?)
+        case setIsApplied(Bool)
     }
     struct State {
         // View의 state를 관리한다.
         var postId: String
         var post: Post?
+        var isApplied: Bool = false
+        var isFinished: Bool = false
     }
     
     var initialState: State
@@ -36,6 +41,12 @@ final class PostReactor: Reactor {
             } else {
                 return Observable.just(Mutation.setPost(nil))
             }
+        case .loadIsApplied:
+            // TODO: - API UseCase 연결 시 신청 정보 가져와서 있는지 확인하고 result 설정
+            let result = Bool.random()
+            return Observable.just(Mutation.setIsApplied(result))
+        case .changeIsApplied(let result):
+            return Observable.just(Mutation.setIsApplied(result))
         }
     }
     
@@ -44,6 +55,13 @@ final class PostReactor: Reactor {
         switch mutation {
         case .setPost(let post):
             newState.post = post
+            if let post = post {
+                if post.maxPerson == post.currentPerson {
+                    newState.isFinished = true
+                }
+            }
+        case .setIsApplied(let state):
+            newState.isApplied = state
         }
         return newState
     }

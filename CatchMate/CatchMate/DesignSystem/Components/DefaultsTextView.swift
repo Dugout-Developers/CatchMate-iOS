@@ -39,7 +39,7 @@ class DefaultsTextView: UITextView {
     private func setupView() {
         layer.cornerRadius = 8
         
-        textContainerInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 62)
+        textContainerInset = UIEdgeInsets(top: 18, left: 12, bottom: 18, right: 12)
         textColor = .cmHeadLineTextColor
         NotificationCenter.default.addObserver(self, selector: #selector(textDidChange), name: UITextView.textDidChangeNotification, object: self)
     }

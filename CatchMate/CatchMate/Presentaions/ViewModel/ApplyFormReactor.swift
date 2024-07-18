@@ -12,14 +12,17 @@ import ReactorKit
 final class ApplyFormReactor: Reactor {
     enum Action {
         case loadPostDetails
+        case requestApplyForm(Apply)
     }
     enum Mutation {
         case setPost(Post?)
+        case applyForm(Bool)
     }
     struct State {
         // View의 state를 관리한다.
         var postId: String
         var post: Post?
+        var appleyResult: Bool? // false 시 에러 핸들링
     }
     
     var initialState: State
@@ -36,6 +39,9 @@ final class ApplyFormReactor: Reactor {
             } else {
                 return Observable.just(Mutation.setPost(nil))
             }
+        case .requestApplyForm(let form):
+           // TODO: API UseCase 처리 후 결과 값 반환
+            return Observable.just(Mutation.applyForm(true))
         }
     }
     
@@ -44,6 +50,9 @@ final class ApplyFormReactor: Reactor {
         switch mutation {
         case .setPost(let post):
             newState.post = post
+
+        case .applyForm(let result):
+            newState.appleyResult = result
         }
         return newState
     }
