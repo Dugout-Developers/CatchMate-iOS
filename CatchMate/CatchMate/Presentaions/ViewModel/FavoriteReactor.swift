@@ -13,13 +13,16 @@ final class FavoriteReactor: Reactor {
     enum Action {
         case loadFavoritePost
         case removeFavoritePost(Post)
+        case selectPost(Post?)
     }
     enum Mutation {
         case setFavoritePost([Post])
         case removeFavoritePost(Post)
+        case setSelectedPost(Post?)
     }
     struct State {
         var favoritePost: [Post] = []
+        var selectedPost: Post?
     }
     
     var initialState: State
@@ -32,9 +35,15 @@ final class FavoriteReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadFavoritePost:
-            return Observable.just(Mutation.setFavoritePost(loadRandomList()))
+            return Observable.just(Mutation.setFavoritePost(Post.dummyFavoriteList))
         case .removeFavoritePost(let post):
+            // TODO: - API 연결로 변경 필요
+            if let index = Post.dummyFavoriteList.firstIndex(of: post) {
+                Post.dummyFavoriteList.remove(at: index)
+            }
             return Observable.just(Mutation.removeFavoritePost(post))
+        case .selectPost(let post):
+            return Observable.just(Mutation.setSelectedPost(post))
         }
     }
     
@@ -47,23 +56,9 @@ final class FavoriteReactor: Reactor {
             if let index = state.favoritePost.firstIndex(of: post) {
                 newState.favoritePost.remove(at: index)
             }
+        case .setSelectedPost(let post):
+            newState.selectedPost = post
         }
         return newState
-    }
-    
-    // MARK: - 임시 목업 데이터용 -> 데이터 연결 후 삭제
-    private func loadRandomList() -> [Post] {
-        var pickedNumbers = Set<Int>()
-        
-        while pickedNumbers.count < 4 {
-            let randomNumber = Int.random(in: 0..<Post.dummyPostData.count)
-            pickedNumbers.insert(randomNumber)
-        }
-        
-        var result: [Post] = []
-        pickedNumbers.forEach { index in
-            result.append(Post.dummyPostData[index])
-        }
-        return result
     }
 }

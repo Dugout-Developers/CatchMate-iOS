@@ -11,12 +11,19 @@ import PinLayout
 import RxSwift
 import ReactorKit
 
+extension Reactive where Base: PostDetailViewController {
+    var isFavoriteState: Observable<Bool> {
+        return base._isFavorite.asObservable()
+    }
+}
 final class PostDetailViewController: BaseViewController, View {
     private var isFavorite: Bool = false {
         didSet {
-            toggleFavoriteButton()
+//            toggleFavoriteButton()
+            _isFavorite.onNext(isFavorite)
         }
     }
+    fileprivate var _isFavorite = PublishSubject<Bool>()
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let partyNumberLabel: UILabel = {
@@ -138,7 +145,8 @@ final class PostDetailViewController: BaseViewController, View {
         super.viewDidLoad()
         bind(reactor: reactor)
         reactor.action.onNext(.loadPostDetails)
-//        reactor.action.onNext(.loadIsApplied)
+        reactor.action.onNext(.loadIsApplied)
+        reactor.action.onNext(.loadIsFavorite)
         setupUI()
         setupNavigation()
         setTextStyle()
@@ -227,13 +235,13 @@ final class PostDetailViewController: BaseViewController, View {
         return label
     }
     
-    private func toggleFavoriteButton() {
-        if isFavorite {
-            favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withTintColor(.cmPrimaryColor, renderingMode: .alwaysOriginal), for: .normal)
-        } else {
-            favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withRenderingMode(.alwaysOriginal), for: .normal)
-        }
-    }
+//    private func toggleFavoriteButton() {
+//        if isFavorite {
+//            favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withTintColor(.cmPrimaryColor, renderingMode: .alwaysOriginal), for: .normal)
+//        } else {
+//            favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withRenderingMode(.alwaysOriginal), for: .normal)
+//        }
+//    }
 }
 
 // MARK: - bind
@@ -243,13 +251,27 @@ extension PostDetailViewController {
             .compactMap{$0}
             .bind(onNext: setupData)
             .disposed(by: disposeBag)
-
+        
+        reactor.state.map{ $0.isFavorite }
+            .distinctUntilChanged() // 초기 상태가 전달되지 않는 문제를 방지
+            .withUnretained(self)
+            .subscribe(onNext: { vc, state in
+                vc.isFavorite = state // 상태를 직접 설정
+                vc.setupFavoriteButton(state)
+            })
+            .disposed(by: disposeBag)
+        _isFavorite
+            .map{Reactor.Action.changeFavorite($0)}
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
         favoriteButton.rx.tap
             .withUnretained(self)
             .subscribe { vc, _ in
                 vc.isFavorite.toggle()
             }
             .disposed(by: disposeBag)
+        
         applyButton.rx.tap
             .withUnretained(self)
             .subscribe { vc, _ in
@@ -275,6 +297,14 @@ extension PostDetailViewController {
             })
             .disposed(by: disposeBag)
         
+    }
+    
+    private func setupFavoriteButton(_ state: Bool) {
+        if state {
+            favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withTintColor(.cmPrimaryColor, renderingMode: .alwaysOriginal), for: .normal)
+        } else {
+            favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        }
     }
     
     private func updateApplyButton(_ state: Bool) {

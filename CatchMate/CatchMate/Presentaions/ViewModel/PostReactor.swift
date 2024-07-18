@@ -12,12 +12,15 @@ import ReactorKit
 final class PostReactor: Reactor {
     enum Action {
         case loadPostDetails
+        case loadIsFavorite
         case loadIsApplied
         case changeIsApplied(Bool)
+        case changeFavorite(Bool)
     }
     enum Mutation {
         case setPost(Post?)
         case setIsApplied(Bool)
+        case setIsFavorite(Bool)
     }
     struct State {
         // View의 state를 관리한다.
@@ -25,6 +28,7 @@ final class PostReactor: Reactor {
         var post: Post?
         var isApplied: Bool = false
         var isFinished: Bool = false
+        var isFavorite: Bool = false
     }
     
     var initialState: State
@@ -47,6 +51,20 @@ final class PostReactor: Reactor {
             return Observable.just(Mutation.setIsApplied(result))
         case .changeIsApplied(let result):
             return Observable.just(Mutation.setIsApplied(result))
+        case .loadIsFavorite:
+            let index = Post.dummyFavoriteList.firstIndex(where: {$0.id == initialState.postId})
+            return Observable.just(Mutation.setIsFavorite(index != nil ? true : false))
+        case .changeFavorite(let state):
+            if state {
+                if let post = currentState.post, !Post.dummyFavoriteList.contains(post) {
+                    Post.dummyFavoriteList.append(post)
+                }
+            } else {
+                if let post = currentState.post, let index = Post.dummyFavoriteList.firstIndex(of: post) {
+                    Post.dummyFavoriteList.remove(at: index)
+                }
+            }
+            return Observable.just(Mutation.setIsFavorite(state))
         }
     }
     
@@ -62,6 +80,9 @@ final class PostReactor: Reactor {
             }
         case .setIsApplied(let state):
             newState.isApplied = state
+        case .setIsFavorite(let state):
+            print(state)
+            newState.isFavorite = state
         }
         return newState
     }

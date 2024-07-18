@@ -13,7 +13,6 @@ import SnapKit
 final class FavoriteListViewController: BaseViewController ,View {
     private let tableView = UITableView()
     private let reactor: FavoriteReactor
-    private let viewWillAppearPublisher = PublishSubject<Void>().asObserver()
 
     init(reactor: FavoriteReactor) {
         self.reactor = reactor
@@ -26,7 +25,7 @@ final class FavoriteListViewController: BaseViewController ,View {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewWillAppearPublisher.onNext(())
+        reactor.action.onNext(.loadFavoritePost)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +33,7 @@ final class FavoriteListViewController: BaseViewController ,View {
         setupTableview()
         setupUI()
         bind(reactor: reactor)
+        reactor.action.onNext(.loadFavoritePost)
     }
     
     private func setupTableview() {
@@ -45,9 +45,22 @@ final class FavoriteListViewController: BaseViewController ,View {
     }
     
     func bind(reactor: FavoriteReactor) {
-        viewWillAppearPublisher
-            .map { Reactor.Action.loadFavoritePost }
+        tableView.rx.itemSelected
+            .map { indexPath in
+                let post = reactor.currentState.favoritePost[indexPath.row]
+                return Reactor.Action.selectPost(post)
+            }
             .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.selectedPost}
+            .distinctUntilChanged()
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, post in
+                let postDetailVC = PostDetailViewController(postID: post.id)
+                vc.navigationController?.pushViewController(postDetailVC, animated: true)
+            }
             .disposed(by: disposeBag)
         
         reactor.state.map{$0.favoritePost}
