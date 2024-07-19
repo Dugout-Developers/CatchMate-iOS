@@ -285,7 +285,7 @@ extension PostDetailViewController {
                 vc.present(applyVC, animated: true)
             }
             .disposed(by: disposeBag)
-        
+
         reactor.state.map{$0.isApplied}
             .withUnretained(self)
             .subscribe(onNext: { vc, state in
