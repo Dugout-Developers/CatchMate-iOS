@@ -459,7 +459,6 @@
 				533A2B282C28558D00A59340 /* Sign */,
 				536BDE102C1B51DE0043B1DA /* TabBar */,
 				536BDE322C1B578C0043B1DA /* Home */,
-				53716BBE2C40093D0044AD2A /* Favorite */,
 				531786832C23248B00ACEF6A /* AddPost */,
 				531786802C21D3E400ACEF6A /* Chat */,
 				531786792C20777000ACEF6A /* Notification */,
@@ -640,6 +639,8 @@
 				537598052C46C0B0003BD8AE /* ApplyPopupViewController.swift */,
 				53716BD12C45567C0044AD2A /* PostDetailViewController.swift */,
 				537598052C46C0B0003BD8AE /* ApplyPopupViewController.swift */,
+				53716BD12C45567C0044AD2A /* PostDetailViewController.swift */,
+				53716BBE2C40093D0044AD2A /* Favorite */,
 			);
 			path = Home;
 			sourceTree = "<group>";

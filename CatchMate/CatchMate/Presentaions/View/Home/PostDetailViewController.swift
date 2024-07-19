@@ -271,6 +271,16 @@ extension PostDetailViewController {
                 vc.isFavorite.toggle()
             }
             .disposed(by: disposeBag)
+        applyButton.rx.tap
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                guard let post = vc.reactor.currentState.post else { return }
+                let applyVC = ApplyPopupViewController(post: post, reactor: reactor)
+                applyVC.modalPresentationStyle = .overFullScreen
+                applyVC.modalTransitionStyle = .crossDissolve
+                vc.present(applyVC, animated: true)
+            }
+            .disposed(by: disposeBag)
         
         applyButton.rx.tap
             .withUnretained(self)

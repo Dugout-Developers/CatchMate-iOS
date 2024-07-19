@@ -71,16 +71,14 @@ final class ApplyPopupViewController: UIViewController, View {
         return label
     }()
     
-<<<<<<< HEAD
+
     private let textView: DefaultsTextView = {
         let textView = DefaultsTextView()
         textView.backgroundColor = .grayScale50
         textView.placeholder = "간단한 자기소개를 적어주세요"
         return textView
     }()
-=======
-    private let textView = DefaultsTextView()
->>>>>>> abf1f0b (feat: 직관 신청 팝업뷰 init (제작중))
+
     
     private let applyButton: UIButton = {
         let button = UIButton()
@@ -129,6 +127,7 @@ final class ApplyPopupViewController: UIViewController, View {
         homeTeamImageView.backgroundColor = post.writer.team == post.homeTeam ? post.homeTeam.getTeamColor : .white
         awayTeamImageView.image = post.awayTeam.getLogoImage
         awayTeamImageView.backgroundColor = post.writer.team == post.awayTeam ? post.awayTeam.getTeamColor : .white
+    
     }
 
     override func viewDidLayoutSubviews() {
