@@ -19,11 +19,11 @@ extension Reactive where Base: PostDetailViewController {
 final class PostDetailViewController: BaseViewController, View {
     private var isFavorite: Bool = false {
         didSet {
-//            toggleFavoriteButton()
             _isFavorite.onNext(isFavorite)
         }
     }
     fileprivate var _isFavorite = PublishSubject<Bool>()
+
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let partyNumberLabel: UILabel = {
@@ -233,6 +233,14 @@ final class PostDetailViewController: BaseViewController, View {
         label.backgroundColor = .grayScale50
         label.layer.cornerRadius = 18
         return label
+    }
+    
+    private func toggleFavoriteButton() {
+        if isFavorite {
+            favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withTintColor(.cmPrimaryColor, renderingMode: .alwaysOriginal), for: .normal)
+        } else {
+            favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        }
     }
 }
 

@@ -50,7 +50,6 @@ final class ApplyFormReactor: Reactor {
         switch mutation {
         case .setPost(let post):
             newState.post = post
-
         case .applyForm(let result):
             newState.appleyResult = result
         }
