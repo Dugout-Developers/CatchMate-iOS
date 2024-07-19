@@ -234,14 +234,6 @@ final class PostDetailViewController: BaseViewController, View {
         label.layer.cornerRadius = 18
         return label
     }
-    
-//    private func toggleFavoriteButton() {
-//        if isFavorite {
-//            favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withTintColor(.cmPrimaryColor, renderingMode: .alwaysOriginal), for: .normal)
-//        } else {
-//            favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withRenderingMode(.alwaysOriginal), for: .normal)
-//        }
-//    }
 }
 
 // MARK: - bind
