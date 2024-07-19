@@ -19,6 +19,11 @@ extension Reactive where Base: AddViewController {
 }
 final class AddViewController: BaseViewController, View {
     private let reactor: AddReactor
+    private var placeCount = 0 {
+        didSet {
+            placePicker.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.tiny - CGFloat((2-placeCount)*50), identifier: "PlaceFilter")
+        }
+    }
     fileprivate var _selectedGender = PublishSubject<Gender?>()
     fileprivate var _selectedAge = PublishSubject<[Int]>()
     private var selectedGenderLabel: PaddingLabel? {
@@ -119,7 +124,7 @@ final class AddViewController: BaseViewController, View {
         }
         return labels
     }()
-    
+    private let buttonContainer = UIView()
     private let registerButton = CMDefaultFilledButton(title: "등록")
     init(reactor: AddReactor) {
         self.reactor = reactor
@@ -148,13 +153,14 @@ final class AddViewController: BaseViewController, View {
             tabBarController.selectedIndex = tabBarController.preViewControllerIndex
         }
     }
-
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        scrollView.pin.all(view.pin.safeArea)
+        scrollView.pin.left().right().top(view.pin.safeArea).above(of: buttonContainer)
+        buttonContainer.pin.left().right().bottom(view.pin.safeArea).height(72)
         contentView.pin.top().left().right()
-        
         contentView.flex.layout(mode: .adjustHeight)
+        buttonContainer.flex.layout()
         scrollView.contentSize = contentView.frame.size
     }
     
@@ -239,6 +245,9 @@ extension AddViewController {
                 if let team = team {
                     vc.homeTeamPicker.didSelectItem(team.rawValue)
                     vc.placePicker.didSelectItem(team.place?[0] ?? "")
+                    if let count = team.place?.count{
+                        vc.placeCount = count
+                    }
                 }
             }
             .disposed(by: disposeBag)
@@ -334,7 +343,7 @@ extension AddViewController {
 // MARK: - UI
 extension AddViewController {
     private func setupUI() {
-        view.addSubview(scrollView)
+        view.addSubviews(views: [scrollView, buttonContainer])
         scrollView.addSubview(contentView)
         contentView.flex.paddingHorizontal(18).define { flex in
             flex.addItem().direction(.column).define { flex in
@@ -382,8 +391,10 @@ extension AddViewController {
                         flex.addItem(ageButton).marginRight(12).marginBottom(12)
                     }
                 }.marginBottom(60)
-                flex.addItem(registerButton).height(50).marginBottom(27)
             }
+        }
+        buttonContainer.flex.direction(.row).marginHorizontal(ButtonGridSystem.getMargin()).alignItems(.center).justifyContent(.center).paddingBottom(34).define { flex in
+            flex.addItem(registerButton).grow(1).height(52)
         }
     }
 }
