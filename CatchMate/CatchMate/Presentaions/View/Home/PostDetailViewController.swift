@@ -23,7 +23,6 @@ final class PostDetailViewController: BaseViewController, View {
         }
     }
     fileprivate var _isFavorite = PublishSubject<Bool>()
-
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let partyNumberLabel: UILabel = {
@@ -235,13 +234,13 @@ final class PostDetailViewController: BaseViewController, View {
         return label
     }
     
-    private func toggleFavoriteButton() {
-        if isFavorite {
-            favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withTintColor(.cmPrimaryColor, renderingMode: .alwaysOriginal), for: .normal)
-        } else {
-            favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withRenderingMode(.alwaysOriginal), for: .normal)
-        }
-    }
+//    private func toggleFavoriteButton() {
+//        if isFavorite {
+//            favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withTintColor(.cmPrimaryColor, renderingMode: .alwaysOriginal), for: .normal)
+//        } else {
+//            favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withRenderingMode(.alwaysOriginal), for: .normal)
+//        }
+//    }
 }
 
 // MARK: - bind
@@ -271,6 +270,7 @@ extension PostDetailViewController {
                 vc.isFavorite.toggle()
             }
             .disposed(by: disposeBag)
+        
         applyButton.rx.tap
             .withUnretained(self)
             .subscribe { vc, _ in
