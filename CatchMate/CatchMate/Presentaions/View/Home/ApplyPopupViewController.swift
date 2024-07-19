@@ -77,7 +77,6 @@ final class ApplyPopupViewController: UIViewController, View {
         textView.placeholder = "간단한 자기소개를 적어주세요"
         return textView
     }()
-    
     private let applyButton: UIButton = {
         let button = UIButton()
         button.setTitle("신청", for: .normal)

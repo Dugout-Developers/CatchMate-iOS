@@ -19,7 +19,6 @@ extension Reactive where Base: PostDetailViewController {
 final class PostDetailViewController: BaseViewController, View {
     private var isFavorite: Bool = false {
         didSet {
-//            toggleFavoriteButton()
             _isFavorite.onNext(isFavorite)
         }
     }
@@ -195,7 +194,7 @@ final class PostDetailViewController: BaseViewController, View {
             addInfoText.textColor = .cmNonImportantTextColor
         }
         if post.preferAge.isEmpty {
-            ageOptionLabel.append(makePreferAgeLabel(ageText: "성별무관"))
+            ageOptionLabel.append(makePreferAgeLabel(ageText: "전연령"))
         } else {
             post.preferAge.forEach { age in
                 ageOptionLabel.append(makePreferAgeLabel(ageText: String(age)))
@@ -234,14 +233,6 @@ final class PostDetailViewController: BaseViewController, View {
         label.layer.cornerRadius = 18
         return label
     }
-    
-//    private func toggleFavoriteButton() {
-//        if isFavorite {
-//            favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withTintColor(.cmPrimaryColor, renderingMode: .alwaysOriginal), for: .normal)
-//        } else {
-//            favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withRenderingMode(.alwaysOriginal), for: .normal)
-//        }
-//    }
 }
 
 // MARK: - bind
@@ -249,6 +240,7 @@ extension PostDetailViewController {
     func bind(reactor: PostReactor) {
         reactor.state.map{ $0.post }
             .compactMap{$0}
+            .distinctUntilChanged()
             .bind(onNext: setupData)
             .disposed(by: disposeBag)
         
@@ -283,6 +275,17 @@ extension PostDetailViewController {
             }
             .disposed(by: disposeBag)
         
+        applyButton.rx.tap
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                guard let post = vc.reactor.currentState.post else { return }
+                let applyVC = ApplyPopupViewController(post: post, reactor: reactor)
+                applyVC.modalPresentationStyle = .overFullScreen
+                applyVC.modalTransitionStyle = .crossDissolve
+                vc.present(applyVC, animated: true)
+            }
+            .disposed(by: disposeBag)
+
         reactor.state.map{$0.isApplied}
             .withUnretained(self)
             .subscribe(onNext: { vc, state in

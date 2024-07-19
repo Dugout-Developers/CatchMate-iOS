@@ -69,8 +69,8 @@ final class PlaceFilterViewController: BasePickerViewController, View {
     private func setupTableView() {
         tableView.register(PlaceFilterTableViewCell.self, forCellReuseIdentifier: "PlaceFilterTableViewCell")
         tableView.tableHeaderView = UIView()
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 50
+//        tableView.rowHeight = UITableView.automaticDimension
+//        tableView.estimatedRowHeight = 50
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
     }
@@ -100,6 +100,7 @@ final class PlaceFilterViewController: BasePickerViewController, View {
                     .map { Reactor.Action.changePlcase(place) }
                     .bind(to: reactor.action)
                     .disposed(by: cell.disposeBag)
+                print(cell.frame.height)
             }
             .disposed(by: disposeBag)
         
@@ -173,6 +174,7 @@ final class PlaceFilterTableViewCell: UITableViewCell {
         super.layoutSubviews()
         containerView.pin.all()
         containerView.flex.layout()
+        contentView.frame.size.height = 50
     }
     override func sizeThatFits(_ size: CGSize) -> CGSize {
         containerView.pin.width(size.width)

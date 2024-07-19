@@ -199,6 +199,7 @@ final class SignReactor: Reactor {
             if let birth = newState.loginModel?.birth {
                 newState.birth = birth
             }
+            print("LoginModel Updated: \(loginInfo)")  // 로그 추가
         case .resetLoginModel:
             newState.loginModel = nil
         }

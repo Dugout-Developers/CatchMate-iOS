@@ -112,6 +112,7 @@ class SignDataSourceImpl: NSObject, SignDataSource, ASAuthorizationControllerDel
         loginInstance.requestThirdPartyLogin()
         return Observable.create { observer in
             self.naverLoginSubject = observer
+            print("naverLoginSubject initialized")  // 로그 추가
             return Disposables.create()
         }
     }
