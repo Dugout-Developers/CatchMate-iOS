@@ -92,11 +92,6 @@ final class SignInViewController: BaseViewController, View {
 // MARK: - Bind
 extension SignInViewController {
     func bind(reactor: SignReactor) {
-        viewWillAppearPublisher
-            .map{ Reactor.Action.reloadSignInView }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
         kakaoLoginButton.rx.tap
             .map{ Reactor.Action.kakaoLogin }
             .bind(to: reactor.action)
