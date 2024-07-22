@@ -88,8 +88,6 @@
 		53716BC42C42B72F0044AD2A /* CMNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BC32C42B72F0044AD2A /* CMNavigationBar.swift */; };
 		53716BC62C42D19A0044AD2A /* PlaceFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BC52C42D19A0044AD2A /* PlaceFilterViewController.swift */; };
 		53716BC82C43EEB50044AD2A /* CMToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BC72C43EEB50044AD2A /* CMToastMessage.swift */; };
-		53716BCD2C44F1250044AD2A /* APIKEY.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 53716BCA2C44F1250044AD2A /* APIKEY.xcconfig */; };
-		53716BCE2C44F1250044AD2A /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53716BCB2C44F1250044AD2A /* APIKeys.plist */; };
 		53716BD22C45567C0044AD2A /* PostDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BD12C45567C0044AD2A /* PostDetailViewController.swift */; };
 		53716BD42C4558780044AD2A /* PostReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BD32C4558780044AD2A /* PostReactor.swift */; };
 		53716BD62C4562AB0044AD2A /* TeamPaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53716BD52C4562AB0044AD2A /* TeamPaddingLabel.swift */; };
@@ -107,6 +105,8 @@
 		5383BE8F2C34DF27008940F1 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5383BE8E2C34DF27008940F1 /* Font.swift */; };
 		5383BE902C34ECD1008940F1 /* PretendardVariable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5383BE8A2C34D543008940F1 /* PretendardVariable.ttf */; };
 		538EB92F2C3FA27600ABA40E /* CMDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */; };
+		53B8F4BD2C4EABA3000132CA /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53B8F4BA2C4EABA3000132CA /* APIKeys.plist */; };
+		53B8F4BF2C4EABA3000132CA /* APIKEY.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 53B8F4BC2C4EABA3000132CA /* APIKEY.xcconfig */; };
 		53BE7ACF2C367008002FC64F /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7ACE2C367008002FC64F /* DateHelper.swift */; };
 		53BE7AD22C367181002FC64F /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7AD12C367181002FC64F /* Date+Extension.swift */; };
 		53BE7AD42C369A35002FC64F /* OptionButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7AD32C369A35002FC64F /* OptionButtonView.swift */; };
@@ -207,9 +207,6 @@
 		53716BC32C42B72F0044AD2A /* CMNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMNavigationBar.swift; sourceTree = "<group>"; };
 		53716BC52C42D19A0044AD2A /* PlaceFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceFilterViewController.swift; sourceTree = "<group>"; };
 		53716BC72C43EEB50044AD2A /* CMToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMToastMessage.swift; sourceTree = "<group>"; };
-		53716BC92C44F1250044AD2A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		53716BCA2C44F1250044AD2A /* APIKEY.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = APIKEY.xcconfig; sourceTree = "<group>"; };
-		53716BCB2C44F1250044AD2A /* APIKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
 		53716BD12C45567C0044AD2A /* PostDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailViewController.swift; sourceTree = "<group>"; };
 		53716BD32C4558780044AD2A /* PostReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostReactor.swift; sourceTree = "<group>"; };
 		53716BD52C4562AB0044AD2A /* TeamPaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamPaddingLabel.swift; sourceTree = "<group>"; };
@@ -226,6 +223,9 @@
 		5383BE8C2C34D594008940F1 /* FontUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontUtility.swift; sourceTree = "<group>"; };
 		5383BE8E2C34DF27008940F1 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 		538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMDatePicker.swift; sourceTree = "<group>"; };
+		53B8F4BA2C4EABA3000132CA /* APIKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
+		53B8F4BB2C4EABA3000132CA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		53B8F4BC2C4EABA3000132CA /* APIKEY.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = APIKEY.xcconfig; sourceTree = "<group>"; };
 		53BE7ACE2C367008002FC64F /* DateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
 		53BE7AD12C367181002FC64F /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		53BE7AD32C369A35002FC64F /* OptionButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionButtonView.swift; sourceTree = "<group>"; };
@@ -400,9 +400,9 @@
 		536BDDDD2C1969370043B1DA /* APP */ = {
 			isa = PBXGroup;
 			children = (
-				53716BCA2C44F1250044AD2A /* APIKEY.xcconfig */,
-				53716BCB2C44F1250044AD2A /* APIKeys.plist */,
-				53716BC92C44F1250044AD2A /* Info.plist */,
+				53B8F4BC2C4EABA3000132CA /* APIKEY.xcconfig */,
+				53B8F4BA2C4EABA3000132CA /* APIKeys.plist */,
+				53B8F4BB2C4EABA3000132CA /* Info.plist */,
 				536BDDAD2C189B230043B1DA /* AppDelegate.swift */,
 				536BDDAF2C189B230043B1DA /* SceneDelegate.swift */,
 			);
@@ -639,9 +639,6 @@
 				5317867E2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift */,
 				537598052C46C0B0003BD8AE /* ApplyPopupViewController.swift */,
 				53716BD12C45567C0044AD2A /* PostDetailViewController.swift */,
-				537598052C46C0B0003BD8AE /* ApplyPopupViewController.swift */,
-				53716BD12C45567C0044AD2A /* PostDetailViewController.swift */,
-				53716BBE2C40093D0044AD2A /* Favorite */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -797,11 +794,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53B8F4BF2C4EABA3000132CA /* APIKEY.xcconfig in Resources */,
 				53241F3E2C3C589100F468E1 /* DesignAssets.xcassets in Resources */,
+				53B8F4BD2C4EABA3000132CA /* APIKeys.plist in Resources */,
 				5383BE902C34ECD1008940F1 /* PretendardVariable.ttf in Resources */,
-				53716BCE2C44F1250044AD2A /* APIKeys.plist in Resources */,
 				536BDDB72C189B240043B1DA /* Assets.xcassets in Resources */,
-				53716BCD2C44F1250044AD2A /* APIKEY.xcconfig in Resources */,
 				536BDDBA2C189B240043B1DA /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1084,6 +1081,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = CatchMate/CatchMate.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 977J65FA28;
@@ -1102,6 +1100,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tori.CatchMate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1118,6 +1117,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = CatchMate/CatchMate.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 977J65FA28;
@@ -1136,6 +1136,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tori.CatchMate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
