@@ -1,0 +1,55 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Build and distribute to Firebase App Distribution"
+  lane :distribute do
+    match(type: "adhoc")
+    # Clean build artifacts
+    clean_build_artifacts
+
+    build_start_time = Time.now
+    UI.message("Build started at #{build_start_time}")
+
+    time_stamp = Time.now.strftime("%y%m%d_%H%M%S")
+    ipa_file_name = "CatchMate_#{time_stamp}.ipa"
+
+    gym(
+      project: "CatchMate.xcodeproj",          # Xcode 프로젝트 파일 경로
+      scheme: "CatchMate",                  # 빌드할 scheme
+      output_directory: "~/Desktop/Log",     # IPA 파일을 저장할 경로
+      output_name: ipa_file_name,             # 생성될 IPA 파일 이름
+      export_method: "ad-hoc",
+      export_options: {
+        provisioningProfiles: {
+          ENV['PROVISIONING_PROFILES'] => ENV['MATCH_PROFILES']
+        }
+      }
+    )
+
+    build_end_time = Time.now
+    UI.message("Build finished at #{build_end_time}")
+
+    # 빌드 시간 계산
+    build_duration = build_end_time - build_start_time
+    UI.message("Build duration: #{build_duration.round(2)} seconds")
+
+    # 빌드 시간 로그 파일에 기록
+    log_directory = File.expand_path("~/Desktop/Log")
+    log_file_path = File.join(log_directory, "build_times.txt")
+    File.open(log_file_path, "a") do |f|
+      f.puts("Build started at: #{build_start_time}")
+      f.puts("Build finished at: #{build_end_time}")
+      f.puts("Build duration: #{build_duration.round(2)} seconds")
+      f.puts("IPA File: #{ipa_file_name}")
+      f.puts("="*30)
+    end
+
+    # Upload to Firebase App Distribution
+    firebase_app_distribution(
+      app: ENV['FIREBASE_APP_ID'],  # Firebase App ID
+      ipa_path: "/Users/bang-yubin/Desktop/Log/#{ipa_file_name}", # 업로드할 IPA 파일 경로
+      firebase_cli_token: ENV['FIREBASE_TOKEN'],
+      groups: "test"
+    )
+  end
+end
