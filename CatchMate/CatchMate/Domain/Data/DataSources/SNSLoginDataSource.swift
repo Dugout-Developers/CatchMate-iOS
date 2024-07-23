@@ -9,21 +9,23 @@ import UIKit
 import RxSwift
 import RxKakaoSDKCommon
 import RxKakaoSDKUser
+import KakaoSDKAuth
 import KakaoSDKUser
 import AuthenticationServices
 import NaverThirdPartyLogin
 import RxAlamofire
 import Alamofire
 
-protocol SignDataSource {
+protocol SNSLoginDataSource {
     func getKakaoLoginToken() -> Observable<SNSLoginResponse>
     func getAppleLoginToken() -> Observable<SNSLoginResponse>
+    func getNaverLoginToken() -> Observable<SNSLoginResponse>
 }
 
-class SignDataSourceImpl: NSObject, SignDataSource, ASAuthorizationControllerDelegate, NaverThirdPartyLoginConnectionDelegate {
+class SNSLoginDataSourceImpl: NSObject, SNSLoginDataSource, ASAuthorizationControllerDelegate, NaverThirdPartyLoginConnectionDelegate {
     
     private let loginInstance: NaverThirdPartyLoginConnection
-    
+    private let disposeBag = DisposeBag()
     override init() {
         self.loginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
         super.init()
@@ -33,33 +35,89 @@ class SignDataSourceImpl: NSObject, SignDataSource, ASAuthorizationControllerDel
     // MARK: - KAKAO LOGIN
     func getKakaoLoginToken() -> Observable<SNSLoginResponse> {
         return Observable.create { observer in
-            UserApi.shared.loginWithKakaoAccount { (oauthToken, error) in
+            UserApi.shared.me { (user, error) in
                 if let error = error {
                     observer.onError(error)
-                } else if oauthToken != nil {
-                    print("Token : \(String(describing: oauthToken))")
-                    // 사용자 정보 요청
-                    UserApi.shared.me { (user, error) in
+                    return
+                }
+                
+                guard let user = user else {
+                    observer.onError(NSError(domain: "KakaoLogin", code: -1, userInfo: [NSLocalizedDescriptionKey: "User information is missing"]))
+                    return
+                }
+                
+                var scopes = [String]()
+                
+                if user.kakaoAccount?.profileImageNeedsAgreement == true {
+                    scopes.append("profile_image")
+                }
+                if user.kakaoAccount?.profileNicknameNeedsAgreement == true {
+                    scopes.append("profile_nickname")
+                }
+                
+                if !scopes.isEmpty {
+                    UserApi.shared.loginWithKakaoAccount(scopes: scopes) { (loginResult, error) in
                         if let error = error {
                             observer.onError(error)
-                        } else if let user = user {
-                            print("User: \(user)")
-                            print("============================")
-                            // 필요한 정보를 KakaoLoginResponse로 변환하여 observer에 전달
-                            guard let userid = user.id else {
+                            return
+                        }
+                        
+                        UserApi.shared.me { (updatedUser, error) in
+                            if let error = error {
+                                observer.onError(error)
                                 return
                             }
-                            let email = user.kakaoAccount?.email ?? "kakao" + String(userid)
-                            let response = SNSLoginResponse(id: String(userid), email: email, loginType: .kakao)
-                            observer.onNext(response)
-                            observer.onCompleted()
+                            
+                            guard let updatedUser = updatedUser else {
+                                observer.onError(NSError(domain: "KakaoLogin", code: -1, userInfo: [NSLocalizedDescriptionKey: "User information is missing after login"]))
+                                return
+                            }
+                            
+                            do {
+                                let response = try self.createSNSLoginResponse(from: updatedUser)
+                                observer.onNext(response)
+                                observer.onCompleted()
+                            } catch {
+                                observer.onError(error)
+                            }
                         }
+                    }
+                } else {
+                    do {
+                        let response = try self.createSNSLoginResponse(from: user)
+                        observer.onNext(response)
+                        observer.onCompleted()
+                    } catch {
+                        observer.onError(error)
                     }
                 }
             }
+            
             return Disposables.create()
         }
     }
+    
+    private func createSNSLoginResponse(from user: KakaoSDKUser.User) throws -> SNSLoginResponse {
+        guard let id = user.id else {
+            throw NSError(domain: "KakaoLogin", code: -1, userInfo: [NSLocalizedDescriptionKey: "User ID is missing"])
+        }
+        
+        guard let email = user.kakaoAccount?.email else {
+            throw NSError(domain: "KakaoLogin", code: -1, userInfo: [NSLocalizedDescriptionKey: "Email is missing"])
+        }
+        
+        let nickName = user.kakaoAccount?.profile?.nickname
+        let imageUrl = user.kakaoAccount?.profile?.profileImageUrl?.absoluteString
+        
+        return SNSLoginResponse(
+            id: String(id),
+            email: email,
+            loginType: .kakao,
+            nickName: nickName,
+            image: imageUrl
+        )
+    }
+    
     
     // MARK: - APPLE LOGIN
     private var loginSubject = PublishSubject<SNSLoginResponse>()
@@ -172,7 +230,7 @@ class SignDataSourceImpl: NSObject, SignDataSource, ASAuthorizationControllerDel
             return nil
         }
         let monthDayString = String(format: "%02d%02d", month, day)
-
+        
         return yearString + monthDayString
     }
     

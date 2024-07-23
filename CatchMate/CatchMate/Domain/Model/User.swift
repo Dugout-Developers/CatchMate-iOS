@@ -8,7 +8,7 @@
 import UIKit
 
 struct User {
-    var id: String = UUID().uuidString
+    var id: String
     let snsID: String
     let email: String
     let nickName: String

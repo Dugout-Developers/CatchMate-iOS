@@ -87,39 +87,7 @@ extension SignUpFinishedViewController {
                 (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(TabBarController(), animated: true)
             }
             .disposed(by: disposeBag)
-        
-//        nextButton.rx.tap
-//            .map { Reactor.Action.signUpUser }
-//            .bind(to: reactor.action)
-//            .disposed(by: disposeBag)
-//
-//        
-//        
-//        reactor.state
-//            .map { $0.isSignUp }
-//            .distinctUntilChanged()
-//            .subscribe(onNext: { [weak self] isSignUp in
-//                if isSignUp == true {
-//                    self?.navigateToNextPage()
-//                } else if isSignUp == false {
-//                    self?.showErrorAlert()
-//                }
-//            })
-//            .disposed(by: disposeBag)
-
     }
-    
-//    private func navigateToNextPage() {
-//            // Logic to navigate to the next page
-//            let nextViewController = UIViewController()
-//            navigationController?.pushViewController(nextViewController, animated: true)
-//        }
-//        
-//        private func showErrorAlert() {
-//            let alert = UIAlertController(title: "Error", message: "Sign up failed.", preferredStyle: .alert)
-//            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-//            present(alert, animated: true, completion: nil)
-//        }
 }
 
 // MARK: - UI

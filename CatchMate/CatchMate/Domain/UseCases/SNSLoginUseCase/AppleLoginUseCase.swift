@@ -12,9 +12,9 @@ protocol AppleLoginUseCase {
 }
 
 final class AppleLoginUseCaseImpl: AppleLoginUseCase {
-    private let repository: SignRepository
+    private let repository: LoginRepository
     
-    init(repository: SignRepository) {
+    init(repository: LoginRepository) {
         self.repository = repository
     }
     func login() -> RxSwift.Observable<LoginModel> {

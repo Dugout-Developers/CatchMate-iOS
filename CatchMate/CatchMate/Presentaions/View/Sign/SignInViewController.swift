@@ -13,7 +13,7 @@ import FlexLayout
 import PinLayout
 
 final class SignInViewController: BaseViewController, View {
-    var reactor: SignReactor
+    var reactor: AuthReactor
     private let containerView = UIView()
     private let logoContainerView = UIView()
     private let logoImageView: UIImageView = {
@@ -51,7 +51,7 @@ final class SignInViewController: BaseViewController, View {
         return button
     }()
     
-    init (reactor: SignReactor) {
+    init (reactor: AuthReactor) {
         self.reactor = reactor
         super.init(nibName: nil, bundle: nil)
     }
@@ -70,7 +70,6 @@ final class SignInViewController: BaseViewController, View {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        reactor.action.onNext(.reloadSignInView)
     }
     
     override func viewDidLayoutSubviews() {
@@ -91,7 +90,7 @@ final class SignInViewController: BaseViewController, View {
 }
 // MARK: - Bind
 extension SignInViewController {
-    func bind(reactor: SignReactor) {
+    func bind(reactor: AuthReactor) {
         kakaoLoginButton.rx.tap
             .map{ Reactor.Action.kakaoLogin }
             .bind(to: reactor.action)
@@ -127,8 +126,17 @@ extension SignInViewController {
     }
     
     private func pushNextView() {
-        let signUpViewController = SignUpViewController(reactor: reactor)
-        navigationController?.pushViewController(signUpViewController, animated: true)
+        if reactor.currentState.isAuthenticated {
+            // 회원가입 이미한 유저일 경우
+            let tabViewController = TabBarController()
+            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(tabViewController, animated: true)
+        } else {
+            if let model = reactor.currentState.loginModel {
+                let signReactor = DIContainerService.shared.makeSignReactor(model)
+                let signUpViewController = SignUpViewController(reactor: signReactor)
+                navigationController?.pushViewController(signUpViewController, animated: true)
+            }
+        }
     }
 }
 

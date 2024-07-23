@@ -12,9 +12,9 @@ protocol NaverLoginUseCase {
 }
 
 final class NaverLoginUseCaseeImpl: NaverLoginUseCase {
-    private let repository: SignRepository
+    private let repository: LoginRepository
     
-    init(repository: SignRepository) {
+    init(repository: LoginRepository) {
         self.repository = repository
     }
     func login() -> Observable<LoginModel> {

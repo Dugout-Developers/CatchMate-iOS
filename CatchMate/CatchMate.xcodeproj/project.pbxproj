@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		530994542C4F6CEB00ABE103 /* LoginResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530994532C4F6CEB00ABE103 /* LoginResult.swift */; };
+		530994562C4F6D9900ABE103 /* LoginRequset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530994552C4F6D9900ABE103 /* LoginRequset.swift */; };
+		530DD6122C4F839600A7D6CE /* LoginDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530DD6112C4F839600A7D6CE /* LoginDataSource.swift */; };
+		530DD6142C4F85BF00A7D6CE /* FCMTokenDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530DD6132C4F85BF00A7D6CE /* FCMTokenDataSource.swift */; };
+		530DD6162C4F884100A7D6CE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 530DD6152C4F884100A7D6CE /* GoogleService-Info.plist */; };
+		530DD6192C4F88C600A7D6CE /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 530DD6182C4F88C600A7D6CE /* FirebaseMessaging */; };
 		531786532C1C8BFB00ACEF6A /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786522C1C8BFB00ACEF6A /* BaseViewController.swift */; };
 		531786552C1C8E7800ACEF6A /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786542C1C8E7800ACEF6A /* UIImage+Extension.swift */; };
 		531786572C1C8F1900ACEF6A /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786562C1C8F1900ACEF6A /* UIView+Extension.swift */; };
@@ -44,10 +50,10 @@
 		533A2B362C2BEA3900A59340 /* InputCheerStyleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B352C2BEA3900A59340 /* InputCheerStyleViewController.swift */; };
 		533A2B382C2BFD4B00A59340 /* SignUpFinishedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B372C2BFD4B00A59340 /* SignUpFinishedViewController.swift */; };
 		533A2B3B2C2C590400A59340 /* RxKakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 533A2B3A2C2C590400A59340 /* RxKakaoSDK */; };
-		533A2B3D2C2C5CE700A59340 /* SignDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B3C2C2C5CE700A59340 /* SignDataSource.swift */; };
+		533A2B3D2C2C5CE700A59340 /* SNSLoginDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B3C2C2C5CE700A59340 /* SNSLoginDataSource.swift */; };
 		533A2B3F2C2C5DBC00A59340 /* SNSLoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B3E2C2C5DBC00A59340 /* SNSLoginResponse.swift */; };
-		533A2B422C2C624D00A59340 /* SignRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B412C2C624D00A59340 /* SignRepository.swift */; };
-		533A2B442C2C62C700A59340 /* SignRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B432C2C62C700A59340 /* SignRepositoryImpl.swift */; };
+		533A2B422C2C624D00A59340 /* LoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B412C2C624D00A59340 /* LoginRepository.swift */; };
+		533A2B442C2C62C700A59340 /* LoginRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B432C2C62C700A59340 /* LoginRepositoryImpl.swift */; };
 		533A2B462C2C638100A59340 /* KakaoLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B452C2C638100A59340 /* KakaoLoginUseCase.swift */; };
 		536548A32C3EF3B700C2309A /* FavoriteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536548A22C3EF3B700C2309A /* FavoriteListViewController.swift */; };
 		536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAD2C189B230043B1DA /* AppDelegate.swift */; };
@@ -62,7 +68,7 @@
 		536BDDE92C1971C70043B1DA /* SignReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDE82C1971C70043B1DA /* SignReactor.swift */; };
 		536BDDEC2C19720E0043B1DA /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDEB2C19720E0043B1DA /* User.swift */; };
 		536BDDF62C1972740043B1DA /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDF52C1972740043B1DA /* UserDTO.swift */; };
-		536BDDF92C1972880043B1DA /* UserMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDF82C1972880043B1DA /* UserMapper.swift */; };
+		536BDDF92C1972880043B1DA /* LoginMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDF82C1972880043B1DA /* LoginMapper.swift */; };
 		536BDDFF2C1972D30043B1DA /* UserDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDFE2C1972D30043B1DA /* UserDataSource.swift */; };
 		536BDE122C1B51FD0043B1DA /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDE112C1B51FD0043B1DA /* TabBarController.swift */; };
 		536BDE152C1B52510043B1DA /* PinLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 536BDE142C1B52510043B1DA /* PinLayout */; };
@@ -110,6 +116,14 @@
 		53BE7ACF2C367008002FC64F /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7ACE2C367008002FC64F /* DateHelper.swift */; };
 		53BE7AD22C367181002FC64F /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7AD12C367181002FC64F /* Date+Extension.swift */; };
 		53BE7AD42C369A35002FC64F /* OptionButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7AD32C369A35002FC64F /* OptionButtonView.swift */; };
+		53E4A9B82C4FF00F00D21B49 /* AuthReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E4A9B72C4FF00F00D21B49 /* AuthReactor.swift */; };
+		53E4A9BA2C4FFB1300D21B49 /* SignUpDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E4A9B92C4FFB1300D21B49 /* SignUpDataSource.swift */; };
+		53E4A9BC2C4FFB8400D21B49 /* SignUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E4A9BB2C4FFB8400D21B49 /* SignUp.swift */; };
+		53E4A9BE2C50046E00D21B49 /* SignUpModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E4A9BD2C50046E00D21B49 /* SignUpModel.swift */; };
+		53E4A9C02C5009EB00D21B49 /* SignUpRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E4A9BF2C5009EB00D21B49 /* SignUpRepository.swift */; };
+		53E4A9C22C500A4400D21B49 /* SignUpRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E4A9C12C500A4400D21B49 /* SignUpRepositoryImpl.swift */; };
+		53E4A9C42C500AD500D21B49 /* SignUpUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E4A9C32C500AD500D21B49 /* SignUpUseCase.swift */; };
+		53E4A9C62C500E9B00D21B49 /* SignUpMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E4A9C52C500E9B00D21B49 /* SignUpMapper.swift */; };
 		53F1E8C62C47A46400A962F3 /* Apply.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F1E8C52C47A46400A962F3 /* Apply.swift */; };
 /* End PBXBuildFile section */
 
@@ -131,6 +145,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		530994532C4F6CEB00ABE103 /* LoginResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResult.swift; sourceTree = "<group>"; };
+		530994552C4F6D9900ABE103 /* LoginRequset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRequset.swift; sourceTree = "<group>"; };
+		530DD6112C4F839600A7D6CE /* LoginDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDataSource.swift; sourceTree = "<group>"; };
+		530DD6132C4F85BF00A7D6CE /* FCMTokenDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FCMTokenDataSource.swift; sourceTree = "<group>"; };
+		530DD6152C4F884100A7D6CE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		531786522C1C8BFB00ACEF6A /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		531786542C1C8E7800ACEF6A /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		531786562C1C8F1900ACEF6A /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
@@ -167,10 +186,10 @@
 		533A2B332C2BE98D00A59340 /* SignSelectedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignSelectedButton.swift; sourceTree = "<group>"; };
 		533A2B352C2BEA3900A59340 /* InputCheerStyleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputCheerStyleViewController.swift; sourceTree = "<group>"; };
 		533A2B372C2BFD4B00A59340 /* SignUpFinishedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpFinishedViewController.swift; sourceTree = "<group>"; };
-		533A2B3C2C2C5CE700A59340 /* SignDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignDataSource.swift; sourceTree = "<group>"; };
+		533A2B3C2C2C5CE700A59340 /* SNSLoginDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SNSLoginDataSource.swift; sourceTree = "<group>"; };
 		533A2B3E2C2C5DBC00A59340 /* SNSLoginResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SNSLoginResponse.swift; sourceTree = "<group>"; };
-		533A2B412C2C624D00A59340 /* SignRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignRepository.swift; sourceTree = "<group>"; };
-		533A2B432C2C62C700A59340 /* SignRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignRepositoryImpl.swift; sourceTree = "<group>"; };
+		533A2B412C2C624D00A59340 /* LoginRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepository.swift; sourceTree = "<group>"; };
+		533A2B432C2C62C700A59340 /* LoginRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRepositoryImpl.swift; sourceTree = "<group>"; };
 		533A2B452C2C638100A59340 /* KakaoLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginUseCase.swift; sourceTree = "<group>"; };
 		533A2B472C2D606600A59340 /* CatchMate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CatchMate.entitlements; sourceTree = "<group>"; };
 		536548A22C3EF3B700C2309A /* FavoriteListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteListViewController.swift; sourceTree = "<group>"; };
@@ -189,7 +208,7 @@
 		536BDDE82C1971C70043B1DA /* SignReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignReactor.swift; sourceTree = "<group>"; };
 		536BDDEB2C19720E0043B1DA /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		536BDDF52C1972740043B1DA /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
-		536BDDF82C1972880043B1DA /* UserMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMapper.swift; sourceTree = "<group>"; };
+		536BDDF82C1972880043B1DA /* LoginMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginMapper.swift; sourceTree = "<group>"; };
 		536BDDFE2C1972D30043B1DA /* UserDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataSource.swift; sourceTree = "<group>"; };
 		536BDE112C1B51FD0043B1DA /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		536BDE262C1B53150043B1DA /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
@@ -229,6 +248,14 @@
 		53BE7ACE2C367008002FC64F /* DateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
 		53BE7AD12C367181002FC64F /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		53BE7AD32C369A35002FC64F /* OptionButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionButtonView.swift; sourceTree = "<group>"; };
+		53E4A9B72C4FF00F00D21B49 /* AuthReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthReactor.swift; sourceTree = "<group>"; };
+		53E4A9B92C4FFB1300D21B49 /* SignUpDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpDataSource.swift; sourceTree = "<group>"; };
+		53E4A9BB2C4FFB8400D21B49 /* SignUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUp.swift; sourceTree = "<group>"; };
+		53E4A9BD2C50046E00D21B49 /* SignUpModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpModel.swift; sourceTree = "<group>"; };
+		53E4A9BF2C5009EB00D21B49 /* SignUpRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRepository.swift; sourceTree = "<group>"; };
+		53E4A9C12C500A4400D21B49 /* SignUpRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRepositoryImpl.swift; sourceTree = "<group>"; };
+		53E4A9C32C500AD500D21B49 /* SignUpUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpUseCase.swift; sourceTree = "<group>"; };
+		53E4A9C52C500E9B00D21B49 /* SignUpMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpMapper.swift; sourceTree = "<group>"; };
 		53F1E8C52C47A46400A962F3 /* Apply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Apply.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -246,6 +273,7 @@
 				536BDE232C1B52510043B1DA /* RxAlamofire in Frameworks */,
 				536BDE1B2C1B52510043B1DA /* RxCocoa in Frameworks */,
 				536BDE172C1B52510043B1DA /* FlexLayout in Frameworks */,
+				530DD6192C4F88C600A7D6CE /* FirebaseMessaging in Frameworks */,
 				533A2B3B2C2C590400A59340 /* RxKakaoSDK in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -267,6 +295,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		530994572C4F6F8C00ABE103 /* SNSLoginUseCase */ = {
+			isa = PBXGroup;
+			children = (
+				533A2B452C2C638100A59340 /* KakaoLoginUseCase.swift */,
+				5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */,
+				538249122C3196AD0074B583 /* NaverLoginUseCase.swift */,
+			);
+			path = SNSLoginUseCase;
+			sourceTree = "<group>";
+		};
 		531173202C36AD1300FF787D /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
@@ -400,6 +438,7 @@
 		536BDDDD2C1969370043B1DA /* APP */ = {
 			isa = PBXGroup;
 			children = (
+				530DD6152C4F884100A7D6CE /* GoogleService-Info.plist */,
 				53B8F4BC2C4EABA3000132CA /* APIKEY.xcconfig */,
 				53B8F4BA2C4EABA3000132CA /* APIKeys.plist */,
 				53B8F4BB2C4EABA3000132CA /* Info.plist */,
@@ -471,6 +510,7 @@
 		536BDDE72C1971AF0043B1DA /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				53E4A9B72C4FF00F00D21B49 /* AuthReactor.swift */,
 				536BDDE82C1971C70043B1DA /* SignReactor.swift */,
 				536BDE392C1C1F210043B1DA /* HomeReactor.swift */,
 				53716BBF2C400B3E0044AD2A /* FavoriteReactor.swift */,
@@ -500,6 +540,8 @@
 				531786772C20498800ACEF6A /* Post.swift */,
 				533A2B312C2BE7E600A59340 /* CheerStyles.swift */,
 				53F1E8C52C47A46400A962F3 /* Apply.swift */,
+				530994532C4F6CEB00ABE103 /* LoginResult.swift */,
+				53E4A9BD2C50046E00D21B49 /* SignUpModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -507,9 +549,8 @@
 		536BDDEE2C1972230043B1DA /* UseCases */ = {
 			isa = PBXGroup;
 			children = (
-				533A2B452C2C638100A59340 /* KakaoLoginUseCase.swift */,
-				5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */,
-				538249122C3196AD0074B583 /* NaverLoginUseCase.swift */,
+				530994572C4F6F8C00ABE103 /* SNSLoginUseCase */,
+				53E4A9C32C500AD500D21B49 /* SignUpUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -518,7 +559,8 @@
 			isa = PBXGroup;
 			children = (
 				531786752C20494500ACEF6A /* HomeRepository.swift */,
-				533A2B412C2C624D00A59340 /* SignRepository.swift */,
+				533A2B412C2C624D00A59340 /* LoginRepository.swift */,
+				53E4A9BF2C5009EB00D21B49 /* SignUpRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -539,6 +581,8 @@
 			children = (
 				536BDDF52C1972740043B1DA /* UserDTO.swift */,
 				533A2B3E2C2C5DBC00A59340 /* SNSLoginResponse.swift */,
+				530994552C4F6D9900ABE103 /* LoginRequset.swift */,
+				53E4A9BB2C4FFB8400D21B49 /* SignUp.swift */,
 			);
 			path = DTO;
 			sourceTree = "<group>";
@@ -546,7 +590,8 @@
 		536BDDFA2C19728C0043B1DA /* Mapper */ = {
 			isa = PBXGroup;
 			children = (
-				536BDDF82C1972880043B1DA /* UserMapper.swift */,
+				536BDDF82C1972880043B1DA /* LoginMapper.swift */,
+				53E4A9C52C500E9B00D21B49 /* SignUpMapper.swift */,
 			);
 			path = Mapper;
 			sourceTree = "<group>";
@@ -554,7 +599,8 @@
 		536BDDFD2C1972A40043B1DA /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
-				533A2B432C2C62C700A59340 /* SignRepositoryImpl.swift */,
+				533A2B432C2C62C700A59340 /* LoginRepositoryImpl.swift */,
+				53E4A9C12C500A4400D21B49 /* SignUpRepositoryImpl.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -563,7 +609,10 @@
 			isa = PBXGroup;
 			children = (
 				536BDDFE2C1972D30043B1DA /* UserDataSource.swift */,
-				533A2B3C2C2C5CE700A59340 /* SignDataSource.swift */,
+				533A2B3C2C2C5CE700A59340 /* SNSLoginDataSource.swift */,
+				530DD6112C4F839600A7D6CE /* LoginDataSource.swift */,
+				530DD6132C4F85BF00A7D6CE /* FCMTokenDataSource.swift */,
+				53E4A9B92C4FFB1300D21B49 /* SignUpDataSource.swift */,
 			);
 			path = DataSources;
 			sourceTree = "<group>";
@@ -695,6 +744,7 @@
 				536BDE222C1B52510043B1DA /* RxAlamofire */,
 				533A2B3A2C2C590400A59340 /* RxKakaoSDK */,
 				538249142C319C020074B583 /* naveridlogin-ios-sp */,
+				530DD6182C4F88C600A7D6CE /* FirebaseMessaging */,
 			);
 			productName = CatchMate;
 			productReference = 536BDDAA2C189B230043B1DA /* CatchMate.app */;
@@ -777,6 +827,7 @@
 				536BDE0F2C1B51440043B1DA /* XCRemoteSwiftPackageReference "RxAlamofire" */,
 				533A2B392C2C581300A59340 /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */,
 				538249112C31881D0074B583 /* XCRemoteSwiftPackageReference "naveridlogin-ios-sp" */,
+				530DD6172C4F88B000A7D6CE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 536BDDAB2C189B230043B1DA /* Products */;
 			projectDirPath = "";
@@ -800,6 +851,7 @@
 				5383BE902C34ECD1008940F1 /* PretendardVariable.ttf in Resources */,
 				536BDDB72C189B240043B1DA /* Assets.xcassets in Resources */,
 				536BDDBA2C189B240043B1DA /* Base in Resources */,
+				530DD6162C4F884100A7D6CE /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -829,14 +881,18 @@
 				533A2B362C2BEA3900A59340 /* InputCheerStyleViewController.swift in Sources */,
 				537598062C46C0B0003BD8AE /* ApplyPopupViewController.swift in Sources */,
 				53BE7AD42C369A35002FC64F /* OptionButtonView.swift in Sources */,
+				53E4A9C02C5009EB00D21B49 /* SignUpRepository.swift in Sources */,
+				53E4A9C62C500E9B00D21B49 /* SignUpMapper.swift in Sources */,
 				53716BD82C4564700044AD2A /* DefaultsPaddingLabel.swift in Sources */,
-				536BDDF92C1972880043B1DA /* UserMapper.swift in Sources */,
+				536BDDF92C1972880043B1DA /* LoginMapper.swift in Sources */,
 				531786782C20498800ACEF6A /* Post.swift in Sources */,
 				533A2B2C2C29485E00A59340 /* SignUpViewController.swift in Sources */,
 				53241F4E2C3EE58E00F468E1 /* CMPopupViewController.swift in Sources */,
 				536BDE2D2C1B55080043B1DA /* AddViewController.swift in Sources */,
+				53E4A9C22C500A4400D21B49 /* SignUpRepositoryImpl.swift in Sources */,
 				537598082C46C3D2003BD8AE /* DefaultsTextView.swift in Sources */,
 				533A2B462C2C638100A59340 /* KakaoLoginUseCase.swift in Sources */,
+				53E4A9BC2C4FFB8400D21B49 /* SignUp.swift in Sources */,
 				531786602C1EB24D00ACEF6A /* TeamFilterViewController.swift in Sources */,
 				531786822C21D3F700ACEF6A /* ChatListTableViewCell.swift in Sources */,
 				531786592C1C934A00ACEF6A /* UIViewController+Extension.swift in Sources */,
@@ -856,9 +912,11 @@
 				536BDE362C1BEC870043B1DA /* ListCardViewTableViewCell.swift in Sources */,
 				536BDDFF2C1972D30043B1DA /* UserDataSource.swift in Sources */,
 				53BE7AD22C367181002FC64F /* Date+Extension.swift in Sources */,
+				53E4A9B82C4FF00F00D21B49 /* AuthReactor.swift in Sources */,
+				53E4A9BA2C4FFB1300D21B49 /* SignUpDataSource.swift in Sources */,
 				536BDDEC2C19720E0043B1DA /* User.swift in Sources */,
 				53241F3C2C3C517600F468E1 /* GridSystem.swift in Sources */,
-				533A2B422C2C624D00A59340 /* SignRepository.swift in Sources */,
+				533A2B422C2C624D00A59340 /* LoginRepository.swift in Sources */,
 				5375980C2C46DC45003BD8AE /* ChatRoomViewController.swift in Sources */,
 				533A2B322C2BE7E600A59340 /* CheerStyles.swift in Sources */,
 				531786572C1C8F1900ACEF6A /* UIView+Extension.swift in Sources */,
@@ -867,6 +925,7 @@
 				53716BC02C400B3E0044AD2A /* FavoriteReactor.swift in Sources */,
 				536BDDE92C1971C70043B1DA /* SignReactor.swift in Sources */,
 				531786552C1C8E7800ACEF6A /* UIImage+Extension.swift in Sources */,
+				530DD6142C4F85BF00A7D6CE /* FCMTokenDataSource.swift in Sources */,
 				536BDE342C1B57B10043B1DA /* HomeFilterButton.swift in Sources */,
 				536BDE272C1B53150043B1DA /* UIColor+Extension.swift in Sources */,
 				536BDE382C1C07990043B1DA /* PaddingLabel.swift in Sources */,
@@ -886,28 +945,33 @@
 				533A2B3F2C2C5DBC00A59340 /* SNSLoginResponse.swift in Sources */,
 				533A2B252C280E0500A59340 /* CMDefaultFilledButton.swift in Sources */,
 				533A2B2E2C29B56200A59340 /* CMDefaultBorderedButton.swift in Sources */,
-				533A2B3D2C2C5CE700A59340 /* SignDataSource.swift in Sources */,
+				530994542C4F6CEB00ABE103 /* LoginResult.swift in Sources */,
+				533A2B3D2C2C5CE700A59340 /* SNSLoginDataSource.swift in Sources */,
 				536BDE122C1B51FD0043B1DA /* TabBarController.swift in Sources */,
 				536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */,
 				531786642C1EF30F00ACEF6A /* Team.swift in Sources */,
 				538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */,
+				530DD6122C4F839600A7D6CE /* LoginDataSource.swift in Sources */,
 				5317867D2C216CBE00ACEF6A /* NumberPickerViewController.swift in Sources */,
 				53716BC62C42D19A0044AD2A /* PlaceFilterViewController.swift in Sources */,
+				53E4A9C42C500AD500D21B49 /* SignUpUseCase.swift in Sources */,
 				5317867F2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift in Sources */,
 				5317867B2C2077EC00ACEF6A /* NotiViewTableViewCell.swift in Sources */,
 				531786662C1F014E00ACEF6A /* CMTextField.swift in Sources */,
+				53E4A9BE2C50046E00D21B49 /* SignUpModel.swift in Sources */,
 				5382490E2C2E79A90074B583 /* AppleLoginUseCase.swift in Sources */,
 				5317866B2C200D6000ACEF6A /* BasePickerViewController.swift in Sources */,
 				536BDDE22C196F510043B1DA /* Bundle+Extension.swift in Sources */,
 				533A2B272C28558600A59340 /* SignInViewController.swift in Sources */,
 				531786742C202F1B00ACEF6A /* NetworkService.swift in Sources */,
+				530994562C4F6D9900ABE103 /* LoginRequset.swift in Sources */,
 				5317865B2C1C956400ACEF6A /* DateFilterViewController.swift in Sources */,
 				53BE7ACF2C367008002FC64F /* DateHelper.swift in Sources */,
 				5383BE8F2C34DF27008940F1 /* Font.swift in Sources */,
 				53716BC82C43EEB50044AD2A /* CMToastMessage.swift in Sources */,
 				536548A32C3EF3B700C2309A /* FavoriteListViewController.swift in Sources */,
 				531786852C23261200ACEF6A /* SheetHeight.swift in Sources */,
-				533A2B442C2C62C700A59340 /* SignRepositoryImpl.swift in Sources */,
+				533A2B442C2C62C700A59340 /* LoginRepositoryImpl.swift in Sources */,
 				533A2B342C2BE98D00A59340 /* SignSelectedButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1265,6 +1329,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		530DD6172C4F88B000A7D6CE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.29.0;
+			};
+		};
 		533A2B392C2C581300A59340 /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kakao/kakao-ios-sdk-rx";
@@ -1332,6 +1404,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		530DD6182C4F88C600A7D6CE /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 530DD6172C4F88B000A7D6CE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
 		533A2B3A2C2C590400A59340 /* RxKakaoSDK */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 533A2B392C2C581300A59340 /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */;
