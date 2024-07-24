@@ -24,8 +24,8 @@ final class HomeViewController: BaseViewController, View {
     private let filterScrollView = UIScrollView()
     private let filterContainerView = UIView()
     private let allFilterButton = HomeFilterButton(icon: UIImage(named: "cm20hamburger")?.withTintColor(.grayScale700, renderingMode: .alwaysOriginal), title: "전체", filter: .all)
-    private let dateFilterButton = HomeFilterButton(icon: UIImage(named: "cm20down")?.withTintColor(.grayScale700, renderingMode: .alwaysOriginal), title: "경기 날짜", filter: .date)
-    private let teamFilterButton = HomeFilterButton(icon: UIImage(named: "cm20down")?.withTintColor(.grayScale700, renderingMode: .alwaysOriginal), title: "응원 구단", filter: .team)
+    private let dateFilterButton = HomeFilterButton(title: "경기 날짜", filter: .date)
+    private let teamFilterButton = HomeFilterButton(title: "응원 구단", filter: .team)
     
     private let tableView = UITableView()
     
@@ -46,7 +46,7 @@ final class HomeViewController: BaseViewController, View {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .cmBackgroundColor
+        view.backgroundColor = .grayScale50
         setupTableView()
         setupUI()
         setupNavigation()

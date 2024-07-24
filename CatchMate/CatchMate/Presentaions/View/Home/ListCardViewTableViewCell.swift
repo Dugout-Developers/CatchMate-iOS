@@ -21,14 +21,16 @@ final class ListCardViewTableViewCell: UITableViewCell {
     private let cardContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
-        view.layer.cornerRadius = 12
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.04
+        view.layer.shadowOffset = CGSize(width: 0, height: 4)
+        view.layer.shadowRadius = 10
+        view.layer.cornerRadius = 8
+        view.clipsToBounds = true
         return view
     }()
-    
-    private let divider = UIView()
-    
-    private let infoContainer = UIView()
-    private let partyNumLabel: UILabel  = UILabel()
+
+    private let partyNumLabel: UILabel  = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8))
     let favoriteButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "cmFavorite_filled")?.withRenderingMode(.alwaysOriginal), for: .normal)
@@ -48,6 +50,13 @@ final class ListCardViewTableViewCell: UITableViewCell {
 
     
     private let homeTeamImageView: ListTeamImageView = ListTeamImageView()
+    private let vsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "VS"
+        label.applyStyle(textStyle: FontSystem.body03_medium)
+        label.textColor = .cmNonImportantTextColor
+        return label
+    }()
     private let awayTeamImageView: ListTeamImageView = ListTeamImageView()
    
     
@@ -86,15 +95,17 @@ final class ListCardViewTableViewCell: UITableViewCell {
         
         //info
         postTitleLabel.text = post.title
+        postTitleLabel.textColor = .cmHeadLineTextColor
         infoLabel.text = "\(post.date) | \(post.playTime) | \(post.location)"
+        infoLabel.textColor = .cmPrimaryColor
         if post.isFinished {
-            partyNumLabel.text = "\(post.currentPerson)/\(post.maxPerson) 인원 마감"
+            partyNumLabel.text = "\(post.currentPerson)/\(post.maxPerson) 마감"
             partyNumLabel.textColor = .cmNonImportantTextColor
-            postTitleLabel.textColor = .cmNonImportantTextColor
+            partyNumLabel.backgroundColor = .grayScale100
         } else {
             partyNumLabel.text = "\(post.currentPerson)/\(post.maxPerson)"
             partyNumLabel.textColor = .cmPrimaryColor
-            postTitleLabel.textColor = .cmHeadLineTextColor
+            partyNumLabel.backgroundColor = .brandColor50
         }
         
         // Font
@@ -110,23 +121,21 @@ extension ListCardViewTableViewCell {
     private func setUI() {
         let margin = MainGridSystem.getMargin()
         contentView.addSubview(cardContainerView)
-        
-        cardContainerView.flex.direction(.column).paddingTop(20).marginHorizontal(margin).define { flex in
-            flex.addItem().direction(.row).width(100%).justifyContent(.start).alignItems(.start).define { flex in
-                flex.addItem(homeTeamImageView).width(50).height(67).marginRight(4)
-                flex.addItem(awayTeamImageView).width(50).height(67).marginRight(16)
-                flex.addItem(infoContainer).direction(.column).justifyContent(.spaceBetween).alignItems(.start).height(67).define { flex in
-                    flex.addItem().direction(.row).justifyContent(.spaceBetween).width(100%).alignItems(.center).define { flex in
-                        flex.addItem(partyNumLabel)
-                        flex.addItem(favoriteButton).width(20).aspectRatio(1)
-                    }
-                    flex.addItem(postTitleLabel).width(100%)
-                    flex.addItem(infoLabel)
-                }.grow(1).shrink(1)
-            }.marginBottom(20)
-            flex.addItem(divider).width(100%).height(1).backgroundColor(.grayScale50)
-
+        cardContainerView.flex.direction(.column).padding(16).marginHorizontal(margin).marginVertical(4).define { flex in
+            flex.addItem().direction(.column).width(100%).justifyContent(.start).alignItems(.start).define { flex in
+                flex.addItem(infoLabel).marginBottom(4)
+                flex.addItem().direction(.row).justifyContent(.start).alignItems(.center).define { flex in
+                    flex.addItem(partyNumLabel).marginRight(6)
+                    flex.addItem(postTitleLabel).grow(1).shrink(1)
+                }
+            }.marginBottom(12)
+            flex.addItem().direction(.row).justifyContent(.center).alignItems(.center).backgroundColor(.grayScale50).cornerRadius(8).paddingVertical(16).define { flex in
+                flex.addItem(homeTeamImageView).width(48).aspectRatio(1)
+                flex.addItem(vsLabel).marginHorizontal(24)
+                flex.addItem(awayTeamImageView).width(48).aspectRatio(1)
+            }
         }
+
     }
 }
 
@@ -157,8 +166,8 @@ final class ListTeamImageView: UIView {
     }
     
     func setupTeam(team: Team, isMyTeam: Bool) {
-        imageView.image = team.getLogoImage
-        containerView.backgroundColor = isMyTeam ? team.getTeamColor : .grayScale50
+        imageView.image = isMyTeam ? team.getLogoImage : team.getLogoImage?.applyBlackAndWhiteFilter()
+        containerView.backgroundColor = isMyTeam ? team.getTeamColor : .white
     }
     
     private func settupUI() {
