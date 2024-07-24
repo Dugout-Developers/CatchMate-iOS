@@ -72,8 +72,16 @@ class NonMembersAccessViewController: BaseViewController {
         signInPageButton.rx.tap
             .withUnretained(self)
             .subscribe { _, _ in
-                let reactor = DIContainerService.shared.makeSignReactor()
-                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(SignInViewController(reactor: reactor), animated: true)
+                let signReactorResult = DIContainerService.shared.makeAuthReactor()
+                switch signReactorResult {
+                case .success(let reactor):
+                    let signInViewController = SignInViewController(reactor: reactor)
+                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(signInViewController, animated: true)
+                    break
+                case .failure(let error):
+                    print("Failed to create SignReactor: \(error)")
+                    // ErrorViewController 만들어서 띄우기
+                }
             }
             .disposed(by: disposeBag)
     }

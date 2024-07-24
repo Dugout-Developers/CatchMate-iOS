@@ -21,7 +21,7 @@ final class HomeFilterButton: UIButton {
     }
     private(set) var filterType: Filter
     
-    init(icon: UIImage?, title: String, filter: Filter) {
+    init(icon: UIImage? = UIImage(named: "cm20down_filled"), title: String, filter: Filter) {
         self.filterType = filter
         super.init(frame: .zero)
         setupButton()
@@ -52,7 +52,7 @@ final class HomeFilterButton: UIButton {
     private func setupButton() {
         // 버튼 스타일 설정
         backgroundColor = UIColor.white
-        layer.cornerRadius = 8
+        layer.cornerRadius = 20
         tintColor = .cmPrimaryColor
         self.addTarget(self, action: #selector(buttonPressed), for: [.touchDown, .touchDragInside])
         self.addTarget(self, action: #selector(buttonReleased), for: [.touchUpInside, .touchUpOutside, .touchCancel])
@@ -60,7 +60,7 @@ final class HomeFilterButton: UIButton {
     
     private func setupData(icon: UIImage?, title: String) {
         // 아이콘 설정
-        iconImageView.image = icon
+        iconImageView.image = icon?.withTintColor(.grayScale700, renderingMode: .alwaysOriginal)
         iconImageView.contentMode = .scaleAspectFit
         iconImageView.tintColor = .grayScale700
         
@@ -73,10 +73,10 @@ final class HomeFilterButton: UIButton {
     private func setupUI() {
         addSubview(containerView)
         containerView.isUserInteractionEnabled = false
-        containerView.flex.direction(.row).alignItems(.center).paddingHorizontal(10).paddingVertical(11).define { flex in
+        containerView.flex.direction(.row).alignItems(.center).paddingHorizontal(16).paddingVertical(12).define { flex in
+            flex.addItem(filterTitleLabel).marginRight(2)
+            flex.addItem(valueLabel).marginRight(2)
             flex.addItem(iconImageView).size(20)
-            flex.addItem(filterTitleLabel).marginLeft(8)
-            flex.addItem(valueLabel).marginLeft(8)
         }
     }
     

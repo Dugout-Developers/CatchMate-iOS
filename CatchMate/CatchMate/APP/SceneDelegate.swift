@@ -22,8 +22,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let tabViewController = TabBarController()
         window?.rootViewController = tabViewController
         
-//        let signInViewController = SignInViewController(reactor: DIContainerService.shared.makeSignReactor())
-//         window?.rootViewController = UINavigationController(rootViewController: signInViewController)
+//        let reactor = DIContainerService.shared.makeAuthReactor()
+//        let signInViewController = SignInViewController(reactor: reactor)
+//        window?.rootViewController = UINavigationController(rootViewController: signInViewController)
+
         window?.makeKeyAndVisible()
     }
     

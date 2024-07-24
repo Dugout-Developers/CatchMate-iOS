@@ -8,6 +8,8 @@
 import UIKit
 import RxKakaoSDKCommon
 import NaverThirdPartyLogin
+import Firebase
+import FirebaseMessaging
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
+        FirebaseApp.configure()
         DispatchQueue.global(qos: .background).async {
             if let kakaoAppKey = Bundle.main.kakaoLoginAPPKey {
                 RxKakaoSDK.initSDK(appKey: kakaoAppKey)
@@ -37,7 +39,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         return true
     }
-
+    // 푸시 알림 등록
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        Messaging.messaging().apnsToken = deviceToken
+    }
+    
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print("Failed to register for remote notifications: \(error.localizedDescription)")
+    }
+    
     // MARK: UISceneSession Lifecycle
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {

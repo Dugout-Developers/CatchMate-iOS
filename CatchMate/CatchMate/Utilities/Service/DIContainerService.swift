@@ -11,14 +11,26 @@ class DIContainerService {
     static let shared = DIContainerService()
 
     private init() {}
-
-    func makeSignReactor() -> SignReactor {
-        let repository = SignRepositoryImpl(remoteDataSource: SignDataSourceImpl())
-        let kakaoUsecase = KakaoLoginUseCaseImpl(repository: repository)
-        let appleUsecase = AppleLoginUseCaseImpl(repository: repository)
-        let naverUsecase = NaverLoginUseCaseeImpl(repository: repository)
-        let reactor = SignReactor(kakaoUsecase: kakaoUsecase, appleUsecase: appleUsecase, naverUsecase: naverUsecase)
-        
-        return reactor
+    
+    func makeAuthReactor() -> Result<AuthReactor, Error> {
+        do {
+            let loginDS = try LoginDataSourceImpl()
+            let repository = LoginRepositoryImpl(snsDataSource: SNSLoginDataSourceImpl(), fcmDataSource: FCMTokenDataSourceImpl(), loginDatasource: loginDS)
+            let kakaoUsecase = KakaoLoginUseCaseImpl(repository: repository)
+            let appleUsecase = AppleLoginUseCaseImpl(repository: repository)
+            let naverUsecase = NaverLoginUseCaseeImpl(repository: repository)
+            let reactor = AuthReactor(kakaoUsecase: kakaoUsecase, appleUsecase: appleUsecase, naverUsecase: naverUsecase)
+            
+            return .success(reactor)
+        } catch {
+            return .failure(error)
+        }
+    }
+    
+    func makeSignReactor(_ model: LoginModel) -> SignReactor {
+        let dataSource = SignUpDataSourceImpl()
+        let repository = SignUpRepositoryImpl(signupDatasource: dataSource)
+        let usecase = SignUpUseCaseImpl(repository: repository)
+        return SignReactor(loginModel: model, signupUseCase: usecase)
     }
 }

@@ -24,9 +24,6 @@ enum ValidatCase: String {
 
 final class SignReactor: Reactor {
     enum Action {
-        case kakaoLogin
-        case appleLogin
-        case naverLogin
         case updateNickname(String)
         case endEditNickname
         case updateBirth(String)
@@ -34,10 +31,8 @@ final class SignReactor: Reactor {
         case updateTeam(Team)
         case updateCheerStyle(CheerStyles?)
         case signUpUser
-        case reloadSignInView
     }
     enum Mutation {
-        case getSNSLoginInfo(LoginModel)
         case setNickname(String)
         case setValidateCase
         case setIsEditingNickName(Bool)
@@ -50,10 +45,8 @@ final class SignReactor: Reactor {
         case validateSignUp
         case validateForm
         case validateTeam
-        case resetLoginModel
     }
     struct State {
-        var loginModel: LoginModel?
         var nickName: String = ""
         var nickNameValidate: ValidatCase = .none
         var isEditingNickname: Bool = false
@@ -62,25 +55,24 @@ final class SignReactor: Reactor {
         var gender: Gender?
         var team: Team?
         var cheerStyle: CheerStyles?
-        var user: User?
         var signUpViewNextButtonState: Bool = false
         var isFormValid: Bool = false
         var isSignUp: Bool?
+        var signupResponse: SignUpResponse? = nil
         var isTeamSelected: Bool = false
         var error: Error?
     }
     
     var initialState: State
-    private let kakaoLoginUseCase: KakaoLoginUseCase
-    private let appleLoginUseCase: AppleLoginUseCase
-    private let naverLoginUseCase: NaverLoginUseCase
-    
-    init(kakaoUsecase: KakaoLoginUseCase, appleUsecase: AppleLoginUseCase, naverUsecase: NaverLoginUseCase) {
+    private let signupUseCase: SignUpUseCase
+    private let loginModel: LoginModel
+    private let disposeBag = DisposeBag()
+
+    init(loginModel: LoginModel, signupUseCase: SignUpUseCase) {
         //usecase 추가하기
         self.initialState = State()
-        self.kakaoLoginUseCase = kakaoUsecase
-        self.appleLoginUseCase = appleUsecase
-        self.naverLoginUseCase = naverUsecase
+        self.loginModel = loginModel
+        self.signupUseCase = signupUseCase
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
@@ -117,26 +109,6 @@ final class SignReactor: Reactor {
             return Observable.just(Mutation.setCheerStyle(cheerStyle))
         case .signUpUser:
             return Observable.just(Mutation.validateSignUp)
-        case .kakaoLogin:
-            return kakaoLoginUseCase.login()
-                .map { Mutation.getSNSLoginInfo($0) }
-                .catch { error in
-                    Observable.just(Mutation.setError(error))
-                }
-        case .appleLogin:
-            return appleLoginUseCase.login()
-                .map { Mutation.getSNSLoginInfo($0) }
-                .catch { error in
-                    Observable.just(Mutation.setError(error))
-                }
-        case .naverLogin:
-            return naverLoginUseCase.login()
-                .map { Mutation.getSNSLoginInfo($0) }
-                .catch { error in
-                    Observable.just(Mutation.setError(error))
-                }
-        case .reloadSignInView:
-            return Observable.just(Mutation.resetLoginModel)
         }
     }
     
@@ -175,11 +147,27 @@ final class SignReactor: Reactor {
         case .setCheerStyle(let cheerStyle):
             newState.cheerStyle = cheerStyle
         case .validateSignUp:
-            if !newState.nickName.isEmpty, !newState.birth.isEmpty, let gender = newState.gender, let team = newState.team, let snsId = newState.loginModel?.id, let email = newState.loginModel?.email{
-                if let age = birthToAge(newState.birth) {
-                    newState.user = User(snsID: snsId, email: email, nickName: newState.nickName, age: age, team: team, gener: gender, cheerStyle: newState.cheerStyle, profilePicture: nil)
-                    newState.isSignUp = true
-                    print(newState.user ?? "Error")
+            if !newState.nickName.isEmpty, !newState.birth.isEmpty, let gender = newState.gender, let team = newState.team {
+                if birthToAge(newState.birth) != nil {
+                    let model = SignUpModel(accessToken: loginModel.accessToken, refreshToken: loginModel.refreshToken, nickName: newState.nickName, birth: newState.birth, team: team, cheerStyle: newState.cheerStyle)
+                    signupUseCase.signup(model)
+                        .subscribe(onNext: { result in
+                              switch result {
+                              case .success(let response):
+                                  print("Sign up successful: \(response)")
+                                  newState.signupResponse = response
+                                  newState.isSignUp = true
+                              case .failure(let error):
+                                  print("Sign up failed with error: \(error)")
+                                  newState.isSignUp = false
+                                  newState.error = error
+                              }
+                          }, onError: { error in
+                              print("Unexpected error: \(error)")
+                              newState.isSignUp = false
+                              newState.error = error
+                          })
+                          .disposed(by: disposeBag)
                 } else {
                     newState.isSignUp = false
                     newState.error = SignUpError.ageError
@@ -188,20 +176,6 @@ final class SignReactor: Reactor {
                 newState.isSignUp = false
                 newState.error = SignUpError.dataError
             }
-        case .getSNSLoginInfo(let loginInfo):
-            newState.loginModel = loginInfo
-            if let gender = newState.loginModel?.gender {
-                newState.gender = gender
-            }
-            if let nickname = newState.loginModel?.nickName {
-                newState.nickName = nickname
-            }
-            if let birth = newState.loginModel?.birth {
-                newState.birth = birth
-            }
-            print("LoginModel Updated: \(loginInfo)")  // 로그 추가
-        case .resetLoginModel:
-            newState.loginModel = nil
         }
         return newState
     }

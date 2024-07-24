@@ -22,4 +22,22 @@ extension UIImage {
         return 0
     }
     
+    /// 흑백 필터 적용
+    func applyBlackAndWhiteFilter() -> UIImage? {
+        guard let ciImage = CIImage(image: self) else { return nil }
+        
+        // CIFilter로 흑백 필터 생성
+        guard let filter = CIFilter(name: "CIPhotoEffectMono") else { return nil }
+        filter.setValue(ciImage, forKey: kCIInputImageKey)
+        
+        // 필터 결과 이미지 생성
+        guard let outputImage = filter.outputImage else { return nil }
+        
+        // CIContext를 사용하여 UIImage로 변환
+        let context = CIContext()
+        guard let cgImage = context.createCGImage(outputImage, from: outputImage.extent) else { return nil }
+        
+        return UIImage(cgImage: cgImage)
+    }
+
 }

@@ -24,7 +24,7 @@ class DefaultsPaddingLabel: UILabel {
         self.padding = UIEdgeInsets(top: 4.0, left: 10.0, bottom: 4.0, right: 10.0)
         super.init(coder: coder)
         self.applyStyle(textStyle: FontSystem.caption01_medium)
-        self.layer.cornerRadius = 10
+        self.layer.cornerRadius = 12
         self.clipsToBounds = true
         self.isUserInteractionEnabled = true
     }

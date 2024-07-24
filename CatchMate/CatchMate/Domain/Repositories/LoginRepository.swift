@@ -8,16 +8,7 @@
 import UIKit
 import RxSwift
 
-// MARK: - Domain Model (확정 X - Test 버전)
-struct LoginModel {
-    let id: String
-    let email: String
-    let nickName: String?
-    let gender: Gender?
-    let birth: String?
-}
-
-protocol SignRepository {
+protocol LoginRepository {
     func kakaoLogin() -> Observable<LoginModel>
     func appleLogin() -> Observable<LoginModel>
     func naverLogin() -> Observable<LoginModel>
