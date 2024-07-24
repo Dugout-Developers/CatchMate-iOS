@@ -24,7 +24,7 @@ final class TeamPaddingLabel: DefaultsPaddingLabel {
         }
 
     func setTeam(team: Team) {
-        self.text = team.rawValue
+        self.text = team.fullName
         self.backgroundColor = team.getTeamColor
     }
 }

@@ -21,6 +21,34 @@ enum Team: String, CaseIterable {
     case allTeamLove = "평화주의자"
     case yarine = "야린이"
     
+    var fullName: String {
+        switch self {
+        case .nc:
+            "엔씨다이노스"
+        case .samsung:
+            "삼성라이온즈"
+        case .ssg:
+            "신세계랜더스"
+        case .dosun:
+            "두산베어스"
+        case .kt:
+            "케이티위즈"
+        case .hanhwa:
+            "한화이글스"
+        case .lotte:
+            "롯데자이언츠"
+        case .kia:
+            "기아타이거즈"
+        case .lg:
+            "엘지트윈스"
+        case .kiwoom:
+            "키움히어로즈"
+        case .allTeamLove:
+            "평화주의자"
+        case .yarine:
+            "야린이"
+        }
+    }
     var place: [String]? {
         switch self {
         case .nc:
