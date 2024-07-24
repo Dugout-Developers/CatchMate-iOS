@@ -76,8 +76,9 @@ final class ListCardViewTableViewCell: UITableViewCell {
     }
     override func layoutSubviews() {
         super.layoutSubviews()
+        partyNumLabel.flex.markDirty()
         cardContainerView.pin.all()
-        cardContainerView.flex.layout()
+        cardContainerView.flex.layout(mode: .adjustHeight)
     }
     override func sizeThatFits(_ size: CGSize) -> CGSize {
         cardContainerView.pin.width(size.width)
@@ -124,7 +125,7 @@ extension ListCardViewTableViewCell {
         cardContainerView.flex.direction(.column).padding(16).marginHorizontal(margin).marginVertical(4).define { flex in
             flex.addItem().direction(.column).width(100%).justifyContent(.start).alignItems(.start).define { flex in
                 flex.addItem(infoLabel).marginBottom(4)
-                flex.addItem().direction(.row).justifyContent(.start).alignItems(.center).define { flex in
+                flex.addItem().width(100%).direction(.row).justifyContent(.start).alignItems(.center).define { flex in
                     flex.addItem(partyNumLabel).marginRight(6)
                     flex.addItem(postTitleLabel).grow(1).shrink(1)
                 }

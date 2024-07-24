@@ -74,8 +74,8 @@ final class HomeFilterButton: UIButton {
         addSubview(containerView)
         containerView.isUserInteractionEnabled = false
         containerView.flex.direction(.row).alignItems(.center).paddingHorizontal(16).paddingVertical(12).define { flex in
-            flex.addItem(filterTitleLabel).marginLeft(8)
-            flex.addItem(valueLabel).marginLeft(8)
+            flex.addItem(filterTitleLabel).marginRight(2)
+            flex.addItem(valueLabel).marginRight(2)
             flex.addItem(iconImageView).size(20)
         }
     }

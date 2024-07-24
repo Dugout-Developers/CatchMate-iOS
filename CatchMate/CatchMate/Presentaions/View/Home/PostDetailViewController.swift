@@ -29,6 +29,7 @@ final class PostDetailViewController: BaseViewController, View {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .cmHeadLineTextColor
+        label.numberOfLines = 0
         return label
     }()
     private var ageOptionLabel = [DefaultsPaddingLabel]()
