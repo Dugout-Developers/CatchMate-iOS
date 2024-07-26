@@ -206,8 +206,6 @@ final class AddViewController: BaseViewController, View {
     }
     
     private func setupNavigationBar() {
-        customNavigationBar.title = "등록"
-        
         let saveButton = UIButton()
         saveButton.setTitle("임시저장", for: .normal)
         saveButton.applyStyle(textStyle: FontSystem.body02_medium)

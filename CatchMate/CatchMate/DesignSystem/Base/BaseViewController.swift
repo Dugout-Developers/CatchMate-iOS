@@ -26,14 +26,23 @@ class BaseViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 //        setupbackButton()
-        if let tabBarController = tabBarController, tabBarController.selectedIndex != 2 {
-            tabBarController.tabBar.isHidden = false
+        if let navigationController = navigationController, navigationController.viewControllers.count > 1 {
+            tabBarController?.tabBar.isHidden = true
+        } else {
+            if tabBarController?.selectedIndex != 2 {
+                tabBarController?.tabBar.isHidden = false
+            } else {
+                tabBarController?.tabBar.isHidden = true
+            }
         }
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-//        tabBarController?.tabBar.isHidden = false
+        if let navigationController = navigationController, navigationController.viewControllers.count <= 1 {
+            tabBarController?.tabBar.isHidden = false
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -79,6 +88,9 @@ class BaseViewController: UIViewController {
     
     func setupLogo() {
         let logoImageView = UIImageView(image: UIImage(named: "navigationLogo"))
+        logoImageView.snp.makeConstraints { make in
+            make.width.equalTo(logoImageView.image!.getRatio(height: 27))
+        }
         logoImageView.contentMode = .scaleAspectFit
         customNavigationBar.addLeftItems(items: [logoImageView])
     }

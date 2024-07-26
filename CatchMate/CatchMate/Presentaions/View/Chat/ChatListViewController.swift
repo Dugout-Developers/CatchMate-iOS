@@ -49,7 +49,7 @@ final class ChatListViewController: BaseViewController {
 // MARK: - TableView
 extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return Chat.mockupData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -59,7 +59,7 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let chatRoomVC = ChatRoomViewController()
+        let chatRoomVC = ChatRoomViewController(chat: Chat.mockupData[indexPath.row])
         navigationController?.pushViewController(chatRoomVC, animated: true)
     }
     

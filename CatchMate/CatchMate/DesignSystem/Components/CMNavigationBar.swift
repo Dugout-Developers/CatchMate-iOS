@@ -6,11 +6,14 @@
 //
 
 import UIKit
+import SnapKit
 
 final class CMNavigationBar: UIView {
     private let leftStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.distribution = .fill
         stackView.spacing = 12
         return stackView
     }()
@@ -18,31 +21,17 @@ final class CMNavigationBar: UIView {
     private let rightStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
+        stackView.alignment = .center
         stackView.spacing = 12
         return stackView
     }()
-    
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.textColor = .cmHeadLineTextColor
-        label.applyStyle(textStyle: FontSystem.headline03_reguler)
-        return label
-    }()
-    
+
     private let backButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "cm20left")?.withRenderingMode(.alwaysOriginal), for: .normal)
-//        button.tintColor = .clear
         return button
     }()
-    
-    var title: String? {
-        didSet {
-            titleLabel.text = title
-        }
-    }
-    
+
     var isBackButtonHidden: Bool = false {
         didSet {
             backButton.isHidden = isBackButtonHidden
@@ -74,33 +63,28 @@ final class CMNavigationBar: UIView {
     private func setupViews() {
         addSubview(leftStackView)
         addSubview(rightStackView)
-        addSubview(titleLabel)
         
-        leftStackView.translatesAutoresizingMaskIntoConstraints = false
-        rightStackView.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            leftStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 18),
-            leftStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            leftStackView.heightAnchor.constraint(equalToConstant: 27),
-            
-            rightStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -18),
-            rightStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            rightStackView.heightAnchor.constraint(equalToConstant: 27),
-            
-            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            titleLabel.leadingAnchor.constraint(greaterThanOrEqualTo: leftStackView.trailingAnchor, constant: 12),
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: rightStackView.leadingAnchor, constant: -12)
-        ])
+        leftStackView.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(18)
+            make.centerY.equalToSuperview()
+            make.height.equalTo(27)
+        }
+        rightStackView.snp.makeConstraints { make in
+            make.leading.greaterThanOrEqualTo(leftStackView.snp.trailing).offset(12)
+            make.trailing.equalToSuperview().offset(-18)
+            make.centerY.equalToSuperview()
+            make.height.equalTo(27)
+        }
+
     }
     
     private func configureItems(stackView: UIStackView, items: [UIView], includeBackButton: Bool = false) {
         stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        
         if includeBackButton && !isBackButtonHidden {
             stackView.addArrangedSubview(backButton)
+            backButton.snp.makeConstraints { make in
+                make.size.equalTo(20)
+            }
         }
         items.forEach { stackView.addArrangedSubview($0) }
     }

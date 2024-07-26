@@ -70,8 +70,8 @@ final class PostDetailViewController: BaseViewController, View {
         label.textColor = .cmHeadLineTextColor
         return label
     }()
-    private let homeTeamImageView = ListTeamImageView()
-    private let awayTeamImageView = ListTeamImageView()
+    private let homeTeamImageView = TeamImageView()
+    private let awayTeamImageView = TeamImageView()
     private let vsLabel: UILabel = {
         let label = UILabel()
         label.text = "VS"
