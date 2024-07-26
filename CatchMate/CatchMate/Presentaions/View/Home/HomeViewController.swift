@@ -11,7 +11,6 @@ import RxCocoa
 import ReactorKit
 
 enum Filter {
-    case all
     case date
     case team
     case none
@@ -23,9 +22,8 @@ final class HomeViewController: BaseViewController, View {
     private let viewWillAppearPublisher = PublishSubject<Void>().asObserver()
     private let filterScrollView = UIScrollView()
     private let filterContainerView = UIView()
-    private let allFilterButton = HomeFilterButton(icon: UIImage(named: "cm20hamburger")?.withTintColor(.grayScale700, renderingMode: .alwaysOriginal), title: "전체", filter: .all)
-    private let dateFilterButton = HomeFilterButton(title: "경기 날짜", filter: .date)
-    private let teamFilterButton = HomeFilterButton(title: "응원 구단", filter: .team)
+    private let dateFilterButton = OptionButtonView(title: "경기 날짜", filter: .date)
+    private let teamFilterButton = OptionButtonView(title: "응원 구단", filter: .team)
     
     private let tableView = UITableView()
     
@@ -131,7 +129,6 @@ extension HomeViewController {
 // MARK: - Button Event
 extension HomeViewController {
     private func setupButton() {
-        allFilterButton.addTarget(self, action: #selector(clickFilterButton(_:)), for: .touchUpInside)
         dateFilterButton.addTarget(self, action: #selector(clickFilterButton(_:)), for: .touchUpInside)
         teamFilterButton.addTarget(self, action: #selector(clickFilterButton(_:)), for: .touchUpInside)
     }
@@ -141,12 +138,8 @@ extension HomeViewController {
         navigationController?.pushViewController(notiViewController, animated: true)
     }
     
-    @objc private func clickFilterButton(_ sender: HomeFilterButton) {
+    @objc private func clickFilterButton(_ sender: OptionButtonView) {
         switch sender.filterType {
-        case .all:
-            print("전체 필터 선택")
-            let allFilterVC = AllFilterViewController(reactor: reactor)
-            navigationController?.pushViewController(allFilterVC, animated: true)
         case .date:
             let customDetent = returnCustomDetent(height: Screen.height / 2.0 + 50.0, identifier: "DateFilter")
             let dateFilterVC = DateFilterViewController(reactor: reactor, disposeBag: disposeBag)
@@ -186,7 +179,6 @@ extension HomeViewController {
         view.addSubview(tableView)
         filterScrollView.addSubview(filterContainerView)
         filterContainerView.flex.direction(.row).paddingHorizontal(18).paddingVertical(11).justifyContent(.start).alignItems(.center).define { flex in
-            flex.addItem(allFilterButton).marginRight(8)
             flex.addItem(dateFilterButton).marginRight(8)
             flex.addItem(teamFilterButton)
         }

@@ -35,7 +35,8 @@ final class TeamImageView: UIView {
     }
     
     func setupTeam(team: Team, isMyTeam: Bool) {
-        imageView.image = isMyTeam ? team.getLogoImage : team.getLogoImage?.applyBlackAndWhiteFilter()
+        imageView.image = team.getLogoImage
+        imageView.alpha = isMyTeam ? 1 : 0.6
         containerView.backgroundColor = isMyTeam ? team.getTeamColor : .white
     }
     

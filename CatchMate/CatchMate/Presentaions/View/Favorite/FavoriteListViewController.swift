@@ -55,6 +55,7 @@ final class FavoriteListViewController: BaseViewController ,View {
         setupTableview()
         setupUI()
         bind(reactor: reactor)
+        view.backgroundColor = .grayScale50
         reactor.action.onNext(.loadFavoritePost)
     }
     

@@ -24,7 +24,6 @@
 		531786662C1F014E00ACEF6A /* CMTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786652C1F014E00ACEF6A /* CMTextField.swift */; };
 		531786682C20048B00ACEF6A /* CMPickerTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786672C20048B00ACEF6A /* CMPickerTextField.swift */; };
 		5317866B2C200D6000ACEF6A /* BasePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317866A2C200D6000ACEF6A /* BasePickerViewController.swift */; };
-		5317866D2C200EDB00ACEF6A /* AllFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317866C2C200EDB00ACEF6A /* AllFilterViewController.swift */; };
 		531786712C202EF500ACEF6A /* DIContainerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786702C202EF500ACEF6A /* DIContainerService.swift */; };
 		531786742C202F1B00ACEF6A /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786732C202F1B00ACEF6A /* NetworkService.swift */; };
 		531786762C20494500ACEF6A /* HomeRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786752C20494500ACEF6A /* HomeRepository.swift */; };
@@ -123,7 +122,6 @@
 		538EB92F2C3FA27600ABA40E /* CMDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */; };
 		53BE7ACF2C367008002FC64F /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7ACE2C367008002FC64F /* DateHelper.swift */; };
 		53BE7AD22C367181002FC64F /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7AD12C367181002FC64F /* Date+Extension.swift */; };
-		53BE7AD42C369A35002FC64F /* OptionButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7AD32C369A35002FC64F /* OptionButtonView.swift */; };
 		53E4A9B82C4FF00F00D21B49 /* AuthReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E4A9B72C4FF00F00D21B49 /* AuthReactor.swift */; };
 		53E4A9BA2C4FFB1300D21B49 /* SignUpDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E4A9B92C4FFB1300D21B49 /* SignUpDataSource.swift */; };
 		53E4A9BC2C4FFB8400D21B49 /* SignUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E4A9BB2C4FFB8400D21B49 /* SignUp.swift */; };
@@ -169,7 +167,6 @@
 		531786652C1F014E00ACEF6A /* CMTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMTextField.swift; sourceTree = "<group>"; };
 		531786672C20048B00ACEF6A /* CMPickerTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMPickerTextField.swift; sourceTree = "<group>"; };
 		5317866A2C200D6000ACEF6A /* BasePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePickerViewController.swift; sourceTree = "<group>"; };
-		5317866C2C200EDB00ACEF6A /* AllFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllFilterViewController.swift; sourceTree = "<group>"; };
 		531786702C202EF500ACEF6A /* DIContainerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainerService.swift; sourceTree = "<group>"; };
 		531786732C202F1B00ACEF6A /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		531786752C20494500ACEF6A /* HomeRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRepository.swift; sourceTree = "<group>"; };
@@ -263,7 +260,6 @@
 		538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMDatePicker.swift; sourceTree = "<group>"; };
 		53BE7ACE2C367008002FC64F /* DateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
 		53BE7AD12C367181002FC64F /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
-		53BE7AD32C369A35002FC64F /* OptionButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionButtonView.swift; sourceTree = "<group>"; };
 		53E4A9B72C4FF00F00D21B49 /* AuthReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthReactor.swift; sourceTree = "<group>"; };
 		53E4A9B92C4FFB1300D21B49 /* SignUpDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpDataSource.swift; sourceTree = "<group>"; };
 		53E4A9BB2C4FFB8400D21B49 /* SignUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUp.swift; sourceTree = "<group>"; };
@@ -703,11 +699,9 @@
 				536BDDB12C189B230043B1DA /* HomeViewController.swift */,
 				536BDE352C1BEC870043B1DA /* ListCardViewTableViewCell.swift */,
 				536BDE332C1B57B10043B1DA /* HomeFilterButton.swift */,
-				53BE7AD32C369A35002FC64F /* OptionButtonView.swift */,
 				5317865A2C1C956400ACEF6A /* DateFilterViewController.swift */,
 				5317865F2C1EB24D00ACEF6A /* TeamFilterViewController.swift */,
 				531786612C1EE6C500ACEF6A /* TeamFilterTableViewCell.swift */,
-				5317866C2C200EDB00ACEF6A /* AllFilterViewController.swift */,
 				5317867C2C216CBE00ACEF6A /* NumberPickerViewController.swift */,
 				5317867E2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift */,
 				537598052C46C0B0003BD8AE /* ApplyPopupViewController.swift */,
@@ -904,7 +898,6 @@
 				536BDDB22C189B230043B1DA /* HomeViewController.swift in Sources */,
 				533A2B362C2BEA3900A59340 /* InputCheerStyleViewController.swift in Sources */,
 				537598062C46C0B0003BD8AE /* ApplyPopupViewController.swift in Sources */,
-				53BE7AD42C369A35002FC64F /* OptionButtonView.swift in Sources */,
 				53E4A9C02C5009EB00D21B49 /* SignUpRepository.swift in Sources */,
 				53E4A9C62C500E9B00D21B49 /* SignUpMapper.swift in Sources */,
 				53716BD82C4564700044AD2A /* DefaultsPaddingLabel.swift in Sources */,
@@ -929,7 +922,6 @@
 				53716BC22C4053430044AD2A /* AddReactor.swift in Sources */,
 				536BDE292C1B53860043B1DA /* Color.swift in Sources */,
 				53716BD62C4562AB0044AD2A /* TeamPaddingLabel.swift in Sources */,
-				5317866D2C200EDB00ACEF6A /* AllFilterViewController.swift in Sources */,
 				533A2B2A2C2859D600A59340 /* CMImageButton.swift in Sources */,
 				536BDE2F2C1B55240043B1DA /* NotiViewController.swift in Sources */,
 				533A2B382C2BFD4B00A59340 /* SignUpFinishedViewController.swift in Sources */,
