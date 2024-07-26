@@ -9,7 +9,7 @@ import UIKit
 import FlexLayout
 import PinLayout
 
-final class HomeFilterButton: UIButton {
+final class OptionButtonView: UIButton {
     private let containerView = UIView()
     private let iconImageView = UIImageView()
     private let filterTitleLabel = UILabel()
@@ -74,8 +74,8 @@ final class HomeFilterButton: UIButton {
         addSubview(containerView)
         containerView.isUserInteractionEnabled = false
         containerView.flex.direction(.row).alignItems(.center).paddingHorizontal(16).paddingVertical(12).define { flex in
-            flex.addItem(filterTitleLabel).marginRight(2)
-            flex.addItem(valueLabel).marginRight(2)
+            flex.addItem(filterTitleLabel).marginRight(4)
+            flex.addItem(valueLabel).marginRight((valueLabel.text == nil || valueLabel.text!.isEmpty) ? 0 : 4)
             flex.addItem(iconImageView).size(20)
         }
     }

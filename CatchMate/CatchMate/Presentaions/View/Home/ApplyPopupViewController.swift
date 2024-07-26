@@ -182,10 +182,10 @@ extension ApplyPopupViewController {
             .subscribe { vc, result in
                 if result {
                     vc.reactor.action.onNext(.changeIsApplied(true))
-                    vc.dismiss(animated: true)
                 } else {
-                    vc.showToast(message: "신청에 실패했습니다. 다시 시도해주세요.", relativeTo: vc.dimView, using: .flexLayout, anchorPosition: .bottom)
+                    vc.reactor.action.onNext(.setError(PostError.applyFailed))
                 }
+                vc.dismiss(animated: true)
             }
             .disposed(by: disposeBag)
     }

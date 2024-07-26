@@ -70,8 +70,8 @@ final class PostDetailViewController: BaseViewController, View {
         label.textColor = .cmHeadLineTextColor
         return label
     }()
-    private let homeTeamImageView = ListTeamImageView()
-    private let awayTeamImageView = ListTeamImageView()
+    private let homeTeamImageView = TeamImageView()
+    private let awayTeamImageView = TeamImageView()
     private let vsLabel: UILabel = {
         let label = UILabel()
         label.text = "VS"
@@ -251,9 +251,13 @@ extension PostDetailViewController {
             .subscribe(onNext: { vc, state in
                 vc.isFavorite = state // 상태를 직접 설정
                 vc.setupFavoriteButton(state)
+                if vc.isFavorite {
+                    vc.showToast(message: "게시글을 저장했어요")
+                }
             })
             .disposed(by: disposeBag)
         _isFavorite
+            .observe(on: MainScheduler.asyncInstance)
             .map{Reactor.Action.changeFavorite($0)}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -299,6 +303,15 @@ extension PostDetailViewController {
             .subscribe(onNext: { vc, state in
                 vc.updateApplyButtonFinished(state)
             })
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.error}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, error in
+                let position = CGPoint(x: vc.buttonContainer.frame.midX, y: vc.buttonContainer.frame.maxY)
+                vc.showToast(message: "신청에 실패했습니다. 다시 시도해주세요.", at: position, anchorPosition: .top)
+            }
             .disposed(by: disposeBag)
         
     }

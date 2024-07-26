@@ -55,6 +55,7 @@ final class FavoriteListViewController: BaseViewController ,View {
         setupTableview()
         setupUI()
         bind(reactor: reactor)
+        view.backgroundColor = .grayScale50
         reactor.action.onNext(.loadFavoritePost)
     }
     
@@ -90,7 +91,7 @@ final class FavoriteListViewController: BaseViewController ,View {
                 cell.backgroundColor = .clear
                 cell.selectionStyle = .none
                 cell.setupData(item, isFavoriteCell: true)
-                
+                cell.updateConstraints()
                 
                 cell.tapEvent
                     .withUnretained(cell)

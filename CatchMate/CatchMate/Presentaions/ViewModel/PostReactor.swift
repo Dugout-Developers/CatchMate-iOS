@@ -9,6 +9,9 @@ import UIKit
 import RxSwift
 import ReactorKit
 
+enum PostError: Error {
+    case applyFailed
+}
 final class PostReactor: Reactor {
     enum Action {
         case loadPostDetails
@@ -16,11 +19,13 @@ final class PostReactor: Reactor {
         case loadIsApplied
         case changeIsApplied(Bool)
         case changeFavorite(Bool)
+        case setError(Error)
     }
     enum Mutation {
         case setPost(Post?)
         case setIsApplied(Bool)
         case setIsFavorite(Bool)
+        case setError(Error)
     }
     struct State {
         // View의 state를 관리한다.
@@ -29,6 +34,7 @@ final class PostReactor: Reactor {
         var isApplied: Bool = false
         var isFinished: Bool = false
         var isFavorite: Bool = false
+        var error: Error?
     }
     
     var initialState: State
@@ -65,6 +71,8 @@ final class PostReactor: Reactor {
                 }
             }
             return Observable.just(Mutation.setIsFavorite(state))
+        case .setError(let error):
+            return Observable.just(Mutation.setError(error))
         }
     }
     
@@ -83,6 +91,8 @@ final class PostReactor: Reactor {
         case .setIsFavorite(let state):
             print(state)
             newState.isFavorite = state
+        case .setError(let error):
+            newState.error = error
         }
         return newState
     }

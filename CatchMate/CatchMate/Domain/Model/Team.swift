@@ -54,7 +54,7 @@ enum Team: String, CaseIterable {
         case .nc:
             return ["창원"]
         case .samsung:
-            return ["대구, 포항"]
+            return ["대구", "포항"]
         case .ssg:
             return ["인천"]
         case .dosun:

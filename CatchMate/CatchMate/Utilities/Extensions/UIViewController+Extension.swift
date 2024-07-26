@@ -12,39 +12,20 @@ import PinLayout
 
 extension UIViewController {
     
-    func showToast(message: String, relativeTo view: UIView, using layoutLibrary: LayoutLibrary, anchorPosition: AnchorPosition) {
+    func showToast(message: String, at position: CGPoint? = nil, anchorPosition: AnchorPosition? = nil) {
         let toastLabel = CMToastMessageLabel(message: message)
         
-        // 토스트 메시지 레이블을 뷰에 추가
-        self.view.addSubview(toastLabel)
+        // 토스트 메시지 레이블의 크기 설정
+        let toastWidth = UIScreen.main.bounds.width - (2 * 16) // 좌우 여백 16포인트씩
+        toastLabel.frame = CGRect(x: 16, y: 0, width: toastWidth, height: 40)
         
-        switch layoutLibrary {
-        case .flexLayout:
-            toastLabel.pin.width(Screen.width - (2*ButtonGridSystem.getMargin()))
-            toastLabel.pin.minHeight(40)
-            switch anchorPosition {
-            case .top:
-                toastLabel.pin.bottom(to: view.edge.top).marginBottom(12).hCenter()
-            case .bottom:
-                toastLabel.pin.bottom(to: view.edge.bottom).marginBottom(12).hCenter()
-            }
-            
-            toastLabel.superview?.flex.markDirty()
-            self.view.flex.layout()
-            
-        case .snapKit:
-            toastLabel.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview().inset(ButtonGridSystem.getMargin())
-                switch anchorPosition {
-                case .top:
-                    make.top.equalTo(view.snp.top).offset(12)
-                case .bottom:
-                    make.bottom.equalTo(view.snp.bottom).offset(-12)
-                }
-            }
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first(where: { $0.isKeyWindow }) else {
+            return
         }
-        
-        
+        let safeAreaTop = window.safeAreaInsets.top
+        toastLabel.frame.origin.y = safeAreaTop + 12
+        window.addSubview(toastLabel)
         
         // 1초 동안 표시된 후 사라지도록 애니메이션 적용
         UIView.animate(withDuration: 1.0, delay: 1.0, options: .curveEaseOut, animations: {
@@ -69,11 +50,6 @@ extension UIViewController {
         
         present(alert, animated: true, completion: nil)
     }
-}
-
-enum LayoutLibrary {
-    case flexLayout
-    case snapKit
 }
 
 enum AnchorPosition {
