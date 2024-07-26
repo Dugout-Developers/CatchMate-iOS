@@ -91,7 +91,7 @@ final class FavoriteListViewController: BaseViewController ,View {
                 cell.backgroundColor = .clear
                 cell.selectionStyle = .none
                 cell.setupData(item, isFavoriteCell: true)
-                
+                cell.updateConstraints()
                 
                 cell.tapEvent
                     .withUnretained(cell)

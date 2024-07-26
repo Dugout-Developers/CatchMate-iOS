@@ -142,12 +142,15 @@ extension ListCardViewTableViewCell {
         
         // cardContainerView 레이아웃 설정
         cardContainerView.flex.direction(.column).padding(16).marginHorizontal(margin).define { flex in
-            flex.addItem().direction(.column).width(100%).justifyContent(.start).alignItems(.start).define { flex in
-                flex.addItem(infoLabel).marginBottom(4)
-                flex.addItem().width(100%).direction(.row).justifyContent(.start).alignItems(.center).define { flex in
-                    flex.addItem(partyNumLabel).marginRight(6)
-                    flex.addItem(postTitleLabel).grow(1).shrink(2)
-                }
+            flex.addItem().direction(.row).width(100%).justifyContent(.spaceBetween).alignItems(.start).define { flex in
+                flex.addItem().direction(.column).justifyContent(.start).alignItems(.start).define { flex in
+                    flex.addItem(infoLabel).marginBottom(4)
+                    flex.addItem().width(100%).direction(.row).justifyContent(.start).alignItems(.center).define { flex in
+                        flex.addItem(partyNumLabel).marginRight(6)
+                        flex.addItem(postTitleLabel).grow(1).shrink(2)
+                    }
+                }.grow(1).shrink(2)
+                flex.addItem(favoriteButton).size(20)
             }.marginBottom(12)
             flex.addItem().direction(.row).justifyContent(.center).alignItems(.center).backgroundColor(.grayScale50).cornerRadius(8).paddingVertical(16).define { flex in
                 flex.addItem(homeTeamImageView).width(48).aspectRatio(1)
