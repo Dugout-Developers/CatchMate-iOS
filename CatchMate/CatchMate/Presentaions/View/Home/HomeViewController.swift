@@ -108,6 +108,7 @@ extension HomeViewController {
                 cell.backgroundColor = .clear
                 cell.selectionStyle = .none
                 cell.setupData(item)
+                cell.updateConstraints()
             }
             .disposed(by: disposeBag)
         

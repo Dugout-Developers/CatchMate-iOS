@@ -254,6 +254,7 @@ extension PostDetailViewController {
             })
             .disposed(by: disposeBag)
         _isFavorite
+            .observe(on: MainScheduler.asyncInstance)
             .map{Reactor.Action.changeFavorite($0)}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)

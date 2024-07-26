@@ -49,7 +49,7 @@ final class ListCardViewTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let homeTeamImageView: TeamImageView = TeamImageView()
+    private var homeTeamImageView: TeamImageView = TeamImageView()
     private let vsLabel: UILabel = {
         let label = UILabel()
         label.text = "VS"
@@ -57,7 +57,7 @@ final class ListCardViewTableViewCell: UITableViewCell {
         label.textColor = .cmNonImportantTextColor
         return label
     }()
-    private let awayTeamImageView: TeamImageView = TeamImageView()
+    private var awayTeamImageView: TeamImageView = TeamImageView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -67,6 +67,15 @@ final class ListCardViewTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         disposeBag = DisposeBag()
+        post = nil
+        partyNumLabel.text = ""
+        postTitleLabel.text = ""
+        infoLabel.text = ""
+        homeTeamImageView = TeamImageView()
+        awayTeamImageView = TeamImageView()
+        partyNumLabel.flex.markDirty()
+        setNeedsLayout()
+        layoutIfNeeded()
     }
     
     @available(*, unavailable)
@@ -84,14 +93,19 @@ final class ListCardViewTableViewCell: UITableViewCell {
     }
     
     override func sizeThatFits(_ size: CGSize) -> CGSize {
-        cardContainerView.pin.width(size.width)
+        cardContainerView.pin.width(size.width - MainGridSystem.getMargin() * 2) // 마진을 고려한 너비 설정
         cardContainerView.flex.layout(mode: .adjustHeight)
-        return CGSize(width: size.width, height: cardContainerView.frame.height + 8)
+        
+        // cardContainerView 높이에 위아래 마진을 더한 크기 반환
+        let height = cardContainerView.frame.height + 8 // 4 + 4 (위아래 마진 합산)
+        return CGSize(width: size.width, height: height)
     }
+    
     
     func setupData(_ post: Post, isFavoriteCell: Bool = false) {
         self.post = post
         favoriteButton.isHidden = !isFavoriteCell
+        favoriteButton.isEnabled = isFavoriteCell
         homeTeamImageView.setupTeam(team:  post.homeTeam, isMyTeam: post.writer.team == post.homeTeam)
         awayTeamImageView.setupTeam(team:  post.awayTeam, isMyTeam: post.writer.team == post.awayTeam)
         
@@ -132,7 +146,7 @@ extension ListCardViewTableViewCell {
                 flex.addItem(infoLabel).marginBottom(4)
                 flex.addItem().width(100%).direction(.row).justifyContent(.start).alignItems(.center).define { flex in
                     flex.addItem(partyNumLabel).marginRight(6)
-                    flex.addItem(postTitleLabel).grow(1).shrink(1)
+                    flex.addItem(postTitleLabel).grow(1).shrink(2)
                 }
             }.marginBottom(12)
             flex.addItem().direction(.row).justifyContent(.center).alignItems(.center).backgroundColor(.grayScale50).cornerRadius(8).paddingVertical(16).define { flex in
@@ -141,8 +155,7 @@ extension ListCardViewTableViewCell {
                 flex.addItem(awayTeamImageView).width(48).aspectRatio(1)
             }
         }
-        
-        // 레이아웃 적용
+
         cardContainerView.flex.layout(mode: .adjustHeight)
     }
 }
