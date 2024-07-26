@@ -13,7 +13,7 @@ import FlexLayout
 import PinLayout
 
 extension Reactive where Base: PlaceFilterViewController {
-    var selectedTime: Observable<[String]> {
+    var selected: Observable<[String]> {
         return base._places.asObservable()
     }
 }
@@ -69,11 +69,18 @@ final class PlaceFilterViewController: BasePickerViewController, View {
     private func setupTableView() {
         tableView.register(PlaceFilterTableViewCell.self, forCellReuseIdentifier: "PlaceFilterTableViewCell")
         tableView.tableHeaderView = UIView()
-//        tableView.rowHeight = UITableView.automaticDimension
-//        tableView.estimatedRowHeight = 50
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
     }
+    
+    private func updateSelectedTeams(_ selectedPlace: String?) {
+        guard let cells = tableView.visibleCells as? [PlaceFilterTableViewCell] else { return }
+        for cell in cells {
+            guard let place = cell.place else { continue }
+            cell.isClicked = (place == selectedPlace)
+        }
+    }
+    
     func bind(reactor: AddReactor) {
         willAppearPublisher
             .withUnretained(self)
@@ -90,6 +97,20 @@ final class PlaceFilterViewController: BasePickerViewController, View {
                     vc.warningLabel.isHidden = true
                 }
             }
+            .disposed(by: disposeBag)
+        reactor.state.map{$0.homeTeam}
+            .observe(on: MainScheduler.asyncInstance)
+            .compactMap{$0}
+            .distinctUntilChanged()
+            .subscribe { team in
+                if let place = team.place, !place.isEmpty {
+                    reactor.action.onNext(.changePlcase(place[0]))
+                }
+            }
+            .disposed(by: disposeBag)
+        reactor.state
+            .map{$0.place}
+            .bind(onNext: updateSelectedTeams)
             .disposed(by: disposeBag)
         
        _places
@@ -142,10 +163,10 @@ final class PlaceFilterTableViewCell: UITableViewCell {
     var disposeBag = DisposeBag()
     var isClicked: Bool = false {
         didSet {
-            checkTeam()
+            checkPlace()
         }
     }
-
+    var place: String?
     private let containerView = UIView()
     private let placeLabel: UILabel = {
         let label = UILabel()
@@ -182,7 +203,7 @@ final class PlaceFilterTableViewCell: UITableViewCell {
         return CGSize(width: size.width, height: containerView.frame.height)
     }
     
-    private func checkTeam() {
+    private func checkPlace() {
         if isClicked {
             checkButton.setImage(UIImage(named: "circle_check")?.withRenderingMode(.alwaysOriginal), for: .normal)
         } else {
@@ -191,6 +212,7 @@ final class PlaceFilterTableViewCell: UITableViewCell {
     }
     
     func setupData(place: String, isClicked: Bool) {
+        self.place = place
         self.placeLabel.text = place
         self.isClicked = isClicked
     }

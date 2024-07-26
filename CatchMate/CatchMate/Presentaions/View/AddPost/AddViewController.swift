@@ -259,6 +259,16 @@ extension AddViewController {
                 }
             }
             .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.place}
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .subscribe { vc, place in
+                if let place = place {
+                    vc.placePicker.didSelectItem(place)
+                }
+            }
+            .disposed(by: disposeBag)
     }
 }
 // MARK: - Button
