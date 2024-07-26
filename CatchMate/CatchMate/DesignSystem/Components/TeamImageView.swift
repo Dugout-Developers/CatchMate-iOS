@@ -34,10 +34,10 @@ final class TeamImageView: UIView {
         containerView.flex.layout()
     }
     
-    func setupTeam(team: Team, isMyTeam: Bool) {
+    func setupTeam(team: Team, isMyTeam: Bool, background: UIColor = .white) {
         imageView.image = team.getLogoImage
         imageView.alpha = isMyTeam ? 1 : 0.6
-        containerView.backgroundColor = isMyTeam ? team.getTeamColor : .white
+        containerView.backgroundColor = isMyTeam ? team.getTeamColor : background
     }
     
     private func settupUI() {

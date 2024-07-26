@@ -63,19 +63,20 @@ extension Post {
         Post(title: "도영아 너땜시 살어야", writer: User(id: "1", snsID: "aa", email: "aa@aa.com", nickName: "도영아사랑해", age: 25, team: .kia, gener: .woman, cheerStyle: .mom, profilePicture: nil), homeTeam: .samsung, awayTeam: .kia, date: "07.03", playTime: "18:30", location: "대구", maxPerson: 3, currentPerson: 2, preferAge: [20, 30])
     ]
     
-    static var dummyFavoriteList: [Post] = {
-        var pickedNumbers = Set<Int>()
-        
-        while pickedNumbers.count < 4 {
-            let randomNumber = Int.random(in: 0..<Post.dummyPostData.count)
-            pickedNumbers.insert(randomNumber)
-        }
-        
-        var result: [Post] = []
-        pickedNumbers.forEach { index in
-            result.append(Post.dummyPostData[index])
-        }
-        return result
-    }()
+    static var dummyFavoriteList: [Post]  = []
+//    = {
+//        var pickedNumbers = Set<Int>()
+//        
+//        while pickedNumbers.count < 4 {
+//            let randomNumber = Int.random(in: 0..<Post.dummyPostData.count)
+//            pickedNumbers.insert(randomNumber)
+//        }
+//        
+//        var result: [Post] = []
+//        pickedNumbers.forEach { index in
+//            result.append(Post.dummyPostData[index])
+//        }
+//        return result
+//    }()
    
 }

@@ -208,7 +208,13 @@ extension ChatRoomViewController {
 
 // MARK: - System Info Cell
 final class StartChatInfoCell: UITableViewCell {
-    private let containerView = UIView()
+    private let containerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 8
+        view.clipsToBounds = true
+        return view
+    }()
     private let infoLabel: UILabel = {
         let label = UILabel()
         label.textColor = .cmNonImportantTextColor
@@ -229,8 +235,20 @@ final class StartChatInfoCell: UITableViewCell {
         stackView.spacing = 26
         return stackView
     }()
-    private let homeTeamImageView = TeamImageView()
-    private let awayTeamImageView = TeamImageView()
+    private let homeTeamImageView: TeamImageView = {
+        let imageview = TeamImageView()
+        imageview.snp.makeConstraints { make in
+            make.size.equalTo(50)
+        }
+        return imageview
+    }()
+    private let awayTeamImageView: TeamImageView = {
+        let imageview = TeamImageView()
+        imageview.snp.makeConstraints { make in
+            make.size.equalTo(50)
+        }
+        return imageview
+    }()
     private let vsLabel: UILabel = {
         let label = UILabel()
         label.text = "VS"
@@ -271,7 +289,7 @@ final class StartChatInfoCell: UITableViewCell {
             make.top.bottom.equalToSuperview().inset(4)
         }
         infoLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview()
+            make.top.equalToSuperview().offset(12)
             make.centerX.equalToSuperview()
         }
         teamView.snp.makeConstraints { make in
@@ -280,6 +298,7 @@ final class StartChatInfoCell: UITableViewCell {
             make.bottom.equalToSuperview().offset(-12)
         }
         teamStackView.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
             make.center.equalToSuperview()
             make.height.equalTo(50)
         }
