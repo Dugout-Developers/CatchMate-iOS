@@ -19,12 +19,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
         
-//        let tabViewController = TabBarController()
-//        window?.rootViewController = tabViewController
+        let tabViewController = TabBarController()
+        window?.rootViewController = tabViewController
         
-        let reactor = DIContainerService.shared.makeAuthReactor()
-        let signInViewController = SignInViewController(reactor: reactor)
-        window?.rootViewController = UINavigationController(rootViewController: signInViewController)
+//        let reactor = DIContainerService.shared.makeAuthReactor()
+//        let signInViewController = SignInViewController(reactor: reactor)
+//        window?.rootViewController = UINavigationController(rootViewController: signInViewController)
 
         window?.makeKeyAndVisible()
     }

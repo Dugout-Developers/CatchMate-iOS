@@ -55,7 +55,7 @@ extension UIColor {
     static let brandColor900 = UIColor(hex: "#77383C")
     
     // MARK: - GrayScale
-    static let grayScale50 = UIColor(hex: "#FCFAFA")
+    static let grayScale50 = UIColor(hex: "##FAFAFC")
     static let grayScale100 = UIColor(hex: "#F2F2F5")
     static let grayScale200 = UIColor(hex: "#E9E9EE")
     static let grayScale300 = UIColor(hex: "#CCCCD0")
