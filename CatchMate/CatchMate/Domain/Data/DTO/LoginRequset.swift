@@ -22,15 +22,3 @@ struct LoginResponse: Codable {
     let isFirstLogin: Bool
 }
 
-/// 최종 presentation단 전달 모델
-struct LoginModel {
-    let id: String
-    let email: String
-    let accessToken: String
-    let refreshToken: String
-    let isFirstLogin: Bool
-    let nickName: String?
-    let gender: Gender?
-    let birth: String?
-    let profileImage: String?
-}

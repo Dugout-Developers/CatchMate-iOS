@@ -97,8 +97,18 @@ extension SignInViewController {
             .disposed(by: disposeBag)
         
         naverLoginButton.rx.tap
-            .map { Reactor.Action.naverLogin }
+            .map{ Reactor.Action.naverLogin }
             .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        reactor.state
+            .map { $0.errorMessage }
+            .distinctUntilChanged()
+            .compactMap { $0 }
+            .subscribe(onNext: { errorMessage in
+                print("로그인 실패: \(errorMessage)")
+                // 에러 메시지 표시
+            })
             .disposed(by: disposeBag)
         
         appleLoginButton.rx.tap
@@ -139,7 +149,6 @@ extension SignInViewController {
         }
     }
 }
-
 
 // MARK: - UI
 extension SignInViewController {
