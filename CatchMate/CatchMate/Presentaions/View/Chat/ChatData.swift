@@ -7,18 +7,22 @@
 
 import UIKit
 // MARK: - 임시 데이터
-struct Chat {
+struct Chat: Equatable {
     let chatId: String
     let createAt: Date
     let message: [ChatMessage]
     let post: Post
     let notRead: Int
+    let enterTime: Date
     static let mockupData: [Chat] = [
-        Chat(chatId: "1", createAt: ChatMessage.getDate(M: 7, d: 24, h: 14, m: 33), message: ChatMessage.mockupData, post: Post.dummyPostData[0], notRead: 0),
-        Chat(chatId: "1", createAt: ChatMessage.getDate(M: 7, d: 24, h: 14, m: 33), message: ChatMessage.mockupData, post: Post.dummyPostData[0], notRead: 0),
-        Chat(chatId: "1", createAt: ChatMessage.getDate(M: 7, d: 24, h: 14, m: 33), message: ChatMessage.mockupData, post: Post.dummyPostData[0], notRead: 3),
-        Chat(chatId: "1", createAt: ChatMessage.getDate(M: 7, d: 24, h: 14, m: 33), message: ChatMessage.mockupData, post: Post.dummyPostData[0], notRead: 2)
+        Chat(chatId: "1", createAt: ChatMessage.getDate(M: 7, d: 24, h: 14, m: 33), message: ChatMessage.mockupData, post: Post.dummyPostData[0], notRead: 0, enterTime: Date()),
+        Chat(chatId: "1", createAt: ChatMessage.getDate(M: 7, d: 24, h: 14, m: 33), message: ChatMessage.mockupData, post: Post.dummyPostData[2], notRead: 0, enterTime:  ChatMessage.getDate(M: 7, d: 24, h: 20, m: 30)),
+        Chat(chatId: "1", createAt: ChatMessage.getDate(M: 7, d: 24, h: 14, m: 33), message: ChatMessage.mockupData, post: Post.dummyPostData[3], notRead: 3, enterTime:  ChatMessage.getDate(M: 7, d: 25, h: 12, m: 53)),
+        Chat(chatId: "1", createAt: ChatMessage.getDate(M: 7, d: 24, h: 14, m: 33), message: ChatMessage.mockupData, post: Post.dummyPostData[4], notRead: 2, enterTime: Date())
     ]
+    static func == (lhs: Chat, rhs: Chat) -> Bool {
+        return lhs.chatId == rhs.chatId
+    }
 }
 
 struct ChatMessage {

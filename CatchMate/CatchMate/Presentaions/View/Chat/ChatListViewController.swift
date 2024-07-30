@@ -8,71 +8,83 @@
 import UIKit
 import RxSwift
 import SnapKit
+import ReactorKit
+import FlexLayout
 
-final class ChatListViewController: BaseViewController {
+final class ChatListViewController: BaseViewController, View {
     private let chatListTableView = UITableView()
-
+    var reactor: ChatListReactor
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        reactor.action.onNext(.loadChatList)
+        reactor.action.onNext(.selectChat(nil))
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupUI()
         setupTableView()
-        setupEditTableView()
         setupNavigationBar()
+        bind(reactor: reactor)
     }
     
     private func setupView() {
         view.backgroundColor = .cmBackgroundColor
     }
     
+    init() {
+        self.reactor = ChatListReactor()
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     private func setupNavigationBar() {
-        let editButton = UIBarButtonItem(image: UIImage(systemName: "slider.horizontal.3"), style: .plain, target: self, action: #selector(clickEditButton))
-        navigationItem.rightBarButtonItem = editButton
         setupLeftTitle("채팅목록")
     }
     
     private func setupTableView() {
-        chatListTableView.delegate = self
-        chatListTableView.dataSource = self
         chatListTableView.register(ChatListTableViewCell.self, forCellReuseIdentifier: "ChatListTableViewCell")
         chatListTableView.tableHeaderView = UIView()
         chatListTableView.rowHeight = UITableView.automaticDimension
         chatListTableView.backgroundColor = .clear
     }
     
-    @objc
-    private func clickEditButton(_ sender: UIBarButtonItem) {
-        print("편집버튼 클릭")
-    }
 
 }
-// MARK: - TableView
-extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Chat.mockupData.count
+// MARK: - Bind
+extension ChatListViewController {
+    func bind(reactor: ChatListReactor) {
+        reactor.state.map{$0.chatList}
+            .bind(to: chatListTableView.rx.items(cellIdentifier: "ChatListTableViewCell", cellType: ChatListTableViewCell.self)) {  (row, item, cell) in
+                cell.configData(chat: item)
+                cell.updateConstraints()
+            }
+            .disposed(by: disposeBag)
+        
+        chatListTableView.rx.itemSelected
+            .map { indexPath in
+                let chat = reactor.currentState.chatList[indexPath.row]
+                return Reactor.Action.selectChat(chat)
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.selectedChat}
+            .compactMap{$0}
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .subscribe(onNext: { vc, chat in
+                let roomVC = ChatRoomViewController(chat: chat)
+                vc.navigationController?.pushViewController(roomVC, animated: true)
+            })
+            .disposed(by: disposeBag)
     }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ChatListTableViewCell", for: indexPath) as? ChatListTableViewCell else { return UITableViewCell() }
-        cell.selectionStyle = .none
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let chatRoomVC = ChatRoomViewController(chat: Chat.mockupData[indexPath.row])
-        navigationController?.pushViewController(chatRoomVC, animated: true)
-    }
-    
-    private func setupEditTableView() {
-        chatListTableView.rx.itemDeleted
-          .observe(on: MainScheduler.asyncInstance)
-          .withUnretained(self)
-          .bind { _, indexPath in
-              print("remove \(indexPath.row+1) item")
-          }
-          .disposed(by: self.disposeBag)
-    }
-    
 }
 // MARK: - UI
 extension ChatListViewController {

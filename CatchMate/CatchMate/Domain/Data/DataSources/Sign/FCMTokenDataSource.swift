@@ -17,6 +17,7 @@ final class FCMTokenDataSourceImpl: FCMTokenDataSource {
     func getFcmToken() -> Observable<String> {
         return Observable.create { observer in
             Messaging.messaging().token { token, error in
+                print(token)
                 if let error = error {
                     observer.onError(error)
                 } else if let token = token {

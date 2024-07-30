@@ -17,6 +17,7 @@ extension Reactive where Base: PostDetailViewController {
     }
 }
 final class PostDetailViewController: BaseViewController, View {
+    private var isFirstFavoriteState: Bool = true
     private var isFavorite: Bool = false {
         didSet {
             _isFavorite.onNext(isFavorite)
@@ -246,16 +247,17 @@ extension PostDetailViewController {
             .disposed(by: disposeBag)
         
         reactor.state.map{ $0.isFavorite }
-            .distinctUntilChanged() // 초기 상태가 전달되지 않는 문제를 방지
+            .distinctUntilChanged()
             .withUnretained(self)
             .subscribe(onNext: { vc, state in
                 vc.isFavorite = state // 상태를 직접 설정
                 vc.setupFavoriteButton(state)
-                if vc.isFavorite {
+                if vc.isFavorite && !vc.isFirstFavoriteState {
                     vc.showToast(message: "게시글을 저장했어요")
                 }
             })
             .disposed(by: disposeBag)
+
         _isFavorite
             .observe(on: MainScheduler.asyncInstance)
             .map{Reactor.Action.changeFavorite($0)}
@@ -265,6 +267,9 @@ extension PostDetailViewController {
         favoriteButton.rx.tap
             .withUnretained(self)
             .subscribe { vc, _ in
+                if vc.isFirstFavoriteState {
+                    vc.isFirstFavoriteState = false
+                }
                 vc.isFavorite.toggle()
             }
             .disposed(by: disposeBag)

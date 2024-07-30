@@ -49,7 +49,7 @@ platform :ios do
       app: ENV['FIREBASE_APP_ID'],  # Firebase App ID
       ipa_path: "/Users/bang-yubin/Desktop/Log/#{ipa_file_name}", # 업로드할 IPA 파일 경로
       firebase_cli_token: ENV['FIREBASE_TOKEN'],
-      groups: "test"
+      groups: "dugout-teckneck"
     )
   end
 end

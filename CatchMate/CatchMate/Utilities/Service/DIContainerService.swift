@@ -12,19 +12,21 @@ class DIContainerService {
 
     private init() {}
     
-    func makeAuthReactor() -> Result<AuthReactor, Error> {
-        do {
-            let loginDS = try LoginDataSourceImpl()
-            let repository = LoginRepositoryImpl(snsDataSource: SNSLoginDataSourceImpl(), fcmDataSource: FCMTokenDataSourceImpl(), loginDatasource: loginDS)
-            let kakaoUsecase = KakaoLoginUseCaseImpl(repository: repository)
-            let appleUsecase = AppleLoginUseCaseImpl(repository: repository)
-            let naverUsecase = NaverLoginUseCaseeImpl(repository: repository)
-            let reactor = AuthReactor(kakaoUsecase: kakaoUsecase, appleUsecase: appleUsecase, naverUsecase: naverUsecase)
-            
-            return .success(reactor)
-        } catch {
-            return .failure(error)
-        }
+    func makeAuthReactor() -> AuthReactor{
+        let naverDS = NaverLoginDataSourceImpl()
+        let kakaoDS = KakaoDataSourceImpl()
+        let appleDS = AppleLoginDataSourceImpl()
+        let fcmDS = FCMTokenDataSourceImpl()
+        let serverDS = ServerLoginDataSourceImpl()
+        let loginRep = SNSLoginRepositoryImpl(kakaoLoginDS: kakaoDS, naverLoginDS: naverDS, appleLoginDS: appleDS)
+        let fcmRep = FCMRepositoryImpl(fcmTokenDS: fcmDS)
+        let serverRep = ServerLoginRepositoryImpl(serverLoginDS: serverDS)
+        let kakaoUC = KakaoLoginUseCaseImpl(snsRepository: loginRep, fcmRepository: fcmRep, serverRepository: serverRep)
+        let naverUC = NaverLoginUseCaseImpl(snsRepository: loginRep, fcmRepository: fcmRep, serverRepository: serverRep)
+        let appleUC = AppleLoginUseCaseImpl(snsRepository: loginRep, fcmRepository: fcmRep, serverRepository: serverRep)
+        let reactor = AuthReactor(kakaoUsecase: kakaoUC, appleUsecase: appleUC, naverUsecase: naverUC)
+        
+        return reactor
     }
     
     func makeSignReactor(_ model: LoginModel) -> SignReactor {

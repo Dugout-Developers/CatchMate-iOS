@@ -73,15 +73,8 @@ class NonMembersAccessViewController: BaseViewController {
             .withUnretained(self)
             .subscribe { _, _ in
                 let signReactorResult = DIContainerService.shared.makeAuthReactor()
-                switch signReactorResult {
-                case .success(let reactor):
-                    let signInViewController = SignInViewController(reactor: reactor)
-                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(signInViewController, animated: true)
-                    break
-                case .failure(let error):
-                    print("Failed to create SignReactor: \(error)")
-                    // ErrorViewController 만들어서 띄우기
-                }
+                let signInViewController = SignInViewController(reactor: signReactorResult)
+                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(signInViewController, animated: true)
             }
             .disposed(by: disposeBag)
     }

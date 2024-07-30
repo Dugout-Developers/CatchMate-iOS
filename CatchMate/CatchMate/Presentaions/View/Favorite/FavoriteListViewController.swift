@@ -48,6 +48,7 @@ final class FavoriteListViewController: BaseViewController ,View {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reactor.action.onNext(.loadFavoritePost)
+        reactor.action.onNext(.selectPost(nil))
     }
     override func viewDidLoad() {
         super.viewDidLoad()
