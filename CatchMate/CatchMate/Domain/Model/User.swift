@@ -22,4 +22,13 @@ struct User {
 enum Gender: String {
     case woman = "여성"
     case man = "남성"
+    
+    var serverRequest: String {
+        switch self {
+        case .woman:
+            "F"
+        case .man:
+            "M"
+        }
+    }
 }

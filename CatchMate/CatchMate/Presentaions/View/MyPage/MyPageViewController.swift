@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RxSwift
 
 class MyPageViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
@@ -15,6 +16,12 @@ class MyPageViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .cmBackgroundColor
+//        let user = UserDataSourceImpl()
+//        user.loadMyInfo()
+//            .subscribe { user in
+//                print(user)
+//            }
+//            .disposed(by: disposeBag)
 //        setupLeftTitle("내정보")
     }
 }

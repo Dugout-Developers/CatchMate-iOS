@@ -63,7 +63,7 @@ final class ServerLoginDataSourceImpl: ServerLoginDataSource {
             "picture": request.picture ?? "",
             "fcmToken": request.fcmToken
         ]
-        print(parameters)
+
         return RxAlamofire.requestData(.post, url, parameters: parameters, encoding: JSONEncoding.default)
             .flatMap { (response, data) -> Observable<LoginResponse> in
                 guard 200..<300 ~= response.statusCode else {
@@ -78,6 +78,7 @@ final class ServerLoginDataSourceImpl: ServerLoginDataSource {
                 }
                 do {
                     let loginResponse = try JSONDecoder().decode(LoginResponse.self, from: data)
+                    print(loginResponse)
                     return Observable.just(loginResponse)
                 } catch {
                     return Observable.error(ServerLoginError.decodingError)

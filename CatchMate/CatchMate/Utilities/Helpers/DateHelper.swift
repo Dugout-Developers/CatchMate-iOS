@@ -26,6 +26,5 @@ final class DateHelper {
         dateFormatter.dateFormat = format
         return dateFormatter.date(from: string)
     }
-
 }
 

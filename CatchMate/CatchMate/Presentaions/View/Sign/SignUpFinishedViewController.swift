@@ -87,6 +87,7 @@ extension SignUpFinishedViewController {
                 (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(TabBarController(), animated: true)
             }
             .disposed(by: disposeBag)
+        
     }
 }
 

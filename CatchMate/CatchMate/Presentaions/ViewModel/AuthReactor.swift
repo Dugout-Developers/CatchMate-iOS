@@ -90,7 +90,7 @@ final class AuthReactor: Reactor {
     }
     private func saveTokens(_ loginModel: LoginModel) {
         // TODO: - KeyChain 연결 로직
-//        keychainService.saveAccessToken(loginModel.accessToken)
-//        keychainService.saveRefreshToken(loginModel.refreshToken)
+        KeychainService.saveToken(token: loginModel.accessToken, for: .accessToken)
+        KeychainService.saveToken(token: loginModel.refreshToken, for: .refreshToken)
     }
 }

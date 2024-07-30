@@ -12,6 +12,7 @@ struct SignUpRequest {
     let nickName: String
     let birthDate: String
     let favoriteGudan: String
+    let gender: String
     let watchStyle: String
 }
 

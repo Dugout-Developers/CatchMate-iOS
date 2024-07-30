@@ -148,8 +148,8 @@ final class SignReactor: Reactor {
             newState.cheerStyle = cheerStyle
         case .validateSignUp:
             if !newState.nickName.isEmpty, !newState.birth.isEmpty, let gender = newState.gender, let team = newState.team {
-                if birthToAge(newState.birth) != nil {
-                    let model = SignUpModel(accessToken: loginModel.accessToken, refreshToken: loginModel.refreshToken, nickName: newState.nickName, birth: newState.birth, team: team, cheerStyle: newState.cheerStyle)
+                if let birthString = toServerFormatBirth(from: newState.birth) {
+                    let model = SignUpModel(accessToken: loginModel.accessToken, refreshToken: loginModel.refreshToken, nickName: newState.nickName, birth: birthString, team: team, gender: gender, cheerStyle: newState.cheerStyle)
                     signupUseCase.signup(model)
                         .subscribe(onNext: { result in
                               switch result {
@@ -208,5 +208,12 @@ final class SignReactor: Reactor {
         } else {
             return nil
         }
+    }
+    
+    private func toServerFormatBirth(from birth: String) -> String? {
+        if let date = DateHelper.shared.toDate(from: birth, format: "yyMMdd") {
+            return DateHelper.shared.toString(from: date, format: "yyyy-MM-dd")
+        }
+        return nil
     }
 }

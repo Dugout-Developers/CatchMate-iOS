@@ -74,6 +74,13 @@ final class HomeReactor: Reactor {
         case let .setSelectedTeams(selectedTeams):
             newState.selectedTeams = selectedTeams
         case .loadPost(let posts):
+            if let savedAccessToken = KeychainService.getToken(for: .accessToken) {
+                print("Access Token: \(savedAccessToken)")
+            }
+
+            if let savedRefreshToken = KeychainService.getToken(for: .refreshToken) {
+                print("Refresh Token: \(savedRefreshToken)")
+            }
             newState.posts = posts
         case .setSelectedPost(let post):
             newState.selectedPost = post
