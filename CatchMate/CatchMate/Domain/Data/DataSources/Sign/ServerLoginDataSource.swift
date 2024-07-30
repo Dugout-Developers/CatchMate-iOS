@@ -78,7 +78,7 @@ final class ServerLoginDataSourceImpl: ServerLoginDataSource {
                 }
                 do {
                     let loginResponse = try JSONDecoder().decode(LoginResponse.self, from: data)
-                    print(loginResponse)
+                    print("loginResponse: \(loginResponse)")
                     return Observable.just(loginResponse)
                 } catch {
                     return Observable.error(ServerLoginError.decodingError)

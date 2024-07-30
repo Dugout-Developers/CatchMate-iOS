@@ -32,10 +32,10 @@ final class SignReactor: Reactor {
         case updateCheerStyle(CheerStyles?)
         case signUpUser
     }
+    
     enum Mutation {
         case setNickname(String)
-        case setValidateCase
-        case setIsEditingNickName(Bool)
+        case endEditingNickname(Bool?)
         case setCount(Int)
         case setBirth(String)
         case setGender(Gender)
@@ -49,7 +49,6 @@ final class SignReactor: Reactor {
     struct State {
         var nickName: String = ""
         var nickNameValidate: ValidatCase = .none
-        var isEditingNickname: Bool = false
         var nicknameCount: Int = 0
         var birth: String = ""
         var gender: Gender?
@@ -65,31 +64,34 @@ final class SignReactor: Reactor {
     
     var initialState: State
     private let signupUseCase: SignUpUseCase
+    private let nicknameUseCase: NicknameCheckUseCase
     private let loginModel: LoginModel
     private let disposeBag = DisposeBag()
-
-    init(loginModel: LoginModel, signupUseCase: SignUpUseCase) {
+    
+    init(loginModel: LoginModel, signupUseCase: SignUpUseCase, nicknameUseCase: NicknameCheckUseCase) {
         //usecase 추가하기
         self.initialState = State()
         self.loginModel = loginModel
         self.signupUseCase = signupUseCase
+        self.nicknameUseCase = nicknameUseCase
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .updateNickname(let nickName):
             return Observable.concat([
-                Observable.just(Mutation.setIsEditingNickName(true)),
-                Observable.just(Mutation.setValidateCase),
                 Observable.just(Mutation.setNickname(nickName)),
                 Observable.just(Mutation.setCount(nickName.count)),
                 Observable.just(Mutation.validateForm)
             ])
         case .endEditNickname:
-            return Observable.concat([
-                Observable.just(Mutation.setIsEditingNickName(false)),
-                Observable.just(Mutation.setValidateCase)
-                ])
+            if !currentState.nickName.isEmpty {
+                return nicknameUseCase.checkNickname(currentState.nickName)
+                    .flatMap { result in
+                        return Observable.just(Mutation.endEditingNickname(result))
+                    }
+            }
+            return Observable.just(Mutation.endEditingNickname(nil))
         case .updateBirth(let birth):
             return Observable.concat([
                 Observable.just(Mutation.setBirth(birth)),
@@ -111,25 +113,17 @@ final class SignReactor: Reactor {
             return Observable.just(Mutation.validateSignUp)
         }
     }
-    
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
         case .setNickname(let nickname):
             newState.nickName = nickname
-        case .setValidateCase:
-            // TODO: - 서버 Validate 통신 결과에 맞춰 상태 바꾸기 (임시결과로 대체)
-            if newState.isEditingNickname {
-                // 닉네임 작성중일때
-                if newState.nicknameCount == 0 { newState.nickNameValidate = .none }
-                else if newState.nicknameCount < 4 {  newState.nickNameValidate = .failed }
-                else {  newState.nickNameValidate = .success }
+        case .endEditingNickname(let state):
+            if let state = state {
+                newState.nickNameValidate = state ? .success : .failed
             } else {
-                // 작성이 끝났을 때 -> 중복이면 failed 중복이 아니면 none
-                if newState.nicknameCount >= 4 { newState.nickNameValidate = .none }
+                newState.nickNameValidate = .none
             }
-        case .setIsEditingNickName(let isEditing):
-            newState.isEditingNickname = isEditing
         case .setBirth(let birth):
             newState.birth = birth
         case .setGender(let gender):
@@ -152,22 +146,22 @@ final class SignReactor: Reactor {
                     let model = SignUpModel(accessToken: loginModel.accessToken, refreshToken: loginModel.refreshToken, nickName: newState.nickName, birth: birthString, team: team, gender: gender, cheerStyle: newState.cheerStyle)
                     signupUseCase.signup(model)
                         .subscribe(onNext: { result in
-                              switch result {
-                              case .success(let response):
-                                  print("Sign up successful: \(response)")
-                                  newState.signupResponse = response
-                                  newState.isSignUp = true
-                              case .failure(let error):
-                                  print("Sign up failed with error: \(error)")
-                                  newState.isSignUp = false
-                                  newState.error = error
-                              }
-                          }, onError: { error in
-                              print("Unexpected error: \(error)")
-                              newState.isSignUp = false
-                              newState.error = error
-                          })
-                          .disposed(by: disposeBag)
+                            switch result {
+                            case .success(let response):
+                                print("Sign up successful: \(response)")
+                                newState.signupResponse = response
+                                newState.isSignUp = true
+                            case .failure(let error):
+                                print("Sign up failed with error: \(error)")
+                                newState.isSignUp = false
+                                newState.error = error
+                            }
+                        }, onError: { error in
+                            print("Unexpected error: \(error)")
+                            newState.isSignUp = false
+                            newState.error = error
+                        })
+                        .disposed(by: disposeBag)
                 } else {
                     newState.isSignUp = false
                     newState.error = SignUpError.ageError
@@ -179,6 +173,8 @@ final class SignReactor: Reactor {
         }
         return newState
     }
+    
+    
     
     private func birthToAge(_ birth: String) -> UInt? {
         guard birth.count == 6 else { return nil }
@@ -217,3 +213,4 @@ final class SignReactor: Reactor {
         return nil
     }
 }
+

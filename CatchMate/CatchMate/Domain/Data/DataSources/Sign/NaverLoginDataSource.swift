@@ -89,10 +89,10 @@ final class NaverLoginDataSourceImpl: NSObject, NaverLoginDataSource, NaverThird
                 guard let id = response["id"] as? String else {
                     return Observable.error(NaverLoginError.EmptyValue)
                 }
-//                guard let email = response["email"] as? String else {
-//                    return Observable.error(NaverLoginError.EmptyValue)
-//                }
-                let email = "ttang1135@naver.com"
+                guard let email = response["email"] as? String else {
+                    return Observable.error(NaverLoginError.EmptyValue)
+                }
+//                let email = "ttang1135@naver.com"
                 var birthResult: String? = nil
                 if let birthday = response["birthday"] as? String,
                    let birthyear = response["birthyear"] as? String,
@@ -101,10 +101,7 @@ final class NaverLoginDataSourceImpl: NSObject, NaverLoginDataSource, NaverThird
                 }
                 
                 var genderResult: String? = nil
-                if let gender = response["gender"] as? String {
-                    if gender == "F" { genderResult = "여성" }
-                    else if gender == "M" { genderResult = "남성" }
-                }
+                let gender = response["gender"] as? String 
                 if let nickname = response["nickname"] as? String {
                     return Observable.just(SNSLoginResponse(id: id, email: email, loginType: .naver, birth: birthResult, nickName: nickname, gender: genderResult))
                 }

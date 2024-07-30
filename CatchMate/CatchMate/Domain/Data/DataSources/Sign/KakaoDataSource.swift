@@ -21,7 +21,7 @@ protocol KakaoDataSource {
 final class KakaoDataSourceImpl: NSObject, KakaoDataSource {
     private let disposeBag = DisposeBag()
     override init() {
-
+        
         super.init()
     }
     // MARK: - KAKAO LOGIN
@@ -47,12 +47,11 @@ final class KakaoDataSourceImpl: NSObject, KakaoDataSource {
                     }
                 }
             } else {
-                // Login via Kakao Account
+                // 웹뷰
                 UserApi.shared.loginWithKakaoAccount { [weak self] (oauthToken, error) in
                     if let error = error {
                         observer.onError(error)
                     } else {
-                        // Successful login
                         guard let oauthToken = oauthToken else {
                             observer.onError(LoginError.kakaoLoginFailed)
                             return
@@ -70,19 +69,22 @@ final class KakaoDataSourceImpl: NSObject, KakaoDataSource {
             if let error = error {
                 observer.onError(error)
             } else {
-                guard let user = user,
-                      let id = user.id,
-                      let email = user.kakaoAccount?.email else {
-                    observer.onError(LoginError.missingUserInfo)
+                guard let user = user, let id = user.id else {
+                    observer.onError(NSError(domain: "KakaoDataSourceImpl", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid user data"]))
                     return
                 }
-                let loginResponse = SNSLoginResponse(id: String(id), email: email, loginType: .kakao, nickName: user.kakaoAccount?.profile?.nickname, image: user.kakaoAccount?.profile?.profileImageUrl?.absoluteString)
                 
-                observer.onNext(loginResponse)
+                let email = user.kakaoAccount?.email ?? ""
+                let nickName = user.kakaoAccount?.profile?.nickname
+                let imageUrl = user.kakaoAccount?.profile?.profileImageUrl?.absoluteString
+                
+                let response = SNSLoginResponse(id: "\(id)", email: email, loginType: .kakao, birth: nil, nickName: nickName, gender: nil, image: imageUrl)
+                
+                observer.onNext(response)
                 observer.onCompleted()
             }
         }
+        
     }
-
 }
-
+    

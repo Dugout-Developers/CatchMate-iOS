@@ -33,6 +33,9 @@ class DIContainerService {
         let dataSource = SignUpDataSourceImpl()
         let repository = SignUpRepositoryImpl(signupDatasource: dataSource)
         let usecase = SignUpUseCaseImpl(repository: repository)
-        return SignReactor(loginModel: model, signupUseCase: usecase)
+        let nicknameDatasource = NicknameCheckDataSourceImpl()
+        let nicknameRepository = NicknameCheckRepositoryImpl(nicknameDS: nicknameDatasource)
+        let nicknameUsecase = NicknameCheckUseCaseImpl(nicknameRepository: nicknameRepository)
+        return SignReactor(loginModel: model, signupUseCase: usecase, nicknameUseCase: nicknameUsecase)
     }
 }

@@ -140,6 +140,10 @@
 		53FC69DB2C58C65700B97AEA /* RefreshTokenResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69DA2C58C65700B97AEA /* RefreshTokenResponseDTO.swift */; };
 		53FC69DD2C58DB8D00B97AEA /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69DC2C58DB8D00B97AEA /* KeychainService.swift */; };
 		53FC69DF2C58E00A00B97AEA /* UserDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69DE2C58E00A00B97AEA /* UserDataSource.swift */; };
+		53FC69E12C58F65B00B97AEA /* NicknameCheckDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69E02C58F65B00B97AEA /* NicknameCheckDataSource.swift */; };
+		53FC69E32C58F94600B97AEA /* NicknameCheckRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69E22C58F94600B97AEA /* NicknameCheckRepository.swift */; };
+		53FC69E52C58F98100B97AEA /* NicknameCheckRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69E42C58F98100B97AEA /* NicknameCheckRepositoryImpl.swift */; };
+		53FC69E72C58F9E700B97AEA /* NicknameCheckUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69E62C58F9E700B97AEA /* NicknameCheckUseCase.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -287,6 +291,10 @@
 		53FC69DA2C58C65700B97AEA /* RefreshTokenResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenResponseDTO.swift; sourceTree = "<group>"; };
 		53FC69DC2C58DB8D00B97AEA /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 		53FC69DE2C58E00A00B97AEA /* UserDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataSource.swift; sourceTree = "<group>"; };
+		53FC69E02C58F65B00B97AEA /* NicknameCheckDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameCheckDataSource.swift; sourceTree = "<group>"; };
+		53FC69E22C58F94600B97AEA /* NicknameCheckRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameCheckRepository.swift; sourceTree = "<group>"; };
+		53FC69E42C58F98100B97AEA /* NicknameCheckRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameCheckRepositoryImpl.swift; sourceTree = "<group>"; };
+		53FC69E62C58F9E700B97AEA /* NicknameCheckUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameCheckUseCase.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -331,6 +339,7 @@
 				533A2B452C2C638100A59340 /* KakaoLoginUseCase.swift */,
 				5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */,
 				538249122C3196AD0074B583 /* NaverLoginUseCase.swift */,
+				53FC69E62C58F9E700B97AEA /* NicknameCheckUseCase.swift */,
 			);
 			path = SNSLoginUseCase;
 			sourceTree = "<group>";
@@ -352,6 +361,7 @@
 				530DD6112C4F839600A7D6CE /* ServerLoginDataSource.swift */,
 				530DD6132C4F85BF00A7D6CE /* FCMTokenDataSource.swift */,
 				53E4A9B92C4FFB1300D21B49 /* SignUpDataSource.swift */,
+				53FC69E02C58F65B00B97AEA /* NicknameCheckDataSource.swift */,
 			);
 			path = Sign;
 			sourceTree = "<group>";
@@ -363,6 +373,7 @@
 				53E4A9C12C500A4400D21B49 /* SignUpRepositoryImpl.swift */,
 				531288C82C540751000C2FB1 /* FCMRepositoryImpl.swift */,
 				531288D22C540B08000C2FB1 /* ServerLoginRepositoryImpl.swift */,
+				53FC69E42C58F98100B97AEA /* NicknameCheckRepositoryImpl.swift */,
 			);
 			path = Sign;
 			sourceTree = "<group>";
@@ -374,6 +385,7 @@
 				53E4A9BF2C5009EB00D21B49 /* SignUpRepository.swift */,
 				531288CA2C540764000C2FB1 /* FCMRepository.swift */,
 				531288D02C540ADF000C2FB1 /* ServerLoginRepository.swift */,
+				53FC69E22C58F94600B97AEA /* NicknameCheckRepository.swift */,
 			);
 			path = Sign;
 			sourceTree = "<group>";
@@ -949,6 +961,7 @@
 				531288CD2C5408FF000C2FB1 /* LoginModel.swift in Sources */,
 				533A2B362C2BEA3900A59340 /* InputCheerStyleViewController.swift in Sources */,
 				537598062C46C0B0003BD8AE /* ApplyPopupViewController.swift in Sources */,
+				53FC69E52C58F98100B97AEA /* NicknameCheckRepositoryImpl.swift in Sources */,
 				53E4A9C02C5009EB00D21B49 /* SignUpRepository.swift in Sources */,
 				53E4A9C62C500E9B00D21B49 /* SignUpMapper.swift in Sources */,
 				53716BD82C4564700044AD2A /* DefaultsPaddingLabel.swift in Sources */,
@@ -985,11 +998,14 @@
 				53E4A9B82C4FF00F00D21B49 /* AuthReactor.swift in Sources */,
 				531288C32C54030D000C2FB1 /* AppleLoginDataSource.swift in Sources */,
 				53E4A9BA2C4FFB1300D21B49 /* SignUpDataSource.swift in Sources */,
+				53FC69E32C58F94600B97AEA /* NicknameCheckRepository.swift in Sources */,
+				53FC69E72C58F9E700B97AEA /* NicknameCheckUseCase.swift in Sources */,
 				536BDDEC2C19720E0043B1DA /* User.swift in Sources */,
 				53241F3C2C3C517600F468E1 /* GridSystem.swift in Sources */,
 				533183D92C5160220097F3F1 /* ChatData.swift in Sources */,
 				533A2B422C2C624D00A59340 /* SNSLoginRepository.swift in Sources */,
 				5375980C2C46DC45003BD8AE /* ChatRoomViewController.swift in Sources */,
+				53FC69E12C58F65B00B97AEA /* NicknameCheckDataSource.swift in Sources */,
 				531288C92C540751000C2FB1 /* FCMRepositoryImpl.swift in Sources */,
 				533A2B322C2BE7E600A59340 /* CheerStyles.swift in Sources */,
 				53FC69DB2C58C65700B97AEA /* RefreshTokenResponseDTO.swift in Sources */,

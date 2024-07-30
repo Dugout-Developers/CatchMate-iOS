@@ -64,6 +64,7 @@ final class AuthReactor: Reactor {
             return naverLoginUseCase.login()
                 .map { loginModel in
                     self.saveTokens(loginModel)
+                    print(loginModel)
                     return Mutation.setLoginInfo(loginModel)
                 }
                 .catch { error in
