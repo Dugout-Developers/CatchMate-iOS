@@ -20,6 +20,7 @@
 		531288CD2C5408FF000C2FB1 /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531288CC2C5408FF000C2FB1 /* LoginModel.swift */; };
 		531288D12C540ADF000C2FB1 /* ServerLoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531288D02C540ADF000C2FB1 /* ServerLoginRepository.swift */; };
 		531288D32C540B08000C2FB1 /* ServerLoginRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531288D22C540B08000C2FB1 /* ServerLoginRepositoryImpl.swift */; };
+		531288D52C554163000C2FB1 /* ChatListReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531288D42C554163000C2FB1 /* ChatListReactor.swift */; };
 		531786532C1C8BFB00ACEF6A /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786522C1C8BFB00ACEF6A /* BaseViewController.swift */; };
 		531786552C1C8E7800ACEF6A /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786542C1C8E7800ACEF6A /* UIImage+Extension.swift */; };
 		531786572C1C8F1900ACEF6A /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786562C1C8F1900ACEF6A /* UIView+Extension.swift */; };
@@ -168,6 +169,7 @@
 		531288CC2C5408FF000C2FB1 /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
 		531288D02C540ADF000C2FB1 /* ServerLoginRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerLoginRepository.swift; sourceTree = "<group>"; };
 		531288D22C540B08000C2FB1 /* ServerLoginRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerLoginRepositoryImpl.swift; sourceTree = "<group>"; };
+		531288D42C554163000C2FB1 /* ChatListReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListReactor.swift; sourceTree = "<group>"; };
 		531786522C1C8BFB00ACEF6A /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		531786542C1C8E7800ACEF6A /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		531786562C1C8F1900ACEF6A /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
@@ -580,6 +582,7 @@
 				53716BD32C4558780044AD2A /* PostReactor.swift */,
 				537598092C46D6D7003BD8AE /* ApplyFormReactor.swift */,
 				533183DA2C51E87E0097F3F1 /* ChatRoomReactor.swift */,
+				531288D42C554163000C2FB1 /* ChatListReactor.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1005,6 +1008,7 @@
 				533183D72C515C480097F3F1 /* TeamImageView.swift in Sources */,
 				536BDDF62C1972740043B1DA /* UserDTO.swift in Sources */,
 				5383BE8D2C34D595008940F1 /* FontUtility.swift in Sources */,
+				531288D52C554163000C2FB1 /* ChatListReactor.swift in Sources */,
 				531786712C202EF500ACEF6A /* DIContainerService.swift in Sources */,
 				531288C12C53FE2D000C2FB1 /* NaverLoginDataSource.swift in Sources */,
 				533183D32C51429B0097F3F1 /* MessageBoxLabel.swift in Sources */,
