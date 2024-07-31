@@ -141,35 +141,36 @@ final class SignReactor: Reactor {
         case .setCheerStyle(let cheerStyle):
             newState.cheerStyle = cheerStyle
         case .validateSignUp:
-            if !newState.nickName.isEmpty, !newState.birth.isEmpty, let gender = newState.gender, let team = newState.team {
-                if let birthString = toServerFormatBirth(from: newState.birth) {
-                    let model = SignUpModel(accessToken: loginModel.accessToken, refreshToken: loginModel.refreshToken, nickName: newState.nickName, birth: birthString, team: team, gender: gender, cheerStyle: newState.cheerStyle)
-                    signupUseCase.signup(model)
-                        .subscribe(onNext: { result in
-                            switch result {
-                            case .success(let response):
-                                print("Sign up successful: \(response)")
-                                newState.signupResponse = response
-                                newState.isSignUp = true
-                            case .failure(let error):
-                                print("Sign up failed with error: \(error)")
-                                newState.isSignUp = false
-                                newState.error = error
-                            }
-                        }, onError: { error in
-                            print("Unexpected error: \(error)")
-                            newState.isSignUp = false
-                            newState.error = error
-                        })
-                        .disposed(by: disposeBag)
-                } else {
-                    newState.isSignUp = false
-                    newState.error = SignUpError.ageError
-                }
-            } else {
-                newState.isSignUp = false
-                newState.error = SignUpError.dataError
-            }
+            break
+//            if !newState.nickName.isEmpty, !newState.birth.isEmpty, let gender = newState.gender, let team = newState.team {
+//                if let birthString = toServerFormatBirth(from: newState.birth) {
+//                    let model = SignUpModel(accessToken: loginModel.accessToken, refreshToken: loginModel.refreshToken, nickName: newState.nickName, birth: birthString, team: team, gender: gender, cheerStyle: newState.cheerStyle)
+//                    signupUseCase.signup(model)
+//                        .subscribe(onNext: { result in
+//                            switch result {
+//                            case .success(let response):
+//                                print("Sign up successful: \(response)")
+//                                newState.signupResponse = response
+//                                newState.isSignUp = true
+//                            case .failure(let error):
+//                                print("Sign up failed with error: \(error)")
+//                                newState.isSignUp = false
+//                                newState.error = error
+//                            }
+//                        }, onError: { error in
+//                            print("Unexpected error: \(error)")
+//                            newState.isSignUp = false
+//                            newState.error = error
+//                        })
+//                        .disposed(by: disposeBag)
+//                } else {
+//                    newState.isSignUp = false
+//                    newState.error = SignUpError.ageError
+//                }
+//            } else {
+//                newState.isSignUp = false
+//                newState.error = SignUpError.dataError
+//            }
         }
         return newState
     }

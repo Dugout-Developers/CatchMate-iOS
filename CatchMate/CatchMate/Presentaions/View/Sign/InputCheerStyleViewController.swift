@@ -47,10 +47,10 @@ final class InputCheerStyleViewController: BaseViewController, View {
         return label
     }()
     
-    private let styleButtons: [SignSelectedButton<CheerStyles>] = {
-        var buttons: [SignSelectedButton<CheerStyles>] = []
+    private let styleButtons: [CheerStyleButton] = {
+        var buttons: [CheerStyleButton] = []
         CheerStyles.allCheerStyles.forEach { team in
-            let teamButton = SignSelectedButton(item: team)
+            let teamButton = CheerStyleButton(item: team)
             buttons.append(teamButton)
         }
         return buttons
@@ -127,7 +127,7 @@ extension InputCheerStyleViewController {
     
     @objc
     private func clickStyleButton(_ sender: UITapGestureRecognizer) {
-        guard let styleButton = sender.view as? SignSelectedButton<CheerStyles> else { return }
+        guard let styleButton = sender.view as? CheerStyleButton else { return }
         styleButtons.forEach { button in
             if styleButton == button {
                 button.isSelected = !button.isSelected

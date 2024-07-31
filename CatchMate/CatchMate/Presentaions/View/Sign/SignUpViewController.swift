@@ -282,6 +282,7 @@ extension SignUpViewController {
             .disposed(by: disposeBag)
         
         reactor.state.map { $0.nickNameValidate}
+            .distinctUntilChanged()
             .withUnretained(self)
             .bind (onNext: { vc, validateCase in
                 vc.vaildateLabel.text = validateCase.rawValue

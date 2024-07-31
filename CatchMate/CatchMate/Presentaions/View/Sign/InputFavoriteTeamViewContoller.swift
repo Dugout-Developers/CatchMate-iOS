@@ -44,10 +44,10 @@ final class InputFavoriteTeamViewContoller: BaseViewController, View {
         return imageView
     }()
     
-    private let teamButtons: [SignSelectedButton<Team>] = {
-        var buttons: [SignSelectedButton<Team>] = []
+    private let teamButtons: [TeamSelectButton] = {
+        var buttons: [TeamSelectButton] = []
         Team.allTeamFull.forEach { team in
-            let teamButton = SignSelectedButton<Team>(item: team)
+            let teamButton = TeamSelectButton(item: team)
             buttons.append(teamButton)
         }
         return buttons
@@ -94,7 +94,7 @@ final class InputFavoriteTeamViewContoller: BaseViewController, View {
         // UIImageView의 높이 제약 조건을 설정
         NSLayoutConstraint.activate([
             indicatorImageView.heightAnchor.constraint(equalToConstant: 6),
-            indicatorImageView.widthAnchor.constraint(equalToConstant: indicatorImage?.getRatio(height: 6) ?? 30.0) // width도 설정해주는 것이 좋습니다.
+            indicatorImageView.widthAnchor.constraint(equalToConstant: indicatorImage?.getRatio(height: 6) ?? 30.0)
         ])
         
         customNavigationBar.addRightItems(items: [indicatorImageView])
@@ -130,7 +130,7 @@ extension InputFavoriteTeamViewContoller {
     
     @objc
     private func clickTeamButton(_ sender: UITapGestureRecognizer) {
-        guard let teamButton = sender.view as? SignSelectedButton<Team> else { return }
+        guard let teamButton = sender.view as? TeamSelectButton else { return }
         teamButtons.forEach { button in
             if teamButton == button {
                 button.isSelected = true

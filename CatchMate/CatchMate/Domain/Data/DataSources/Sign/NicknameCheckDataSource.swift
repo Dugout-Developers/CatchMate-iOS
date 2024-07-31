@@ -17,6 +17,7 @@ enum NicknameAPIError: Error {
     case notFoundURL
     case serverError(code: Int, description: String)
     case decodingError
+    case encodingError
     
     
     var statusCode: Int {
@@ -27,6 +28,8 @@ enum NicknameAPIError: Error {
             return code
         case .decodingError:
             return -1002
+        case .encodingError:
+            return -1003
         }
     }
     var errorDescription: String? {
@@ -37,6 +40,8 @@ enum NicknameAPIError: Error {
             return "서버 에러: \(message)"
         case .decodingError:
             return "데이터 디코딩 에러"
+        case .encodingError:
+            return "파라미터 인코딩 에러"
         }
     }
 }
@@ -46,41 +51,46 @@ final class NicknameCheckDataSourceImpl: NicknameCheckDataSource {
             return Observable.error(NicknameAPIError.notFoundURL)
         }
         let url = base + "/auth/check-nickname"
-        let parameters: [String: Any] = [
+        let parameters: [String: String] = [
             "nickname": nickname
         ]
-        return RxAlamofire.requestData(.get, url, parameters: parameters, encoding: JSONEncoding.default)
-            .flatMap { (response, data) -> Observable<Bool> in
-                guard 200..<300 ~= response.statusCode else {
+
+        let queryString = encodeParameters(parameters: parameters)
+        let urlString = url + "?" + queryString
+        print("Request URL: \(urlString)")
+
+        return RxAlamofire.requestJSON(.get, urlString, encoding: JSONEncoding.default)
+            .do(onNext: { (response, json) in
+                // 응답 상태 코드 및 데이터 출력
+                print("Response Status Code: \(response.statusCode)")
+                print(json)
+            }, onError: { error in
+                // 에러 발생 시 로그 출력
+                print("Network Request Error: \(error)")
+            })
+            .flatMap { (response, json) -> Observable<Bool> in
+                guard 200...300 ~= response.statusCode else {
                     print(response.statusCode)
                     print(response.debugDescription)
-                    if let errorData = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                       let errorMessage = errorData["errorMessage"] as? String {
-                        print(errorMessage)
-                    }
                     return Observable.error(NicknameAPIError.serverError(code: response.statusCode, description: "서버에러 발생"))
                 }
                 
-                do {
-                    if let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                       let available = jsonObject["available"] as? Bool {
-                        return Observable.just(available)
-                    } else {
-                        return Observable.error(NicknameAPIError.decodingError)
-                    }
-                } catch {
-                    // JSON 데이터를 문자열로 변환하여 출력
-                    if let jsonString = String(data: data, encoding: .utf8) {
-                        print("Decoding Error: JSON 데이터는 다음과 같습니다.")
-                        print(jsonString)
-                    } else {
-                        print("Decoding Error: JSON 데이터를 문자열로 변환할 수 없습니다.")
-                    }
-                    return Observable.error(UserAPIError.decodingError)
+                if let jsonDict = json as? [String: Any], let result = jsonDict["available"] as? Bool {
+                    return Observable.just(result)
+                } else {
+                    return Observable.error(NicknameAPIError.decodingError)
                 }
             }
     }
     
-    
+    func encodeParameters(parameters: [String: Any]) -> String {
+        var components = URLComponents()
+        components.queryItems = parameters.map { (key, value) in
+            URLQueryItem(name: key, value: "\(value)")
+        }
+        return components.percentEncodedQuery ?? ""
+    }
 }
+
+
 

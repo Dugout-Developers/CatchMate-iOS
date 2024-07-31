@@ -10,9 +10,9 @@ import RxSwift
 
 final class ServerLoginRepositoryImpl: ServerLoginRepository {
     
-    private let serverLoginDS: ServerLoginDataSource
+    private let serverLoginDS: ServerLoginDataSourceImpl
     
-    init(serverLoginDS: ServerLoginDataSource) {
+    init(serverLoginDS: ServerLoginDataSourceImpl) {
         self.serverLoginDS = serverLoginDS
     }
     func login(snsModel: SNSLoginResponse, token: String) -> RxSwift.Observable<LoginModel> {

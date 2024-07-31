@@ -18,6 +18,7 @@ final class NicknameCheckUseCaseImpl: NicknameCheckUseCase {
     }
     
     func checkNickname(_ nickname: String) -> Observable<Bool> {
+        print(nickname)
         return nicknameRepository.checkNickName(nickname)
     }
 }

@@ -9,9 +9,9 @@ import UIKit
 import RxSwift
 
 final class FCMRepositoryImpl: FCMRepository {
-    private let fcmTokenDS: FCMTokenDataSource
+    private let fcmTokenDS: FCMTokenDataSourceImpl
     
-    init(fcmTokenDS: FCMTokenDataSource) {
+    init(fcmTokenDS: FCMTokenDataSourceImpl) {
         self.fcmTokenDS = fcmTokenDS
     }
     func getFCMToken() -> Observable<String> {

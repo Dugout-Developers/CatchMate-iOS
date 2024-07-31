@@ -9,9 +9,9 @@ import UIKit
 import RxSwift
 
 final class NicknameCheckRepositoryImpl: NicknameCheckRepository {
-    private let nicknameDS: NicknameCheckDataSource
+    private let nicknameDS: NicknameCheckDataSourceImpl
     
-    init(nicknameDS: NicknameCheckDataSource) {
+    init(nicknameDS: NicknameCheckDataSourceImpl) {
         self.nicknameDS = nicknameDS
     }
     
