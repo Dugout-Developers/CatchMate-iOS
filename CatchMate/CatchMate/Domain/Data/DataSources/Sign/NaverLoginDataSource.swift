@@ -59,6 +59,7 @@ final class NaverLoginDataSourceImpl: NSObject, NaverLoginDataSource, NaverThird
     private var naverLoginSubject: AnyObserver<SNSLoginResponse>?
     
     func getNaverLoginToken() -> Observable<SNSLoginResponse> {
+        loginInstance.resetToken() // 로그아웃하여 토큰을 초기화
         loginInstance.requestThirdPartyLogin()
         return Observable.create { observer in
             self.naverLoginSubject = observer
@@ -92,7 +93,6 @@ final class NaverLoginDataSourceImpl: NSObject, NaverLoginDataSource, NaverThird
                 guard let email = response["email"] as? String else {
                     return Observable.error(NaverLoginError.EmptyValue)
                 }
-//                let email = "ttang1135@naver.com"
                 var birthResult: String? = nil
                 if let birthday = response["birthday"] as? String,
                    let birthyear = response["birthyear"] as? String,

@@ -144,6 +144,7 @@
 		53FC69E32C58F94600B97AEA /* NicknameCheckRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69E22C58F94600B97AEA /* NicknameCheckRepository.swift */; };
 		53FC69E52C58F98100B97AEA /* NicknameCheckRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69E42C58F98100B97AEA /* NicknameCheckRepositoryImpl.swift */; };
 		53FC69E72C58F9E700B97AEA /* NicknameCheckUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69E62C58F9E700B97AEA /* NicknameCheckUseCase.swift */; };
+		53FC69FC2C5A2DD700B97AEA /* SignUpReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69FB2C5A2DD700B97AEA /* SignUpReactor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -295,6 +296,7 @@
 		53FC69E22C58F94600B97AEA /* NicknameCheckRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameCheckRepository.swift; sourceTree = "<group>"; };
 		53FC69E42C58F98100B97AEA /* NicknameCheckRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameCheckRepositoryImpl.swift; sourceTree = "<group>"; };
 		53FC69E62C58F9E700B97AEA /* NicknameCheckUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameCheckUseCase.swift; sourceTree = "<group>"; };
+		53FC69FB2C5A2DD700B97AEA /* SignUpReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpReactor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -596,6 +598,7 @@
 			children = (
 				53E4A9B72C4FF00F00D21B49 /* AuthReactor.swift */,
 				536BDDE82C1971C70043B1DA /* SignReactor.swift */,
+				53FC69FB2C5A2DD700B97AEA /* SignUpReactor.swift */,
 				536BDE392C1C1F210043B1DA /* HomeReactor.swift */,
 				53716BBF2C400B3E0044AD2A /* FavoriteReactor.swift */,
 				53716BC12C4053430044AD2A /* AddReactor.swift */,
@@ -1009,6 +1012,7 @@
 				531288C92C540751000C2FB1 /* FCMRepositoryImpl.swift in Sources */,
 				533A2B322C2BE7E600A59340 /* CheerStyles.swift in Sources */,
 				53FC69DB2C58C65700B97AEA /* RefreshTokenResponseDTO.swift in Sources */,
+				53FC69FC2C5A2DD700B97AEA /* SignUpReactor.swift in Sources */,
 				531288D12C540ADF000C2FB1 /* ServerLoginRepository.swift in Sources */,
 				531786572C1C8F1900ACEF6A /* UIView+Extension.swift in Sources */,
 				538EB92F2C3FA27600ABA40E /* CMDatePicker.swift in Sources */,

@@ -43,16 +43,14 @@ final class AuthReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .kakaoLogin:
-            let tempModel = LoginModel(id: "1111", email: "dddd", accessToken: "ddddd", refreshToken: "ddddd", isFirstLogin: true, nickName: nil, gender: nil, birth: nil, profileImage: "")
-            return Observable.just(Mutation.setLoginInfo(tempModel))
-//            return kakaoLoginUseCase.login()
-//                .map { loginModel in
-//                    self.saveTokens(loginModel)
-//                    return Mutation.setLoginInfo(loginModel)
-//                }
-//                .catch { error in
-//                    return Observable.just(Mutation.setError(error))
-//                }
+            return kakaoLoginUseCase.login()
+                .map { loginModel in
+                    self.saveTokens(loginModel)
+                    return Mutation.setLoginInfo(loginModel)
+                }
+                .catch { error in
+                    return Observable.just(Mutation.setError(error))
+                }
         case .appleLogin:
             return appleLoginUseCase.login()
                 .map { loginModel in

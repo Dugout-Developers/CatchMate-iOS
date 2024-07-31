@@ -63,6 +63,7 @@ final class SignUpDataSourceImpl: SignUpDataSource {
             "gender": model.gender.serverRequest,
             "watchStyle": model.cheerStyle?.rawValue ?? ""
         ]
+        
         let headers: HTTPHeaders = [
             "AccessToken": model.accessToken
         ]

@@ -9,6 +9,6 @@ import UIKit
 
 final class LoginMapper {
     static func snsToLoginRequest(_ snsModel: SNSLoginResponse, _ token: String) -> LoginRequset {
-        return LoginRequset(provideId: snsModel.id, provider: snsModel.loginType.rawValue, email: snsModel.email, picture: snsModel.imageUrl, fcmToken: token)
+        return LoginRequset(provideId: snsModel.id, provider: snsModel.loginType, email: snsModel.email, picture: snsModel.imageUrl ?? "", fcmToken: token)
     }
 }

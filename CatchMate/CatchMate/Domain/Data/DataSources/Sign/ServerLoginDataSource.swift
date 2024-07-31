@@ -60,7 +60,7 @@ final class ServerLoginDataSourceImpl: ServerLoginDataSource {
             "provideId": request.provideId,
             "provider": request.provider,
             "email": request.email,
-            "picture": request.picture ?? "",
+            "picture": request.picture,
             "fcmToken": request.fcmToken
         ]
 

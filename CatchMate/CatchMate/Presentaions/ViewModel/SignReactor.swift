@@ -30,7 +30,6 @@ final class SignReactor: Reactor {
         case updateGender(Gender)
         case updateTeam(Team)
         case updateCheerStyle(CheerStyles?)
-        case signUpUser
     }
     
     enum Mutation {
@@ -54,25 +53,21 @@ final class SignReactor: Reactor {
         var gender: Gender?
         var team: Team?
         var cheerStyle: CheerStyles?
-        var signUpViewNextButtonState: Bool = false
         var isFormValid: Bool = false
-        var isSignUp: Bool?
-        var signupResponse: SignUpResponse? = nil
+        var signUpModel: SignUpModel?
         var isTeamSelected: Bool = false
         var error: Error?
     }
     
     var initialState: State
-    private let signupUseCase: SignUpUseCase
     private let nicknameUseCase: NicknameCheckUseCase
     private let loginModel: LoginModel
     private let disposeBag = DisposeBag()
     
-    init(loginModel: LoginModel, signupUseCase: SignUpUseCase, nicknameUseCase: NicknameCheckUseCase) {
+    init(loginModel: LoginModel, nicknameUseCase: NicknameCheckUseCase) {
         //usecase 추가하기
         self.initialState = State()
         self.loginModel = loginModel
-        self.signupUseCase = signupUseCase
         self.nicknameUseCase = nicknameUseCase
     }
     
@@ -82,7 +77,8 @@ final class SignReactor: Reactor {
             return Observable.concat([
                 Observable.just(Mutation.setNickname(nickName)),
                 Observable.just(Mutation.setCount(nickName.count)),
-                Observable.just(Mutation.validateForm)
+                Observable.just(Mutation.validateForm),
+                Observable.just(Mutation.validateSignUp)
             ])
         case .endEditNickname:
             if !currentState.nickName.isEmpty {
@@ -95,22 +91,26 @@ final class SignReactor: Reactor {
         case .updateBirth(let birth):
             return Observable.concat([
                 Observable.just(Mutation.setBirth(birth)),
-                Observable.just(Mutation.validateForm)
+                Observable.just(Mutation.validateForm),
+                Observable.just(Mutation.validateSignUp)
             ])
         case .updateGender(let gender):
             return Observable.concat([
                 Observable.just(Mutation.setGender(gender)),
-                Observable.just(Mutation.validateForm)
+                Observable.just(Mutation.validateForm),
+                Observable.just(Mutation.validateSignUp)
             ])
         case .updateTeam(let team):
             return Observable.concat([
                 Observable.just(Mutation.setTeam(team)),
-                Observable.just(Mutation.validateTeam)
+                Observable.just(Mutation.validateTeam),
+                Observable.just(Mutation.validateSignUp)
             ])
         case .updateCheerStyle(let cheerStyle):
-            return Observable.just(Mutation.setCheerStyle(cheerStyle))
-        case .signUpUser:
-            return Observable.just(Mutation.validateSignUp)
+            return Observable.concat([
+                Observable.just(Mutation.setCheerStyle(cheerStyle)),
+                Observable.just(Mutation.validateSignUp)
+            ])
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
@@ -133,7 +133,7 @@ final class SignReactor: Reactor {
         case .setCount(let count):
             newState.nicknameCount = count
         case .validateForm:
-            newState.isFormValid = !newState.nickName.isEmpty && newState.birth.count == 6 && newState.gender != nil && newState.nickNameValidate == .none
+            newState.isFormValid = !newState.nickName.isEmpty && newState.birth.count == 6 && newState.gender != nil && newState.nickNameValidate == .success
         case .setTeam(let team):
             newState.team = team
         case .validateTeam:
@@ -141,36 +141,12 @@ final class SignReactor: Reactor {
         case .setCheerStyle(let cheerStyle):
             newState.cheerStyle = cheerStyle
         case .validateSignUp:
-            break
-//            if !newState.nickName.isEmpty, !newState.birth.isEmpty, let gender = newState.gender, let team = newState.team {
-//                if let birthString = toServerFormatBirth(from: newState.birth) {
-//                    let model = SignUpModel(accessToken: loginModel.accessToken, refreshToken: loginModel.refreshToken, nickName: newState.nickName, birth: birthString, team: team, gender: gender, cheerStyle: newState.cheerStyle)
-//                    signupUseCase.signup(model)
-//                        .subscribe(onNext: { result in
-//                            switch result {
-//                            case .success(let response):
-//                                print("Sign up successful: \(response)")
-//                                newState.signupResponse = response
-//                                newState.isSignUp = true
-//                            case .failure(let error):
-//                                print("Sign up failed with error: \(error)")
-//                                newState.isSignUp = false
-//                                newState.error = error
-//                            }
-//                        }, onError: { error in
-//                            print("Unexpected error: \(error)")
-//                            newState.isSignUp = false
-//                            newState.error = error
-//                        })
-//                        .disposed(by: disposeBag)
-//                } else {
-//                    newState.isSignUp = false
-//                    newState.error = SignUpError.ageError
-//                }
-//            } else {
-//                newState.isSignUp = false
-//                newState.error = SignUpError.dataError
-//            }
+            if !newState.nickName.isEmpty, !newState.birth.isEmpty, let gender = newState.gender, let team = newState.team {
+                if let birthString = toServerFormatBirth(from: newState.birth) {
+                    let model = SignUpModel(accessToken: loginModel.accessToken, refreshToken: loginModel.refreshToken, nickName: newState.nickName, birth: birthString, team: team, gender: gender, cheerStyle: newState.cheerStyle)
+                    newState.signUpModel = model
+                } 
+            }
         }
         return newState
     }

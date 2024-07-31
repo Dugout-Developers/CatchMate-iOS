@@ -12,7 +12,7 @@ struct LoginRequset {
     let provideId: String
     let provider: String
     let email: String
-    let picture: String?
+    let picture: String
     let fcmToken: String
 }
 

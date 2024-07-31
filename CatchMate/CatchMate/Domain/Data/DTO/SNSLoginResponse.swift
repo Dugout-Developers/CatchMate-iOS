@@ -16,16 +16,16 @@ enum LoginType: String {
 struct SNSLoginResponse {
     let id: String
     let email: String
-    let loginType: LoginType
+    let loginType: String
     let birth: String?
     let nickName: String?
     let gender: String?
     let imageUrl: String?
     
-    init(id: String, email: String, loginType: LoginType, birth: String? = nil, nickName: String? = nil, gender: String? = nil, image: String? = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.studiopeople.kr%2F&psig=AOvVaw0WompMLL5M4iJ7_pLkKb7i&ust=1722405797923000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCOj8st-LzocDFQAAAAAdAAAAABAP") {
+    init(id: String, email: String, loginType: LoginType, birth: String? = nil, nickName: String? = nil, gender: String? = nil, image: String? = "") {
         self.id = id
         self.email = email
-        self.loginType = loginType
+        self.loginType = loginType.rawValue
         self.birth = birth
         self.nickName = nickName
         self.gender = gender
