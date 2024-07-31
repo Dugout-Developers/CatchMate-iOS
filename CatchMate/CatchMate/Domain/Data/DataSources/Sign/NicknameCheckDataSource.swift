@@ -17,7 +17,7 @@ enum NicknameAPIError: Error {
     case notFoundURL
     case serverError(code: Int, description: String)
     case decodingError
-    case encodingError
+    case requestFailed
     
     
     var statusCode: Int {
@@ -28,7 +28,7 @@ enum NicknameAPIError: Error {
             return code
         case .decodingError:
             return -1002
-        case .encodingError:
+        case .requestFailed:
             return -1003
         }
     }
@@ -40,26 +40,22 @@ enum NicknameAPIError: Error {
             return "서버 에러: \(message)"
         case .decodingError:
             return "데이터 디코딩 에러"
-        case .encodingError:
-            return "파라미터 인코딩 에러"
+        case .requestFailed:
+            return "요청 실패"
         }
     }
 }
+
+
 final class NicknameCheckDataSourceImpl: NicknameCheckDataSource {
     func checkNickname(_ nickname: String) -> RxSwift.Observable<Bool> {
         guard let base = Bundle.main.baseURL else {
             return Observable.error(NicknameAPIError.notFoundURL)
         }
         let url = base + "/auth/check-nickname"
-        let parameters: [String: String] = [
-            "nickname": nickname
-        ]
+        let urlString = url + "?" + "nickName=\(nickname)"
 
-        let queryString = encodeParameters(parameters: parameters)
-        let urlString = url + "?" + queryString
-        print("Request URL: \(urlString)")
-
-        return RxAlamofire.requestJSON(.get, urlString, encoding: JSONEncoding.default)
+        return RxAlamofire.requestJSON(.get, urlString)
             .do(onNext: { (response, json) in
                 // 응답 상태 코드 및 데이터 출력
                 print("Response Status Code: \(response.statusCode)")
