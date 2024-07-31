@@ -94,6 +94,14 @@ extension NumberPickerViewController {
             .map { Reactor.Action.updateNumberFilter($0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        resetButton.rx.tap
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                reactor.action.onNext(.updateNumberFilter(nil))
+                vc.dismiss(animated: true)
+            }
+            .disposed(by: disposeBag)
     }
     
     func bind(reactor: AddReactor) {

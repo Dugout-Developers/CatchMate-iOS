@@ -62,7 +62,7 @@ final class HomeViewController: BaseViewController, View {
         customNavigationBar.addRightItems(items: [notiButton])
     }
     private func setupTableView() {
-        tableView.register(ListCardViewTableViewCell2.self, forCellReuseIdentifier: "ListCardViewTableViewCell2")
+        tableView.register(ListCardViewTableViewCell.self, forCellReuseIdentifier: "ListCardViewTableViewCell")
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 178
         tableView.backgroundColor = .clear
@@ -106,7 +106,7 @@ extension HomeViewController {
             .disposed(by: disposeBag)
         
         reactor.state.map{ $0.posts }
-            .bind(to: tableView.rx.items(cellIdentifier: "ListCardViewTableViewCell2", cellType: ListCardViewTableViewCell2.self)) {  (row, item, cell) in
+            .bind(to: tableView.rx.items(cellIdentifier: "ListCardViewTableViewCell", cellType: ListCardViewTableViewCell.self)) {  (row, item, cell) in
                 cell.backgroundColor = .clear
                 cell.selectionStyle = .none
                 cell.setupData(item)
@@ -124,10 +124,13 @@ extension HomeViewController {
             .disposed(by: disposeBag)
         
         reactor.state.map{$0.seletedNumberFilter}
-            .compactMap{$0}
             .withUnretained(self)
             .bind { vc, number in
-                vc.numberFilterButton.filterValue = "\(number)명"
+                if let number = number {
+                    vc.numberFilterButton.filterValue = "\(number)명"
+                } else {
+                    vc.numberFilterButton.filterValue = nil
+                }
                 vc.updateFilterContainerLayout()
             }
             .disposed(by: disposeBag)
