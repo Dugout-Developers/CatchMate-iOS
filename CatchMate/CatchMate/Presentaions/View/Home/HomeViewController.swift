@@ -127,7 +127,7 @@ extension HomeViewController {
             .compactMap{$0}
             .withUnretained(self)
             .bind { vc, number in
-                vc.numberFilterButton.filterValue = String(number)
+                vc.numberFilterButton.filterValue = "\(number)명"
                 vc.updateFilterContainerLayout()
             }
             .disposed(by: disposeBag)
