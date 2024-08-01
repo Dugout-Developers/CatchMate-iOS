@@ -16,6 +16,12 @@
 		5301E2A92C5B81D10078E910 /* MypageHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2A82C5B81D10078E910 /* MypageHeader.swift */; };
 		5301E2AB2C5B82AA0078E910 /* MypageMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2AA2C5B82AA0078E910 /* MypageMenu.swift */; };
 		5301E2AE2C5BC45E0078E910 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 5301E2AD2C5BC45E0078E910 /* Kingfisher */; };
+		5301E2B02C5BE3E20078E910 /* LogoutDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2AF2C5BE3E20078E910 /* LogoutDataSource.swift */; };
+		5301E2B22C5BE6350078E910 /* LogoutRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2B12C5BE6350078E910 /* LogoutRepositoryImpl.swift */; };
+		5301E2B42C5BE6570078E910 /* LogoutRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2B32C5BE6570078E910 /* LogoutRepository.swift */; };
+		5301E2B62C5BE6AF0078E910 /* LogoutUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2B52C5BE6AF0078E910 /* LogoutUseCase.swift */; };
+		5301E2B82C5BECBB0078E910 /* MyPageReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2B72C5BECBB0078E910 /* MyPageReactor.swift */; };
+		5301E2BA2C5BED8D0078E910 /* UserMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2B92C5BED8D0078E910 /* UserMapper.swift */; };
 		530994542C4F6CEB00ABE103 /* LoginResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530994532C4F6CEB00ABE103 /* LoginResult.swift */; };
 		530994562C4F6D9900ABE103 /* LoginRequset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530994552C4F6D9900ABE103 /* LoginRequset.swift */; };
 		530DD6122C4F839600A7D6CE /* ServerLoginDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530DD6112C4F839600A7D6CE /* ServerLoginDataSource.swift */; };
@@ -181,6 +187,12 @@
 		5301E2A62C5B7F740078E910 /* MypageListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MypageListCell.swift; sourceTree = "<group>"; };
 		5301E2A82C5B81D10078E910 /* MypageHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MypageHeader.swift; sourceTree = "<group>"; };
 		5301E2AA2C5B82AA0078E910 /* MypageMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MypageMenu.swift; sourceTree = "<group>"; };
+		5301E2AF2C5BE3E20078E910 /* LogoutDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoutDataSource.swift; sourceTree = "<group>"; };
+		5301E2B12C5BE6350078E910 /* LogoutRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoutRepositoryImpl.swift; sourceTree = "<group>"; };
+		5301E2B32C5BE6570078E910 /* LogoutRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoutRepository.swift; sourceTree = "<group>"; };
+		5301E2B52C5BE6AF0078E910 /* LogoutUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoutUseCase.swift; sourceTree = "<group>"; };
+		5301E2B72C5BECBB0078E910 /* MyPageReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageReactor.swift; sourceTree = "<group>"; };
+		5301E2B92C5BED8D0078E910 /* UserMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMapper.swift; sourceTree = "<group>"; };
 		530994532C4F6CEB00ABE103 /* LoginResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResult.swift; sourceTree = "<group>"; };
 		530994552C4F6D9900ABE103 /* LoginRequset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRequset.swift; sourceTree = "<group>"; };
 		530DD6112C4F839600A7D6CE /* ServerLoginDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerLoginDataSource.swift; sourceTree = "<group>"; };
@@ -359,6 +371,7 @@
 				538249122C3196AD0074B583 /* NaverLoginUseCase.swift */,
 				53FC69E62C58F9E700B97AEA /* NicknameCheckUseCase.swift */,
 				53E4A9C32C500AD500D21B49 /* SignUpUseCase.swift */,
+				5301E2B52C5BE6AF0078E910 /* LogoutUseCase.swift */,
 			);
 			path = SNSLoginUseCase;
 			sourceTree = "<group>";
@@ -398,6 +411,7 @@
 				531288C82C540751000C2FB1 /* FCMRepositoryImpl.swift */,
 				531288D22C540B08000C2FB1 /* ServerLoginRepositoryImpl.swift */,
 				53FC69E42C58F98100B97AEA /* NicknameCheckRepositoryImpl.swift */,
+				5301E2B12C5BE6350078E910 /* LogoutRepositoryImpl.swift */,
 			);
 			path = Sign;
 			sourceTree = "<group>";
@@ -631,6 +645,7 @@
 				537598092C46D6D7003BD8AE /* ApplyFormReactor.swift */,
 				533183DA2C51E87E0097F3F1 /* ChatRoomReactor.swift */,
 				531288D42C554163000C2FB1 /* ChatListReactor.swift */,
+				5301E2B72C5BECBB0078E910 /* MyPageReactor.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -673,6 +688,7 @@
 			isa = PBXGroup;
 			children = (
 				531288C72C54061E000C2FB1 /* Sign */,
+				5301E2B32C5BE6570078E910 /* LogoutRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -705,6 +721,7 @@
 			children = (
 				536BDDF82C1972880043B1DA /* LoginMapper.swift */,
 				53E4A9C52C500E9B00D21B49 /* SignUpMapper.swift */,
+				5301E2B92C5BED8D0078E910 /* UserMapper.swift */,
 			);
 			path = Mapper;
 			sourceTree = "<group>";
@@ -722,6 +739,7 @@
 			children = (
 				531288BF2C53FE0E000C2FB1 /* Sign */,
 				53FC69DE2C58E00A00B97AEA /* UserDataSource.swift */,
+				5301E2AF2C5BE3E20078E910 /* LogoutDataSource.swift */,
 			);
 			path = DataSources;
 			sourceTree = "<group>";
@@ -998,9 +1016,11 @@
 				531786782C20498800ACEF6A /* Post.swift in Sources */,
 				533A2B2C2C29485E00A59340 /* SignUpViewController.swift in Sources */,
 				53241F4E2C3EE58E00F468E1 /* CMPopupViewController.swift in Sources */,
+				5301E2B42C5BE6570078E910 /* LogoutRepository.swift in Sources */,
 				536BDE2D2C1B55080043B1DA /* AddViewController.swift in Sources */,
 				533183DB2C51E87E0097F3F1 /* ChatRoomReactor.swift in Sources */,
 				53E4A9C22C500A4400D21B49 /* SignUpRepositoryImpl.swift in Sources */,
+				5301E2B62C5BE6AF0078E910 /* LogoutUseCase.swift in Sources */,
 				537598082C46C3D2003BD8AE /* DefaultsTextView.swift in Sources */,
 				533A2B462C2C638100A59340 /* KakaoLoginUseCase.swift in Sources */,
 				53E4A9BC2C4FFB8400D21B49 /* SignUp.swift in Sources */,
@@ -1045,6 +1065,7 @@
 				531288D12C540ADF000C2FB1 /* ServerLoginRepository.swift in Sources */,
 				531786572C1C8F1900ACEF6A /* UIView+Extension.swift in Sources */,
 				538EB92F2C3FA27600ABA40E /* CMDatePicker.swift in Sources */,
+				5301E2B02C5BE3E20078E910 /* LogoutDataSource.swift in Sources */,
 				53FC69DD2C58DB8D00B97AEA /* KeychainService.swift in Sources */,
 				5375980A2C46D6D7003BD8AE /* ApplyFormReactor.swift in Sources */,
 				5301E29D2C5B38B10078E910 /* Error+Extension.swift in Sources */,
@@ -1053,6 +1074,7 @@
 				531786552C1C8E7800ACEF6A /* UIImage+Extension.swift in Sources */,
 				530DD6142C4F85BF00A7D6CE /* FCMTokenDataSource.swift in Sources */,
 				536BDE342C1B57B10043B1DA /* HomeFilterButton.swift in Sources */,
+				5301E2BA2C5BED8D0078E910 /* UserMapper.swift in Sources */,
 				536BDE272C1B53150043B1DA /* UIColor+Extension.swift in Sources */,
 				536BDE382C1C07990043B1DA /* PaddingLabel.swift in Sources */,
 				53716BC42C42B72F0044AD2A /* CMNavigationBar.swift in Sources */,
@@ -1095,6 +1117,7 @@
 				53E4A9BE2C50046E00D21B49 /* SignUpModel.swift in Sources */,
 				5382490E2C2E79A90074B583 /* AppleLoginUseCase.swift in Sources */,
 				5317866B2C200D6000ACEF6A /* BasePickerViewController.swift in Sources */,
+				5301E2B22C5BE6350078E910 /* LogoutRepositoryImpl.swift in Sources */,
 				536BDDE22C196F510043B1DA /* Bundle+Extension.swift in Sources */,
 				533A2B272C28558600A59340 /* SignInViewController.swift in Sources */,
 				531786742C202F1B00ACEF6A /* NetworkService.swift in Sources */,
@@ -1104,6 +1127,7 @@
 				5383BE8F2C34DF27008940F1 /* Font.swift in Sources */,
 				53716BC82C43EEB50044AD2A /* CMToastMessage.swift in Sources */,
 				533183CF2C5141BC0097F3F1 /* MyMessageTableViewCell.swift in Sources */,
+				5301E2B82C5BECBB0078E910 /* MyPageReactor.swift in Sources */,
 				536548A32C3EF3B700C2309A /* FavoriteListViewController.swift in Sources */,
 				531288D32C540B08000C2FB1 /* ServerLoginRepositoryImpl.swift in Sources */,
 				531786852C23261200ACEF6A /* SheetHeight.swift in Sources */,

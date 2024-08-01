@@ -43,4 +43,5 @@ class DIContainerService {
         
         return SignUpReactor(signUpModel: model, signupUseCase: usecase)
     }
+    
 }
