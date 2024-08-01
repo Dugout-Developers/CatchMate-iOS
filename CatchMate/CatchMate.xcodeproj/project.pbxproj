@@ -20,6 +20,8 @@
 		5301E2B22C5BE6350078E910 /* LogoutRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2B12C5BE6350078E910 /* LogoutRepositoryImpl.swift */; };
 		5301E2B42C5BE6570078E910 /* LogoutRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2B32C5BE6570078E910 /* LogoutRepository.swift */; };
 		5301E2B62C5BE6AF0078E910 /* LogoutUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2B52C5BE6AF0078E910 /* LogoutUseCase.swift */; };
+		5301E2B82C5BECBB0078E910 /* MyPageReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2B72C5BECBB0078E910 /* MyPageReactor.swift */; };
+		5301E2BA2C5BED8D0078E910 /* UserMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2B92C5BED8D0078E910 /* UserMapper.swift */; };
 		530994542C4F6CEB00ABE103 /* LoginResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530994532C4F6CEB00ABE103 /* LoginResult.swift */; };
 		530994562C4F6D9900ABE103 /* LoginRequset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530994552C4F6D9900ABE103 /* LoginRequset.swift */; };
 		530DD6122C4F839600A7D6CE /* ServerLoginDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530DD6112C4F839600A7D6CE /* ServerLoginDataSource.swift */; };
@@ -189,6 +191,8 @@
 		5301E2B12C5BE6350078E910 /* LogoutRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoutRepositoryImpl.swift; sourceTree = "<group>"; };
 		5301E2B32C5BE6570078E910 /* LogoutRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoutRepository.swift; sourceTree = "<group>"; };
 		5301E2B52C5BE6AF0078E910 /* LogoutUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoutUseCase.swift; sourceTree = "<group>"; };
+		5301E2B72C5BECBB0078E910 /* MyPageReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageReactor.swift; sourceTree = "<group>"; };
+		5301E2B92C5BED8D0078E910 /* UserMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMapper.swift; sourceTree = "<group>"; };
 		530994532C4F6CEB00ABE103 /* LoginResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResult.swift; sourceTree = "<group>"; };
 		530994552C4F6D9900ABE103 /* LoginRequset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRequset.swift; sourceTree = "<group>"; };
 		530DD6112C4F839600A7D6CE /* ServerLoginDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerLoginDataSource.swift; sourceTree = "<group>"; };
@@ -641,6 +645,7 @@
 				537598092C46D6D7003BD8AE /* ApplyFormReactor.swift */,
 				533183DA2C51E87E0097F3F1 /* ChatRoomReactor.swift */,
 				531288D42C554163000C2FB1 /* ChatListReactor.swift */,
+				5301E2B72C5BECBB0078E910 /* MyPageReactor.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -716,6 +721,7 @@
 			children = (
 				536BDDF82C1972880043B1DA /* LoginMapper.swift */,
 				53E4A9C52C500E9B00D21B49 /* SignUpMapper.swift */,
+				5301E2B92C5BED8D0078E910 /* UserMapper.swift */,
 			);
 			path = Mapper;
 			sourceTree = "<group>";
@@ -1068,6 +1074,7 @@
 				531786552C1C8E7800ACEF6A /* UIImage+Extension.swift in Sources */,
 				530DD6142C4F85BF00A7D6CE /* FCMTokenDataSource.swift in Sources */,
 				536BDE342C1B57B10043B1DA /* HomeFilterButton.swift in Sources */,
+				5301E2BA2C5BED8D0078E910 /* UserMapper.swift in Sources */,
 				536BDE272C1B53150043B1DA /* UIColor+Extension.swift in Sources */,
 				536BDE382C1C07990043B1DA /* PaddingLabel.swift in Sources */,
 				53716BC42C42B72F0044AD2A /* CMNavigationBar.swift in Sources */,
@@ -1120,6 +1127,7 @@
 				5383BE8F2C34DF27008940F1 /* Font.swift in Sources */,
 				53716BC82C43EEB50044AD2A /* CMToastMessage.swift in Sources */,
 				533183CF2C5141BC0097F3F1 /* MyMessageTableViewCell.swift in Sources */,
+				5301E2B82C5BECBB0078E910 /* MyPageReactor.swift in Sources */,
 				536548A32C3EF3B700C2309A /* FavoriteListViewController.swift in Sources */,
 				531288D32C540B08000C2FB1 /* ServerLoginRepositoryImpl.swift in Sources */,
 				531786852C23261200ACEF6A /* SheetHeight.swift in Sources */,
