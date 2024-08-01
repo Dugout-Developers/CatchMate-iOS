@@ -59,7 +59,7 @@ final class ServerLoginDataSourceImpl: ServerLoginDataSource {
         let request = LoginMapper.snsToLoginRequest(loginResponse, token)
         LoggerService.shared.debugLog("RequestModel : \(request)")
         let parameters: [String: Any] = [
-            "provideId": request.provideId,
+            "providerId": request.providerId,
             "provider": request.provider,
             "email": request.email,
             "picture": request.picture,

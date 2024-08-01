@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RxSwift
 import RxKakaoSDKAuth
 import KakaoSDKAuth
 import NaverThirdPartyLogin
@@ -13,19 +14,39 @@ import NaverThirdPartyLogin
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
-    
+    private let disposeBag = DisposeBag()
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
         
+        AuthManager.shared.attemptAutoLogin()
+            .observe(on: MainScheduler.instance)
+            .withUnretained(self)
+            .subscribe { scene, result in
+                if result {
+                    scene.moveMainTab()
+                } else {
+                    scene.moveSignIn()
+                }
+            } onError: { error in
+                print(error)
+                self.moveSignIn()
+            }
+            .disposed(by: disposeBag)
+
+    }
+    
+    private func moveMainTab() {
         let tabViewController = TabBarController()
         window?.rootViewController = tabViewController
-        
-//        let reactor = DIContainerService.shared.makeAuthReactor()
-//        let signInViewController = SignInViewController(reactor: reactor)
-//        window?.rootViewController = UINavigationController(rootViewController: signInViewController)
-
+        window?.makeKeyAndVisible()
+    }
+    
+    private func moveSignIn() {
+        let reactor = DIContainerService.shared.makeAuthReactor()
+        let signInViewController = SignInViewController(reactor: reactor)
+        window?.rootViewController = UINavigationController(rootViewController: signInViewController)
         window?.makeKeyAndVisible()
     }
     

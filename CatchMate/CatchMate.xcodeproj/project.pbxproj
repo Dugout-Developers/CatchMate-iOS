@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		5301E2962C5B2BAE0078E910 /* LoggerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2952C5B2BAE0078E910 /* LoggerService.swift */; };
 		5301E29D2C5B38B10078E910 /* Error+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E29C2C5B38B10078E910 /* Error+Extension.swift */; };
+		5301E2A12C5B5C280078E910 /* MyPageProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2A02C5B5C280078E910 /* MyPageProfileCell.swift */; };
+		5301E2A32C5B6B8B0078E910 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2A22C5B6B8B0078E910 /* AuthService.swift */; };
 		530994542C4F6CEB00ABE103 /* LoginResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530994532C4F6CEB00ABE103 /* LoginResult.swift */; };
 		530994562C4F6D9900ABE103 /* LoginRequset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530994552C4F6D9900ABE103 /* LoginRequset.swift */; };
 		530DD6122C4F839600A7D6CE /* ServerLoginDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530DD6112C4F839600A7D6CE /* ServerLoginDataSource.swift */; };
@@ -168,6 +170,8 @@
 /* Begin PBXFileReference section */
 		5301E2952C5B2BAE0078E910 /* LoggerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerService.swift; sourceTree = "<group>"; };
 		5301E29C2C5B38B10078E910 /* Error+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extension.swift"; sourceTree = "<group>"; };
+		5301E2A02C5B5C280078E910 /* MyPageProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageProfileCell.swift; sourceTree = "<group>"; };
+		5301E2A22C5B6B8B0078E910 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		530994532C4F6CEB00ABE103 /* LoginResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResult.swift; sourceTree = "<group>"; };
 		530994552C4F6D9900ABE103 /* LoginRequset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRequset.swift; sourceTree = "<group>"; };
 		530DD6112C4F839600A7D6CE /* ServerLoginDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerLoginDataSource.swift; sourceTree = "<group>"; };
@@ -352,6 +356,7 @@
 			isa = PBXGroup;
 			children = (
 				536BDE302C1B55440043B1DA /* MyPageViewController.swift */,
+				5301E2A02C5B5C280078E910 /* MyPageProfileCell.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -421,6 +426,7 @@
 				5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */,
 				53FC69DC2C58DB8D00B97AEA /* KeychainService.swift */,
 				5301E2952C5B2BAE0078E910 /* LoggerService.swift */,
+				5301E2A22C5B6B8B0078E910 /* AuthService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -997,6 +1003,7 @@
 				533A2B2A2C2859D600A59340 /* CMImageButton.swift in Sources */,
 				536BDE2F2C1B55240043B1DA /* NotiViewController.swift in Sources */,
 				533A2B382C2BFD4B00A59340 /* SignUpFinishedViewController.swift in Sources */,
+				5301E2A12C5B5C280078E910 /* MyPageProfileCell.swift in Sources */,
 				53716BD42C4558780044AD2A /* PostReactor.swift in Sources */,
 				536BDE362C1BEC870043B1DA /* ListCardViewTableViewCell.swift in Sources */,
 				53BE7AD22C367181002FC64F /* Date+Extension.swift in Sources */,
@@ -1049,6 +1056,7 @@
 				531288C12C53FE2D000C2FB1 /* NaverLoginDataSource.swift in Sources */,
 				533183D32C51429B0097F3F1 /* MessageBoxLabel.swift in Sources */,
 				53F1E8C62C47A46400A962F3 /* Apply.swift in Sources */,
+				5301E2A32C5B6B8B0078E910 /* AuthService.swift in Sources */,
 				533A2B3F2C2C5DBC00A59340 /* SNSLoginResponse.swift in Sources */,
 				533A2B252C280E0500A59340 /* CMDefaultFilledButton.swift in Sources */,
 				533A2B2E2C29B56200A59340 /* CMDefaultBorderedButton.swift in Sources */,
