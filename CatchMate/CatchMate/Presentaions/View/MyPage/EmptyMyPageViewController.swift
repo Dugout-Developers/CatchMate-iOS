@@ -1,18 +1,16 @@
 //
-//  MyPageViewController.swift
+//  EmptyMyPageViewController.swift
 //  CatchMate
 //
-//  Created by 방유빈 on 6/14/24.
+//  Created by 방유빈 on 8/1/24.
 //
 
 import UIKit
 import RxSwift
-
-class MyPageViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource  {
-    private var user: User? = User(id: "11", snsID: "11", email: "dd", nickName: "한화화나", age: 24, team: .hanhwa, gener: .woman, cheerStyle: .cheerleader, profilePicture: "https://cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/GVJVDKERHREIPJJHZHNNHHOUTI.jpg")
+import SnapKit
+final class EmptyMyPageViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource {
     private let tableview = UITableView()
-    private let supportMenus = MypageMenu.supportMenus
-    private let myMenus = MypageMenu.myMenus
+    private let menus = MypageMenu.supportMenus
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigation()
@@ -44,37 +42,29 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
         }
     }
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return 2
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return 1
-        } else if section == 1 {
-            return myMenus.count
         } else {
-            return supportMenus.count
+            return menus.count
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = MyPageProfileCell(style: .default, reuseIdentifier: nil)
-            cell.configData(user)
+            cell.configData(nil)
             cell.updateConstraints()
             cell.selectionStyle = .none
             return cell
-        } else if indexPath.section == 1 {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "MypageListCell", for: indexPath) as? MypageListCell else {
-                return UITableViewCell()
-            }
-            cell.configData(title: myMenus[indexPath.row].rawValue)
-            cell.selectionStyle = .none
-            return cell
         } else {
+            // 나머지 섹션의 셀은 재사용
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "MypageListCell", for: indexPath) as? MypageListCell else {
                 return UITableViewCell()
             }
-            cell.configData(title: supportMenus[indexPath.row].rawValue)
+            cell.configData(title: menus[indexPath.row].rawValue)
             cell.selectionStyle = .none
             return cell
         }
@@ -84,11 +74,7 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
             return nil // 첫 번째 섹션에 헤더 뷰 없음
         }
         guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "MypageHeader") as? MypageHeader else { return UIView() }
-        if section == 1 {
-            headerView.configData(title: "직관 생활")
-        } else {
-            headerView.configData(title: "지원")
-        }
+        headerView.configData(title: "지원")
         return headerView
     }
 

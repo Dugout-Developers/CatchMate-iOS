@@ -206,6 +206,14 @@ extension SignUpViewController {
             .map { Reactor.Action.updateNickname($0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        nickNameTextField.rx.text.orEmpty
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
+            .distinctUntilChanged()
+            .map { _ in Reactor.Action.endEditNickname }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
         nickNameTextField.rx.controlEvent(.editingDidEnd)
             .map { Reactor.Action.endEditNickname }
             .bind(to: reactor.action)
@@ -274,6 +282,7 @@ extension SignUpViewController {
             .disposed(by: disposeBag)
         
         reactor.state.map { $0.nickNameValidate}
+            .distinctUntilChanged()
             .withUnretained(self)
             .bind (onNext: { vc, validateCase in
                 vc.vaildateLabel.text = validateCase.rawValue

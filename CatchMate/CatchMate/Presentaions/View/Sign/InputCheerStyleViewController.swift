@@ -14,7 +14,7 @@ import RxCocoa
 
 final class InputCheerStyleViewController: BaseViewController, View {
     var reactor: SignReactor
-    
+    var signUpReactor: SignUpReactor?
     private let scrollView = UIScrollView()
     private let containerView = UIView()
     private let styleButtonTapPublisher = PublishSubject<CheerStyles?>().asObserver()
@@ -47,10 +47,10 @@ final class InputCheerStyleViewController: BaseViewController, View {
         return label
     }()
     
-    private let styleButtons: [SignSelectedButton<CheerStyles>] = {
-        var buttons: [SignSelectedButton<CheerStyles>] = []
+    private let styleButtons: [CheerStyleButton] = {
+        var buttons: [CheerStyleButton] = []
         CheerStyles.allCheerStyles.forEach { team in
-            let teamButton = SignSelectedButton(item: team)
+            let teamButton = CheerStyleButton(item: team)
             buttons.append(teamButton)
         }
         return buttons
@@ -127,7 +127,7 @@ extension InputCheerStyleViewController {
     
     @objc
     private func clickStyleButton(_ sender: UITapGestureRecognizer) {
-        guard let styleButton = sender.view as? SignSelectedButton<CheerStyles> else { return }
+        guard let styleButton = sender.view as? CheerStyleButton else { return }
         styleButtons.forEach { button in
             if styleButton == button {
                 button.isSelected = !button.isSelected
@@ -148,8 +148,16 @@ extension InputCheerStyleViewController {
             .disposed(by: disposeBag)
         
         nextButton.rx.tap
-            .map { Reactor.Action.signUpUser }
-            .bind(to: reactor.action)
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                if let model = reactor.currentState.signUpModel {
+                    vc.signUpReactor = DIContainerService.shared.makeSignUpReactor(model)
+                    vc.bindSignUp(reactor: vc.signUpReactor!)
+                    vc.signUpReactor?.action.onNext(.signUpUser)
+                } else {
+                    vc.showToast(message: "회원가입에 실패했습니다. 입력 값을 다시 확인해주세요.")
+                }
+            }
             .disposed(by: disposeBag)
         
         reactor.state
@@ -160,33 +168,27 @@ extension InputCheerStyleViewController {
                 vc.titleLabel1.applyStyle(textStyle: FontSystem.highlight)
             })
             .disposed(by: disposeBag)
-        
-        
-        reactor.state
-            .map { $0.isSignUp }
-            .distinctUntilChanged()
-            .subscribe(onNext: { [weak self] isSignUp in
-                if isSignUp == true {
-                    self?.navigateToNextPage()
-                } else if isSignUp == false {
-                    self?.showErrorAlert()
-                }
-            })
-            .disposed(by: disposeBag)
 
+    }
+}
+
+extension InputCheerStyleViewController {
+    func bindSignUp(reactor: SignUpReactor) {
+        reactor.state.map{$0.signupResponse}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, response in
+                LoggerService.shared.log("bindSingUp: - SignUp success \(response)")
+                vc.navigateToNextPage()
+            }
+            .disposed(by: disposeBag)
     }
     
     private func navigateToNextPage() {
-            // Logic to navigate to the next page
-            let nextViewController = SignUpFinishedViewController(reactor: reactor)
-            navigationController?.pushViewController(nextViewController, animated: true)
-        }
-        
-        private func showErrorAlert() {
-            let alert = UIAlertController(title: "Error", message: "Sign up failed.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            present(alert, animated: true, completion: nil)
-        }
+        // Logic to navigate to the next page
+        let nextViewController = SignUpFinishedViewController()
+        navigationController?.pushViewController(nextViewController, animated: true)
+    }
 }
 
 // MARK: - UI

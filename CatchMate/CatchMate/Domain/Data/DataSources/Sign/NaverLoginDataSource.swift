@@ -15,12 +15,12 @@ protocol NaverLoginDataSource {
     func getNaverLoginToken() -> Observable<SNSLoginResponse>
 }
 
-enum NaverLoginError: Error {
+enum NaverLoginError: LocalizedError {
     case NotFountToken
     case serverError(code: Int, description: String)
     case decodingError
     case EmptyValue
-    
+
     var statusCode: Int {
         switch self {
         case .NotFountToken:
@@ -59,6 +59,8 @@ final class NaverLoginDataSourceImpl: NSObject, NaverLoginDataSource, NaverThird
     private var naverLoginSubject: AnyObserver<SNSLoginResponse>?
     
     func getNaverLoginToken() -> Observable<SNSLoginResponse> {
+        LoggerService.shared.debugLog("-----------------NaverLogin-------------------")
+        loginInstance.resetToken() // 로그아웃하여 토큰을 초기화
         loginInstance.requestThirdPartyLogin()
         return Observable.create { observer in
             self.naverLoginSubject = observer
@@ -81,34 +83,34 @@ final class NaverLoginDataSourceImpl: NSObject, NaverLoginDataSource, NaverThird
         return RxAlamofire.requestJSON(.get, url, headers: headers)
             .flatMap { (response, json) -> Observable<SNSLoginResponse> in
                 guard let json = json as? [String: Any], let response = json["response"] as? [String: Any] else {
+                    LoggerService.shared.log("NaverLoginError: \(NaverLoginError.decodingError.statusCode) - 디코딩 에러", level: .error)
                     return Observable.error(NaverLoginError.decodingError)
                 }
-                print(json)
-                print("==========================")
-                print("response: \(response)")
+                LoggerService.shared.log("\(json)\n response: \(response)")
                 guard let id = response["id"] as? String else {
+                    LoggerService.shared.log("NaverLoginError: \(NaverLoginError.EmptyValue.statusCode) - id 값 없음", level: .error)
                     return Observable.error(NaverLoginError.EmptyValue)
                 }
-//                guard let email = response["email"] as? String else {
-//                    return Observable.error(NaverLoginError.EmptyValue)
-//                }
-                let email = "ttang1135@naver.com"
+                guard let email = response["email"] as? String else {
+                    LoggerService.shared.log("NaverLoginError: \(NaverLoginError.EmptyValue.statusCode) - email 값 없음", level: .error)
+                    return Observable.error(NaverLoginError.EmptyValue)
+                }
                 var birthResult: String? = nil
                 if let birthday = response["birthday"] as? String,
                    let birthyear = response["birthyear"] as? String,
                    let birth = self.convertBirth(birthday: birthday, birthYear: birthyear) {
                     birthResult = birth
                 }
-                
-                var genderResult: String? = nil
-                if let gender = response["gender"] as? String {
-                    if gender == "F" { genderResult = "여성" }
-                    else if gender == "M" { genderResult = "남성" }
-                }
+            
+                let gender = response["gender"] as? String
                 if let nickname = response["nickname"] as? String {
-                    return Observable.just(SNSLoginResponse(id: id, email: email, loginType: .naver, birth: birthResult, nickName: nickname, gender: genderResult))
+                    let model = SNSLoginResponse(id: id, email: email, loginType: .naver, birth: birthResult, nickName: nickname, gender: gender, image: response["profile_image"] as? String)
+                    LoggerService.shared.log("NAVER Response: \(model)")
+                    return Observable.just(model)
                 }
-                return Observable.just(SNSLoginResponse(id: id, email: email, loginType: .naver, birth: birthResult, gender: genderResult))
+                let model = SNSLoginResponse(id: id, email: email, loginType: .naver, birth: birthResult, gender: gender, image: response["profile_image"] as? String)
+                LoggerService.shared.log("NAVER Response: \(model)")
+                return Observable.just(model)
             }
     }
     
@@ -141,14 +143,12 @@ final class NaverLoginDataSourceImpl: NSObject, NaverLoginDataSource, NaverThird
     }
     
     func oauth20ConnectionDidFinishRequestACTokenWithAuthCode() {
-        print("Access Token Request Successful")
         if let observer = naverLoginSubject {
             _ = fetchUserDataWithValidToken().subscribe(observer)
         }
     }
     
     func oauth20ConnectionDidFinishRequestACTokenWithRefreshToken() {
-        print("Access Token Refresh Successful")
         if let observer = naverLoginSubject {
             _ = fetchUserDataWithValidToken().subscribe(observer)
         }
@@ -160,6 +160,7 @@ final class NaverLoginDataSourceImpl: NSObject, NaverLoginDataSource, NaverThird
     
     func oauth20Connection(_ connection: NaverThirdPartyLoginConnection!, didFailWithError error: Error!) {
         print("Error: \(error.localizedDescription)")
+        LoggerService.shared.log("NAVER API ERROR - \(error.localizedDescription)", level: .error)
         if let observer = naverLoginSubject {
             observer.onError(error)
         }

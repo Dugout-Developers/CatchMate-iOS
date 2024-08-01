@@ -13,6 +13,7 @@ struct SignUpModel {
     let nickName: String
     let birth: String
     let team: Team
+    let gender: Gender
     let cheerStyle: CheerStyles?
 }
 

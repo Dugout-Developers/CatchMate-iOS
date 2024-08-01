@@ -8,27 +8,27 @@
 import UIKit
 
 enum CheerStyles: String, CaseIterable {
-    case director = "감독 스타일"
-    case mom = "어미새 스타일"
-    case eatLove = "먹보 스타일"
-    case cheerleader = "응원 단장 스타일"
-    case silent = "돌하르방 스타일"
-    case bodhisattva = "보살 스타일"
+    case director = "감독"
+    case mom = "어미새"
+    case cheerleader = "응원단장"
+    case eatLove = "먹보"
+    case silent = "돌하르방"
+    case bodhisattva = "보살"
     
     var subInfo: String {
         switch self {
         case .director:
-            return "\"당근과 채찍\"\n감독 스타일"
+            return "여기선 이렇게 하고 저기선\n저렇게 했어야지"
         case .mom:
-            return "\"무조건 애정과 박수\"\n어미새 스타일"
+            return "못해도 너는 내 새끼\n무조건적 애정과 박수"
         case .eatLove:
-            return "\"맛집이 어디라구요?\"\n먹보 스타일"
+            return "그래서 여기 구장 맛집이\n어디라구요?"
         case .cheerleader:
-            return "\"이곳이 나의 무대\"\n응원 단장 스타일"
+            return "내가 바로 응원단장이고\n내가 치어리더다"
         case .silent:
-            return "\"...\"\n돌하르방 스타일"
+            return "...\n"
         case .bodhisattva:
-            return "\"그럴 수 있지\"\n보살 스타일"
+            return "그래 그럴 수 있지\n그래도 잘했다"
         }
     }
     

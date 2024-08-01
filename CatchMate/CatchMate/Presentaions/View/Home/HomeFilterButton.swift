@@ -12,17 +12,18 @@ import PinLayout
 final class OptionButtonView: UIButton {
     private let containerView = UIView()
     private let iconImageView = UIImageView()
+    private let titleText: String
     private let filterTitleLabel = UILabel()
-    private let valueLabel = UILabel()
     var filterValue: String? {
         didSet {
-            setupValue(filterValue)
+            updateView(filterValue)
         }
     }
     private(set) var filterType: Filter
     
     init(icon: UIImage? = UIImage(named: "cm20down_filled"), title: String, filter: Filter) {
         self.filterType = filter
+        self.titleText = title
         super.init(frame: .zero)
         setupButton()
         setupData(icon: icon, title: title)
@@ -32,6 +33,7 @@ final class OptionButtonView: UIButton {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         self.filterType = .none
+        self.titleText = ""
         super.init(coder: coder)
     }
     
@@ -41,11 +43,21 @@ final class OptionButtonView: UIButton {
         containerView.flex.layout()
     }
     
-    private func setupValue(_ value: String?) {
-        valueLabel.text = value
-        valueLabel.textColor = .cmPrimaryColor
-        valueLabel.applyStyle(textStyle: FontSystem.body03_medium)
-        valueLabel.flex.markDirty()
+    private func updateView(_ value: String?) {
+        if let value = value, !value.isEmpty {
+            filterTitleLabel.text = value
+            filterTitleLabel.textColor = .white
+            filterTitleLabel.applyStyle(textStyle: FontSystem.body03_medium)
+            iconImageView.image = UIImage(named: "cm20down_filled")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+            backgroundColor = .cmPrimaryColor
+        } else {
+            filterTitleLabel.text = titleText
+            filterTitleLabel.textColor = .cmBodyTextColor
+            filterTitleLabel.applyStyle(textStyle: FontSystem.body03_medium)
+            iconImageView.image = UIImage(named: "cm20down_filled")?.withTintColor(.cmBodyTextColor, renderingMode: .alwaysOriginal)
+            backgroundColor = .white
+        }
+        filterTitleLabel.flex.markDirty()
         containerView.flex.layout()
     }
     
@@ -53,7 +65,6 @@ final class OptionButtonView: UIButton {
         // 버튼 스타일 설정
         backgroundColor = UIColor.white
         layer.cornerRadius = 20
-        tintColor = .cmPrimaryColor
         self.addTarget(self, action: #selector(buttonPressed), for: [.touchDown, .touchDragInside])
         self.addTarget(self, action: #selector(buttonReleased), for: [.touchUpInside, .touchUpOutside, .touchCancel])
     }
@@ -75,7 +86,6 @@ final class OptionButtonView: UIButton {
         containerView.isUserInteractionEnabled = false
         containerView.flex.direction(.row).alignItems(.center).paddingHorizontal(16).paddingVertical(12).define { flex in
             flex.addItem(filterTitleLabel).marginRight(4)
-            flex.addItem(valueLabel).marginRight((valueLabel.text == nil || valueLabel.text!.isEmpty) ? 0 : 4)
             flex.addItem(iconImageView).size(20)
         }
     }

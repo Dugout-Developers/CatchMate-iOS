@@ -8,13 +8,10 @@
 import UIKit
 import FlexLayout
 import PinLayout
-import ReactorKit
 import RxSwift
 import RxCocoa
 
-final class SignUpFinishedViewController: BaseViewController, View {
-    var reactor: SignReactor
-    
+final class SignUpFinishedViewController: BaseViewController{
     private let containerView = UIView()
     
     private let logoImageView: UIImageView = {
@@ -43,26 +40,15 @@ final class SignUpFinishedViewController: BaseViewController, View {
     
     private let nextButton = CMDefaultFilledButton(title: "다음")
 
-    
-    init(reactor: SignReactor) {
-        self.reactor = reactor
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    @available(*, unavailable)
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-            }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
         setupUI()
-        bind(reactor: reactor)
+        bind()
         customNavigationBar.isBackButtonHidden = true
-
     }
     
     override func viewDidLayoutSubviews() {
@@ -71,22 +57,19 @@ final class SignUpFinishedViewController: BaseViewController, View {
         containerView.flex.layout()
     }
     
-    private func setupView() {
-        view.backgroundColor = .white
-        view.tappedDismissKeyboard()
-    }
 }
 
 
 // MARK: - bind
 extension SignUpFinishedViewController {
-    func bind(reactor: SignReactor) {
+    func bind() {
         nextButton.rx.tap
             .withUnretained(self)
             .subscribe { _, _ in
                 (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(TabBarController(), animated: true)
             }
             .disposed(by: disposeBag)
+        
     }
 }
 

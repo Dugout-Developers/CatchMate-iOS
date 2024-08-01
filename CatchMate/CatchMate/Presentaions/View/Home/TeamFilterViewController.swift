@@ -15,6 +15,16 @@ final class TeamFilterViewController: BasePickerViewController, View, UIScrollVi
     private let allTeams: [Team] = Team.allTeam
     private let tableView: UITableView = UITableView()
     private let saveButton = CMDefaultFilledButton(title: "저장")
+    private let resetButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("초기화", for: .normal)
+        button.applyStyle(textStyle: FontSystem.body02_semiBold)
+        button.setTitleColor(.cmNonImportantTextColor, for: .normal)
+        button.backgroundColor = .grayScale50
+        button.clipsToBounds = true
+        button.layer.cornerRadius = 8
+        return button
+    }()
     private let willAppearPublisher = PublishSubject<Void>()
     
     var reactor: HomeReactor?
@@ -42,13 +52,14 @@ final class TeamFilterViewController: BasePickerViewController, View, UIScrollVi
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        setupUI()
         setupTableView()
         settupButton()
         if let homeReactor = reactor {
             bind(reactor: homeReactor)
+            setupUI(isHome: true)
         } else if let addReactor = addReactor {
             bind(reactor: addReactor)
+            setupUI()
         }
     }
     
@@ -179,7 +190,7 @@ extension TeamFilterViewController {
 
 // MARK: - UI
 extension TeamFilterViewController {
-    private func setupUI() {
+    private func setupUI(isHome: Bool = false) {
         view.addSubviews(views: [tableView, saveButton])
         
         tableView.snp.makeConstraints { make in
@@ -187,11 +198,27 @@ extension TeamFilterViewController {
             make.leading.trailing.equalToSuperview().inset(12)
         }
 
-        saveButton.snp.makeConstraints { make in
-            make.top.equalTo(tableView.snp.bottom).offset(30)
-            make.leading.trailing.equalTo(tableView)
-            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
-            make.height.equalTo(50)
+        if isHome {
+            view.addSubview(resetButton)
+            resetButton.snp.makeConstraints { make in
+                make.top.equalTo(tableView.snp.bottom).offset(30)
+                make.leading.equalToSuperview().inset(ButtonGridSystem.getMargin())
+                make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
+                make.width.equalTo(ButtonGridSystem.getColumnWidth(totalWidht: Screen.width))
+                make.height.equalTo(52)
+            }
+            saveButton.snp.makeConstraints { make in
+                make.top.bottom.height.equalTo(resetButton)
+                make.leading.equalTo(resetButton.snp.trailing).offset(ButtonGridSystem.getGutter())
+                make.trailing.equalToSuperview().inset(ButtonGridSystem.getMargin())
+            }
+        } else {
+            saveButton.snp.makeConstraints { make in
+                make.top.equalTo(tableView.snp.bottom).offset(30)
+                make.leading.trailing.equalTo(tableView)
+                make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
+                make.height.equalTo(50)
+            }
         }
     }
 }

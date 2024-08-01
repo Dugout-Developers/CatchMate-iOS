@@ -93,7 +93,8 @@ final class FavoriteListViewController: BaseViewController ,View {
                 cell.selectionStyle = .none
                 cell.setupData(item, isFavoriteCell: true)
                 cell.updateConstraints()
-                
+
+
                 cell.tapEvent
                     .withUnretained(cell)
                     .map { $0.0.post }

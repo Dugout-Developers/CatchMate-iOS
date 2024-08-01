@@ -9,10 +9,10 @@ import UIKit
 
 /// 요청 모델
 struct LoginRequset {
-    let provideId: String
+    let providerId: String
     let provider: String
     let email: String
-    let picture: String?
+    let picture: String
     let fcmToken: String
 }
 

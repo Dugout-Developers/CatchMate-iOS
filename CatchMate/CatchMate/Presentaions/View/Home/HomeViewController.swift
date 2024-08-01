@@ -13,6 +13,7 @@ import ReactorKit
 enum Filter {
     case date
     case team
+    case number
     case none
 }
 
@@ -24,6 +25,7 @@ final class HomeViewController: BaseViewController, View {
     private let filterContainerView = UIView()
     private let dateFilterButton = OptionButtonView(title: "경기 날짜", filter: .date)
     private let teamFilterButton = OptionButtonView(title: "응원 구단", filter: .team)
+    private let numberFilterButton = OptionButtonView(title: "모집 인원", filter: .number)
     
     private let tableView = UITableView()
     
@@ -60,7 +62,7 @@ final class HomeViewController: BaseViewController, View {
         customNavigationBar.addRightItems(items: [notiButton])
     }
     private func setupTableView() {
-        tableView.register(ListCardViewTableViewCell2.self, forCellReuseIdentifier: "ListCardViewTableViewCell2")
+        tableView.register(ListCardViewTableViewCell.self, forCellReuseIdentifier: "ListCardViewTableViewCell")
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 178
         tableView.backgroundColor = .clear
@@ -104,7 +106,7 @@ extension HomeViewController {
             .disposed(by: disposeBag)
         
         reactor.state.map{ $0.posts }
-            .bind(to: tableView.rx.items(cellIdentifier: "ListCardViewTableViewCell2", cellType: ListCardViewTableViewCell2.self)) {  (row, item, cell) in
+            .bind(to: tableView.rx.items(cellIdentifier: "ListCardViewTableViewCell", cellType: ListCardViewTableViewCell.self)) {  (row, item, cell) in
                 cell.backgroundColor = .clear
                 cell.selectionStyle = .none
                 cell.setupData(item)
@@ -120,6 +122,18 @@ extension HomeViewController {
                 vc.updateFilterContainerLayout()
             }
             .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.seletedNumberFilter}
+            .withUnretained(self)
+            .bind { vc, number in
+                if let number = number {
+                    vc.numberFilterButton.filterValue = "\(number)명"
+                } else {
+                    vc.numberFilterButton.filterValue = nil
+                }
+                vc.updateFilterContainerLayout()
+            }
+            .disposed(by: disposeBag)
     
     }
     private func updateFilterContainerLayout() {
@@ -132,6 +146,8 @@ extension HomeViewController {
     private func setupButton() {
         dateFilterButton.addTarget(self, action: #selector(clickFilterButton(_:)), for: .touchUpInside)
         teamFilterButton.addTarget(self, action: #selector(clickFilterButton(_:)), for: .touchUpInside)
+        numberFilterButton.addTarget(self, action: #selector(clickFilterButton(_:)), for: .touchUpInside)
+
     }
     
     @objc private func clickNotiButton(_ sender: UIButton) {
@@ -157,6 +173,14 @@ extension HomeViewController {
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             }
             present(teamFilterVC, animated: true)
+        case .number:
+            let numberFilterVC = NumberPickerViewController(reactor: reactor)
+            let customDetent = returnCustomDetent(height: SheetHeight.low, identifier: "NumberFilter")
+            if let sheet = numberFilterVC.sheetPresentationController {
+                sheet.detents = [customDetent]
+                sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            }
+            present(numberFilterVC, animated: true)
         case .none:
             // 잘못된 필터 값
             break
@@ -181,7 +205,8 @@ extension HomeViewController {
         filterScrollView.addSubview(filterContainerView)
         filterContainerView.flex.direction(.row).paddingHorizontal(18).paddingVertical(11).justifyContent(.start).alignItems(.center).define { flex in
             flex.addItem(dateFilterButton).marginRight(8)
-            flex.addItem(teamFilterButton)
+            flex.addItem(teamFilterButton).marginRight(8)
+            flex.addItem(numberFilterButton)
         }
     }
     

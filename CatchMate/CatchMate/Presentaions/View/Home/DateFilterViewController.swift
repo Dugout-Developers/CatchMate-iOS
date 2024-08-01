@@ -30,6 +30,16 @@ final class DateFilterViewController: BasePickerViewController, View {
     }
     let cmDatePicker = CMDatePicker()
     private let saveButton = CMDefaultFilledButton(title: "저장")
+    private let resetButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("초기화", for: .normal)
+        button.applyStyle(textStyle: FontSystem.body02_semiBold)
+        button.setTitleColor(.cmNonImportantTextColor, for: .normal)
+        button.backgroundColor = .grayScale50
+        button.clipsToBounds = true
+        button.layer.cornerRadius = 8
+        return button
+    }()
     private let timeLabel: UILabel = {
         let label = UILabel()
         label.text = "경기 시간"
@@ -184,7 +194,7 @@ extension DateFilterViewController {
 
 // MARK: - UI
 extension DateFilterViewController {
-    private func setupUI() {
+    private func setupUI(isHome: Bool = false) {
         view.addSubviews(views: [cmDatePicker, saveButton])
         cmDatePicker.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(30)
@@ -207,6 +217,7 @@ extension DateFilterViewController {
                 make.top.equalTo(timeLabel.snp.bottom).offset(12)
                 make.leading.equalTo(cmDatePicker)
             }
+            
             saveButton.snp.makeConstraints { make in
                 make.top.equalTo(stackView.snp.bottom).offset(36)
                 make.leading.trailing.equalToSuperview().inset(12)
@@ -214,12 +225,20 @@ extension DateFilterViewController {
                 make.height.equalTo(52)
             }
         } else {
-            saveButton.snp.makeConstraints { make in
-                make.top.equalTo(cmDatePicker.snp.bottom).offset(30)
-                make.leading.trailing.equalToSuperview().inset(12)
-                make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-34)
-                make.height.equalTo(52)
-            }
+                view.addSubview(resetButton)
+                resetButton.snp.makeConstraints { make in
+                    make.top.equalTo(cmDatePicker.snp.bottom).offset(30)
+                    make.leading.equalToSuperview().inset(ButtonGridSystem.getMargin())
+                    make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
+                    make.width.equalTo(ButtonGridSystem.getColumnWidth(totalWidht: Screen.width))
+                    make.height.equalTo(52)
+                }
+                saveButton.snp.makeConstraints { make in
+                    make.top.bottom.height.equalTo(resetButton)
+                    make.leading.equalTo(resetButton.snp.trailing).offset(ButtonGridSystem.getGutter())
+                    make.trailing.equalToSuperview().inset(ButtonGridSystem.getMargin())
+                }
+            
         }
     }
 }

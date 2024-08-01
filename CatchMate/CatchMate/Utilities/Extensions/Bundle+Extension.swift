@@ -8,6 +8,15 @@
 import Foundation
 
 extension Bundle {
+    var logPath: String? {
+        guard let file = self.path(forResource: "APIKeys", ofType: "plist"),
+              let resource = NSDictionary(contentsOfFile: file),
+              let key = resource["LOG_PATH"] as? String else {
+            print("logPath 얻기 실패")
+            return nil
+        }
+        return key
+    }
     var baseURL: String? {
            guard let file = self.path(forResource: "APIKeys", ofType: "plist"),
                  let resource = NSDictionary(contentsOfFile: file),

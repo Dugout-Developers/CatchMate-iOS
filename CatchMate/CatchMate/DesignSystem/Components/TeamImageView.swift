@@ -11,7 +11,7 @@ import FlexLayout
 
 final class TeamImageView: UIView {
     private let containerView: UIView = UIView()
-    private let imageView: UIImageView = {
+    let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         return imageView
