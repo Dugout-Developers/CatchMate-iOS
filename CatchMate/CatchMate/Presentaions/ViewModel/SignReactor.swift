@@ -66,7 +66,11 @@ final class SignReactor: Reactor {
     
     init(loginModel: LoginModel, nicknameUseCase: NicknameCheckUseCase) {
         //usecase 추가하기
-        self.initialState = State()
+        self.initialState = State(
+            nickName: loginModel.nickName ?? "",
+            birth: loginModel.birth ?? "",
+            gender: loginModel.gender
+        )
         self.loginModel = loginModel
         self.nicknameUseCase = nicknameUseCase
     }

@@ -26,7 +26,7 @@ enum CheerStyles: String, CaseIterable {
         case .cheerleader:
             return "내가 바로 응원단장이고\n내가 치어리더다"
         case .silent:
-            return "..."
+            return "...\n"
         case .bodhisattva:
             return "그래 그럴 수 있지\n그래도 잘했다"
         }
