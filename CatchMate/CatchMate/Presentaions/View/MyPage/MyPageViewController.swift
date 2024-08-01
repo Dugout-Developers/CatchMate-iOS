@@ -13,11 +13,18 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
     private let tableview = UITableView()
     private let supportMenus = MypageMenu.supportMenus
     private let myMenus = MypageMenu.myMenus
+    private let logoutButton = CMDefaultFilledButton(title: "임시 로그아웃임둥")
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigation()
         setupTableView()
         setupUI()
+        bind()
     }
     
     private func setupNavigation() {
@@ -39,8 +46,15 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
     private func setupUI() {
         tableview.backgroundColor = .grayScale50
         view.addSubview(tableview)
+        view.addSubview(logoutButton)
         tableview.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
+            make.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+        }
+        logoutButton.snp.makeConstraints { make in
+            make.top.equalTo(tableview.snp.bottom).offset(5)
+            make.leading.trailing.equalToSuperview().inset(ButtonGridSystem.getMargin())
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
+            make.height.equalTo(52)
         }
     }
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -110,5 +124,36 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
     }
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 8
+    }
+}
+
+// MARK: - Bind
+extension MyPageViewController {
+    func bind() {
+        logoutButton.rx.tap
+            .take(1)
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                // 임시
+                let logoutDS = LogoutDataSourceImpl()
+                guard let refreshToken = KeychainService.getToken(for: .refreshToken) else {
+                    let reactor = DIContainerService.shared.makeAuthReactor()
+                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(SignInViewController(reactor: reactor), animated: true)
+                    return
+                }
+                logoutDS.logout(token: refreshToken)
+                    .subscribe { result in
+                        if result {
+                            LoggerService.shared.debugLog("로그아웃")
+                            _ = KeychainService.deleteToken(for: .accessToken)
+                            _ = KeychainService.deleteToken(for: .refreshToken)
+                            let reactor = DIContainerService.shared.makeAuthReactor()
+                            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(SignInViewController(reactor: reactor), animated: true)
+                        }
+                    }
+    
+                    .disposed(by: vc.disposeBag)
+            }
+            .disposed(by: disposeBag)
     }
 }
