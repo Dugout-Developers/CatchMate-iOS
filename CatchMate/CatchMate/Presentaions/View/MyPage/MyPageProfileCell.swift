@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 import PinLayout
 import FlexLayout
 
@@ -15,6 +16,8 @@ final class MyPageProfileCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFit
+        imageView.layer.borderWidth = 1
+        imageView.layer.borderColor = UIColor.cmStrokeColor.cgColor
         return imageView
     }()
     private let nicknameLabel: UILabel = {
@@ -62,14 +65,21 @@ final class MyPageProfileCell: UITableViewCell {
     }
     
     func configData(_ user: User?) {
+
         if let user = user {
+            if let image = user.profilePicture, let url = URL(string: image) {
+                profileImageView.kf.setImage(with: url)
+            } else {
+                profileImageView.image = UIImage(named: "tempProfile")
+            }
+            nicknameLabel.text = user.nickName
             tags.append(makePaddingLabel(color: .white, backgroundColor: user.team.getTeamColor, text: user.team.rawValue))
             if let cheerStyle = user.cheerStyle {
                 tags.append(makePaddingLabel(color: .white, backgroundColor: .cmPrimaryColor, text: cheerStyle.rawValue))
             }
             tags.append(makePaddingLabel(color: .cmNonImportantTextColor, backgroundColor: .grayScale100, text: user.gener.rawValue))
             let ageDecade = (user.age / 10) * 10
-            tags.append(makePaddingLabel(color: .cmNonImportantTextColor, backgroundColor: .brandColor100, text: "\(ageDecade)대"))
+            tags.append(makePaddingLabel(color: .cmNonImportantTextColor, backgroundColor: .grayScale100, text: "\(ageDecade)대"))
         } else {
             profileImageView.image = UIImage(named: "EmptyPrimary")
             nicknameLabel.text = "로그인이 필요해요"
@@ -89,6 +99,7 @@ final class MyPageProfileCell: UITableViewCell {
                 flex.addItem(label).marginRight(4)
             }
         }
+        nicknameLabel.applyStyle(textStyle: FontSystem.body02_semiBold)
         containerView.flex.layout(mode: .adjustHeight)
     }
     
