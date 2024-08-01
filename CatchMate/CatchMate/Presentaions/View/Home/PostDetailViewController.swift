@@ -93,16 +93,30 @@ final class PostDetailViewController: BaseViewController, View {
         label.textColor = .cmHeadLineTextColor
         return label
     }()
-    private let cheerTeam = TeamPaddingLabel()
+    private let cheerTeam: DefaultsPaddingLabel = {
+        let label = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 4, bottom: 2, right: 4))
+        label.layer.cornerRadius = 2
+        label.textColor = .white
+        return label
+    }()
+    private var cheerStyleLabel: DefaultsPaddingLabel? = {
+        let label = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 4, bottom: 2, right: 4))
+        label.layer.cornerRadius = 2
+        label.textColor = .white
+        label.backgroundColor = .cmPrimaryColor
+        return label
+    }()
+    
     private let genderLabel: DefaultsPaddingLabel = {
-        let label = DefaultsPaddingLabel()
+        let label = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 4, bottom: 2, right: 4))
+        label.layer.cornerRadius = 2
         label.textColor = .cmHeadLineTextColor
-        label.text = "성별"
         label.backgroundColor = .grayScale100
         return label
     }()
     private let ageLabel: DefaultsPaddingLabel = {
-        let label = DefaultsPaddingLabel()
+        let label = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 4, bottom: 2, right: 4))
+        label.layer.cornerRadius = 2
         label.textColor = .cmHeadLineTextColor
         label.backgroundColor = .grayScale50
         return label
@@ -173,19 +187,48 @@ final class PostDetailViewController: BaseViewController, View {
     private func setupNavigation() {
         let reportButton = UIButton()
         reportButton.setImage(UIImage(named: "cm20kebab")?.withTintColor(.cmHeadLineTextColor, renderingMode: .alwaysOriginal), for: .normal)
+        reportButton.showsMenuAsPrimaryAction = true
+        reportButton.menu = createMenu()
         customNavigationBar.addRightItems(items: [reportButton])
     }
     
+    private func createMenu() -> UIMenu {
+        let pullUpAction = UIAction(title: "끌어올리기", image: nil) { _ in
+            print("끌어올리기 선택됨")
+        }
+        
+        let editAction = UIAction(title: "게시글 수정", image: nil) { _ in
+            print("게시글 수정 선택됨")
+        }
+        
+        let deleteAction = UIAction(title: "게시글 삭제", image: nil, attributes: .destructive) { _ in
+            print("게시글 삭제 선택됨")
+        }
+        
+        return UIMenu(title: "", children: [pullUpAction, editAction, deleteAction])
+    }
+    
     private func setupData(post: Post) {
+        if let date = DateHelper.shared.toDate(from: post.date, format: "MM.dd") {
+            let dateString = DateHelper.shared.toString(from: date, format: "M월 d일")
+            dateValueLabel.text = "\(dateString) | \(post.playTime)"
+        } else {
+            dateValueLabel.text = "\(post.date) | \(post.playTime)"
+        }
         titleLabel.text = post.title
-        dateValueLabel.text = "\(post.date) \(post.playTime)"
-        placeLabel.text = post.location
-        partynumLabel.text = "\(post.maxPerson)명"
+        placeValueLabel.text = post.location
+        partynumValueLabel.text = "\(post.maxPerson)명"
         // TODO: - API UseCase 연결시 프로필 링크 가져오는걸로 바꾸기
         profileImageView.image = UIImage(named: "profile")
         nickNameLabel.text = post.writer.nickName
-        cheerTeam.setTeam(team: post.writer.team)
-        cheerTeam.layer.cornerRadius = 12
+        cheerTeam.backgroundColor = post.writer.team.getTeamColor
+        cheerTeam.text = post.writer.team.rawValue
+        if let cheerStyle = post.writer.cheerStyle {
+            cheerStyleLabel?.text = cheerStyle.rawValue
+            cheerStyleLabel?.applyStyle(textStyle: FontSystem.caption01_medium)
+        } else {
+            cheerStyleLabel = nil
+        }
         genderLabel.text = post.writer.gener.rawValue
         ageLabel.text = "\(post.writer.age)세"
         homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.homeTeam == post.writer.team)
@@ -394,8 +437,11 @@ extension PostDetailViewController {
                     flex.addItem().direction(.column).justifyContent(.start).alignItems(.start).define { flex in
                         flex.addItem(nickNameLabel).marginBottom(6)
                         flex.addItem().direction(.row).justifyContent(.start).alignItems(.start).define { flex in
-                            flex.addItem(cheerTeam)
-                            flex.addItem(genderLabel).marginHorizontal(6)
+                            flex.addItem(cheerTeam).marginRight(4)
+                            if let cheerStyleLabel = cheerStyleLabel {
+                                flex.addItem(cheerStyleLabel).marginRight(4)
+                            }
+                            flex.addItem(genderLabel).marginRight(4)
                             flex.addItem(ageLabel)
                         }
                     }
