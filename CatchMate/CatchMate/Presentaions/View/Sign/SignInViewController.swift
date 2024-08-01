@@ -119,6 +119,7 @@ extension SignInViewController {
         reactor.state
             .map { state -> Bool? in
                 if let loginModel = state.loginModel {
+                    
                     return loginModel.isFirstLogin
                 }
                 return nil

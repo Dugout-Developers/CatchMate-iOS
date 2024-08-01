@@ -51,7 +51,9 @@ enum SignUpAPIError: Error {
 
 final class SignUpDataSourceImpl: SignUpDataSource {
     func saveUserModel(_ model: SignUpModel) -> Observable<Result<SignUpResponseDTO, SignUpAPIError>> {
+        LoggerService.shared.debugLog("-----------------Servser Request SignUp-------------------")
         guard let base = Bundle.main.baseURL else {
+            LoggerService.shared.log("SignUp: - BaseURL 찾기 실패", level: .error)
             return Observable.just(.failure(SignUpAPIError.notFoundURL))
         }
         
@@ -63,6 +65,7 @@ final class SignUpDataSourceImpl: SignUpDataSource {
             "gender": model.gender.serverRequest,
             "watchStyle": model.cheerStyle?.rawValue ?? ""
         ]
+        LoggerService.shared.debugLog("SignUp Parameters : \(parameters)")
         
         let headers: HTTPHeaders = [
             "AccessToken": model.accessToken
@@ -73,22 +76,11 @@ final class SignUpDataSourceImpl: SignUpDataSource {
 }
     
     private func performRequest(url: String, parameters: [String: Any], headers: HTTPHeaders, model: SignUpModel, retryCount: Int) -> Observable<Result<SignUpResponseDTO, SignUpAPIError>> {
-        do {
-            print("Headers: \(headers)")
-            print("parameter 출력 ")
-            let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
-            if let jsonString = String(data: jsonData, encoding: .utf8) {
-                print("Encoded Parameters: \(jsonString)")
-            }
-            print("============")
-        } catch {
-            print("Failed to encode parameters: \(error)")
-        }
+        
         return RxAlamofire.requestData(.patch, url, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
             .flatMap { (response, data) -> Observable<Result<SignUpResponseDTO, SignUpAPIError>> in
                 guard 200..<300 ~= response.statusCode else {
-                    print(response.statusCode)
-                    print(response.debugDescription)
+                    LoggerService.shared.debugLog("요청 Error : \(response.statusCode) \(response.debugDescription)")
                     if let errorData = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
                        let errorMessage = errorData["errorMessage"] as? String {
                         print(errorMessage)
@@ -101,26 +93,32 @@ final class SignUpDataSourceImpl: SignUpDataSource {
                 
                 do {
                     let signUpResponse = try JSONDecoder().decode(SignUpResponseDTO.self, from: data)
+                    LoggerService.shared.log("Response : \(signUpResponse)")
                     return Observable.just(.success(signUpResponse))
                 } catch {
+                    LoggerService.shared.log("SignUpModel: Decoding Error")
                     return Observable.just(.failure(SignUpAPIError.decodingError))
                 }
             }
             .flatMap { result -> Observable<Result<SignUpResponseDTO, SignUpAPIError>> in
                 switch result {
                 case .success:
+                    LoggerService.shared.log("SignUp Success : \(result)")
                     return Observable.just(result)
                 case .failure(let error):
                     if case .unauthorized = error, retryCount < 1 {
+                        LoggerService.shared.debugLog("SignUp - Token 재발급")
                         return refreshAccessToken(model: model)
                             .flatMap { newAccessToken -> Observable<Result<SignUpResponseDTO, SignUpAPIError>> in
                                 let newModel = SignUpModel(accessToken: newAccessToken, refreshToken: model.accessToken, nickName: model.nickName, birth: model.birth, team: model.team, gender: model.gender, cheerStyle: model.cheerStyle)
+                                LoggerService.shared.debugLog("SignUp - Token 재발급: \(newModel)")
                                 let updatedHeaders: HTTPHeaders = [
                                     "AccessToken": newAccessToken
                                 ]
                                 return performRequest(url: url, parameters: parameters, headers: updatedHeaders, model: newModel, retryCount: retryCount + 1)
                             }
                     } else {
+                        LoggerService.shared.log("SignUp failure : \(result)")
                         return Observable.just(result)
                     }
                 }

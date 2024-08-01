@@ -19,12 +19,10 @@ final class AuthReactor: Reactor {
     }
     enum Mutation {
         case setLoginInfo(LoginModel)
-        case setAuthenticated(Bool)
         case setError(Error)
     }
     struct State {
         var loginModel: LoginModel?
-        var isAuthenticated: Bool = false
         var errorMessage: String?
     }
     
@@ -45,7 +43,6 @@ final class AuthReactor: Reactor {
         case .kakaoLogin:
             return kakaoLoginUseCase.login()
                 .map { loginModel in
-                    self.saveTokens(loginModel)
                     return Mutation.setLoginInfo(loginModel)
                 }
                 .catch { error in
@@ -54,7 +51,6 @@ final class AuthReactor: Reactor {
         case .appleLogin:
             return appleLoginUseCase.login()
                 .map { loginModel in
-                    self.saveTokens(loginModel)
                     return Mutation.setLoginInfo(loginModel)
                 }
                 .catch { error in
@@ -63,14 +59,12 @@ final class AuthReactor: Reactor {
         case .naverLogin:
             return naverLoginUseCase.login()
                 .map { loginModel in
-                    self.saveTokens(loginModel)
-                    print(loginModel)
                     return Mutation.setLoginInfo(loginModel)
                 }
                 .catch { error in
                     return Observable.just(Mutation.setError(error))
                 }
-        
+            
         case .setError(let error):
             return Observable.just(Mutation.setError(error))
         }
@@ -79,18 +73,16 @@ final class AuthReactor: Reactor {
         var newState = state
         switch mutation {
         case .setLoginInfo(let loginModel):
+            saveToken(loginModel: loginModel)
             newState.loginModel = loginModel
-            newState.isAuthenticated = !loginModel.isFirstLogin
-        case .setAuthenticated(let state):
-            newState.isAuthenticated = state
         case .setError(let error):
             print(error.localizedDescription)
             newState.errorMessage = error.localizedDescription
         }
         return newState
     }
-    private func saveTokens(_ loginModel: LoginModel) {
-        // TODO: - KeyChain 연결 로직
+    private func saveToken(loginModel: LoginModel) {
+        LoggerService.shared.debugLog("saveKeychain : \(loginModel.accessToken), \(loginModel.refreshToken)")
         KeychainService.saveToken(token: loginModel.accessToken, for: .accessToken)
         KeychainService.saveToken(token: loginModel.refreshToken, for: .refreshToken)
     }

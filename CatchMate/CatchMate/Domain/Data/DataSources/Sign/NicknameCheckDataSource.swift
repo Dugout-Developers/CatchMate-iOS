@@ -13,7 +13,7 @@ import Alamofire
 protocol NicknameCheckDataSource {
     func checkNickname(_ nickname: String) -> Observable<Bool>
 }
-enum NicknameAPIError: Error {
+enum NicknameAPIError: LocalizedError {
     case notFoundURL
     case serverError(code: Int, description: String)
     case decodingError

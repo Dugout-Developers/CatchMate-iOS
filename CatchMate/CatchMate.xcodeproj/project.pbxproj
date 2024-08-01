@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5301E2962C5B2BAE0078E910 /* LoggerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2952C5B2BAE0078E910 /* LoggerService.swift */; };
+		5301E29D2C5B38B10078E910 /* Error+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E29C2C5B38B10078E910 /* Error+Extension.swift */; };
 		530994542C4F6CEB00ABE103 /* LoginResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530994532C4F6CEB00ABE103 /* LoginResult.swift */; };
 		530994562C4F6D9900ABE103 /* LoginRequset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530994552C4F6D9900ABE103 /* LoginRequset.swift */; };
 		530DD6122C4F839600A7D6CE /* ServerLoginDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530DD6112C4F839600A7D6CE /* ServerLoginDataSource.swift */; };
@@ -164,6 +166,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5301E2952C5B2BAE0078E910 /* LoggerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerService.swift; sourceTree = "<group>"; };
+		5301E29C2C5B38B10078E910 /* Error+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extension.swift"; sourceTree = "<group>"; };
 		530994532C4F6CEB00ABE103 /* LoginResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResult.swift; sourceTree = "<group>"; };
 		530994552C4F6D9900ABE103 /* LoginRequset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRequset.swift; sourceTree = "<group>"; };
 		530DD6112C4F839600A7D6CE /* ServerLoginDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerLoginDataSource.swift; sourceTree = "<group>"; };
@@ -416,6 +420,7 @@
 				531786732C202F1B00ACEF6A /* NetworkService.swift */,
 				5382490F2C3139C80074B583 /* LoginUserDefaultsService.swift */,
 				53FC69DC2C58DB8D00B97AEA /* KeychainService.swift */,
+				5301E2952C5B2BAE0078E910 /* LoggerService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -563,6 +568,7 @@
 				531786582C1C934A00ACEF6A /* UIViewController+Extension.swift */,
 				53BE7AD12C367181002FC64F /* Date+Extension.swift */,
 				533183D02C5141EB0097F3F1 /* UILabel+Extension.swift */,
+				5301E29C2C5B38B10078E910 /* Error+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -980,6 +986,7 @@
 				531786592C1C934A00ACEF6A /* UIViewController+Extension.swift in Sources */,
 				531288CB2C540764000C2FB1 /* FCMRepository.swift in Sources */,
 				5317865D2C1EAC4700ACEF6A /* Screen.swift in Sources */,
+				5301E2962C5B2BAE0078E910 /* LoggerService.swift in Sources */,
 				538249102C3139C80074B583 /* LoginUserDefaultsService.swift in Sources */,
 				531786622C1EE6C500ACEF6A /* TeamFilterTableViewCell.swift in Sources */,
 				536BDE3A2C1C1F210043B1DA /* HomeReactor.swift in Sources */,
@@ -1014,6 +1021,7 @@
 				538EB92F2C3FA27600ABA40E /* CMDatePicker.swift in Sources */,
 				53FC69DD2C58DB8D00B97AEA /* KeychainService.swift in Sources */,
 				5375980A2C46D6D7003BD8AE /* ApplyFormReactor.swift in Sources */,
+				5301E29D2C5B38B10078E910 /* Error+Extension.swift in Sources */,
 				53716BC02C400B3E0044AD2A /* FavoriteReactor.swift in Sources */,
 				536BDDE92C1971C70043B1DA /* SignReactor.swift in Sources */,
 				531786552C1C8E7800ACEF6A /* UIImage+Extension.swift in Sources */,

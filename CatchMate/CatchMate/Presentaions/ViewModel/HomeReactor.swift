@@ -79,13 +79,15 @@ final class HomeReactor: Reactor {
         case let .setSelectedTeams(selectedTeams):
             newState.selectedTeams = selectedTeams
         case .loadPost(let posts):
+            LoggerService.shared.debugLog("----------------loadHome----------------")
             if let savedAccessToken = KeychainService.getToken(for: .accessToken) {
-                print("Access Token: \(savedAccessToken)")
+                LoggerService.shared.debugLog("GetKeyChain Access Token: \(savedAccessToken)")
             }
 
             if let savedRefreshToken = KeychainService.getToken(for: .refreshToken) {
-                print("Refresh Token: \(savedRefreshToken)")
+                LoggerService.shared.debugLog("GetKeyChain Refresh Token: \(savedRefreshToken)")
             }
+            LoggerService.shared.debugLog("----------------------------------------")
             newState.posts = posts
         case .setSelectedPost(let post):
             newState.selectedPost = post

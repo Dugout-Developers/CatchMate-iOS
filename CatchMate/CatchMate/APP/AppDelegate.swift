@@ -17,6 +17,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     let gcmMessageIDKey = "gcm.message_id"
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        if let logPath = Bundle.main.logPath {
+            LoggerService.shared.configure(logDirectoryPath: logPath)
+        }
         FirebaseApp.configure()
         // APNS 등록
             if #available(iOS 10.0, *) {
