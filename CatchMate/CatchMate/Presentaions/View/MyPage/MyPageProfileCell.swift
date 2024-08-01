@@ -23,6 +23,7 @@ final class MyPageProfileCell: UITableViewCell {
         label.numberOfLines = 1
         return label
     }()
+    private let tagContainer = UIView()
     private var tags = [DefaultsPaddingLabel]()
     private let indicatorImageButton: UIButton = {
         let button = UIButton()
@@ -60,7 +61,7 @@ final class MyPageProfileCell: UITableViewCell {
         containerView.flex.layout(mode: .adjustHeight)
     }
     
-    private func setupData(_ user: User?) {
+    func configData(_ user: User?) {
         if let user = user {
             tags.append(makePaddingLabel(color: .white, backgroundColor: user.team.getTeamColor, text: user.team.rawValue))
             if let cheerStyle = user.cheerStyle {
@@ -83,6 +84,12 @@ final class MyPageProfileCell: UITableViewCell {
             }()
             tags.append(label)
         }
+        tagContainer.flex.direction(.row).justifyContent(.start).alignItems(.center).define { flex in
+            tags.forEach { label in
+                flex.addItem(label).marginRight(4)
+            }
+        }
+        containerView.flex.layout(mode: .adjustHeight)
     }
     
     private func makePaddingLabel(color: UIColor, backgroundColor: UIColor, text: String) -> DefaultsPaddingLabel {
@@ -99,9 +106,14 @@ final class MyPageProfileCell: UITableViewCell {
 extension MyPageProfileCell {
     private func setupUI() {
         addSubview(containerView)
-        containerView.flex.direction(.row).justifyContent(.start).alignItems(.center).define { flex in
+        containerView.flex.direction(.row).justifyContent(.start).alignItems(.center).paddingVertical(16).paddingHorizontal(18).define { flex in
             flex.addItem(profileImageView).size(56).cornerRadius(56/2).marginRight(12)
-//            flex.addItem().flex.direction(.column)
+            flex.addItem().direction(.column).justifyContent(.start).alignItems(.start).define { flex in
+                flex.addItem(nicknameLabel).marginBottom(6)
+                flex.addItem(tagContainer)
+            }.grow(1)
+            flex.addItem(indicatorImageButton).size(20).marginLeft(40)
         }
+        containerView.flex.layout(mode: .adjustHeight)
     }
 }

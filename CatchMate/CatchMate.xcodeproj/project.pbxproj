@@ -11,6 +11,10 @@
 		5301E29D2C5B38B10078E910 /* Error+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E29C2C5B38B10078E910 /* Error+Extension.swift */; };
 		5301E2A12C5B5C280078E910 /* MyPageProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2A02C5B5C280078E910 /* MyPageProfileCell.swift */; };
 		5301E2A32C5B6B8B0078E910 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2A22C5B6B8B0078E910 /* AuthService.swift */; };
+		5301E2A52C5B7DB70078E910 /* EmptyMyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2A42C5B7DB70078E910 /* EmptyMyPageViewController.swift */; };
+		5301E2A72C5B7F740078E910 /* MypageListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2A62C5B7F740078E910 /* MypageListCell.swift */; };
+		5301E2A92C5B81D10078E910 /* MypageHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2A82C5B81D10078E910 /* MypageHeader.swift */; };
+		5301E2AB2C5B82AA0078E910 /* MypageMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2AA2C5B82AA0078E910 /* MypageMenu.swift */; };
 		530994542C4F6CEB00ABE103 /* LoginResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530994532C4F6CEB00ABE103 /* LoginResult.swift */; };
 		530994562C4F6D9900ABE103 /* LoginRequset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530994552C4F6D9900ABE103 /* LoginRequset.swift */; };
 		530DD6122C4F839600A7D6CE /* ServerLoginDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530DD6112C4F839600A7D6CE /* ServerLoginDataSource.swift */; };
@@ -49,7 +53,7 @@
 		53241F3E2C3C589100F468E1 /* DesignAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */; };
 		53241F4E2C3EE58E00F468E1 /* CMPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */; };
 		533183CA2C50DE8D0097F3F1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 533183C62C50DE8D0097F3F1 /* GoogleService-Info.plist */; };
-		533183CB2C50DE8D0097F3F1 /* APIKEY.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 533183C72C50DE8D0097F3F1 /* APIKEY.xcconfig */; };
+		533183CB2C50DE8D0097F3F1 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 533183C72C50DE8D0097F3F1 /* Config.xcconfig */; };
 		533183CD2C50DE8D0097F3F1 /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 533183C92C50DE8D0097F3F1 /* APIKeys.plist */; };
 		533183CF2C5141BC0097F3F1 /* MyMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533183CE2C5141BC0097F3F1 /* MyMessageTableViewCell.swift */; };
 		533183D12C5141EB0097F3F1 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533183D02C5141EB0097F3F1 /* UILabel+Extension.swift */; };
@@ -172,6 +176,10 @@
 		5301E29C2C5B38B10078E910 /* Error+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extension.swift"; sourceTree = "<group>"; };
 		5301E2A02C5B5C280078E910 /* MyPageProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageProfileCell.swift; sourceTree = "<group>"; };
 		5301E2A22C5B6B8B0078E910 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		5301E2A42C5B7DB70078E910 /* EmptyMyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyMyPageViewController.swift; sourceTree = "<group>"; };
+		5301E2A62C5B7F740078E910 /* MypageListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MypageListCell.swift; sourceTree = "<group>"; };
+		5301E2A82C5B81D10078E910 /* MypageHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MypageHeader.swift; sourceTree = "<group>"; };
+		5301E2AA2C5B82AA0078E910 /* MypageMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MypageMenu.swift; sourceTree = "<group>"; };
 		530994532C4F6CEB00ABE103 /* LoginResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResult.swift; sourceTree = "<group>"; };
 		530994552C4F6D9900ABE103 /* LoginRequset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRequset.swift; sourceTree = "<group>"; };
 		530DD6112C4F839600A7D6CE /* ServerLoginDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerLoginDataSource.swift; sourceTree = "<group>"; };
@@ -209,7 +217,7 @@
 		53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DesignAssets.xcassets; sourceTree = "<group>"; };
 		53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMPopupViewController.swift; sourceTree = "<group>"; };
 		533183C62C50DE8D0097F3F1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		533183C72C50DE8D0097F3F1 /* APIKEY.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = APIKEY.xcconfig; sourceTree = "<group>"; };
+		533183C72C50DE8D0097F3F1 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		533183C82C50DE8D0097F3F1 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		533183C92C50DE8D0097F3F1 /* APIKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
 		533183CE2C5141BC0097F3F1 /* MyMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMessageTableViewCell.swift; sourceTree = "<group>"; };
@@ -356,7 +364,11 @@
 			isa = PBXGroup;
 			children = (
 				536BDE302C1B55440043B1DA /* MyPageViewController.swift */,
+				5301E2A42C5B7DB70078E910 /* EmptyMyPageViewController.swift */,
 				5301E2A02C5B5C280078E910 /* MyPageProfileCell.swift */,
+				5301E2A62C5B7F740078E910 /* MypageListCell.swift */,
+				5301E2A82C5B81D10078E910 /* MypageHeader.swift */,
+				5301E2AA2C5B82AA0078E910 /* MypageMenu.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -532,7 +544,7 @@
 		536BDDDD2C1969370043B1DA /* APP */ = {
 			isa = PBXGroup;
 			children = (
-				533183C72C50DE8D0097F3F1 /* APIKEY.xcconfig */,
+				533183C72C50DE8D0097F3F1 /* Config.xcconfig */,
 				533183C92C50DE8D0097F3F1 /* APIKeys.plist */,
 				533183C62C50DE8D0097F3F1 /* GoogleService-Info.plist */,
 				533183C82C50DE8D0097F3F1 /* Info.plist */,
@@ -941,7 +953,7 @@
 				53241F3E2C3C589100F468E1 /* DesignAssets.xcassets in Resources */,
 				5383BE902C34ECD1008940F1 /* PretendardVariable.ttf in Resources */,
 				533183CA2C50DE8D0097F3F1 /* GoogleService-Info.plist in Resources */,
-				533183CB2C50DE8D0097F3F1 /* APIKEY.xcconfig in Resources */,
+				533183CB2C50DE8D0097F3F1 /* Config.xcconfig in Resources */,
 				536BDDB72C189B240043B1DA /* Assets.xcassets in Resources */,
 				533183CD2C50DE8D0097F3F1 /* APIKeys.plist in Resources */,
 				536BDDBA2C189B240043B1DA /* Base in Resources */,
@@ -974,6 +986,7 @@
 				533A2B362C2BEA3900A59340 /* InputCheerStyleViewController.swift in Sources */,
 				537598062C46C0B0003BD8AE /* ApplyPopupViewController.swift in Sources */,
 				53FC69E52C58F98100B97AEA /* NicknameCheckRepositoryImpl.swift in Sources */,
+				5301E2A92C5B81D10078E910 /* MypageHeader.swift in Sources */,
 				53E4A9C02C5009EB00D21B49 /* SignUpRepository.swift in Sources */,
 				53E4A9C62C500E9B00D21B49 /* SignUpMapper.swift in Sources */,
 				53716BD82C4564700044AD2A /* DefaultsPaddingLabel.swift in Sources */,
@@ -987,6 +1000,7 @@
 				537598082C46C3D2003BD8AE /* DefaultsTextView.swift in Sources */,
 				533A2B462C2C638100A59340 /* KakaoLoginUseCase.swift in Sources */,
 				53E4A9BC2C4FFB8400D21B49 /* SignUp.swift in Sources */,
+				5301E2A72C5B7F740078E910 /* MypageListCell.swift in Sources */,
 				531786602C1EB24D00ACEF6A /* TeamFilterViewController.swift in Sources */,
 				531786822C21D3F700ACEF6A /* ChatListTableViewCell.swift in Sources */,
 				531786592C1C934A00ACEF6A /* UIViewController+Extension.swift in Sources */,
@@ -1014,6 +1028,7 @@
 				53FC69E32C58F94600B97AEA /* NicknameCheckRepository.swift in Sources */,
 				53FC69E72C58F9E700B97AEA /* NicknameCheckUseCase.swift in Sources */,
 				536BDDEC2C19720E0043B1DA /* User.swift in Sources */,
+				5301E2AB2C5B82AA0078E910 /* MypageMenu.swift in Sources */,
 				53241F3C2C3C517600F468E1 /* GridSystem.swift in Sources */,
 				533183D92C5160220097F3F1 /* ChatData.swift in Sources */,
 				533A2B422C2C624D00A59340 /* SNSLoginRepository.swift in Sources */,
@@ -1063,6 +1078,7 @@
 				530994542C4F6CEB00ABE103 /* LoginResult.swift in Sources */,
 				536BDE122C1B51FD0043B1DA /* TabBarController.swift in Sources */,
 				536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */,
+				5301E2A52C5B7DB70078E910 /* EmptyMyPageViewController.swift in Sources */,
 				531786642C1EF30F00ACEF6A /* Team.swift in Sources */,
 				538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */,
 				530DD6122C4F839600A7D6CE /* ServerLoginDataSource.swift in Sources */,
@@ -1138,6 +1154,7 @@
 /* Begin XCBuildConfiguration section */
 		536BDDD22C189B240043B1DA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 533183C72C50DE8D0097F3F1 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -1201,6 +1218,7 @@
 		};
 		536BDDD32C189B240043B1DA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 533183C72C50DE8D0097F3F1 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -1257,6 +1275,7 @@
 		};
 		536BDDD52C189B240043B1DA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 533183C72C50DE8D0097F3F1 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1293,6 +1312,7 @@
 		};
 		536BDDD62C189B240043B1DA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 533183C72C50DE8D0097F3F1 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1329,6 +1349,7 @@
 		};
 		536BDDD82C189B240043B1DA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 533183C72C50DE8D0097F3F1 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1349,6 +1370,7 @@
 		};
 		536BDDD92C189B240043B1DA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 533183C72C50DE8D0097F3F1 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1369,6 +1391,7 @@
 		};
 		536BDDDB2C189B240043B1DA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 533183C72C50DE8D0097F3F1 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -1387,6 +1410,7 @@
 		};
 		536BDDDC2C189B240043B1DA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 533183C72C50DE8D0097F3F1 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
