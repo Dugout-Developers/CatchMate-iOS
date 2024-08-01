@@ -13,8 +13,8 @@ final class SignUpReactor: Reactor {
         case signUpUser
     }
     enum Mutation {
-        case requestSignUp
-        
+        case setSignUpResponse(SignUpResponse)
+        case setError(Error?)
     }
     struct State {
         // View의 state를 관리한다.
@@ -35,26 +35,28 @@ final class SignUpReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .signUpUser:
-            return Observable.just(Mutation.requestSignUp)
+            return signupUseCase.signup(signUpModel)
+                .map { result in
+                    switch result {
+                    case .success(let response):
+                        return .setSignUpResponse(response)
+                    case .failure(let error):
+                        return .setError(error)
+                    }
+                }
+                .catchAndReturn(.setError(nil)) // 에러 발생 시
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
-        case .requestSignUp:
-            signupUseCase.signup(signUpModel)
-                .subscribe(onNext: { result in
-                    switch result {
-                    case .success(let response):
-                        print("Sign up successful: \(response)")
-                        newState.signupResponse = response
-                    case .failure(let error):
-                        print("Sign up failed with error: \(error)")
-                        newState.error = error
-                        newState.error = nil
-                    }
-                })
-                .disposed(by: disposeBag)
+        case let .setSignUpResponse(response):
+            LoggerService.shared.log("SignReactor: - SignUp success \(response)")
+            newState.signupResponse = response
+            newState.error = nil
+        case let .setError(error):
+            newState.signupResponse = nil
+            newState.error = error
         }
         return newState
     }

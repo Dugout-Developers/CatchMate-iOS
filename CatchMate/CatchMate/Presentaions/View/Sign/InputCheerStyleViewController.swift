@@ -178,7 +178,7 @@ extension InputCheerStyleViewController {
             .compactMap{$0}
             .withUnretained(self)
             .subscribe { vc, response in
-                print(response)
+                LoggerService.shared.log("bindSingUp: - SignUp success \(response)")
                 vc.navigateToNextPage()
             }
             .disposed(by: disposeBag)

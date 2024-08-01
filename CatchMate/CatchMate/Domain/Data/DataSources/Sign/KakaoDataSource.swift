@@ -96,7 +96,7 @@ final class KakaoDataSourceImpl: NSObject, KakaoDataSource {
     
     private func fetchUserInfo(oauthToken: String, observer: AnyObserver<SNSLoginResponse>) {
         LoggerService.shared.debugLog("KAKAO Login - fetchUserInfo")
-        UserApi.shared.me(propertyKeys: ["properties.nickname", "properties.profile_image", "account_email"]) { user, error in
+        UserApi.shared.me(propertyKeys: ["properties.nickname", "properties.profile_image", "kakao_account.email"]) { user, error in
             if let error = error {
                 LoggerService.shared.log("\(KakaoLoginError.errorType): \(error.statusCode) - \(error.localizedDescription)", level: .error)
                 observer.onError(KakaoLoginError.serverError(error.statusCode, error.localizedDescription))
@@ -109,7 +109,7 @@ final class KakaoDataSourceImpl: NSObject, KakaoDataSource {
                 LoggerService.shared.log("\(user)")
                 let email = user.kakaoAccount?.email ?? ""
                 let nickName = user.properties?["nickname"] ?? ""
-                let imageUrl = user.kakaoAccount?.profile?.profileImageUrl?.absoluteString
+                let imageUrl = user.properties?["profile_image"] ?? ""
                 
                 let response = SNSLoginResponse(id: "\(id)", email: email, loginType: .kakao, birth: nil, nickName: nickName, gender: nil, image: imageUrl)
                 LoggerService.shared.log("KakaoLogin Response : \(response)")

@@ -358,6 +358,7 @@
 				5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */,
 				538249122C3196AD0074B583 /* NaverLoginUseCase.swift */,
 				53FC69E62C58F9E700B97AEA /* NicknameCheckUseCase.swift */,
+				53E4A9C32C500AD500D21B49 /* SignUpUseCase.swift */,
 			);
 			path = SNSLoginUseCase;
 			sourceTree = "<group>";
@@ -664,7 +665,6 @@
 			isa = PBXGroup;
 			children = (
 				530994572C4F6F8C00ABE103 /* SNSLoginUseCase */,
-				53E4A9C32C500AD500D21B49 /* SignUpUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";

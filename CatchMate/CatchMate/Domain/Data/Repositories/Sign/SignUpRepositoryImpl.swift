@@ -19,7 +19,9 @@ final class SignUpRepositoryImpl: SignUpRepository {
             .map { result in
                 switch result {
                 case .success(let dto):
+                    LoggerService.shared.log("DTO Repository 전달 완료")
                     let domainModel = SignUpMapper.signUpResponseToDomain(dto)
+                    LoggerService.shared.log("DTO to Domain : \(domainModel)")
                     return .success(domainModel)
                 case .failure(let error):
                     return .failure(error)
