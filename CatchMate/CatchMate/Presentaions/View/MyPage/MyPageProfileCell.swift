@@ -11,6 +11,8 @@ import PinLayout
 import FlexLayout
 
 final class MyPageProfileCell: UITableViewCell {
+    private var skeletonLayers: [CALayer] = []
+    
     private let containerView = UIView()
     private let profileImageView: UIImageView = {
         let imageView = UIImageView()
@@ -27,7 +29,7 @@ final class MyPageProfileCell: UITableViewCell {
         return label
     }()
     private let tagContainer = UIView()
-    private var tags = [DefaultsPaddingLabel]()
+    private var tags: [DefaultsPaddingLabel] = []
     private let indicatorImageButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "cm20right")?.withTintColor(.grayScale500, renderingMode: .alwaysOriginal), for: .normal)
@@ -36,8 +38,7 @@ final class MyPageProfileCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .white
-        setupUI()
-        
+        contentView.addSubview(containerView)
     }
     @available(*, unavailable)
     required init?(coder: NSCoder) {
@@ -64,42 +65,42 @@ final class MyPageProfileCell: UITableViewCell {
         containerView.flex.layout(mode: .adjustHeight)
     }
     
-    func configData(_ user: User?) {
-
-        if let user = user {
-            if let image = user.profilePicture, let url = URL(string: image) {
-                profileImageView.kf.setImage(with: url)
-            } else {
-                profileImageView.image = UIImage(named: "tempProfile")
-            }
-            nicknameLabel.text = user.nickName
-            tags.append(makePaddingLabel(color: .white, backgroundColor: user.team.getTeamColor, text: user.team.rawValue))
-            if let cheerStyle = user.cheerStyle {
-                tags.append(makePaddingLabel(color: .white, backgroundColor: .cmPrimaryColor, text: cheerStyle.rawValue))
-            }
-            tags.append(makePaddingLabel(color: .cmNonImportantTextColor, backgroundColor: .grayScale100, text: user.gener.rawValue))
-            let ageDecade = (user.age / 10) * 10
-            tags.append(makePaddingLabel(color: .cmNonImportantTextColor, backgroundColor: .grayScale100, text: "\(ageDecade)대"))
+    func configData(_ user: User) {
+        indicatorImageButton.isHidden = false
+        if let image = user.profilePicture, let url = URL(string: image) {
+            profileImageView.kf.setImage(with: url)
         } else {
-            profileImageView.image = UIImage(named: "EmptyPrimary")
-            nicknameLabel.text = "로그인이 필요해요"
-            let label: DefaultsPaddingLabel = {
-                let label = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 4, bottom: 2, right: 4))
-                label.layer.cornerRadius = 2
-                label.text = "로그인하고 캐치메이트에서 직관 친구를 찾아보세요"
-                label.applyStyle(textStyle: FontSystem.caption01_medium)
-                label.textColor = .grayScale500
-                label.backgroundColor = .grayScale100
-                return label
-            }()
-            tags.append(label)
+            profileImageView.image = UIImage(named: "tempProfile")
         }
+        nicknameLabel.text = user.nickName
+        tags = []
+        tags.append(makePaddingLabel(color: .white, backgroundColor: user.team.getTeamColor, text: user.team.rawValue))
+        if let cheerStyle = user.cheerStyle {
+            tags.append(makePaddingLabel(color: .white, backgroundColor: .cmPrimaryColor, text: cheerStyle.rawValue))
+        }
+        tags.append(makePaddingLabel(color: .cmNonImportantTextColor, backgroundColor: .grayScale100, text: user.gener.rawValue))
+        let ageDecade = (user.age / 10) * 10
+        tags.append(makePaddingLabel(color: .cmNonImportantTextColor, backgroundColor: .grayScale100, text: "\(ageDecade)대"))
+        
+        nicknameLabel.applyStyle(textStyle: FontSystem.body02_semiBold)
+        setupUI()
         tagContainer.flex.direction(.row).justifyContent(.start).alignItems(.center).define { flex in
             tags.forEach { label in
                 flex.addItem(label).marginRight(4)
             }
         }
-        nicknameLabel.applyStyle(textStyle: FontSystem.body02_semiBold)
+        containerView.flex.layout(mode: .adjustHeight)
+    }
+    
+    func configNotuser() {
+        indicatorImageButton.isHidden = false
+        profileImageView.image = UIImage(named: "EmptyPrimary")
+        nicknameLabel.text = "로그인이 필요해요"
+        setupUI()
+        let label = makePaddingLabel(color: .grayScale500, backgroundColor: .grayScale100, text: "로그인하고 캐치메이트에서 직관 친구를 찾아보세요")
+        tagContainer.flex.direction(.row).justifyContent(.start).alignItems(.center).define { flex in
+            flex.addItem(label)
+        }
         containerView.flex.layout(mode: .adjustHeight)
     }
     
@@ -114,9 +115,10 @@ final class MyPageProfileCell: UITableViewCell {
     }
 }
 
+
 extension MyPageProfileCell {
     private func setupUI() {
-        addSubview(containerView)
+       
         containerView.flex.direction(.row).justifyContent(.start).alignItems(.center).paddingVertical(16).paddingHorizontal(18).define { flex in
             flex.addItem(profileImageView).size(56).cornerRadius(56/2).marginRight(12)
             flex.addItem().direction(.column).justifyContent(.start).alignItems(.start).define { flex in

@@ -44,4 +44,14 @@ class DIContainerService {
         return SignUpReactor(signUpModel: model, signupUseCase: usecase)
     }
     
+    func makeMypageReactor() -> MyPageReactor {
+        let userDataSource = UserDataSourceImpl()
+        let logoutDataSource = LogoutDataSourceImpl()
+        let userRepository = UserRepositoryImpl(userDS: userDataSource)
+        let logoutRepository = LogoutRepositoryImpl(lopgoutDS: logoutDataSource)
+        let userUsecase = UserUseCaseImpl(userRepository: userRepository)
+        let logoutUsecase = LogoutUseCaseImpl(repository: logoutRepository)
+        
+        return MyPageReactor(userUsecase: userUsecase, logoutUsecase: logoutUsecase)
+    }
 }

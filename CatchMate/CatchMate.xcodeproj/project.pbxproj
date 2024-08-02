@@ -140,6 +140,9 @@
 		5383BE8F2C34DF27008940F1 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5383BE8E2C34DF27008940F1 /* Font.swift */; };
 		5383BE902C34ECD1008940F1 /* PretendardVariable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5383BE8A2C34D543008940F1 /* PretendardVariable.ttf */; };
 		538EB92F2C3FA27600ABA40E /* CMDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */; };
+		53B8E2382C5C7BAA001D0ADF /* UserRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E2372C5C7BAA001D0ADF /* UserRepositoryImpl.swift */; };
+		53B8E23B2C5C7BCF001D0ADF /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E23A2C5C7BCF001D0ADF /* UserRepository.swift */; };
+		53B8E23E2C5C7BEB001D0ADF /* UserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E23D2C5C7BEB001D0ADF /* UserUseCase.swift */; };
 		53BE7ACF2C367008002FC64F /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7ACE2C367008002FC64F /* DateHelper.swift */; };
 		53BE7AD22C367181002FC64F /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7AD12C367181002FC64F /* Date+Extension.swift */; };
 		53E4A9B82C4FF00F00D21B49 /* AuthReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E4A9B72C4FF00F00D21B49 /* AuthReactor.swift */; };
@@ -305,6 +308,9 @@
 		5383BE8C2C34D594008940F1 /* FontUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontUtility.swift; sourceTree = "<group>"; };
 		5383BE8E2C34DF27008940F1 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 		538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMDatePicker.swift; sourceTree = "<group>"; };
+		53B8E2372C5C7BAA001D0ADF /* UserRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepositoryImpl.swift; sourceTree = "<group>"; };
+		53B8E23A2C5C7BCF001D0ADF /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
+		53B8E23D2C5C7BEB001D0ADF /* UserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserUseCase.swift; sourceTree = "<group>"; };
 		53BE7ACE2C367008002FC64F /* DateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
 		53BE7AD12C367181002FC64F /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		53E4A9B72C4FF00F00D21B49 /* AuthReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthReactor.swift; sourceTree = "<group>"; };
@@ -369,9 +375,6 @@
 				533A2B452C2C638100A59340 /* KakaoLoginUseCase.swift */,
 				5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */,
 				538249122C3196AD0074B583 /* NaverLoginUseCase.swift */,
-				53FC69E62C58F9E700B97AEA /* NicknameCheckUseCase.swift */,
-				53E4A9C32C500AD500D21B49 /* SignUpUseCase.swift */,
-				5301E2B52C5BE6AF0078E910 /* LogoutUseCase.swift */,
 			);
 			path = SNSLoginUseCase;
 			sourceTree = "<group>";
@@ -411,7 +414,6 @@
 				531288C82C540751000C2FB1 /* FCMRepositoryImpl.swift */,
 				531288D22C540B08000C2FB1 /* ServerLoginRepositoryImpl.swift */,
 				53FC69E42C58F98100B97AEA /* NicknameCheckRepositoryImpl.swift */,
-				5301E2B12C5BE6350078E910 /* LogoutRepositoryImpl.swift */,
 			);
 			path = Sign;
 			sourceTree = "<group>";
@@ -680,6 +682,8 @@
 			isa = PBXGroup;
 			children = (
 				530994572C4F6F8C00ABE103 /* SNSLoginUseCase */,
+				53B8E2402C5C7C0A001D0ADF /* Sign */,
+				53B8E23F2C5C7BF3001D0ADF /* User */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -688,7 +692,7 @@
 			isa = PBXGroup;
 			children = (
 				531288C72C54061E000C2FB1 /* Sign */,
-				5301E2B32C5BE6570078E910 /* LogoutRepository.swift */,
+				53B8E23C2C5C7BD3001D0ADF /* User */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -730,6 +734,7 @@
 			isa = PBXGroup;
 			children = (
 				531288C62C540602000C2FB1 /* Sign */,
+				53B8E2392C5C7BB8001D0ADF /* User */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -738,8 +743,7 @@
 			isa = PBXGroup;
 			children = (
 				531288BF2C53FE0E000C2FB1 /* Sign */,
-				53FC69DE2C58E00A00B97AEA /* UserDataSource.swift */,
-				5301E2AF2C5BE3E20078E910 /* LogoutDataSource.swift */,
+				53B8E2362C5C7530001D0ADF /* User */,
 			);
 			path = DataSources;
 			sourceTree = "<group>";
@@ -832,6 +836,51 @@
 				5383BE8C2C34D594008940F1 /* FontUtility.swift */,
 			);
 			path = Font;
+			sourceTree = "<group>";
+		};
+		53B8E2362C5C7530001D0ADF /* User */ = {
+			isa = PBXGroup;
+			children = (
+				53FC69DE2C58E00A00B97AEA /* UserDataSource.swift */,
+				5301E2AF2C5BE3E20078E910 /* LogoutDataSource.swift */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
+		53B8E2392C5C7BB8001D0ADF /* User */ = {
+			isa = PBXGroup;
+			children = (
+				5301E2B12C5BE6350078E910 /* LogoutRepositoryImpl.swift */,
+				53B8E2372C5C7BAA001D0ADF /* UserRepositoryImpl.swift */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
+		53B8E23C2C5C7BD3001D0ADF /* User */ = {
+			isa = PBXGroup;
+			children = (
+				5301E2B32C5BE6570078E910 /* LogoutRepository.swift */,
+				53B8E23A2C5C7BCF001D0ADF /* UserRepository.swift */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
+		53B8E23F2C5C7BF3001D0ADF /* User */ = {
+			isa = PBXGroup;
+			children = (
+				5301E2B52C5BE6AF0078E910 /* LogoutUseCase.swift */,
+				53B8E23D2C5C7BEB001D0ADF /* UserUseCase.swift */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
+		53B8E2402C5C7C0A001D0ADF /* Sign */ = {
+			isa = PBXGroup;
+			children = (
+				53FC69E62C58F9E700B97AEA /* NicknameCheckUseCase.swift */,
+				53E4A9C32C500AD500D21B49 /* SignUpUseCase.swift */,
+			);
+			path = Sign;
 			sourceTree = "<group>";
 		};
 		53BE7AD02C36700D002FC64F /* Helpers */ = {
@@ -1060,6 +1109,7 @@
 				53FC69E12C58F65B00B97AEA /* NicknameCheckDataSource.swift in Sources */,
 				531288C92C540751000C2FB1 /* FCMRepositoryImpl.swift in Sources */,
 				533A2B322C2BE7E600A59340 /* CheerStyles.swift in Sources */,
+				53B8E23E2C5C7BEB001D0ADF /* UserUseCase.swift in Sources */,
 				53FC69DB2C58C65700B97AEA /* RefreshTokenResponseDTO.swift in Sources */,
 				53FC69FC2C5A2DD700B97AEA /* SignUpReactor.swift in Sources */,
 				531288D12C540ADF000C2FB1 /* ServerLoginRepository.swift in Sources */,
@@ -1104,6 +1154,7 @@
 				530994542C4F6CEB00ABE103 /* LoginResult.swift in Sources */,
 				536BDE122C1B51FD0043B1DA /* TabBarController.swift in Sources */,
 				536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */,
+				53B8E2382C5C7BAA001D0ADF /* UserRepositoryImpl.swift in Sources */,
 				5301E2A52C5B7DB70078E910 /* EmptyMyPageViewController.swift in Sources */,
 				531786642C1EF30F00ACEF6A /* Team.swift in Sources */,
 				538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */,
@@ -1112,6 +1163,7 @@
 				53716BC62C42D19A0044AD2A /* PlaceFilterViewController.swift in Sources */,
 				53E4A9C42C500AD500D21B49 /* SignUpUseCase.swift in Sources */,
 				5317867F2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift in Sources */,
+				53B8E23B2C5C7BCF001D0ADF /* UserRepository.swift in Sources */,
 				5317867B2C2077EC00ACEF6A /* NotiViewTableViewCell.swift in Sources */,
 				531786662C1F014E00ACEF6A /* CMTextField.swift in Sources */,
 				53E4A9BE2C50046E00D21B49 /* SignUpModel.swift in Sources */,

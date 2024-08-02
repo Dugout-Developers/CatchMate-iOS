@@ -8,7 +8,7 @@
 import UIKit
 
 struct UserDTO: Codable {
-    let userID: Int
+    let userID: Int64
     let email, picture, pushAgreement, nickName: String
     let favoriteGudan: String
     let description, watchStyle: String?

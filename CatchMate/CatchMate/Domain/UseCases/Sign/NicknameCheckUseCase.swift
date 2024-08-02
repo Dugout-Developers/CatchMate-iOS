@@ -10,6 +10,7 @@ import RxSwift
 protocol NicknameCheckUseCase {
     func checkNickname(_ nickname: String) -> Observable<Bool>
 }
+
 final class NicknameCheckUseCaseImpl: NicknameCheckUseCase {
     private let nicknameRepository: NicknameCheckRepository
     

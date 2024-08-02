@@ -7,16 +7,19 @@
 
 import UIKit
 import RxSwift
+import ReactorKit
 
-class MyPageViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource  {
-    private var user: User? = User(id: "11", snsID: "11", email: "dd", nickName: "한화화나", age: 24, team: .hanhwa, gener: .woman, cheerStyle: .cheerleader, profilePicture: "https://cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/GVJVDKERHREIPJJHZHNNHHOUTI.jpg")
+class MyPageViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource, View  {
+    private var user: User?
     private let tableview = UITableView()
     private let supportMenus = MypageMenu.supportMenus
     private let myMenus = MypageMenu.myMenus
     private let logoutButton = CMDefaultFilledButton(title: "임시 로그아웃임둥")
+    private let reactor: MyPageReactor
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        reactor.action.onNext(.loadUser)
     }
     
     override func viewDidLoad() {
@@ -24,7 +27,17 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
         setupNavigation()
         setupTableView()
         setupUI()
-        bind()
+        bind(reactor: reactor)
+    }
+    
+    init(reactor: MyPageReactor) {
+        self.reactor = reactor
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     private func setupNavigation() {
@@ -61,36 +74,36 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
         return 3
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
+        switch section {
+        case 0:
             return 1
-        } else if section == 1 {
+        case 1:
             return myMenus.count
-        } else {
+        case 2:
             return supportMenus.count
+        default:
+            return 0
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            let cell = MyPageProfileCell(style: .default, reuseIdentifier: nil)
-            cell.configData(user)
-            cell.updateConstraints()
+        switch indexPath.section {
+        case 0:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyPageProfileCell", for: indexPath) as? MyPageProfileCell else {
+                return UITableViewCell()
+            }
             cell.selectionStyle = .none
             return cell
-        } else if indexPath.section == 1 {
+        case 1, 2:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "MypageListCell", for: indexPath) as? MypageListCell else {
                 return UITableViewCell()
             }
-            cell.configData(title: myMenus[indexPath.row].rawValue)
+            let menu = indexPath.section == 1 ? myMenus[indexPath.row] : supportMenus[indexPath.row]
+            cell.configData(title: menu.rawValue)
             cell.selectionStyle = .none
             return cell
-        } else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "MypageListCell", for: indexPath) as? MypageListCell else {
-                return UITableViewCell()
-            }
-            cell.configData(title: supportMenus[indexPath.row].rawValue)
-            cell.selectionStyle = .none
-            return cell
+        default:
+            return UITableViewCell()
         }
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -116,11 +129,7 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return 88
-        } else {
-            return 53
-        }
+        return indexPath.section == 0 ? 88 : 53
     }
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 8
@@ -129,30 +138,54 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
 
 // MARK: - Bind
 extension MyPageViewController {
-    func bind() {
+    func bind(reactor: MyPageReactor) {
         logoutButton.rx.tap
             .take(1)
-            .withUnretained(self)
-            .subscribe { vc, _ in
-                // 임시
-                let logoutDS = LogoutDataSourceImpl()
-                guard let refreshToken = KeychainService.getToken(for: .refreshToken) else {
+            .map{ Reactor.Action.logout }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.logoutResult}
+            .distinctUntilChanged()
+            .subscribe { result in
+                if result {
+                    _ = KeychainService.deleteToken(for: .accessToken)
+                    _ = KeychainService.deleteToken(for: .refreshToken)
                     let reactor = DIContainerService.shared.makeAuthReactor()
                     (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(SignInViewController(reactor: reactor), animated: true)
-                    return
                 }
-                logoutDS.logout(token: refreshToken)
-                    .subscribe { result in
-                        if result {
-                            LoggerService.shared.debugLog("로그아웃")
-                            _ = KeychainService.deleteToken(for: .accessToken)
-                            _ = KeychainService.deleteToken(for: .refreshToken)
-                            let reactor = DIContainerService.shared.makeAuthReactor()
-                            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(SignInViewController(reactor: reactor), animated: true)
-                        }
+            }
+        
+        reactor.state.map { $0.user }
+            .compactMap{$0}
+            .distinctUntilChanged()
+            .subscribe(onNext: { [weak self] user in
+                self?.user = user
+                self?.tableview.reloadData()
+            })
+            .disposed(by: disposeBag)
+        
+        reactor.state.map { $0.isLoading }
+            .distinctUntilChanged()
+            .subscribe(onNext: { [weak self] isLoading in
+                guard let cell = self?.tableview.cellForRow(at: IndexPath(row: 0, section: 0)) as? MyPageProfileCell else { return }
+                if !isLoading {
+                    if let user = self?.user {
+                        cell.configData(user)
                     }
-    
-                    .disposed(by: vc.disposeBag)
+                }
+            })
+            .disposed(by: disposeBag)
+        reactor.state.map {$0.error}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, error in
+                vc.showAlert(message: "유저 정보가 만료되었습니다\n다시 로그인 해주세요.") {
+                    _ = KeychainService.deleteToken(for: .accessToken)
+                    _ = KeychainService.deleteToken(for: .refreshToken)
+                    let reactor = DIContainerService.shared.makeAuthReactor()
+                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(SignInViewController(reactor: reactor), animated: true)
+                }
             }
             .disposed(by: disposeBag)
     }

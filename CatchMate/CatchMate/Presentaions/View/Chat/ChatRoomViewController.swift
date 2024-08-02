@@ -37,7 +37,7 @@ final class ChatRoomViewController: BaseViewController, View {
         view.backgroundColor = .white
     }
     // 임시
-    private let user = User(id: "1", snsID: "ㄴㄴ", email: "ㄴㄴㄴ", nickName: "나요", age: 24, team: .dosun, gener: .man, cheerStyle: .director, profilePicture: nil)
+    private let user = User(id: "1", email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: nil, pushAgreement: true, description: "")
     init(chat: Chat) {
         self.reactor = ChatRoomReactor(chat: chat, user: user)
         self.chat = chat

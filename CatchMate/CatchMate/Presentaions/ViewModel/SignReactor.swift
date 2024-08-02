@@ -155,38 +155,6 @@ final class SignReactor: Reactor {
         return newState
     }
     
-    
-    
-    private func birthToAge(_ birth: String) -> UInt? {
-        guard birth.count == 6 else { return nil }
-        
-        let yearString = String(birth.prefix(2))
-        let monthString = String(birth.dropFirst(2).prefix(2))
-        let dayString = String(birth.dropFirst(4))
-        
-        guard let year = Int(yearString), let month = Int(monthString), let day = Int(dayString) else { return nil }
-        
-        
-        let currentYear = Calendar.current.component(.year, from: Date())
-        let currentCentury = currentYear / 100
-        let birthYear = (year <= currentYear % 100) ? (currentCentury * 100 + year) : ((currentCentury - 1) * 100 + year)
-        
-        var birthDateComponents = DateComponents()
-        birthDateComponents.year = birthYear
-        birthDateComponents.month = month
-        birthDateComponents.day = day
-        
-        let calendar = Calendar.current
-        guard let birthDate = calendar.date(from: birthDateComponents) else { return nil }
-        
-        let ageComponents = calendar.dateComponents([.year], from: birthDate, to: Date())
-        if let age = ageComponents.year, age >= 0 {
-            return UInt(age)
-        } else {
-            return nil
-        }
-    }
-    
     private func toServerFormatBirth(from birth: String) -> String? {
         if let date = DateHelper.shared.toDate(from: birth, format: "yyMMdd") {
             return DateHelper.shared.toString(from: date, format: "yyyy-MM-dd")

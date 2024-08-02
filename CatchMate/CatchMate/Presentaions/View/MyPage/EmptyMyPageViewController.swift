@@ -55,7 +55,7 @@ final class EmptyMyPageViewController: BaseViewController, UITableViewDelegate, 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = MyPageProfileCell(style: .default, reuseIdentifier: nil)
-            cell.configData(nil)
+            cell.configNotuser()
             cell.updateConstraints()
             cell.selectionStyle = .none
             return cell
