@@ -143,6 +143,8 @@
 		53B8E2382C5C7BAA001D0ADF /* UserRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E2372C5C7BAA001D0ADF /* UserRepositoryImpl.swift */; };
 		53B8E23B2C5C7BCF001D0ADF /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E23A2C5C7BCF001D0ADF /* UserRepository.swift */; };
 		53B8E23E2C5C7BEB001D0ADF /* UserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E23D2C5C7BEB001D0ADF /* UserUseCase.swift */; };
+		53B8E2422C5D0A2D001D0ADF /* ProfileEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E2412C5D0A2D001D0ADF /* ProfileEditViewController.swift */; };
+		53B8E2442C5D2436001D0ADF /* ProfileEditReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E2432C5D2436001D0ADF /* ProfileEditReactor.swift */; };
 		53BE7ACF2C367008002FC64F /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7ACE2C367008002FC64F /* DateHelper.swift */; };
 		53BE7AD22C367181002FC64F /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7AD12C367181002FC64F /* Date+Extension.swift */; };
 		53E4A9B82C4FF00F00D21B49 /* AuthReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E4A9B72C4FF00F00D21B49 /* AuthReactor.swift */; };
@@ -311,6 +313,8 @@
 		53B8E2372C5C7BAA001D0ADF /* UserRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepositoryImpl.swift; sourceTree = "<group>"; };
 		53B8E23A2C5C7BCF001D0ADF /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		53B8E23D2C5C7BEB001D0ADF /* UserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserUseCase.swift; sourceTree = "<group>"; };
+		53B8E2412C5D0A2D001D0ADF /* ProfileEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditViewController.swift; sourceTree = "<group>"; };
+		53B8E2432C5D2436001D0ADF /* ProfileEditReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditReactor.swift; sourceTree = "<group>"; };
 		53BE7ACE2C367008002FC64F /* DateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
 		53BE7AD12C367181002FC64F /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		53E4A9B72C4FF00F00D21B49 /* AuthReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthReactor.swift; sourceTree = "<group>"; };
@@ -388,6 +392,7 @@
 				5301E2A62C5B7F740078E910 /* MypageListCell.swift */,
 				5301E2A82C5B81D10078E910 /* MypageHeader.swift */,
 				5301E2AA2C5B82AA0078E910 /* MypageMenu.swift */,
+				53B8E2412C5D0A2D001D0ADF /* ProfileEditViewController.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -648,6 +653,7 @@
 				533183DA2C51E87E0097F3F1 /* ChatRoomReactor.swift */,
 				531288D42C554163000C2FB1 /* ChatListReactor.swift */,
 				5301E2B72C5BECBB0078E910 /* MyPageReactor.swift */,
+				53B8E2432C5D2436001D0ADF /* ProfileEditReactor.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1072,6 +1078,7 @@
 				5301E2B62C5BE6AF0078E910 /* LogoutUseCase.swift in Sources */,
 				537598082C46C3D2003BD8AE /* DefaultsTextView.swift in Sources */,
 				533A2B462C2C638100A59340 /* KakaoLoginUseCase.swift in Sources */,
+				53B8E2422C5D0A2D001D0ADF /* ProfileEditViewController.swift in Sources */,
 				53E4A9BC2C4FFB8400D21B49 /* SignUp.swift in Sources */,
 				5301E2A72C5B7F740078E910 /* MypageListCell.swift in Sources */,
 				531786602C1EB24D00ACEF6A /* TeamFilterViewController.swift in Sources */,
@@ -1097,6 +1104,7 @@
 				531288C52C5404C3000C2FB1 /* KakaoDataSource.swift in Sources */,
 				53E4A9B82C4FF00F00D21B49 /* AuthReactor.swift in Sources */,
 				531288C32C54030D000C2FB1 /* AppleLoginDataSource.swift in Sources */,
+				53B8E2442C5D2436001D0ADF /* ProfileEditReactor.swift in Sources */,
 				53E4A9BA2C4FFB1300D21B49 /* SignUpDataSource.swift in Sources */,
 				53FC69E32C58F94600B97AEA /* NicknameCheckRepository.swift in Sources */,
 				53FC69E72C58F9E700B97AEA /* NicknameCheckUseCase.swift in Sources */,

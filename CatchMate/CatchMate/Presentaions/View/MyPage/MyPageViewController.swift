@@ -106,6 +106,21 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
             return UITableViewCell()
         }
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case 0:
+            guard let user = user else { return }
+            let profileEditVC = ProfileEditViewController(reactor: ProfileEditReactor(user: user), imageString: user.profilePicture)
+            navigationController?.pushViewController(profileEditVC, animated: true)
+        case 1:
+            break
+        case 2:
+            break
+        default:
+            break
+        }
+    }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 {
             return nil // 첫 번째 섹션에 헤더 뷰 없음
@@ -155,13 +170,14 @@ extension MyPageViewController {
                     (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(SignInViewController(reactor: reactor), animated: true)
                 }
             }
+            .disposed(by: disposeBag)
         
         reactor.state.map { $0.user }
             .compactMap{$0}
             .distinctUntilChanged()
             .subscribe(onNext: { [weak self] user in
                 self?.user = user
-                self?.tableview.reloadData()
+//                self?.tableview.reloadData()
             })
             .disposed(by: disposeBag)
         
@@ -172,6 +188,7 @@ extension MyPageViewController {
                 if !isLoading {
                     if let user = self?.user {
                         cell.configData(user)
+                        cell.updateConstraints()
                     }
                 }
             })

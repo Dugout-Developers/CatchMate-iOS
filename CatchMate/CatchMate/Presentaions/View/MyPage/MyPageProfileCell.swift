@@ -39,6 +39,7 @@ final class MyPageProfileCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .white
         contentView.addSubview(containerView)
+        setupUI()
     }
     @available(*, unavailable)
     required init?(coder: NSCoder) {
@@ -66,6 +67,7 @@ final class MyPageProfileCell: UITableViewCell {
     }
     
     func configData(_ user: User) {
+        tagContainer.subviews.forEach { $0.removeFromSuperview() }
         indicatorImageButton.isHidden = false
         if let image = user.profilePicture, let url = URL(string: image) {
             profileImageView.kf.setImage(with: url)
@@ -83,12 +85,14 @@ final class MyPageProfileCell: UITableViewCell {
         tags.append(makePaddingLabel(color: .cmNonImportantTextColor, backgroundColor: .grayScale100, text: "\(ageDecade)대"))
         
         nicknameLabel.applyStyle(textStyle: FontSystem.body02_semiBold)
-        setupUI()
+        tagContainer.subviews.forEach { $0.removeFromSuperview() }
         tagContainer.flex.direction(.row).justifyContent(.start).alignItems(.center).define { flex in
             tags.forEach { label in
                 flex.addItem(label).marginRight(4)
             }
         }
+        nicknameLabel.flex.markDirty()
+        tagContainer.flex.markDirty()
         containerView.flex.layout(mode: .adjustHeight)
     }
     
@@ -118,12 +122,11 @@ final class MyPageProfileCell: UITableViewCell {
 
 extension MyPageProfileCell {
     private func setupUI() {
-       
         containerView.flex.direction(.row).justifyContent(.start).alignItems(.center).paddingVertical(16).paddingHorizontal(18).define { flex in
             flex.addItem(profileImageView).size(56).cornerRadius(56/2).marginRight(12)
             flex.addItem().direction(.column).justifyContent(.start).alignItems(.start).define { flex in
                 flex.addItem(nicknameLabel).marginBottom(6)
-                flex.addItem(tagContainer)
+                flex.addItem(tagContainer).width(100%)
             }.grow(1)
             flex.addItem(indicatorImageButton).size(20).marginLeft(40)
         }
