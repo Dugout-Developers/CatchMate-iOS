@@ -32,8 +32,10 @@ struct deleteTokeDTO: Codable {
 }
 final class LogoutDataSourceImpl: LogoutDataSource {
     func logout(token: String) -> RxSwift.Observable<Bool> {
+        LoggerService.shared.debugLog("--------------Logout--------------")
         guard let base = Bundle.main.baseURL else {
-            return Observable.error(UserAPIError.notFoundURL)
+            LoggerService.shared.log("로그아웃 - BaseUrl 찾기 실패", level: .error)
+            return Observable.error(LogoutError.notFoundURL)
         }
         let url = base + "/auth/logout"
         let headers: HTTPHeaders = [
@@ -48,10 +50,12 @@ final class LogoutDataSourceImpl: LogoutDataSource {
                         LoggerService.shared.debugLog("\(refreshResponse)")
                         return Observable.just(refreshResponse.state)
                     } catch {
+                        LoggerService.shared.log("로그아웃 - 로그아웃 토큰 데이터 디코딩 오류", level: .error)
                         return Observable.error(LogoutError.decodingError)
                     }
                 } else {
-                    return Observable.error(LogoutError.serverError(response.statusCode, "토큰 재발급 실패 - 서버에러"))
+                    LoggerService.shared.log("로그아웃 실패: \(response.statusCode): \(response.debugDescription)", level: .error)
+                    return Observable.error(LogoutError.serverError(response.statusCode, "로그아웃 실패 - 서버에러"))
                 }
             }
     }

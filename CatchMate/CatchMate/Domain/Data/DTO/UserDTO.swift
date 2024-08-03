@@ -6,15 +6,14 @@
 //
 
 import UIKit
-
 struct UserDTO: Codable {
-    let userID: Int64
-    let email, picture, pushAgreement, nickName: String
-    let favoriteGudan: String
+    let userID: Int
+    let email, picture, gender, pushAgreement: String
+    let nickName, favoriteGudan, birthDate: String
     let description, watchStyle: String?
 
     enum CodingKeys: String, CodingKey {
         case userID = "userId"
-        case email, picture, pushAgreement, nickName, favoriteGudan, description, watchStyle
+        case email, picture, gender, pushAgreement, nickName, favoriteGudan, description, birthDate, watchStyle
     }
 }

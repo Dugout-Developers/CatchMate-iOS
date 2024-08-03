@@ -97,12 +97,7 @@ final class UserDataSourceImpl: UserDataSource {
             return RxAlamofire.requestData(.get, url, encoding: JSONEncoding.default, headers: headers)
                 .flatMap { (response, data) -> Observable<UserDTO> in
                     guard 200..<300 ~= response.statusCode else {
-                        print(response.statusCode)
-                        print(response.debugDescription)
-                        if let errorData = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                           let errorMessage = errorData["errorMessage"] as? String {
-                            print(errorMessage)
-                        }
+                        LoggerService.shared.debugLog("User Data Request Error : \(response.statusCode) \(response.debugDescription)")
                         if response.statusCode == 401 {
                             return Observable.error(UserAPIError.serverError(code: response.statusCode, description: "401 Error"))
                         }
@@ -111,25 +106,29 @@ final class UserDataSourceImpl: UserDataSource {
                     
                     do {
                         let userResponse = try JSONDecoder().decode(UserDTO.self, from: data)
+                        LoggerService.shared.log("UserDTO: \(userResponse)")
                         return Observable.just(userResponse)
                     } catch {
+                        LoggerService.shared.log("Decoding Error", level: .error)
                         if let jsonString = String(data: data, encoding: .utf8) {
-                                            print("Decoding Error: JSON 데이터는 다음과 같습니다.")
-                                            print(jsonString)
-                                        } else {
-                                            print("Decoding Error: JSON 데이터를 문자열로 변환할 수 없습니다.")
-                                        }
+                            LoggerService.shared.debugLog("Decoding Error - JSON 데이터 : \(jsonString)")
+                        } else {
+                            LoggerService.shared.debugLog("Decoding Error: Json String 변환 불가")
+                        }
                         return Observable.error(UserAPIError.decodingError)
                     }
                 }
                 .catch { error -> Observable<UserDTO> in
                     if retryCount < 1, let userError = error as? UserAPIError, userError.statusCode == 401 {
-                        return self.refreshAccessToken().flatMap { newAccessToken in
+                        return self.refreshAccessToken().flatMap {
+                            newAccessToken in
                             var newHeaders = headers
                             newHeaders["Authorization"] = newAccessToken
+                            LoggerService.shared.log("AcessToken 재발급 : \(newAccessToken)")
                             return self.performRequest(url: url, headers: newHeaders, retryCount: retryCount + 1)
                         }
                     } else {
+                        LoggerService.shared.log("AcessToken 재발급 실패", level: .error)
                         return Observable.error(error)
                     }
                 }
