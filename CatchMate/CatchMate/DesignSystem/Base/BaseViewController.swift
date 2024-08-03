@@ -21,6 +21,8 @@ class BaseViewController: UIViewController {
         setupCustomNavigationBar()
         setupbackButton()
         view.backgroundColor = .cmBackgroundColor
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -95,3 +97,5 @@ class BaseViewController: UIViewController {
         customNavigationBar.addLeftItems(items: [logoImageView])
     }
 }
+
+extension BaseViewController: UIGestureRecognizerDelegate { }
