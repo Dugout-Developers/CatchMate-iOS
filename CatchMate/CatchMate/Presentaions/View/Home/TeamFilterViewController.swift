@@ -166,6 +166,14 @@ extension TeamFilterViewController {
         tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
         
+        resetButton.rx.tap
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                reactor.action.onNext(.updateTeamFilter([]))
+                vc.dismiss(animated: true)
+            }
+            .disposed(by: disposeBag)
+        
         Observable.just(allTeams)
             .bind(to: tableView.rx.items(cellIdentifier: "TeamFilterTableViewCell", cellType: TeamFilterTableViewCell.self)) { row, team, cell in
                 let isSelected = reactor.currentState.selectedTeams.contains(team)

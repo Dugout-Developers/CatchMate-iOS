@@ -181,6 +181,14 @@ extension DateFilterViewController {
                 }
             })
             .disposed(by: disposeBag)
+        
+        resetButton.rx.tap
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                reactor.action.onNext(.updateDateFilter(nil))
+                vc.dismiss(animated: true)
+            }
+            .disposed(by: disposeBag)
         saveButton.rx.tap
             .withUnretained(self)
             .map { ( vc, _ ) -> Date? in
