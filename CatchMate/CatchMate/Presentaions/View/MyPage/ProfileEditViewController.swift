@@ -75,6 +75,7 @@ final class ProfileEditViewController: BaseViewController, View {
 extension ProfileEditViewController {
     func bind(reactor: ProfileEditReactor) {
         self.nicknameTextField.text = reactor.currentState.nickname
+        self.nicknameTextField.applyStyle(textStyle: FontSystem.body02_semiBold)
         self.nicknameCountLabel.text = "\(reactor.currentState.nickNameCount)/10"
         self.nicknameCountLabel.applyStyle(textStyle: FontSystem.body02_medium)
         
@@ -84,6 +85,7 @@ extension ProfileEditViewController {
             .map { vc, text in
                 let string = String(text.trimmingCharacters(in: .whitespaces).prefix(10))
                 vc.nicknameTextField.text = string
+                vc.nicknameTextField.applyStyle(textStyle: FontSystem.body02_semiBold)
                 return string
             }
             .map { Reactor.Action.changeNickname($0) }
@@ -94,6 +96,7 @@ extension ProfileEditViewController {
             .withUnretained(self)
             .subscribe { vc, nickname in
                 vc.nicknameTextField.text = nickname
+                vc.nicknameTextField.applyStyle(textStyle: FontSystem.body02_semiBold)
             }
             .disposed(by: disposeBag)
         
