@@ -6,7 +6,6 @@
 //
 
 final class UserMapper {
-    // MARK: - API 에 생일, 성별 없음
     func userToDomain(_ dto: UserDTO) -> User {
         let team = Team(rawValue: dto.favoriteGudan) ?? .allTeamLove
         let gender = Gender(serverValue: dto.gender) ?? .man

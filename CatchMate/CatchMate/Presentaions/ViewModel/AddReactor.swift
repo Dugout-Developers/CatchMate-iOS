@@ -61,13 +61,13 @@ final class AddReactor: Reactor {
         var addText: String = ""
         var partyNumber: Int?
         var saveButtonState: Bool = false
-        var post: Post?
     }
     
     var initialState: State
-    
-    init() {
+    private let addUsecase: AddPostUseCase
+    init(addUsecase: AddPostUseCase) {
         self.initialState = State()
+        self.addUsecase = addUsecase
     }
     
     func mutate(action: Action) -> Observable<Mutation> {

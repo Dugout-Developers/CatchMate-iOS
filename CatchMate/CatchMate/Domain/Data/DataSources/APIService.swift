@@ -46,46 +46,9 @@ enum Endpoint: String {
         }
     }
 }
-enum APIServiceError: LocalizedError {
-    case notFoundURL
-    case serverError(code: Int, description: String)
-    case decodingError
-    case notFoundAccessTokenInKeyChain
-    case notFoundRefreshTokenInKeyChain
-    
-    var statusCode: Int {
-        switch self {
-        case .notFoundURL:
-            return -1001
-        case .serverError(let code, _):
-            return code
-        case .decodingError:
-            return -1002
-        case .notFoundAccessTokenInKeyChain:
-            return -1003
-        case .notFoundRefreshTokenInKeyChain:
-            return -1004
-        }
-    }
-    
-    var errorDescription: String? {
-        switch self {
-        case .notFoundURL:
-            return "서버 URL을 찾을 수 없습니다."
-        case .serverError(_, let message):
-            return "서버 에러: \(message)"
-        case .decodingError:
-            return "데이터 디코딩 에러"
-        case .notFoundAccessTokenInKeyChain:
-            return "키체인에서 엑세스 토큰을 가져올 수 없음"
-        case .notFoundRefreshTokenInKeyChain:
-            return "키체인에서 리프레시 토큰을 가져올 수 없음"
-        }
-    }
-}
 
 final class APIService {
-    static var apiService = APIService()
+    static var shared = APIService()
     
     private var baseURL = Bundle.main.baseURL
     private let disposeBag = DisposeBag()
@@ -94,7 +57,7 @@ final class APIService {
         LoggerService.shared.debugLog("APIService: - Get Request: \(type.rawValue)")
         guard let base = baseURL else {
             LoggerService.shared.log("base 찾기 실패", level: .error)
-            return Observable.error(APIServiceError.notFoundURL)
+            return Observable.error(NetworkError.notFoundBaseURL)
         }
         let url = base + type.rawValue
         
@@ -102,7 +65,12 @@ final class APIService {
             .flatMap { (response, data) -> Observable<T> in
                 guard 200..<300 ~= response.statusCode else {
                     LoggerService.shared.debugLog("\(type.apiName) Error : \(response.statusCode) \(response.debugDescription)")
-                    return Observable.error(APIServiceError.serverError(code: response.statusCode, description: "서버에러 발생"))
+                    if 400..<500 ~= response.statusCode {
+                        return Observable.error(NetworkError.clientError(statusCode: response.statusCode))
+                    } else if 500..<600 ~= response.statusCode {
+                        return Observable.error(NetworkError.serverError(statusCode: response.statusCode))
+                    }
+                    return Observable.error(NetworkError.unownedError(statusCode: response.statusCode))
                 }
                 
                 do {
@@ -116,7 +84,7 @@ final class APIService {
                     } else {
                         LoggerService.shared.debugLog("Decoding Error: Json String 변환 불가")
                     }
-                    return Observable.error(APIServiceError.decodingError)
+                    return Observable.error(CodableError.decodingFailed)
                 }
             }
     }
@@ -125,11 +93,11 @@ final class APIService {
         LoggerService.shared.debugLog("토큰 재발급 시작")
         guard let base = Bundle.main.baseURL else {
             LoggerService.shared.log("base 찾기 실패", level: .error)
-            return Observable.error(APIServiceError.notFoundURL)
+            return Observable.error(NetworkError.notFoundBaseURL)
         }
         guard let token = KeychainService.getToken(for: .refreshToken) else {
-            LoggerService.shared.log("\(APIServiceError.notFoundRefreshTokenInKeyChain.errorDescription!)", level: .error)
-            return Observable.error(APIServiceError.notFoundRefreshTokenInKeyChain)
+            LoggerService.shared.log("\(TokenError.notFoundRefreshToken.errorDescription!)", level: .error)
+            return Observable.error(TokenError.notFoundRefreshToken)
         }
         let url = base + "/auth/reissue"
         let headers: HTTPHeaders = [
@@ -145,12 +113,19 @@ final class APIService {
                         LoggerService.shared.debugLog("토큰 재발급 성공: \(refreshResponse.accessToken)")
                         return Observable.just(refreshResponse.accessToken)
                     } catch {
-                        LoggerService.shared.log("APIService - 토큰 재발급 : \(APIServiceError.decodingError.errorDescription!)", level: .error)
-                        return Observable.error(APIServiceError.decodingError)
+                        LoggerService.shared.log("APIService - 토큰 재발급 : \(CodableError.decodingFailed.errorDescription!)", level: .error)
+                        return Observable.error(CodableError.decodingFailed)
                     }
                 } else {
                     LoggerService.shared.log("APIService - 토큰 재발급( 서버 에러 ): \(response.debugDescription)", level: .error)
-                    return Observable.error(APIServiceError.serverError(code:  response.statusCode, description: "토큰 재발급 실패 - 서버에러"))
+                    switch response.statusCode {
+                    case 400..<500:
+                        return Observable.error(NetworkError.clientError(statusCode: response.statusCode))
+                    case 500..<600:
+                        return Observable.error(NetworkError.serverError(statusCode: response.statusCode))
+                    default:
+                        return Observable.error(NetworkError.unownedError(statusCode: response.statusCode))
+                    }
                 }
             }
     }
