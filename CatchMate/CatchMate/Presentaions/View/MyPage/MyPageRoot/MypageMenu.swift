@@ -59,7 +59,7 @@ enum MypageMenu: String {
                     return Observable.error(PresentationError.unauthorized(message: "계정 정보를 찾을 수 없습니다. 다시 로그인해주세요."))
                 }
         case .noti:
-            return Observable.just(UIViewController())
+            return Observable.just(NotificationSettingViewController(reactor: NotificationSettingReactor()))
         }
     }
 }

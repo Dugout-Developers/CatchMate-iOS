@@ -40,6 +40,7 @@ final class LoginUserDefaultsService {
     static let shared = LoginUserDefaultsService()
     
     func saveLoginData(email: String, loginType: LoginType) {
+        LoggerService.shared.log("UserData 저장: \(email), \(loginType.rawValue)")
         UserDefaults.standard.setValue(email, forKey: LoginUserDataKeys.email.rawValue)
         switch loginType {
         case .kakao:
@@ -52,6 +53,7 @@ final class LoginUserDefaultsService {
     }
     
     func deleteLoginData() {
+        LoggerService.shared.log("UserData 삭제")
         UserDefaults.standard.removeObject(forKey: LoginUserDataKeys.email.rawValue)
         UserDefaults.standard.removeObject(forKey: LoginUserDataKeys.loginTypeImage.rawValue)
     }

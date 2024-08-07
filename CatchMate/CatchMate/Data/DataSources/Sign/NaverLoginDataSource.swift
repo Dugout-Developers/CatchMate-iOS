@@ -101,6 +101,7 @@ final class NaverLoginDataSourceImpl: NSObject, NaverLoginDataSource, NaverThird
                 if let nickname = response["nickname"] as? String {
                     let model = SNSLoginResponse(id: id, email: email, loginType: .naver, birth: birthResult, nickName: nickname, gender: gender, image: response["profile_image"] as? String)
                     LoggerService.shared.log("NAVER Response: \(model)")
+                    LoginUserDefaultsService.shared.saveLoginData(email: model.email, loginType: .naver)
                     return Observable.just(model)
                 }
                 let model = SNSLoginResponse(id: id, email: email, loginType: .naver, birth: birthResult, gender: gender, image: response["profile_image"] as? String)
