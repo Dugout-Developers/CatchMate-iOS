@@ -42,6 +42,14 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
     
     private func setupNavigation() {
         setupLeftTitle("내 정보")
+        let settingButton = UIButton()
+        settingButton.setImage(UIImage(named: "setting")?.withTintColor(.grayScale700, renderingMode: .alwaysOriginal), for: .normal)
+        settingButton.addTarget(self, action: #selector(clickSettingButton), for: .touchUpInside)
+        customNavigationBar.addRightItems(items: [settingButton])
+    }
+    @objc private func clickSettingButton(_ sender: UIButton) {
+        let settingVC = SettingViewController()
+        navigationController?.pushViewController(settingVC, animated: true)
     }
     
     private func setupTableView() {
@@ -166,6 +174,7 @@ extension MyPageViewController {
                 if result {
                     _ = KeychainService.deleteToken(for: .accessToken)
                     _ = KeychainService.deleteToken(for: .refreshToken)
+                    LoginUserDefaultsService.shared.deleteLoginData()
                     let reactor = DIContainerService.shared.makeAuthReactor()
                     (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(SignInViewController(reactor: reactor), animated: true)
                 }

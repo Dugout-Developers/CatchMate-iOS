@@ -18,7 +18,6 @@ protocol NaverLoginDataSource {
 enum NaverLoginError: LocalizedError {
     case NotFountToken
     case serverError(code: Int, description: String)
-    case decodingError
     case EmptyValue
 
     var statusCode: Int {
@@ -27,8 +26,6 @@ enum NaverLoginError: LocalizedError {
             return -1001
         case .serverError(let code, _):
             return code
-        case .decodingError:
-            return -1002
         case .EmptyValue:
             return -1003
         }
@@ -40,8 +37,6 @@ enum NaverLoginError: LocalizedError {
             return "토큰이 없습니다."
         case .serverError(_, let message):
             return "서버 에러: \(message)"
-        case .decodingError:
-            return "데이터 디코딩 에러"
         case .EmptyValue:
             return "빈 응답값 전달"
         }
@@ -83,8 +78,8 @@ final class NaverLoginDataSourceImpl: NSObject, NaverLoginDataSource, NaverThird
         return RxAlamofire.requestJSON(.get, url, headers: headers)
             .flatMap { (response, json) -> Observable<SNSLoginResponse> in
                 guard let json = json as? [String: Any], let response = json["response"] as? [String: Any] else {
-                    LoggerService.shared.log("NaverLoginError: \(NaverLoginError.decodingError.statusCode) - 디코딩 에러", level: .error)
-                    return Observable.error(NaverLoginError.decodingError)
+                    LoggerService.shared.log("NaverLoginError: 네이버 로그인 response - 디코딩 에러", level: .error)
+                    return Observable.error(CodableError.decodingFailed)
                 }
                 LoggerService.shared.log("\(json)\n response: \(response)")
                 guard let id = response["id"] as? String else {
@@ -110,6 +105,7 @@ final class NaverLoginDataSourceImpl: NSObject, NaverLoginDataSource, NaverThird
                 }
                 let model = SNSLoginResponse(id: id, email: email, loginType: .naver, birth: birthResult, gender: gender, image: response["profile_image"] as? String)
                 LoggerService.shared.log("NAVER Response: \(model)")
+                LoginUserDefaultsService.shared.saveLoginData(email: model.email, loginType: .naver)
                 return Observable.just(model)
             }
     }

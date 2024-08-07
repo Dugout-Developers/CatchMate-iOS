@@ -17,7 +17,7 @@ final class MyPageProfileCell: UITableViewCell {
     private let profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.layer.borderWidth = 1
         imageView.layer.borderColor = UIColor.cmStrokeColor.cgColor
         return imageView

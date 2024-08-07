@@ -66,8 +66,8 @@ final class AppleLoginDataSourceImpl: NSObject, AppleLoginDataSource,  ASAuthori
             let response = SNSLoginResponse(id: userId, email: email, loginType: .apple)
             LoggerService.shared.log("APPLE Login Response : \(response)")
             AppleLoginUserDefaultsService.shared.setTempStorage(type: .apple, id: response.id, email: response.email)
+            LoginUserDefaultsService.shared.saveLoginData(email: response.email, loginType: .apple)
             loginSubject.onNext(response)
-            loginSubject.onCompleted()
         } else {
             if let loginData = AppleLoginUserDefaultsService.shared.getLoginData() {
                 if loginData.email.isEmpty {
@@ -76,8 +76,8 @@ final class AppleLoginDataSourceImpl: NSObject, AppleLoginDataSource,  ASAuthori
                 }
                 let response = SNSLoginResponse(id: loginData.id, email: loginData.email, loginType: .apple)
                 LoggerService.shared.log("APPLE Login Response(User Defaults) : \(response)")
+                LoginUserDefaultsService.shared.saveLoginData(email: response.email, loginType: .apple)
                 loginSubject.onNext(response)
-                loginSubject.onCompleted()
             } else {
                 LoggerService.shared.log("\(AppleLoginError.errorType) : \(AppleLoginError.authorizationFailed.statusCode) - \(AppleLoginError.authorizationFailed.errorDescription ?? "인증 실패")", level: .error)
                 loginSubject.onError(AppleLoginError.authorizationFailed)

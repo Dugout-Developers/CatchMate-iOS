@@ -23,14 +23,26 @@ class SNSLoginRepositoryImpl: SNSLoginRepository {
 
     func kakaoLogin() -> RxSwift.Observable<SNSLoginResponse> {
         return kakaoLoginDS.getKakaoLoginToken()
+            .catch { error in
+                LoginUserDefaultsService.shared.deleteLoginData()
+                return Observable.error(ErrorMapper.mapToPresentationError(error))
+            }
     }
     
     func appleLogin() -> RxSwift.Observable<SNSLoginResponse> {
         return appleLoginDS.getAppleLoginToken()
+            .catch { error in
+                LoginUserDefaultsService.shared.deleteLoginData()
+                return Observable.error(ErrorMapper.mapToPresentationError(error))
+            }
     }
     
     func naverLogin() -> RxSwift.Observable<SNSLoginResponse> {
         return naverLoginDS.getNaverLoginToken()
+            .catch { error in
+                LoginUserDefaultsService.shared.deleteLoginData()
+                return Observable.error(ErrorMapper.mapToPresentationError(error))
+            }
     }
     
 }

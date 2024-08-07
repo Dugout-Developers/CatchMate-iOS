@@ -14,37 +14,6 @@ import Alamofire
 protocol ServerLoginDataSource {
     func postLoginRequest(_ loginResponse: SNSLoginResponse, _ token: String) -> Observable<LoginModel>
 }
-enum ServerLoginError: LocalizedError {
-    case notFountURL
-    case serverError(code: Int, description: String)
-    case decodingError
-    
-    
-    var statusCode: Int {
-        switch self {
-        case .notFountURL:
-            return -1001
-        case .serverError(let code, _):
-            return code
-        case .decodingError:
-            return -1002
-            
-        }
-    }
-    
-    var errorDescription: String? {
-        switch self {
-        case .notFountURL:
-            return "서버 URL을 찾을 수 없습니다."
-        case .serverError(_, let message):
-            return "서버 에러: \(message)"
-        case .decodingError:
-            return "데이터 디코딩 에러"
-            
-            
-        }
-    }
-}
 
 final class ServerLoginDataSourceImpl: ServerLoginDataSource {
     init() {}
@@ -52,7 +21,7 @@ final class ServerLoginDataSourceImpl: ServerLoginDataSource {
     func postLoginRequest(_ loginResponse: SNSLoginResponse, _ token: String) -> Observable<LoginModel> {
         LoggerService.shared.debugLog("-----------------Servser Request Login-------------------")
         guard let baseUrl = Bundle.main.baseURL else {
-            return Observable.error(ServerLoginError.notFountURL)
+            return Observable.error(NetworkError.notFoundBaseURL)
         }
         let url = "\(baseUrl)/auth/login"
         LoggerService.shared.log("\(url) post 요청")
@@ -74,15 +43,21 @@ final class ServerLoginDataSourceImpl: ServerLoginDataSource {
                        let errorMessage = errorData["errorMessage"] as? String {
                         print(errorMessage)
                     }
-                    return Observable.error(ServerLoginError.serverError(code: response.statusCode, description: "서버에러 발생"))
+                    if 400..<500 ~= response.statusCode {
+                        return Observable.error(NetworkError.clientError(statusCode: response.statusCode))
+                    } else if 500..<600 ~= response.statusCode {
+                        return Observable.error(NetworkError.serverError(statusCode: response.statusCode))
+                    } else {
+                        return Observable.error(NetworkError.unownedError(statusCode: response.statusCode))
+                    }
                 }
                 do {
                     let loginResponse = try JSONDecoder().decode(LoginResponse.self, from: data)
                     LoggerService.shared.debugLog("Server Login Response: \(loginResponse)")
                     return Observable.just(loginResponse)
                 } catch {
-                    LoggerService.shared.log("\(ServerLoginError.errorType): - \(ServerLoginError.decodingError.errorDescription ?? "디코딩 에러")", level: .error)
-                    return Observable.error(ServerLoginError.decodingError)
+                    LoggerService.shared.log("ServerLogin Response Decoding 실패: - \(CodableError.decodingFailed.errorDescription ?? "디코딩 에러")", level: .error)
+                    return Observable.error(CodableError.decodingFailed)
                 }
             }
             .flatMap { response -> Observable<LoginModel> in

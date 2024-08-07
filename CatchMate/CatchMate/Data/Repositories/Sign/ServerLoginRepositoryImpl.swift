@@ -17,6 +17,9 @@ final class ServerLoginRepositoryImpl: ServerLoginRepository {
     }
     func login(snsModel: SNSLoginResponse, token: String) -> RxSwift.Observable<LoginModel> {
         return serverLoginDS.postLoginRequest(snsModel, token)
+            .catch { error in
+                return Observable.error(ErrorMapper.mapToPresentationError(error))
+            }
     }
 
 }

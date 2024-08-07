@@ -113,8 +113,8 @@ final class KakaoDataSourceImpl: NSObject, KakaoDataSource {
                 
                 let response = SNSLoginResponse(id: "\(id)", email: email, loginType: .kakao, birth: nil, nickName: nickName, gender: nil, image: imageUrl)
                 LoggerService.shared.log("KakaoLogin Response : \(response)")
+                LoginUserDefaultsService.shared.saveLoginData(email: response.email, loginType: .kakao)
                 observer.onNext(response)
-                observer.onCompleted()
             }
         }
         
