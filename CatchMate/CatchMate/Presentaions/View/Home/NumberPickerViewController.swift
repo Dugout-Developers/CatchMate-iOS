@@ -105,7 +105,22 @@ extension NumberPickerViewController {
     }
     
     func bind(reactor: AddReactor) {
+        reactor.state.map{$0.partyNumber}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe(onNext: { vc, number in
+                vc.selectedNum = number
+                vc.picker.selectRow(number-1, inComponent: 0, animated: false)
+            })
+            .disposed(by: disposeBag)
         
+        saveButton.rx.tap
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                reactor.action.onNext(.changePartyNumber(vc.selectedNum))
+                vc.dismiss(animated: true)
+            }
+            .disposed(by: disposeBag)
     }
 }
 // MARK: - Picker

@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum CheerStyles: String, CaseIterable {
+enum CheerStyles: String, CaseIterable, Codable {
     case director = "감독"
     case mom = "어미새"
     case cheerleader = "응원단장"

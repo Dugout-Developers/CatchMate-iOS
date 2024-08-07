@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct User: Equatable {
+struct User: Codable, Equatable {
     var id: String
     let email: String
     let nickName: String
@@ -34,7 +34,7 @@ struct User: Equatable {
     }
 }
 
-enum Gender: String {
+enum Gender: String, Codable {
     case woman = "여성"
     case man = "남성"
     

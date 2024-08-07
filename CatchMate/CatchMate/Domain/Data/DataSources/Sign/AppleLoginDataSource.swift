@@ -65,11 +65,11 @@ final class AppleLoginDataSourceImpl: NSObject, AppleLoginDataSource,  ASAuthori
             let userId = appleIDCredential.user
             let response = SNSLoginResponse(id: userId, email: email, loginType: .apple)
             LoggerService.shared.log("APPLE Login Response : \(response)")
-            LoginUserDefaultsService.shared.setTempStorage(type: .apple, id: response.id, email: response.email)
+            AppleLoginUserDefaultsService.shared.setTempStorage(type: .apple, id: response.id, email: response.email)
             loginSubject.onNext(response)
             loginSubject.onCompleted()
         } else {
-            if let loginData = LoginUserDefaultsService.shared.getLoginData() {
+            if let loginData = AppleLoginUserDefaultsService.shared.getLoginData() {
                 if loginData.email.isEmpty {
                     LoggerService.shared.log("\(AppleLoginError.errorType) : \(AppleLoginError.EmptyValue.statusCode) - 이메일 없음", level: .error)
                     loginSubject.onError(AppleLoginError.EmptyValue)

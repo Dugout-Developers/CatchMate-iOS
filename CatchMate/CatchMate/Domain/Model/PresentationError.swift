@@ -24,8 +24,6 @@ enum PresentationError: LocalizedError {
              .informational(let message),
              .validationFailed(let message),
              .unauthorized(let message),
-             .forbidden(let message),
-             .notFound(let message),
              .timeout(let message):
             return message
         }

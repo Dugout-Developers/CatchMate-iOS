@@ -10,30 +10,12 @@ import RxSwift
 import RxAlamofire
 import Alamofire
 
-/*
- 요청 Post
- {
-   "title": "string",
-   "gameDate": "2024-08-06T11:38:53.235Z",
-   "location": "string",
-   "homeTeam": "string",
-   "awayTeam": "string",
-   "currentPerson": 0,
-   "maxPerson": 0,
-   "preferGender": "string",
-   "preferAge": 0,
-   "addInfo": "string",
-   "writeDate": "2024-08-06T11:38:53.235Z"
- }
- 리스폰
- 200 {}
- */
 protocol AddPostDataSource {
-    func addPost(_ post: PostRequset) -> Observable<Void>
+    func addPost(_ post: PostRequsetDTO) -> Observable<Void>
 }
 final class AddPostDataSourceImpl: AddPostDataSource {
     private var isRefreshingToken = false
-    func addPost(_ post: PostRequset) -> Observable<Void> {
+    func addPost(_ post: PostRequsetDTO) -> Observable<Void> {
         let encoder = JSONEncoder()
         guard let token = KeychainService.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
@@ -42,9 +24,11 @@ final class AddPostDataSourceImpl: AddPostDataSource {
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
+        LoggerService.shared.log("토큰 확인: \(headers)")
         
         do {
             let jsonData = try encoder.encode(post)
+            encoder.dateEncodingStrategy = .iso8601
             let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: [])
             if let jsonDictionary = jsonObject as? [String: Any] {
                 return APIService.shared.requestAPI(type: .savePost, parameters: jsonDictionary, headers: headers, encoding: JSONEncoding.default, dataType: VoidResponse.self)
@@ -62,8 +46,12 @@ final class AddPostDataSourceImpl: AddPostDataSource {
                                 }
                         }
                         LoggerService.shared.log("Post DATASOURCE 저장 실패: ", level: .error)
+                        LoggerService.shared.log("JSON Data: \(String(data: jsonData, encoding: .utf8) ?? "") \n headers: \(headers)", level: .error)
                         return Observable.error(error)
                     }
+            } else {
+                LoggerService.shared.log("AddPostDataSource: PostRequset 인코딩 실패", level: .error)
+                return Observable.error(CodableError.encodingFailed)
             }
         } catch {
             LoggerService.shared.log("AddPostDataSource: PostRequset 인코딩 실패", level: .error)
@@ -75,7 +63,6 @@ final class AddPostDataSourceImpl: AddPostDataSource {
            return APIService.shared.refreshAccessToken()
                .flatMap { newToken in
                    KeychainService.saveToken(token: newToken, for: .accessToken)
-                   self.isRefreshingToken = false  // 토큰 갱신 성공 후 플래그 초기화
                    return Observable.just(Void())
                }
                .catch { error in

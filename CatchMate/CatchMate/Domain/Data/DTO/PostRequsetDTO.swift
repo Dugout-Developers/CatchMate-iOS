@@ -6,11 +6,12 @@
 //
 import Foundation
 
-struct PostRequset: Codable {
+struct PostRequsetDTO: Codable {
     let title, gameDate, location, homeTeam: String
     let awayTeam: String
     let currentPerson, maxPerson: Int
     let preferGender: String
     let preferAge: Int
-    let addInfo, writeDate: String
+    let addInfo: String?
+//    let writeDate: String
 }

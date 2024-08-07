@@ -202,7 +202,6 @@ final class AddViewController: BaseViewController, View {
     
     private func setupView() {
         view.backgroundColor = .white
-        registerButton.addTarget(self, action: #selector(clickRegisterButton), for: .touchUpInside)
     }
     
     private func setupNavigationBar() {
@@ -227,6 +226,33 @@ extension AddViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
+        registerButton.rx.tap
+            .map{Reactor.Action.updatePost}
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        titleTextField.rx.text.orEmpty
+            .map { Reactor.Action.changeTitle($0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        textview.rx.text.orEmpty
+            .map { Reactor.Action.changeAddText($0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.isSavePost}
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .subscribe { vc, state in
+                if state {
+                    LoggerService.shared.debugLog("게시글 저장 완료")
+                    vc.navigationController?.popViewController(animated: true)
+                }
+            }
+            .disposed(by: disposeBag)
+//        reactor.state.map{$0.error}
+//            .compactMap{$0}
+//            .
         reactor.state.map{$0.dateInfoString}
             .observe(on: MainScheduler.asyncInstance)
             .withUnretained(self)
@@ -269,6 +295,14 @@ extension AddViewController {
                 }
             }
             .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.partyNumber}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, num in
+                vc.numberPickerTextField.didSelectItem(String(num))
+            }
+            .disposed(by: disposeBag)
     }
 }
 // MARK: - Button
@@ -288,12 +322,7 @@ extension AddViewController {
             })
         }
     }
-    
-    @objc
-    func clickRegisterButton(_ sender: UIButton) {
-        navigationController?.popViewController(animated: true)
-        print("등록")
-    }
+
     private func setupGenderButton() {
         let tapGesture1 = UITapGestureRecognizer(target: self, action: #selector(clickGenderButton))
         let tapGesture2 = UITapGestureRecognizer(target: self, action: #selector(clickGenderButton))

@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum Team: String, CaseIterable {
+enum Team: String, CaseIterable, Codable {
     case nc = "다이노스"
     case samsung = "라이온즈"
     case ssg = "랜더스"

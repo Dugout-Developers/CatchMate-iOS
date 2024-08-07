@@ -9,7 +9,6 @@ import UIKit
 
 struct RequestPost {
     let title: String
-    let writer: User
     let homeTeam: Team
     let awayTeam: Team
     let date: String

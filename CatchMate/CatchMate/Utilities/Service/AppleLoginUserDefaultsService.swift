@@ -8,8 +8,8 @@
 import Foundation
 
 /// LOGIN 정보 임시 저장 서비스 파일
-final class LoginUserDefaultsService {
-    static let shared = LoginUserDefaultsService()
+final class AppleLoginUserDefaultsService {
+    static let shared = AppleLoginUserDefaultsService()
    
     /// 로그인 정보 가져올 시 임시데이터 세팅
     func setTempStorage(type: LoginType, id: String, email: String) {
@@ -39,7 +39,7 @@ final class LoginUserDefaultsService {
     }
 }
 
-extension LoginUserDefaultsService {
+extension AppleLoginUserDefaultsService {
     struct LoginData {
         let type: LoginType
         let id: String

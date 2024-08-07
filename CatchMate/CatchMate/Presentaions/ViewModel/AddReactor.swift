@@ -45,6 +45,7 @@ final class AddReactor: Reactor {
         case updateSaveButton
         case updatePlcase(String)
         case updatePost
+        case setError(PresentationError)
     }
     struct State {
         // View의 state를 관리한다.
@@ -61,6 +62,8 @@ final class AddReactor: Reactor {
         var addText: String = ""
         var partyNumber: Int?
         var saveButtonState: Bool = false
+        var isSavePost: Bool = false
+        var error: PresentationError?
     }
     
     var initialState: State
@@ -115,7 +118,19 @@ final class AddReactor: Reactor {
                 Observable.just(Mutation.updateSaveButton)
             ])
         case .updatePost:
-            return Observable.just(Mutation.updatePost)
+            guard let request = validatePost(currentState) else {
+                print(currentState)
+                return Observable.just(Mutation.setError(.validationFailed(message: "입력값 확인 후 다시 시도해주세요.")))
+            }
+            return addUsecase.addPost(request)
+                .map{ Mutation.updatePost }
+                .catch { error in
+                    if let presentationError = error as? PresentationError {
+                        return Observable.just(Mutation.setError(presentationError))
+                    } else {
+                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
         case .changeTitle(let title):
             return Observable.concat([
                 Observable.just(Mutation.updateTitle(title)),
@@ -157,8 +172,7 @@ final class AddReactor: Reactor {
         case .updatePartyNumber(let num):
             newState.partyNumber = num
         case .updatePost:
-            // TODO: - UseCase upload 시스템 서버 연결
-            break
+            newState.isSavePost = true
         case .updateSaveButton:
             if newState.selecteDate != nil , newState.selecteTime != nil , newState.homeTeam != nil, newState.awayTeam != nil, newState.place != nil, newState.addText.trimmingCharacters(in: .whitespaces).isEmpty, newState.title.trimmingCharacters(in: .whitespaces).isEmpty {
                 newState.saveButtonState = true
@@ -169,8 +183,16 @@ final class AddReactor: Reactor {
             newState.title = title
         case .updatePlcase(let place):
             newState.place = place
+        case .setError(let error):
+            newState.error = error
         }
         return newState
     }
-
+    private func validatePost(_ state: State) -> RequestPost? {
+        if let homeTeam = state.homeTeam, let awayTeam = state.awayTeam, let place = state.place, let maxNum = state.partyNumber, let date = state.selecteDate, let time = state.selecteTime,
+           !place.isEmpty, !state.title.isEmpty {
+            return RequestPost(title: state.title, homeTeam: homeTeam, awayTeam: awayTeam, date: DateHelper.shared.toString(from: date, format: "M월d일 EEEE"), playTime: time.rawValue, location: place, maxPerson: maxNum, preferGender: state.selectedGender, preferAge: state.selectedAge, addInfo: state.addText)
+        }
+        return nil
+    }
 }

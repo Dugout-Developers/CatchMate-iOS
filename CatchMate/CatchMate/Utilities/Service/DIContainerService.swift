@@ -44,6 +44,13 @@ class DIContainerService {
         return SignUpReactor(signUpModel: model, signupUseCase: usecase)
     }
     
+    func makeAddReactor() -> AddReactor {
+        let addDataSource = AddPostDataSourceImpl()
+        let addRepository = AddPostRepositoryImpl(addPostDS: addDataSource)
+        let addUsecase = AddPostUseCaseImpl(addPostRepository: addRepository)
+        return AddReactor(addUsecase: addUsecase)
+    }
+    
     func makeMypageReactor() -> MyPageReactor {
         let userDataSource = UserDataSourceImpl()
         let logoutDataSource = LogoutDataSourceImpl()

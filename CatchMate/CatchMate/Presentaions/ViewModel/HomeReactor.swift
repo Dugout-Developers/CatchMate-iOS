@@ -19,8 +19,6 @@ final class HomeReactor: Reactor {
         case selectPost(Post?)
     }
     enum Mutation {
-        // Action과 State 사이의 다리역할이다.
-        // action stream을 변환하여 state에 전달한다.
         case loadPost([Post])
         case setDateFilter(Date?)
         case setSelectedTeams([Team])
@@ -65,11 +63,12 @@ final class HomeReactor: Reactor {
             return Observable.just(Mutation.setSelectedTeams(teams))
         case .willAppear:
             return Observable.just(Mutation.loadPost(Post.dummyPostData))
-
+            
         case .selectPost(let post):
             return Observable.just(Mutation.setSelectedPost(post))
         }
     }
+    
     
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
@@ -83,7 +82,7 @@ final class HomeReactor: Reactor {
             if let savedAccessToken = KeychainService.getToken(for: .accessToken) {
                 LoggerService.shared.debugLog("GetKeyChain Access Token: \(savedAccessToken)")
             }
-
+            
             if let savedRefreshToken = KeychainService.getToken(for: .refreshToken) {
                 LoggerService.shared.debugLog("GetKeyChain Refresh Token: \(savedRefreshToken)")
             }
