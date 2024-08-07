@@ -90,6 +90,11 @@
 		534E39D62C6352EE006D180E /* AuthInfoSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39D52C6352EE006D180E /* AuthInfoSettingViewController.swift */; };
 		534E39D82C637FD3006D180E /* NotificationSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39D72C637FD3006D180E /* NotificationSettingViewController.swift */; };
 		534E39DA2C63BA26006D180E /* NotificationSettingReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39D92C63BA26006D180E /* NotificationSettingReactor.swift */; };
+		534E39DC2C63CE78006D180E /* AnnouncementsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39DB2C63CE78006D180E /* AnnouncementsViewController.swift */; };
+		534E39DF2C63CF65006D180E /* Announcements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39DE2C63CF65006D180E /* Announcements.swift */; };
+		534E39E12C63D10B006D180E /* AnnouncementsListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39E02C63D10B006D180E /* AnnouncementsListCell.swift */; };
+		534E39E32C63D392006D180E /* AnnouncementsReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39E22C63D392006D180E /* AnnouncementsReactor.swift */; };
+		534E39E52C63D5AE006D180E /* AnnouncementDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39E42C63D5AE006D180E /* AnnouncementDetailViewController.swift */; };
 		536548A32C3EF3B700C2309A /* FavoriteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536548A22C3EF3B700C2309A /* FavoriteListViewController.swift */; };
 		536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAD2C189B230043B1DA /* AppDelegate.swift */; };
 		536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAF2C189B230043B1DA /* SceneDelegate.swift */; };
@@ -281,6 +286,11 @@
 		534E39D52C6352EE006D180E /* AuthInfoSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthInfoSettingViewController.swift; sourceTree = "<group>"; };
 		534E39D72C637FD3006D180E /* NotificationSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingViewController.swift; sourceTree = "<group>"; };
 		534E39D92C63BA26006D180E /* NotificationSettingReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingReactor.swift; sourceTree = "<group>"; };
+		534E39DB2C63CE78006D180E /* AnnouncementsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementsViewController.swift; sourceTree = "<group>"; };
+		534E39DE2C63CF65006D180E /* Announcements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Announcements.swift; sourceTree = "<group>"; };
+		534E39E02C63D10B006D180E /* AnnouncementsListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementsListCell.swift; sourceTree = "<group>"; };
+		534E39E22C63D392006D180E /* AnnouncementsReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementsReactor.swift; sourceTree = "<group>"; };
+		534E39E42C63D5AE006D180E /* AnnouncementDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementDetailViewController.swift; sourceTree = "<group>"; };
 		536548A22C3EF3B700C2309A /* FavoriteListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteListViewController.swift; sourceTree = "<group>"; };
 		536BDDAA2C189B230043B1DA /* CatchMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CatchMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		536BDDAD2C189B230043B1DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -420,6 +430,7 @@
 				534E39CE2C63422E006D180E /* MyPageRoot */,
 				534E39CF2C63423F006D180E /* ProfileEdit */,
 				534E39D42C6352DC006D180E /* Setting */,
+				534E39DD2C63CF45006D180E /* Supports */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -579,6 +590,16 @@
 			path = Setting;
 			sourceTree = "<group>";
 		};
+		534E39DD2C63CF45006D180E /* Supports */ = {
+			isa = PBXGroup;
+			children = (
+				534E39DB2C63CE78006D180E /* AnnouncementsViewController.swift */,
+				534E39E02C63D10B006D180E /* AnnouncementsListCell.swift */,
+				534E39E42C63D5AE006D180E /* AnnouncementDetailViewController.swift */,
+			);
+			path = Supports;
+			sourceTree = "<group>";
+		};
 		536BDDA12C189B230043B1DA = {
 			isa = PBXGroup;
 			children = (
@@ -722,6 +743,7 @@
 				5301E2B72C5BECBB0078E910 /* MyPageReactor.swift */,
 				53B8E2432C5D2436001D0ADF /* ProfileEditReactor.swift */,
 				534E39D92C63BA26006D180E /* NotificationSettingReactor.swift */,
+				534E39E22C63D392006D180E /* AnnouncementsReactor.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -749,6 +771,7 @@
 				53E4A9BD2C50046E00D21B49 /* SignUpModel.swift */,
 				531288CC2C5408FF000C2FB1 /* LoginModel.swift */,
 				53B8E2642C61280D001D0ADF /* RequestPost.swift */,
+				534E39DE2C63CF65006D180E /* Announcements.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1147,6 +1170,8 @@
 				53716BD82C4564700044AD2A /* DefaultsPaddingLabel.swift in Sources */,
 				534E39DA2C63BA26006D180E /* NotificationSettingReactor.swift in Sources */,
 				536BDDF92C1972880043B1DA /* LoginMapper.swift in Sources */,
+				534E39DF2C63CF65006D180E /* Announcements.swift in Sources */,
+				534E39E52C63D5AE006D180E /* AnnouncementDetailViewController.swift in Sources */,
 				531786782C20498800ACEF6A /* Post.swift in Sources */,
 				533A2B2C2C29485E00A59340 /* SignUpViewController.swift in Sources */,
 				53241F4E2C3EE58E00F468E1 /* CMPopupViewController.swift in Sources */,
@@ -1154,6 +1179,7 @@
 				536BDE2D2C1B55080043B1DA /* AddViewController.swift in Sources */,
 				533183DB2C51E87E0097F3F1 /* ChatRoomReactor.swift in Sources */,
 				53E4A9C22C500A4400D21B49 /* SignUpRepositoryImpl.swift in Sources */,
+				534E39DC2C63CE78006D180E /* AnnouncementsViewController.swift in Sources */,
 				5301E2B62C5BE6AF0078E910 /* LogoutUseCase.swift in Sources */,
 				537598082C46C3D2003BD8AE /* DefaultsTextView.swift in Sources */,
 				533A2B462C2C638100A59340 /* KakaoLoginUseCase.swift in Sources */,
@@ -1222,6 +1248,7 @@
 				536BDE272C1B53150043B1DA /* UIColor+Extension.swift in Sources */,
 				53B8E2612C61229A001D0ADF /* AddPostRepositoryImpl.swift in Sources */,
 				536BDE382C1C07990043B1DA /* PaddingLabel.swift in Sources */,
+				534E39E32C63D392006D180E /* AnnouncementsReactor.swift in Sources */,
 				53716BC42C42B72F0044AD2A /* CMNavigationBar.swift in Sources */,
 				533A2B232C27FF6A00A59340 /* CMTextView.swift in Sources */,
 				536BDE2B2C1B54C80043B1DA /* ChatListViewController.swift in Sources */,
@@ -1234,6 +1261,7 @@
 				531786682C20048B00ACEF6A /* CMPickerTextField.swift in Sources */,
 				531786532C1C8BFB00ACEF6A /* BaseViewController.swift in Sources */,
 				5383BE852C327FF9008940F1 /* NonMembersAccessViewController.swift in Sources */,
+				534E39E12C63D10B006D180E /* AnnouncementsListCell.swift in Sources */,
 				533183D72C515C480097F3F1 /* TeamImageView.swift in Sources */,
 				536BDDF62C1972740043B1DA /* UserDTO.swift in Sources */,
 				5383BE8D2C34D595008940F1 /* FontUtility.swift in Sources */,

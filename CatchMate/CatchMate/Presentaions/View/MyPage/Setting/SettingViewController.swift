@@ -99,7 +99,12 @@ final class SettingViewController: BaseViewController, UITableViewDelegate, UITa
                 }
                 .disposed(by: disposeBag)
         case 1:
-            break
+            supportMenus[indexPath.row].navigationVC
+                .withUnretained(self)
+                .subscribe { vc, nextVC in
+                    vc.navigationController?.pushViewController(nextVC, animated: true)
+                }
+                .disposed(by: disposeBag)
         default:
             break
         }

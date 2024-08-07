@@ -27,7 +27,6 @@ final class ListCardViewTableViewCell: UITableViewCell {
         view.layer.shadowOffset = CGSize(width: 0, height: 4)
         view.layer.shadowRadius = 10
         view.layer.cornerRadius = 8
-        // view.clipsToBounds = true // 이 부분은 shadowPath 설정 시 제거해야 합니다.
         return view
     }()
     

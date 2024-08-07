@@ -36,7 +36,7 @@ enum MypageMenu: String {
     var navigationVC: Observable<UIViewController> {
         switch self {
         case .notices:
-            return Observable.just(UIViewController())
+            return Observable.just(AnnouncementsViewController(reactor: AnnouncementsReactor()))
         case .customerService:
             return Observable.just(UIViewController())
         case .terms:

@@ -124,7 +124,12 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
         case 1:
             break
         case 2:
-            break
+            supportMenus[indexPath.row].navigationVC
+                .withUnretained(self)
+                .subscribe { vc, nextVC in
+                    vc.navigationController?.pushViewController(nextVC, animated: true)
+                }
+                .disposed(by: disposeBag)
         default:
             break
         }
