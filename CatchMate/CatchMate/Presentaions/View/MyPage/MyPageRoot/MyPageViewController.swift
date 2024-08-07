@@ -122,7 +122,12 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
             let profileEditVC = ProfileEditViewController(reactor: ProfileEditReactor(user: user), imageString: user.profilePicture)
             navigationController?.pushViewController(profileEditVC, animated: true)
         case 1:
-            break
+            myMenus[indexPath.row].navigationVC
+                .withUnretained(self)
+                .subscribe { vc, nextVC in
+                    vc.navigationController?.pushViewController(nextVC, animated: true)
+                }
+                .disposed(by: disposeBag)
         case 2:
             supportMenus[indexPath.row].navigationVC
                 .withUnretained(self)

@@ -38,17 +38,17 @@ enum MypageMenu: String {
         case .notices:
             return Observable.just(AnnouncementsViewController(reactor: AnnouncementsReactor()))
         case .customerService:
-            return Observable.just(UIViewController())
+            return Observable.just(CustomerServiceViewController(title: self.rawValue))
         case .terms:
-            return Observable.just(UIViewController())
+            return Observable.just(CustomerServiceViewController(title: self.rawValue))
         case .info:
-            return Observable.just(UIViewController())
+            return Observable.just(CustomerServiceViewController(title: self.rawValue))
         case .write:
-            return Observable.just(UIViewController())
+            return Observable.just(CustomerServiceViewController(title: self.rawValue))
         case .send:
-            return Observable.just(UIViewController())
+            return Observable.just(CustomerServiceViewController(title: self.rawValue))
         case .receive:
-            return Observable.just(UIViewController())
+            return Observable.just(CustomerServiceViewController(title: self.rawValue))
         case .auth:
             return LoginUserDefaultsService.shared.getLoginData()
                 .map { loginData in

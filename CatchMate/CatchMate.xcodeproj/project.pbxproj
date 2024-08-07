@@ -95,6 +95,7 @@
 		534E39E12C63D10B006D180E /* AnnouncementsListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39E02C63D10B006D180E /* AnnouncementsListCell.swift */; };
 		534E39E32C63D392006D180E /* AnnouncementsReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39E22C63D392006D180E /* AnnouncementsReactor.swift */; };
 		534E39E52C63D5AE006D180E /* AnnouncementDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39E42C63D5AE006D180E /* AnnouncementDetailViewController.swift */; };
+		534E39E72C63E022006D180E /* CustomerServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39E62C63E021006D180E /* CustomerServiceViewController.swift */; };
 		536548A32C3EF3B700C2309A /* FavoriteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536548A22C3EF3B700C2309A /* FavoriteListViewController.swift */; };
 		536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAD2C189B230043B1DA /* AppDelegate.swift */; };
 		536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAF2C189B230043B1DA /* SceneDelegate.swift */; };
@@ -291,6 +292,7 @@
 		534E39E02C63D10B006D180E /* AnnouncementsListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementsListCell.swift; sourceTree = "<group>"; };
 		534E39E22C63D392006D180E /* AnnouncementsReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementsReactor.swift; sourceTree = "<group>"; };
 		534E39E42C63D5AE006D180E /* AnnouncementDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementDetailViewController.swift; sourceTree = "<group>"; };
+		534E39E62C63E021006D180E /* CustomerServiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerServiceViewController.swift; sourceTree = "<group>"; };
 		536548A22C3EF3B700C2309A /* FavoriteListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteListViewController.swift; sourceTree = "<group>"; };
 		536BDDAA2C189B230043B1DA /* CatchMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CatchMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		536BDDAD2C189B230043B1DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -596,6 +598,7 @@
 				534E39DB2C63CE78006D180E /* AnnouncementsViewController.swift */,
 				534E39E02C63D10B006D180E /* AnnouncementsListCell.swift */,
 				534E39E42C63D5AE006D180E /* AnnouncementDetailViewController.swift */,
+				534E39E62C63E021006D180E /* CustomerServiceViewController.swift */,
 			);
 			path = Supports;
 			sourceTree = "<group>";
@@ -1274,6 +1277,7 @@
 				5301E2A32C5B6B8B0078E910 /* AuthService.swift in Sources */,
 				533A2B3F2C2C5DBC00A59340 /* SNSLoginResponse.swift in Sources */,
 				533A2B252C280E0500A59340 /* CMDefaultFilledButton.swift in Sources */,
+				534E39E72C63E022006D180E /* CustomerServiceViewController.swift in Sources */,
 				533A2B2E2C29B56200A59340 /* CMDefaultBorderedButton.swift in Sources */,
 				530994542C4F6CEB00ABE103 /* LoginResult.swift in Sources */,
 				53B8E2462C5E7BF1001D0ADF /* APIService.swift in Sources */,
