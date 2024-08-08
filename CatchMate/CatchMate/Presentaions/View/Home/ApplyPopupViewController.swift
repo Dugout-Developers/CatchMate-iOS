@@ -194,7 +194,7 @@ extension ApplyPopupViewController {
             .subscribe(onNext: { vc, _ in
                 let text = vc.textView.text
                 // MARK: - 로그인 연결 후 유저 정보 아이디값 연결 필요
-                let apply = Apply(id: UUID().uuidString, post: vc.post, applicantId: "1", addText: text)
+                let apply = Apply(id: UUID().uuidString, post: vc.post, applicant: User(id: "1", email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: nil, pushAgreement: true, description: ""), addText: text)
                 vc.applyReactor.action.onNext(.requestApplyForm(apply))
             })
             .disposed(by: disposeBag)

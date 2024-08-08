@@ -30,7 +30,7 @@ final class ListCardViewTableViewCell: UITableViewCell {
         return view
     }()
     
-    private let partyNumLabel: UILabel  = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8))
+    private let partyNumLabel: UILabel = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8))
 
     private let postTitleLabel: UILabel = {
         let label = UILabel()
@@ -122,7 +122,7 @@ final class ListCardViewTableViewCell: UITableViewCell {
             partyNumLabel.textColor = .cmPrimaryColor
             partyNumLabel.backgroundColor = .brandColor50
         }
-        
+        partyNumLabel.layer.cornerRadius = 10
         // Font
         partyNumLabel.applyStyle(textStyle: FontSystem.body03_semiBold)
         postTitleLabel.applyStyle(textStyle: FontSystem.bodyTitle)

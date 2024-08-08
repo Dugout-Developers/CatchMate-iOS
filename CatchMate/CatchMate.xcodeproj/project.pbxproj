@@ -144,6 +144,9 @@
 		537598082C46C3D2003BD8AE /* DefaultsTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537598072C46C3D2003BD8AE /* DefaultsTextView.swift */; };
 		5375980A2C46D6D7003BD8AE /* ApplyFormReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537598092C46D6D7003BD8AE /* ApplyFormReactor.swift */; };
 		5375980C2C46DC45003BD8AE /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375980B2C46DC45003BD8AE /* ChatRoomViewController.swift */; };
+		5378EA9B2C6487A600A2422C /* ReceiveMateListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5378EA9A2C6487A600A2422C /* ReceiveMateListCell.swift */; };
+		5378EA9D2C649B6900A2422C /* ReceiveMateListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5378EA9C2C649B6900A2422C /* ReceiveMateListViewController.swift */; };
+		5378EA9F2C649BBE00A2422C /* RecevieMateReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5378EA9E2C649BBE00A2422C /* RecevieMateReactor.swift */; };
 		5382490E2C2E79A90074B583 /* AppleLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */; };
 		538249102C3139C80074B583 /* AppleLoginUserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490F2C3139C80074B583 /* AppleLoginUserDefaultsService.swift */; };
 		538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538249122C3196AD0074B583 /* NaverLoginUseCase.swift */; };
@@ -339,6 +342,9 @@
 		537598072C46C3D2003BD8AE /* DefaultsTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsTextView.swift; sourceTree = "<group>"; };
 		537598092C46D6D7003BD8AE /* ApplyFormReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyFormReactor.swift; sourceTree = "<group>"; };
 		5375980B2C46DC45003BD8AE /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
+		5378EA9A2C6487A600A2422C /* ReceiveMateListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMateListCell.swift; sourceTree = "<group>"; };
+		5378EA9C2C649B6900A2422C /* ReceiveMateListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMateListViewController.swift; sourceTree = "<group>"; };
+		5378EA9E2C649BBE00A2422C /* RecevieMateReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecevieMateReactor.swift; sourceTree = "<group>"; };
 		5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginUseCase.swift; sourceTree = "<group>"; };
 		5382490F2C3139C80074B583 /* AppleLoginUserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginUserDefaultsService.swift; sourceTree = "<group>"; };
 		538249122C3196AD0074B583 /* NaverLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverLoginUseCase.swift; sourceTree = "<group>"; };
@@ -615,6 +621,8 @@
 			children = (
 				534E39E82C63E509006D180E /* SendMateListViewController.swift */,
 				534E39EB2C63E771006D180E /* SendMateListCell.swift */,
+				5378EA9C2C649B6900A2422C /* ReceiveMateListViewController.swift */,
+				5378EA9A2C6487A600A2422C /* ReceiveMateListCell.swift */,
 			);
 			path = MyMenus;
 			sourceTree = "<group>";
@@ -764,6 +772,7 @@
 				534E39D92C63BA26006D180E /* NotificationSettingReactor.swift */,
 				534E39E22C63D392006D180E /* AnnouncementsReactor.swift */,
 				531963F02C645FDE00EE7F23 /* SendMateReactor.swift */,
+				5378EA9E2C649BBE00A2422C /* RecevieMateReactor.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1213,6 +1222,7 @@
 				53B8E2692C613127001D0ADF /* PresentationError.swift in Sources */,
 				531786602C1EB24D00ACEF6A /* TeamFilterViewController.swift in Sources */,
 				531786822C21D3F700ACEF6A /* ChatListTableViewCell.swift in Sources */,
+				5378EA9F2C649BBE00A2422C /* RecevieMateReactor.swift in Sources */,
 				531786592C1C934A00ACEF6A /* UIViewController+Extension.swift in Sources */,
 				531288CB2C540764000C2FB1 /* FCMRepository.swift in Sources */,
 				5317865D2C1EAC4700ACEF6A /* Screen.swift in Sources */,
@@ -1268,9 +1278,11 @@
 				536BDE342C1B57B10043B1DA /* HomeFilterButton.swift in Sources */,
 				53B8E26B2C613613001D0ADF /* DataError.swift in Sources */,
 				5301E2BA2C5BED8D0078E910 /* UserMapper.swift in Sources */,
+				5378EA9B2C6487A600A2422C /* ReceiveMateListCell.swift in Sources */,
 				536BDE272C1B53150043B1DA /* UIColor+Extension.swift in Sources */,
 				53B8E2612C61229A001D0ADF /* AddPostRepositoryImpl.swift in Sources */,
 				536BDE382C1C07990043B1DA /* PaddingLabel.swift in Sources */,
+				5378EA9D2C649B6900A2422C /* ReceiveMateListViewController.swift in Sources */,
 				534E39E32C63D392006D180E /* AnnouncementsReactor.swift in Sources */,
 				53716BC42C42B72F0044AD2A /* CMNavigationBar.swift in Sources */,
 				533A2B232C27FF6A00A59340 /* CMTextView.swift in Sources */,
