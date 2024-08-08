@@ -8,6 +8,28 @@
 import Security
 import Foundation
 
+enum TokenError: LocalizedError {
+    case notFoundAccessToken
+    case notFoundRefreshToken
+    var statusCode: Int {
+        switch self {
+        case .notFoundAccessToken:
+            return -1001
+        case .notFoundRefreshToken:
+            return -1002
+        }
+    }
+    
+    var errorDescription: String? {
+        switch self {
+        case .notFoundAccessToken:
+            return "엑세스 토큰 찾기 실패"
+        case .notFoundRefreshToken:
+            return "리프레시 토큰 찾기 실패"
+        }
+    }
+}
+
 final class KeychainService {
     // 키체인에 데이터 저장
     @discardableResult

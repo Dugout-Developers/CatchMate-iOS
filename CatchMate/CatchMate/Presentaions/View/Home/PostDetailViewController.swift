@@ -50,7 +50,7 @@ final class PostDetailViewController: BaseViewController, View {
     private let placeLabel: UILabel = {
         let label = UILabel()
         label.textColor = .cmNonImportantTextColor
-        label.text = "일시"
+        label.text = "장소"
         label.applyStyle(textStyle: FontSystem.body02_medium)
         return label
     }()
@@ -62,7 +62,7 @@ final class PostDetailViewController: BaseViewController, View {
     private let partynumLabel: UILabel = {
         let label = UILabel()
         label.textColor = .cmNonImportantTextColor
-        label.text = "일시"
+        label.text = "인원"
         label.applyStyle(textStyle: FontSystem.body02_medium)
         return label
     }()

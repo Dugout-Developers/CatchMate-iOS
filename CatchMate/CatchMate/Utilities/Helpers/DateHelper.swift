@@ -11,6 +11,7 @@ final class DateHelper {
     static let shared = DateHelper()
     
     let dateFormatter: DateFormatter
+    let isoFormatter = ISO8601DateFormatter()
     
     private init() {
         dateFormatter = DateFormatter()
@@ -25,6 +26,13 @@ final class DateHelper {
     func toDate(from string: String, format: String) -> Date? {
         dateFormatter.dateFormat = format
         return dateFormatter.date(from: string)
+    }
+    
+    func returniSODateToString() -> String {
+        isoFormatter.timeZone = TimeZone(secondsFromGMT: 0) 
+        let currentDate = Date()
+        let isoString = isoFormatter.string(from: currentDate)
+        return isoString
     }
 }
 

@@ -21,6 +21,8 @@ class BaseViewController: UIViewController {
         setupCustomNavigationBar()
         setupbackButton()
         view.backgroundColor = .cmBackgroundColor
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -63,6 +65,12 @@ class BaseViewController: UIViewController {
     private func setupViewController() {
         navigationController?.isNavigationBarHidden = true
         view.tappedDismissKeyboard()
+        // 제스처 인식기 delegate 설정
+          if let gestureRecognizers = self.view.gestureRecognizers {
+              for gesture in gestureRecognizers {
+                  gesture.delegate = self
+              }
+          }
     }
     
     private func setupbackButton() {
@@ -93,5 +101,16 @@ class BaseViewController: UIViewController {
         }
         logoImageView.contentMode = .scaleAspectFit
         customNavigationBar.addLeftItems(items: [logoImageView])
+    }
+}
+
+extension BaseViewController: UIGestureRecognizerDelegate { 
+    // UIGestureRecognizerDelegate 메소드
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        // 터치된 뷰가 send 버튼이면 제스쳐 무시 -> 버튼 클릭 우선
+        if let button = touch.view as? UIButton, button.tag == 999 {
+            return false
+        }
+        return true
     }
 }

@@ -54,29 +54,15 @@ struct Post: Identifiable, Equatable {
 
 extension Post {
     static var dummyPostData: [Post] = [
-        Post(title: "연패는 안 된다 쉬었잖아 제발", writer: User(id: "1", snsID: "aa", email: "aa@aa.com", nickName: "망곰보유구단", age: 25, team: .dosun, gener: .woman, cheerStyle: .director, profilePicture: nil), homeTeam: .dosun, awayTeam: .lotte, date: "07.03", playTime: "18:30", location: "잠실", maxPerson: 4, currentPerson: 3, preferAge: [20, 30]),
-        Post(title: "괜찮겠어? 난 멈추는 법을 모르는 롯데인걸?", writer: User(id: "1", snsID: "aa", email: "aa@aa.com", nickName: "부산갈매기", age: 25, team: .lotte, gener: .man, cheerStyle: .cheerleader, profilePicture: nil), homeTeam: .dosun, awayTeam: .lotte, date: "07.03", playTime: "18:30", location: "잠실", maxPerson: 4, currentPerson: 3, preferAge: [20, 30]),
-        Post(title: "돌고 돌아 류현진", writer: User(id: "1", snsID: "aa", email: "aa@aa.com", nickName: "치킨", age: 25, team: .hanhwa, gener: .woman, cheerStyle: .director, profilePicture: nil), homeTeam: .hanhwa, awayTeam: .kt, date: "07.03", playTime: "18:30", location: "대전", maxPerson: 4, currentPerson: 3, preferAge: [20, 30], addInfo: "제발 좀 이겨주세요 미친놈들아!!!"),
-        Post(title: "주말 홈경기 승률 뭐하냐? 제발 좀 이겨주세요 제발제발요.", writer: User(id: "1", snsID: "aa", email: "aa@aa.com", nickName: "꼴등", age: 25, team: .hanhwa, gener: .woman, cheerStyle: .director, profilePicture: nil), homeTeam: .hanhwa, awayTeam: .kt, date: "07.03", playTime: "18:30", location: "대전", maxPerson: 4, currentPerson: 4, preferAge: [20, 30]),
-        Post(title: "2등만 팬다", writer: User(id: "1", snsID: "aa", email: "aa@aa.com", nickName: "실책 1위", age: 25, team: .kia, gener: .man, cheerStyle: .director, profilePicture: nil), homeTeam: .samsung, awayTeam: .kia, date: "07.03", playTime: "18:30", location: "대구", maxPerson: 2, currentPerson: 1, preferAge: [20, 30]),
-        Post(title: "타이거즈 좋아하세요?", writer: User(id: "1", snsID: "aa", email: "aa@aa.com", nickName: "우승가자", age: 25, team: .kia, gener: .man, cheerStyle: .director, profilePicture: nil), homeTeam: .samsung, awayTeam: .kia, date: "07.03", playTime: "18:30", location: "대구", maxPerson: 8, currentPerson: 4, preferAge: [20, 30]),
-        Post(title: "도영아 너땜시 살어야", writer: User(id: "1", snsID: "aa", email: "aa@aa.com", nickName: "도영아사랑해", age: 25, team: .kia, gener: .woman, cheerStyle: .mom, profilePicture: nil), homeTeam: .samsung, awayTeam: .kia, date: "07.03", playTime: "18:30", location: "대구", maxPerson: 3, currentPerson: 2, preferAge: [20, 30])
+        Post(title: "연패는 안 된다 쉬었잖아 제발", writer: User(id: "1", email: "aa@aa.com", nickName: "망곰보유구단", birth: "1999-01-01", team: .dosun, gener: .woman, cheerStyle: .director, profilePicture: nil, pushAgreement: true, description: ""), homeTeam: .dosun, awayTeam: .lotte, date: "07.03", playTime: "18:30", location: "잠실", maxPerson: 4, currentPerson: 3, preferAge: [20, 30]),
+        Post(title: "괜찮겠어? 난 멈추는 법을 모르는 롯데인걸?", writer: User(id: "2", email: "aa@aa.com", nickName: "부산갈매기", birth: "1999-01-01", team: .lotte, gener: .man, cheerStyle: .cheerleader, profilePicture: nil, pushAgreement: true, description: ""), homeTeam: .dosun, awayTeam: .lotte, date: "07.03", playTime: "18:30", location: "잠실", maxPerson: 4, currentPerson: 3, preferAge: [20, 30]),
+        Post(title: "돌고 돌아 류현진", writer: User(id: "3", email: "aa@aa.com", nickName: "치킨", birth: "2000-01-01", team: .hanhwa, gener: .woman, cheerStyle: .director, profilePicture: nil, pushAgreement: true, description: ""), homeTeam: .hanhwa, awayTeam: .kt, date: "07.03", playTime: "18:30", location: "대전", maxPerson: 4, currentPerson: 3, preferAge: [20, 30], addInfo: "제발 좀 이겨주세요 미친놈들아!!!"),
+        Post(title: "주말 홈경기 승률 뭐하냐? 제발 좀 이겨주세요 제발제발요.", writer: User(id: "4", email: "aa@aa.com", nickName: "꼴등", birth: "1998-01-01", team: .hanhwa, gener: .woman, cheerStyle: .director, profilePicture: nil, pushAgreement: true, description: ""), homeTeam: .hanhwa, awayTeam: .kt, date: "07.03", playTime: "18:30", location: "대전", maxPerson: 4, currentPerson: 4, preferAge: [20, 30]),
+        Post(title: "2등만 팬다", writer: User(id: "5", email: "aa@aa.com", nickName: "실책 1위", birth: "1997-02-02", team: .kia, gener: .man, cheerStyle: .director, profilePicture: nil, pushAgreement: true, description: ""), homeTeam: .samsung, awayTeam: .kia, date: "07.03", playTime: "18:30", location: "대구", maxPerson: 2, currentPerson: 1, preferAge: [20, 30]),
+        Post(title: "타이거즈 좋아하세요?", writer: User(id: "6", email: "aa@aa.com", nickName: "우승가자", birth: "1999-10-10", team: .kia, gener: .man, cheerStyle: .director, profilePicture: nil, pushAgreement: true, description: ""), homeTeam: .samsung, awayTeam: .kia, date: "07.03", playTime: "18:30", location: "대구", maxPerson: 8, currentPerson: 4, preferAge: [20, 30]),
+        Post(title: "도영아 너땜시 살어야", writer: User(id: "7", email: "aa@aa.com", nickName: "도영아사랑해", birth: "1999-10-10", team: .kia, gener: .woman, cheerStyle: .mom, profilePicture: nil, pushAgreement: true, description: ""), homeTeam: .samsung, awayTeam: .kia, date: "07.03", playTime: "18:30", location: "대구", maxPerson: 3, currentPerson: 2, preferAge: [20, 30])
     ]
     
     static var dummyFavoriteList: [Post]  = []
-//    = {
-//        var pickedNumbers = Set<Int>()
-//        
-//        while pickedNumbers.count < 4 {
-//            let randomNumber = Int.random(in: 0..<Post.dummyPostData.count)
-//            pickedNumbers.insert(randomNumber)
-//        }
-//        
-//        var result: [Post] = []
-//        pickedNumbers.forEach { index in
-//            result.append(Post.dummyPostData[index])
-//        }
-//        return result
-//    }()
    
 }

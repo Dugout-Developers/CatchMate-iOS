@@ -15,11 +15,11 @@ final class ChatRoomViewController: BaseViewController, View {
     private let inputview: ChatingInputField = ChatingInputField()
     private var chat: Chat
     var reactor: ChatRoomReactor
+    private var keyboardManager: KeyboardManager?
     private var bottomConstraint: Constraint?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupKeyboardObservers()
         reactor.action.onNext(.loadMessages)
     }
     
@@ -34,10 +34,14 @@ final class ChatRoomViewController: BaseViewController, View {
         setupNavigation()
         setupUI()
         bind(reactor: reactor)
+
+        keyboardManager = KeyboardManager(view: view, bottomConstraint: bottomConstraint, keyboardWillShowHandler: { [weak self] in
+            self?.scrollToBottom(animated: true)
+        })
         view.backgroundColor = .white
     }
     // 임시
-    private let user = User(id: "1", snsID: "ㄴㄴ", email: "ㄴㄴㄴ", nickName: "나요", age: 24, team: .dosun, gener: .man, cheerStyle: .director, profilePicture: nil)
+    private let user = User(id: "1", email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: nil, pushAgreement: true, description: "")
     init(chat: Chat) {
         self.reactor = ChatRoomReactor(chat: chat, user: user)
         self.chat = chat
@@ -47,6 +51,12 @@ final class ChatRoomViewController: BaseViewController, View {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func scrollToBottom(animated: Bool) {
+        guard !reactor.currentState.messages.isEmpty else { return }
+        let indexPath = IndexPath(row: reactor.currentState.messages.count - 1, section: 0)
+        tableView.scrollToRow(at: indexPath, at: .bottom, animated: animated)
     }
     
     private func setupView() {
@@ -95,33 +105,6 @@ final class ChatRoomViewController: BaseViewController, View {
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(52)
             bottomConstraint = make.bottom.equalTo(view.safeAreaLayoutGuide).constraint
-        }
-    }
-    private func setupKeyboardObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc private func keyboardWillShow(notification: NSNotification) {
-        guard let userInfo = notification.userInfo,
-              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
-              let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else { return }
-        
-        bottomConstraint?.update(offset: -keyboardFrame.height)
-        
-        UIView.animate(withDuration: animationDuration) {
-            self.view.layoutIfNeeded()
-        }
-    }
-    
-    @objc private func keyboardWillHide(notification: NSNotification) {
-        guard let userInfo = notification.userInfo,
-              let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else { return }
-        
-        bottomConstraint?.update(offset: 0)
-        
-        UIView.animate(withDuration: animationDuration) {
-            self.view.layoutIfNeeded()
         }
     }
 }
@@ -424,6 +407,63 @@ final class EnterUserCell: UITableViewCell {
             make.center.equalToSuperview()
             make.top.bottom.equalToSuperview().inset(10)
             make.width.lessThanOrEqualTo(containerView).offset(-24)
+        }
+    }
+}
+
+
+class KeyboardManager {
+    private weak var view: UIView?
+    private var bottomConstraint: Constraint?
+    private var keyboardWillShowHandler: (() -> Void)?
+    private var keyboardWillHideHandler: (() -> Void)?
+
+    init(view: UIView, bottomConstraint: Constraint?, keyboardWillShowHandler: (() -> Void)? = nil, keyboardWillHideHandler: (() -> Void)? = nil) {
+        self.view = view
+        self.bottomConstraint = bottomConstraint
+        self.keyboardWillShowHandler = keyboardWillShowHandler
+        self.keyboardWillHideHandler = keyboardWillHideHandler
+        registerKeyboardNotifications()
+    }
+    
+    deinit {
+        unregisterKeyboardNotifications()
+    }
+    
+    private func registerKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    private func unregisterKeyboardNotifications() {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        adjustForKeyboard(notification: notification, keyboardWillShow: true)
+        keyboardWillShowHandler?()
+    }
+    
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        adjustForKeyboard(notification: notification, keyboardWillShow: false)
+        keyboardWillHideHandler?()
+    }
+    
+    private func adjustForKeyboard(notification: Notification, keyboardWillShow: Bool) {
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+              let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
+              let view = view else {
+            return
+        }
+        
+        let changeInHeight = keyboardWillShow ? -keyboardFrame.height + view.safeAreaInsets.bottom : 0
+
+        bottomConstraint?.update(offset: changeInHeight)
+
+        UIView.animate(withDuration: animationDuration) {
+            view.layoutIfNeeded()
         }
     }
 }

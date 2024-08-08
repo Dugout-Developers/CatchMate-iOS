@@ -27,11 +27,10 @@ final class ListCardViewTableViewCell: UITableViewCell {
         view.layer.shadowOffset = CGSize(width: 0, height: 4)
         view.layer.shadowRadius = 10
         view.layer.cornerRadius = 8
-        // view.clipsToBounds = true // 이 부분은 shadowPath 설정 시 제거해야 합니다.
         return view
     }()
     
-    private let partyNumLabel: UILabel  = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8))
+    private let partyNumLabel: UILabel = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8))
 
     private let postTitleLabel: UILabel = {
         let label = UILabel()
@@ -123,7 +122,7 @@ final class ListCardViewTableViewCell: UITableViewCell {
             partyNumLabel.textColor = .cmPrimaryColor
             partyNumLabel.backgroundColor = .brandColor50
         }
-        
+        partyNumLabel.layer.cornerRadius = 10
         // Font
         partyNumLabel.applyStyle(textStyle: FontSystem.body03_semiBold)
         postTitleLabel.applyStyle(textStyle: FontSystem.bodyTitle)

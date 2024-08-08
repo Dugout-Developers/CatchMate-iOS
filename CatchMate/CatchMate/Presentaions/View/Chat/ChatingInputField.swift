@@ -42,6 +42,7 @@ final class ChatingInputField: UIView {
         super.init(frame: .zero)
         backgroundColor = .white
         setupUI()
+        sendButton.tag = 999
         bind()
     }
     
@@ -87,7 +88,6 @@ final class ChatingInputField: UIView {
 
 final class SendButton: UIButton {
     private var isButtonActive: Bool = true
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupButton()

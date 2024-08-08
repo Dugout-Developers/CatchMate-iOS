@@ -44,4 +44,30 @@ class DIContainerService {
         return SignUpReactor(signUpModel: model, signupUseCase: usecase)
     }
     
+    func makeAddReactor() -> AddReactor {
+        let addDataSource = AddPostDataSourceImpl()
+        let addRepository = AddPostRepositoryImpl(addPostDS: addDataSource)
+        let addUsecase = AddPostUseCaseImpl(addPostRepository: addRepository)
+        return AddReactor(addUsecase: addUsecase)
+    }
+    
+    func makeMypageReactor() -> MyPageReactor {
+        let userDataSource = UserDataSourceImpl()
+        let logoutDataSource = LogoutDataSourceImpl()
+        let userRepository = UserRepositoryImpl(userDS: userDataSource)
+        let logoutRepository = LogoutRepositoryImpl(lopgoutDS: logoutDataSource)
+        let userUsecase = UserUseCaseImpl(userRepository: userRepository)
+        let logoutUsecase = LogoutUseCaseImpl(repository: logoutRepository)
+        
+        return MyPageReactor(userUsecase: userUsecase, logoutUsecase: logoutUsecase)
+    }
+    
+    
+    // MARK: - 특정 Usecase만 필요할 때
+    func makeLogoutUseCase() -> LogoutUseCase {
+        let logoutDataSource = LogoutDataSourceImpl()
+        let logoutRepository = LogoutRepositoryImpl(lopgoutDS: logoutDataSource)
+        let logoutUsecase = LogoutUseCaseImpl(repository: logoutRepository)
+        return logoutUsecase
+    }
 }

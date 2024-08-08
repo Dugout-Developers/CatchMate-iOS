@@ -18,9 +18,7 @@ enum Filter {
 }
 
 final class HomeViewController: BaseViewController, View {
-    
     private let reactor: HomeReactor
-    private let viewWillAppearPublisher = PublishSubject<Void>().asObserver()
     private let filterScrollView = UIScrollView()
     private let filterContainerView = UIView()
     private let dateFilterButton = OptionButtonView(title: "경기 날짜", filter: .date)
@@ -41,7 +39,7 @@ final class HomeViewController: BaseViewController, View {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        viewWillAppearPublisher.onNext(())
+        reactor.action.onNext(.willAppear)
         reactor.action.onNext(.selectPost(nil))
     }
     override func viewDidLoad() {
@@ -74,11 +72,6 @@ final class HomeViewController: BaseViewController, View {
 // MARK: - Bind
 extension HomeViewController {
     func bind(reactor: HomeReactor) {
-        
-        viewWillAppearPublisher
-            .map { Reactor.Action.willAppear }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
         
         tableView.rx.itemSelected
             .map { indexPath in

@@ -9,22 +9,22 @@ import UIKit
 
 
 class DefaultsPaddingLabel: UILabel {
-    private var padding: UIEdgeInsets = UIEdgeInsets(top: 4.0, left: 10.0, bottom: 4.0, right: 10.0)
+    private var padding: UIEdgeInsets = UIEdgeInsets(top: 2, left: 4, bottom: 2, right: 4)
     
     override init(frame: CGRect) {
-        self.padding = UIEdgeInsets(top: 4.0, left: 10.0, bottom: 4.0, right: 10.0)
+        self.padding = UIEdgeInsets(top: 2, left: 4, bottom: 2, right: 4)
         super.init(frame: frame)
         self.applyStyle(textStyle: FontSystem.caption01_medium)
-        self.layer.cornerRadius = 10
+        self.layer.cornerRadius = 2
         self.clipsToBounds = true
         self.isUserInteractionEnabled = true
     }
     
     required init?(coder: NSCoder) {
-        self.padding = UIEdgeInsets(top: 4.0, left: 10.0, bottom: 4.0, right: 10.0)
+        self.padding = UIEdgeInsets(top: 2, left: 4, bottom: 2, right: 4)
         super.init(coder: coder)
         self.applyStyle(textStyle: FontSystem.caption01_medium)
-        self.layer.cornerRadius = 12
+        self.layer.cornerRadius = 2
         self.clipsToBounds = true
         self.isUserInteractionEnabled = true
     }

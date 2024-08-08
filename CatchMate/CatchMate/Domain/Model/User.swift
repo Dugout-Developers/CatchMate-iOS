@@ -7,19 +7,34 @@
 
 import UIKit
 
-struct User {
+struct User: Codable, Equatable {
     var id: String
-    let snsID: String
     let email: String
     let nickName: String
-    let age: UInt
+    let birth: String
     let team: Team
     let gener: Gender
     let cheerStyle: CheerStyles?
     let profilePicture: String?
+    let pushAgreement: Bool
+    let description: String?
+    
+    var age: UInt {
+        guard let birthdate = DateHelper.shared.toDate(from: birth, format: "yyyy-MM-dd") else {
+            return 0
+        }
+        let today = Date()
+        let calendar = Calendar.current
+        let ageComponents = calendar.dateComponents([.year], from: birthdate, to: today)
+        return UInt(ageComponents.year ?? 0)
+    }
+    
+    static func ==(lhs: User, rhs: User) -> Bool {
+        return lhs.id == rhs.id
+    }
 }
 
-enum Gender: String {
+enum Gender: String, Codable {
     case woman = "여성"
     case man = "남성"
     
@@ -31,4 +46,17 @@ enum Gender: String {
             "M"
         }
     }
+    
+    // 서버에서 받은 값을 기반으로 Gender 열거형 값을 반환하는 이니셜라이저
+    init?(serverValue: String) {
+        switch serverValue {
+        case "F":
+            self = .woman
+        case "M":
+            self = .man
+        default:
+            return nil
+        }
+    }
 }
+

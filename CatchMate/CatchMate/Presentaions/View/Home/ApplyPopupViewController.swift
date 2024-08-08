@@ -13,8 +13,10 @@ import RxSwift
 
 final class ApplyPopupViewController: UIViewController, View {
     var post: Post
+    var apply: Apply?
     var disposeBag: DisposeBag = DisposeBag()
-    private var reactor: PostReactor
+    var reactor: PostReactor?
+    var sendMateReactor: SendMateReactor?
     private var applyReactor: ApplyFormReactor
     private let topContentsPadding = 36.0
     private let bottomContentsPadding = 36.0
@@ -77,17 +79,17 @@ final class ApplyPopupViewController: UIViewController, View {
         textView.placeholder = "간단한 자기소개를 적어주세요"
         return textView
     }()
-    private let applyButton: UIButton = {
+    private let primaryButton: UIButton = {
         let button = UIButton()
         button.setTitle("신청", for: .normal)
-        button.setTitleColor(.cmNonImportantTextColor, for: .normal)
+        button.setTitleColor(.cmPrimaryColor, for: .normal)
         button.applyStyle(textStyle: FontSystem.body02_medium)
         button.backgroundColor = .white
         button.tintColor = .clear
         return button
     }()
     
-    private let cancelButton: UIButton = {
+    private let commonButton: UIButton = {
         let button = UIButton()
         button.setTitle("취소", for: .normal)
         button.setTitleColor(.cmHeadLineTextColor, for: .normal)
@@ -100,9 +102,15 @@ final class ApplyPopupViewController: UIViewController, View {
     private let horizontralDivider = UIView()
     private let verticalDivider = UIView()
    
-    init(post: Post, reactor: PostReactor) {
+    init(post: Post, reactor: any Reactor, apply: Apply? = nil) {
         self.post = post
-        self.reactor = reactor
+        self.apply = apply
+        if let postReactor = reactor as? PostReactor {
+            self.reactor = postReactor
+        }
+        if let sendMateReactor = reactor as? SendMateReactor {
+            self.sendMateReactor = sendMateReactor
+        }
         self.applyReactor = ApplyFormReactor(postId: post.id)
         super.init(nibName: nil, bundle: nil)
     }
@@ -114,7 +122,12 @@ final class ApplyPopupViewController: UIViewController, View {
         super.viewDidLoad()
         setupView()
         setupUI()
-        bind(reactor: reactor)
+        if let reactor = reactor {
+            bind(reactor: reactor)
+        }
+        if let sendMateReactor = sendMateReactor {
+           bind(reactor: sendMateReactor)
+        }
     }
     
     private func setupView() {
@@ -124,7 +137,17 @@ final class ApplyPopupViewController: UIViewController, View {
         homeTeamImageView.backgroundColor = post.writer.team == post.homeTeam ? post.homeTeam.getTeamColor : .white
         awayTeamImageView.image = post.awayTeam.getLogoImage
         awayTeamImageView.backgroundColor = post.writer.team == post.awayTeam ? post.awayTeam.getTeamColor : .white
-    
+        if let apply = apply {
+            titleLabel.text = "직관 신청을 보냈어요"
+            titleLabel.applyStyle(textStyle: FontSystem.bodyTitle)
+            textView.text = apply.addText
+            textView.applyStyle(textStyle: FontSystem.body02_medium)
+            textView.isEditable = false
+            primaryButton.setTitle("확인", for: .normal)
+            primaryButton.applyStyle(textStyle: FontSystem.body02_medium)
+            commonButton.setTitle("신청 취소", for: .normal)
+            commonButton.applyStyle(textStyle: FontSystem.body02_medium)
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -146,32 +169,32 @@ final class ApplyPopupViewController: UIViewController, View {
                 flex.addItem(titleLabel).marginBottom(16)
                 flex.addItem(textView).width(100%).height(100).marginHorizontal(24).marginBottom(bottomContentsPadding)
                 flex.addItem(horizontralDivider).width(100%).height(1).backgroundColor(.grayScale100)
-                flex.addItem().direction(.row).justifyContent(.start).alignItems(.center).width(100%).paddingTop(16).paddingBottom(24).paddingHorizontal(24).define { flex in
-                    flex.addItem(cancelButton).grow(1).shrink(0)
-                    flex.addItem(verticalDivider).width(1).height(18).backgroundColor(.grayScale100).marginHorizontal(10)
-                    flex.addItem(applyButton).grow(1).shrink(0)
+                flex.addItem().direction(.row).justifyContent(.start).alignItems(.center).width(100%).paddingTop(16).paddingBottom(24).define { flex in
+                    flex.addItem(commonButton).grow(1).shrink(0).basis(0%)
+                    flex.addItem(verticalDivider).width(1).height(18).backgroundColor(.grayScale100)
+                    flex.addItem(primaryButton).grow(1).shrink(0).basis(0%)
                 }
             }
         }
     }
 }
 
-// MARK: - Bind
+// MARK: - Bind: Post Reactor
 extension ApplyPopupViewController {
     func bind(reactor: PostReactor) {
-        cancelButton.rx.tap
+        commonButton.rx.tap
             .withUnretained(self)
             .subscribe { vc, _ in
                 vc.dismiss(animated: true)
             }
             .disposed(by: disposeBag)
         
-        applyButton.rx.tap
+        primaryButton.rx.tap
             .withUnretained(self)
             .subscribe(onNext: { vc, _ in
                 let text = vc.textView.text
                 // MARK: - 로그인 연결 후 유저 정보 아이디값 연결 필요
-                let apply = Apply(postId: vc.post.id, applicantId: "111111", addText: text)
+                let apply = Apply(id: UUID().uuidString, post: vc.post, applicant: User(id: "1", email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: nil, pushAgreement: true, description: ""), addText: text)
                 vc.applyReactor.action.onNext(.requestApplyForm(apply))
             })
             .disposed(by: disposeBag)
@@ -181,10 +204,33 @@ extension ApplyPopupViewController {
             .withUnretained(self)
             .subscribe { vc, result in
                 if result {
-                    vc.reactor.action.onNext(.changeIsApplied(true))
+                    vc.reactor?.action.onNext(.changeIsApplied(true))
                 } else {
-                    vc.reactor.action.onNext(.setError(PostError.applyFailed))
+                    vc.reactor?.action.onNext(.setError(PostError.applyFailed))
                 }
+                vc.dismiss(animated: true)
+            }
+            .disposed(by: disposeBag)
+    }
+}
+
+// MARK: - Bind: SendMate Reactor
+extension ApplyPopupViewController {
+    func bind(reactor: SendMateReactor) {
+        commonButton.rx.tap
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                if let id = vc.apply?.id {
+                    reactor.action.onNext(.cancelApply(id))
+                } else {
+                    vc.showToast(message: "취소를 처리하는데 문제가 생겼습니다. 다시 시도해주세요.")
+                }
+                vc.dismiss(animated: true)
+            }
+            .disposed(by: disposeBag)
+        primaryButton.rx.tap
+            .withUnretained(self)
+            .subscribe { vc, _ in
                 vc.dismiss(animated: true)
             }
             .disposed(by: disposeBag)
