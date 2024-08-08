@@ -55,6 +55,7 @@
 		5317867F2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317867E2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift */; };
 		531786822C21D3F700ACEF6A /* ChatListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786812C21D3F700ACEF6A /* ChatListTableViewCell.swift */; };
 		531786852C23261200ACEF6A /* SheetHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786842C23261200ACEF6A /* SheetHeight.swift */; };
+		531963F12C645FDE00EE7F23 /* SendMateReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531963F02C645FDE00EE7F23 /* SendMateReactor.swift */; };
 		53241F3C2C3C517600F468E1 /* GridSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F3B2C3C517600F468E1 /* GridSystem.swift */; };
 		53241F3E2C3C589100F468E1 /* DesignAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */; };
 		53241F4E2C3EE58E00F468E1 /* CMPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */; };
@@ -96,6 +97,8 @@
 		534E39E32C63D392006D180E /* AnnouncementsReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39E22C63D392006D180E /* AnnouncementsReactor.swift */; };
 		534E39E52C63D5AE006D180E /* AnnouncementDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39E42C63D5AE006D180E /* AnnouncementDetailViewController.swift */; };
 		534E39E72C63E022006D180E /* CustomerServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39E62C63E021006D180E /* CustomerServiceViewController.swift */; };
+		534E39E92C63E509006D180E /* SendMateListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39E82C63E509006D180E /* SendMateListViewController.swift */; };
+		534E39EC2C63E771006D180E /* SendMateListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39EB2C63E771006D180E /* SendMateListCell.swift */; };
 		536548A32C3EF3B700C2309A /* FavoriteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536548A22C3EF3B700C2309A /* FavoriteListViewController.swift */; };
 		536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAD2C189B230043B1DA /* AppDelegate.swift */; };
 		536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAF2C189B230043B1DA /* SceneDelegate.swift */; };
@@ -251,6 +254,7 @@
 		5317867E2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamFilterCollectionViewCell.swift; sourceTree = "<group>"; };
 		531786812C21D3F700ACEF6A /* ChatListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListTableViewCell.swift; sourceTree = "<group>"; };
 		531786842C23261200ACEF6A /* SheetHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetHeight.swift; sourceTree = "<group>"; };
+		531963F02C645FDE00EE7F23 /* SendMateReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMateReactor.swift; sourceTree = "<group>"; };
 		53241F3B2C3C517600F468E1 /* GridSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSystem.swift; sourceTree = "<group>"; };
 		53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DesignAssets.xcassets; sourceTree = "<group>"; };
 		53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMPopupViewController.swift; sourceTree = "<group>"; };
@@ -293,6 +297,8 @@
 		534E39E22C63D392006D180E /* AnnouncementsReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementsReactor.swift; sourceTree = "<group>"; };
 		534E39E42C63D5AE006D180E /* AnnouncementDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementDetailViewController.swift; sourceTree = "<group>"; };
 		534E39E62C63E021006D180E /* CustomerServiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerServiceViewController.swift; sourceTree = "<group>"; };
+		534E39E82C63E509006D180E /* SendMateListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMateListViewController.swift; sourceTree = "<group>"; };
+		534E39EB2C63E771006D180E /* SendMateListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMateListCell.swift; sourceTree = "<group>"; };
 		536548A22C3EF3B700C2309A /* FavoriteListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteListViewController.swift; sourceTree = "<group>"; };
 		536BDDAA2C189B230043B1DA /* CatchMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CatchMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		536BDDAD2C189B230043B1DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -433,6 +439,7 @@
 				534E39CF2C63423F006D180E /* ProfileEdit */,
 				534E39D42C6352DC006D180E /* Setting */,
 				534E39DD2C63CF45006D180E /* Supports */,
+				534E39EA2C63E50E006D180E /* MyMenus */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -603,6 +610,15 @@
 			path = Supports;
 			sourceTree = "<group>";
 		};
+		534E39EA2C63E50E006D180E /* MyMenus */ = {
+			isa = PBXGroup;
+			children = (
+				534E39E82C63E509006D180E /* SendMateListViewController.swift */,
+				534E39EB2C63E771006D180E /* SendMateListCell.swift */,
+			);
+			path = MyMenus;
+			sourceTree = "<group>";
+		};
 		536BDDA12C189B230043B1DA = {
 			isa = PBXGroup;
 			children = (
@@ -747,6 +763,7 @@
 				53B8E2432C5D2436001D0ADF /* ProfileEditReactor.swift */,
 				534E39D92C63BA26006D180E /* NotificationSettingReactor.swift */,
 				534E39E22C63D392006D180E /* AnnouncementsReactor.swift */,
+				531963F02C645FDE00EE7F23 /* SendMateReactor.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1163,6 +1180,7 @@
 			files = (
 				536BDDB22C189B230043B1DA /* HomeViewController.swift in Sources */,
 				531288CD2C5408FF000C2FB1 /* LoginModel.swift in Sources */,
+				534E39EC2C63E771006D180E /* SendMateListCell.swift in Sources */,
 				533A2B362C2BEA3900A59340 /* InputCheerStyleViewController.swift in Sources */,
 				537598062C46C0B0003BD8AE /* ApplyPopupViewController.swift in Sources */,
 				53FC69E52C58F98100B97AEA /* NicknameCheckRepositoryImpl.swift in Sources */,
@@ -1176,12 +1194,14 @@
 				534E39DF2C63CF65006D180E /* Announcements.swift in Sources */,
 				534E39E52C63D5AE006D180E /* AnnouncementDetailViewController.swift in Sources */,
 				531786782C20498800ACEF6A /* Post.swift in Sources */,
+				534E39E92C63E509006D180E /* SendMateListViewController.swift in Sources */,
 				533A2B2C2C29485E00A59340 /* SignUpViewController.swift in Sources */,
 				53241F4E2C3EE58E00F468E1 /* CMPopupViewController.swift in Sources */,
 				5301E2B42C5BE6570078E910 /* LogoutRepository.swift in Sources */,
 				536BDE2D2C1B55080043B1DA /* AddViewController.swift in Sources */,
 				533183DB2C51E87E0097F3F1 /* ChatRoomReactor.swift in Sources */,
 				53E4A9C22C500A4400D21B49 /* SignUpRepositoryImpl.swift in Sources */,
+				531963F12C645FDE00EE7F23 /* SendMateReactor.swift in Sources */,
 				534E39DC2C63CE78006D180E /* AnnouncementsViewController.swift in Sources */,
 				5301E2B62C5BE6AF0078E910 /* LogoutUseCase.swift in Sources */,
 				537598082C46C3D2003BD8AE /* DefaultsTextView.swift in Sources */,
