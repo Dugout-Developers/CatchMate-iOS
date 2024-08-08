@@ -169,10 +169,10 @@ final class ApplyPopupViewController: UIViewController, View {
                 flex.addItem(titleLabel).marginBottom(16)
                 flex.addItem(textView).width(100%).height(100).marginHorizontal(24).marginBottom(bottomContentsPadding)
                 flex.addItem(horizontralDivider).width(100%).height(1).backgroundColor(.grayScale100)
-                flex.addItem().direction(.row).justifyContent(.start).alignItems(.center).width(100%).paddingTop(16).paddingBottom(24).paddingHorizontal(24).define { flex in
-                    flex.addItem(commonButton).grow(1).shrink(0)
-                    flex.addItem(verticalDivider).width(1).height(18).backgroundColor(.grayScale100).marginHorizontal(10)
-                    flex.addItem(primaryButton).grow(1).shrink(0)
+                flex.addItem().direction(.row).justifyContent(.start).alignItems(.center).width(100%).paddingTop(16).paddingBottom(24).define { flex in
+                    flex.addItem(commonButton).grow(1).shrink(0).basis(0%)
+                    flex.addItem(verticalDivider).width(1).height(18).backgroundColor(.grayScale100)
+                    flex.addItem(primaryButton).grow(1).shrink(0).basis(0%)
                 }
             }
         }
