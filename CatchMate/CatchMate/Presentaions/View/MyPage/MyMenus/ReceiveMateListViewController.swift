@@ -60,7 +60,7 @@ extension ReceiveMateListViewController {
                 guard let self = self else { return }
                 cell.backgroundColor = .clear
                 cell.selectionStyle = .none
-                cell.configData(apply: item, disposedBag: disposeBag)
+                cell.configData(apply: item)
                 cell.updateConstraints()
             }
             .disposed(by: disposeBag)

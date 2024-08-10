@@ -12,6 +12,7 @@ import PinLayout
 import Kingfisher
 
 final class ReceiveMateListCell: UITableViewCell {
+    private var disposedBag = DisposeBag()
     private var appliesSubject = PublishSubject<[Apply]>()
     private let containerView = UIView()
     private let infoLabel: UILabel = {
@@ -38,7 +39,7 @@ final class ReceiveMateListCell: UITableViewCell {
         setupCollectionView()
         setupUI()
         backgroundColor = .clear
-        
+        collectionViewBind()
     }
     @available(*, unavailable)
     required init?(coder: NSCoder) {
@@ -79,8 +80,7 @@ final class ReceiveMateListCell: UITableViewCell {
         containerView.flex.layout(mode: .adjustHeight)
     }
     
-    func configData(apply: [Apply], disposedBag: DisposeBag) {
-        collectionViewBind(disposedBag: disposedBag)
+    func configData(apply: [Apply]) {
         let post = apply[0].post
         titleLabel.text = post.title
         titleLabel.applyStyle(textStyle: FontSystem.body01_medium)
@@ -108,7 +108,7 @@ final class ReceiveMateListCell: UITableViewCell {
     }
 
         
-    private func collectionViewBind(disposedBag: DisposeBag) {
+    private func collectionViewBind() {
         appliesSubject.bind(to: collectionView.rx.items(cellIdentifier: "ReceiveCollectionViewCell", cellType: ReceiveCollectionViewCell.self)) { [weak self] (row, apply, cell) in
             guard let self = self else { return }
             cell.configData(apply: apply)
