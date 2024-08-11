@@ -27,6 +27,7 @@ final class ReceiveMateListViewController: BaseViewController, View {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reactor.action.onNext(.loadReceiveMate)
+        reactor.action.onNext(.selectPost(nil))
     }
     
     override func viewDidLoad() {
@@ -56,8 +57,7 @@ final class ReceiveMateListViewController: BaseViewController, View {
 extension ReceiveMateListViewController {
     func bind(reactor: RecevieMateReactor) {
         reactor.state.map{$0.receiveMates}
-            .bind(to: tableView.rx.items(cellIdentifier: "ReceiveMateListCell", cellType: ReceiveMateListCell.self)) { [weak self] (row, item, cell) in
-                guard let self = self else { return }
+            .bind(to: tableView.rx.items(cellIdentifier: "ReceiveMateListCell", cellType: ReceiveMateListCell.self)) { (row, item, cell) in
                 cell.backgroundColor = .clear
                 cell.selectionStyle = .none
                 cell.configData(apply: item)
@@ -65,5 +65,13 @@ extension ReceiveMateListViewController {
             }
             .disposed(by: disposeBag)
         
+        tableView.rx.itemSelected
+            .subscribe { indexPath in
+                let applies = reactor.currentState.receiveMates[indexPath.row]
+                let detailVC = ReceiveMateListDetailViewController(reactor: ReceiveMateDetailReactor(aplies: applies))
+                detailVC.modalPresentationStyle = .overFullScreen
+                self.present(detailVC, animated: true)
+            }
+            .disposed(by: disposeBag)
     }
 }

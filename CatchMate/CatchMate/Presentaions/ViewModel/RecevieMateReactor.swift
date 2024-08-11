@@ -11,15 +11,18 @@ import ReactorKit
 final class RecevieMateReactor: Reactor {
     enum Action {
         case loadReceiveMate
+        case selectPost([Apply]?)
 //        case deleteApply(String)
 //        case applyMate(String)
     }
     enum Mutation {
         case setReceiveMate([[Apply]])
+        case setSelectedPost([Apply]?)
         case setError(PresentationError?)
     }
     struct State {
         var receiveMates: [[Apply]] = []
+        var selectedPost: [Apply]?
         var error: PresentationError?
     }
     
@@ -37,6 +40,8 @@ final class RecevieMateReactor: Reactor {
 //            
 //        case .applyMate(let id):
 //
+        case .selectPost(let apply):
+            return Observable.just(Mutation.setSelectedPost(apply))
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
@@ -46,6 +51,8 @@ final class RecevieMateReactor: Reactor {
             newState.receiveMates = applies
         case .setError(let error):
             newState.error = error
+        case .setSelectedPost(let apply):
+            newState.selectedPost = apply
         }
         return newState
     }

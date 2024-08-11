@@ -109,8 +109,7 @@ final class ReceiveMateListCell: UITableViewCell {
 
         
     private func collectionViewBind() {
-        appliesSubject.bind(to: collectionView.rx.items(cellIdentifier: "ReceiveCollectionViewCell", cellType: ReceiveCollectionViewCell.self)) { [weak self] (row, apply, cell) in
-            guard let self = self else { return }
+        appliesSubject.bind(to: collectionView.rx.items(cellIdentifier: "ReceiveCollectionViewCell", cellType: ReceiveCollectionViewCell.self)) { (row, apply, cell) in
             cell.configData(apply: apply)
         }
         .disposed(by: disposedBag)
