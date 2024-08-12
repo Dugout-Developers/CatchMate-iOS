@@ -132,27 +132,28 @@ extension OtherUserMyPageViewController {
                 vc.tableview.reloadSections(indexSet, with: .automatic)
             }
             .disposed(by: disposeBag)
+        
+        tableview.rx.contentOffset
+            .skip(1)
+            .map { $0.y }
+            .withUnretained(self)
+            .bind { vc, offsetY in
+                vc.scrollSetupNavigation(offsetY)
+            }.disposed(by: disposeBag)
+    }
+    
+    func scrollSetupNavigation(_ offsetY: CGFloat) {
+        if offsetY > 88 {
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                setupLeftTitle("\(user.nickName)", font: FontSystem.body01_semiBold)
+            }
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                setupLeftTitle("")
+            }
+        }
     }
 }
 
-
-//extension OtherUserMyPageViewController: UIScrollViewDelegate {
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        let offsetY = scrollView.contentOffset.y
-//        setupNavigation(offsetY: offsetY)
-//    }
-//    
-//    func setupNavigation(_ offsetY: CGFloat) {
-//        if offsetY > 88 {
-//            if previousOffsetY <= 88 {
-//                print("88 이상으로 스크롤: \(offsetY)")
-//                // 88 이상일 때 동작
-//            }
-//        } else {
-//            if previousOffsetY > 88 {
-//                print("88 이하로 스크롤: \(offsetY)")
-//                // 88 이하일 때 동작
-//            }
-//        }
-//    }
-//}

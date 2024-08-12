@@ -87,11 +87,11 @@ class BaseViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
-    func setupLeftTitle(_ title: String) {
+    func setupLeftTitle(_ title: String, font: TextStyle = FontSystem.headline03_medium) {
         let titlLabel = UILabel()
         titlLabel.text = title
         titlLabel.textColor = .cmHeadLineTextColor
-        titlLabel.applyStyle(textStyle: FontSystem.headline03_medium)
+        titlLabel.applyStyle(textStyle: font)
         customNavigationBar.addLeftItems(items: [titlLabel])
     }
     
