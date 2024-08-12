@@ -118,34 +118,32 @@ extension SignInViewController {
             .disposed(by: disposeBag)
         
         reactor.state
-            .map { state -> Bool? in
+            .map { state -> LoginModel? in
                 if let loginModel = state.loginModel {
-                    
-                    return loginModel.isFirstLogin
+                    return loginModel
                 }
                 return nil
             }
             .compactMap{$0}
             .distinctUntilChanged()
             .withUnretained(self)
-            .subscribe(onNext: { vc, state in
-                print("State changed: \(state)")
-                vc.pushNextView(state)
+            .subscribe(onNext: { vc, model in
+                print("\(model)")
+                vc.pushNextView(model)
             })
             .disposed(by: disposeBag)
     }
     
-    private func pushNextView(_ state: Bool) {
+    private func pushNextView(_ model: LoginModel) {
+        let state = model.isFirstLogin
         if !state {
             // 회원가입 이미한 유저일 경우
             let tabViewController = TabBarController()
             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(tabViewController, animated: true)
         } else {
-            if let model = reactor.currentState.loginModel {
-                let signReactor = DIContainerService.shared.makeSignReactor(model)
-                let signUpViewController = SignUpViewController(reactor: signReactor)
-                navigationController?.pushViewController(signUpViewController, animated: true)
-            }
+            let signReactor = DIContainerService.shared.makeSignReactor(model)
+            let signUpViewController = SignUpViewController(reactor: signReactor)
+            navigationController?.pushViewController(signUpViewController, animated: true)
         }
     }
 }

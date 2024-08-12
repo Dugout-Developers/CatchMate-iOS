@@ -82,6 +82,7 @@ final class PostDetailViewController: BaseViewController, View {
     }()
 
     // 작성자 정보
+    private let wirterInfoView = UIView()
     private let profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -172,6 +173,7 @@ final class PostDetailViewController: BaseViewController, View {
         setTextStyle()
         setupUI()
         setupNavigation()
+        setupButton()
     }
     
     override func viewDidLayoutSubviews() {
@@ -251,6 +253,21 @@ final class PostDetailViewController: BaseViewController, View {
             genderOptionLabel = makePreferPaddingLabel(text: gender.rawValue)
         } else {
             genderOptionLabel = makePreferPaddingLabel(text: "성별 무관")
+        }
+    }
+    
+    private func setupButton() {
+        let pushUserPageGesture = UITapGestureRecognizer(target: self, action: #selector(pushUserPage))
+        wirterInfoView.addGestureRecognizer(pushUserPageGesture)
+        
+    }
+    
+    @objc private func pushUserPage(_ sender: UITapGestureRecognizer) {
+        if let user = reactor.currentState.post?.writer {
+            let userPageVC = OtherUserMyPageViewController(user: user, reactor: OtherUserpageReactor())
+            navigationController?.pushViewController(userPageVC, animated: true)
+        } else {
+            showToast(message: "해당 사용자 정보에 접근할 수 없습니다. 다시 시도해주세요.")
         }
     }
     
@@ -431,7 +448,7 @@ extension PostDetailViewController {
             }.paddingTop(12).paddingBottom(16).paddingHorizontal(MainGridSystem.getMargin()).marginBottom(8)
             
             // 작성자 정보
-            flex.addItem().backgroundColor(.white).width(100%).direction(.row).justifyContent(.spaceBetween).alignItems(.center).define { flex in
+            flex.addItem(wirterInfoView).backgroundColor(.white).width(100%).direction(.row).justifyContent(.spaceBetween).alignItems(.center).define { flex in
                 flex.addItem().direction(.row).justifyContent(.start).alignItems(.center).define { flex in
                     flex.addItem(profileImageView).size(48).cornerRadius(24).marginRight(8)
                     flex.addItem().direction(.column).justifyContent(.start).alignItems(.start).define { flex in

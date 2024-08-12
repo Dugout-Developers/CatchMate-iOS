@@ -58,6 +58,8 @@
 		531963F12C645FDE00EE7F23 /* SendMateReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531963F02C645FDE00EE7F23 /* SendMateReactor.swift */; };
 		531DCA252C67C5450015AC53 /* ReceiveMateListDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531DCA242C67C5450015AC53 /* ReceiveMateListDetailViewController.swift */; };
 		531DCA272C67CC8A0015AC53 /* ReceiveMateDetailReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531DCA262C67CC8A0015AC53 /* ReceiveMateDetailReactor.swift */; };
+		531DCA292C6905430015AC53 /* OtherUserMyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531DCA282C6905430015AC53 /* OtherUserMyPageViewController.swift */; };
+		531DCA2B2C6A0F540015AC53 /* OtherUserpageReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531DCA2A2C6A0F540015AC53 /* OtherUserpageReactor.swift */; };
 		53241F3C2C3C517600F468E1 /* GridSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F3B2C3C517600F468E1 /* GridSystem.swift */; };
 		53241F3E2C3C589100F468E1 /* DesignAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */; };
 		53241F4E2C3EE58E00F468E1 /* CMPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */; };
@@ -262,6 +264,8 @@
 		531963F02C645FDE00EE7F23 /* SendMateReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMateReactor.swift; sourceTree = "<group>"; };
 		531DCA242C67C5450015AC53 /* ReceiveMateListDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMateListDetailViewController.swift; sourceTree = "<group>"; };
 		531DCA262C67CC8A0015AC53 /* ReceiveMateDetailReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMateDetailReactor.swift; sourceTree = "<group>"; };
+		531DCA282C6905430015AC53 /* OtherUserMyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserMyPageViewController.swift; sourceTree = "<group>"; };
+		531DCA2A2C6A0F540015AC53 /* OtherUserpageReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserpageReactor.swift; sourceTree = "<group>"; };
 		53241F3B2C3C517600F468E1 /* GridSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSystem.swift; sourceTree = "<group>"; };
 		53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DesignAssets.xcassets; sourceTree = "<group>"; };
 		53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMPopupViewController.swift; sourceTree = "<group>"; };
@@ -587,6 +591,7 @@
 				5301E2A42C5B7DB70078E910 /* EmptyMyPageViewController.swift */,
 				5301E2A02C5B5C280078E910 /* MyPageProfileCell.swift */,
 				5301E2AA2C5B82AA0078E910 /* MypageMenu.swift */,
+				531DCA282C6905430015AC53 /* OtherUserMyPageViewController.swift */,
 			);
 			path = MyPageRoot;
 			sourceTree = "<group>";
@@ -778,6 +783,7 @@
 				534E39E22C63D392006D180E /* AnnouncementsReactor.swift */,
 				531963F02C645FDE00EE7F23 /* SendMateReactor.swift */,
 				5378EA9E2C649BBE00A2422C /* RecevieMateReactor.swift */,
+				531DCA2A2C6A0F540015AC53 /* OtherUserpageReactor.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1194,6 +1200,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				536BDDB22C189B230043B1DA /* HomeViewController.swift in Sources */,
+				531DCA292C6905430015AC53 /* OtherUserMyPageViewController.swift in Sources */,
 				531288CD2C5408FF000C2FB1 /* LoginModel.swift in Sources */,
 				534E39EC2C63E771006D180E /* SendMateListCell.swift in Sources */,
 				533A2B362C2BEA3900A59340 /* InputCheerStyleViewController.swift in Sources */,
@@ -1239,6 +1246,7 @@
 				53FC69DF2C58E00A00B97AEA /* UserDataSource.swift in Sources */,
 				536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */,
 				53716BC22C4053430044AD2A /* AddReactor.swift in Sources */,
+				531DCA2B2C6A0F540015AC53 /* OtherUserpageReactor.swift in Sources */,
 				536BDE292C1B53860043B1DA /* Color.swift in Sources */,
 				533A2B2A2C2859D600A59340 /* CMImageButton.swift in Sources */,
 				536BDE2F2C1B55240043B1DA /* NotiViewController.swift in Sources */,

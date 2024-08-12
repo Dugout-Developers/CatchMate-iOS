@@ -8,7 +8,7 @@
 import Foundation
 
 /// 최종 presentation단 전달 모델 
-struct LoginModel {
+struct LoginModel: Equatable {
     let id: String
     let email: String
     let accessToken: String
@@ -18,4 +18,8 @@ struct LoginModel {
     let gender: Gender?
     let birth: String?
     let profileImage: String?
+    
+    static func == (lhs: LoginModel, rhs: LoginModel) -> Bool {
+        return lhs.id == rhs.id
+    }
 }
