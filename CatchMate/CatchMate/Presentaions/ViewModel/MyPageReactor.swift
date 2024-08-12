@@ -30,7 +30,9 @@ final class MyPageReactor: Reactor {
     var initialState: State
     private let userUseCase: UserUseCase
     private let logoutUseCase: LogoutUseCase
-    
+    deinit {
+        print("Logout Reactor deinit")
+    }
     init(userUsecase: UserUseCase, logoutUsecase: LogoutUseCase) {
         self.initialState = State()
         self.userUseCase = userUsecase

@@ -12,12 +12,14 @@ import NaverThirdPartyLogin
 
 final class AuthReactor: Reactor {
     enum Action {
+        case resetState
         case kakaoLogin
         case appleLogin
         case naverLogin
         case setError(Error)
     }
     enum Mutation {
+        case resetState
         case setLoginInfo(LoginModel)
         case setError(Error)
     }
@@ -67,6 +69,9 @@ final class AuthReactor: Reactor {
             
         case .setError(let error):
             return Observable.just(Mutation.setError(error))
+        case .resetState:
+            URLCache.shared.removeAllCachedResponses()
+            return Observable.just(Mutation.resetState)
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
@@ -78,6 +83,9 @@ final class AuthReactor: Reactor {
         case .setError(let error):
             print(error.localizedDescription)
             newState.errorMessage = error.localizedDescription
+        case .resetState:
+            newState.loginModel = nil
+            newState.errorMessage = nil
         }
         return newState
     }

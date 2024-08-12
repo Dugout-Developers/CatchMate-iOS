@@ -186,7 +186,7 @@ extension MyPageViewController {
                     _ = KeychainService.deleteToken(for: .refreshToken)
                     LoginUserDefaultsService.shared.deleteLoginData()
                     let reactor = DIContainerService.shared.makeAuthReactor()
-                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(SignInViewController(reactor: reactor), animated: true)
+                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(UINavigationController(rootViewController: SignInViewController(reactor: reactor)), animated: true)
                 }
             }
             .disposed(by: disposeBag)
@@ -220,7 +220,7 @@ extension MyPageViewController {
                     _ = KeychainService.deleteToken(for: .accessToken)
                     _ = KeychainService.deleteToken(for: .refreshToken)
                     let reactor = DIContainerService.shared.makeAuthReactor()
-                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(SignInViewController(reactor: reactor), animated: true)
+                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(UINavigationController(rootViewController: SignInViewController(reactor: reactor)), animated: true)
                 }
             }
             .disposed(by: disposeBag)

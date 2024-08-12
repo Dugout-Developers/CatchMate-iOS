@@ -21,7 +21,7 @@ final class SignInViewController: BaseViewController, View {
         imageView.image = UIImage(named: "EmptyPrimary")
         return imageView
     }()
-    
+
     private let simpleLoginLabelImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "Simplelogin")
@@ -70,6 +70,7 @@ final class SignInViewController: BaseViewController, View {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        reactor.action.onNext(.resetState)
         print(KeychainService.getToken(for: .refreshToken))
     }
     
@@ -117,6 +118,7 @@ extension SignInViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
+        // !! 로그인 바인딩 부분
         reactor.state
             .map { state -> LoginModel? in
                 if let loginModel = state.loginModel {
@@ -125,8 +127,8 @@ extension SignInViewController {
                 return nil
             }
             .compactMap{$0}
-            .distinctUntilChanged()
             .withUnretained(self)
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { vc, model in
                 print("\(model)")
                 vc.pushNextView(model)
@@ -139,11 +141,28 @@ extension SignInViewController {
         if !state {
             // 회원가입 이미한 유저일 경우
             let tabViewController = TabBarController()
-            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(tabViewController, animated: true)
+            DispatchQueue.main.async { [weak self] in
+                guard let self else {
+                    LoggerService.shared.debugLog("회원가입 화면 전환 self 없음")
+                    return
+                }
+                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(tabViewController, animated: true)
+            }
+
         } else {
             let signReactor = DIContainerService.shared.makeSignReactor(model)
             let signUpViewController = SignUpViewController(reactor: signReactor)
-            navigationController?.pushViewController(signUpViewController, animated: true)
+            DispatchQueue.main.async { [weak self] in
+                guard let self else {
+                    LoggerService.shared.debugLog("회원가입 화면 전환 self 없음")
+                    return
+                }
+                guard let navigationController = navigationController else {
+                    LoggerService.shared.debugLog("회원가입 화면 전환 navigation 없음")
+                    return
+                }
+                navigationController.pushViewController(signUpViewController, animated: true)
+            }
         }
     }
 }
