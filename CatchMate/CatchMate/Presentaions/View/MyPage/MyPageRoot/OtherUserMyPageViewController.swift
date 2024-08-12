@@ -85,7 +85,7 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyPageProfileCell", for: indexPath) as? MyPageProfileCell else {
                 return UITableViewCell()
             }
-            cell.configData(user)
+            cell.configData(user, indicatorIsHidden: true)
             cell.selectionStyle = .none
             return cell
         case 1:

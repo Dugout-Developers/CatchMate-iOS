@@ -66,9 +66,9 @@ final class MyPageProfileCell: UITableViewCell {
         containerView.flex.layout(mode: .adjustHeight)
     }
     
-    func configData(_ user: User) {
+    func configData(_ user: User, indicatorIsHidden: Bool = false) {
         tagContainer.subviews.forEach { $0.removeFromSuperview() }
-        indicatorImageButton.isHidden = false
+        indicatorImageButton.isHidden = indicatorIsHidden
         if let image = user.profilePicture, let url = URL(string: image) {
             profileImageView.kf.setImage(with: url)
         } else {
