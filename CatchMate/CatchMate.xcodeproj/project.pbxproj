@@ -60,6 +60,7 @@
 		531DCA272C67CC8A0015AC53 /* ReceiveMateDetailReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531DCA262C67CC8A0015AC53 /* ReceiveMateDetailReactor.swift */; };
 		531DCA292C6905430015AC53 /* OtherUserMyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531DCA282C6905430015AC53 /* OtherUserMyPageViewController.swift */; };
 		531DCA2B2C6A0F540015AC53 /* OtherUserpageReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531DCA2A2C6A0F540015AC53 /* OtherUserpageReactor.swift */; };
+		531E4C232C6A75320052E754 /* ChatSideSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E4C222C6A75320052E754 /* ChatSideSheetViewController.swift */; };
 		53241F3C2C3C517600F468E1 /* GridSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F3B2C3C517600F468E1 /* GridSystem.swift */; };
 		53241F3E2C3C589100F468E1 /* DesignAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */; };
 		53241F4E2C3EE58E00F468E1 /* CMPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */; };
@@ -266,6 +267,7 @@
 		531DCA262C67CC8A0015AC53 /* ReceiveMateDetailReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMateDetailReactor.swift; sourceTree = "<group>"; };
 		531DCA282C6905430015AC53 /* OtherUserMyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserMyPageViewController.swift; sourceTree = "<group>"; };
 		531DCA2A2C6A0F540015AC53 /* OtherUserpageReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserpageReactor.swift; sourceTree = "<group>"; };
+		531E4C222C6A75320052E754 /* ChatSideSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSideSheetViewController.swift; sourceTree = "<group>"; };
 		53241F3B2C3C517600F468E1 /* GridSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSystem.swift; sourceTree = "<group>"; };
 		53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DesignAssets.xcassets; sourceTree = "<group>"; };
 		53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMPopupViewController.swift; sourceTree = "<group>"; };
@@ -549,6 +551,7 @@
 				533183D42C5150B60097F3F1 /* OtherMessageTableViewCell.swift */,
 				533183D82C5160220097F3F1 /* ChatData.swift */,
 				533183DC2C51F5370097F3F1 /* ChatingInputField.swift */,
+				531E4C222C6A75320052E754 /* ChatSideSheetViewController.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -1295,6 +1298,7 @@
 				5301E2BA2C5BED8D0078E910 /* UserMapper.swift in Sources */,
 				5378EA9B2C6487A600A2422C /* ReceiveMateListCell.swift in Sources */,
 				536BDE272C1B53150043B1DA /* UIColor+Extension.swift in Sources */,
+				531E4C232C6A75320052E754 /* ChatSideSheetViewController.swift in Sources */,
 				53B8E2612C61229A001D0ADF /* AddPostRepositoryImpl.swift in Sources */,
 				536BDE382C1C07990043B1DA /* PaddingLabel.swift in Sources */,
 				5378EA9D2C649B6900A2422C /* ReceiveMateListViewController.swift in Sources */,
