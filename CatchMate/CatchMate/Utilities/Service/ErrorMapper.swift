@@ -49,7 +49,7 @@ final class ErrorMapper {
             return .retryable(message: "네트워크로 인해 요청이 지연되고 있습니다. 다시 시도해주세요.")
         case .serverUnavailable:
             return .showErrorPage(message: "서버 오류가 발생했습니다. 나중에 다시 시도해주세요.")
-        case .unownedError(let statusCode):
+        case .unownedError(_):
             return .showErrorPage(message: "서버 오류가 발생했습니다. 나중에 다시 시도해주세요.")
         case .clientError(let statusCode):
             return mapClientError(statusCode)
@@ -82,6 +82,13 @@ final class ErrorMapper {
             return .showErrorPage(message: message)
         default:
             return .contactSupport(message: "예기치 않은 오류가 발생했습니다. 지원팀에 문의해주세요.")
+        }
+    }
+    
+    private static func mapReferenceError(_ error: ReferenceError) -> PresentationError {
+        switch error {
+        case .notFoundSelf:
+            return .informational(message: "오류가 발생했습니다. 잠시 후 다시 시도해 주세요.")
         }
     }
 }

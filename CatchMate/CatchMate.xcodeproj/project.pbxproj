@@ -61,6 +61,12 @@
 		531DCA292C6905430015AC53 /* OtherUserMyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531DCA282C6905430015AC53 /* OtherUserMyPageViewController.swift */; };
 		531DCA2B2C6A0F540015AC53 /* OtherUserpageReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531DCA2A2C6A0F540015AC53 /* OtherUserpageReactor.swift */; };
 		531E4C232C6A75320052E754 /* ChatSideSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E4C222C6A75320052E754 /* ChatSideSheetViewController.swift */; };
+		531E4C252C6B549B0052E754 /* PostLoadDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E4C242C6B549B0052E754 /* PostLoadDataSource.swift */; };
+		531E4C282C6B55510052E754 /* PostListDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E4C272C6B55510052E754 /* PostListDTO.swift */; };
+		531E4C2B2C6B5C2E0052E754 /* PostListLoadRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E4C2A2C6B5C2E0052E754 /* PostListLoadRepositoryImpl.swift */; };
+		531E4C2D2C6B5C4A0052E754 /* PostListLoadRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E4C2C2C6B5C4A0052E754 /* PostListLoadRepository.swift */; };
+		531E4C2F2C6B5D5C0052E754 /* PostList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E4C2E2C6B5D5C0052E754 /* PostList.swift */; };
+		531E4C322C6B62070052E754 /* PostListLoadUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E4C312C6B62070052E754 /* PostListLoadUseCase.swift */; };
 		53241F3C2C3C517600F468E1 /* GridSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F3B2C3C517600F468E1 /* GridSystem.swift */; };
 		53241F3E2C3C589100F468E1 /* DesignAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */; };
 		53241F4E2C3EE58E00F468E1 /* CMPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */; };
@@ -268,6 +274,12 @@
 		531DCA282C6905430015AC53 /* OtherUserMyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserMyPageViewController.swift; sourceTree = "<group>"; };
 		531DCA2A2C6A0F540015AC53 /* OtherUserpageReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserpageReactor.swift; sourceTree = "<group>"; };
 		531E4C222C6A75320052E754 /* ChatSideSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSideSheetViewController.swift; sourceTree = "<group>"; };
+		531E4C242C6B549B0052E754 /* PostLoadDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLoadDataSource.swift; sourceTree = "<group>"; };
+		531E4C272C6B55510052E754 /* PostListDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListDTO.swift; sourceTree = "<group>"; };
+		531E4C2A2C6B5C2E0052E754 /* PostListLoadRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListLoadRepositoryImpl.swift; sourceTree = "<group>"; };
+		531E4C2C2C6B5C4A0052E754 /* PostListLoadRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListLoadRepository.swift; sourceTree = "<group>"; };
+		531E4C2E2C6B5D5C0052E754 /* PostList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostList.swift; sourceTree = "<group>"; };
+		531E4C312C6B62070052E754 /* PostListLoadUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListLoadUseCase.swift; sourceTree = "<group>"; };
 		53241F3B2C3C517600F468E1 /* GridSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSystem.swift; sourceTree = "<group>"; };
 		53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DesignAssets.xcassets; sourceTree = "<group>"; };
 		53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMPopupViewController.swift; sourceTree = "<group>"; };
@@ -565,6 +577,33 @@
 			path = AddPost;
 			sourceTree = "<group>";
 		};
+		531E4C262C6B54A60052E754 /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				53B8E2662C612B25001D0ADF /* AddPostDataSource.swift */,
+				531E4C242C6B549B0052E754 /* PostLoadDataSource.swift */,
+			);
+			path = Post;
+			sourceTree = "<group>";
+		};
+		531E4C292C6B5BF40052E754 /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				53B8E2602C61229A001D0ADF /* AddPostRepositoryImpl.swift */,
+				531E4C2A2C6B5C2E0052E754 /* PostListLoadRepositoryImpl.swift */,
+			);
+			path = Post;
+			sourceTree = "<group>";
+		};
+		531E4C302C6B61F90052E754 /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				53B8E25C2C612245001D0ADF /* AddPostRepository.swift */,
+				531E4C2C2C6B5C4A0052E754 /* PostListLoadRepository.swift */,
+			);
+			path = Post;
+			sourceTree = "<group>";
+		};
 		533A2B282C28558D00A59340 /* Sign */ = {
 			isa = PBXGroup;
 			children = (
@@ -815,6 +854,7 @@
 				531288CC2C5408FF000C2FB1 /* LoginModel.swift */,
 				53B8E2642C61280D001D0ADF /* RequestPost.swift */,
 				534E39DE2C63CF65006D180E /* Announcements.swift */,
+				531E4C2E2C6B5D5C0052E754 /* PostList.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -826,6 +866,7 @@
 				53B8E2402C5C7C0A001D0ADF /* Sign */,
 				53B8E23F2C5C7BF3001D0ADF /* User */,
 				53B8E25A2C612171001D0ADF /* AddPostUseCase.swift */,
+				531E4C312C6B62070052E754 /* PostListLoadUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -835,7 +876,7 @@
 			children = (
 				531288C72C54061E000C2FB1 /* Sign */,
 				53B8E23C2C5C7BD3001D0ADF /* User */,
-				53B8E25C2C612245001D0ADF /* AddPostRepository.swift */,
+				531E4C302C6B61F90052E754 /* Post */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -861,6 +902,7 @@
 				53E4A9BB2C4FFB8400D21B49 /* SignUp.swift */,
 				53FC69DA2C58C65700B97AEA /* RefreshTokenResponseDTO.swift */,
 				53B8E25E2C61228A001D0ADF /* PostRequsetDTO.swift */,
+				531E4C272C6B55510052E754 /* PostListDTO.swift */,
 			);
 			path = DTO;
 			sourceTree = "<group>";
@@ -881,7 +923,7 @@
 			children = (
 				531288C62C540602000C2FB1 /* Sign */,
 				53B8E2392C5C7BB8001D0ADF /* User */,
-				53B8E2602C61229A001D0ADF /* AddPostRepositoryImpl.swift */,
+				531E4C292C6B5BF40052E754 /* Post */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -889,10 +931,10 @@
 		536BDE002C1972D80043B1DA /* DataSources */ = {
 			isa = PBXGroup;
 			children = (
+				53B8E2452C5E7BF1001D0ADF /* APIService.swift */,
 				531288BF2C53FE0E000C2FB1 /* Sign */,
 				53B8E2362C5C7530001D0ADF /* User */,
-				53B8E2452C5E7BF1001D0ADF /* APIService.swift */,
-				53B8E2662C612B25001D0ADF /* AddPostDataSource.swift */,
+				531E4C262C6B54A60052E754 /* Post */,
 			);
 			path = DataSources;
 			sourceTree = "<group>";
@@ -1231,6 +1273,7 @@
 				5301E2B62C5BE6AF0078E910 /* LogoutUseCase.swift in Sources */,
 				537598082C46C3D2003BD8AE /* DefaultsTextView.swift in Sources */,
 				533A2B462C2C638100A59340 /* KakaoLoginUseCase.swift in Sources */,
+				531E4C282C6B55510052E754 /* PostListDTO.swift in Sources */,
 				534E39D32C634E26006D180E /* LoginUserDefaultsService.swift in Sources */,
 				53B8E2422C5D0A2D001D0ADF /* ProfileEditViewController.swift in Sources */,
 				53E4A9BC2C4FFB8400D21B49 /* SignUp.swift in Sources */,
@@ -1261,6 +1304,7 @@
 				531288C52C5404C3000C2FB1 /* KakaoDataSource.swift in Sources */,
 				53E4A9B82C4FF00F00D21B49 /* AuthReactor.swift in Sources */,
 				531288C32C54030D000C2FB1 /* AppleLoginDataSource.swift in Sources */,
+				531E4C2B2C6B5C2E0052E754 /* PostListLoadRepositoryImpl.swift in Sources */,
 				53B8E2442C5D2436001D0ADF /* ProfileEditReactor.swift in Sources */,
 				53E4A9BA2C4FFB1300D21B49 /* SignUpDataSource.swift in Sources */,
 				53FC69E32C58F94600B97AEA /* NicknameCheckRepository.swift in Sources */,
@@ -1295,6 +1339,7 @@
 				530DD6142C4F85BF00A7D6CE /* FCMTokenDataSource.swift in Sources */,
 				536BDE342C1B57B10043B1DA /* HomeFilterButton.swift in Sources */,
 				53B8E26B2C613613001D0ADF /* DataError.swift in Sources */,
+				531E4C2F2C6B5D5C0052E754 /* PostList.swift in Sources */,
 				5301E2BA2C5BED8D0078E910 /* UserMapper.swift in Sources */,
 				5378EA9B2C6487A600A2422C /* ReceiveMateListCell.swift in Sources */,
 				536BDE272C1B53150043B1DA /* UIColor+Extension.swift in Sources */,
@@ -1302,6 +1347,7 @@
 				53B8E2612C61229A001D0ADF /* AddPostRepositoryImpl.swift in Sources */,
 				536BDE382C1C07990043B1DA /* PaddingLabel.swift in Sources */,
 				5378EA9D2C649B6900A2422C /* ReceiveMateListViewController.swift in Sources */,
+				531E4C322C6B62070052E754 /* PostListLoadUseCase.swift in Sources */,
 				534E39E32C63D392006D180E /* AnnouncementsReactor.swift in Sources */,
 				53716BC42C42B72F0044AD2A /* CMNavigationBar.swift in Sources */,
 				533A2B232C27FF6A00A59340 /* CMTextView.swift in Sources */,
@@ -1338,10 +1384,12 @@
 				5301E2A52C5B7DB70078E910 /* EmptyMyPageViewController.swift in Sources */,
 				531786642C1EF30F00ACEF6A /* Team.swift in Sources */,
 				53B8E2652C61280D001D0ADF /* RequestPost.swift in Sources */,
+				531E4C252C6B549B0052E754 /* PostLoadDataSource.swift in Sources */,
 				538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */,
 				530DD6122C4F839600A7D6CE /* ServerLoginDataSource.swift in Sources */,
 				5317867D2C216CBE00ACEF6A /* NumberPickerViewController.swift in Sources */,
 				53716BC62C42D19A0044AD2A /* PlaceFilterViewController.swift in Sources */,
+				531E4C2D2C6B5C4A0052E754 /* PostListLoadRepository.swift in Sources */,
 				53E4A9C42C500AD500D21B49 /* SignUpUseCase.swift in Sources */,
 				53B8E26D2C61CBD5001D0ADF /* ErrorMapper.swift in Sources */,
 				531DCA252C67C5450015AC53 /* ReceiveMateListDetailViewController.swift in Sources */,

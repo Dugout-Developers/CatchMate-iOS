@@ -250,9 +250,7 @@ extension AddViewController {
                 }
             }
             .disposed(by: disposeBag)
-//        reactor.state.map{$0.error}
-//            .compactMap{$0}
-//            .
+
         reactor.state.map{$0.dateInfoString}
             .observe(on: MainScheduler.asyncInstance)
             .withUnretained(self)
@@ -303,6 +301,24 @@ extension AddViewController {
                 vc.numberPickerTextField.didSelectItem(String(num))
             }
             .disposed(by: disposeBag)
+    }
+    
+    // 작성 완료 후 호출되는 메소드
+    private func postSavedSuccessfully(postId: String) {
+        let postDetailVC = PostDetailViewController(postID: postId)
+        
+        // 네비게이션 스택을 리셋하고 PostDetailViewController를 push
+        if let navigationController = self.navigationController {
+            var viewControllers = navigationController.viewControllers
+            
+            // 네비게이션 스택에서 현재 뷰컨트롤러(작성 페이지)를 제거하고
+            viewControllers = viewControllers.filter { !($0 is AddViewController) }
+
+            
+            // 새로운 네비게이션 스택에 PostDetailViewController 추가
+            viewControllers.append(postDetailVC)
+            navigationController.setViewControllers(viewControllers, animated: true)
+        }
     }
 }
 // MARK: - Button

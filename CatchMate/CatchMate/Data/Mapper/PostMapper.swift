@@ -18,4 +18,21 @@ final class PostMapper {
             return nil
         }
     }
+
+    func postListDTOtoDomain(_ dto: PostListDTO) -> PostList? {
+        if let homeTeam = Team.init(rawValue: dto.homeTeam), let awayTeam = Team.init(rawValue: dto.awayTeam) {
+            if let convertedDates = DateHelper.shared.convertISODateToCustomStrings(isoDateString: dto.gameDate) {
+                let date = convertedDates.date   // "08.13" 형식
+                let playTime = convertedDates.playTime   // "09:21" 형식
+                
+                return PostList(id: String(dto.boardId), title: dto.title, homeTeam: homeTeam, awayTeam: awayTeam, date: date, playTime: playTime, location: dto.location, maxPerson: dto.maxPerson, currentPerson: dto.currentPerson)
+            } else {
+                LoggerService.shared.log("favoriteListDTO -> PostList 변환 실패 : 날짜 변환 실패", level: .error)
+                return nil
+            }
+        } else {
+            LoggerService.shared.log("favoriteListDTO -> PostList 변환 실패 : 팀정보 매칭 실패", level: .error)
+            return nil
+        }
+    }
 }

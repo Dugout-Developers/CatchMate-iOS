@@ -17,6 +17,8 @@ enum Endpoint: String {
     case postlist = "/board/page/"
     /// 게시글 조회 /board/{boardId}
     case loadPost = "/board/"
+    /// 찜목록 조회 /board/likes
+    case loadFavorite = "/board/likes"
     /// 알람 설정
     case setNotification = "/user/alarm"
     
@@ -26,10 +28,13 @@ enum Endpoint: String {
             return "게시글 요청 API"
         case .postlist:
             return "게시글 리스트 불러오기 API"
-        case .setNotification:
-            return "알람 설정 API"
         case .loadPost:
             return "게시글 리스트 로드 API"
+        case .loadFavorite:
+            return "찜목록 로드 API"
+        case .setNotification:
+            return "알람 설정 API"
+
         }
     }
     
@@ -39,9 +44,11 @@ enum Endpoint: String {
             return .post
         case .setNotification:
             return .patch
-        case .postlist:
-            return .get
         case .loadPost:
+            return .get
+        case .loadFavorite:
+            return .get
+        case .postlist:
             return .get
         }
     }
@@ -54,7 +61,7 @@ final class APIService {
     private let disposeBag = DisposeBag()
     
     func requestAPI<T: Codable>(type: Endpoint, parameters: [String: Any]?, headers: HTTPHeaders? = nil, encoding: any ParameterEncoding = URLEncoding.default, dataType: T.Type) -> Observable<T> {
-        LoggerService.shared.debugLog("APIService: - Get Request: \(type.rawValue)")
+        LoggerService.shared.debugLog("APIService: - Request: \(type.apiName)")
         guard let base = baseURL else {
             LoggerService.shared.log("base 찾기 실패", level: .error)
             return Observable.error(NetworkError.notFoundBaseURL)
@@ -72,7 +79,6 @@ final class APIService {
                     }
                     return Observable.error(NetworkError.unownedError(statusCode: response.statusCode))
                 }
-                
                 do {
                     let dtoResponse = try JSONDecoder().decode(T.self, from: data)
                     LoggerService.shared.log("DTO: \(dtoResponse)")
@@ -87,6 +93,55 @@ final class APIService {
                     return Observable.error(CodableError.decodingFailed)
                 }
             }
+            .catch { error in
+                print(error)
+                return Observable.error(NetworkError.unownedError(statusCode: error.statusCode))
+            }
+    }
+    
+    private let session: Session = {
+        let configuration = URLSessionConfiguration.default
+        return Session(configuration: configuration)
+    }()
+    
+    func requestVoidAPI(type: Endpoint, parameters: [String: Any]?, headers: HTTPHeaders? = nil, encoding: any ParameterEncoding = URLEncoding.default) -> Observable<Void> {
+        LoggerService.shared.debugLog("APIService: - Request: \(type.apiName)")
+        
+        guard let base = baseURL else {
+            LoggerService.shared.log("base 찾기 실패", level: .error)
+            return Observable.error(NetworkError.notFoundBaseURL)
+        }
+        
+        let url = base + type.rawValue
+        return Observable<Void>.create { [weak self] observer in
+            guard let self = self else {
+                observer.onError(ReferenceError.notFoundSelf)
+                return Disposables.create()
+            }
+            
+            let request = self.session.request(
+                url,
+                method: type.requstType,
+                parameters: parameters,
+                encoding: encoding,
+                headers: headers
+            )
+                .validate(statusCode: 200..<300)
+                .responseDecodable(of: Empty.self, emptyResponseCodes: [200]) { response in
+                    switch response.result {
+                    case .success(let data):
+                        observer.onNext(())
+                        observer.onCompleted()
+                    case .failure(let error):
+                        LoggerService.shared.debugLog("Request failed: \(error)")
+                        observer.onError(error)
+                    }
+                }
+            
+            return Disposables.create {
+                request.cancel()
+            }
+        }
     }
     
     func refreshAccessToken() -> RxSwift.Observable<String> {
