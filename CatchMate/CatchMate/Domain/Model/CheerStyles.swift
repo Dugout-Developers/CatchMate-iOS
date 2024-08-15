@@ -50,4 +50,8 @@ enum CheerStyles: String, CaseIterable, Codable {
     }
     
     static let allCheerStyles: [CheerStyles] = CheerStyles.allCases
+    
+    static func random() -> CheerStyles {
+        return allCheerStyles.randomElement() ?? .cheerleader
+    }
 }

@@ -70,8 +70,8 @@ final class ChatSideSheetViewController: BaseViewController {
         titleLabel.text = chat.post.title
         titleLabel.textColor = .cmHeadLineTextColor
         titleLabel.applyStyle(textStyle: FontSystem.body01_medium)
-        homeTeamImageView.setupTeam(team: chat.post.homeTeam, isMyTeam: chat.post.writer.team == chat.post.homeTeam)
-        awayTeamImageView.setupTeam(team: chat.post.awayTeam, isMyTeam: chat.post.writer.team == chat.post.awayTeam)
+        homeTeamImageView.setupTeam(team: chat.post.homeTeam, isMyTeam: chat.post.writer.favGudan == chat.post.homeTeam)
+        awayTeamImageView.setupTeam(team: chat.post.awayTeam, isMyTeam: chat.post.writer.favGudan == chat.post.awayTeam)
     }
     
     private func setupTableView() {

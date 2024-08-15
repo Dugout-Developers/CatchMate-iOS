@@ -259,8 +259,8 @@ final class StartChatInfoCell: UITableViewCell {
     func configData(_ post: Post) {
         infoLabel.text = "\(post.date) | \(post.playTime) | \(post.location)"
         infoLabel.applyStyle(textStyle: FontSystem.body02_medium)
-        homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.writer.team == post.homeTeam)
-        awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.writer.team == post.awayTeam)
+        homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.writer.favGudan == post.homeTeam)
+        awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.writer.favGudan == post.awayTeam)
     }
     
     private func setupUI() {

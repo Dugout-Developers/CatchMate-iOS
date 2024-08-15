@@ -48,7 +48,15 @@ class DIContainerService {
         let addDataSource = AddPostDataSourceImpl()
         let addRepository = AddPostRepositoryImpl(addPostDS: addDataSource)
         let addUsecase = AddPostUseCaseImpl(addPostRepository: addRepository)
-        return AddReactor(addUsecase: addUsecase)
+        
+        let loadPostDataSource = LoadPostDataSourceImpl()
+        let loadPostRepository = LoadPostRepositoryImpl(loadPostDS: loadPostDataSource)
+        let loadPostUsecase = LoadPostUseCaseImpl(loadPostRepository: loadPostRepository)
+        
+        let loadUserDataSource = UserDataSourceImpl()
+        let loadUserRepository = UserRepositoryImpl(userDS: loadUserDataSource)
+        let loadUserUsecase = UserUseCaseImpl(userRepository: loadUserRepository)
+        return AddReactor(addUsecase: addUsecase, loadPostDetailUsecase: loadPostUsecase, loadUserUsecase: loadUserUsecase)
     }
     
     func makeMypageReactor() -> MyPageReactor {

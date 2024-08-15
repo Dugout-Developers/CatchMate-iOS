@@ -66,21 +66,21 @@ final class MyPageProfileCell: UITableViewCell {
         containerView.flex.layout(mode: .adjustHeight)
     }
     
-    func configData(_ user: User, indicatorIsHidden: Bool = false) {
+    func configData(_ user: SimpleUser, indicatorIsHidden: Bool = false) {
         tagContainer.subviews.forEach { $0.removeFromSuperview() }
         indicatorImageButton.isHidden = indicatorIsHidden
-        if let image = user.profilePicture, let url = URL(string: image) {
+        if let image = user.picture, !image.isEmpty, let url = URL(string: image) {
             profileImageView.kf.setImage(with: url)
         } else {
             profileImageView.image = UIImage(named: "tempProfile")
         }
         nicknameLabel.text = user.nickName
         tags = []
-        tags.append(makePaddingLabel(color: .white, backgroundColor: user.team.getTeamColor, text: user.team.rawValue))
+        tags.append(makePaddingLabel(color: .white, backgroundColor: user.favGudan.getTeamColor, text: user.favGudan.rawValue))
         if let cheerStyle = user.cheerStyle {
             tags.append(makePaddingLabel(color: .white, backgroundColor: .cmPrimaryColor, text: cheerStyle.rawValue))
         }
-        tags.append(makePaddingLabel(color: .cmNonImportantTextColor, backgroundColor: .grayScale100, text: user.gener.rawValue))
+        tags.append(makePaddingLabel(color: .cmNonImportantTextColor, backgroundColor: .grayScale100, text: user.gender.rawValue))
         let ageDecade = (user.age / 10) * 10
         tags.append(makePaddingLabel(color: .cmNonImportantTextColor, backgroundColor: .grayScale100, text: "\(ageDecade)대"))
         

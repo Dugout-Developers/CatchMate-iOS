@@ -206,7 +206,7 @@ extension MyPageViewController {
                 guard let cell = self?.tableview.cellForRow(at: IndexPath(row: 0, section: 0)) as? MyPageProfileCell else { return }
                 if !isLoading {
                     if let user = self?.user {
-                        cell.configData(user)
+                        cell.configData(SimpleUser(user: user))
                         cell.updateConstraints()
                     }
                 }

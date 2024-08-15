@@ -10,10 +10,10 @@ import RxSwift
 import RxAlamofire
 import Alamofire
 
-protocol PostLoadDataSource {
+protocol PostListLoadDataSource {
     func loadPostList(isFavorite: Bool, pageNum: Int, gudan: String, gameDate: String) ->  Observable<[PostListDTO]>
 }
-final class PostLoadDataSourceImpl: PostLoadDataSource {
+final class PostListLoadDataSourceImpl: PostListLoadDataSource {
     func loadPostList(isFavorite: Bool, pageNum: Int, gudan: String, gameDate: String) -> RxSwift.Observable<[PostListDTO]> {
         guard let token = KeychainService.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)

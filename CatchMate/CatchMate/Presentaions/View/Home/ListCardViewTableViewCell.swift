@@ -105,8 +105,8 @@ final class ListCardViewTableViewCell: UITableViewCell {
         self.post = post
         favoriteButton.isHidden = !isFavoriteCell
         favoriteButton.isEnabled = isFavoriteCell
-        homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.writer.team == post.homeTeam, background: .grayScale50)
-        awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.writer.team == post.awayTeam, background: .grayScale50)
+        homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.writer.favGudan == post.homeTeam, background: .grayScale50)
+        awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.writer.favGudan == post.awayTeam, background: .grayScale50)
         
         //info
         postTitleLabel.text = post.title

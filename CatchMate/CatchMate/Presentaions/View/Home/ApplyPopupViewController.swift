@@ -134,9 +134,9 @@ final class ApplyPopupViewController: UIViewController, View {
         infoTextLabel.text = "\(post.date) | \(post.playTime) | \(post.location)"
         infoTextLabel.applyStyle(textStyle: FontSystem.body02_medium)
         homeTeamImageView.image = post.homeTeam.getLogoImage
-        homeTeamImageView.backgroundColor = post.writer.team == post.homeTeam ? post.homeTeam.getTeamColor : .white
+        homeTeamImageView.backgroundColor = post.writer.favGudan == post.homeTeam ? post.homeTeam.getTeamColor : .white
         awayTeamImageView.image = post.awayTeam.getLogoImage
-        awayTeamImageView.backgroundColor = post.writer.team == post.awayTeam ? post.awayTeam.getTeamColor : .white
+        awayTeamImageView.backgroundColor = post.writer.favGudan == post.awayTeam ? post.awayTeam.getTeamColor : .white
         if let apply = apply {
             titleLabel.text = "직관 신청을 보냈어요"
             titleLabel.applyStyle(textStyle: FontSystem.bodyTitle)

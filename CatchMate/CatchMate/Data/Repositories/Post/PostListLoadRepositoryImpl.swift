@@ -9,8 +9,8 @@ import UIKit
 import RxSwift
 
 final class PostListLoadRepositoryImpl: PostListLoadRepository {
-    private let favoriteLoadDS: PostLoadDataSource
-    init(favoriteLoadDS: PostLoadDataSource) {
+    private let favoriteLoadDS: PostListLoadDataSource
+    init(favoriteLoadDS: PostListLoadDataSource) {
         self.favoriteLoadDS = favoriteLoadDS
     }
     func loadPostList(isFavorite: Bool, pageNum: Int, gudan: String, gameDate: String) -> RxSwift.Observable<[PostList]> {

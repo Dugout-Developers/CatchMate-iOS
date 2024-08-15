@@ -95,7 +95,7 @@ final class ChatListTableViewCell: UITableViewCell {
     }
   
     func configData(chat: Chat) {
-        chatImageView.image = chat.post.writer.team.getFillImage
+        chatImageView.image = chat.post.writer.favGudan.getFillImage
         postTitleLabel.text = chat.post.title
         newChat = chat.enterTime.isSameDay(as: Date())
         lastChatLabel.text = newChat ? "채팅을 시작해보세요." : (chat.message.last?.text ?? "채팅을 시작해보세요.")

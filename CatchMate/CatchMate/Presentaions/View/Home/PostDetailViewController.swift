@@ -26,6 +26,7 @@ final class PostDetailViewController: BaseViewController, View {
     fileprivate var _isFavorite = PublishSubject<Bool>()
     private let scrollView = UIScrollView()
     private let contentView = UIView()
+    private let isAddView: Bool
     // 기본 게시글 정보
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -154,15 +155,23 @@ final class PostDetailViewController: BaseViewController, View {
     private let applyButton = CMDefaultFilledButton(title: "직관 신청")
     
     var reactor: PostReactor
-    
-    init(postID: String) {
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if let tabBarController = tabBarController as? TabBarController, isAddView {
+            tabBarController.isAddView = false
+            tabBarController.selectedIndex = tabBarController.preViewControllerIndex
+        }
+    }
+    init(postID: String, isAddView: Bool = false) {
         self.reactor = PostReactor(postId: postID)
+        self.isAddView = isAddView
         super.init(nibName: nil, bundle: nil)
     }
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -223,18 +232,18 @@ final class PostDetailViewController: BaseViewController, View {
         // TODO: - API UseCase 연결시 프로필 링크 가져오는걸로 바꾸기
         profileImageView.image = UIImage(named: "profile")
         nickNameLabel.text = post.writer.nickName
-        cheerTeam.backgroundColor = post.writer.team.getTeamColor
-        cheerTeam.text = post.writer.team.rawValue
+        cheerTeam.backgroundColor = post.writer.favGudan.getTeamColor
+        cheerTeam.text = post.writer.favGudan.rawValue
         if let cheerStyle = post.writer.cheerStyle {
             cheerStyleLabel?.text = cheerStyle.rawValue
             cheerStyleLabel?.applyStyle(textStyle: FontSystem.caption01_medium)
         } else {
             cheerStyleLabel = nil
         }
-        genderLabel.text = post.writer.gener.rawValue
-        ageLabel.text = "\(post.writer.age)세"
-        homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.homeTeam == post.writer.team)
-        awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.awayTeam == post.writer.team)
+        genderLabel.text = post.writer.gender.rawValue
+        ageLabel.text = post.writer.ageRange
+        homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.homeTeam == post.writer.favGudan)
+        awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.awayTeam == post.writer.favGudan)
 
         if post.addInfo != nil {
             addInfoValueLabel.text = post.addInfo

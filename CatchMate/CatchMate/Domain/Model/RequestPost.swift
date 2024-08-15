@@ -11,7 +11,7 @@ struct RequestPost {
     let title: String
     let homeTeam: Team
     let awayTeam: Team
-    let date: String
+    let date: Date
     let playTime: String
     let location: String
     let maxPerson: Int

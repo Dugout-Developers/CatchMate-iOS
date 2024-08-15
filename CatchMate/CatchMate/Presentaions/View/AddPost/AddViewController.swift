@@ -19,6 +19,7 @@ extension Reactive where Base: AddViewController {
 }
 final class AddViewController: BaseViewController, View {
     private let reactor: AddReactor
+    private var isSaved: Bool = false
     private var placeCount = 0 {
         didSet {
             placePicker.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.tiny - CGFloat((2-placeCount)*50), identifier: "PlaceFilter")
@@ -135,6 +136,21 @@ final class AddViewController: BaseViewController, View {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        if !isSaved{
+            reactor.action.onNext(.loadUser)
+        }
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if isSaved {
+            isSaved.toggle()
+            navigationController?.popViewController(animated: false)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -148,7 +164,7 @@ final class AddViewController: BaseViewController, View {
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if let tabBarController = tabBarController as? TabBarController {
+        if let tabBarController = tabBarController as? TabBarController, !isSaved {
             tabBarController.isAddView = false
             tabBarController.selectedIndex = tabBarController.preViewControllerIndex
         }
@@ -240,14 +256,13 @@ extension AddViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        reactor.state.map{$0.isSavePost}
+        reactor.state.map{$0.loadSavePost}
             .distinctUntilChanged()
+            .compactMap{$0}
             .withUnretained(self)
-            .subscribe { vc, state in
-                if state {
+            .subscribe { vc, post in
                     LoggerService.shared.debugLog("게시글 저장 완료")
-                    vc.navigationController?.popViewController(animated: true)
-                }
+                    vc.postSavedSuccessfully(postId: "1")
             }
             .disposed(by: disposeBag)
 
@@ -305,19 +320,10 @@ extension AddViewController {
     
     // 작성 완료 후 호출되는 메소드
     private func postSavedSuccessfully(postId: String) {
-        let postDetailVC = PostDetailViewController(postID: postId)
-        
-        // 네비게이션 스택을 리셋하고 PostDetailViewController를 push
+        let postDetailVC = PostDetailViewController(postID: postId, isAddView: true)
         if let navigationController = self.navigationController {
-            var viewControllers = navigationController.viewControllers
-            
-            // 네비게이션 스택에서 현재 뷰컨트롤러(작성 페이지)를 제거하고
-            viewControllers = viewControllers.filter { !($0 is AddViewController) }
-
-            
-            // 새로운 네비게이션 스택에 PostDetailViewController 추가
-            viewControllers.append(postDetailVC)
-            navigationController.setViewControllers(viewControllers, animated: true)
+            isSaved = true
+            navigationController.pushViewController(postDetailVC, animated: true)
         }
     }
 }

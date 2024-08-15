@@ -9,7 +9,7 @@ import RxSwift
 import ReactorKit
 
 final class OtherUserMyPageViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource, View  {
-    private var user: User
+    private var user: SimpleUser
     private let tableview = UITableView()
     private let reactor: OtherUserpageReactor
     private var posts: [Post] = []
@@ -27,7 +27,7 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
         bind(reactor: reactor)
     }
     
-    init(user: User, reactor: OtherUserpageReactor) {
+    init(user: SimpleUser, reactor: OtherUserpageReactor) {
         self.user = user
         self.reactor = reactor
         super.init(nibName: nil, bundle: nil)
