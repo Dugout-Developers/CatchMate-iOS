@@ -11,10 +11,10 @@ import RxAlamofire
 import Alamofire
 
 protocol PostListLoadDataSource {
-    func loadPostList(isFavorite: Bool, pageNum: Int, gudan: String, gameDate: String) ->  Observable<[PostListDTO]>
+    func loadPostList(pageNum: Int, gudan: String, gameDate: String) ->  Observable<[PostListDTO]>
 }
 final class PostListLoadDataSourceImpl: PostListLoadDataSource {
-    func loadPostList(isFavorite: Bool, pageNum: Int, gudan: String, gameDate: String) -> RxSwift.Observable<[PostListDTO]> {
+    func loadPostList(pageNum: Int, gudan: String, gameDate: String) -> RxSwift.Observable<[PostListDTO]> {
         guard let token = KeychainService.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
@@ -22,15 +22,18 @@ final class PostListLoadDataSourceImpl: PostListLoadDataSource {
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
-
+        
+        let parameters: [String: Any] = [
+            "gudan": gudan,
+            "gameDate": gameDate
+        ]
         LoggerService.shared.debugLog("FavoritePostLoadDataSourceImpl 토큰 확인: \(headers)")
-        return APIService.shared.requestAPI(type: isFavorite ? .loadFavorite : .loadPost, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: [PostListDTO].self)
+        return APIService.shared.requestAPI(addEndPoint: String(pageNum), type: .loadPost, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: [PostListDTO].self)
             .map { favoriteDTOList in
                 LoggerService.shared.debugLog("FavoriteList Load 성공: \(favoriteDTOList)")
                 return favoriteDTOList
             }
-            .catch { [weak self] error in
-                guard let self = self else { return Observable.error(error) }
+            .catch { error in
                 if let networkError = error as? NetworkError, networkError.statusCode == 401 {
                     return APIService.shared.refreshAccessToken()
                         .flatMap { token -> Observable<[PostListDTO]> in

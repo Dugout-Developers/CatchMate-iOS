@@ -43,7 +43,13 @@ class DIContainerService {
         
         return SignUpReactor(signUpModel: model, signupUseCase: usecase)
     }
-    
+    func makeHomeReactor() -> HomeReactor {
+        let listLoadDataSource = PostListLoadDataSourceImpl()
+        let listLoadRepository = PostListLoadRepositoryImpl(favoriteLoadDS: listLoadDataSource)
+        let listLoadUsecase = PostListLoadUseCaseImpl(postListRepository: listLoadRepository)
+        
+        return HomeReactor(loadPostListUsecase: listLoadUsecase)
+    }
     func makeAddReactor() -> AddReactor {
         let addDataSource = AddPostDataSourceImpl()
         let addRepository = AddPostRepositoryImpl(addPostDS: addDataSource)

@@ -36,9 +36,10 @@ final class HomeReactor: Reactor {
     }
     
     var initialState: State
-    
-    init() {
+    private let loadPostListUsecase: PostListLoadUseCase
+    init(loadPostListUsecase: PostListLoadUseCase) {
         self.initialState = State()
+        self.loadPostListUsecase = loadPostListUsecase
     }
     
     func mutate(action: Action) -> Observable<Mutation> {

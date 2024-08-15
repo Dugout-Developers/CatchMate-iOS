@@ -60,14 +60,16 @@ final class APIService {
     private var baseURL = Bundle.main.baseURL
     private let disposeBag = DisposeBag()
     
-    func requestAPI<T: Codable>(type: Endpoint, parameters: [String: Any]?, headers: HTTPHeaders? = nil, encoding: any ParameterEncoding = URLEncoding.default, dataType: T.Type) -> Observable<T> {
+    func requestAPI<T: Codable>(addEndPoint: String? = nil, type: Endpoint, parameters: [String: Any]?, headers: HTTPHeaders? = nil, encoding: any ParameterEncoding = URLEncoding.default, dataType: T.Type) -> Observable<T> {
         LoggerService.shared.debugLog("APIService: - Request: \(type.apiName)")
         guard let base = baseURL else {
             LoggerService.shared.log("base 찾기 실패", level: .error)
             return Observable.error(NetworkError.notFoundBaseURL)
         }
-        let url = base + type.rawValue
-        
+        var url = base + type.rawValue
+        if let addEndPoint = addEndPoint {
+            url += addEndPoint
+        }
         return RxAlamofire.requestData(type.requstType, url, parameters: parameters, encoding: encoding, headers: headers)
             .flatMap { (response, data) -> Observable<T> in
                 guard 200..<300 ~= response.statusCode else {
