@@ -163,7 +163,7 @@ final class PostDetailViewController: BaseViewController, View {
         }
     }
     init(postID: String, isAddView: Bool = false) {
-        self.reactor = PostReactor(postId: postID)
+        self.reactor = DIContainerService.shared.makePostReactor(postID)
         self.isAddView = isAddView
         super.init(nibName: nil, bundle: nil)
     }
@@ -177,9 +177,8 @@ final class PostDetailViewController: BaseViewController, View {
         super.viewDidLoad()
         bind(reactor: reactor)
         reactor.action.onNext(.loadPostDetails)
-        reactor.action.onNext(.loadIsApplied)
-        reactor.action.onNext(.loadIsFavorite)
-        setTextStyle()
+//        reactor.action.onNext(.loadIsApplied)
+//        reactor.action.onNext(.loadIsFavorite)
         setupUI()
         setupNavigation()
         setupButton()
@@ -263,6 +262,21 @@ final class PostDetailViewController: BaseViewController, View {
         } else {
             genderOptionLabel = makePreferPaddingLabel(text: "성별 무관")
         }
+        setTextStyle()
+        titleLabel.flex.markDirty()
+        dateValueLabel.flex.markDirty()
+        placeValueLabel.flex.markDirty()
+        partynumValueLabel.flex.markDirty()
+        cheerTeam.flex.markDirty()
+        cheerStyleLabel?.flex.markDirty()
+        genderLabel.flex.markDirty()
+        ageLabel.flex.markDirty()
+        addInfoValueLabel.flex.markDirty()
+        ageOptionLabel.forEach { label in
+            label.flex.markDirty()
+        }
+        genderOptionLabel.flex.markDirty()
+        contentView.flex.layout(mode: .adjustHeight)
     }
     
     private func setupButton() {

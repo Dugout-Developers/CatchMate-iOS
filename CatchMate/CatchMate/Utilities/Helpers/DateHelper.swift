@@ -11,11 +11,15 @@ final class DateHelper {
     static let shared = DateHelper()
     
     let dateFormatter: DateFormatter
-    let isoFormatter = ISO8601DateFormatter()
+    let isoFormatter: ISO8601DateFormatter
     
     private init() {
         dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ko_KR")
+        
+        isoFormatter = ISO8601DateFormatter()
+        isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        isoFormatter.timeZone = TimeZone(secondsFromGMT: 0)
     }
     
     func toString(from date: Date, format: String) -> String {
@@ -36,11 +40,10 @@ final class DateHelper {
     }
     // ISO8601 형식의 문자열을 받아 date와 playTime으로 변환하는 메서드 추가
     func convertISODateToCustomStrings(isoDateString: String) -> (date: String, playTime: String)? {
-        isoFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-        
         // ISO8601 문자열을 Date 객체로 변환
         if let date = isoFormatter.date(from: isoDateString) {
             // Date 객체를 원하는 포맷의 문자열로 변환
+            dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
             let dateString = toString(from: date, format: "MM.dd")
             let playTimeString = toString(from: date, format: "HH:mm")
             return (dateString, playTimeString)

@@ -24,13 +24,12 @@ final class LoadPostDataSourceImpl: LoadPostDataSource {
             "AccessToken": token
         ]
         
-        return APIService.shared.requestAPI(type: .loadPost, parameters: ["boardId": postId], headers: headers, encoding: URLEncoding.default, dataType: PostDTO.self)
+        return APIService.shared.requestAPI(addEndPoint: String(postId),type: .loadPost, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: PostDTO.self)
             .map { dto in
                 LoggerService.shared.debugLog("Post Load 성공: \(dto)")
                 return dto
             }
-            .catch { [weak self] error in
-                guard let self = self else { return Observable.error(error) }
+            .catch { error in
                 if let networkError = error as? NetworkError, networkError.statusCode == 401 {
                     return APIService.shared.refreshAccessToken()
                         .flatMap { token -> Observable<PostDTO> in

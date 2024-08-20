@@ -13,11 +13,11 @@ final class OtherUserpageReactor: Reactor {
         case loadPost
     }
     enum Mutation {
-        case setPost([Post])
+        case setPost([SimplePost])
         case setError(PresentationError?)
     }
     struct State {
-        var posts: [Post] = []
+        var posts: [SimplePost] = []
         var error: PresentationError?
     }
     
@@ -30,7 +30,8 @@ final class OtherUserpageReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadPost:
-            return Observable.just(Mutation.setPost(Post.dummyPostData))
+            let list = Post.dummyPostData.map{SimplePost(post: $0)}
+            return Observable.just(Mutation.setPost(list))
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {

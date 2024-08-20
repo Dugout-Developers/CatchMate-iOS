@@ -9,6 +9,6 @@ import UIKit
 import RxSwift
 
 protocol PostListLoadRepository {
-    func loadPostList(pageNum: Int, gudan: String, gameDate: String) -> Observable<[PostList]>
+    func loadPostList(pageNum: Int, gudan: String, gameDate: String) -> Observable<[SimplePost]>
 }
 

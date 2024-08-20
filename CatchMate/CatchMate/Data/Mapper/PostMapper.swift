@@ -20,7 +20,7 @@ final class PostMapper {
     }
     
     func dtoToDomain(_ dto: PostDTO) -> Post? {
-        if let team = Team(rawValue: dto.writer.favGudan), let gender = Gender(rawValue: dto.writer.gender),
+        if let team = Team(rawValue: dto.writer.favGudan), let gender = Gender(serverValue: dto.writer.gender),
         let homeTeam = Team(rawValue: dto.homeTeam), let awayTeam = Team(rawValue: dto.awayTeam) {
             if let convertedDates = DateHelper.shared.convertISODateToCustomStrings(isoDateString: dto.gameDate) {
                 let date = convertedDates.date   // "08.13" 형식
@@ -33,15 +33,15 @@ final class PostMapper {
         return nil
     }
 
-    func postListDTOtoDomain(_ dto: PostListDTO) -> PostList? {
+    func postListDTOtoDomain(_ dto: PostListDTO) -> SimplePost? {
         if let homeTeam = Team.init(rawValue: dto.homeTeam), let awayTeam = Team.init(rawValue: dto.awayTeam) {
             if let convertedDates = DateHelper.shared.convertISODateToCustomStrings(isoDateString: dto.gameDate) {
                 let date = convertedDates.date   // "08.13" 형식
                 let playTime = convertedDates.playTime   // "09:21" 형식
                 
-                return PostList(id: String(dto.boardId), title: dto.title, homeTeam: homeTeam, awayTeam: awayTeam, date: date, playTime: playTime, location: dto.location, maxPerson: dto.maxPerson, currentPerson: dto.currentPerson)
+                return SimplePost(id: String(dto.boardId), title: dto.title, homeTeam: homeTeam, awayTeam: awayTeam, date: date, playTime: playTime, location: dto.location, maxPerson: dto.maxPerson, currentPerson: dto.currentPerson)
             } else {
-                LoggerService.shared.log("favoriteListDTO -> PostList 변환 실패 : 날짜 변환 실패", level: .error)
+                LoggerService.shared.log("PostListDTO -> PostList 변환 실패 : 날짜 변환 실패", level: .error)
                 return nil
             }
         } else {

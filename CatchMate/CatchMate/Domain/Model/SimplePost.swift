@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct PostList: Identifiable, Equatable {
+struct SimplePost: Identifiable, Equatable {
     var id: String
     let title: String
     let homeTeam: Team
@@ -25,7 +25,7 @@ struct PostList: Identifiable, Equatable {
         }
     }
     
-    static func == (lhs: PostList, rhs: PostList) -> Bool {
+    static func == (lhs: SimplePost, rhs: SimplePost) -> Bool {
         return lhs.id == rhs.id
     }
     
@@ -39,5 +39,17 @@ struct PostList: Identifiable, Equatable {
         self.location = location
         self.maxPerson = maxPerson
         self.currentPerson = currentPerson
+    }
+    
+    init(post: Post) {
+        self.id = post.id
+        self.title = post.title
+        self.homeTeam = post.homeTeam
+        self.awayTeam = post.awayTeam
+        self.date = post.date
+        self.playTime = post.playTime
+        self.location = post.location
+        self.maxPerson = post.maxPerson
+        self.currentPerson = post.currentPerson
     }
 }

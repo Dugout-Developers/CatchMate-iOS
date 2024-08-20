@@ -151,7 +151,7 @@ extension InputCheerStyleViewController {
             .withUnretained(self)
             .subscribe { vc, _ in
                 if let model = reactor.currentState.signUpModel {
-                    vc.signUpReactor = DIContainerService.shared.makeSignUpReactor(model)
+                    vc.signUpReactor = DIContainerService.shared.makeSignUpReactor(model, loginModel: reactor.loginModel)
                     vc.bindSignUp(reactor: vc.signUpReactor!)
                     vc.signUpReactor?.action.onNext(.signUpUser)
                 } else {

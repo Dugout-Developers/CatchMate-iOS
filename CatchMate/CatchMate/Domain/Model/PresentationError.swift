@@ -14,8 +14,8 @@ enum PresentationError: LocalizedError {
     case informational(message: String)     // 정보성 메시지
     case validationFailed(message: String)  // 입력 값 검증 실패
     case unauthorized(message: String)      // 인증 실패
-    case timeout(message: String)           // 시간 초과
-
+    case timeout(message: String)    // 시간 초과
+    case unknown(message: String)
     var errorDescription: String? {
         switch self {
         case .retryable(let message),
@@ -24,7 +24,8 @@ enum PresentationError: LocalizedError {
              .informational(let message),
              .validationFailed(let message),
              .unauthorized(let message),
-             .timeout(let message):
+             .timeout(let message),
+             .unknown(let message):
             return message
         }
     }

@@ -27,10 +27,10 @@ final class PostListLoadDataSourceImpl: PostListLoadDataSource {
             "gudan": gudan,
             "gameDate": gameDate
         ]
-        LoggerService.shared.debugLog("FavoritePostLoadDataSourceImpl 토큰 확인: \(headers)")
-        return APIService.shared.requestAPI(addEndPoint: String(pageNum), type: .loadPost, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: [PostListDTO].self)
+        LoggerService.shared.debugLog("PostListLoadDataSourceImpl 토큰 확인: \(headers)")
+        return APIService.shared.requestAPI(addEndPoint: String(pageNum), type: .postlist, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: [PostListDTO].self)
             .map { favoriteDTOList in
-                LoggerService.shared.debugLog("FavoriteList Load 성공: \(favoriteDTOList)")
+                LoggerService.shared.debugLog("PostList Load 성공: \(favoriteDTOList)")
                 return favoriteDTOList
             }
             .catch { error in

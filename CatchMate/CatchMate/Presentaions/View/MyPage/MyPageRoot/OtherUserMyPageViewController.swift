@@ -12,7 +12,7 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
     private var user: SimpleUser
     private let tableview = UITableView()
     private let reactor: OtherUserpageReactor
-    private var posts: [Post] = []
+    private var posts: [SimplePost] = []
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

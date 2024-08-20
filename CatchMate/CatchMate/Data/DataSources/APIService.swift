@@ -11,6 +11,10 @@ import RxAlamofire
 import Alamofire
 
 enum Endpoint: String {
+    /// 로그인
+    case login = "/auth/login"
+    /// 회원가입
+    case signUp = "/user/additional-info"
     /// 게시글 저장
     case savePost = "/board/write"
     /// 게시글 리스트 /board/page/{pageNum}
@@ -24,6 +28,10 @@ enum Endpoint: String {
     
     var apiName: String {
         switch self {
+        case .login:
+            return "로그인 API"
+        case .signUp:
+            return "회원가입 API"
         case .savePost:
             return "게시글 요청 API"
         case .postlist:
@@ -40,6 +48,10 @@ enum Endpoint: String {
     
     var requstType: HTTPMethod {
         switch self {
+        case .login:
+            return .post
+        case .signUp:
+            return .post
         case .savePost:
             return .post
         case .setNotification:
@@ -96,8 +108,7 @@ final class APIService {
                 }
             }
             .catch { error in
-                print(error)
-                return Observable.error(NetworkError.unownedError(statusCode: error.statusCode))
+                return Observable.error(error)
             }
     }
     

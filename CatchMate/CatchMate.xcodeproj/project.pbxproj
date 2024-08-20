@@ -65,7 +65,7 @@
 		531E4C282C6B55510052E754 /* PostListDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E4C272C6B55510052E754 /* PostListDTO.swift */; };
 		531E4C2B2C6B5C2E0052E754 /* PostListLoadRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E4C2A2C6B5C2E0052E754 /* PostListLoadRepositoryImpl.swift */; };
 		531E4C2D2C6B5C4A0052E754 /* PostListLoadRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E4C2C2C6B5C4A0052E754 /* PostListLoadRepository.swift */; };
-		531E4C2F2C6B5D5C0052E754 /* PostList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E4C2E2C6B5D5C0052E754 /* PostList.swift */; };
+		531E4C2F2C6B5D5C0052E754 /* SimplePost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E4C2E2C6B5D5C0052E754 /* SimplePost.swift */; };
 		531E4C322C6B62070052E754 /* PostListLoadUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E4C312C6B62070052E754 /* PostListLoadUseCase.swift */; };
 		53241F3C2C3C517600F468E1 /* GridSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F3B2C3C517600F468E1 /* GridSystem.swift */; };
 		53241F3E2C3C589100F468E1 /* DesignAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */; };
@@ -167,6 +167,7 @@
 		5383BE8F2C34DF27008940F1 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5383BE8E2C34DF27008940F1 /* Font.swift */; };
 		5383BE902C34ECD1008940F1 /* PretendardVariable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5383BE8A2C34D543008940F1 /* PretendardVariable.ttf */; };
 		538EB92F2C3FA27600ABA40E /* CMDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */; };
+		539BD8632C74F0A5004720B8 /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7ACE2C367008002FC64F /* DateHelper.swift */; };
 		53B8E2382C5C7BAA001D0ADF /* UserRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E2372C5C7BAA001D0ADF /* UserRepositoryImpl.swift */; };
 		53B8E23B2C5C7BCF001D0ADF /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E23A2C5C7BCF001D0ADF /* UserRepository.swift */; };
 		53B8E23E2C5C7BEB001D0ADF /* UserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E23D2C5C7BEB001D0ADF /* UserUseCase.swift */; };
@@ -284,7 +285,7 @@
 		531E4C272C6B55510052E754 /* PostListDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListDTO.swift; sourceTree = "<group>"; };
 		531E4C2A2C6B5C2E0052E754 /* PostListLoadRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListLoadRepositoryImpl.swift; sourceTree = "<group>"; };
 		531E4C2C2C6B5C4A0052E754 /* PostListLoadRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListLoadRepository.swift; sourceTree = "<group>"; };
-		531E4C2E2C6B5D5C0052E754 /* PostList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostList.swift; sourceTree = "<group>"; };
+		531E4C2E2C6B5D5C0052E754 /* SimplePost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplePost.swift; sourceTree = "<group>"; };
 		531E4C312C6B62070052E754 /* PostListLoadUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListLoadUseCase.swift; sourceTree = "<group>"; };
 		53241F3B2C3C517600F468E1 /* GridSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSystem.swift; sourceTree = "<group>"; };
 		53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DesignAssets.xcassets; sourceTree = "<group>"; };
@@ -869,7 +870,7 @@
 				531288CC2C5408FF000C2FB1 /* LoginModel.swift */,
 				53B8E2642C61280D001D0ADF /* RequestPost.swift */,
 				534E39DE2C63CF65006D180E /* Announcements.swift */,
-				531E4C2E2C6B5D5C0052E754 /* PostList.swift */,
+				531E4C2E2C6B5D5C0052E754 /* SimplePost.swift */,
 				53E592562C6D05690042E1D7 /* SimpleUser.swift */,
 			);
 			path = Model;
@@ -1368,7 +1369,7 @@
 				530DD6142C4F85BF00A7D6CE /* FCMTokenDataSource.swift in Sources */,
 				536BDE342C1B57B10043B1DA /* HomeFilterButton.swift in Sources */,
 				53B8E26B2C613613001D0ADF /* DataError.swift in Sources */,
-				531E4C2F2C6B5D5C0052E754 /* PostList.swift in Sources */,
+				531E4C2F2C6B5D5C0052E754 /* SimplePost.swift in Sources */,
 				5301E2BA2C5BED8D0078E910 /* UserMapper.swift in Sources */,
 				5378EA9B2C6487A600A2422C /* ReceiveMateListCell.swift in Sources */,
 				536BDE272C1B53150043B1DA /* UIColor+Extension.swift in Sources */,
@@ -1457,6 +1458,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				536BDDC52C189B240043B1DA /* CatchMateTests.swift in Sources */,
+				539BD8632C74F0A5004720B8 /* DateHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

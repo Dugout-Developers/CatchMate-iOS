@@ -206,7 +206,7 @@ extension ApplyPopupViewController {
                 if result {
                     vc.reactor?.action.onNext(.changeIsApplied(true))
                 } else {
-                    vc.reactor?.action.onNext(.setError(PostError.applyFailed))
+                    vc.reactor?.action.onNext(.setError(PresentationError.informational(message: "신청에 실패했습니다. 다시 시도해주세요.")))
                 }
                 vc.dismiss(animated: true)
             }

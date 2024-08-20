@@ -72,7 +72,7 @@ final class FavoriteListViewController: BaseViewController ,View {
         tableView.rx.itemSelected
             .map { indexPath in
                 let post = reactor.currentState.favoritePost[indexPath.row]
-                return Reactor.Action.selectPost(post)
+                return Reactor.Action.selectPost(post.id)
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -81,8 +81,8 @@ final class FavoriteListViewController: BaseViewController ,View {
             .distinctUntilChanged()
             .compactMap{$0}
             .withUnretained(self)
-            .subscribe { vc, post in
-                let postDetailVC = PostDetailViewController(postID: post.id)
+            .subscribe { vc, postId in
+                let postDetailVC = PostDetailViewController(postID: postId)
                 vc.navigationController?.pushViewController(postDetailVC, animated: true)
             }
             .disposed(by: disposeBag)
@@ -99,6 +99,7 @@ final class FavoriteListViewController: BaseViewController ,View {
                     .withUnretained(cell)
                     .map { $0.0.post }
                     .compactMap { $0 }
+                    .map{$0.id}
                     .map { Reactor.Action.removeFavoritePost($0) }
                     .bind(to: reactor.action)
                     .disposed(by: cell.disposeBag)

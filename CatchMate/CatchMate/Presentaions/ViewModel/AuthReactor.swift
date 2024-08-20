@@ -78,8 +78,10 @@ final class AuthReactor: Reactor {
         var newState = state
         switch mutation {
         case .setLoginInfo(let loginModel):
-            saveToken(loginModel: loginModel)
             newState.loginModel = loginModel
+            if !loginModel.isFirstLogin {
+                saveToken(loginModel: loginModel)
+            }
         case .setError(let error):
             print(error.localizedDescription)
             newState.errorMessage = error.localizedDescription
@@ -89,6 +91,7 @@ final class AuthReactor: Reactor {
         }
         return newState
     }
+    
     private func saveToken(loginModel: LoginModel) {
         LoggerService.shared.debugLog("saveKeychain : \(loginModel.accessToken), \(loginModel.refreshToken)")
         KeychainService.saveToken(token: loginModel.accessToken, for: .accessToken)

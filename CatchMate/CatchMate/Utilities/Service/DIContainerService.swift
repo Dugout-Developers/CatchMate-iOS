@@ -36,12 +36,12 @@ class DIContainerService {
         return SignReactor(loginModel: model, nicknameUseCase: nicknameUsecase)
     }
     
-    func makeSignUpReactor(_ model: SignUpModel) -> SignUpReactor {
+    func makeSignUpReactor(_ model: SignUpModel, loginModel: LoginModel) -> SignUpReactor {
         let dataSource = SignUpDataSourceImpl()
         let repository = SignUpRepositoryImpl(signupDatasource: dataSource)
         let usecase = SignUpUseCaseImpl(repository: repository)
         
-        return SignUpReactor(signUpModel: model, signupUseCase: usecase)
+        return SignUpReactor(signUpModel: model, loginModel: loginModel, signupUseCase: usecase)
     }
     func makeHomeReactor() -> HomeReactor {
         let listLoadDataSource = PostListLoadDataSourceImpl()
@@ -63,6 +63,14 @@ class DIContainerService {
         let loadUserRepository = UserRepositoryImpl(userDS: loadUserDataSource)
         let loadUserUsecase = UserUseCaseImpl(userRepository: loadUserRepository)
         return AddReactor(addUsecase: addUsecase, loadPostDetailUsecase: loadPostUsecase, loadUserUsecase: loadUserUsecase)
+    }
+    
+    func makePostReactor(_ postID: String) -> PostReactor {
+        let loadPostDataSource = LoadPostDataSourceImpl()
+        let loadPostRepository = LoadPostRepositoryImpl(loadPostDS: loadPostDataSource)
+        let loadPostUsecase = LoadPostUseCaseImpl(loadPostRepository: loadPostRepository)
+        
+        return PostReactor(postId: postID, postloadUsecase: loadPostUsecase)
     }
     
     func makeMypageReactor() -> MyPageReactor {
