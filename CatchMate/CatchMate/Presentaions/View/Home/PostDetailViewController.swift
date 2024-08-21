@@ -10,6 +10,7 @@ import FlexLayout
 import PinLayout
 import RxSwift
 import ReactorKit
+import Kingfisher
 
 extension Reactive where Base: PostDetailViewController {
     var isFavoriteState: Observable<Bool> {
@@ -229,7 +230,20 @@ final class PostDetailViewController: BaseViewController, View {
         placeValueLabel.text = post.location
         partynumValueLabel.text = "\(post.maxPerson)명"
         // TODO: - API UseCase 연결시 프로필 링크 가져오는걸로 바꾸기
-        profileImageView.image = UIImage(named: "profile")
+        if let string = post.writer.picture, let url = URL(string: string) {
+            profileImageView.kf.setImage(with: url, placeholder: UIImage(named: "tempProfile"), options: nil, completionHandler: { [weak self] result in
+                   switch result {
+                   case .success(_):
+                       // 이미지 로드 성공
+                       break
+                   case .failure(_):
+                       // 이미지 로드 실패, 기본 이미지 설정
+                       self?.profileImageView.image = UIImage(named: "tempProfile")
+                   }
+               })
+        } else {
+            profileImageView.image = UIImage(named: "tempProfile")
+        }
         nickNameLabel.text = post.writer.nickName
         cheerTeam.backgroundColor = post.writer.favGudan.getTeamColor
         cheerTeam.text = post.writer.favGudan.rawValue
@@ -275,6 +289,7 @@ final class PostDetailViewController: BaseViewController, View {
         ageOptionLabel.forEach { label in
             label.flex.markDirty()
         }
+        nickNameLabel.flex.markDirty()
         genderOptionLabel.flex.markDirty()
         contentView.flex.layout(mode: .adjustHeight)
     }
