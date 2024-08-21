@@ -6,7 +6,7 @@
 //
 
 import Foundation
-struct SimpleUser {
+struct SimpleUser: Equatable {
     let userId: String
     let nickName: String
     let picture: String?
@@ -32,6 +32,10 @@ struct SimpleUser {
     var ageRange: String {
         let ageRangeCalc = (age / 10) * 10
         return ageRangeCalc >= 50 ? "50대 이상" : "\(ageRangeCalc)대"
+    }
+    
+    static func ==(lhs: SimpleUser, rhs: SimpleUser) -> Bool {
+        return lhs.userId == rhs.userId
     }
     
     init(userId: String, nickName: String, picture: String?, favGudan: Team, gender: Gender, birthDate: String, cheerStyle: CheerStyles?) {

@@ -14,11 +14,29 @@ struct Chat: Equatable {
     let post: Post
     let notRead: Int
     let enterTime: Date
+    let people: [SimpleUser]
+    let roomManager: SimpleUser
     static let mockupData: [Chat] = [
-        Chat(chatId: "1", createAt: ChatMessage.getDate(M: 7, d: 24, h: 14, m: 33), message: ChatMessage.mockupData, post: Post.dummyPostData[0], notRead: 0, enterTime: Date()),
-        Chat(chatId: "1", createAt: ChatMessage.getDate(M: 7, d: 24, h: 14, m: 33), message: ChatMessage.mockupData, post: Post.dummyPostData[2], notRead: 0, enterTime:  ChatMessage.getDate(M: 7, d: 24, h: 20, m: 30)),
-        Chat(chatId: "1", createAt: ChatMessage.getDate(M: 7, d: 24, h: 14, m: 33), message: ChatMessage.mockupData, post: Post.dummyPostData[3], notRead: 3, enterTime:  ChatMessage.getDate(M: 7, d: 25, h: 12, m: 53)),
-        Chat(chatId: "1", createAt: ChatMessage.getDate(M: 7, d: 24, h: 14, m: 33), message: ChatMessage.mockupData, post: Post.dummyPostData[4], notRead: 2, enterTime: Date())
+        Chat(chatId: "1", createAt: ChatMessage.getDate(M: 7, d: 24, h: 14, m: 33), message: ChatMessage.mockupData, post: Post.dummyPostData[0], notRead: 0, enterTime: Date(), people: [
+            SimpleUser(user: User(id: "1", email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4MTkSLvHP365kTge2U5CHc-smH-Z2Xq5p-A&s", pushAgreement: true, description: "")),
+            SimpleUser(user: User(id: "3", email: "ㄴㄴㄴ", nickName: "철웅아다이어트하자", birth: "1999-09-09", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: nil, pushAgreement: true, description: "")),
+            SimpleUser(user: User(id: "2", email: "ㄴㄴㄴ", nickName: "부산예수님", birth: "2000-01-01", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: "https://www.urbanbrush.net/web/wp-content/uploads/edd/2023/03/urban-20230316165416504518.jpg", pushAgreement: true, description: ""))
+        ], roomManager: SimpleUser(user: User(id: "1", email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4MTkSLvHP365kTge2U5CHc-smH-Z2Xq5p-A&s", pushAgreement: true, description: ""))),
+        Chat(chatId: "1", createAt: ChatMessage.getDate(M: 7, d: 24, h: 14, m: 33), message: ChatMessage.mockupData, post: Post.dummyPostData[2], notRead: 0, enterTime:  ChatMessage.getDate(M: 7, d: 24, h: 20, m: 30), people: [
+            SimpleUser(user: User(id: "1", email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4MTkSLvHP365kTge2U5CHc-smH-Z2Xq5p-A&s", pushAgreement: true, description: "")),
+            SimpleUser(user: User(id: "3", email: "ㄴㄴㄴ", nickName: "철웅아다이어트하자", birth: "1999-09-09", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: nil, pushAgreement: true, description: "")),
+            SimpleUser(user: User(id: "2", email: "ㄴㄴㄴ", nickName: "부산예수님", birth: "2000-01-01", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: "https://www.urbanbrush.net/web/wp-content/uploads/edd/2023/03/urban-20230316165416504518.jpg", pushAgreement: true, description: ""))
+        ], roomManager: SimpleUser(user: User(id: "1", email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4MTkSLvHP365kTge2U5CHc-smH-Z2Xq5p-A&s", pushAgreement: true, description: ""))),
+        Chat(chatId: "1", createAt: ChatMessage.getDate(M: 7, d: 24, h: 14, m: 33), message: ChatMessage.mockupData, post: Post.dummyPostData[3], notRead: 3, enterTime:  ChatMessage.getDate(M: 7, d: 25, h: 12, m: 53), people: [
+            SimpleUser(user: User(id: "1", email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4MTkSLvHP365kTge2U5CHc-smH-Z2Xq5p-A&s", pushAgreement: true, description: "")),
+            SimpleUser(user: User(id: "3", email: "ㄴㄴㄴ", nickName: "철웅아다이어트하자", birth: "1999-09-09", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: nil, pushAgreement: true, description: "")),
+            SimpleUser(user: User(id: "2", email: "ㄴㄴㄴ", nickName: "부산예수님", birth: "2000-01-01", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: "https://www.urbanbrush.net/web/wp-content/uploads/edd/2023/03/urban-20230316165416504518.jpg", pushAgreement: true, description: ""))
+        ], roomManager: SimpleUser(user: User(id: "1", email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4MTkSLvHP365kTge2U5CHc-smH-Z2Xq5p-A&s", pushAgreement: true, description: ""))),
+        Chat(chatId: "1", createAt: ChatMessage.getDate(M: 7, d: 24, h: 14, m: 33), message: ChatMessage.mockupData, post: Post.dummyPostData[4], notRead: 2, enterTime: Date(), people: [
+            SimpleUser(user: User(id: "1", email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4MTkSLvHP365kTge2U5CHc-smH-Z2Xq5p-A&s", pushAgreement: true, description: "")),
+            SimpleUser(user: User(id: "3", email: "ㄴㄴㄴ", nickName: "철웅아다이어트하자", birth: "1999-09-09", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: nil, pushAgreement: true, description: "")),
+            SimpleUser(user: User(id: "2", email: "ㄴㄴㄴ", nickName: "부산예수님", birth: "2000-01-01", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: "https://www.urbanbrush.net/web/wp-content/uploads/edd/2023/03/urban-20230316165416504518.jpg", pushAgreement: true, description: ""))
+        ], roomManager: SimpleUser(user: User(id: "1", email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4MTkSLvHP365kTge2U5CHc-smH-Z2Xq5p-A&s", pushAgreement: true, description: "")))
     ]
     static func == (lhs: Chat, rhs: Chat) -> Bool {
         return lhs.chatId == rhs.chatId

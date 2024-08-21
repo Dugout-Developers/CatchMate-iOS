@@ -97,6 +97,7 @@
 		533A2B422C2C624D00A59340 /* SNSLoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B412C2C624D00A59340 /* SNSLoginRepository.swift */; };
 		533A2B442C2C62C700A59340 /* SNSLoginRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B432C2C62C700A59340 /* SNSLoginRepositoryImpl.swift */; };
 		533A2B462C2C638100A59340 /* KakaoLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B452C2C638100A59340 /* KakaoLoginUseCase.swift */; };
+		533B28F72C75BC2800BFE9F6 /* ProfileImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B28F62C75BC2800BFE9F6 /* ProfileImageHelper.swift */; };
 		534E39D12C634255006D180E /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39D02C634255006D180E /* SettingViewController.swift */; };
 		534E39D32C634E26006D180E /* LoginUserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39D22C634E26006D180E /* LoginUserDefaultsService.swift */; };
 		534E39D62C6352EE006D180E /* AuthInfoSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39D52C6352EE006D180E /* AuthInfoSettingViewController.swift */; };
@@ -318,6 +319,7 @@
 		533A2B432C2C62C700A59340 /* SNSLoginRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SNSLoginRepositoryImpl.swift; sourceTree = "<group>"; };
 		533A2B452C2C638100A59340 /* KakaoLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginUseCase.swift; sourceTree = "<group>"; };
 		533A2B472C2D606600A59340 /* CatchMate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CatchMate.entitlements; sourceTree = "<group>"; };
+		533B28F62C75BC2800BFE9F6 /* ProfileImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageHelper.swift; sourceTree = "<group>"; };
 		534E39D02C634255006D180E /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		534E39D22C634E26006D180E /* LoginUserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUserDefaultsService.swift; sourceTree = "<group>"; };
 		534E39D52C6352EE006D180E /* AuthInfoSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthInfoSettingViewController.swift; sourceTree = "<group>"; };
@@ -1096,6 +1098,7 @@
 			isa = PBXGroup;
 			children = (
 				53BE7ACE2C367008002FC64F /* DateHelper.swift */,
+				533B28F62C75BC2800BFE9F6 /* ProfileImageHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1422,6 +1425,7 @@
 				530DD6122C4F839600A7D6CE /* ServerLoginDataSource.swift in Sources */,
 				5317867D2C216CBE00ACEF6A /* NumberPickerViewController.swift in Sources */,
 				53716BC62C42D19A0044AD2A /* PlaceFilterViewController.swift in Sources */,
+				533B28F72C75BC2800BFE9F6 /* ProfileImageHelper.swift in Sources */,
 				531E4C2D2C6B5C4A0052E754 /* PostListLoadRepository.swift in Sources */,
 				53E4A9C42C500AD500D21B49 /* SignUpUseCase.swift in Sources */,
 				53B8E26D2C61CBD5001D0ADF /* ErrorMapper.swift in Sources */,

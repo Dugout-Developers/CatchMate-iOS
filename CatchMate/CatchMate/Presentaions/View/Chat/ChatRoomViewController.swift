@@ -78,6 +78,7 @@ final class ChatRoomViewController: BaseViewController, View {
     private func setupNavigation() {
         let menuButton = UIButton()
         menuButton.setImage(UIImage(named: "cm20hamburger")?.withTintColor(.grayScale800, renderingMode: .alwaysOriginal), for: .normal)
+        menuButton.addTarget(self, action: #selector(clickedMenuButton), for: .touchUpInside)
         customNavigationBar.addRightItems(items: [menuButton])
         let titleLabel: UILabel = {
             let label = UILabel()
@@ -95,6 +96,12 @@ final class ChatRoomViewController: BaseViewController, View {
         }()
         customNavigationBar.addLeftItems(items: [titleLabel, numberLabel])
     }
+    
+    @objc private func clickedMenuButton(_ sender: UIButton) {
+//        let sideSheetVC = ChatSideSheetViewController(chat: chat)
+//        present(sideSheetVC, animated: true, completion: nil)
+    }
+    
     private func setupUI() {
         view.addSubviews(views: [tableView, inputview])
         tableView.snp.makeConstraints { make in

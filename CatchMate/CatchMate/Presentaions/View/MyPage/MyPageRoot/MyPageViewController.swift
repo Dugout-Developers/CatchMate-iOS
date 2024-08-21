@@ -61,7 +61,7 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
         tableview.register(MypageHeader.self, forHeaderFooterViewReuseIdentifier: "MypageHeader")
         tableview.register(DividerFooterView.self, forHeaderFooterViewReuseIdentifier: "DividerFooterView")
         tableview.estimatedSectionHeaderHeight = 0
-         tableview.estimatedSectionFooterHeight = 0
+        tableview.estimatedSectionFooterHeight = 0
         tableview.sectionHeaderTopPadding = 0
     }
     private func setupUI() {
