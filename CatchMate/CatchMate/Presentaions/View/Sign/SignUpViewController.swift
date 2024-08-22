@@ -20,7 +20,7 @@ final class SignUpViewController: BaseViewController, View {
         let label = UILabel()
         label.numberOfLines = 1
         label.text = "딱맞는 직관 친구를 구하기 위해"
-        label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
         label.applyStyle(textStyle: FontSystem.highlight)
         label.textColor = .cmHeadLineTextColor
         return label
@@ -29,7 +29,7 @@ final class SignUpViewController: BaseViewController, View {
         let label = UILabel()
         label.numberOfLines = 1
         label.text = "정보를 입력해주세요."
-        label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
         label.applyStyle(textStyle: FontSystem.highlight)
         label.textColor = .cmHeadLineTextColor
         return label
@@ -133,10 +133,9 @@ final class SignUpViewController: BaseViewController, View {
         
         indicatorImageView.translatesAutoresizingMaskIntoConstraints = false
         
-        // UIImageView의 높이 제약 조건을 설정
         NSLayoutConstraint.activate([
             indicatorImageView.heightAnchor.constraint(equalToConstant: 6),
-            indicatorImageView.widthAnchor.constraint(equalToConstant: indicatorImage?.getRatio(height: 6) ?? 30.0) // width도 설정해주는 것이 좋습니다.
+            indicatorImageView.widthAnchor.constraint(equalToConstant: indicatorImage?.getRatio(height: 6) ?? 30.0)
         ])
         
         customNavigationBar.addRightItems(items: [indicatorImageView])

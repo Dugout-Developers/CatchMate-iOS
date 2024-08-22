@@ -98,6 +98,7 @@
 		533A2B442C2C62C700A59340 /* SNSLoginRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B432C2C62C700A59340 /* SNSLoginRepositoryImpl.swift */; };
 		533A2B462C2C638100A59340 /* KakaoLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B452C2C638100A59340 /* KakaoLoginUseCase.swift */; };
 		533B28F72C75BC2800BFE9F6 /* ProfileImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B28F62C75BC2800BFE9F6 /* ProfileImageHelper.swift */; };
+		533B291D2C7648DC00BFE9F6 /* CMSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B291C2C7648DC00BFE9F6 /* CMSwitch.swift */; };
 		534E39D12C634255006D180E /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39D02C634255006D180E /* SettingViewController.swift */; };
 		534E39D32C634E26006D180E /* LoginUserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39D22C634E26006D180E /* LoginUserDefaultsService.swift */; };
 		534E39D62C6352EE006D180E /* AuthInfoSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39D52C6352EE006D180E /* AuthInfoSettingViewController.swift */; };
@@ -320,6 +321,7 @@
 		533A2B452C2C638100A59340 /* KakaoLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginUseCase.swift; sourceTree = "<group>"; };
 		533A2B472C2D606600A59340 /* CatchMate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CatchMate.entitlements; sourceTree = "<group>"; };
 		533B28F62C75BC2800BFE9F6 /* ProfileImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageHelper.swift; sourceTree = "<group>"; };
+		533B291C2C7648DC00BFE9F6 /* CMSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMSwitch.swift; sourceTree = "<group>"; };
 		534E39D02C634255006D180E /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		534E39D22C634E26006D180E /* LoginUserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUserDefaultsService.swift; sourceTree = "<group>"; };
 		534E39D52C6352EE006D180E /* AuthInfoSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthInfoSettingViewController.swift; sourceTree = "<group>"; };
@@ -985,6 +987,7 @@
 				53716BD72C4564700044AD2A /* DefaultsPaddingLabel.swift */,
 				537598072C46C3D2003BD8AE /* DefaultsTextView.swift */,
 				533183D62C515C480097F3F1 /* TeamImageView.swift */,
+				533B291C2C7648DC00BFE9F6 /* CMSwitch.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1391,6 +1394,7 @@
 				533A2B302C2AC5C400A59340 /* InputFavoriteTeamViewContoller.swift in Sources */,
 				533183DD2C51F5370097F3F1 /* ChatingInputField.swift in Sources */,
 				53E5925E2C6D0A550042E1D7 /* LoadPostDataSource.swift in Sources */,
+				533B291D2C7648DC00BFE9F6 /* CMSwitch.swift in Sources */,
 				536BDE312C1B55440043B1DA /* MyPageViewController.swift in Sources */,
 				531786682C20048B00ACEF6A /* CMPickerTextField.swift in Sources */,
 				531786532C1C8BFB00ACEF6A /* BaseViewController.swift in Sources */,
