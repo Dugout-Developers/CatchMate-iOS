@@ -18,7 +18,7 @@ struct LoginRequset {
 
 /// 응답 모델
 struct LoginResponse: Codable {
-    let accessToken, refreshToken: String
+    let accessToken, refreshToken: String?
     let isFirstLogin: Bool
 }
 

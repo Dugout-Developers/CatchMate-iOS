@@ -12,8 +12,8 @@ struct LoginModel: Equatable {
     let email: String
     let provider: LoginType
     let providerId: String
-    let accessToken: String
-    let refreshToken: String
+    let accessToken: String?
+    let refreshToken: String?
     let isFirstLogin: Bool
     let fcmToken: String
     let imageString: String?

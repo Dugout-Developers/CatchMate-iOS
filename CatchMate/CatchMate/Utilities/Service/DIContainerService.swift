@@ -45,7 +45,7 @@ class DIContainerService {
     }
     func makeHomeReactor() -> HomeReactor {
         let listLoadDataSource = PostListLoadDataSourceImpl()
-        let listLoadRepository = PostListLoadRepositoryImpl(favoriteLoadDS: listLoadDataSource)
+        let listLoadRepository = PostListLoadRepositoryImpl(postListLoadDS: listLoadDataSource)
         let listLoadUsecase = PostListLoadUseCaseImpl(postListRepository: listLoadRepository)
         
         return HomeReactor(loadPostListUsecase: listLoadUsecase)

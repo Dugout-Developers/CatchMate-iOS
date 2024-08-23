@@ -80,7 +80,9 @@ final class AuthReactor: Reactor {
         case .setLoginInfo(let loginModel):
             newState.loginModel = loginModel
             if !loginModel.isFirstLogin {
-                saveToken(loginModel: loginModel)
+                if !saveToken(loginModel: loginModel) {
+                    newState.errorMessage = "토큰 없음"
+                }
             }
         case .setError(let error):
             print(error.localizedDescription)
@@ -92,9 +94,14 @@ final class AuthReactor: Reactor {
         return newState
     }
     
-    private func saveToken(loginModel: LoginModel) {
-        LoggerService.shared.debugLog("saveKeychain : \(loginModel.accessToken), \(loginModel.refreshToken)")
-        KeychainService.saveToken(token: loginModel.accessToken, for: .accessToken)
-        KeychainService.saveToken(token: loginModel.refreshToken, for: .refreshToken)
+    private func saveToken(loginModel: LoginModel) -> Bool {
+        if let accessToken = loginModel.accessToken, let refreshToken = loginModel.refreshToken {
+            LoggerService.shared.debugLog("saveKeychain : \(accessToken), \(refreshToken)")
+            KeychainService.saveToken(token: accessToken, for: .accessToken)
+            KeychainService.saveToken(token: refreshToken, for: .refreshToken)
+            return true
+        } else {
+            return false
+        }
     }
 }

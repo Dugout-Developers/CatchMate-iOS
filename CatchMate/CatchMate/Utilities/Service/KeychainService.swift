@@ -11,12 +11,16 @@ import Foundation
 enum TokenError: LocalizedError {
     case notFoundAccessToken
     case notFoundRefreshToken
+    case notFoundEmail
+    
     var statusCode: Int {
         switch self {
         case .notFoundAccessToken:
             return -1001
         case .notFoundRefreshToken:
             return -1002
+        case .notFoundEmail:
+            return -1003
         }
     }
     
@@ -26,6 +30,8 @@ enum TokenError: LocalizedError {
             return "엑세스 토큰 찾기 실패"
         case .notFoundRefreshToken:
             return "리프레시 토큰 찾기 실패"
+        case .notFoundEmail:
+            return "일치하는 이메일 찾기 실패"
         }
     }
 }
@@ -94,5 +100,57 @@ final class KeychainService {
     enum TokenType: String {
         case accessToken = "accessToken"
         case refreshToken = "refreshToken"
+    }
+    
+    // MARK: - Appple Email 관련
+    // 이메일 저장
+    @discardableResult
+    static func saveEmail(email: String, userIdentifier: String) -> Bool {
+        let data = email.data(using: .utf8)!
+        
+        let account = "email_\(userIdentifier)"
+        
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: account,
+            kSecValueData as String: data
+        ]
+        
+        let status = SecItemAdd(query as CFDictionary, nil)
+        if status == errSecDuplicateItem {
+            let updateQuery: [String: Any] = [
+                kSecClass as String: kSecClassGenericPassword,
+                kSecAttrAccount as String: account
+            ]
+            let updateAttributes: [String: Any] = [
+                kSecValueData as String: data
+            ]
+            SecItemUpdate(updateQuery as CFDictionary, updateAttributes as CFDictionary)
+        }
+        
+        return status == errSecSuccess || status == errSecDuplicateItem
+    }
+    
+    // 이메일 불러오기
+    static func getEmail(userIdentifier: String) -> String? {
+        let account = "email_\(userIdentifier)"
+        
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: account,
+            kSecReturnData as String: kCFBooleanTrue!,
+            kSecMatchLimit as String: kSecMatchLimitOne
+        ]
+        
+        var dataTypeRef: AnyObject? = nil
+        let status: OSStatus = SecItemCopyMatching(query as CFDictionary, &dataTypeRef)
+        
+        if status == errSecSuccess {
+            if let retrievedData = dataTypeRef as? Data {
+                return String(data: retrievedData, encoding: .utf8)
+            }
+        }
+        
+        return nil
     }
 }

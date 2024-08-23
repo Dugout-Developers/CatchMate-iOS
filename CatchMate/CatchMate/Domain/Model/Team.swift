@@ -20,7 +20,37 @@ enum Team: String, CaseIterable, Codable {
     case kiwoom = "히어로즈"
     case allTeamLove = "평화주의자"
     case yarine = "야린이"
-    
+    // 스폰서 이름으로 Team을 반환하는 초기화 메서드
+    init?(sponsorName: String) {
+        switch sponsorName {
+        case "엔씨":
+            self = .nc
+        case "삼성":
+            self = .samsung
+        case "신세계":
+            self = .ssg
+        case "두산":
+            self = .dosun
+        case "케이티":
+            self = .kt
+        case "한화":
+            self = .hanhwa
+        case "롯데":
+            self = .lotte
+        case "기아":
+            self = .kia
+        case "엘지":
+            self = .lg
+        case "키움":
+            self = .kiwoom
+        case "평화주의자":
+            self = .allTeamLove
+        case "야린이":
+            self = .yarine
+        default:
+            return nil
+        }
+    }
     var fullName: String {
         switch self {
         case .nc:
@@ -43,6 +73,35 @@ enum Team: String, CaseIterable, Codable {
             "엘지트윈스"
         case .kiwoom:
             "키움히어로즈"
+        case .allTeamLove:
+            "평화주의자"
+        case .yarine:
+            "야린이"
+        }
+    }
+    
+    var sponsor: String {
+        switch self {
+        case .nc:
+            "엔씨"
+        case .samsung:
+            "삼성"
+        case .ssg:
+            "신세계"
+        case .dosun:
+            "두산"
+        case .kt:
+            "케이티"
+        case .hanhwa:
+            "한화"
+        case .lotte:
+            "롯데"
+        case .kia:
+            "기아"
+        case .lg:
+            "엘지"
+        case .kiwoom:
+            "키움"
         case .allTeamLove:
             "평화주의자"
         case .yarine:

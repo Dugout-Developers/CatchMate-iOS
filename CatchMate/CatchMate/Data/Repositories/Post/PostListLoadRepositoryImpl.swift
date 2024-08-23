@@ -9,12 +9,12 @@ import UIKit
 import RxSwift
 
 final class PostListLoadRepositoryImpl: PostListLoadRepository {
-    private let favoriteLoadDS: PostListLoadDataSource
-    init(favoriteLoadDS: PostListLoadDataSource) {
-        self.favoriteLoadDS = favoriteLoadDS
+    private let postListLoadDS: PostListLoadDataSource
+    init(postListLoadDS: PostListLoadDataSource) {
+        self.postListLoadDS = postListLoadDS
     }
     func loadPostList(pageNum: Int, gudan: String, gameDate: String) -> RxSwift.Observable<[SimplePost]> {
-        return favoriteLoadDS.loadPostList(pageNum: pageNum, gudan: gudan, gameDate: gameDate)
+        return postListLoadDS.loadPostList(pageNum: pageNum, gudan: gudan, gameDate: gameDate)
             .flatMap { dtoList -> Observable<[SimplePost]> in
                 var list = [SimplePost]()
                 dtoList.forEach { dto in

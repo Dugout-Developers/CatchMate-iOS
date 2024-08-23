@@ -23,6 +23,8 @@ enum Endpoint: String {
     case loadPost = "/board/"
     /// 찜목록 조회 /board/likes
     case loadFavorite = "/board/likes"
+    /// 찜 설정 /board/like/{boardID}
+    case setFavorite = "/board/like/"
     /// 알람 설정
     case setNotification = "/user/alarm"
     
@@ -40,6 +42,8 @@ enum Endpoint: String {
             return "게시글 리스트 로드 API"
         case .loadFavorite:
             return "찜목록 로드 API"
+        case .setFavorite:
+            return "찜 상태 설정 API"
         case .setNotification:
             return "알람 설정 API"
 
@@ -60,6 +64,8 @@ enum Endpoint: String {
             return .get
         case .loadFavorite:
             return .get
+        case .setFavorite:
+            return .post
         case .postlist:
             return .get
         }
@@ -117,7 +123,7 @@ final class APIService {
         return Session(configuration: configuration)
     }()
     
-    func requestVoidAPI(type: Endpoint, parameters: [String: Any]?, headers: HTTPHeaders? = nil, encoding: any ParameterEncoding = URLEncoding.default) -> Observable<Void> {
+    func requestVoidAPI(addEndPoint: String? = nil, type: Endpoint, parameters: [String: Any]?, headers: HTTPHeaders? = nil, encoding: any ParameterEncoding = URLEncoding.default) -> Observable<Void> {
         LoggerService.shared.debugLog("APIService: - Request: \(type.apiName)")
         
         guard let base = baseURL else {
@@ -125,7 +131,10 @@ final class APIService {
             return Observable.error(NetworkError.notFoundBaseURL)
         }
         
-        let url = base + type.rawValue
+        var url = base + type.rawValue
+        if let addEndPoint = addEndPoint {
+            url += addEndPoint
+        }
         return Observable<Void>.create { [weak self] observer in
             guard let self = self else {
                 observer.onError(ReferenceError.notFoundSelf)

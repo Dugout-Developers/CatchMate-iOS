@@ -1,8 +1,8 @@
 //
-//  FavoritePostLoadDataSource.swift
+//  LoadFavoriteListDataSource.swift
 //  CatchMate
 //
-//  Created by 방유빈 on 8/13/24.
+//  Created by 방유빈 on 8/22/24.
 //
 
 import UIKit
@@ -10,28 +10,24 @@ import RxSwift
 import RxAlamofire
 import Alamofire
 
-protocol PostListLoadDataSource {
-    func loadPostList(pageNum: Int, gudan: String, gameDate: String) ->  Observable<[PostListDTO]>
+protocol LoadFavoriteListDataSource {
+    func loadFavoriteList() ->  Observable<[PostListDTO]>
 }
-final class PostListLoadDataSourceImpl: PostListLoadDataSource {
-    func loadPostList(pageNum: Int, gudan: String, gameDate: String) -> RxSwift.Observable<[PostListDTO]> {
+
+final class LoadFavoriteListDataSourceImpl: LoadFavoriteListDataSource {
+    func loadFavoriteList() -> RxSwift.Observable<[PostListDTO]>{
         guard let token = KeychainService.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
-        
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
+        LoggerService.shared.log("토큰 확인: \(headers)")
         
-        let parameters: [String: Any] = [
-            "gudan": gudan,
-            "gameDate": gameDate
-        ]
-        LoggerService.shared.debugLog("PostListLoadDataSourceImpl 토큰 확인: \(headers)")
-        return APIService.shared.requestAPI(addEndPoint: String(pageNum), type: .postlist, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: [PostListDTO].self)
-            .map { postListDTO in
-                LoggerService.shared.debugLog("PostList Load 성공: \(postListDTO)")
-                return postListDTO
+        return APIService.shared.requestAPI(type: .loadFavorite, parameters: nil, dataType: [PostListDTO].self)
+            .map { favoriteListDTO in
+                LoggerService.shared.debugLog("Favorite List Load 성공: \(favoriteListDTO)")
+                return favoriteListDTO
             }
             .catch { error in
                 if let networkError = error as? NetworkError, networkError.statusCode == 401 {
@@ -54,7 +50,5 @@ final class PostListLoadDataSourceImpl: PostListLoadDataSource {
                 return Observable.error(error)
             }
     }
+    
 }
-
-
-
