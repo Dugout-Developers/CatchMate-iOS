@@ -230,20 +230,6 @@ final class PostDetailViewController: BaseViewController, View {
         placeValueLabel.text = post.location
         partynumValueLabel.text = "\(post.maxPerson)명"
         ProfileImageHelper.loadImage(profileImageView, pictureString: post.writer.picture)
-//        if let string = post.writer.picture, let url = URL(string: string) {
-//            profileImageView.kf.setImage(with: url, placeholder: UIImage(named: "tempProfile"), options: nil, completionHandler: { [weak self] result in
-//                   switch result {
-//                   case .success(_):
-//                       // 이미지 로드 성공
-//                       break
-//                   case .failure(_):
-//                       // 이미지 로드 실패, 기본 이미지 설정
-//                       self?.profileImageView.image = UIImage(named: "tempProfile")
-//                   }
-//               })
-//        } else {
-//            profileImageView.image = UIImage(named: "tempProfile")
-//        }
         nickNameLabel.text = post.writer.nickName
         cheerTeam.backgroundColor = post.writer.favGudan.getTeamColor
         cheerTeam.text = post.writer.favGudan.rawValue
@@ -305,7 +291,7 @@ final class PostDetailViewController: BaseViewController, View {
             let userPageVC = OtherUserMyPageViewController(user: user, reactor: OtherUserpageReactor())
             navigationController?.pushViewController(userPageVC, animated: true)
         } else {
-            showToast(message: "해당 사용자 정보에 접근할 수 없습니다. 다시 시도해주세요.")
+            showToast(message: "해당 사용자 정보에 접근할 수 없습니다. 다시 시도해주세요.", buttonContainerExists: true)
         }
     }
     
@@ -351,7 +337,7 @@ extension PostDetailViewController {
                 vc.isFavorite = state // 상태를 직접 설정
                 vc.setupFavoriteButton(state)
                 if vc.isFavorite && !vc.isFirstFavoriteState {
-                    vc.showToast(message: "게시글을 저장했어요")
+                    vc.showToast(message: "게시글을 저장했어요", buttonContainerExists: true)
                 }
             })
             .disposed(by: disposeBag)
@@ -412,8 +398,7 @@ extension PostDetailViewController {
             .compactMap{$0}
             .withUnretained(self)
             .subscribe { vc, error in
-                let position = CGPoint(x: vc.buttonContainer.frame.midX, y: vc.buttonContainer.frame.maxY)
-                vc.showToast(message: "신청에 실패했습니다. 다시 시도해주세요.", at: position, anchorPosition: .top)
+                vc.showToast(message: "요청에 실패했습니다. 다시 시도해주세요.", buttonContainerExists: true)
             }
             .disposed(by: disposeBag)
         

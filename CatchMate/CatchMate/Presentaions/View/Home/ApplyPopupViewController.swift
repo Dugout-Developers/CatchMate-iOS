@@ -223,7 +223,7 @@ extension ApplyPopupViewController {
                 if let id = vc.apply?.id {
                     reactor.action.onNext(.cancelApply(id))
                 } else {
-                    vc.showToast(message: "취소를 처리하는데 문제가 생겼습니다. 다시 시도해주세요.")
+                    vc.showToast(message: "취소를 처리하는데 문제가 생겼습니다. 다시 시도해주세요.", buttonContainerExists: false)
                 }
                 vc.dismiss(animated: true)
             }

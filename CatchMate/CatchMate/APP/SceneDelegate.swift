@@ -19,21 +19,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        
-        AuthManager.shared.attemptAutoLogin()
-            .observe(on: MainScheduler.instance)
-            .withUnretained(self)
-            .subscribe { scene, result in
-                if result {
-                    scene.moveMainTab()
-                } else {
-                    scene.moveSignIn()
-                }
-            } onError: { error in
-                print(error)
-                self.moveSignIn()
-            }
-            .disposed(by: disposeBag)
+        moveMainTab()
+//        AuthManager.shared.attemptAutoLogin()
+//            .observe(on: MainScheduler.instance)
+//            .withUnretained(self)
+//            .subscribe { scene, result in
+//                if result {
+//                    scene.moveMainTab()
+//                } else {
+//                    scene.moveSignIn()
+//                }
+//            } onError: { error in
+//                print(error)
+//                self.moveSignIn()
+//            }
+//            .disposed(by: disposeBag)
 
     }
     

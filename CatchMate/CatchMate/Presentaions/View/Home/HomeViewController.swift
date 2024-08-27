@@ -39,7 +39,7 @@ final class HomeViewController: BaseViewController, View {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        reactor.action.onNext(.willAppear)
+//        reactor.action.onNext(.willAppear)
         reactor.action.onNext(.selectPost(nil))
     }
     override func viewDidLoad() {

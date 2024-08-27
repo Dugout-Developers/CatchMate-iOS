@@ -15,8 +15,16 @@ protocol PostListLoadDataSource {
 }
 final class PostListLoadDataSourceImpl: PostListLoadDataSource {
     func loadPostList(pageNum: Int, gudan: String, gameDate: String) -> RxSwift.Observable<[PostListDTO]> {
+        LoggerService.shared.debugLog("<필터값> 구단: \(gudan), 날짜: \(gameDate)")
         guard let token = KeychainService.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
+        }
+        // MARK: - 임시 필터
+        var gudan = gudan
+        var gameDate = gameDate
+        if gudan.isEmpty && gameDate.isEmpty {
+            gudan = "다이노스"
+            gameDate = "2024-08-16"
         }
         
         let headers: HTTPHeaders = [

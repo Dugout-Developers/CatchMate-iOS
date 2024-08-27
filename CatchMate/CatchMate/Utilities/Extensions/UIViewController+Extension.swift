@@ -12,27 +12,41 @@ import PinLayout
 
 extension UIViewController {
     
-    func showToast(message: String, at position: CGPoint? = nil, anchorPosition: AnchorPosition? = nil) {
+    func showToast(message: String, buttonContainerExists: Bool = false) {
         let toastLabel = CMToastMessageLabel(message: message)
         
-        // 토스트 메시지 레이블의 크기 설정
-        let toastWidth = UIScreen.main.bounds.width - (2 * 16) // 좌우 여백 16포인트씩
-        toastLabel.frame = CGRect(x: 16, y: 0, width: toastWidth, height: 40)
+        // 토스트 메시지의 최대 너비를 설정
+        let maxWidth = self.view.frame.width - 32 // 좌우 여백 16씩
+
+        let containerWidth = maxWidth
+        let labelSize = toastLabel.sizeThatFits(CGSize(width: maxWidth - 20, height: CGFloat.greatestFiniteMagnitude)) // 20은 레이블 좌우 여백
+        let containerHeight = labelSize.height + 24 // 레이블 상하 여백 12씩 추가
         
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let window = windowScene.windows.first(where: { $0.isKeyWindow }) else {
-            return
+        // 컨테이너 뷰의 프레임 설정
+        let toastContainerView = UIView(frame: CGRect(x: 0, y: 0, width: containerWidth, height: containerHeight))
+        toastContainerView.backgroundColor = .clear
+        toastContainerView.addSubview(toastLabel)
+        
+        // 레이블의 프레임 설정
+        toastLabel.frame = CGRect(x: 16, y: 0, width: maxWidth, height: labelSize.height)
+
+        let safeAreaBottom = self.view.safeAreaInsets.bottom
+        // 토스트 메시지의 위치 설정
+        if buttonContainerExists {
+            toastContainerView.frame.origin.y = self.view.frame.height - containerHeight - 72 - safeAreaBottom
+        } else {
+            toastContainerView.frame.origin.y = self.view.safeAreaInsets.bottom + self.view.frame.height - containerHeight - 12 - safeAreaBottom
         }
-        let safeAreaTop = window.safeAreaInsets.top
-        toastLabel.frame.origin.y = safeAreaTop + 12
-        window.addSubview(toastLabel)
         
-        // 1초 동안 표시된 후 사라지도록 애니메이션 적용
-        UIView.animate(withDuration: 1.0, delay: 1.0, options: .curveEaseOut, animations: {
-            toastLabel.alpha = 0.0
-        }, completion: { (isCompleted) in
-            toastLabel.removeFromSuperview()
-        })
+        // 컨테이너 뷰를 메인 뷰에 추가
+        self.view.addSubview(toastContainerView)
+        
+        // 애니메이션을 통해 1초 후에 사라지게 설정
+        UIView.animate(withDuration: 0.5, delay: 1.0, options: .curveEaseOut, animations: {
+            toastContainerView.alpha = 0.0
+        }) { (_) in
+            toastContainerView.removeFromSuperview()
+        }
     }
     
     /// 알림창 띄우기
@@ -90,7 +104,3 @@ extension UIViewController {
     }
 }
 
-enum AnchorPosition {
-    case top
-    case bottom
-}

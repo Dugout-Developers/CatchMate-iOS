@@ -91,6 +91,7 @@ final class HomeReactor: Reactor {
             let loadList = loadPostListUsecase.loadPostList(pageNum: 1, gudan: gudan, gameDate: requestDate)
                 .map { list in
                     Mutation.loadPost(list)
+                    
                 }
                 .catch { error in
                     if let presentationError = error as? PresentationError {
@@ -104,7 +105,7 @@ final class HomeReactor: Reactor {
                 loadList
             ])
         case .willAppear:
-            return loadPostListUsecase.loadPostList(pageNum: 1, gudan: "다이노스", gameDate: "2024-08-16")
+            return loadPostListUsecase.loadPostList(pageNum: 1, gudan: "", gameDate: "")
                 .map { list in
                     return Mutation.loadPost(list)
                 }
