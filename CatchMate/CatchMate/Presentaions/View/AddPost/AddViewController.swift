@@ -334,8 +334,9 @@ extension AddViewController {
             print("임시저장")
             self?.dismiss(animated: true) { [weak self] in
                 guard let self = self else { return }
-                showToast(message: "임시저장이 완료되었어요", buttonContainerExists: true)
-//                navigationController?.popViewController(animated: true)
+                showToast(message: "임시저장이 완료되었어요", buttonContainerExists: true) { [weak self] in
+                    self?.navigationController?.popViewController(animated: true)
+                }
             }
         } commonAction: { [weak self] in
             self?.dismiss(animated: true, completion: {

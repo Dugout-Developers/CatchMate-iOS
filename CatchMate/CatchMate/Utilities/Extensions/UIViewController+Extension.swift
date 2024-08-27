@@ -12,7 +12,7 @@ import PinLayout
 
 extension UIViewController {
     
-    func showToast(message: String, buttonContainerExists: Bool = false) {
+    func showToast(message: String, buttonContainerExists: Bool = false, completion: (() -> Void)? = nil) {
         let toastLabel = CMToastMessageLabel(message: message)
         
         // 토스트 메시지의 최대 너비를 설정
@@ -46,6 +46,7 @@ extension UIViewController {
             toastContainerView.alpha = 0.0
         }) { (_) in
             toastContainerView.removeFromSuperview()
+            completion?()
         }
     }
     

@@ -210,6 +210,7 @@
 		5383BE902C34ECD1008940F1 /* PretendardVariable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5383BE8A2C34D543008940F1 /* PretendardVariable.ttf */; };
 		538EB92F2C3FA27600ABA40E /* CMDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */; };
 		539BD8632C74F0A5004720B8 /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7ACE2C367008002FC64F /* DateHelper.swift */; };
+		53ACBA1D2C7D8E60004FAF00 /* CMActionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA1C2C7D8E60004FAF00 /* CMActionMenu.swift */; };
 		53B8E2382C5C7BAA001D0ADF /* UserRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E2372C5C7BAA001D0ADF /* UserRepositoryImpl.swift */; };
 		53B8E23B2C5C7BCF001D0ADF /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E23A2C5C7BCF001D0ADF /* UserRepository.swift */; };
 		53B8E23E2C5C7BEB001D0ADF /* UserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E23D2C5C7BEB001D0ADF /* UserUseCase.swift */; };
@@ -434,6 +435,7 @@
 		5383BE8C2C34D594008940F1 /* FontUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontUtility.swift; sourceTree = "<group>"; };
 		5383BE8E2C34DF27008940F1 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 		538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMDatePicker.swift; sourceTree = "<group>"; };
+		53ACBA1C2C7D8E60004FAF00 /* CMActionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMActionMenu.swift; sourceTree = "<group>"; };
 		53B8E2372C5C7BAA001D0ADF /* UserRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepositoryImpl.swift; sourceTree = "<group>"; };
 		53B8E23A2C5C7BCF001D0ADF /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		53B8E23D2C5C7BEB001D0ADF /* UserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserUseCase.swift; sourceTree = "<group>"; };
@@ -1043,6 +1045,7 @@
 				537598072C46C3D2003BD8AE /* DefaultsTextView.swift */,
 				533183D62C515C480097F3F1 /* TeamImageView.swift */,
 				533B291C2C7648DC00BFE9F6 /* CMSwitch.swift */,
+				53ACBA1C2C7D8E60004FAF00 /* CMActionMenu.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1502,6 +1505,7 @@
 				531786662C1F014E00ACEF6A /* CMTextField.swift in Sources */,
 				53E4A9BE2C50046E00D21B49 /* SignUpModel.swift in Sources */,
 				534E39D62C6352EE006D180E /* AuthInfoSettingViewController.swift in Sources */,
+				53ACBA1D2C7D8E60004FAF00 /* CMActionMenu.swift in Sources */,
 				5382490E2C2E79A90074B583 /* AppleLoginUseCase.swift in Sources */,
 				5317866B2C200D6000ACEF6A /* BasePickerViewController.swift in Sources */,
 				5301E2B22C5BE6350078E910 /* LogoutRepositoryImpl.swift in Sources */,
