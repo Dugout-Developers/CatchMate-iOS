@@ -10,9 +10,22 @@ import UIKit
 final class CMPickerTextField: UIView {
     private let padding = UIEdgeInsets(top: 17, left: 16, bottom: 17, right: 16)
     private let isFlexLayout: Bool
+    private var tapGesture: UITapGestureRecognizer?
     var isRequiredMark: Bool = false {
         didSet {
             updatePlaceholder()
+        }
+    }
+    var isDisable: Bool = false {
+        didSet {
+            if isDisable {
+                if let gesture = tapGesture {
+                    removeGestureRecognizer(gesture)
+                    tapGesture = nil // 제스처를 제거한 후 참조도 nil로 설정
+                }
+            } else {
+                setupGesture()
+            }
         }
     }
     
@@ -92,8 +105,10 @@ final class CMPickerTextField: UIView {
     }
     
     private func setupGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(textFieldTapped))
-        addGestureRecognizer(tapGesture)
+        tapGesture = UITapGestureRecognizer(target: self, action: #selector(textFieldTapped))
+        if let gesture = tapGesture {
+            addGestureRecognizer(gesture)
+        }
     }
     
     // 다른 응답자 포기
