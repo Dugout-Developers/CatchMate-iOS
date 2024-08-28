@@ -41,6 +41,7 @@ final class PostReactor: Reactor {
     init(postId: String, postloadUsecase: LoadPostUseCase) {
         self.initialState = State()
         self.postId = postId
+        LoggerService.shared.debugLog("-----------\(postId) detail Load------------")
         self.postloadUsecase = postloadUsecase
     }
     func mutate(action: Action) -> Observable<Mutation> {

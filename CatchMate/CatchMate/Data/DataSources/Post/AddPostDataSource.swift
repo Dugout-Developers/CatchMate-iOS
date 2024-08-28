@@ -30,10 +30,12 @@ final class AddPostDataSourceImpl: AddPostDataSource {
         do {
             let jsonData = try encoder.encode(post)
             let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: [])
+            print(jsonObject)
             if let jsonDictionary = jsonObject as? [String: Any] {
+                LoggerService.shared.debugLog("parameters Encoding:\(jsonDictionary)")
                 return APIService.shared.requestVoidAPI(type: .savePost, parameters: jsonDictionary, headers: headers, encoding: JSONEncoding.default)
                     .map { result in
-                        LoggerService.shared.debugLog("Post 저장 성공: \(jsonData)")
+                        LoggerService.shared.debugLog("Post 저장 성공 - result: \(result)")
                         return result
                     }
                     .catch { [weak self] error in

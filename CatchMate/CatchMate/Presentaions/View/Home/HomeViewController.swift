@@ -152,7 +152,7 @@ extension HomeViewController {
     @objc private func clickFilterButton(_ sender: OptionButtonView) {
         switch sender.filterType {
         case .date:
-            let customDetent = returnCustomDetent(height: Screen.height / 2.0 + 50.0, identifier: "DateFilter")
+            let customDetent = returnCustomDetent(height: SheetHeight.dateFilter, identifier: "DateFilter")
             let dateFilterVC = DateFilterViewController(reactor: reactor, disposeBag: disposeBag)
             if let sheet = dateFilterVC.sheetPresentationController {
                 sheet.detents = [customDetent]

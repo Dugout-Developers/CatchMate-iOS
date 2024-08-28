@@ -10,7 +10,9 @@ final class PostMapper {
         let gameDateDomain = "\(domain.date) \(domain.playTime)"
         
         if let preferGender = domain.preferGender?.serverRequest {
-            let resultString = DateHelper.shared.toString(from: domain.date, format: "yyyy-MM-dd HH:mm:ss")
+            let dateString = DateHelper.shared.toString(from: domain.date, format: "yyyy-MM-dd")
+            let playTime = domain.playTime+":00"
+            let resultString = "\(dateString) \(playTime)"
             LoggerService.shared.debugLog("PostMapper: Domain -> DTO : \(resultString)")
             return PostRequsetDTO(title: domain.title, gameDate: resultString, location: domain.location, homeTeam: domain.homeTeam.rawValue, awayTeam: domain.awayTeam.rawValue, currentPerson: 1, maxPerson: domain.maxPerson, preferGender: preferGender, preferAge: 28, addInfo: domain.addInfo)
         } else {

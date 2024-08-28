@@ -144,7 +144,7 @@ final class AddReactor: Reactor {
                 print(currentState)
                 return Observable.just(Mutation.setError(.validationFailed(message: "입력값 확인 후 다시 시도해주세요.")))
             }
-            
+            print(request.0)
             return addUsecase.addPost(request.0)
                 .map{
                     let post = Post(post: request.0, writer: request.1)

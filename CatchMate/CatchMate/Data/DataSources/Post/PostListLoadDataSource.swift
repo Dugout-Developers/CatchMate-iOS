@@ -50,14 +50,14 @@ final class PostListLoadDataSourceImpl: PostListLoadDataSource {
                 if let networkError = error as? NetworkError, networkError.statusCode == 401 {
                     return APIService.shared.refreshAccessToken()
                         .flatMap { token -> Observable<[PostListDTO]> in
-                            let headers: HTTPHeaders = [
+                            let newHeaders: HTTPHeaders = [
                                 "AccessToken": token
                             ]
                             LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            return APIService.shared.requestAPI(type: .loadFavorite, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: [PostListDTO].self)
-                                .map { favoriteDTOList in
-                                    LoggerService.shared.debugLog("FavoriteList Load 성공: \(favoriteDTOList)")
-                                    return favoriteDTOList
+                            return APIService.shared.requestAPI(addEndPoint: String(pageNum), type: .postlist, parameters: parameters, headers: newHeaders, encoding: URLEncoding.default, dataType: [PostListDTO].self)
+                                .map { postListDTO in
+                                    LoggerService.shared.debugLog("PostList Load 성공: \(postListDTO)")
+                                    return postListDTO
                                 }
                                 .catch { error in
                                     return Observable.error(error)

@@ -20,6 +20,7 @@ final class AddPostUseCaseImpl: AddPostUseCase {
     }
     
     func addPost(_ post: RequestPost) -> Observable<Void> {
+        print("useCase:\(post)")
         return addPostRepository.addPost(post)
     }
 }

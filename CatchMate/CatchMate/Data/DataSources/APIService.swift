@@ -39,7 +39,7 @@ enum Endpoint: String {
         case .postlist:
             return "게시글 리스트 불러오기 API"
         case .loadPost:
-            return "게시글 리스트 로드 API"
+            return "게시글 로드 API"
         case .loadFavorite:
             return "찜목록 로드 API"
         case .setFavorite:
@@ -152,6 +152,7 @@ final class APIService {
                 .responseDecodable(of: Empty.self, emptyResponseCodes: [200]) { response in
                     switch response.result {
                     case .success(let data):
+                        print(data)
                         observer.onNext(())
                         observer.onCompleted()
                     case .failure(let error):
