@@ -176,6 +176,7 @@ final class APIService {
             LoggerService.shared.log("\(TokenError.notFoundRefreshToken.errorDescription!)", level: .error)
             return Observable.error(TokenError.notFoundRefreshToken)
         }
+        LoggerService.shared.debugLog("Refresh Token: \(token)")
         let url = base + "/auth/reissue"
         let headers: HTTPHeaders = [
             "RefreshToken": token

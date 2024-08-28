@@ -211,6 +211,11 @@
 		538EB92F2C3FA27600ABA40E /* CMDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */; };
 		539BD8632C74F0A5004720B8 /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7ACE2C367008002FC64F /* DateHelper.swift */; };
 		53ACBA1D2C7D8E60004FAF00 /* CMActionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA1C2C7D8E60004FAF00 /* CMActionMenu.swift */; };
+		53ACBA1F2C7DDD36004FAF00 /* SetupResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA1E2C7DDD36004FAF00 /* SetupResult.swift */; };
+		53ACBA212C7DDD84004FAF00 /* SetupUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA202C7DDD84004FAF00 /* SetupUseCase.swift */; };
+		53ACBA232C7EACB1004FAF00 /* SetupInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA222C7EACB1004FAF00 /* SetupInfoService.swift */; };
+		53ACBA252C7EAE1B004FAF00 /* UserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA242C7EAE1B004FAF00 /* UserDefaultsKeys.swift */; };
+		53ACBA272C7EB493004FAF00 /* UserInfoDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA262C7EB493004FAF00 /* UserInfoDTO.swift */; };
 		53B8E2382C5C7BAA001D0ADF /* UserRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E2372C5C7BAA001D0ADF /* UserRepositoryImpl.swift */; };
 		53B8E23B2C5C7BCF001D0ADF /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E23A2C5C7BCF001D0ADF /* UserRepository.swift */; };
 		53B8E23E2C5C7BEB001D0ADF /* UserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E23D2C5C7BEB001D0ADF /* UserUseCase.swift */; };
@@ -436,6 +441,11 @@
 		5383BE8E2C34DF27008940F1 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 		538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMDatePicker.swift; sourceTree = "<group>"; };
 		53ACBA1C2C7D8E60004FAF00 /* CMActionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMActionMenu.swift; sourceTree = "<group>"; };
+		53ACBA1E2C7DDD36004FAF00 /* SetupResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupResult.swift; sourceTree = "<group>"; };
+		53ACBA202C7DDD84004FAF00 /* SetupUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupUseCase.swift; sourceTree = "<group>"; };
+		53ACBA222C7EACB1004FAF00 /* SetupInfoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupInfoService.swift; sourceTree = "<group>"; };
+		53ACBA242C7EAE1B004FAF00 /* UserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeys.swift; sourceTree = "<group>"; };
+		53ACBA262C7EB493004FAF00 /* UserInfoDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoDTO.swift; sourceTree = "<group>"; };
 		53B8E2372C5C7BAA001D0ADF /* UserRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepositoryImpl.swift; sourceTree = "<group>"; };
 		53B8E23A2C5C7BCF001D0ADF /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		53B8E23D2C5C7BEB001D0ADF /* UserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserUseCase.swift; sourceTree = "<group>"; };
@@ -582,6 +592,7 @@
 			children = (
 				5317865C2C1EAC4700ACEF6A /* Screen.swift */,
 				531786842C23261200ACEF6A /* SheetHeight.swift */,
+				53ACBA242C7EAE1B004FAF00 /* UserDefaultsKeys.swift */,
 			);
 			path = Constraints;
 			sourceTree = "<group>";
@@ -606,6 +617,7 @@
 				5301E2A22C5B6B8B0078E910 /* AuthService.swift */,
 				53B8E26C2C61CBD5001D0ADF /* ErrorMapper.swift */,
 				534E39D22C634E26006D180E /* LoginUserDefaultsService.swift */,
+				53ACBA222C7EACB1004FAF00 /* SetupInfoService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -840,6 +852,7 @@
 				5317865E2C1EAC4B00ACEF6A /* Constraints */,
 				531786722C202F0300ACEF6A /* Service */,
 				53BE7AD02C36700D002FC64F /* Helpers */,
+				53ACBA282C7EB498004FAF00 /* UtilitiesDTO */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -933,6 +946,7 @@
 				534E39DE2C63CF65006D180E /* Announcements.swift */,
 				531E4C2E2C6B5D5C0052E754 /* SimplePost.swift */,
 				53E592562C6D05690042E1D7 /* SimpleUser.swift */,
+				53ACBA1E2C7DDD36004FAF00 /* SetupResult.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1110,6 +1124,14 @@
 			path = Font;
 			sourceTree = "<group>";
 		};
+		53ACBA282C7EB498004FAF00 /* UtilitiesDTO */ = {
+			isa = PBXGroup;
+			children = (
+				53ACBA262C7EB493004FAF00 /* UserInfoDTO.swift */,
+			);
+			path = UtilitiesDTO;
+			sourceTree = "<group>";
+		};
 		53B8E2362C5C7530001D0ADF /* User */ = {
 			isa = PBXGroup;
 			children = (
@@ -1151,6 +1173,7 @@
 			children = (
 				53FC69E62C58F9E700B97AEA /* NicknameCheckUseCase.swift */,
 				53E4A9C32C500AD500D21B49 /* SignUpUseCase.swift */,
+				53ACBA202C7DDD84004FAF00 /* SetupUseCase.swift */,
 			);
 			path = Sign;
 			sourceTree = "<group>";
@@ -1438,12 +1461,14 @@
 				53B8E26B2C613613001D0ADF /* DataError.swift in Sources */,
 				531E4C2F2C6B5D5C0052E754 /* SimplePost.swift in Sources */,
 				5301E2BA2C5BED8D0078E910 /* UserMapper.swift in Sources */,
+				53ACBA1F2C7DDD36004FAF00 /* SetupResult.swift in Sources */,
 				5378EA9B2C6487A600A2422C /* ReceiveMateListCell.swift in Sources */,
 				536BDE272C1B53150043B1DA /* UIColor+Extension.swift in Sources */,
 				533B291F2C77079100BFE9F6 /* LoadFavoriteListDataSource.swift in Sources */,
 				531E4C232C6A75320052E754 /* ChatSideSheetViewController.swift in Sources */,
 				53B8E2612C61229A001D0ADF /* AddPostRepositoryImpl.swift in Sources */,
 				536BDE382C1C07990043B1DA /* PaddingLabel.swift in Sources */,
+				53ACBA252C7EAE1B004FAF00 /* UserDefaultsKeys.swift in Sources */,
 				5378EA9D2C649B6900A2422C /* ReceiveMateListViewController.swift in Sources */,
 				531E4C322C6B62070052E754 /* PostListLoadUseCase.swift in Sources */,
 				534E39E32C63D392006D180E /* AnnouncementsReactor.swift in Sources */,
@@ -1494,6 +1519,7 @@
 				5317867D2C216CBE00ACEF6A /* NumberPickerViewController.swift in Sources */,
 				53716BC62C42D19A0044AD2A /* PlaceFilterViewController.swift in Sources */,
 				533B28F72C75BC2800BFE9F6 /* ProfileImageHelper.swift in Sources */,
+				53ACBA232C7EACB1004FAF00 /* SetupInfoService.swift in Sources */,
 				531E4C2D2C6B5C4A0052E754 /* PostListLoadRepository.swift in Sources */,
 				53E4A9C42C500AD500D21B49 /* SignUpUseCase.swift in Sources */,
 				53B8E26D2C61CBD5001D0ADF /* ErrorMapper.swift in Sources */,
@@ -1505,6 +1531,7 @@
 				531786662C1F014E00ACEF6A /* CMTextField.swift in Sources */,
 				53E4A9BE2C50046E00D21B49 /* SignUpModel.swift in Sources */,
 				534E39D62C6352EE006D180E /* AuthInfoSettingViewController.swift in Sources */,
+				53ACBA212C7DDD84004FAF00 /* SetupUseCase.swift in Sources */,
 				53ACBA1D2C7D8E60004FAF00 /* CMActionMenu.swift in Sources */,
 				5382490E2C2E79A90074B583 /* AppleLoginUseCase.swift in Sources */,
 				5317866B2C200D6000ACEF6A /* BasePickerViewController.swift in Sources */,
@@ -1516,6 +1543,7 @@
 				53BE7ACF2C367008002FC64F /* DateHelper.swift in Sources */,
 				53B8E25D2C612245001D0ADF /* AddPostRepository.swift in Sources */,
 				533B29232C7709C100BFE9F6 /* LoadFavoriteListRepository.swift in Sources */,
+				53ACBA272C7EB493004FAF00 /* UserInfoDTO.swift in Sources */,
 				5383BE8F2C34DF27008940F1 /* Font.swift in Sources */,
 				53716BC82C43EEB50044AD2A /* CMToastMessage.swift in Sources */,
 				533183CF2C5141BC0097F3F1 /* MyMessageTableViewCell.swift in Sources */,

@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 
 protocol PostListLoadUseCase {
-    func loadPostList(pageNum: Int, gudan: String, gameDate: String) -> Observable<[SimplePost]>
+    func loadPostList(pageNum: Int, gudan: String, gameDate: String, people: Int) -> Observable<[SimplePost]>
 }
 
 final class PostListLoadUseCaseImpl: PostListLoadUseCase {
@@ -18,8 +18,8 @@ final class PostListLoadUseCaseImpl: PostListLoadUseCase {
     init(postListRepository: PostListLoadRepository) {
         self.postListRepository = postListRepository
     }
-    func loadPostList(pageNum: Int, gudan: String, gameDate: String) -> Observable<[SimplePost]> {
-        return postListRepository.loadPostList(pageNum: pageNum, gudan: gudan, gameDate: gameDate)
+    func loadPostList(pageNum: Int, gudan: String, gameDate: String, people: Int = 0) -> Observable<[SimplePost]> {
+        return postListRepository.loadPostList(pageNum: pageNum, gudan: gudan, gameDate: gameDate, people: people)
     }
     
 }

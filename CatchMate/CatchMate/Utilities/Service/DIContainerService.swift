@@ -48,7 +48,12 @@ class DIContainerService {
         let listLoadRepository = PostListLoadRepositoryImpl(postListLoadDS: listLoadDataSource)
         let listLoadUsecase = PostListLoadUseCaseImpl(postListRepository: listLoadRepository)
         
-        return HomeReactor(loadPostListUsecase: listLoadUsecase)
+        let favoriteListLoadDS = LoadFavoriteListDataSourceImpl()
+        let favoriteListRepository = LoadFavoriteListRepositoryImpl(loadFavorioteListDS: favoriteListLoadDS)
+        let userDS = UserDataSourceImpl()
+        let userRepositorty = UserRepositoryImpl(userDS: userDS)
+        let setupUsecase = SetupUseCaseImpl(favoriteListRepository: favoriteListRepository, userRepository: userRepositorty)
+        return HomeReactor(loadPostListUsecase: listLoadUsecase, setupUsecase: setupUsecase)
     }
     func makeAddReactor() -> AddReactor {
         let addDataSource = AddPostDataSourceImpl()

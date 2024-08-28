@@ -23,20 +23,21 @@ final class SignUpDataSourceImpl: SignUpDataSource {
             return Observable.error(NetworkError.notFoundBaseURL)
         }
         
-        let url = base + "/user/additional-info"
-        
-        let parameters: [String: Any] = [
+        var parameters: [String: Any] = [
             "email": model.email,
             "provider": model.provider,
             "providerId": model.providerId,
             "gender": model.gender,
-            "picture": model.picture,
+            "picture": model.picture ?? "",
             "fcmToken": model.fcmToken,
             "nickName": model.nickName,
             "birthDate": model.birthDate,
-            "favGudan": model.favGudan,
-            "watchStyle": model.watchStyle
+            "favGudan": model.favGudan
         ]
+        
+        if let watchStyle = model.watchStyle {
+            parameters["watchStyle"] = watchStyle
+        }
         LoggerService.shared.debugLog("SignUp Parameters : \(parameters)")
         return APIService.shared.requestAPI(type: .signUp, parameters: parameters, encoding: JSONEncoding.default, dataType: SignUpResponseDTO.self)
             .map { dto in

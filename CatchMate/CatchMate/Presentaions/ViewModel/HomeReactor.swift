@@ -12,6 +12,7 @@ import ReactorKit
 final class HomeReactor: Reactor {
     enum Action {
         case willAppear
+        case viewDidLoad
         case updateDateFilter(Date?)
         case toggleTeamSelection(Team?)
         case updateTeamFilter([Team])
@@ -38,9 +39,11 @@ final class HomeReactor: Reactor {
     
     var initialState: State
     private let loadPostListUsecase: PostListLoadUseCase
-    init(loadPostListUsecase: PostListLoadUseCase) {
+    private let setupUseCase: SetupUseCase
+    init(loadPostListUsecase: PostListLoadUseCase, setupUsecase: SetupUseCase) {
         self.initialState = State()
         self.loadPostListUsecase = loadPostListUsecase
+        self.setupUseCase = setupUsecase
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
@@ -53,7 +56,7 @@ final class HomeReactor: Reactor {
             if let date = date {
                 requestDate = DateHelper.shared.toString(from: date, format: "YYYY-MM-dd")
             }
-            let loadList = loadPostListUsecase.loadPostList(pageNum: 1, gudan: gudan, gameDate: requestDate)
+            let loadList = loadPostListUsecase.loadPostList(pageNum: 1, gudan: gudan, gameDate: requestDate, people: 0)
                 .map { list in
                     Mutation.loadPost(list)
                 }
@@ -88,7 +91,7 @@ final class HomeReactor: Reactor {
             } else {
                 requestDate = DateHelper.shared.toString(from: Date(), format: "YYYY-MM-dd")
             }
-            let loadList = loadPostListUsecase.loadPostList(pageNum: 1, gudan: gudan, gameDate: requestDate)
+            let loadList = loadPostListUsecase.loadPostList(pageNum: 1, gudan: gudan, gameDate: requestDate, people: 0)
                 .map { list in
                     Mutation.loadPost(list)
                     
@@ -105,7 +108,7 @@ final class HomeReactor: Reactor {
                 loadList
             ])
         case .willAppear:
-            return loadPostListUsecase.loadPostList(pageNum: 1, gudan: "", gameDate: "")
+            return loadPostListUsecase.loadPostList(pageNum: 1, gudan: "", gameDate: "", people: 0)
                 .map { list in
                     return Mutation.loadPost(list)
                 }
@@ -119,6 +122,22 @@ final class HomeReactor: Reactor {
             
         case .selectPost(let post):
             return Observable.just(Mutation.setSelectedPost(post))
+        case .viewDidLoad:
+            return setupUseCase.setupInfo()
+                .do(onNext: { result in
+                    SetupInfoService.shared.saveUserInfo(UserInfoDTO(id: result.user.id, email: result.user.email, team: result.user.team.rawValue))
+                    SetupInfoService.shared.saveFavoriteListIds(result.favoriteList)
+                })
+                .flatMap { _ in
+                    Observable<Mutation>.empty()
+                }
+                .catch { error in
+                    if let presentationError = error as? PresentationError {
+                        return Observable.just(Mutation.setError(presentationError))
+                    } else {
+                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
         }
     }
     

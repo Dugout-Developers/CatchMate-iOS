@@ -11,7 +11,7 @@ struct SimplePost: Identifiable, Equatable {
     let title: String
     let homeTeam: Team
     let awayTeam: Team
-//    let cheerTeam: Team -> 넣을지 말지 상의
+//    let cheerTeam: Team 
     let date: String
     let playTime: String
     let location: String
