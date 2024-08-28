@@ -66,7 +66,7 @@ enum NetworkError: LocalizedError {
 }
 
 // 매핑 에러
-enum MappingError: Error {
+enum MappingError: LocalizedError {
     ///DomainModel -> DTO
     case mappingFailed
     ///DTO -> DomainModel
@@ -91,7 +91,7 @@ enum MappingError: Error {
 }
 
 // 디코딩 에러
-enum CodableError: Error {
+enum CodableError: LocalizedError {
     case decodingFailed
     case encodingFailed
     case missingFields
@@ -118,3 +118,18 @@ enum CodableError: Error {
     }
 }
 
+enum ReferenceError: LocalizedError {
+    case notFoundSelf
+    var statusCode: Int {
+        switch self {
+        case .notFoundSelf:
+            return -5001
+        }
+    }
+    var errorDescription: String? {
+        switch self {
+        case .notFoundSelf:
+            return "self 참조 실패"
+        }
+    }
+}

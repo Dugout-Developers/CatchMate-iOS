@@ -70,12 +70,7 @@ final class NotificationSettingCell: UITableViewCell {
     }()
     var disposeBag = DisposeBag() 
     var switchStateSubject = PublishSubject<Bool>()
-    private let switchView: UISwitch = {
-        let swicth: UISwitch = UISwitch()
-        swicth.onTintColor = .cmPrimaryColor
-        swicth.tintColor = .cmPrimaryColor
-        return swicth
-    }()
+    private let switchView = CMSwitch()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -88,7 +83,7 @@ final class NotificationSettingCell: UITableViewCell {
     }
     private func setupSwitch() {
         accessoryView = switchView
-        switchView.rx.isOn
+        switchView.rx_isOn()
             .bind(to: switchStateSubject)
             .disposed(by: disposeBag)
     }
@@ -96,20 +91,21 @@ final class NotificationSettingCell: UITableViewCell {
     func configData(setting: NotificationSetting) {
         notiTitleLabel.text = setting.title
         notiTitleLabel.applyStyle(textStyle: FontSystem.body01_medium)
-        switchView.isOn = setting.isEnabled
         setupUI()
     }
     
     private func setupUI() {
         contentView.addSubviews(views: [notiTitleLabel, switchView])
         notiTitleLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview() // 여백 없이 왼쪽에 붙이기
+            make.leading.equalToSuperview()
             make.centerY.equalToSuperview()
 
         }
         switchView.snp.makeConstraints { make in
-            make.trailing.equalToSuperview() // 여백 없이 오른쪽에 붙이기
+            make.trailing.equalToSuperview()
             make.centerY.equalToSuperview()
+            make.width.equalTo(58)  // widthAnchor 설정
+            make.height.equalTo(34)
 
         }
         notiTitleLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)

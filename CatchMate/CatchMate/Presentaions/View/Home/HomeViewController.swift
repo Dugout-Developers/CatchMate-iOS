@@ -51,6 +51,7 @@ final class HomeViewController: BaseViewController, View {
         setupButton()
         setupLogo()
         bind(reactor: self.reactor)
+        reactor.action.onNext(.viewDidLoad)
         filterScrollView.showsHorizontalScrollIndicator = false
     }
     private func setupNavigation() {
@@ -76,7 +77,7 @@ extension HomeViewController {
         tableView.rx.itemSelected
             .map { indexPath in
                 let post = reactor.currentState.posts[indexPath.row]
-                return HomeReactor.Action.selectPost(post)
+                return HomeReactor.Action.selectPost(post.id)
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -85,8 +86,8 @@ extension HomeViewController {
             .distinctUntilChanged()
             .compactMap{$0}
             .withUnretained(self)
-            .subscribe { vc, post in
-                let postDetailVC = PostDetailViewController(postID: post.id)
+            .subscribe { vc, postId in
+                let postDetailVC = PostDetailViewController(postID: postId)
                 vc.navigationController?.pushViewController(postDetailVC, animated: true)
             }
             .disposed(by: disposeBag)
@@ -151,7 +152,7 @@ extension HomeViewController {
     @objc private func clickFilterButton(_ sender: OptionButtonView) {
         switch sender.filterType {
         case .date:
-            let customDetent = returnCustomDetent(height: Screen.height / 2.0 + 50.0, identifier: "DateFilter")
+            let customDetent = returnCustomDetent(height: SheetHeight.dateFilter, identifier: "DateFilter")
             let dateFilterVC = DateFilterViewController(reactor: reactor, disposeBag: disposeBag)
             if let sheet = dateFilterVC.sheetPresentationController {
                 sheet.detents = [customDetent]

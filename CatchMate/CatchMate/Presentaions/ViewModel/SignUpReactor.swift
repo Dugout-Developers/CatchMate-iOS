@@ -14,37 +14,42 @@ final class SignUpReactor: Reactor {
     }
     enum Mutation {
         case setSignUpResponse(SignUpResponse)
-        case setError(Error?)
+        case setError(PresentationError?)
     }
     struct State {
         // View의 state를 관리한다.
         var signupResponse: SignUpResponse? = nil
-        var error: Error?
+        var error: PresentationError?
     }
     
     var initialState: State
     private let signupUseCase: SignUpUseCase
     private let signUpModel: SignUpModel
+    private let loginModel: LoginModel
     private let disposeBag = DisposeBag()
-    init(signUpModel: SignUpModel, signupUseCase: SignUpUseCase) {
+    init(signUpModel: SignUpModel, loginModel: LoginModel, signupUseCase: SignUpUseCase) {
         self.initialState = State()
         self.signUpModel = signUpModel
+        self.loginModel = loginModel
         self.signupUseCase = signupUseCase
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .signUpUser:
-            return signupUseCase.signup(signUpModel)
-                .map { result in
-                    switch result {
-                    case .success(let response):
-                        return .setSignUpResponse(response)
-                    case .failure(let error):
-                        return .setError(error)
+            return signupUseCase.signup(loginModel, signupInfo: signUpModel)
+                .withUnretained(self)
+                .map { reactor, response in
+                    reactor.saveToken(accessToken: response.accessToken, refreshToken: response.refreshToken)
+                    return Mutation.setSignUpResponse(response)
+                }
+                .catch { error in
+                    if let presentaionError = error as? PresentationError {
+                        return Observable.just(.setError(presentaionError))
+                    } else {
+                        return Observable.just(.setError(.unknown(message: error.localizedDescription)))
                     }
                 }
-                .catchAndReturn(.setError(nil)) // 에러 발생 시
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
@@ -59,5 +64,11 @@ final class SignUpReactor: Reactor {
             newState.error = error
         }
         return newState
+    }
+    
+    private func saveToken(accessToken: String, refreshToken: String) {
+        LoggerService.shared.debugLog("saveKeychain : \(loginModel.accessToken), \(loginModel.refreshToken)")
+        KeychainService.saveToken(token: accessToken, for: .accessToken)
+        KeychainService.saveToken(token: refreshToken, for: .refreshToken)
     }
 }

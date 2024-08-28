@@ -10,40 +10,6 @@ import RxSwift
 import RxAlamofire
 import Alamofire
 
-enum UserAPIError: Error {
-    case notFoundURL
-    case serverError(code: Int, description: String)
-    case decodingError
-    case notFoundTokenInKeyChain
-    
-    
-    var statusCode: Int {
-        switch self {
-        case .notFoundURL:
-            return -1001
-        case .serverError(let code, _):
-            return code
-        case .decodingError:
-            return -1002
-        case .notFoundTokenInKeyChain:
-            return -1003
-        }
-    }
-    
-    var errorDescription: String? {
-        switch self {
-        case .notFoundURL:
-            return "서버 URL을 찾을 수 없습니다."
-        case .serverError(_, let message):
-            return "서버 에러: \(message)"
-        case .decodingError:
-            return "데이터 디코딩 에러"
-        case .notFoundTokenInKeyChain:
-            return "키체인에서 토큰을 가져올 수 없음"
-        }
-    }
-}
-
 protocol UserDataSource {
     func refreshAccessToken() -> Observable<String>
     func loadMyInfo() -> Observable<UserDTO>
@@ -51,10 +17,10 @@ protocol UserDataSource {
 final class UserDataSourceImpl: UserDataSource {
     func refreshAccessToken() -> RxSwift.Observable<String> {
         guard let base = Bundle.main.baseURL else {
-            return Observable.error(SignUpAPIError.notFoundURL)
+            return Observable.error(NetworkError.notFoundBaseURL)
         }
         guard let token = KeychainService.getToken(for: .refreshToken) else {
-            return Observable.error(UserAPIError.notFoundTokenInKeyChain)
+            return Observable.error(TokenError.notFoundRefreshToken)
         }
         let url = base + "/auth/reissue"
         let headers: HTTPHeaders = [
@@ -69,20 +35,26 @@ final class UserDataSourceImpl: UserDataSource {
                         KeychainService.saveToken(token: refreshResponse.accessToken, for: .accessToken)
                         return Observable.just(refreshResponse.accessToken)
                     } catch {
-                        return Observable.error(SignUpAPIError.decodingError)
+                        return Observable.error(CodableError.decodingFailed)
                     }
                 } else {
-                    return Observable.error(SignUpAPIError.serverError(code:  response.statusCode, description: "토큰 재발급 실패 - 서버에러"))
+                    if 400..<500 ~= response.statusCode {
+                        return Observable.error(NetworkError.clientError(statusCode: response.statusCode))
+                    } else if 500..<600 ~= response.statusCode {
+                        return Observable.error(NetworkError.serverError(statusCode: response.statusCode))
+                    } else {
+                        return Observable.error(NetworkError.unownedError(statusCode: response.statusCode))
+                    }
                 }
             }
     }
     
     func loadMyInfo() -> RxSwift.Observable<UserDTO> {
         guard let base = Bundle.main.baseURL else {
-            return Observable.error(UserAPIError.notFoundURL)
+            return Observable.error(NetworkError.notFoundBaseURL)
         }
         guard let token = KeychainService.getToken(for: .accessToken) else {
-            return Observable.error(UserAPIError.notFoundTokenInKeyChain)
+            return Observable.error(TokenError.notFoundAccessToken)
         }
         
         let url = base + "/user/profile"
@@ -99,9 +71,15 @@ final class UserDataSourceImpl: UserDataSource {
                     guard 200..<300 ~= response.statusCode else {
                         LoggerService.shared.debugLog("User Data Request Error : \(response.statusCode) \(response.debugDescription)")
                         if response.statusCode == 401 {
-                            return Observable.error(UserAPIError.serverError(code: response.statusCode, description: "401 Error"))
+                            return Observable.error(NetworkError.clientError(statusCode: 401))
                         }
-                        return Observable.error(SignUpAPIError.serverError(code: response.statusCode, description: "서버에러 발생"))
+                        if 400..<500 ~= response.statusCode {
+                            return Observable.error(NetworkError.clientError(statusCode: response.statusCode))
+                        } else if 500..<600 ~= response.statusCode {
+                            return Observable.error(NetworkError.serverError(statusCode: response.statusCode))
+                        } else {
+                            return Observable.error(NetworkError.unownedError(statusCode: response.statusCode))
+                        }
                     }
                     
                     do {
@@ -115,11 +93,11 @@ final class UserDataSourceImpl: UserDataSource {
                         } else {
                             LoggerService.shared.debugLog("Decoding Error: Json String 변환 불가")
                         }
-                        return Observable.error(UserAPIError.decodingError)
+                        return Observable.error(CodableError.decodingFailed)
                     }
                 }
                 .catch { error -> Observable<UserDTO> in
-                    if retryCount < 1, let userError = error as? UserAPIError, userError.statusCode == 401 {
+                    if retryCount < 1, let networkError = error as? NetworkError, networkError.statusCode == 401 {
                         return self.refreshAccessToken().flatMap {
                             newAccessToken in
                             var newHeaders = headers

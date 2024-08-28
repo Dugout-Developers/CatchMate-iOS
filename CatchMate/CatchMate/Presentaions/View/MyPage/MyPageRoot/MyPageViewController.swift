@@ -61,7 +61,7 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
         tableview.register(MypageHeader.self, forHeaderFooterViewReuseIdentifier: "MypageHeader")
         tableview.register(DividerFooterView.self, forHeaderFooterViewReuseIdentifier: "DividerFooterView")
         tableview.estimatedSectionHeaderHeight = 0
-         tableview.estimatedSectionFooterHeight = 0
+        tableview.estimatedSectionFooterHeight = 0
         tableview.sectionHeaderTopPadding = 0
     }
     private func setupUI() {
@@ -186,7 +186,7 @@ extension MyPageViewController {
                     _ = KeychainService.deleteToken(for: .refreshToken)
                     LoginUserDefaultsService.shared.deleteLoginData()
                     let reactor = DIContainerService.shared.makeAuthReactor()
-                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(SignInViewController(reactor: reactor), animated: true)
+                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(UINavigationController(rootViewController: SignInViewController(reactor: reactor)), animated: true)
                 }
             }
             .disposed(by: disposeBag)
@@ -206,7 +206,7 @@ extension MyPageViewController {
                 guard let cell = self?.tableview.cellForRow(at: IndexPath(row: 0, section: 0)) as? MyPageProfileCell else { return }
                 if !isLoading {
                     if let user = self?.user {
-                        cell.configData(user)
+                        cell.configData(SimpleUser(user: user))
                         cell.updateConstraints()
                     }
                 }
@@ -220,7 +220,7 @@ extension MyPageViewController {
                     _ = KeychainService.deleteToken(for: .accessToken)
                     _ = KeychainService.deleteToken(for: .refreshToken)
                     let reactor = DIContainerService.shared.makeAuthReactor()
-                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(SignInViewController(reactor: reactor), animated: true)
+                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(UINavigationController(rootViewController: SignInViewController(reactor: reactor)), animated: true)
                 }
             }
             .disposed(by: disposeBag)

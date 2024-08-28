@@ -16,7 +16,7 @@ final class ListCardViewTableViewCell: UITableViewCell {
     var tapEvent: ControlEvent<Void> {
         return favoriteButton.rx.tap
     }
-    var post: Post?
+    var post: SimplePost?
     var disposeBag = DisposeBag()
     
     private let cardContainerView: UIView = {
@@ -101,12 +101,13 @@ final class ListCardViewTableViewCell: UITableViewCell {
     }
     
     
-    func setupData(_ post: Post, isFavoriteCell: Bool = false) {
+    func setupData(_ post: SimplePost, isFavoriteCell: Bool = false) {
         self.post = post
         favoriteButton.isHidden = !isFavoriteCell
         favoriteButton.isEnabled = isFavoriteCell
-        homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.writer.team == post.homeTeam, background: .grayScale50)
-        awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.writer.team == post.awayTeam, background: .grayScale50)
+        // MARK: - API 변경 시 isMyTeam 반영
+        homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: false, background: .grayScale50)
+        awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: false, background: .grayScale50)
         
         //info
         postTitleLabel.text = post.title

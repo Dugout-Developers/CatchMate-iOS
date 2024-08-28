@@ -61,7 +61,7 @@ final class SignReactor: Reactor {
     
     var initialState: State
     private let nicknameUseCase: NicknameCheckUseCase
-    private let loginModel: LoginModel
+    let loginModel: LoginModel
     private let disposeBag = DisposeBag()
     
     init(loginModel: LoginModel, nicknameUseCase: NicknameCheckUseCase) {
@@ -147,7 +147,7 @@ final class SignReactor: Reactor {
         case .validateSignUp:
             if !newState.nickName.isEmpty, !newState.birth.isEmpty, let gender = newState.gender, let team = newState.team {
                 if let birthString = toServerFormatBirth(from: newState.birth) {
-                    let model = SignUpModel(accessToken: loginModel.accessToken, refreshToken: loginModel.refreshToken, nickName: newState.nickName, birth: birthString, team: team, gender: gender, cheerStyle: newState.cheerStyle)
+                    let model = SignUpModel(nickName:  newState.nickName, birth: birthString, team: team, gender: gender, cheerStyle: newState.cheerStyle)
                     newState.signUpModel = model
                 } 
             }

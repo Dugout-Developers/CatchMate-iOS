@@ -17,6 +17,7 @@ final class AddPostDataSourceImpl: AddPostDataSource {
     private var isRefreshingToken = false
     func addPost(_ post: PostRequsetDTO) -> Observable<Void> {
         let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
         guard let token = KeychainService.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
@@ -28,13 +29,14 @@ final class AddPostDataSourceImpl: AddPostDataSource {
         
         do {
             let jsonData = try encoder.encode(post)
-            encoder.dateEncodingStrategy = .iso8601
             let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: [])
+            print(jsonObject)
             if let jsonDictionary = jsonObject as? [String: Any] {
-                return APIService.shared.requestAPI(type: .savePost, parameters: jsonDictionary, headers: headers, encoding: JSONEncoding.default, dataType: VoidResponse.self)
-                    .map { _ in
-                        LoggerService.shared.debugLog("Post 저장 성공: \(jsonData)")
-                        return Void()
+                LoggerService.shared.debugLog("parameters Encoding:\(jsonDictionary)")
+                return APIService.shared.requestVoidAPI(type: .savePost, parameters: jsonDictionary, headers: headers, encoding: JSONEncoding.default)
+                    .map { result in
+                        LoggerService.shared.debugLog("Post 저장 성공 - result: \(result)")
+                        return result
                     }
                     .catch { [weak self] error in
                         guard let self = self else { return Observable.error(error) }
@@ -47,6 +49,7 @@ final class AddPostDataSourceImpl: AddPostDataSource {
                         }
                         LoggerService.shared.log("Post DATASOURCE 저장 실패: ", level: .error)
                         LoggerService.shared.log("JSON Data: \(String(data: jsonData, encoding: .utf8) ?? "") \n headers: \(headers)", level: .error)
+                        LoggerService.shared.log("\(error.localizedDescription)", level: .error)
                         return Observable.error(error)
                     }
             } else {

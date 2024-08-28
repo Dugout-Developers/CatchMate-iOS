@@ -8,8 +8,6 @@
 import UIKit
 
 struct SignUpModel {
-    let accessToken: String
-    let refreshToken: String
     let nickName: String
     let birth: String
     let team: Team
@@ -18,6 +16,8 @@ struct SignUpModel {
 }
 
 struct SignUpResponse {
-    let userId: Int
+    let userId: String
     let createdAt: String
+    let accessToken: String
+    let refreshToken: String
 }

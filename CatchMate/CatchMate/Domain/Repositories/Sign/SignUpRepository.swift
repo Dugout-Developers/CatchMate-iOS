@@ -9,5 +9,5 @@ import UIKit
 import RxSwift
 
 protocol SignUpRepository {
-    func requestSignUp(_ model: SignUpModel) -> Observable<Result<SignUpResponse, SignUpAPIError>>
+    func requestSignup(_ model: LoginModel, signupInfo: SignUpModel) -> Observable<SignUpResponse>
 }

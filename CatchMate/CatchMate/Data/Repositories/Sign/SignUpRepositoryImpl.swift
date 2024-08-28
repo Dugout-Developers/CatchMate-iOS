@@ -9,23 +9,22 @@ import UIKit
 import RxSwift
 
 final class SignUpRepositoryImpl: SignUpRepository {
+    func requestSignup(_ model: LoginModel, signupInfo: SignUpModel) -> RxSwift.Observable<SignUpResponse> {
+        let gender = signupInfo.gender == .man ? "M" : "F"
+        let request = SignUpRequest(email: model.email, provider: model.provider.rawValue, providerId: model.providerId, gender: gender, picture: model.imageString, fcmToken: model.fcmToken, nickName: signupInfo.nickName, birthDate: signupInfo.birth, favGudan: signupInfo.team.rawValue, watchStyle: signupInfo.cheerStyle?.rawValue)
+        return signupDatasource.saveUserModel(request)
+            .map { dto -> SignUpResponse in
+                return SignUpResponse(userId: String(dto.userId), createdAt: dto.createdAt, accessToken: dto.accessToken, refreshToken: dto.refreshToken)
+            }
+            .catch { error in
+                Observable.error(ErrorMapper.mapToPresentationError(error))
+            }
+    }
+    
     private let signupDatasource: SignUpDataSourceImpl
 
     init(signupDatasource: SignUpDataSourceImpl) {
         self.signupDatasource = signupDatasource
     }
-    func requestSignUp(_ model: SignUpModel) -> RxSwift.Observable<Result<SignUpResponse, SignUpAPIError>> {
-        return signupDatasource.saveUserModel(model)
-            .map { result in
-                switch result {
-                case .success(let dto):
-                    LoggerService.shared.log("DTO Repository 전달 완료")
-                    let domainModel = SignUpMapper.signUpResponseToDomain(dto)
-                    LoggerService.shared.log("DTO to Domain : \(domainModel)")
-                    return .success(domainModel)
-                case .failure(let error):
-                    return .failure(error)
-                }
-            }
-    }
+   
 }

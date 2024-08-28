@@ -12,33 +12,38 @@ import ReactorKit
 final class HomeReactor: Reactor {
     enum Action {
         case willAppear
+        case viewDidLoad
         case updateDateFilter(Date?)
         case toggleTeamSelection(Team?)
         case updateTeamFilter([Team])
         case updateNumberFilter(Int?)
-        case selectPost(Post?)
+        case selectPost(String?)
     }
     enum Mutation {
-        case loadPost([Post])
+        case loadPost([SimplePost])
         case setDateFilter(Date?)
         case setSelectedTeams([Team])
-        case setSelectedPost(Post?)
+        case setSelectedPost(String?)
         case setNumberFilter(Int?)
+        case setError(PresentationError?)
     }
     struct State {
         // View의 state를 관리한다.
-        var posts: [Post] = []
+        var posts: [SimplePost] = []
         var dateFilterValue: Date?
         var selectedTeams: [Team] = []
-        var selectedPost: Post?
+        var selectedPost: String?
         var seletedNumberFilter: Int?
-        var error: Error?
+        var error: PresentationError?
     }
     
     var initialState: State
-    
-    init() {
+    private let loadPostListUsecase: PostListLoadUseCase
+    private let setupUseCase: SetupUseCase
+    init(loadPostListUsecase: PostListLoadUseCase, setupUsecase: SetupUseCase) {
         self.initialState = State()
+        self.loadPostListUsecase = loadPostListUsecase
+        self.setupUseCase = setupUsecase
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
@@ -46,7 +51,26 @@ final class HomeReactor: Reactor {
         case .updateNumberFilter(let number):
             return Observable.just(Mutation.setNumberFilter(number))
         case .updateDateFilter(let date):
-            return Observable.just(Mutation.setDateFilter(date))
+            let gudan = currentState.selectedTeams.map { $0.rawValue }.joined(separator: ",")
+            var requestDate = ""
+            if let date = date {
+                requestDate = DateHelper.shared.toString(from: date, format: "YYYY-MM-dd")
+            }
+            let loadList = loadPostListUsecase.loadPostList(pageNum: 1, gudan: gudan, gameDate: requestDate, people: 0)
+                .map { list in
+                    Mutation.loadPost(list)
+                }
+                .catch { error in
+                    if let presentationError = error as? PresentationError {
+                        Observable.just(Mutation.setError(presentationError))
+                    } else {
+                        Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
+            return Observable.concat([
+                Observable.just(Mutation.setDateFilter(date)),
+                loadList
+            ])
             
         case let .toggleTeamSelection(team):
             var updatedTeams = currentState.selectedTeams
@@ -59,13 +83,61 @@ final class HomeReactor: Reactor {
                 updatedTeams.append(team)
             }
             return Observable.just(Mutation.setSelectedTeams(updatedTeams))
-        case .updateTeamFilter(let teams):
-            return Observable.just(Mutation.setSelectedTeams(teams))
+        case .updateTeamFilter(let teams):          
+            let gudan = teams.map { $0.rawValue }.joined(separator: ",")
+            var requestDate = ""
+            if let date = currentState.dateFilterValue {
+                requestDate = DateHelper.shared.toString(from: date, format: "YYYY-MM-dd")
+            } else {
+                requestDate = DateHelper.shared.toString(from: Date(), format: "YYYY-MM-dd")
+            }
+            let loadList = loadPostListUsecase.loadPostList(pageNum: 1, gudan: gudan, gameDate: requestDate, people: 0)
+                .map { list in
+                    Mutation.loadPost(list)
+                    
+                }
+                .catch { error in
+                    if let presentationError = error as? PresentationError {
+                        Observable.just(Mutation.setError(presentationError))
+                    } else {
+                        Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
+            return Observable.concat([
+                Observable.just(Mutation.setSelectedTeams(teams)),
+                loadList
+            ])
         case .willAppear:
-            return Observable.just(Mutation.loadPost(Post.dummyPostData))
+            return loadPostListUsecase.loadPostList(pageNum: 1, gudan: "", gameDate: "", people: 0)
+                .map { list in
+                    return Mutation.loadPost(list)
+                }
+                .catch { error in
+                    if let presentationError = error as? PresentationError {
+                        return Observable.just(Mutation.setError(presentationError))
+                    } else {
+                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
             
         case .selectPost(let post):
             return Observable.just(Mutation.setSelectedPost(post))
+        case .viewDidLoad:
+            return setupUseCase.setupInfo()
+                .do(onNext: { result in
+                    SetupInfoService.shared.saveUserInfo(UserInfoDTO(id: result.user.id, email: result.user.email, team: result.user.team.rawValue))
+                    SetupInfoService.shared.saveFavoriteListIds(result.favoriteList)
+                })
+                .flatMap { _ in
+                    Observable<Mutation>.empty()
+                }
+                .catch { error in
+                    if let presentationError = error as? PresentationError {
+                        return Observable.just(Mutation.setError(presentationError))
+                    } else {
+                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
         }
     }
     
@@ -92,6 +164,8 @@ final class HomeReactor: Reactor {
             newState.selectedPost = post
         case .setNumberFilter(let number):
             newState.seletedNumberFilter = number
+        case .setError(let error):
+            newState.error = error
         }
         return newState
     }

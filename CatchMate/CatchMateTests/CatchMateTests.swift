@@ -8,29 +8,31 @@
 import XCTest
 @testable import CatchMate
 
-final class CatchMateTests: XCTestCase {
+final class DateHelperTests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    func testConvertISODateToCustomStrings_ValidDate() {
+        // Given: 테스트할 ISO8601 형식의 문자열을 준비
+        let isoDateString = "2024-08-16T00:00:00.000+00:00"
+        
+        // When: DateHelper의 메서드를 호출하여 결과를 받음
+        let result = DateHelper.shared.convertISODateToCustomStrings(isoDateString: isoDateString)
+        
+        // Then: 결과가 예상한 값과 일치하는지 확인
+        XCTAssertNotNil(result, "변환이 실패하면 안 됩니다.")
+        XCTAssertEqual(result?.date, "08.16", "날짜 형식이 일치해야 합니다.")
+        XCTAssertEqual(result?.playTime, "00:00", "시간 형식이 일치해야 합니다.")
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
+    func testConvertISODateToCustomStrings_InvalidDate() {
+        // Given: 유효하지 않은 ISO8601 형식의 문자열을 준비
+        let invalidISODateString = "Invalid-Date-String"
+        
+        // When: DateHelper의 메서드를 호출하여 결과를 받음
+        let result = DateHelper.shared.convertISODateToCustomStrings(isoDateString: invalidISODateString)
+        
+        // Then: 변환이 실패하여 nil을 반환해야 함
+        XCTAssertNil(result, "유효하지 않은 날짜 문자열은 nil을 반환해야 합니다.")
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
 }
+
+

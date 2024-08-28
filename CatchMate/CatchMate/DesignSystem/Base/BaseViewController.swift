@@ -27,7 +27,7 @@ class BaseViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        setupbackButton()
+        print("\(self) did Appear")
         if let navigationController = navigationController, navigationController.viewControllers.count > 1 {
             tabBarController?.tabBar.isHidden = true
         } else {
@@ -37,15 +37,16 @@ class BaseViewController: UIViewController {
                 tabBarController?.tabBar.isHidden = true
             }
         }
-        
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        if let navigationController = navigationController, navigationController.viewControllers.count <= 1 {
-            tabBarController?.tabBar.isHidden = false
-        }
-    }
+
+//    override func viewDidDisappear(_ animated: Bool) {
+//        super.viewDidDisappear(animated)
+//        if let navigationController = navigationController, navigationController.viewControllers.count <= 1 {
+//            tabBarController?.tabBar.isHidden = false
+//        }
+//        view.setNeedsLayout()
+//        view.layoutIfNeeded()
+//    }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -86,11 +87,11 @@ class BaseViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
-    func setupLeftTitle(_ title: String) {
+    func setupLeftTitle(_ title: String, font: TextStyle = FontSystem.headline03_medium) {
         let titlLabel = UILabel()
         titlLabel.text = title
         titlLabel.textColor = .cmHeadLineTextColor
-        titlLabel.applyStyle(textStyle: FontSystem.headline03_medium)
+        titlLabel.applyStyle(textStyle: font)
         customNavigationBar.addLeftItems(items: [titlLabel])
     }
     

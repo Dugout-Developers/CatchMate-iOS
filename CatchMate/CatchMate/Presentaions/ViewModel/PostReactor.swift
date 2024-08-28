@@ -19,46 +19,55 @@ final class PostReactor: Reactor {
         case loadIsApplied
         case changeIsApplied(Bool)
         case changeFavorite(Bool)
-        case setError(Error)
+        case setError(PresentationError?)
     }
     enum Mutation {
         case setPost(Post?)
         case setIsApplied(Bool)
         case setIsFavorite(Bool)
-        case setError(Error)
+        case setError(PresentationError?)
     }
     struct State {
         // View의 state를 관리한다.
-        var postId: String
         var post: Post?
         var isApplied: Bool = false
         var isFinished: Bool = false
         var isFavorite: Bool = false
-        var error: Error?
+        var error: PresentationError?
     }
-    
+    var postId: String
     var initialState: State
-    
-    init(postId: String) {
-        self.initialState = State(postId: postId)
+    private let postloadUsecase: LoadPostUseCase
+    init(postId: String, postloadUsecase: LoadPostUseCase) {
+        self.initialState = State()
+        self.postId = postId
+        LoggerService.shared.debugLog("-----------\(postId) detail Load------------")
+        self.postloadUsecase = postloadUsecase
     }
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadPostDetails:
-            // TODO: - API UseCase 연결 시 post load로 변경하기
-            if let index = Post.dummyPostData.firstIndex(where: {$0.id == initialState.postId}) {
-                return Observable.just(Mutation.setPost(Post.dummyPostData[index]))
-            } else {
-                return Observable.just(Mutation.setPost(nil))
-            }
+            return postloadUsecase.loadPost(postId: postId)
+                .map { post in
+                    return Mutation.setPost(post)
+                }
+                .catch { error in
+                    if let presentationError = error as? PresentationError {
+                        return Observable.just(Mutation.setError(presentationError))
+                    } else {
+                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
+
         case .loadIsApplied:
             // TODO: - API UseCase 연결 시 신청 정보 가져와서 있는지 확인하고 result 설정
-            let result = Bool.random()
+            let result = false
             return Observable.just(Mutation.setIsApplied(result))
         case .changeIsApplied(let result):
             return Observable.just(Mutation.setIsApplied(result))
         case .loadIsFavorite:
-            let index = Post.dummyFavoriteList.firstIndex(where: {$0.id == initialState.postId})
+            // MARK: - API 연결 필요
+            let index = Post.dummyFavoriteList.firstIndex(where: {$0.id == postId})
             return Observable.just(Mutation.setIsFavorite(index != nil ? true : false))
         case .changeFavorite(let state):
             if state {

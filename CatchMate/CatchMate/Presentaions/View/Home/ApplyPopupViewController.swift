@@ -134,9 +134,9 @@ final class ApplyPopupViewController: UIViewController, View {
         infoTextLabel.text = "\(post.date) | \(post.playTime) | \(post.location)"
         infoTextLabel.applyStyle(textStyle: FontSystem.body02_medium)
         homeTeamImageView.image = post.homeTeam.getLogoImage
-        homeTeamImageView.backgroundColor = post.writer.team == post.homeTeam ? post.homeTeam.getTeamColor : .white
+        homeTeamImageView.backgroundColor = post.writer.favGudan == post.homeTeam ? post.homeTeam.getTeamColor : .white
         awayTeamImageView.image = post.awayTeam.getLogoImage
-        awayTeamImageView.backgroundColor = post.writer.team == post.awayTeam ? post.awayTeam.getTeamColor : .white
+        awayTeamImageView.backgroundColor = post.writer.favGudan == post.awayTeam ? post.awayTeam.getTeamColor : .white
         if let apply = apply {
             titleLabel.text = "직관 신청을 보냈어요"
             titleLabel.applyStyle(textStyle: FontSystem.bodyTitle)
@@ -206,7 +206,7 @@ extension ApplyPopupViewController {
                 if result {
                     vc.reactor?.action.onNext(.changeIsApplied(true))
                 } else {
-                    vc.reactor?.action.onNext(.setError(PostError.applyFailed))
+                    vc.reactor?.action.onNext(.setError(PresentationError.informational(message: "신청에 실패했습니다. 다시 시도해주세요.")))
                 }
                 vc.dismiss(animated: true)
             }
@@ -223,7 +223,7 @@ extension ApplyPopupViewController {
                 if let id = vc.apply?.id {
                     reactor.action.onNext(.cancelApply(id))
                 } else {
-                    vc.showToast(message: "취소를 처리하는데 문제가 생겼습니다. 다시 시도해주세요.")
+                    vc.showToast(message: "취소를 처리하는데 문제가 생겼습니다. 다시 시도해주세요.", buttonContainerExists: false)
                 }
                 vc.dismiss(animated: true)
             }

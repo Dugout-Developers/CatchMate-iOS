@@ -19,6 +19,7 @@ extension Reactive where Base: AddViewController {
 }
 final class AddViewController: BaseViewController, View {
     private let reactor: AddReactor
+    private var isSaved: Bool = false
     private var placeCount = 0 {
         didSet {
             placePicker.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.tiny - CGFloat((2-placeCount)*50), identifier: "PlaceFilter")
@@ -135,6 +136,21 @@ final class AddViewController: BaseViewController, View {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        if !isSaved{
+            reactor.action.onNext(.loadUser)
+        }
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if isSaved {
+            isSaved.toggle()
+            navigationController?.popViewController(animated: false)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -148,7 +164,7 @@ final class AddViewController: BaseViewController, View {
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if let tabBarController = tabBarController as? TabBarController {
+        if let tabBarController = tabBarController as? TabBarController, !isSaved {
             tabBarController.isAddView = false
             tabBarController.selectedIndex = tabBarController.preViewControllerIndex
         }
@@ -173,7 +189,7 @@ final class AddViewController: BaseViewController, View {
         // datePicker Setup
         datePickerTextField.parentViewController = self
         datePickerTextField.pickerViewController = DateFilterViewController(reactor: reactor, disposeBag: disposeBag, isAddView: true)
-        datePickerTextField.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.medium + 70, identifier: "DateFilter")
+        datePickerTextField.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.dateFilter+90, identifier: "DateFilter")
         
         // numberPicker Setup
         numberPickerTextField.parentViewController = self
@@ -240,19 +256,16 @@ extension AddViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        reactor.state.map{$0.isSavePost}
+        reactor.state.map{$0.loadSavePost}
             .distinctUntilChanged()
+            .compactMap{$0}
             .withUnretained(self)
-            .subscribe { vc, state in
-                if state {
+            .subscribe { vc, post in
                     LoggerService.shared.debugLog("게시글 저장 완료")
-                    vc.navigationController?.popViewController(animated: true)
-                }
+                    vc.postSavedSuccessfully(postId: "1")
             }
             .disposed(by: disposeBag)
-//        reactor.state.map{$0.error}
-//            .compactMap{$0}
-//            .
+
         reactor.state.map{$0.dateInfoString}
             .observe(on: MainScheduler.asyncInstance)
             .withUnretained(self)
@@ -304,6 +317,15 @@ extension AddViewController {
             }
             .disposed(by: disposeBag)
     }
+    
+    // 작성 완료 후 호출되는 메소드
+    private func postSavedSuccessfully(postId: String) {
+        let postDetailVC = PostDetailViewController(postID: postId, isAddView: true)
+        if let navigationController = self.navigationController {
+            isSaved = true
+            navigationController.pushViewController(postDetailVC, animated: true)
+        }
+    }
 }
 // MARK: - Button
 extension AddViewController {
@@ -312,9 +334,9 @@ extension AddViewController {
             print("임시저장")
             self?.dismiss(animated: true) { [weak self] in
                 guard let self = self else { return }
-                let toastPosition = CGPoint(x: registerButton.frame.midX, y: registerButton.frame.maxY)
-                showToast(message: "임시저장이 완료되었어요", at: toastPosition, anchorPosition: .bottom)
-                navigationController?.popViewController(animated: true)
+                showToast(message: "임시저장이 완료되었어요", buttonContainerExists: true) { [weak self] in
+                    self?.navigationController?.popViewController(animated: true)
+                }
             }
         } commonAction: { [weak self] in
             self?.dismiss(animated: true, completion: {

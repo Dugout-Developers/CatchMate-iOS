@@ -151,11 +151,11 @@ extension InputCheerStyleViewController {
             .withUnretained(self)
             .subscribe { vc, _ in
                 if let model = reactor.currentState.signUpModel {
-                    vc.signUpReactor = DIContainerService.shared.makeSignUpReactor(model)
+                    vc.signUpReactor = DIContainerService.shared.makeSignUpReactor(model, loginModel: reactor.loginModel)
                     vc.bindSignUp(reactor: vc.signUpReactor!)
                     vc.signUpReactor?.action.onNext(.signUpUser)
                 } else {
-                    vc.showToast(message: "회원가입에 실패했습니다. 입력 값을 다시 확인해주세요.")
+                    vc.showToast(message: "회원가입에 실패했습니다. 입력 값을 다시 확인해주세요.", buttonContainerExists: true)
                 }
             }
             .disposed(by: disposeBag)

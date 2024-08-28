@@ -17,6 +17,7 @@ enum PlayTime: String, CaseIterable {
 }
 final class AddReactor: Reactor {
     enum Action {
+        case loadUser
         case changeTitle(String)
         case changeDate(Date?)
         case changeTime(PlayTime)
@@ -32,6 +33,7 @@ final class AddReactor: Reactor {
     enum Mutation {
         // Action과 State 사이의 다리역할이다.
         // action stream을 변환하여 state에 전달한다.
+        case setUser(SimpleUser)
         case updateTitle(String)
         case updateDate(Date?)
         case updateTime(PlayTime)
@@ -44,7 +46,7 @@ final class AddReactor: Reactor {
         case updatePartyNumber(Int)
         case updateSaveButton
         case updatePlcase(String)
-        case updatePost
+        case updatePost(Post)
         case setError(PresentationError)
     }
     struct State {
@@ -62,19 +64,39 @@ final class AddReactor: Reactor {
         var addText: String = ""
         var partyNumber: Int?
         var saveButtonState: Bool = false
-        var isSavePost: Bool = false
+        var loadSavePost: Post? = nil
         var error: PresentationError?
     }
     
     var initialState: State
+    var writer: SimpleUser?
     private let addUsecase: AddPostUseCase
-    init(addUsecase: AddPostUseCase) {
+    private let loadPostDetailUsecase: LoadPostUseCase
+    private let loadUserUsecase: UserUseCase
+    init(addUsecase: AddPostUseCase, loadPostDetailUsecase: LoadPostUseCase, loadUserUsecase: UserUseCase) {
         self.initialState = State()
         self.addUsecase = addUsecase
+        self.writer = nil
+        self.loadPostDetailUsecase = loadPostDetailUsecase
+        self.loadUserUsecase = loadUserUsecase
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+        case .loadUser:
+            return loadUserUsecase.loadUser()
+                .map { user in
+                    let simpleUser = SimpleUser(user: user)
+                    return Mutation.setUser(simpleUser)
+                }
+                .catch { error in
+                    if let presentationError = error as? PresentationError {
+                        return Observable.just(Mutation.setError(presentationError))
+                    } else {
+                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
+
         case .changeGender(let gender):
             return Observable.concat([
                 Observable.just(Mutation.updateGender(gender)),
@@ -122,8 +144,12 @@ final class AddReactor: Reactor {
                 print(currentState)
                 return Observable.just(Mutation.setError(.validationFailed(message: "입력값 확인 후 다시 시도해주세요.")))
             }
-            return addUsecase.addPost(request)
-                .map{ Mutation.updatePost }
+            print(request.0)
+            return addUsecase.addPost(request.0)
+                .map{
+                    let post = Post(post: request.0, writer: request.1)
+                    return Mutation.updatePost(post)
+                }
                 .catch { error in
                     if let presentationError = error as? PresentationError {
                         return Observable.just(Mutation.setError(presentationError))
@@ -171,8 +197,9 @@ final class AddReactor: Reactor {
             newState.addText = text
         case .updatePartyNumber(let num):
             newState.partyNumber = num
-        case .updatePost:
-            newState.isSavePost = true
+        case .updatePost(let post):
+            newState.loadSavePost = post
+            
         case .updateSaveButton:
             if newState.selecteDate != nil , newState.selecteTime != nil , newState.homeTeam != nil, newState.awayTeam != nil, newState.place != nil, newState.addText.trimmingCharacters(in: .whitespaces).isEmpty, newState.title.trimmingCharacters(in: .whitespaces).isEmpty {
                 newState.saveButtonState = true
@@ -185,13 +212,16 @@ final class AddReactor: Reactor {
             newState.place = place
         case .setError(let error):
             newState.error = error
+        case .setUser(let user):
+            writer = user
         }
         return newState
     }
-    private func validatePost(_ state: State) -> RequestPost? {
-        if let homeTeam = state.homeTeam, let awayTeam = state.awayTeam, let place = state.place, let maxNum = state.partyNumber, let date = state.selecteDate, let time = state.selecteTime,
+    private func validatePost(_ state: State) -> (RequestPost, SimpleUser)? {
+        if let user = writer, let homeTeam = state.homeTeam, let awayTeam = state.awayTeam, let place = state.place, let maxNum = state.partyNumber, let date = state.selecteDate, let time = state.selecteTime,
            !place.isEmpty, !state.title.isEmpty {
-            return RequestPost(title: state.title, homeTeam: homeTeam, awayTeam: awayTeam, date: DateHelper.shared.toString(from: date, format: "M월d일 EEEE"), playTime: time.rawValue, location: place, maxPerson: maxNum, preferGender: state.selectedGender, preferAge: state.selectedAge, addInfo: state.addText)
+            let request = RequestPost(title: state.title, homeTeam: homeTeam, awayTeam: awayTeam, date: date, playTime: time.rawValue, location: place, maxPerson: maxNum, preferGender: state.selectedGender, preferAge: state.selectedAge, addInfo: state.addText)
+            return (request, user)
         }
         return nil
     }

@@ -36,19 +36,46 @@ class DIContainerService {
         return SignReactor(loginModel: model, nicknameUseCase: nicknameUsecase)
     }
     
-    func makeSignUpReactor(_ model: SignUpModel) -> SignUpReactor {
+    func makeSignUpReactor(_ model: SignUpModel, loginModel: LoginModel) -> SignUpReactor {
         let dataSource = SignUpDataSourceImpl()
         let repository = SignUpRepositoryImpl(signupDatasource: dataSource)
         let usecase = SignUpUseCaseImpl(repository: repository)
         
-        return SignUpReactor(signUpModel: model, signupUseCase: usecase)
+        return SignUpReactor(signUpModel: model, loginModel: loginModel, signupUseCase: usecase)
     }
-    
+    func makeHomeReactor() -> HomeReactor {
+        let listLoadDataSource = PostListLoadDataSourceImpl()
+        let listLoadRepository = PostListLoadRepositoryImpl(postListLoadDS: listLoadDataSource)
+        let listLoadUsecase = PostListLoadUseCaseImpl(postListRepository: listLoadRepository)
+        
+        let favoriteListLoadDS = LoadFavoriteListDataSourceImpl()
+        let favoriteListRepository = LoadFavoriteListRepositoryImpl(loadFavorioteListDS: favoriteListLoadDS)
+        let userDS = UserDataSourceImpl()
+        let userRepositorty = UserRepositoryImpl(userDS: userDS)
+        let setupUsecase = SetupUseCaseImpl(favoriteListRepository: favoriteListRepository, userRepository: userRepositorty)
+        return HomeReactor(loadPostListUsecase: listLoadUsecase, setupUsecase: setupUsecase)
+    }
     func makeAddReactor() -> AddReactor {
         let addDataSource = AddPostDataSourceImpl()
         let addRepository = AddPostRepositoryImpl(addPostDS: addDataSource)
         let addUsecase = AddPostUseCaseImpl(addPostRepository: addRepository)
-        return AddReactor(addUsecase: addUsecase)
+        
+        let loadPostDataSource = LoadPostDataSourceImpl()
+        let loadPostRepository = LoadPostRepositoryImpl(loadPostDS: loadPostDataSource)
+        let loadPostUsecase = LoadPostUseCaseImpl(loadPostRepository: loadPostRepository)
+        
+        let loadUserDataSource = UserDataSourceImpl()
+        let loadUserRepository = UserRepositoryImpl(userDS: loadUserDataSource)
+        let loadUserUsecase = UserUseCaseImpl(userRepository: loadUserRepository)
+        return AddReactor(addUsecase: addUsecase, loadPostDetailUsecase: loadPostUsecase, loadUserUsecase: loadUserUsecase)
+    }
+    
+    func makePostReactor(_ postID: String) -> PostReactor {
+        let loadPostDataSource = LoadPostDataSourceImpl()
+        let loadPostRepository = LoadPostRepositoryImpl(loadPostDS: loadPostDataSource)
+        let loadPostUsecase = LoadPostUseCaseImpl(loadPostRepository: loadPostRepository)
+        
+        return PostReactor(postId: postID, postloadUsecase: loadPostUsecase)
     }
     
     func makeMypageReactor() -> MyPageReactor {

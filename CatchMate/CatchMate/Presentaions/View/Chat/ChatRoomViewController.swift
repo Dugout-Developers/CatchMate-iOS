@@ -78,6 +78,7 @@ final class ChatRoomViewController: BaseViewController, View {
     private func setupNavigation() {
         let menuButton = UIButton()
         menuButton.setImage(UIImage(named: "cm20hamburger")?.withTintColor(.grayScale800, renderingMode: .alwaysOriginal), for: .normal)
+        menuButton.addTarget(self, action: #selector(clickedMenuButton), for: .touchUpInside)
         customNavigationBar.addRightItems(items: [menuButton])
         let titleLabel: UILabel = {
             let label = UILabel()
@@ -95,6 +96,12 @@ final class ChatRoomViewController: BaseViewController, View {
         }()
         customNavigationBar.addLeftItems(items: [titleLabel, numberLabel])
     }
+    
+    @objc private func clickedMenuButton(_ sender: UIButton) {
+//        let sideSheetVC = ChatSideSheetViewController(chat: chat)
+//        present(sideSheetVC, animated: true, completion: nil)
+    }
+    
     private func setupUI() {
         view.addSubviews(views: [tableView, inputview])
         tableView.snp.makeConstraints { make in
@@ -259,8 +266,8 @@ final class StartChatInfoCell: UITableViewCell {
     func configData(_ post: Post) {
         infoLabel.text = "\(post.date) | \(post.playTime) | \(post.location)"
         infoLabel.applyStyle(textStyle: FontSystem.body02_medium)
-        homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.writer.team == post.homeTeam)
-        awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.writer.team == post.awayTeam)
+        homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.writer.favGudan == post.homeTeam)
+        awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.writer.favGudan == post.awayTeam)
     }
     
     private func setupUI() {

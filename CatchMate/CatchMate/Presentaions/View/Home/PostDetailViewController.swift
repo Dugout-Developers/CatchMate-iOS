@@ -10,6 +10,7 @@ import FlexLayout
 import PinLayout
 import RxSwift
 import ReactorKit
+import Kingfisher
 
 extension Reactive where Base: PostDetailViewController {
     var isFavoriteState: Observable<Bool> {
@@ -26,6 +27,7 @@ final class PostDetailViewController: BaseViewController, View {
     fileprivate var _isFavorite = PublishSubject<Bool>()
     private let scrollView = UIScrollView()
     private let contentView = UIView()
+    private let isAddView: Bool
     // 기본 게시글 정보
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -82,6 +84,7 @@ final class PostDetailViewController: BaseViewController, View {
     }()
 
     // 작성자 정보
+    private let wirterInfoView = UIView()
     private let profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -153,25 +156,33 @@ final class PostDetailViewController: BaseViewController, View {
     private let applyButton = CMDefaultFilledButton(title: "직관 신청")
     
     var reactor: PostReactor
-    
-    init(postID: String) {
-        self.reactor = PostReactor(postId: postID)
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if let tabBarController = tabBarController as? TabBarController, isAddView {
+            tabBarController.isAddView = false
+            tabBarController.selectedIndex = tabBarController.preViewControllerIndex
+        }
+    }
+    init(postID: String, isAddView: Bool = false) {
+        self.reactor = DIContainerService.shared.makePostReactor(postID)
+        self.isAddView = isAddView
         super.init(nibName: nil, bundle: nil)
     }
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
         bind(reactor: reactor)
         reactor.action.onNext(.loadPostDetails)
-        reactor.action.onNext(.loadIsApplied)
-        reactor.action.onNext(.loadIsFavorite)
-        setTextStyle()
+//        reactor.action.onNext(.loadIsApplied)
+//        reactor.action.onNext(.loadIsFavorite)
         setupUI()
         setupNavigation()
+        setupButton()
     }
     
     override func viewDidLayoutSubviews() {
@@ -218,21 +229,20 @@ final class PostDetailViewController: BaseViewController, View {
         titleLabel.text = post.title
         placeValueLabel.text = post.location
         partynumValueLabel.text = "\(post.maxPerson)명"
-        // TODO: - API UseCase 연결시 프로필 링크 가져오는걸로 바꾸기
-        profileImageView.image = UIImage(named: "profile")
+        ProfileImageHelper.loadImage(profileImageView, pictureString: post.writer.picture)
         nickNameLabel.text = post.writer.nickName
-        cheerTeam.backgroundColor = post.writer.team.getTeamColor
-        cheerTeam.text = post.writer.team.rawValue
+        cheerTeam.backgroundColor = post.writer.favGudan.getTeamColor
+        cheerTeam.text = post.writer.favGudan.rawValue
         if let cheerStyle = post.writer.cheerStyle {
             cheerStyleLabel?.text = cheerStyle.rawValue
             cheerStyleLabel?.applyStyle(textStyle: FontSystem.caption01_medium)
         } else {
             cheerStyleLabel = nil
         }
-        genderLabel.text = post.writer.gener.rawValue
-        ageLabel.text = "\(post.writer.age)세"
-        homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.homeTeam == post.writer.team)
-        awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.awayTeam == post.writer.team)
+        genderLabel.text = post.writer.gender.rawValue
+        ageLabel.text = post.writer.ageRange
+        homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.homeTeam == post.writer.favGudan)
+        awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.awayTeam == post.writer.favGudan)
 
         if post.addInfo != nil {
             addInfoValueLabel.text = post.addInfo
@@ -251,6 +261,37 @@ final class PostDetailViewController: BaseViewController, View {
             genderOptionLabel = makePreferPaddingLabel(text: gender.rawValue)
         } else {
             genderOptionLabel = makePreferPaddingLabel(text: "성별 무관")
+        }
+        setTextStyle()
+        titleLabel.flex.markDirty()
+        dateValueLabel.flex.markDirty()
+        placeValueLabel.flex.markDirty()
+        partynumValueLabel.flex.markDirty()
+        cheerTeam.flex.markDirty()
+        cheerStyleLabel?.flex.markDirty()
+        genderLabel.flex.markDirty()
+        ageLabel.flex.markDirty()
+        addInfoValueLabel.flex.markDirty()
+        ageOptionLabel.forEach { label in
+            label.flex.markDirty()
+        }
+        nickNameLabel.flex.markDirty()
+        genderOptionLabel.flex.markDirty()
+        contentView.flex.layout(mode: .adjustHeight)
+    }
+    
+    private func setupButton() {
+        let pushUserPageGesture = UITapGestureRecognizer(target: self, action: #selector(pushUserPage))
+        wirterInfoView.addGestureRecognizer(pushUserPageGesture)
+        
+    }
+    
+    @objc private func pushUserPage(_ sender: UITapGestureRecognizer) {
+        if let user = reactor.currentState.post?.writer {
+            let userPageVC = OtherUserMyPageViewController(user: user, reactor: OtherUserpageReactor())
+            navigationController?.pushViewController(userPageVC, animated: true)
+        } else {
+            showToast(message: "해당 사용자 정보에 접근할 수 없습니다. 다시 시도해주세요.", buttonContainerExists: true)
         }
     }
     
@@ -296,7 +337,7 @@ extension PostDetailViewController {
                 vc.isFavorite = state // 상태를 직접 설정
                 vc.setupFavoriteButton(state)
                 if vc.isFavorite && !vc.isFirstFavoriteState {
-                    vc.showToast(message: "게시글을 저장했어요")
+                    vc.showToast(message: "게시글을 저장했어요", buttonContainerExists: true)
                 }
             })
             .disposed(by: disposeBag)
@@ -357,8 +398,7 @@ extension PostDetailViewController {
             .compactMap{$0}
             .withUnretained(self)
             .subscribe { vc, error in
-                let position = CGPoint(x: vc.buttonContainer.frame.midX, y: vc.buttonContainer.frame.maxY)
-                vc.showToast(message: "신청에 실패했습니다. 다시 시도해주세요.", at: position, anchorPosition: .top)
+                vc.showToast(message: "요청에 실패했습니다. 다시 시도해주세요.", buttonContainerExists: true)
             }
             .disposed(by: disposeBag)
         
@@ -431,7 +471,7 @@ extension PostDetailViewController {
             }.paddingTop(12).paddingBottom(16).paddingHorizontal(MainGridSystem.getMargin()).marginBottom(8)
             
             // 작성자 정보
-            flex.addItem().backgroundColor(.white).width(100%).direction(.row).justifyContent(.spaceBetween).alignItems(.center).define { flex in
+            flex.addItem(wirterInfoView).backgroundColor(.white).width(100%).direction(.row).justifyContent(.spaceBetween).alignItems(.center).define { flex in
                 flex.addItem().direction(.row).justifyContent(.start).alignItems(.center).define { flex in
                     flex.addItem(profileImageView).size(48).cornerRadius(24).marginRight(8)
                     flex.addItem().direction(.column).justifyContent(.start).alignItems(.start).define { flex in
