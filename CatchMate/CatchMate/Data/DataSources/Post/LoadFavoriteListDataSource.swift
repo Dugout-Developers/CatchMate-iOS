@@ -33,11 +33,11 @@ final class LoadFavoriteListDataSourceImpl: LoadFavoriteListDataSource {
                 if let networkError = error as? NetworkError, networkError.statusCode == 401 {
                     return APIService.shared.refreshAccessToken()
                         .flatMap { token -> Observable<[PostListDTO]> in
-                            let headers: HTTPHeaders = [
+                            let newHeaders: HTTPHeaders = [
                                 "AccessToken": token
                             ]
                             LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            return APIService.shared.requestAPI(type: .loadFavorite, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: [PostListDTO].self)
+                            return APIService.shared.requestAPI(type: .loadFavorite, parameters: nil, headers: newHeaders, encoding: URLEncoding.default, dataType: [PostListDTO].self)
                                 .map { favoriteDTOList in
                                     LoggerService.shared.debugLog("FavoriteList Load 성공: \(favoriteDTOList)")
                                     return favoriteDTOList

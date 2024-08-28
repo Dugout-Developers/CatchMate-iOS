@@ -54,7 +54,7 @@ final class PostMapper {
         }
     }
     func favoritePostListDTOtoDomain(_ dto: PostListDTO) -> SimplePost? {
-        if let homeTeam = Team.init(sponsorName: dto.homeTeam), let awayTeam = Team.init(sponsorName: dto.awayTeam) {
+        if let homeTeam = Team.init(rawValue: dto.homeTeam), let awayTeam = Team.init(rawValue: dto.awayTeam) {
             if let convertedDates = DateHelper.shared.convertISODateToCustomStrings(isoDateString: dto.gameDate) {
                 let date = convertedDates.date   // "08.13" 형식
                 let playTime = convertedDates.playTime   // "09:21" 형식

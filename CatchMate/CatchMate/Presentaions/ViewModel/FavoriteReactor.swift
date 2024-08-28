@@ -19,23 +19,36 @@ final class FavoriteReactor: Reactor {
         case setFavoritePost([SimplePost])
         case removeFavoritePost(String)
         case setSelectedPost(String?)
+        case setError(PresentationError?)
     }
     struct State {
         var favoritePost: [SimplePost] = []
         var selectedPost: String?
+        var error: PresentationError?
     }
     
     var initialState: State
-    
-    init() {
+    private let favoriteListUsecase: LoadFavoriteListUseCase
+    init(favoriteListUsecase: LoadFavoriteListUseCase) {
         self.initialState = State()
+        self.favoriteListUsecase = favoriteListUsecase
     }
     
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadFavoritePost:
-            return Observable.just(Mutation.setFavoritePost([]))
+            return favoriteListUsecase.loadFavoriteList()
+                .map { list in
+                    return Mutation.setFavoritePost(list)
+                }
+                .catch { error in
+                    if let presentationError = error as? PresentationError {
+                        return Observable.just(Mutation.setError(presentationError))
+                    } else {
+                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
         case .removeFavoritePost(let post):
             // TODO: - API 연결로 변경 필요
 //            if let index = Post.dummyFavoriteList.firstIndex(of: post) {
@@ -59,6 +72,8 @@ final class FavoriteReactor: Reactor {
 //            }
         case .setSelectedPost(let postId):
             newState.selectedPost = postId
+        case .setError(let error):
+            newState.error = error
         }
         return newState
     }

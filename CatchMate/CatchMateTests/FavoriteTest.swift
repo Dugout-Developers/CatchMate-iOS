@@ -33,7 +33,7 @@ final class FavoriteTest: XCTestCase {
     func testFavprotePostAPI() {
         let expectation = self.expectation(description: "API Request")
         
-        dataSource.setFavorite(true, "1")
+        dataSource.setFavorite(true, "74")
             .subscribe(onNext: { result in
                 print(result)
                 XCTAssertFalse(!result.isEmpty, "API 호출 결과로 빈 목록이 반환됩니다.")
