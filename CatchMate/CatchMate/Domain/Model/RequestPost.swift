@@ -18,5 +18,5 @@ struct RequestPost {
     let maxPerson: Int
     let preferGender: Gender?
     let preferAge: [Int]
-    let addInfo: String?
+    let addInfo: String
 }

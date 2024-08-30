@@ -28,7 +28,7 @@ final class PostMapper {
                 let date = convertedDates.date   // "08.13" 형식
                 let playTime = convertedDates.playTime   // "09:21" 형식
                 LoggerService.shared.debugLog("PostMapper: DTO -> domain 변환 성공")
-                return Post(title: dto.title, writer: SimpleUser(userId: String(dto.writer.userId), nickName: dto.writer.nickName, picture: dto.writer.picture, favGudan: team, gender: gender, birthDate: dto.writer.birthDate, cheerStyle: CheerStyles.random()), homeTeam: homeTeam, awayTeam: awayTeam , date: date, playTime: playTime, location: dto.location, maxPerson: dto.maxPerson, currentPerson: 1)
+                return Post(title: dto.title, writer: SimpleUser(userId: String(dto.writer.userId), nickName: dto.writer.nickName, picture: dto.writer.picture, favGudan: team, gender: gender, birthDate: dto.writer.birthDate, cheerStyle: CheerStyles.random()), homeTeam: homeTeam, awayTeam: awayTeam , date: date, playTime: playTime, location: dto.location, maxPerson: dto.maxPerson, currentPerson: 1, addInfo: dto.addInfo)
             }
         }
         LoggerService.shared.log("PostMapper: DTO -> domain 변환 실패", level: .error)

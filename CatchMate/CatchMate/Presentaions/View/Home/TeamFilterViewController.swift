@@ -13,11 +13,8 @@ import SnapKit
 final class TeamFilterViewController: BasePickerViewController, View, UIScrollViewDelegate {
     var isHomeTeam: Bool = false
     private let allTeams: [Team] = Team.allTeam
-    private var selectedTeams: [Team] = [] {
-        didSet {
-            print(selectedTeams)
-        }
-    }
+    private var selectedTeams: [Team] = []
+    private var selectedTeam: Team?
     private let tableView: UITableView = UITableView()
     private let saveButton = CMDefaultFilledButton(title: "저장")
     private let resetButton: UIButton = {
@@ -56,6 +53,12 @@ final class TeamFilterViewController: BasePickerViewController, View, UIScrollVi
         if let homeReactor = reactor {
             for team in homeReactor.currentState.selectedTeams {
                 selectedTeams.append(team)
+            }
+        } else if let addReactor = addReactor {
+            if isHomeTeam {
+                selectedTeam = addReactor.currentState.homeTeam
+            } else {
+                selectedTeam = addReactor.currentState.awayTeam
             }
         }
     }
@@ -116,19 +119,6 @@ extension TeamFilterViewController {
             .bind(onNext: updateUnableTeam)
             .disposed(by: disposeBag)
         
-        reactor.state
-            .withUnretained(self)
-            .map { vc, state in
-                if vc.isHomeTeam {
-                    state.homeTeam
-                } else {
-                    state.awayTeam
-                }
-            }
-            .bind(onNext: updateSelectedTeams)
-            .disposed(by: disposeBag)
-        
-        
         Observable.just(allTeams)
             .bind(to: tableView.rx.items(cellIdentifier: "TeamFilterTableViewCell", cellType: TeamFilterTableViewCell.self)) {[weak self] row, team, cell in
                 guard let self = self else { return }
@@ -140,17 +130,37 @@ extension TeamFilterViewController {
                 cell.selectionStyle = .none
                 cell.checkButton.rx.tap
                     .withUnretained(self)
-                    .map{ vc, _ in
-                        if vc.isHomeTeam {
-                            return AddReactor.Action.changeHomeTeam(team)
-                        } else {
-                            return AddReactor.Action.changeAwayTeam(team)
-                        }
+                    .subscribe { vc, _ in
+                        vc.selectedTeam = team
+                        vc.updateSelectedTeams(team)
                     }
-                    .bind(to: reactor.action)
                     .disposed(by: cell.disposeBag)
             }
             .disposed(by: disposeBag)
+        
+        saveButton.rx.tap
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                if let team = vc.selectedTeam {
+                    if vc.isHomeTeam {
+                        reactor.action.onNext(.changeHomeTeam(team))
+                    } else {
+                        reactor.action.onNext(.changeAwayTeam(team))
+                    }
+                }
+                vc.dismiss(animated: true)
+            }
+            .disposed(by: disposeBag)
+        reactor.state.map{$0.error}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, error in
+                if let message = error.errorDescription {
+                    vc.showToast(message: message, buttonContainerExists: true)
+                }
+            }
+            .disposed(by: disposeBag)
+            
     }
     
     func bind(reactor: HomeReactor) {

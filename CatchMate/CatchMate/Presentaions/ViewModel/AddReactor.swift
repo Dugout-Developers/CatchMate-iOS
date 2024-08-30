@@ -246,7 +246,7 @@ final class AddReactor: Reactor {
     }
     private func validatePost(_ state: State) -> (RequestPost, SimpleUser)? {
         if let user = writer, let homeTeam = state.homeTeam, let awayTeam = state.awayTeam, let cheerTeam = state.cheerTeam, let place = state.place, let maxNum = state.partyNumber, let date = state.selecteDate, let time = state.selecteTime,
-           !place.isEmpty, !state.title.isEmpty {
+           !place.isEmpty, !state.title.isEmpty, !state.addText.isEmpty {
             let request = RequestPost(title: state.title, homeTeam: homeTeam, awayTeam: awayTeam, cheerTeam: cheerTeam, date: date, playTime: time.rawValue, location: place, maxPerson: maxNum, preferGender: state.selectedGender, preferAge: state.selectedAge, addInfo: state.addText)
             return (request, user)
         }

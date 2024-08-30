@@ -262,12 +262,8 @@ final class PostDetailViewController: BaseViewController, View {
         homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.homeTeam == post.writer.favGudan)
         awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.awayTeam == post.writer.favGudan)
 
-        if post.addInfo != nil {
-            addInfoValueLabel.text = post.addInfo
-        } else {
-            addInfoValueLabel.text = "작성한 추가 정보가 없습니다."
-            addInfoValueLabel.textColor = .cmNonImportantTextColor
-        }
+        addInfoValueLabel.text = post.addInfo
+
         if post.preferAge.isEmpty {
             ageOptionLabel.append(makePreferPaddingLabel(text: "전연령"))
         } else {
