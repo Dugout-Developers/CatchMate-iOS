@@ -73,6 +73,7 @@ final class AddViewController: BaseViewController, View {
     private let teamSelectedContainerView = UIView()
     private let homeTeamPicker = CMPickerTextField(placeHolder: "홈 팀",isFlex: true)
     private let awayTeamPicker = CMPickerTextField(placeHolder: "원정 팀",isFlex: true)
+    private let cheerTeamPicker = CMPickerTextField(placeHolder: "응원 구단 선택", isFlex: true)
     private let placePicker = CMPickerTextField(placeHolder: "구장 위치", isFlex: true)
     
     private let textInfoLabel: UILabel = {
@@ -144,7 +145,6 @@ final class AddViewController: BaseViewController, View {
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         if isSaved {
             isSaved.toggle()
             navigationController?.popViewController(animated: false)
@@ -214,6 +214,13 @@ final class AddViewController: BaseViewController, View {
         placePicker.parentViewController = self
         placePicker.pickerViewController = PlaceFilterViewController(reactor: reactor)
         placePicker.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.tiny, identifier: "PlaceFilter")
+    }
+    
+    func cheerTeamPickerSetup(homeTeam: Team, awayTeam: Team) {
+        // PlacePicker Setup
+        cheerTeamPicker.parentViewController = self
+        cheerTeamPicker.pickerViewController = CheerTeamPickerViewController(reactor: reactor, home: homeTeam, away: awayTeam)
+        cheerTeamPicker.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.tiny+70, identifier: "CheerTeamFilter")
     }
     
     private func setupView() {
@@ -302,6 +309,28 @@ extension AddViewController {
             }
             .disposed(by: disposeBag)
         
+        reactor.state.map{$0.cheerTeam}
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .subscribe { vc, team in
+                if let team = team {
+                    vc.cheerTeamPicker.didSelectItem(team.rawValue)
+                } else {
+                    vc.cheerTeamPicker.didSelectItem("")
+                }
+            }
+            .disposed(by: disposeBag)
+        reactor.state.map{$0.isDisableCheerTeamPicker}
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .subscribe { vc, state in
+                vc.cheerTeamPicker.isDisable = state
+                if let home = reactor.currentState.homeTeam, let away = reactor.currentState.awayTeam {
+                    vc.cheerTeamPickerSetup(homeTeam: home, awayTeam: away)
+                }
+            }
+            .disposed(by: disposeBag)
+        
         reactor.state.map{$0.place}
             .observe(on: MainScheduler.asyncInstance)
             .withUnretained(self)
@@ -323,11 +352,12 @@ extension AddViewController {
     
     // 작성 완료 후 호출되는 메소드
     private func postSavedSuccessfully(postId: String) {
-        let postDetailVC = PostDetailViewController(postID: postId, isAddView: true)
-        if let navigationController = self.navigationController {
-            isSaved = true
-            navigationController.pushViewController(postDetailVC, animated: true)
-        }
+        navigationController?.popViewController(animated: true)
+//        let postDetailVC = PostDetailViewController(postID: postId, isAddView: true)
+//        if let navigationController = self.navigationController {
+//            isSaved = true
+//            navigationController.pushViewController(postDetailVC, animated: true)
+//        }
     }
 }
 // MARK: - Button
@@ -432,6 +462,7 @@ extension AddViewController {
                     flex.addItem(homeTeamPicker).grow(1).marginRight(9)
                     flex.addItem(awayTeamPicker).grow(1)
                 }.marginBottom(8)
+                flex.addItem(cheerTeamPicker).marginBottom(8)
                 flex.addItem(placePicker).marginBottom(32)
                 flex.addItem().direction(.row).justifyContent(.spaceBetween).alignItems(.center).define {flex in
                     flex.addItem().direction(.row).justifyContent(.start).alignItems(.center).define { flex in

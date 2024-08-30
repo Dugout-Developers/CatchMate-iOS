@@ -28,6 +28,7 @@ final class AddReactor: Reactor {
         case changeAddText(String)
         case changePartyNumber(Int)
         case changePlcase(String)
+        case changeCheerTeam(Team)
         case updatePost
     }
     enum Mutation {
@@ -42,6 +43,8 @@ final class AddReactor: Reactor {
         case updateDatePickerSaveButton
         case updateHomeTeam(Team)
         case updageAwayTeam(Team)
+        case updateCheerTeam(Team)
+        case updateCheerTeamPickerState
         case updateAddText(String)
         case updatePartyNumber(Int)
         case updateSaveButton
@@ -61,6 +64,8 @@ final class AddReactor: Reactor {
         var homeTeam: Team?
         var place: String? = ""
         var awayTeam: Team?
+        var isDisableCheerTeamPicker: Bool = true
+        var cheerTeam: Team?
         var addText: String = ""
         var partyNumber: Int?
         var saveButtonState: Bool = false
@@ -122,12 +127,14 @@ final class AddReactor: Reactor {
         case .changeHomeTeam(let team):
             return Observable.concat([
                 Observable.just(Mutation.updateHomeTeam(team)),
-                Observable.just(Mutation.updateSaveButton)
+                Observable.just(Mutation.updateSaveButton),
+                Observable.just(Mutation.updateCheerTeamPickerState)
             ])
         case .changeAwayTeam(let team):
             return Observable.concat([
                 Observable.just(Mutation.updageAwayTeam(team)),
-                Observable.just(Mutation.updateSaveButton)
+                Observable.just(Mutation.updateSaveButton),
+                Observable.just(Mutation.updateCheerTeamPickerState)
             ])
         case .changeAddText(let text):
             return Observable.concat([
@@ -165,6 +172,11 @@ final class AddReactor: Reactor {
         case .changePlcase(let place):
             return Observable.concat([
                 Observable.just(Mutation.updatePlcase(place)),
+                Observable.just(Mutation.updateSaveButton)
+            ])
+        case .changeCheerTeam(let team):
+            return Observable.concat([
+                Observable.just(Mutation.updateCheerTeam(team)),
                 Observable.just(Mutation.updateSaveButton)
             ])
         }
@@ -214,13 +226,28 @@ final class AddReactor: Reactor {
             newState.error = error
         case .setUser(let user):
             writer = user
+        case .updateCheerTeam(let team):
+            newState.cheerTeam = team
+        case .updateCheerTeamPickerState:
+            if let home = currentState.homeTeam, let away = currentState.awayTeam {
+                newState.isDisableCheerTeamPicker = false
+                if let myTeamStr = SetupInfoService.shared.getUserInfo(type: .team), let myTeam = Team(rawValue: myTeamStr) {
+                    if home == myTeam || away == myTeam {
+                        newState.cheerTeam = myTeam
+                    } else {
+                        newState.cheerTeam = nil
+                    }
+                }
+            } else {
+                newState.isDisableCheerTeamPicker = true
+            }
         }
         return newState
     }
     private func validatePost(_ state: State) -> (RequestPost, SimpleUser)? {
-        if let user = writer, let homeTeam = state.homeTeam, let awayTeam = state.awayTeam, let place = state.place, let maxNum = state.partyNumber, let date = state.selecteDate, let time = state.selecteTime,
+        if let user = writer, let homeTeam = state.homeTeam, let awayTeam = state.awayTeam, let cheerTeam = state.cheerTeam, let place = state.place, let maxNum = state.partyNumber, let date = state.selecteDate, let time = state.selecteTime,
            !place.isEmpty, !state.title.isEmpty {
-            let request = RequestPost(title: state.title, homeTeam: homeTeam, awayTeam: awayTeam, cheerTeam: homeTeam, date: date, playTime: time.rawValue, location: place, maxPerson: maxNum, preferGender: state.selectedGender, preferAge: state.selectedAge, addInfo: state.addText)
+            let request = RequestPost(title: state.title, homeTeam: homeTeam, awayTeam: awayTeam, cheerTeam: cheerTeam, date: date, playTime: time.rawValue, location: place, maxPerson: maxNum, preferGender: state.selectedGender, preferAge: state.selectedAge, addInfo: state.addText)
             return (request, user)
         }
         return nil
