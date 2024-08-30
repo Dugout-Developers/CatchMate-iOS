@@ -101,6 +101,13 @@ extension TeamFilterViewController {
         }
     }
     
+    private func setupCell() {
+        guard let cells = tableView.visibleCells as? [TeamFilterTableViewCell] else { return }
+        for cell in cells {
+            guard let team = cell.team else { continue }
+            cell.isClicked = team == selectedTeam
+        }
+    }
     private func updateUnableTeam(_ selectedTeam: Team?) {
         guard let cells = tableView.visibleCells as? [TeamFilterTableViewCell] else { return }
         for cell in cells {
@@ -117,6 +124,11 @@ extension TeamFilterViewController {
             .distinctUntilChanged()
             .observe(on: MainScheduler.asyncInstance)
             .bind(onNext: updateUnableTeam)
+            .disposed(by: disposeBag)
+        
+        willAppearPublisher
+            .observe(on: MainScheduler.asyncInstance)
+            .bind(onNext: setupCell)
             .disposed(by: disposeBag)
         
         Observable.just(allTeams)
