@@ -216,6 +216,8 @@
 		53ACBA232C7EACB1004FAF00 /* SetupInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA222C7EACB1004FAF00 /* SetupInfoService.swift */; };
 		53ACBA252C7EAE1B004FAF00 /* UserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA242C7EAE1B004FAF00 /* UserDefaultsKeys.swift */; };
 		53ACBA272C7EB493004FAF00 /* UserInfoDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA262C7EB493004FAF00 /* UserInfoDTO.swift */; };
+		53ACBA302C80B68E004FAF00 /* ListLoadDataSourceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA2F2C80B68E004FAF00 /* ListLoadDataSourceTest.swift */; };
+		53ACBA312C80B6C0004FAF00 /* PostListLoadDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E4C242C6B549B0052E754 /* PostListLoadDataSource.swift */; };
 		53B8E2382C5C7BAA001D0ADF /* UserRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E2372C5C7BAA001D0ADF /* UserRepositoryImpl.swift */; };
 		53B8E23B2C5C7BCF001D0ADF /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E23A2C5C7BCF001D0ADF /* UserRepository.swift */; };
 		53B8E23E2C5C7BEB001D0ADF /* UserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E23D2C5C7BEB001D0ADF /* UserUseCase.swift */; };
@@ -446,6 +448,7 @@
 		53ACBA222C7EACB1004FAF00 /* SetupInfoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupInfoService.swift; sourceTree = "<group>"; };
 		53ACBA242C7EAE1B004FAF00 /* UserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeys.swift; sourceTree = "<group>"; };
 		53ACBA262C7EB493004FAF00 /* UserInfoDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoDTO.swift; sourceTree = "<group>"; };
+		53ACBA2F2C80B68E004FAF00 /* ListLoadDataSourceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListLoadDataSourceTest.swift; sourceTree = "<group>"; };
 		53B8E2372C5C7BAA001D0ADF /* UserRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepositoryImpl.swift; sourceTree = "<group>"; };
 		53B8E23A2C5C7BCF001D0ADF /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		53B8E23D2C5C7BEB001D0ADF /* UserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserUseCase.swift; sourceTree = "<group>"; };
@@ -808,6 +811,7 @@
 			children = (
 				536BDDC42C189B240043B1DA /* CatchMateTests.swift */,
 				533B292C2C77130900BFE9F6 /* FavoriteTest.swift */,
+				53ACBA2F2C80B68E004FAF00 /* ListLoadDataSourceTest.swift */,
 			);
 			path = CatchMateTests;
 			sourceTree = "<group>";
@@ -1562,6 +1566,7 @@
 			files = (
 				533B293B2C771ED000BFE9F6 /* APIService.swift in Sources */,
 				533B29332C771E2100BFE9F6 /* SimplePost.swift in Sources */,
+				53ACBA302C80B68E004FAF00 /* ListLoadDataSourceTest.swift in Sources */,
 				533B294A2C771F6300BFE9F6 /* Error+Extension.swift in Sources */,
 				533B293D2C771EEA00BFE9F6 /* DataError.swift in Sources */,
 				533B29352C771E6000BFE9F6 /* Post.swift in Sources */,
@@ -1570,6 +1575,7 @@
 				533B292F2C771C8600BFE9F6 /* SetFavoriteRepository.swift in Sources */,
 				533B29412C771F0A00BFE9F6 /* RequestPost.swift in Sources */,
 				536BDDC52C189B240043B1DA /* CatchMateTests.swift in Sources */,
+				53ACBA312C80B6C0004FAF00 /* PostListLoadDataSource.swift in Sources */,
 				533B29482C771F5E00BFE9F6 /* UIColor+Extension.swift in Sources */,
 				533B29462C771F4700BFE9F6 /* Color.swift in Sources */,
 				533B294E2C773AB700BFE9F6 /* LoadFavoriteListRepositoryImpl.swift in Sources */,
