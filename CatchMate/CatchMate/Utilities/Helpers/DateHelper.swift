@@ -16,6 +16,7 @@ final class DateHelper {
     private init() {
         dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ko_KR")
+        dateFormatter.timeZone = TimeZone(identifier: "Asia/Seoul")
         
         isoFormatter = ISO8601DateFormatter()
         isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
@@ -23,11 +24,13 @@ final class DateHelper {
     }
     
     func toString(from date: Date, format: String) -> String {
+        dateFormatter.timeZone = TimeZone(identifier: "Asia/Seoul")
         dateFormatter.dateFormat = format
         return dateFormatter.string(from: date)
     }
     
     func toDate(from string: String, format: String) -> Date? {
+        dateFormatter.timeZone = TimeZone(identifier: "Asia/Seoul")
         dateFormatter.dateFormat = format
         return dateFormatter.date(from: string)
     }
