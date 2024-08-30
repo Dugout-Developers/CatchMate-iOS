@@ -80,11 +80,14 @@ final class ChatRoomViewController: BaseViewController, View {
         menuButton.setImage(UIImage(named: "cm20hamburger")?.withTintColor(.grayScale800, renderingMode: .alwaysOriginal), for: .normal)
         menuButton.addTarget(self, action: #selector(clickedMenuButton), for: .touchUpInside)
         customNavigationBar.addRightItems(items: [menuButton])
+        menuButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         let titleLabel: UILabel = {
             let label = UILabel()
             label.text = chat.post.title
             label.textColor = .cmHeadLineTextColor
             label.applyStyle(textStyle: FontSystem.body01_medium)
+            label.lineBreakMode = .byTruncatingTail
+            label.numberOfLines = 1
             return label
         }()
         let numberLabel: UILabel = {
@@ -94,6 +97,7 @@ final class ChatRoomViewController: BaseViewController, View {
             label.applyStyle(textStyle: FontSystem.caption01_medium)
             return label
         }()
+        numberLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         customNavigationBar.addLeftItems(items: [titleLabel, numberLabel])
     }
     

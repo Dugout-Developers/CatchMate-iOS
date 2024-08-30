@@ -280,11 +280,14 @@ extension AddViewController {
             .withUnretained(self)
             .subscribe { vc, team in
                 if let team = team {
+                    vc.placePicker.isDisable = false
                     vc.homeTeamPicker.didSelectItem(team.rawValue)
                     vc.placePicker.didSelectItem(team.place?[0] ?? "")
                     if let count = team.place?.count{
                         vc.placeCount = count
                     }
+                } else {
+                    vc.placePicker.isDisable = true
                 }
             }
             .disposed(by: disposeBag)

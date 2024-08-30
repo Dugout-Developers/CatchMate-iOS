@@ -17,8 +17,8 @@ final class ChatListViewController: BaseViewController, View {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        reactor.action.onNext(.loadChatList)
         reactor.action.onNext(.selectChat(nil))
+        reactor.action.onNext(.loadChatList)
     }
     
     override func viewDidLoad() {
@@ -53,6 +53,7 @@ final class ChatListViewController: BaseViewController, View {
         chatListTableView.tableHeaderView = UIView()
         chatListTableView.rowHeight = UITableView.automaticDimension
         chatListTableView.backgroundColor = .clear
+        chatListTableView.separatorStyle = .none
     }
     
 
@@ -62,6 +63,7 @@ extension ChatListViewController {
     func bind(reactor: ChatListReactor) {
         reactor.state.map{$0.chatList}
             .bind(to: chatListTableView.rx.items(cellIdentifier: "ChatListTableViewCell", cellType: ChatListTableViewCell.self)) {  (row, item, cell) in
+                cell.selectionStyle = .none
                 cell.configData(chat: item)
                 cell.updateConstraints()
             }
@@ -77,7 +79,6 @@ extension ChatListViewController {
         
         reactor.state.map{$0.selectedChat}
             .compactMap{$0}
-            .distinctUntilChanged()
             .withUnretained(self)
             .subscribe(onNext: { vc, chat in
                 let roomVC = ChatRoomViewController(chat: chat)

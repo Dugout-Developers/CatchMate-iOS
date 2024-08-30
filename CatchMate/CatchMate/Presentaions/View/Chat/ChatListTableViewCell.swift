@@ -57,6 +57,7 @@ final class ChatListTableViewCell: UITableViewCell {
         label.textColor = .white
         return label
     }()
+    private let divider = UIView()
     
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -132,23 +133,26 @@ final class ChatListTableViewCell: UITableViewCell {
 extension ChatListTableViewCell {
     private func setupUI() {
         contentView.addSubview(containerView)
-        containerView.flex.direction(.row).width(100%).paddingTop(16).paddingBottom(12).alignItems(.center).define { flex in
-            flex.addItem(chatImageView).size(52)
-            flex.addItem().direction(.column).grow(1).shrink(1).marginLeft(12).define { flex in
-                flex.addItem().direction(.row).define { flex in
+        containerView.flex.direction(.column).width(100%).paddingTop(16).define { flex in
+            flex.addItem().direction(.row).width(100%).alignItems(.center).define { flex in
+                flex.addItem(chatImageView).size(52)
+                flex.addItem().direction(.column).grow(1).shrink(1).marginLeft(12).define { flex in
                     flex.addItem().direction(.row).define { flex in
-                        flex.addItem(postTitleLabel).shrink(1)
-                        flex.addItem(peopleNumLabel).grow(1).marginLeft(5)
-                    }.grow(1).shrink(1)
-                    flex.addItem(lastChatDateLabel).marginLeft(35)
-                }.marginBottom(5)
-                flex.addItem().direction(.row).define { (flex) in
-                    flex.addItem(lastChatLabel).grow(1).shrink(1)
-                    flex.addItem(notiBadgeView).size(18).cornerRadius(9).marginLeft(35).alignItems(.center).justifyContent(.center).define { flex in
-                        flex.addItem(notiBadge).alignSelf(.center)
+                        flex.addItem().direction(.row).define { flex in
+                            flex.addItem(postTitleLabel).shrink(1)
+                            flex.addItem(peopleNumLabel).grow(1).marginLeft(5)
+                        }.grow(1).shrink(1)
+                        flex.addItem(lastChatDateLabel).marginLeft(35)
+                    }.marginBottom(5)
+                    flex.addItem().direction(.row).define { (flex) in
+                        flex.addItem(lastChatLabel).grow(1).shrink(1)
+                        flex.addItem(notiBadgeView).size(18).cornerRadius(9).marginLeft(35).alignItems(.center).justifyContent(.center).define { flex in
+                            flex.addItem(notiBadge).alignSelf(.center)
+                        }
                     }
                 }
-            }
+            }.marginBottom(12)
+            flex.addItem(divider).height(1).width(100%).backgroundColor(.cmStrokeColor)
         }
     }
 }

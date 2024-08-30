@@ -198,25 +198,43 @@ final class PostDetailViewController: BaseViewController, View {
     private func setupNavigation() {
         let reportButton = UIButton()
         reportButton.setImage(UIImage(named: "cm20kebab")?.withTintColor(.cmHeadLineTextColor, renderingMode: .alwaysOriginal), for: .normal)
-        reportButton.showsMenuAsPrimaryAction = true
-        reportButton.menu = createMenu()
+        reportButton.addTarget(self, action: #selector(setupMenuButton), for: .touchUpInside)
         customNavigationBar.addRightItems(items: [reportButton])
     }
     
-    private func createMenu() -> UIMenu {
-        let pullUpAction = UIAction(title: "끌어올리기", image: nil) { _ in
-            print("끌어올리기 선택됨")
+    @objc private func setupMenuButton() {
+        let isMine = Bool.random() // MARK: - 임시 -> API 수정되면 Post의 작성자와 비교하기
+        let menuVC = CMActionMenu()
+        if isMine {
+            // 메뉴 항목 설정
+            menuVC.menuItems = [
+                MenuItem(title: "끌어올리기", action: { [weak self] in
+                    self?.showToast(message: "게시글을 끌어올렸어요", buttonContainerExists: true)
+                }),
+                MenuItem(title: "게시글 수정", action: {
+                    print("게시글 수정 선택됨")
+                }),
+                MenuItem(title: "게시글 삭제", textColor: UIColor.cmSystemRed, action: {
+                    print("게시글 삭제 선택됨")
+                })
+            ]
+        } else {
+            // 메뉴 항목 설정
+            menuVC.menuItems = [
+                MenuItem(title: "찜하기", action: {
+                    print("찜하기 선택됨")
+                }),
+                MenuItem(title: "공유하기", action: {
+                    print("공유하기 선택됨")
+                }),
+                MenuItem(title: "신고하기", textColor: UIColor.cmSystemRed, action: {
+                    print("신고하기 선택됨")
+                })
+            ]
         }
-        
-        let editAction = UIAction(title: "게시글 수정", image: nil) { _ in
-            print("게시글 수정 선택됨")
-        }
-        
-        let deleteAction = UIAction(title: "게시글 삭제", image: nil, attributes: .destructive) { _ in
-            print("게시글 삭제 선택됨")
-        }
-        
-        return UIMenu(title: "", children: [pullUpAction, editAction, deleteAction])
+        // 메뉴 화면을 모달로 표시
+        menuVC.modalPresentationStyle = .overFullScreen
+        present(menuVC, animated: false, completion: nil)
     }
     
     private func setupData(post: Post) {

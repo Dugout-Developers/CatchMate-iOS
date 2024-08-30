@@ -75,7 +75,6 @@ final class CMNavigationBar: UIView {
             make.centerY.equalToSuperview()
             make.height.equalTo(27)
         }
-
     }
     
     private func configureItems(stackView: UIStackView, items: [UIView], includeBackButton: Bool = false) {

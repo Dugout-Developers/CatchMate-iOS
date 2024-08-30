@@ -78,6 +78,14 @@ class DIContainerService {
         return PostReactor(postId: postID, postloadUsecase: loadPostUsecase)
     }
     
+    func makeFavoriteReactor() -> FavoriteReactor {
+        let loadFavoriteListDS = LoadFavoriteListDataSourceImpl()
+        let loadFavoriteListRepository = LoadFavoriteListRepositoryImpl(loadFavorioteListDS: loadFavoriteListDS)
+        let loadFavoriteListUsecase = LoadFavoriteListUseCaseImpl(loadFavoriteListRepository: loadFavoriteListRepository)
+        
+        return FavoriteReactor(favoriteListUsecase: loadFavoriteListUsecase)
+    }
+    
     func makeMypageReactor() -> MyPageReactor {
         let userDataSource = UserDataSourceImpl()
         let logoutDataSource = LogoutDataSourceImpl()
