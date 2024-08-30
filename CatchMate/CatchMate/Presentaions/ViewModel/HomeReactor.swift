@@ -14,7 +14,6 @@ final class HomeReactor: Reactor {
         case willAppear
         case viewDidLoad
         case updateDateFilter(Date?)
-        case toggleTeamSelection(Team?)
         case updateTeamFilter([Team])
         case updateNumberFilter(Int?)
         case selectPost(String?)
@@ -72,17 +71,6 @@ final class HomeReactor: Reactor {
                 loadList
             ])
             
-        case let .toggleTeamSelection(team):
-            var updatedTeams = currentState.selectedTeams
-            guard let team = team else {
-                return Observable.just(Mutation.setSelectedTeams([]))
-            }
-            if let index = updatedTeams.firstIndex(of: team) {
-                updatedTeams.remove(at: index)
-            } else {
-                updatedTeams.append(team)
-            }
-            return Observable.just(Mutation.setSelectedTeams(updatedTeams))
         case .updateTeamFilter(let teams):          
             let gudan = teams.map { $0.rawValue }
             var requestDate = ""

@@ -39,6 +39,11 @@ final class OptionButtonView: UIButton {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        if let value = filterValue, !value.isEmpty {
+            filterTitleLabel.textColor = .white
+        } else {
+            filterTitleLabel.textColor = .cmBodyTextColor
+        }
         containerView.pin.all()
         containerView.flex.layout()
     }

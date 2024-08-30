@@ -13,6 +13,11 @@ import SnapKit
 final class TeamFilterViewController: BasePickerViewController, View, UIScrollViewDelegate {
     var isHomeTeam: Bool = false
     private let allTeams: [Team] = Team.allTeam
+    private var selectedTeams: [Team] = [] {
+        didSet {
+            print(selectedTeams)
+        }
+    }
     private let tableView: UITableView = UITableView()
     private let saveButton = CMDefaultFilledButton(title: "저장")
     private let resetButton: UIButton = {
@@ -48,12 +53,16 @@ final class TeamFilterViewController: BasePickerViewController, View, UIScrollVi
 
     override func viewWillAppear(_ animated: Bool) {
         willAppearPublisher.onNext(())
+        if let homeReactor = reactor {
+            for team in homeReactor.currentState.selectedTeams {
+                selectedTeams.append(team)
+            }
+        }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupTableView()
-        settupButton()
         if let homeReactor = reactor {
             bind(reactor: homeReactor)
             setupUI(isHome: true)
@@ -68,12 +77,6 @@ final class TeamFilterViewController: BasePickerViewController, View, UIScrollVi
         disable()
     }
     
-    private func settupButton() {
-        saveButton.addTarget(self, action: #selector(clickedSaveButton), for: .touchUpInside)
-    }
-    @objc private func clickedSaveButton(_ sender: UIButton) {
-        dismiss(animated: true)
-    }
     private func setupTableView() {
         tableView.register(TeamFilterTableViewCell.self, forCellReuseIdentifier: "TeamFilterTableViewCell")
         tableView.tableHeaderView = UIView()
@@ -151,16 +154,16 @@ extension TeamFilterViewController {
     }
     
     func bind(reactor: HomeReactor) {
-        reactor.state.map { $0.selectedTeams }
-            .bind(onNext: updateSelectedTeams)
-            .disposed(by: disposeBag)
-        
         tableView.rx.itemSelected
-            .map { indexPath in
+            .withUnretained(self)
+            .subscribe { vc, indexPath in
                 let team = self.allTeams[indexPath.row]
-                return Reactor.Action.toggleTeamSelection(team)
+                if let index = vc.selectedTeams.firstIndex(of: team) {
+                    vc.selectedTeams.remove(at: index)
+                } else {
+                    vc.selectedTeams.append(team)
+                }
             }
-            .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
         tableView.rx.setDelegate(self)
@@ -174,25 +177,33 @@ extension TeamFilterViewController {
             }
             .disposed(by: disposeBag)
         
+        saveButton.rx.tap
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                reactor.action.onNext(.updateTeamFilter(vc.selectedTeams))
+                vc.dismiss(animated: true)
+            }
+            .disposed(by: disposeBag)
+        
         Observable.just(allTeams)
             .bind(to: tableView.rx.items(cellIdentifier: "TeamFilterTableViewCell", cellType: TeamFilterTableViewCell.self)) { row, team, cell in
                 let isSelected = reactor.currentState.selectedTeams.contains(team)
                 cell.configure(with: team, isClicked: isSelected)
                 cell.selectionStyle = .none
                 cell.checkButton.rx.tap
-                    .map { Reactor.Action.toggleTeamSelection(team) }
-                    .bind(to: reactor.action)
+                    .subscribe(onNext: { [weak self] _ in
+                        guard let self = self else { return }
+                        if let index = selectedTeams.firstIndex(of: team) {
+                            selectedTeams.remove(at: index)
+                            cell.isClicked = false
+                        } else {
+                            selectedTeams.append(team)
+                            cell.isClicked = true
+                        }
+                    })
                     .disposed(by: cell.disposeBag)
             }
             .disposed(by: disposeBag)
-    }
-    
-    private func updateSelectedTeams(_ selectedTeams: [Team]) {
-        guard let cells = tableView.visibleCells as? [TeamFilterTableViewCell] else { return }
-        for cell in cells {
-            guard let team = cell.team else { continue }
-            cell.isClicked = selectedTeams.contains(team)
-        }
     }
 }
 
