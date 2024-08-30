@@ -209,3 +209,32 @@ final class APIService {
             }
     }
 }
+
+
+struct CustomURLEncoding: ParameterEncoding {
+    static var `default`: CustomURLEncoding { return CustomURLEncoding() }
+    
+    func encode(_ urlRequest: URLRequestConvertible, with parameters: Parameters?) throws -> URLRequest {
+        var urlRequest = try URLEncoding.default.encode(urlRequest, with: parameters)
+        
+        guard let url = urlRequest.url, var components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let queryItems = components.queryItems else {
+            return urlRequest
+        }
+        
+        var newQueryItems = [URLQueryItem]()
+        
+        for queryItem in queryItems {
+            if let value = queryItem.value, value.isEmpty {
+                // 빈 값을 가진 항목이 있을 경우, 빈 값으로 인코딩
+                newQueryItems.append(URLQueryItem(name: queryItem.name, value: ""))
+            } else {
+                newQueryItems.append(queryItem)
+            }
+        }
+        
+        components.queryItems = newQueryItems
+        urlRequest.url = components.url
+        return urlRequest
+    }
+}

@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 
 protocol AddPostUseCase {
-    func addPost(_ post: RequestPost) -> Observable<Void>
+    func addPost(_ post: RequestPost) -> Observable<Int>
 }
 
 final class AddPostUseCaseImpl: AddPostUseCase {
@@ -19,7 +19,7 @@ final class AddPostUseCaseImpl: AddPostUseCase {
         self.addPostRepository = addPostRepository
     }
     
-    func addPost(_ post: RequestPost) -> Observable<Void> {
+    func addPost(_ post: RequestPost) -> Observable<Int> {
         print("useCase:\(post)")
         return addPostRepository.addPost(post)
     }

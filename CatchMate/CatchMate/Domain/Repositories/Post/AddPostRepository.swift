@@ -9,5 +9,5 @@ import UIKit
 import RxSwift
 
 protocol AddPostRepository {
-    func addPost(_ post: RequestPost) -> Observable<Void>
+    func addPost(_ post: RequestPost) -> Observable<Int>
 }

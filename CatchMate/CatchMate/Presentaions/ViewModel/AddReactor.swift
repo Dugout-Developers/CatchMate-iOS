@@ -146,7 +146,7 @@ final class AddReactor: Reactor {
             }
             print(request.0)
             return addUsecase.addPost(request.0)
-                .map{
+                .map{ _ in 
                     let post = Post(post: request.0, writer: request.1)
                     return Mutation.updatePost(post)
                 }
@@ -220,7 +220,7 @@ final class AddReactor: Reactor {
     private func validatePost(_ state: State) -> (RequestPost, SimpleUser)? {
         if let user = writer, let homeTeam = state.homeTeam, let awayTeam = state.awayTeam, let place = state.place, let maxNum = state.partyNumber, let date = state.selecteDate, let time = state.selecteTime,
            !place.isEmpty, !state.title.isEmpty {
-            let request = RequestPost(title: state.title, homeTeam: homeTeam, awayTeam: awayTeam, date: date, playTime: time.rawValue, location: place, maxPerson: maxNum, preferGender: state.selectedGender, preferAge: state.selectedAge, addInfo: state.addText)
+            let request = RequestPost(title: state.title, homeTeam: homeTeam, awayTeam: awayTeam, cheerTeam: homeTeam, date: date, playTime: time.rawValue, location: place, maxPerson: maxNum, preferGender: state.selectedGender, preferAge: state.selectedAge, addInfo: state.addText)
             return (request, user)
         }
         return nil

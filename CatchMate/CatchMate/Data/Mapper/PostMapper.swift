@@ -6,7 +6,7 @@
 //
 
 final class PostMapper {
-    func domainToDto(_ domain: RequestPost) -> PostRequsetDTO? {
+    func domainToDto(_ domain: RequestPost) -> AddPostRequsetDTO? {
         let gameDateDomain = "\(domain.date) \(domain.playTime)"
         
         if let preferGender = domain.preferGender?.serverRequest {
@@ -14,7 +14,7 @@ final class PostMapper {
             let playTime = domain.playTime+":00"
             let resultString = "\(dateString) \(playTime)"
             LoggerService.shared.debugLog("PostMapper: Domain -> DTO : \(resultString)")
-            return PostRequsetDTO(title: domain.title, gameDate: resultString, location: domain.location, homeTeam: domain.homeTeam.rawValue, awayTeam: domain.awayTeam.rawValue, currentPerson: 1, maxPerson: domain.maxPerson, preferGender: preferGender, preferAge: 28, addInfo: domain.addInfo)
+            return AddPostRequsetDTO(title: domain.title, gameDate: resultString, location: domain.location, homeTeam: domain.homeTeam.rawValue, awayTeam: domain.awayTeam.rawValue, cheerTeam: domain.cheerTeam.rawValue, maxPerson: domain.maxPerson, preferGender: preferGender, preferAge: 28, addInfo: domain.addInfo ?? "")
         } else {
             LoggerService.shared.log("PostMapper: Domain -> DTO 변환 실패", level: .error)
             return nil

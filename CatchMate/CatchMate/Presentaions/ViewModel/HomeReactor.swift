@@ -51,7 +51,7 @@ final class HomeReactor: Reactor {
         case .updateNumberFilter(let number):
             return Observable.just(Mutation.setNumberFilter(number))
         case .updateDateFilter(let date):
-            let gudan = currentState.selectedTeams.map { $0.rawValue }.joined(separator: ",")
+            let gudan = currentState.selectedTeams.map { $0.rawValue }
             var requestDate = ""
             if let date = date {
                 requestDate = DateHelper.shared.toString(from: date, format: "YYYY-MM-dd")
@@ -84,17 +84,14 @@ final class HomeReactor: Reactor {
             }
             return Observable.just(Mutation.setSelectedTeams(updatedTeams))
         case .updateTeamFilter(let teams):          
-            let gudan = teams.map { $0.rawValue }.joined(separator: ",")
+            let gudan = teams.map { $0.rawValue }
             var requestDate = ""
             if let date = currentState.dateFilterValue {
                 requestDate = DateHelper.shared.toString(from: date, format: "YYYY-MM-dd")
-            } else {
-                requestDate = DateHelper.shared.toString(from: Date(), format: "YYYY-MM-dd")
             }
             let loadList = loadPostListUsecase.loadPostList(pageNum: 1, gudan: gudan, gameDate: requestDate, people: 0)
                 .map { list in
                     Mutation.loadPost(list)
-                    
                 }
                 .catch { error in
                     if let presentationError = error as? PresentationError {
@@ -108,7 +105,7 @@ final class HomeReactor: Reactor {
                 loadList
             ])
         case .willAppear:
-            return loadPostListUsecase.loadPostList(pageNum: 1, gudan: "", gameDate: "", people: 0)
+            return loadPostListUsecase.loadPostList(pageNum: 1, gudan: [], gameDate: "", people: 0)
                 .map { list in
                     return Mutation.loadPost(list)
                 }

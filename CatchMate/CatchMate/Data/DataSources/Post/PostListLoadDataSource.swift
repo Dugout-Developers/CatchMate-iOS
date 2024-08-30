@@ -11,23 +11,19 @@ import RxAlamofire
 import Alamofire
 
 protocol PostListLoadDataSource {
-    func loadPostList(pageNum: Int, gudan: String, gameDate: String, people: Int) ->  Observable<[PostListDTO]>
+    func loadPostList(pageNum: Int, gudan: [String], gameDate: String, people: Int) ->  Observable<[PostListDTO]>
 }
 final class PostListLoadDataSourceImpl: PostListLoadDataSource {
-    func loadPostList(pageNum: Int, gudan: String, gameDate: String, people: Int) -> RxSwift.Observable<[PostListDTO]> {
+    func loadPostList(pageNum: Int, gudan: [String], gameDate: String, people: Int) -> RxSwift.Observable<[PostListDTO]> {
         LoggerService.shared.debugLog("<필터값> 구단: \(gudan), 날짜: \(gameDate)")
         guard let token = KeychainService.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
-        // MARK: - 임시 필터
-        var gudan = gudan
+        
         var gameDate = gameDate
-        if gudan.isEmpty, let myTeam = SetupInfoService.shared.getUserInfo(type: .team) {
-            gudan = myTeam
-        }
         if gameDate.isEmpty {
-            let date = DateHelper.shared.toString(from: Date(), format: "YYYY-MM-dd")
-            gameDate = date
+//            let date = DateHelper.shared.toString(from: Date(), format: "YYYY-MM-dd")
+            gameDate = "2024-08-31"
         }
         
         let headers: HTTPHeaders = [
@@ -35,13 +31,13 @@ final class PostListLoadDataSourceImpl: PostListLoadDataSource {
         ]
         
         let parameters: [String: Any] = [
-            "gudans": gudan,
+            "gudans": gudan.isEmpty ? "" : gudan,
             "gameDate": gameDate,
             "people": people
         ]
         LoggerService.shared.debugLog("parameters: \(parameters)")
         LoggerService.shared.debugLog("PostListLoadDataSourceImpl 토큰 확인: \(headers)")
-        return APIService.shared.requestAPI(addEndPoint: String(pageNum), type: .postlist, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: [PostListDTO].self)
+        return APIService.shared.requestAPI(addEndPoint: String(pageNum), type: .postlist, parameters: parameters, headers: headers, encoding: CustomURLEncoding.default, dataType: [PostListDTO].self)
             .map { postListDTO in
                 LoggerService.shared.debugLog("PostList Load 성공: \(postListDTO)")
                 return postListDTO
