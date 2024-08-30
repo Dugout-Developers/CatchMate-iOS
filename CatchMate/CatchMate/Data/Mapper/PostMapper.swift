@@ -14,7 +14,7 @@ final class PostMapper {
             let playTime = domain.playTime+":00"
             let resultString = "\(dateString) \(playTime)"
             LoggerService.shared.debugLog("PostMapper: Domain -> DTO : \(resultString)")
-            return AddPostRequsetDTO(title: domain.title, gameDate: resultString, location: domain.location, homeTeam: domain.homeTeam.rawValue, awayTeam: domain.awayTeam.rawValue, cheerTeam: domain.cheerTeam.rawValue, maxPerson: domain.maxPerson, preferGender: preferGender, preferAge: 28, addInfo: domain.addInfo ?? "")
+            return AddPostRequsetDTO(title: domain.title, gameDate: resultString, location: domain.location, homeTeam: domain.homeTeam.rawValue, awayTeam: domain.awayTeam.rawValue, cheerTeam: domain.cheerTeam.rawValue, maxPerson: domain.maxPerson, preferGender: preferGender, preferAge: 28, addInfo: domain.addInfo)
         } else {
             LoggerService.shared.log("PostMapper: Domain -> DTO 변환 실패", level: .error)
             return nil
@@ -38,6 +38,7 @@ final class PostMapper {
     func postListDTOtoDomain(_ dto: PostListDTO) -> SimplePost? {
         if let homeTeam = Team.init(rawValue: dto.homeTeam), let awayTeam = Team.init(rawValue: dto.awayTeam) {
             if let convertedDates = DateHelper.shared.convertISODateToCustomStrings(isoDateString: dto.gameDate) {
+                print(convertedDates)
                 let date = convertedDates.date   // "08.13" 형식
                 let playTime = convertedDates.playTime   // "09:21" 형식
                 
