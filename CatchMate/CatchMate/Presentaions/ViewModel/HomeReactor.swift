@@ -48,14 +48,41 @@ final class HomeReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .updateNumberFilter(let number):
-            return Observable.just(Mutation.setNumberFilter(number))
+            let gudan = currentState.selectedTeams.map { $0.rawValue }
+            var requestDate = ""
+            if let date = currentState.dateFilterValue {
+                requestDate = DateHelper.shared.toString(from: date, format: "YYYY-MM-dd")
+            }
+            var requestNumber = 0
+            if let num = number {
+                requestNumber = num
+            }
+            let loadList = loadPostListUsecase.loadPostList(pageNum: 1, gudan: gudan, gameDate: requestDate, people: requestNumber)
+                .map { list in
+                    Mutation.loadPost(list)
+                }
+                .catch { error in
+                    if let presentationError = error as? PresentationError {
+                        Observable.just(Mutation.setError(presentationError))
+                    } else {
+                        Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
+            return Observable.concat([
+                Observable.just(Mutation.setNumberFilter(number)),
+                loadList
+            ])
         case .updateDateFilter(let date):
             let gudan = currentState.selectedTeams.map { $0.rawValue }
             var requestDate = ""
             if let date = date {
                 requestDate = DateHelper.shared.toString(from: date, format: "YYYY-MM-dd")
             }
-            let loadList = loadPostListUsecase.loadPostList(pageNum: 1, gudan: gudan, gameDate: requestDate, people: 0)
+            var requestNumber = 0
+            if let num = currentState.seletedNumberFilter {
+                requestNumber = num
+            }
+            let loadList = loadPostListUsecase.loadPostList(pageNum: 1, gudan: gudan, gameDate: requestDate, people: requestNumber)
                 .map { list in
                     Mutation.loadPost(list)
                 }
@@ -77,7 +104,11 @@ final class HomeReactor: Reactor {
             if let date = currentState.dateFilterValue {
                 requestDate = DateHelper.shared.toString(from: date, format: "YYYY-MM-dd")
             }
-            let loadList = loadPostListUsecase.loadPostList(pageNum: 1, gudan: gudan, gameDate: requestDate, people: 0)
+            var requestNumber = 0
+            if let num = currentState.seletedNumberFilter {
+                requestNumber = num
+            }
+            let loadList = loadPostListUsecase.loadPostList(pageNum: 1, gudan: gudan, gameDate: requestDate, people: requestNumber)
                 .map { list in
                     Mutation.loadPost(list)
                 }
