@@ -33,6 +33,7 @@ final class HomeReactor: Reactor {
         var selectedTeams: [Team] = []
         var selectedPost: String?
         var seletedNumberFilter: Int?
+        var page: Int = 1
         var error: PresentationError?
     }
     
@@ -57,7 +58,7 @@ final class HomeReactor: Reactor {
             if let num = number {
                 requestNumber = num
             }
-            let loadList = loadPostListUsecase.loadPostList(pageNum: 1, gudan: gudan, gameDate: requestDate, people: requestNumber)
+            let loadList = loadPostListUsecase.loadPostList(pageNum: currentState.page, gudan: gudan, gameDate: requestDate, people: requestNumber)
                 .map { list in
                     Mutation.loadPost(list)
                 }

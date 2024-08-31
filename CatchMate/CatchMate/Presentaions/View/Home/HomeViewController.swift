@@ -73,7 +73,6 @@ final class HomeViewController: BaseViewController, View {
 // MARK: - Bind
 extension HomeViewController {
     func bind(reactor: HomeReactor) {
-        
         tableView.rx.itemSelected
             .map { indexPath in
                 let post = reactor.currentState.posts[indexPath.row]

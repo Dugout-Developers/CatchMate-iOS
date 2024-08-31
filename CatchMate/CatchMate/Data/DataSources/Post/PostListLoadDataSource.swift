@@ -22,8 +22,7 @@ final class PostListLoadDataSourceImpl: PostListLoadDataSource {
         
         var gameDate = gameDate
         if gameDate.isEmpty {
-//            let date = DateHelper.shared.toString(from: Date(), format: "YYYY-MM-dd")
-            gameDate = "2024-08-31"
+            gameDate = "9999-99-99"
         }
         
         let headers: HTTPHeaders = [

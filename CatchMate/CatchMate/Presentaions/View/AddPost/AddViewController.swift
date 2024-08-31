@@ -220,7 +220,7 @@ final class AddViewController: BaseViewController, View {
         // PlacePicker Setup
         cheerTeamPicker.parentViewController = self
         cheerTeamPicker.pickerViewController = CheerTeamPickerViewController(reactor: reactor, home: homeTeam, away: awayTeam)
-        cheerTeamPicker.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.tiny+70, identifier: "CheerTeamFilter")
+        cheerTeamPicker.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.tiny+65, identifier: "CheerTeamFilter")
     }
     
     private func setupView() {

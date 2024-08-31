@@ -34,6 +34,10 @@ final class TeamImageView: UIView {
         containerView.flex.layout()
     }
     
+    func changeBackGroundColor(_ background: UIColor) {
+        containerView.backgroundColor = background
+    }
+    
     func setupTeam(team: Team, isMyTeam: Bool, background: UIColor = .white) {
         imageView.image = team.getLogoImage
         imageView.alpha = isMyTeam ? 1 : 0.6

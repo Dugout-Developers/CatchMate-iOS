@@ -87,7 +87,7 @@ final class PostDetailViewController: BaseViewController, View {
     private let wirterInfoView = UIView()
     private let profileImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
     }()
