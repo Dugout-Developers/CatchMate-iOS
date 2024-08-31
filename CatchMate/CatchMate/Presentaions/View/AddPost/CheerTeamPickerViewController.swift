@@ -41,8 +41,6 @@ final class CheerTeamPickerViewController: BasePickerViewController, View {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        print("\(home), \(away)")
-        print("\(reactor.currentState.cheerTeam)")
         updateSelectedTeam(reactor.currentState.cheerTeam)
     }
 
@@ -79,10 +77,8 @@ final class CheerTeamPickerViewController: BasePickerViewController, View {
             .disposed(by: disposeBag)
         
         teams.bind(to: tableView.rx.items(cellIdentifier: "CheerTeamTableViewCell", cellType: CheerTeamTableViewCell.self)) { [weak self] row, team, cell in
-            guard let self = self else {return}
-            if let myTeamStr = SetupInfoService.shared.getUserInfo(type: .team), let myTeam = Team(rawValue: myTeamStr)  {
-                cell.setupData(team: team, isClicked: selectedTeam == team)
-            }
+            guard let self = self else { return }
+            cell.setupData(team: team, isClicked: selectedTeam == team)
             cell.selectionStyle = .none
             cell.checkButton.rx.tap
                 .withUnretained(self)

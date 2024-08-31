@@ -7,8 +7,6 @@
 
 final class PostMapper {
     func domainToDto(_ domain: RequestPost) -> AddPostRequsetDTO? {
-        let gameDateDomain = "\(domain.date) \(domain.playTime)"
-        
         if let preferGender = domain.preferGender?.serverRequest {
             let dateString = DateHelper.shared.toString(from: domain.date, format: "yyyy-MM-dd")
             let playTime = domain.playTime+":00"

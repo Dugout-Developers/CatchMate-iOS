@@ -263,13 +263,13 @@ extension AddViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        reactor.state.map{$0.loadSavePost}
+        reactor.state.map{$0.savePostResult}
             .distinctUntilChanged()
             .compactMap{$0}
             .withUnretained(self)
-            .subscribe { vc, post in
-                    LoggerService.shared.debugLog("게시글 저장 완료")
-                    vc.postSavedSuccessfully(postId: "1")
+            .subscribe { vc, postId in
+                LoggerService.shared.debugLog("게시글 저장 완료")
+                vc.postSavedSuccessfully(postId: "\(postId)")
             }
             .disposed(by: disposeBag)
 
@@ -352,12 +352,11 @@ extension AddViewController {
     
     // 작성 완료 후 호출되는 메소드
     private func postSavedSuccessfully(postId: String) {
-        navigationController?.popViewController(animated: true)
-//        let postDetailVC = PostDetailViewController(postID: postId, isAddView: true)
-//        if let navigationController = self.navigationController {
-//            isSaved = true
-//            navigationController.pushViewController(postDetailVC, animated: true)
-//        }
+        let postDetailVC = PostDetailViewController(postID: postId, isAddView: true)
+        if let navigationController = self.navigationController {
+            isSaved = true
+            navigationController.pushViewController(postDetailVC, animated: true)
+        }
     }
 }
 // MARK: - Button

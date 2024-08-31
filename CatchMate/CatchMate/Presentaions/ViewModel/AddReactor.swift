@@ -49,7 +49,7 @@ final class AddReactor: Reactor {
         case updatePartyNumber(Int)
         case updateSaveButton
         case updatePlcase(String)
-        case updatePost(Post)
+        case savePost(Int)
         case setError(PresentationError)
     }
     struct State {
@@ -68,8 +68,7 @@ final class AddReactor: Reactor {
         var cheerTeam: Team?
         var addText: String = ""
         var partyNumber: Int?
-        var saveButtonState: Bool = false
-        var loadSavePost: Post? = nil
+        var savePostResult: Int? = nil
         var error: PresentationError?
     }
     
@@ -153,9 +152,8 @@ final class AddReactor: Reactor {
             }
             print(request.0)
             return addUsecase.addPost(request.0)
-                .map{ _ in 
-                    let post = Post(post: request.0, writer: request.1)
-                    return Mutation.updatePost(post)
+                .map{ id in
+                    return Mutation.savePost(id)
                 }
                 .catch { error in
                     if let presentationError = error as? PresentationError {
@@ -209,14 +207,11 @@ final class AddReactor: Reactor {
             newState.addText = text
         case .updatePartyNumber(let num):
             newState.partyNumber = num
-        case .updatePost(let post):
-            newState.loadSavePost = post
+        case .savePost(let postId):
+            newState.savePostResult = postId
             
         case .updateSaveButton:
             if newState.selecteDate != nil , newState.selecteTime != nil , newState.homeTeam != nil, newState.awayTeam != nil, newState.place != nil, newState.addText.trimmingCharacters(in: .whitespaces).isEmpty, newState.title.trimmingCharacters(in: .whitespaces).isEmpty {
-                newState.saveButtonState = true
-            } else {
-                newState.saveButtonState = false
             }
         case .updateTitle(let title):
             newState.title = title
