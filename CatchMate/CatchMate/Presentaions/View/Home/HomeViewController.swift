@@ -39,6 +39,7 @@ final class HomeViewController: BaseViewController, View {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        tabBarController?.tabBar.isHidden = false
         reactor.action.onNext(.willAppear)
         reactor.action.onNext(.selectPost(nil))
     }
@@ -87,6 +88,7 @@ extension HomeViewController {
             .withUnretained(self)
             .subscribe { vc, postId in
                 let postDetailVC = PostDetailViewController(postID: postId)
+                postDetailVC.hidesBottomBarWhenPushed = true
                 vc.navigationController?.pushViewController(postDetailVC, animated: true)
             }
             .disposed(by: disposeBag)
@@ -145,6 +147,7 @@ extension HomeViewController {
     
     @objc private func clickNotiButton(_ sender: UIButton) {
         let notiViewController = NotiViewController()
+        notiViewController.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(notiViewController, animated: true)
     }
     

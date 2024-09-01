@@ -139,6 +139,7 @@ final class PostDetailViewController: BaseViewController, View {
     }()
     private let addInfoValueLabel: UILabel = {
         let label = UILabel()
+        label.numberOfLines = 0
         label.textColor = .cmHeadLineTextColor
         return label
     }()
@@ -160,6 +161,9 @@ final class PostDetailViewController: BaseViewController, View {
         super.viewWillDisappear(animated)
         if let tabBarController = tabBarController as? TabBarController, isAddView {
             tabBarController.isAddView = false
+//            if let vcs = tabBarController.viewControllers {
+//                navigationController?.viewControllers = [vcs[tabBarController.preViewControllerIndex]]
+//            }
             tabBarController.selectedIndex = tabBarController.preViewControllerIndex
         }
     }

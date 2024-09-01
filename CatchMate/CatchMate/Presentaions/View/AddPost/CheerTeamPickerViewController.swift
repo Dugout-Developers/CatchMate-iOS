@@ -197,7 +197,7 @@ final class CheerTeamTableViewCell: UITableViewCell {
     private func setUI() {
         contentView.addSubview(containerView)
         
-        containerView.flex.direction(.row).justifyContent(.start).alignContent(.center).paddingVertical(20).define { flex in
+        containerView.flex.direction(.row).justifyContent(.start).alignItems(.center).paddingVertical(20).define { flex in
             flex.addItem(teamImageView).size(50)
             flex.addItem(teamLabel).marginHorizontal(12).grow(1)
             flex.addItem(checkButton).size(20)

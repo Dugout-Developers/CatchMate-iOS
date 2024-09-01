@@ -160,10 +160,7 @@ extension CMDatePicker: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DateCell", for: indexPath) as! DateCell
         let date = daysInMonth[indexPath.item]
-        
-        // 디버깅 로그 추가
-        print("IndexPath: \(indexPath.item), Date: \(String(describing: date))")
-        
+    
         cell.configure(with: date, isCurrentDate: isCurrentDate(date), isSelectedDate: isSelectedDate(date), minimuDate: minimumDate)
         return cell
     }
