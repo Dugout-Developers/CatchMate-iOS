@@ -12,6 +12,7 @@ struct WriterDTO: Codable {
     let nickName: String
     let picture: String
     let favGudan: String
+    let watchStyle: String?
     let gender: String
     let birthDate: String
 }
@@ -24,6 +25,7 @@ struct PostDTO: Codable {
     let location: String
     let homeTeam: String
     let awayTeam: String
+    let cheerTeam: String
     let maxPerson: Int
     let preferGender: String
     let preferAge: Int

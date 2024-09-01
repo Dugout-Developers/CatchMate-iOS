@@ -161,9 +161,6 @@ final class PostDetailViewController: BaseViewController, View {
         super.viewWillDisappear(animated)
         if let tabBarController = tabBarController as? TabBarController, isAddView {
             tabBarController.isAddView = false
-//            if let vcs = tabBarController.viewControllers {
-//                navigationController?.viewControllers = [vcs[tabBarController.preViewControllerIndex]]
-//            }
             tabBarController.selectedIndex = tabBarController.preViewControllerIndex
         }
     }
@@ -263,8 +260,8 @@ final class PostDetailViewController: BaseViewController, View {
         }
         genderLabel.text = post.writer.gender.rawValue
         ageLabel.text = post.writer.ageRange
-        homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.homeTeam == post.writer.favGudan)
-        awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.awayTeam == post.writer.favGudan)
+        homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.homeTeam == post.cheerTeam)
+        awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.awayTeam == post.cheerTeam)
 
         addInfoValueLabel.text = post.addInfo
 
