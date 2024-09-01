@@ -15,17 +15,11 @@ final class SetFavoriteRepositoryImpl: SetFavoriteRepository {
         self.setFavoriteDS = setFavoriteDS
     }
     
-    func setFavorite(_ state: Bool, _ boardID: String) -> RxSwift.Observable<[SimplePost]> {
+    func setFavorite(_ state: Bool, _ boardID: String) -> RxSwift.Observable<Bool> {
         return setFavoriteDS.setFavorite(state, boardID)
-            .flatMap { dtoList in
-                var list = [SimplePost]()
-                dtoList.forEach { dto in
-                    if let mapResult = PostMapper().postListDTOtoDomain(dto) {
-                        list.append(mapResult)
-                    }
-                }
+            .flatMap { state in
                 LoggerService.shared.log("setFavorite Repository 데이터 변환 완료")
-                return Observable.just(list)
+                return Observable.just(state)
             }
             .catch { error in
                 return Observable.error(ErrorMapper.mapToPresentationError(error))

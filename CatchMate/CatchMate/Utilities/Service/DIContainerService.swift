@@ -75,7 +75,11 @@ class DIContainerService {
         let loadPostRepository = LoadPostRepositoryImpl(loadPostDS: loadPostDataSource)
         let loadPostUsecase = LoadPostUseCaseImpl(loadPostRepository: loadPostRepository)
         
-        return PostReactor(postId: postID, postloadUsecase: loadPostUsecase)
+        let setFavoriteDataSource = SetFavoriteDataSourceImpl()
+        let setFavoriteRepository = SetFavoriteRepositoryImpl(setFavoriteDS: setFavoriteDataSource)
+        let setFavoriteUsecase = SetFavoriteUseCaseImpl(setFavoriteRepository: setFavoriteRepository)
+        
+        return PostReactor(postId: postID, postloadUsecase: loadPostUsecase, setfavoriteUsecase: setFavoriteUsecase)
     }
     
     func makeFavoriteReactor() -> FavoriteReactor {

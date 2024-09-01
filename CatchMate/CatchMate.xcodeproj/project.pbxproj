@@ -223,6 +223,8 @@
 		53ACBA372C81A91E004FAF00 /* CheerTeamPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA362C81A91E004FAF00 /* CheerTeamPickerViewController.swift */; };
 		53ACBA392C8330C9004FAF00 /* LoadPostDetailDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA382C8330C9004FAF00 /* LoadPostDetailDataSourceTests.swift */; };
 		53ACBA3A2C8330E1004FAF00 /* LoadPostDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E5925D2C6D0A550042E1D7 /* LoadPostDataSource.swift */; };
+		53ACBA3C2C84A98C004FAF00 /* SetFavoriteUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA3B2C84A98C004FAF00 /* SetFavoriteUseCase.swift */; };
+		53ACBA3E2C84AA3D004FAF00 /* SetFavoriteDataSourceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA3D2C84AA3D004FAF00 /* SetFavoriteDataSourceTest.swift */; };
 		53B8E2382C5C7BAA001D0ADF /* UserRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E2372C5C7BAA001D0ADF /* UserRepositoryImpl.swift */; };
 		53B8E23B2C5C7BCF001D0ADF /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E23A2C5C7BCF001D0ADF /* UserRepository.swift */; };
 		53B8E23E2C5C7BEB001D0ADF /* UserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E23D2C5C7BEB001D0ADF /* UserUseCase.swift */; };
@@ -457,6 +459,8 @@
 		53ACBA322C81A4C0004FAF00 /* AddPostDataSourceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostDataSourceTest.swift; sourceTree = "<group>"; };
 		53ACBA362C81A91E004FAF00 /* CheerTeamPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheerTeamPickerViewController.swift; sourceTree = "<group>"; };
 		53ACBA382C8330C9004FAF00 /* LoadPostDetailDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadPostDetailDataSourceTests.swift; sourceTree = "<group>"; };
+		53ACBA3B2C84A98C004FAF00 /* SetFavoriteUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetFavoriteUseCase.swift; sourceTree = "<group>"; };
+		53ACBA3D2C84AA3D004FAF00 /* SetFavoriteDataSourceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetFavoriteDataSourceTest.swift; sourceTree = "<group>"; };
 		53B8E2372C5C7BAA001D0ADF /* UserRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepositoryImpl.swift; sourceTree = "<group>"; };
 		53B8E23A2C5C7BCF001D0ADF /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		53B8E23D2C5C7BEB001D0ADF /* UserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserUseCase.swift; sourceTree = "<group>"; };
@@ -823,6 +827,7 @@
 				53ACBA2F2C80B68E004FAF00 /* ListLoadDataSourceTest.swift */,
 				53ACBA322C81A4C0004FAF00 /* AddPostDataSourceTest.swift */,
 				53ACBA382C8330C9004FAF00 /* LoadPostDetailDataSourceTests.swift */,
+				53ACBA3D2C84AA3D004FAF00 /* SetFavoriteDataSourceTest.swift */,
 			);
 			path = CatchMateTests;
 			sourceTree = "<group>";
@@ -1209,6 +1214,7 @@
 				531E4C312C6B62070052E754 /* PostListLoadUseCase.swift */,
 				53E5925B2C6D05DD0042E1D7 /* LoadPostUseCase.swift */,
 				533B29242C770A9600BFE9F6 /* LoadFavoriteListUseCase.swift */,
+				53ACBA3B2C84A98C004FAF00 /* SetFavoriteUseCase.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -1534,6 +1540,7 @@
 				530DD6122C4F839600A7D6CE /* ServerLoginDataSource.swift in Sources */,
 				5317867D2C216CBE00ACEF6A /* NumberPickerViewController.swift in Sources */,
 				53716BC62C42D19A0044AD2A /* PlaceFilterViewController.swift in Sources */,
+				53ACBA3C2C84A98C004FAF00 /* SetFavoriteUseCase.swift in Sources */,
 				533B28F72C75BC2800BFE9F6 /* ProfileImageHelper.swift in Sources */,
 				53ACBA232C7EACB1004FAF00 /* SetupInfoService.swift in Sources */,
 				531E4C2D2C6B5C4A0052E754 /* PostListLoadRepository.swift in Sources */,
@@ -1579,6 +1586,7 @@
 				533B293B2C771ED000BFE9F6 /* APIService.swift in Sources */,
 				533B29332C771E2100BFE9F6 /* SimplePost.swift in Sources */,
 				53ACBA302C80B68E004FAF00 /* ListLoadDataSourceTest.swift in Sources */,
+				53ACBA3E2C84AA3D004FAF00 /* SetFavoriteDataSourceTest.swift in Sources */,
 				533B294A2C771F6300BFE9F6 /* Error+Extension.swift in Sources */,
 				533B293D2C771EEA00BFE9F6 /* DataError.swift in Sources */,
 				533B29352C771E6000BFE9F6 /* Post.swift in Sources */,

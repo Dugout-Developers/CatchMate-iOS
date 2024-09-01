@@ -179,7 +179,7 @@ final class PostDetailViewController: BaseViewController, View {
         bind(reactor: reactor)
         reactor.action.onNext(.loadPostDetails)
 //        reactor.action.onNext(.loadIsApplied)
-//        reactor.action.onNext(.loadIsFavorite)
+        reactor.action.onNext(.loadIsFavorite)
         setupUI()
         setupNavigation()
         setupButton()
@@ -203,9 +203,9 @@ final class PostDetailViewController: BaseViewController, View {
     }
     
     @objc private func setupMenuButton() {
-        let isMine = Bool.random() // MARK: - 임시 -> API 수정되면 Post의 작성자와 비교하기
+        let localDataUserId = SetupInfoService.shared.getUserInfo(type: .id)
         let menuVC = CMActionMenu()
-        if isMine {
+        if let currentlocalId = localDataUserId, currentlocalId == reactor.currentState.post?.writer.userId {
             // 메뉴 항목 설정
             menuVC.menuItems = [
                 MenuItem(title: "끌어올리기", action: { [weak self] in
