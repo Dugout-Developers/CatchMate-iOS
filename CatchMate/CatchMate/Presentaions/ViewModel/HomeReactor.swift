@@ -57,20 +57,20 @@ final class HomeReactor: Reactor {
         case .updateNumberFilter(let number):
             return Observable.concat([
                 Observable.just(Mutation.resetPage),
-                updateFiltersAndLoadPosts(number: number)
+                updateFiltersAndLoadPosts(date: currentState.dateFilterValue, teams: currentState.selectedTeams, number: number)
             ])
             
         case .updateDateFilter(let date):
             return Observable.concat([
                 Observable.just(Mutation.resetPage),
-                updateFiltersAndLoadPosts(date: date)
+                updateFiltersAndLoadPosts(date: date, teams: currentState.selectedTeams, number: currentState.seletedNumberFilter)
             ])
 
             
         case .updateTeamFilter(let teams):
             return Observable.concat([
                 Observable.just(Mutation.resetPage),
-                updateFiltersAndLoadPosts(teams: teams)
+                updateFiltersAndLoadPosts(date: currentState.dateFilterValue, teams: teams, number: currentState.seletedNumberFilter)
             ])
             
         case .selectPost(let post):
@@ -84,7 +84,7 @@ final class HomeReactor: Reactor {
                 })
                 .withUnretained(self)
                 .flatMap({ reactor, _ in
-                    return reactor.updateFiltersAndLoadPosts()
+                    return reactor.updateFiltersAndLoadPosts(date: nil, teams: nil, number: nil)
                 })
                 .catch { [weak self] error in
                     guard let self = self else { return .empty()}
@@ -112,7 +112,7 @@ final class HomeReactor: Reactor {
             return Observable.concat([
                 Observable.just(Mutation.setRefreshing(true)),
                 Observable.just(Mutation.resetPage),
-                updateFiltersAndLoadPosts(),
+                updateFiltersAndLoadPosts(date: currentState.dateFilterValue, teams: currentState.selectedTeams, number: currentState.seletedNumberFilter),
                 Observable.just(Mutation.setRefreshing(false))
             ])
         }
@@ -156,10 +156,10 @@ final class HomeReactor: Reactor {
     }
     
     // Helper Method: 필터 업데이트 및 포스트 로딩 처리
-    private func updateFiltersAndLoadPosts(date: Date? = nil, teams: [Team]? = nil, number: Int? = nil) -> Observable<Mutation> {
+    private func updateFiltersAndLoadPosts(date: Date?, teams: [Team]?, number: Int?) -> Observable<Mutation> {
         let gudan = (teams ?? currentState.selectedTeams).map { $0.rawValue }
-        let requestDate = date?.toString(format: "YYYY-MM-dd") ?? currentState.dateFilterValue?.toString(format: "YYYY-MM-dd") ?? ""
-        let requestNumber = number ?? currentState.seletedNumberFilter ?? 0
+        let requestDate = date?.toString(format: "YYYY-MM-dd") ?? ""
+        let requestNumber = number ?? 0
         print(currentState.page)
         let loadList = loadPostListUsecase.loadPostList(pageNum: 1, gudan: gudan, gameDate: requestDate, people: requestNumber)
             .map { list in
@@ -172,8 +172,8 @@ final class HomeReactor: Reactor {
         
         return Observable.concat([
             teams != nil ? Observable.just(Mutation.setSelectedTeams(teams!)) : .empty(),
-            date != nil ? Observable.just(Mutation.setDateFilter(date)) : .empty(),
-            number != nil ? Observable.just(Mutation.setNumberFilter(number)) : .empty(),
+            Observable.just(Mutation.setDateFilter(date)),
+            Observable.just(Mutation.setNumberFilter(number)),
             loadList,
             Observable.just(Mutation.incrementPage)
         ])
