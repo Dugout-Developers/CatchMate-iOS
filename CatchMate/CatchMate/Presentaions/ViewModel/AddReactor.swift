@@ -28,6 +28,7 @@ final class AddReactor: Reactor {
         case changeAddText(String)
         case changePartyNumber(Int)
         case changePlcase(String)
+        case changeCheerTeam(Team)
         case updatePost
     }
     enum Mutation {
@@ -42,11 +43,13 @@ final class AddReactor: Reactor {
         case updateDatePickerSaveButton
         case updateHomeTeam(Team)
         case updageAwayTeam(Team)
+        case updateCheerTeam(Team)
+        case updateCheerTeamPickerState
         case updateAddText(String)
         case updatePartyNumber(Int)
         case updateSaveButton
         case updatePlcase(String)
-        case updatePost(Post)
+        case savePost(Int)
         case setError(PresentationError)
     }
     struct State {
@@ -61,10 +64,11 @@ final class AddReactor: Reactor {
         var homeTeam: Team?
         var place: String? = ""
         var awayTeam: Team?
+        var isDisableCheerTeamPicker: Bool = true
+        var cheerTeam: Team?
         var addText: String = ""
         var partyNumber: Int?
-        var saveButtonState: Bool = false
-        var loadSavePost: Post? = nil
+        var savePostResult: Int? = nil
         var error: PresentationError?
     }
     
@@ -122,12 +126,14 @@ final class AddReactor: Reactor {
         case .changeHomeTeam(let team):
             return Observable.concat([
                 Observable.just(Mutation.updateHomeTeam(team)),
-                Observable.just(Mutation.updateSaveButton)
+                Observable.just(Mutation.updateSaveButton),
+                Observable.just(Mutation.updateCheerTeamPickerState)
             ])
         case .changeAwayTeam(let team):
             return Observable.concat([
                 Observable.just(Mutation.updageAwayTeam(team)),
-                Observable.just(Mutation.updateSaveButton)
+                Observable.just(Mutation.updateSaveButton),
+                Observable.just(Mutation.updateCheerTeamPickerState)
             ])
         case .changeAddText(let text):
             return Observable.concat([
@@ -146,9 +152,8 @@ final class AddReactor: Reactor {
             }
             print(request.0)
             return addUsecase.addPost(request.0)
-                .map{
-                    let post = Post(post: request.0, writer: request.1)
-                    return Mutation.updatePost(post)
+                .map{ id in
+                    return Mutation.savePost(id)
                 }
                 .catch { error in
                     if let presentationError = error as? PresentationError {
@@ -165,6 +170,11 @@ final class AddReactor: Reactor {
         case .changePlcase(let place):
             return Observable.concat([
                 Observable.just(Mutation.updatePlcase(place)),
+                Observable.just(Mutation.updateSaveButton)
+            ])
+        case .changeCheerTeam(let team):
+            return Observable.concat([
+                Observable.just(Mutation.updateCheerTeam(team)),
                 Observable.just(Mutation.updateSaveButton)
             ])
         }
@@ -197,14 +207,11 @@ final class AddReactor: Reactor {
             newState.addText = text
         case .updatePartyNumber(let num):
             newState.partyNumber = num
-        case .updatePost(let post):
-            newState.loadSavePost = post
+        case .savePost(let postId):
+            newState.savePostResult = postId
             
         case .updateSaveButton:
             if newState.selecteDate != nil , newState.selecteTime != nil , newState.homeTeam != nil, newState.awayTeam != nil, newState.place != nil, newState.addText.trimmingCharacters(in: .whitespaces).isEmpty, newState.title.trimmingCharacters(in: .whitespaces).isEmpty {
-                newState.saveButtonState = true
-            } else {
-                newState.saveButtonState = false
             }
         case .updateTitle(let title):
             newState.title = title
@@ -214,13 +221,28 @@ final class AddReactor: Reactor {
             newState.error = error
         case .setUser(let user):
             writer = user
+        case .updateCheerTeam(let team):
+            newState.cheerTeam = team
+        case .updateCheerTeamPickerState:
+            if let home = currentState.homeTeam, let away = currentState.awayTeam {
+                newState.isDisableCheerTeamPicker = false
+                if let myTeamStr = SetupInfoService.shared.getUserInfo(type: .team), let myTeam = Team(rawValue: myTeamStr) {
+                    if home == myTeam || away == myTeam {
+                        newState.cheerTeam = myTeam
+                    } else {
+                        newState.cheerTeam = nil
+                    }
+                }
+            } else {
+                newState.isDisableCheerTeamPicker = true
+            }
         }
         return newState
     }
     private func validatePost(_ state: State) -> (RequestPost, SimpleUser)? {
-        if let user = writer, let homeTeam = state.homeTeam, let awayTeam = state.awayTeam, let place = state.place, let maxNum = state.partyNumber, let date = state.selecteDate, let time = state.selecteTime,
-           !place.isEmpty, !state.title.isEmpty {
-            let request = RequestPost(title: state.title, homeTeam: homeTeam, awayTeam: awayTeam, date: date, playTime: time.rawValue, location: place, maxPerson: maxNum, preferGender: state.selectedGender, preferAge: state.selectedAge, addInfo: state.addText)
+        if let user = writer, let homeTeam = state.homeTeam, let awayTeam = state.awayTeam, let cheerTeam = state.cheerTeam, let place = state.place, let maxNum = state.partyNumber, let date = state.selecteDate, let time = state.selecteTime,
+           !place.isEmpty, !state.title.isEmpty, !state.addText.isEmpty {
+            let request = RequestPost(title: state.title, homeTeam: homeTeam, awayTeam: awayTeam, cheerTeam: cheerTeam, date: date, playTime: time.rawValue, location: place, maxPerson: maxNum, preferGender: state.selectedGender, preferAge: state.selectedAge, addInfo: state.addText)
             return (request, user)
         }
         return nil

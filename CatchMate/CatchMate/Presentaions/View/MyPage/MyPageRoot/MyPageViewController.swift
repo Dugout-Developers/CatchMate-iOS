@@ -19,6 +19,7 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = false
         reactor.action.onNext(.loadUser)
     }
     
@@ -120,11 +121,13 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
         case 0:
             guard let user = user else { return }
             let profileEditVC = ProfileEditViewController(reactor: ProfileEditReactor(user: user), imageString: user.profilePicture)
+            profileEditVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(profileEditVC, animated: true)
         case 1:
             myMenus[indexPath.row].navigationVC
                 .withUnretained(self)
                 .subscribe { vc, nextVC in
+                    nextVC.hidesBottomBarWhenPushed = true
                     vc.navigationController?.pushViewController(nextVC, animated: true)
                 }
                 .disposed(by: disposeBag)
@@ -132,6 +135,7 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
             supportMenus[indexPath.row].navigationVC
                 .withUnretained(self)
                 .subscribe { vc, nextVC in
+                    nextVC.hidesBottomBarWhenPushed = true
                     vc.navigationController?.pushViewController(nextVC, animated: true)
                 }
                 .disposed(by: disposeBag)

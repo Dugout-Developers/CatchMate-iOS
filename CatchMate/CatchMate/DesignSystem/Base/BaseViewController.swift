@@ -25,19 +25,19 @@ class BaseViewController: UIViewController {
         navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        print("\(self) did Appear")
-        if let navigationController = navigationController, navigationController.viewControllers.count > 1 {
-            tabBarController?.tabBar.isHidden = true
-        } else {
-            if tabBarController?.selectedIndex != 2 {
-                tabBarController?.tabBar.isHidden = false
-            } else {
-                tabBarController?.tabBar.isHidden = true
-            }
-        }
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        print("\(self) did Appear")
+//        if let navigationController = navigationController, navigationController.viewControllers.count > 1 {
+//            tabBarController?.tabBar.isHidden = true
+//        } else {
+//            if tabBarController?.selectedIndex != 2 {
+//                tabBarController?.tabBar.isHidden = false
+//            } else {
+//                tabBarController?.tabBar.isHidden = true
+//            }
+//        }
+//    }
 
 //    override func viewDidDisappear(_ animated: Bool) {
 //        super.viewDidDisappear(animated)

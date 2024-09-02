@@ -50,7 +50,8 @@ class CMTextView: UITextView {
         addSubview(placeholderLabel)
         
         placeholderLabel.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview().inset(16)
+            make.top.equalToSuperview().inset(12)
+            make.leading.trailing.equalToSuperview().inset(16)
         }
 
     }

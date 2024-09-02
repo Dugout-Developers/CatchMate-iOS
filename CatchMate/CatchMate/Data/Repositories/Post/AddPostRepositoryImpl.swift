@@ -15,7 +15,7 @@ final class AddPostRepositoryImpl: AddPostRepository {
         self.addPostDS = addPostDS
     }
     
-    func addPost(_ post: RequestPost) -> Observable<Void> {
+    func addPost(_ post: RequestPost) -> Observable<Int> {
         guard let post = PostMapper().domainToDto(post) else {
             print("Repositiory: \(post)")
             return Observable.error(ErrorMapper.mapToPresentationError(MappingError.mappingFailed))

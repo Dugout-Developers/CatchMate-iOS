@@ -11,11 +11,11 @@ import RxAlamofire
 import Alamofire
 
 protocol AddPostDataSource {
-    func addPost(_ post: PostRequsetDTO) -> Observable<Void>
+    func addPost(_ post: AddPostRequsetDTO) -> Observable<Int>
 }
 final class AddPostDataSourceImpl: AddPostDataSource {
     private var isRefreshingToken = false
-    func addPost(_ post: PostRequsetDTO) -> Observable<Void> {
+    func addPost(_ post: AddPostRequsetDTO) -> Observable<Int> {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
         guard let token = KeychainService.getToken(for: .accessToken) else {
@@ -33,10 +33,10 @@ final class AddPostDataSourceImpl: AddPostDataSource {
             print(jsonObject)
             if let jsonDictionary = jsonObject as? [String: Any] {
                 LoggerService.shared.debugLog("parameters Encoding:\(jsonDictionary)")
-                return APIService.shared.requestVoidAPI(type: .savePost, parameters: jsonDictionary, headers: headers, encoding: JSONEncoding.default)
-                    .map { result in
-                        LoggerService.shared.debugLog("Post 저장 성공 - result: \(result)")
-                        return result
+                return APIService.shared.requestAPI(type: .savePost, parameters: jsonDictionary, headers: headers, encoding: JSONEncoding.default, dataType: AddPostResponseDTO.self)
+                    .map { response in
+                        LoggerService.shared.debugLog("Post 저장 성공 - result: \(response)")
+                        return response.boardId
                     }
                     .catch { [weak self] error in
                         guard let self = self else { return Observable.error(error) }
@@ -76,4 +76,6 @@ final class AddPostDataSourceImpl: AddPostDataSource {
        }
 }
 
-struct VoidResponse: Codable {}
+struct AddPostResponseDTO: Codable {
+    let boardId: Int
+}

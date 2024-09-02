@@ -21,7 +21,7 @@ class PaddingLabel: UILabel {
         self.backgroundColor = .grayScale50
         self.textColor = .cmNonImportantTextColor
         self.applyStyle(textStyle: FontSystem.body02_semiBold)
-        self.layer.cornerRadius = 18
+        self.layer.cornerRadius = 16
         self.clipsToBounds = true
         self.isUserInteractionEnabled = true
     }

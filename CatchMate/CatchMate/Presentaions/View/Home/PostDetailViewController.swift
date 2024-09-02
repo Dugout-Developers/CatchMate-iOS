@@ -87,7 +87,7 @@ final class PostDetailViewController: BaseViewController, View {
     private let wirterInfoView = UIView()
     private let profileImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -139,6 +139,7 @@ final class PostDetailViewController: BaseViewController, View {
     }()
     private let addInfoValueLabel: UILabel = {
         let label = UILabel()
+        label.numberOfLines = 0
         label.textColor = .cmHeadLineTextColor
         return label
     }()
@@ -179,7 +180,7 @@ final class PostDetailViewController: BaseViewController, View {
         bind(reactor: reactor)
         reactor.action.onNext(.loadPostDetails)
 //        reactor.action.onNext(.loadIsApplied)
-//        reactor.action.onNext(.loadIsFavorite)
+        reactor.action.onNext(.loadIsFavorite)
         setupUI()
         setupNavigation()
         setupButton()
@@ -203,9 +204,9 @@ final class PostDetailViewController: BaseViewController, View {
     }
     
     @objc private func setupMenuButton() {
-        let isMine = Bool.random() // MARK: - 임시 -> API 수정되면 Post의 작성자와 비교하기
+        let localDataUserId = SetupInfoService.shared.getUserInfo(type: .id)
         let menuVC = CMActionMenu()
-        if isMine {
+        if let currentlocalId = localDataUserId, currentlocalId == reactor.currentState.post?.writer.userId {
             // 메뉴 항목 설정
             menuVC.menuItems = [
                 MenuItem(title: "끌어올리기", action: { [weak self] in
@@ -259,15 +260,11 @@ final class PostDetailViewController: BaseViewController, View {
         }
         genderLabel.text = post.writer.gender.rawValue
         ageLabel.text = post.writer.ageRange
-        homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.homeTeam == post.writer.favGudan)
-        awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.awayTeam == post.writer.favGudan)
+        homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.homeTeam == post.cheerTeam)
+        awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.awayTeam == post.cheerTeam)
 
-        if post.addInfo != nil {
-            addInfoValueLabel.text = post.addInfo
-        } else {
-            addInfoValueLabel.text = "작성한 추가 정보가 없습니다."
-            addInfoValueLabel.textColor = .cmNonImportantTextColor
-        }
+        addInfoValueLabel.text = post.addInfo
+
         if post.preferAge.isEmpty {
             ageOptionLabel.append(makePreferPaddingLabel(text: "전연령"))
         } else {

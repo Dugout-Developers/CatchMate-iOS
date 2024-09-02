@@ -9,5 +9,5 @@ import UIKit
 import RxSwift
 
 protocol SetFavoriteRepository {
-    func setFavorite(_ state: Bool, _ boardID: String) -> Observable<[SimplePost]>
+    func setFavorite(_ state: Bool, _ boardID: String) -> Observable<Bool>
 }

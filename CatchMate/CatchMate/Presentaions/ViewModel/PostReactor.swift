@@ -38,11 +38,13 @@ final class PostReactor: Reactor {
     var postId: String
     var initialState: State
     private let postloadUsecase: LoadPostUseCase
-    init(postId: String, postloadUsecase: LoadPostUseCase) {
+    private let setFavoriteUsecase: SetFavoriteUseCase
+    init(postId: String, postloadUsecase: LoadPostUseCase, setfavoriteUsecase: SetFavoriteUseCase) {
         self.initialState = State()
         self.postId = postId
         LoggerService.shared.debugLog("-----------\(postId) detail Load------------")
         self.postloadUsecase = postloadUsecase
+        self.setFavoriteUsecase = setfavoriteUsecase
     }
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -66,20 +68,24 @@ final class PostReactor: Reactor {
         case .changeIsApplied(let result):
             return Observable.just(Mutation.setIsApplied(result))
         case .loadIsFavorite:
-            // MARK: - API 연결 필요
-            let index = Post.dummyFavoriteList.firstIndex(where: {$0.id == postId})
+            let favoriteList = SetupInfoService.shared.loadSimplePostIds()
+            let index = favoriteList.firstIndex(where: {$0 == postId})
             return Observable.just(Mutation.setIsFavorite(index != nil ? true : false))
         case .changeFavorite(let state):
-            if state {
-                if let post = currentState.post, !Post.dummyFavoriteList.contains(post) {
-                    Post.dummyFavoriteList.append(post)
+            return setFavoriteUsecase.setFavorite(state, postId)
+                .map { result in
+                    if result {
+                        return Mutation.setIsFavorite(state)
+                    }
+                    return Mutation.setError(PresentationError.retryable(message: "찜하기 요청 실패. 다시 시도해주세요."))
                 }
-            } else {
-                if let post = currentState.post, let index = Post.dummyFavoriteList.firstIndex(of: post) {
-                    Post.dummyFavoriteList.remove(at: index)
+                .catch { error in
+                    if let presentationError = error as? PresentationError {
+                        return Observable.just(Mutation.setError(presentationError))
+                    } else {
+                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
                 }
-            }
-            return Observable.just(Mutation.setIsFavorite(state))
         case .setError(let error):
             return Observable.just(Mutation.setError(error))
         }

@@ -68,8 +68,10 @@ final class TeamFilterTableViewCell: UITableViewCell{
     
     private func checkTeam() {
         if isClicked {
+            teamImageView.image = team?.getFillImage
             checkButton.setImage(UIImage(named: "circle_check")?.withRenderingMode(.alwaysOriginal), for: .normal)
         } else {
+            teamImageView.image = team?.getLogoImage
             checkButton.setImage(UIImage(named: "circle_default")?.withTintColor(.grayScale300, renderingMode: .alwaysOriginal), for: .normal)
         }
     }

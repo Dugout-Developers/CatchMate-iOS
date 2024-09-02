@@ -72,9 +72,10 @@ final class ListCardViewTableViewCell: UITableViewCell {
         infoLabel.text = ""
         homeTeamImageView.imageView.image = nil
         awayTeamImageView.imageView.image = nil
-        partyNumLabel.flex.markDirty()
-        setNeedsLayout()
-        layoutIfNeeded()
+        componentsMarkDirty()
+//        partyNumLabel.flex.markDirty()
+//        setNeedsLayout()
+//        layoutIfNeeded()
     }
     
     @available(*, unavailable)
@@ -130,6 +131,15 @@ final class ListCardViewTableViewCell: UITableViewCell {
         postTitleLabel.lineBreakMode = .byTruncatingTail
         infoLabel.applyStyle(textStyle: FontSystem.body02_medium)
         postTitleLabel.textAlignment = .center
+        
+        componentsMarkDirty()
+    }
+    
+    func componentsMarkDirty() {
+        partyNumLabel.flex.markDirty()
+        postTitleLabel.flex.markDirty()
+        infoLabel.flex.markDirty()
+        cardContainerView.flex.layout(mode: .adjustHeight)
     }
 }
 

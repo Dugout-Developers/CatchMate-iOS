@@ -17,7 +17,7 @@ class CMDatePicker: UIView {
     private let previousButton = UIButton()
     private let nextButton = UIButton()
     private let titleLabel = UILabel()
-    
+    private var calendar = Calendar.current
     private var currentDate = Date()
     var selectedDate: Date? = Date() {
         didSet {
@@ -38,7 +38,7 @@ class CMDatePicker: UIView {
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
         super.init(frame: frame)
         setupView()
         setupCollectionView()
@@ -109,16 +109,24 @@ class CMDatePicker: UIView {
         collectionView.delegate = self
         collectionView.register(DateCell.self, forCellWithReuseIdentifier: "DateCell")
     }
-    
+  
     private func setupDaysInMonth() {
-        let calendar = Calendar.current
-        let range = calendar.range(of: .day, in: .month, for: currentDate)!
-        let firstDayOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: currentDate))!
-        
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
+
+        // currentDate를 KST로 변환
+        let adjustedCurrentDate = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: currentDate) ?? currentDate
+
+        let range = calendar.range(of: .day, in: .month, for: adjustedCurrentDate)!
+        let firstDayOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: adjustedCurrentDate))!
+
         daysInMonth.removeAll()
-        
-        let firstWeekday = calendar.component(.weekday, from: firstDayOfMonth) - 1
-        daysInMonth = Array(repeating: nil, count: firstWeekday) + range.compactMap { calendar.date(byAdding: .day, value: $0 - 1, to: firstDayOfMonth) }
+
+        let firstWeekday = calendar.component(.weekday, from: firstDayOfMonth) - calendar.firstWeekday
+        let adjustedFirstWeekday = (firstWeekday + 7) % 7
+
+        daysInMonth = Array(repeating: nil, count: adjustedFirstWeekday) + range.compactMap {
+            calendar.date(byAdding: .day, value: $0 - 1, to: firstDayOfMonth)
+        }
     }
     
     @objc private func previousMonthTapped() {
@@ -130,7 +138,6 @@ class CMDatePicker: UIView {
     }
     
     private func changeMonth(by value: Int) {
-        let calendar = Calendar.current
         currentDate = calendar.date(byAdding: .month, value: value, to: currentDate) ?? Date()
         updateTitleLabel()
         setupDaysInMonth()
@@ -153,6 +160,7 @@ extension CMDatePicker: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DateCell", for: indexPath) as! DateCell
         let date = daysInMonth[indexPath.item]
+    
         cell.configure(with: date, isCurrentDate: isCurrentDate(date), isSelectedDate: isSelectedDate(date), minimuDate: minimumDate)
         return cell
     }
@@ -173,13 +181,11 @@ extension CMDatePicker: UICollectionViewDataSource, UICollectionViewDelegate {
     
     private func isCurrentDate(_ date: Date?) -> Bool {
         guard let date = date else { return false }
-        let calendar = Calendar.current
         return calendar.isDate(date, inSameDayAs: Date())
     }
     
     private func isSelectedDate(_ date: Date?) -> Bool {
         guard let date = date, let selectedDate = selectedDate else { return false }
-        let calendar = Calendar.current
         return calendar.isDate(date, inSameDayAs: selectedDate)
     }
 }

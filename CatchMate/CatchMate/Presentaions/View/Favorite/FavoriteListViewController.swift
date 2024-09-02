@@ -47,6 +47,7 @@ final class FavoriteListViewController: BaseViewController ,View {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = false
         reactor.action.onNext(.loadFavoritePost)
         reactor.action.onNext(.selectPost(nil))
     }
@@ -83,6 +84,7 @@ final class FavoriteListViewController: BaseViewController ,View {
             .withUnretained(self)
             .subscribe { vc, postId in
                 let postDetailVC = PostDetailViewController(postID: postId)
+                postDetailVC.hidesBottomBarWhenPushed = true
                 vc.navigationController?.pushViewController(postDetailVC, animated: true)
             }
             .disposed(by: disposeBag)

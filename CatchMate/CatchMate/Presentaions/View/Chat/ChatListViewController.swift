@@ -17,6 +17,7 @@ final class ChatListViewController: BaseViewController, View {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = false
         reactor.action.onNext(.selectChat(nil))
         reactor.action.onNext(.loadChatList)
     }
@@ -82,6 +83,7 @@ extension ChatListViewController {
             .withUnretained(self)
             .subscribe(onNext: { vc, chat in
                 let roomVC = ChatRoomViewController(chat: chat)
+                roomVC.hidesBottomBarWhenPushed = true
                 vc.navigationController?.pushViewController(roomVC, animated: true)
             })
             .disposed(by: disposeBag)
