@@ -28,7 +28,11 @@ final class HomeViewController: BaseViewController, View {
     private let tableView = UITableView()
     private let footerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
     private let activityIndicator = UIActivityIndicatorView(style: .medium)
-    private let refreshControl = UIRefreshControl()
+    private let refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        control.tintColor = .cmPrimaryColor
+        return control
+    }()
     
     init(reactor: HomeReactor) {
         self.reactor = reactor
