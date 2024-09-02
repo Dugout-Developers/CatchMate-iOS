@@ -15,7 +15,7 @@ protocol PostListLoadDataSource {
 }
 final class PostListLoadDataSourceImpl: PostListLoadDataSource {
     func loadPostList(pageNum: Int, gudan: [String], gameDate: String, people: Int) -> RxSwift.Observable<[PostListDTO]> {
-        LoggerService.shared.debugLog("<필터값> 구단: \(gudan), 날짜: \(gameDate)")
+        LoggerService.shared.debugLog("<필터값> 구단: \(gudan), 날짜: \(gameDate), 페이지: \(pageNum)")
         guard let token = KeychainService.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }

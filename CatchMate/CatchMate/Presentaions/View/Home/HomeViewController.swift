@@ -26,6 +26,9 @@ final class HomeViewController: BaseViewController, View {
     private let numberFilterButton = OptionButtonView(title: "모집 인원", filter: .number)
     
     private let tableView = UITableView()
+    private let footerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
+    private let activityIndicator = UIActivityIndicatorView(style: .medium)
+    private let refreshControl = UIRefreshControl()
     
     init(reactor: HomeReactor) {
         self.reactor = reactor
@@ -40,7 +43,6 @@ final class HomeViewController: BaseViewController, View {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         tabBarController?.tabBar.isHidden = false
-        reactor.action.onNext(.willAppear)
         reactor.action.onNext(.selectPost(nil))
     }
     override func viewDidLoad() {
@@ -67,6 +69,16 @@ final class HomeViewController: BaseViewController, View {
         tableView.estimatedRowHeight = 178
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
+        
+        // 푸터에 로딩 인디케이터 추가
+        footerView.addSubview(activityIndicator)
+        activityIndicator.center = footerView.center
+        footerView.isHidden = true
+        tableView.tableFooterView = footerView
+        
+        
+        // 새로고침 컨트롤 추가
+        tableView.refreshControl = refreshControl
     }
 }
 
@@ -80,6 +92,49 @@ extension HomeViewController {
                 return HomeReactor.Action.selectPost(post.id)
             }
             .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        // MARK: - Pagenation
+        tableView.rx.contentOffset
+            .map { [weak self] _ in
+                guard let self = self else { return false }
+                let offsetY = self.tableView.contentOffset.y
+                let contentHeight = self.tableView.contentSize.height
+                let threshold = contentHeight - self.tableView.frame.size.height - (self.tableView.rowHeight * 4)
+                return offsetY > threshold
+            }
+            .distinctUntilChanged()
+            .filter { $0 }
+            .map { _ in HomeReactor.Action.loadNextPage }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        // 로딩 상태에 따른 푸터 인디케이터 표시/숨김 제어
+        reactor.state.map { $0.isLoadingNextPage }
+            .distinctUntilChanged()
+            .subscribe(onNext: { [weak self] isLoading in
+                self?.footerView.isHidden = !isLoading
+                if isLoading {
+                    self?.activityIndicator.startAnimating()
+                } else {
+                    self?.activityIndicator.stopAnimating()
+                }
+            })
+            .disposed(by: disposeBag)
+        // MARK: - 새로고침
+        // 새로고침 컨트롤 액션 바인딩
+        refreshControl.rx.controlEvent(.valueChanged)
+            .map { HomeReactor.Action.refreshPage }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        // 새로고침 완료 시 인디케이터 숨김 처리
+        reactor.state.map { $0.isRefreshing }
+            .distinctUntilChanged()
+            .filter { !$0 }
+            .subscribe(onNext: { [weak self] _ in
+                self?.refreshControl.endRefreshing()
+            })
             .disposed(by: disposeBag)
         
         reactor.state.map{$0.selectedPost}

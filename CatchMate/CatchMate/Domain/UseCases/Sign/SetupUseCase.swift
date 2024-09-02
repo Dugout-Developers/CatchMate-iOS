@@ -22,10 +22,6 @@ final class SetupUseCaseImpl: SetupUseCase {
     }
     
     func setupInfo() -> RxSwift.Observable<SetupResult> {
-//        return userRepository.loadUser()
-//            .map { user in
-//                return SetupResult(user: user, favoriteList: [])
-//            }
         return Observable.zip(
             favoriteListRepository.loadFavoriteList(),
             userRepository.loadUser()
