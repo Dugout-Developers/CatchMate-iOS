@@ -35,7 +35,7 @@ final class SendMateListViewController: BaseViewController, View {
         bind(reactor: reactor)
     }
     private func setupTableView() {
-        tableView.register(SendMateListCell.self, forCellReuseIdentifier: "SendMateListCell")
+        tableView.register(ListCardViewTableViewCell.self, forCellReuseIdentifier: "ListCardViewTableViewCell")
         tableView.rowHeight = UITableView.automaticDimension
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
@@ -46,7 +46,7 @@ final class SendMateListViewController: BaseViewController, View {
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.top.bottom.equalTo(view.safeAreaLayoutGuide)
-            make.leading.trailing.equalToSuperview().inset(MainGridSystem.getMargin())
+            make.leading.trailing.equalToSuperview()
         }
     }
 }
@@ -55,10 +55,10 @@ final class SendMateListViewController: BaseViewController, View {
 extension SendMateListViewController {
     func bind(reactor: SendMateReactor) {
         reactor.state.map{$0.sendMates}
-            .bind(to: tableView.rx.items(cellIdentifier: "SendMateListCell", cellType: SendMateListCell.self)) { (row, item, cell) in
+            .bind(to: tableView.rx.items(cellIdentifier: "ListCardViewTableViewCell", cellType: ListCardViewTableViewCell.self)) { (row, item, cell) in
                 cell.backgroundColor = .clear
                 cell.selectionStyle = .none
-                cell.configData(apply: item)
+                cell.setupData(SimplePost(post: item.post))
                 cell.updateConstraints()
             }
             .disposed(by: disposeBag)
