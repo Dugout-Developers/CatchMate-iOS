@@ -9,7 +9,7 @@ import UIKit
 
 class DIContainerService {
     static let shared = DIContainerService()
-
+    private let tokenDS = TokenDataSourceImpl()
     private init() {}
     
     func makeAuthReactor() -> AuthReactor{
@@ -17,7 +17,7 @@ class DIContainerService {
         let kakaoDS = KakaoDataSourceImpl()
         let appleDS = AppleLoginDataSourceImpl()
         let fcmDS = FCMTokenDataSourceImpl()
-        let serverDS = ServerLoginDataSourceImpl()
+        let serverDS = ServerLoginDataSourceImpl(tokenDataSource: tokenDS)
         let loginRep = SNSLoginRepositoryImpl(kakaoLoginDS: kakaoDS, naverLoginDS: naverDS, appleLoginDS: appleDS)
         let fcmRep = FCMRepositoryImpl(fcmTokenDS: fcmDS)
         let serverRep = ServerLoginRepositoryImpl(serverLoginDS: serverDS)
@@ -37,45 +37,45 @@ class DIContainerService {
     }
     
     func makeSignUpReactor(_ model: SignUpModel, loginModel: LoginModel) -> SignUpReactor {
-        let dataSource = SignUpDataSourceImpl()
+        let dataSource = SignUpDataSourceImpl(tokenDataSource: tokenDS)
         let repository = SignUpRepositoryImpl(signupDatasource: dataSource)
         let usecase = SignUpUseCaseImpl(repository: repository)
         
         return SignUpReactor(signUpModel: model, loginModel: loginModel, signupUseCase: usecase)
     }
     func makeHomeReactor() -> HomeReactor {
-        let listLoadDataSource = PostListLoadDataSourceImpl()
+        let listLoadDataSource = PostListLoadDataSourceImpl(tokenDataSource: tokenDS)
         let listLoadRepository = PostListLoadRepositoryImpl(postListLoadDS: listLoadDataSource)
         let listLoadUsecase = PostListLoadUseCaseImpl(postListRepository: listLoadRepository)
         
-        let favoriteListLoadDS = LoadFavoriteListDataSourceImpl()
+        let favoriteListLoadDS = LoadFavoriteListDataSourceImpl(tokenDataSource: tokenDS)
         let favoriteListRepository = LoadFavoriteListRepositoryImpl(loadFavorioteListDS: favoriteListLoadDS)
-        let userDS = UserDataSourceImpl()
+        let userDS = UserDataSourceImpl(tokenDataSource: tokenDS)
         let userRepositorty = UserRepositoryImpl(userDS: userDS)
         let setupUsecase = SetupUseCaseImpl(favoriteListRepository: favoriteListRepository, userRepository: userRepositorty)
         return HomeReactor(loadPostListUsecase: listLoadUsecase, setupUsecase: setupUsecase)
     }
     func makeAddReactor() -> AddReactor {
-        let addDataSource = AddPostDataSourceImpl()
+        let addDataSource = AddPostDataSourceImpl(tokenDataSource: tokenDS)
         let addRepository = AddPostRepositoryImpl(addPostDS: addDataSource)
         let addUsecase = AddPostUseCaseImpl(addPostRepository: addRepository)
         
-        let loadPostDataSource = LoadPostDataSourceImpl()
+        let loadPostDataSource = LoadPostDataSourceImpl(tokenDataSource: tokenDS)
         let loadPostRepository = LoadPostRepositoryImpl(loadPostDS: loadPostDataSource)
         let loadPostUsecase = LoadPostUseCaseImpl(loadPostRepository: loadPostRepository)
         
-        let loadUserDataSource = UserDataSourceImpl()
+        let loadUserDataSource = UserDataSourceImpl(tokenDataSource: tokenDS)
         let loadUserRepository = UserRepositoryImpl(userDS: loadUserDataSource)
         let loadUserUsecase = UserUseCaseImpl(userRepository: loadUserRepository)
         return AddReactor(addUsecase: addUsecase, loadPostDetailUsecase: loadPostUsecase, loadUserUsecase: loadUserUsecase)
     }
     
     func makePostReactor(_ postID: String) -> PostReactor {
-        let loadPostDataSource = LoadPostDataSourceImpl()
+        let loadPostDataSource = LoadPostDataSourceImpl(tokenDataSource: tokenDS)
         let loadPostRepository = LoadPostRepositoryImpl(loadPostDS: loadPostDataSource)
         let loadPostUsecase = LoadPostUseCaseImpl(loadPostRepository: loadPostRepository)
         
-        let setFavoriteDataSource = SetFavoriteDataSourceImpl()
+        let setFavoriteDataSource = SetFavoriteDataSourceImpl(tokenDataSource: tokenDS)
         let setFavoriteRepository = SetFavoriteRepositoryImpl(setFavoriteDS: setFavoriteDataSource)
         let setFavoriteUsecase = SetFavoriteUseCaseImpl(setFavoriteRepository: setFavoriteRepository)
         
@@ -83,18 +83,26 @@ class DIContainerService {
     }
     
     func makeFavoriteReactor() -> FavoriteReactor {
-        let loadFavoriteListDS = LoadFavoriteListDataSourceImpl()
+        let loadFavoriteListDS = LoadFavoriteListDataSourceImpl(tokenDataSource: tokenDS)
         let loadFavoriteListRepository = LoadFavoriteListRepositoryImpl(loadFavorioteListDS: loadFavoriteListDS)
         let loadFavoriteListUsecase = LoadFavoriteListUseCaseImpl(loadFavoriteListRepository: loadFavoriteListRepository)
         
         return FavoriteReactor(favoriteListUsecase: loadFavoriteListUsecase)
     }
     
+    func makeApplyReactor(apply: MyApplyInfo?) -> ApplyFormReactor {
+        let applyPostDS = ApplyDataSourceImpl(tokenDataSource: tokenDS)
+        let applyRepository = ApplyPostRepositoryImpl(applyDS: applyPostDS)
+        let applyUsecase = applyUseCaseImpl(applyRepository: applyRepository)
+        
+        return ApplyFormReactor(applyUsecase: applyUsecase, apply: apply)
+    }
+    
     func makeMypageReactor() -> MyPageReactor {
-        let userDataSource = UserDataSourceImpl()
-        let logoutDataSource = LogoutDataSourceImpl()
+        let userDataSource = UserDataSourceImpl(tokenDataSource: tokenDS)
+        let logoutDataSource = LogoutDataSourceImpl(tokenDataSource: tokenDS)
         let userRepository = UserRepositoryImpl(userDS: userDataSource)
-        let logoutRepository = LogoutRepositoryImpl(lopgoutDS: logoutDataSource)
+        let logoutRepository = LogoutRepositoryImpl(logoutDS: logoutDataSource)
         let userUsecase = UserUseCaseImpl(userRepository: userRepository)
         let logoutUsecase = LogoutUseCaseImpl(repository: logoutRepository)
         
@@ -104,8 +112,8 @@ class DIContainerService {
     
     // MARK: - 특정 Usecase만 필요할 때
     func makeLogoutUseCase() -> LogoutUseCase {
-        let logoutDataSource = LogoutDataSourceImpl()
-        let logoutRepository = LogoutRepositoryImpl(lopgoutDS: logoutDataSource)
+        let logoutDataSource = LogoutDataSourceImpl(tokenDataSource: tokenDS)
+        let logoutRepository = LogoutRepositoryImpl(logoutDS: logoutDataSource)
         let logoutUsecase = LogoutUseCaseImpl(repository: logoutRepository)
         return logoutUsecase
     }

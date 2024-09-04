@@ -1,8 +1,8 @@
 //
-//  LoadFavoriteListDataSource.swift
+//  RecivedAppiesDataSource.swift
 //  CatchMate
 //
-//  Created by 방유빈 on 8/22/24.
+//  Created by 방유빈 on 9/3/24.
 //
 
 import UIKit
@@ -10,18 +10,18 @@ import RxSwift
 import RxAlamofire
 import Alamofire
 
-protocol LoadFavoriteListDataSource {
-    func loadFavoriteList() ->  Observable<[PostListDTO]>
+protocol RecivedAppiesDataSource {
+    func loadRecivedApplies() -> Observable<[Content]>
 }
 
-final class LoadFavoriteListDataSourceImpl: LoadFavoriteListDataSource {
+final class RecivedAppiesDataSourceImpl: RecivedAppiesDataSource {
     private let tokenDataSource: TokenDataSource
     
     init(tokenDataSource: TokenDataSource) {
         self.tokenDataSource = tokenDataSource
     }
     
-    func loadFavoriteList() -> RxSwift.Observable<[PostListDTO]>{
+    func loadRecivedApplies() -> RxSwift.Observable<[Content]> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
@@ -30,10 +30,9 @@ final class LoadFavoriteListDataSourceImpl: LoadFavoriteListDataSource {
         ]
         LoggerService.shared.log("토큰 확인: \(headers)")
         
-        return APIService.shared.requestAPI(type: .loadFavorite, parameters: nil, headers: headers, dataType: [PostListDTO].self)
-            .map { favoriteListDTO in
-                LoggerService.shared.debugLog("Favorite List Load 성공: \(favoriteListDTO)")
-                return favoriteListDTO
+        return APIService.shared.requestAPI(type: .receivedApply, parameters: nil, headers: headers, dataType: ApplyListResponse.self)
+            .map { response -> [Content] in
+                return response.content
             }
             .catch { [weak self] error in
                 guard let self = self else { return Observable.error(ReferenceError.notFoundSelf) }
@@ -42,23 +41,20 @@ final class LoadFavoriteListDataSourceImpl: LoadFavoriteListDataSource {
                         return Observable.error(TokenError.notFoundRefreshToken)
                     }
                     return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
-                        .flatMap { token -> Observable<[PostListDTO]> in
+                        .flatMap { token -> Observable<[Content]> in
                             let newHeaders: HTTPHeaders = [
                                 "AccessToken": token
                             ]
                             LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            return APIService.shared.requestAPI(type: .loadFavorite, parameters: nil, headers: newHeaders, encoding: URLEncoding.default, dataType: [PostListDTO].self)
-                                .map { favoriteDTOList in
-                                    LoggerService.shared.debugLog("FavoriteList Load 성공: \(favoriteDTOList)")
-                                    return favoriteDTOList
-                                }
-                                .catch { error in
-                                    return Observable.error(error)
+                            return APIService.shared.requestAPI(type: .receivedApply, parameters: nil, headers: newHeaders, dataType: ApplyListResponse.self)
+                                .map { response -> [Content] in
+                                    return response.content
                                 }
                         }
                 }
                 return Observable.error(error)
             }
     }
+    
     
 }

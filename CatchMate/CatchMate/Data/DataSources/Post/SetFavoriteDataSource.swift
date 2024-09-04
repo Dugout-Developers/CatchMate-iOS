@@ -15,8 +15,13 @@ protocol SetFavoriteDataSource {
 }
 
 final class SetFavoriteDataSourceImpl: SetFavoriteDataSource {
+    private let tokenDataSource: TokenDataSource
+    
+    init(tokenDataSource: TokenDataSource) {
+        self.tokenDataSource = tokenDataSource
+    }
     func setFavorite(_ state: Bool, _ boardID: String) -> RxSwift.Observable<Bool> {
-        guard let token = KeychainService.getToken(for: .accessToken) else {
+        guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
         let headers: HTTPHeaders = [
@@ -29,9 +34,13 @@ final class SetFavoriteDataSourceImpl: SetFavoriteDataSource {
             .map { _ in
                 return true
             }
-            .catch { error in
-                if let networkError = error as? NetworkError, networkError.statusCode == 401 {
-                    return APIService.shared.refreshAccessToken()
+            .catch { [weak self] error in
+                guard let self = self else { return Observable.error(ReferenceError.notFoundSelf) }
+                if error.statusCode == 401 {
+                    guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
+                        return Observable.error(TokenError.notFoundRefreshToken)
+                    }
+                    return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
                         .flatMap { token -> Observable<Bool> in
                             let headers: HTTPHeaders = [
                                 "AccessToken": token

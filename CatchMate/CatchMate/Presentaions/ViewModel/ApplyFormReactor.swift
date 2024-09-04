@@ -11,47 +11,59 @@ import ReactorKit
 
 final class ApplyFormReactor: Reactor {
     enum Action {
-        case loadPostDetails
-        case requestApplyForm(Apply)
+        case requestApplyForm(ApplyRequest)
+        case setApplyInfo(MyApplyInfo)
+        case cancelApply(String)
     }
     enum Mutation {
-        case setPost(Post?)
-        case applyForm(Bool)
+        case applyForm(MyApplyInfo)
+        case cancelApply
+        case setError(PresentationError)
     }
     struct State {
-        // View의 state를 관리한다.
-        var postId: String
-        var post: Post?
-        var appleyResult: Bool? // false 시 에러 핸들링
+        var appleyResult: MyApplyInfo? // false 시 에러 핸들링
+        var error: PresentationError?
     }
     
     var initialState: State
-    
-    init(postId: String) {
-        self.initialState = State(postId: postId)
+    private let applyUsecase: applyUseCase
+    init(applyUsecase: applyUseCase, apply: MyApplyInfo?) {
+        self.initialState = State(appleyResult: apply)
+        self.applyUsecase = applyUsecase
     }
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case .loadPostDetails:
-            // TODO: - API UseCase 연결 시 post load로 변경하기
-            if let index = Post.dummyPostData.firstIndex(where: {$0.id == initialState.postId}) {
-                return Observable.just(Mutation.setPost(Post.dummyPostData[index]))
-            } else {
-                return Observable.just(Mutation.setPost(nil))
-            }
         case .requestApplyForm(let form):
-           // TODO: API UseCase 처리 후 결과 값 반환
-            return Observable.just(Mutation.applyForm(true))
+            return applyUsecase.applyPost(form.applyPostId, addInfo: form.addInfo ?? "")
+                .map { result in
+                    return Mutation.applyForm(result)
+                }
+                .catch { error in
+                    if let presentationError = error as? PresentationError {
+                        return Observable.just(Mutation.setError(presentationError))
+                    } else {
+                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
+
+        case .setApplyInfo(let apply):
+            return Observable.just(Mutation.applyForm(apply))
+        case .cancelApply(let enrollId):
+            // MARK: - API 연결 필요
+            print("\(enrollId) 신청 취소")
+            return Observable.just(Mutation.cancelApply)
         }
     }
     
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
-        case .setPost(let post):
-            newState.post = post
         case .applyForm(let result):
             newState.appleyResult = result
+        case .setError(let error):
+            newState.error = error
+        case .cancelApply:
+            newState.appleyResult = nil
         }
         return newState
     }

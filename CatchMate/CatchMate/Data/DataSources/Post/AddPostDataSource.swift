@@ -14,11 +14,15 @@ protocol AddPostDataSource {
     func addPost(_ post: AddPostRequsetDTO) -> Observable<Int>
 }
 final class AddPostDataSourceImpl: AddPostDataSource {
-    private var isRefreshingToken = false
+    private let tokenDataSource: TokenDataSource
+    
+    init(tokenDataSource: TokenDataSource) {
+        self.tokenDataSource = tokenDataSource
+    }
     func addPost(_ post: AddPostRequsetDTO) -> Observable<Int> {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
-        guard let token = KeychainService.getToken(for: .accessToken) else {
+        guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
         
@@ -34,17 +38,26 @@ final class AddPostDataSourceImpl: AddPostDataSource {
             if let jsonDictionary = jsonObject as? [String: Any] {
                 LoggerService.shared.debugLog("parameters Encoding:\(jsonDictionary)")
                 return APIService.shared.requestAPI(type: .savePost, parameters: jsonDictionary, headers: headers, encoding: JSONEncoding.default, dataType: AddPostResponseDTO.self)
-                    .map { response in
+                    .map({ response in
                         LoggerService.shared.debugLog("Post 저장 성공 - result: \(response)")
                         return response.boardId
-                    }
+                    })
                     .catch { [weak self] error in
-                        guard let self = self else { return Observable.error(error) }
-                        if !self.isRefreshingToken, let networkError = error as? NetworkError, networkError.statusCode == 401 {
-                            self.isRefreshingToken = true
-                            return self.handleUnauthorizedError()
-                                .flatMap { _ in
-                                    return self.addPost(post)
+                        guard let self = self else { return Observable.error(ReferenceError.notFoundSelf) }
+                        if error.statusCode == 401 {
+                            guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
+                                return Observable.error(TokenError.notFoundRefreshToken)
+                            }
+                            return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
+                                .flatMap { newToken -> Observable<Int> in
+                                    return APIService.shared.requestAPI(type: .savePost, parameters: jsonDictionary, headers: headers, encoding: JSONEncoding.default, dataType: AddPostResponseDTO.self)
+                                        .map({ response in
+                                            LoggerService.shared.debugLog("Post 저장 성공 - result: \(response)")
+                                            return response.boardId
+                                        })
+                                }
+                                .catch { error in
+                                    return Observable.error(error)
                                 }
                         }
                         LoggerService.shared.log("Post DATASOURCE 저장 실패: ", level: .error)
@@ -61,19 +74,6 @@ final class AddPostDataSourceImpl: AddPostDataSource {
             return Observable.error(CodableError.encodingFailed)
         }
     }
-    
-    private func handleUnauthorizedError() -> Observable<Void> {
-           return APIService.shared.refreshAccessToken()
-               .flatMap { newToken in
-                   KeychainService.saveToken(token: newToken, for: .accessToken)
-                   return Observable.just(Void())
-               }
-               .catch { error in
-                   LoggerService.shared.log("토큰 갱신 실패: \(error.localizedDescription)", level: .error)
-
-                   return Observable.error(NetworkError.tokenRefreshFailed)
-               }
-       }
 }
 
 struct AddPostResponseDTO: Codable {

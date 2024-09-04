@@ -19,7 +19,7 @@ final class ListLoadDataSourceTest: XCTestCase {
     override func setUp() {
         super.setUp()
         disposeBag = DisposeBag()
-        dataSource = PostListLoadDataSourceImpl() // 실제 데이터 소스
+        dataSource = PostListLoadDataSourceImpl(tokenDataSource: MockTokenDataSource()) // 실제 데이터 소스
     }
     
     override func tearDown() {

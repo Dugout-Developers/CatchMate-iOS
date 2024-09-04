@@ -20,7 +20,7 @@ final class LoadPostDetailDataSourceTests: XCTestCase {
     override func setUp() {
         super.setUp()
         disposeBag = DisposeBag()
-        dataSource = LoadPostDataSourceImpl()
+        dataSource = LoadPostDataSourceImpl(tokenDataSource: MockTokenDataSource())
     }
     
     override func tearDown() {

@@ -155,7 +155,11 @@ final class PostDetailViewController: BaseViewController, View {
         return button
     }()
     private let applyButton = CMDefaultFilledButton(title: "직관 신청")
-    
+    private let alreadyApplyButton: CMDefaultBorderedButton = {
+        let button = CMDefaultBorderedButton(title: "보낸 신청 보기")
+        button.isSelecte = true
+        return button
+    }()
     var reactor: PostReactor
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -377,23 +381,14 @@ extension PostDetailViewController {
             .withUnretained(self)
             .subscribe { vc, _ in
                 guard let post = vc.reactor.currentState.post else { return }
-                let applyVC = ApplyPopupViewController(post: post, reactor: reactor)
+                let applyVC = ApplyPopupViewController(post: post, reactor: reactor, apply: nil)
                 applyVC.modalPresentationStyle = .overFullScreen
                 applyVC.modalTransitionStyle = .crossDissolve
                 vc.present(applyVC, animated: true)
             }
             .disposed(by: disposeBag)
         
-        applyButton.rx.tap
-            .withUnretained(self)
-            .subscribe { vc, _ in
-                guard let post = vc.reactor.currentState.post else { return }
-                let applyVC = ApplyPopupViewController(post: post, reactor: reactor)
-                applyVC.modalPresentationStyle = .overFullScreen
-                applyVC.modalTransitionStyle = .crossDissolve
-                vc.present(applyVC, animated: true)
-            }
-            .disposed(by: disposeBag)
+        
 
         reactor.state.map{$0.isApplied}
             .withUnretained(self)
@@ -429,14 +424,13 @@ extension PostDetailViewController {
     
     private func updateApplyButton(_ state: Bool) {
         if state {
-            applyButton.isEnabled = false
-            applyButton.setTitle("신청 완료", for: .normal)
-            applyButton.applyStyle(textStyle: FontSystem.body02_semiBold)
+            applyButton.flex.display(.none) // applyButton을 레이아웃에서 제거
+            alreadyApplyButton.flex.display(.flex).grow(1) // alreadyApplyButton을 레이아웃에 표시
         } else {
-            applyButton.isEnabled = true
-            applyButton.setTitle("직관 신청", for: .normal)
-            applyButton.applyStyle(textStyle: FontSystem.body02_semiBold)
+            applyButton.flex.display(.flex).grow(1) // applyButton을 레이아웃에 표시
+            alreadyApplyButton.flex.display(.none) // alreadyApplyButton을 레이아웃에서 제거
         }
+        buttonContainer.flex.layout()
     }
     
     private func updateApplyButtonFinished(_ state: Bool) {
@@ -513,7 +507,8 @@ extension PostDetailViewController {
 
         buttonContainer.flex.direction(.row).paddingHorizontal(ButtonGridSystem.getMargin()).paddingVertical(10).define { flex in
             flex.addItem(favoriteButton).height(52).width(ButtonGridSystem.getColumnWidth(totalWidht: Screen.width)).marginRight(ButtonGridSystem.getGutter())
-            flex.addItem(applyButton).grow(1)
+            flex.addItem(applyButton).display(.flex).grow(1)
+            flex.addItem(alreadyApplyButton).display(.none)
         }
     }
 }

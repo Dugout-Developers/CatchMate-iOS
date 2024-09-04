@@ -9,54 +9,61 @@ import UIKit
 import RxSwift
 import RxAlamofire
 import Alamofire
-enum LogoutError: LocalizedError {
-    case notFoundURL
-    case decodingError
-    case serverError(Int, String)
-    var statusCode: Int {
-        switch self {
-        case .notFoundURL:
-            return -1001
-        case .decodingError:
-            return -1002
-        case .serverError(let code, _):
-            return code
-        }
-    }
-}
+
 protocol LogoutDataSource {
-    func logout(token: String) -> Observable<Bool>
+    func logout() -> Observable<Bool>
+    func deleteToken()
 }
 struct deleteTokeDTO: Codable {
     let state: Bool
 }
+
 final class LogoutDataSourceImpl: LogoutDataSource {
-    func logout(token: String) -> RxSwift.Observable<Bool> {
+    private let tokenDataSource: TokenDataSource
+    init(tokenDataSource: TokenDataSource) {
+        self.tokenDataSource = tokenDataSource
+    }
+    func logout() -> RxSwift.Observable<Bool> {
         LoggerService.shared.debugLog("--------------Logout--------------")
         guard let base = Bundle.main.baseURL else {
             LoggerService.shared.log("로그아웃 - BaseUrl 찾기 실패", level: .error)
-            return Observable.error(LogoutError.notFoundURL)
+            return Observable.error(NetworkError.notFoundBaseURL)
         }
         let url = base + "/auth/logout"
+        guard let token = tokenDataSource.getToken(for: .refreshToken) else {
+            return Observable.error(TokenError.notFoundRefreshToken)
+        }
         let headers: HTTPHeaders = [
             "RefreshToken": token
         ]
         return RxAlamofire.requestJSON(.delete, url, encoding: JSONEncoding.default, headers: headers)
-            .flatMap { (response, data) -> Observable<Bool> in
+            .flatMap { [weak self] (response, data) -> Observable<Bool> in
+                guard let self = self else { return Observable.error(ReferenceError.notFoundSelf) }
                 if response.statusCode == 200 {
                     do {
                         let jsonData = try JSONSerialization.data(withJSONObject: data, options: [])
                         let refreshResponse = try JSONDecoder().decode(deleteTokeDTO.self, from: jsonData)
                         LoggerService.shared.debugLog("\(refreshResponse)")
-                        return Observable.just(refreshResponse.state)
+                        if refreshResponse.state {
+                            _ = tokenDataSource.deleteToken(for: .accessToken)
+                            _ = tokenDataSource.deleteToken(for: .refreshToken)
+                            return Observable.just(true)
+                        }
+                        return Observable.just(false)
                     } catch {
                         LoggerService.shared.log("로그아웃 - 로그아웃 토큰 데이터 디코딩 오류", level: .error)
-                        return Observable.error(LogoutError.decodingError)
+                        return Observable.error(CodableError.decodingFailed)
                     }
                 } else {
                     LoggerService.shared.log("로그아웃 실패: \(response.statusCode): \(response.debugDescription)", level: .error)
-                    return Observable.error(LogoutError.serverError(response.statusCode, "로그아웃 실패 - 서버에러"))
+                    let error = APIService.shared.mapServerError(statusCode: response.statusCode)
+                    return Observable.error(error)
                 }
             }
+    }
+    
+    func deleteToken() {
+        _ = tokenDataSource.deleteToken(for: .accessToken)
+        _ = tokenDataSource.deleteToken(for: .refreshToken)
     }
 }

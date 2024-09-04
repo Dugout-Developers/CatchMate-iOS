@@ -67,11 +67,11 @@ extension SendMateListViewController {
             .observe(on: MainScheduler.instance)
             .withUnretained(self)
             .subscribe(onNext: { vc, indexPath in
-                let apply = reactor.currentState.sendMates[indexPath.row]
-                let cancelPopup = ApplyPopupViewController(post: apply.post, reactor: reactor, apply: apply)
-                cancelPopup.modalPresentationStyle = .overFullScreen
-                cancelPopup.modalTransitionStyle = .crossDissolve
-                vc.present(cancelPopup, animated: true)
+//                let apply = reactor.currentState.sendMates[indexPath.row]
+//                let cancelPopup = ApplyPopupViewController(post: apply.post, reactor: reactor, apply: apply)
+//                cancelPopup.modalPresentationStyle = .overFullScreen
+//                cancelPopup.modalTransitionStyle = .crossDissolve
+//                vc.present(cancelPopup, animated: true)
             })
             .disposed(by: disposeBag)
     }

@@ -15,8 +15,13 @@ protocol LoadPostDataSource {
 }
 
 final class LoadPostDataSourceImpl: LoadPostDataSource {
+    private let tokenDataSource: TokenDataSource
+   
+    init(tokenDataSource: TokenDataSource) {
+        self.tokenDataSource = tokenDataSource
+    }
     func laodPost(postId: Int) -> RxSwift.Observable<PostDTO> {
-        guard let token = KeychainService.getToken(for: .accessToken) else {
+        guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
         
@@ -29,9 +34,13 @@ final class LoadPostDataSourceImpl: LoadPostDataSource {
                 LoggerService.shared.debugLog("Post Load 성공: \(dto)")
                 return dto
             }
-            .catch { error in
-                if let networkError = error as? NetworkError, networkError.statusCode == 401 {
-                    return APIService.shared.refreshAccessToken()
+            .catch {[weak self] error in
+                guard let self = self else { return Observable.error(ReferenceError.notFoundSelf) }
+                if error.statusCode == 401 {
+                    guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
+                        return Observable.error(TokenError.notFoundRefreshToken)
+                    }
+                    return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
                         .flatMap { token -> Observable<PostDTO> in
                             let newHeaders: HTTPHeaders = [
                                 "AccessToken": token

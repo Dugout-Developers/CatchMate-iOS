@@ -38,9 +38,7 @@ final class SignUpReactor: Reactor {
         switch action {
         case .signUpUser:
             return signupUseCase.signup(loginModel, signupInfo: signUpModel)
-                .withUnretained(self)
-                .map { reactor, response in
-                    reactor.saveToken(accessToken: response.accessToken, refreshToken: response.refreshToken)
+                .map { response in
                     return Mutation.setSignUpResponse(response)
                 }
                 .catch { error in
@@ -64,11 +62,5 @@ final class SignUpReactor: Reactor {
             newState.error = error
         }
         return newState
-    }
-    
-    private func saveToken(accessToken: String, refreshToken: String) {
-        LoggerService.shared.debugLog("saveKeychain : \(loginModel.accessToken), \(loginModel.refreshToken)")
-        KeychainService.saveToken(token: accessToken, for: .accessToken)
-        KeychainService.saveToken(token: refreshToken, for: .refreshToken)
     }
 }

@@ -20,7 +20,7 @@ final class SetFavoriteDataSourceTest: XCTestCase {
     override func setUp() {
         super.setUp()
         disposeBag = DisposeBag()
-        dataSource = SetFavoriteDataSourceImpl()
+        dataSource = SetFavoriteDataSourceImpl(tokenDataSource: MockTokenDataSource())
     }
     
     override func tearDown() {

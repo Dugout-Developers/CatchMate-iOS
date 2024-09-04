@@ -50,10 +50,7 @@ final class MyPageReactor: Reactor {
                 Observable.just(Mutation.setLoading(false))
             ])
         case .logout:
-            guard let refreshToken = KeychainService.getToken(for: .refreshToken) else {
-                return Observable.just(Mutation.setError(TokenError.notFoundRefreshToken))
-            }
-            return logoutUseCase.logout(token: refreshToken)
+            return logoutUseCase.logout()
                 .map { Mutation.logout($0) }
                 .catch { .just(Mutation.setError($0))}
         }

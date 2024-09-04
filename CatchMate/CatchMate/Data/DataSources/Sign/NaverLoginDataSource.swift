@@ -15,33 +15,6 @@ protocol NaverLoginDataSource {
     func getNaverLoginToken() -> Observable<SNSLoginResponse>
 }
 
-enum NaverLoginError: LocalizedError {
-    case NotFountToken
-    case serverError(code: Int, description: String)
-    case EmptyValue
-
-    var statusCode: Int {
-        switch self {
-        case .NotFountToken:
-            return -1001
-        case .serverError(let code, _):
-            return code
-        case .EmptyValue:
-            return -1003
-        }
-    }
-    
-    var errorDescription: String? {
-        switch self {
-        case .NotFountToken:
-            return "토큰이 없습니다."
-        case .serverError(_, let message):
-            return "서버 에러: \(message)"
-        case .EmptyValue:
-            return "빈 응답값 전달"
-        }
-    }
-}
 final class NaverLoginDataSourceImpl: NSObject, NaverLoginDataSource, NaverThirdPartyLoginConnectionDelegate {
     private let disposeBag = DisposeBag()
     private let loginInstance: NaverThirdPartyLoginConnection
@@ -66,7 +39,7 @@ final class NaverLoginDataSourceImpl: NSObject, NaverLoginDataSource, NaverThird
     private func fetchUserDataWithValidToken() -> Observable<SNSLoginResponse> {
         guard let tokenType = loginInstance.tokenType,
               let accessToken = loginInstance.accessToken else {
-            return Observable.error(NaverLoginError.NotFountToken)
+            return Observable.error(SNSLoginError.authorizationFailed)
         }
         
         let headers: HTTPHeaders = [
@@ -83,12 +56,12 @@ final class NaverLoginDataSourceImpl: NSObject, NaverLoginDataSource, NaverThird
                 }
                 LoggerService.shared.log("\(json)\n response: \(response)")
                 guard let id = response["id"] as? String else {
-                    LoggerService.shared.log("NaverLoginError: \(NaverLoginError.EmptyValue.statusCode) - id 값 없음", level: .error)
-                    return Observable.error(NaverLoginError.EmptyValue)
+                    LoggerService.shared.log("NaverLoginError: \(SNSLoginError.EmptyValue.statusCode) - id 값 없음", level: .error)
+                    return Observable.error(SNSLoginError.EmptyValue)
                 }
                 guard let email = response["email"] as? String else {
-                    LoggerService.shared.log("NaverLoginError: \(NaverLoginError.EmptyValue.statusCode) - email 값 없음", level: .error)
-                    return Observable.error(NaverLoginError.EmptyValue)
+                    LoggerService.shared.log("NaverLoginError: \(SNSLoginError.EmptyValue.statusCode) - email 값 없음", level: .error)
+                    return Observable.error(SNSLoginError.EmptyValue)
                 }
                 var birthResult: String? = nil
                 if let birthday = response["birthday"] as? String,
@@ -159,7 +132,7 @@ final class NaverLoginDataSourceImpl: NSObject, NaverLoginDataSource, NaverThird
         print("Error: \(error.localizedDescription)")
         LoggerService.shared.log("NAVER API ERROR - \(error.localizedDescription)", level: .error)
         if let observer = naverLoginSubject {
-            observer.onError(error)
+            observer.onError(SNSLoginError.loginServerError(code: error.statusCode, description: error.localizedDescription))
         }
     }
     

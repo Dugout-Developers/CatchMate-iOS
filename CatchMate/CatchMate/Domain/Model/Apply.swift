@@ -7,6 +7,16 @@
 
 import UIKit
 
+struct ApplyRequest {
+    let applyPostId: String
+    let addInfo: String?
+}
+
+struct MyApplyInfo {
+    let enrollId: String
+    let addInfo: String
+}
+
 struct Apply: Equatable {
     let id: String
     let post: Post
