@@ -199,7 +199,6 @@ extension MyPageViewController {
             .distinctUntilChanged()
             .subscribe(onNext: { [weak self] user in
                 self?.user = user
-//                self?.tableview.reloadData()
             })
             .disposed(by: disposeBag)
         

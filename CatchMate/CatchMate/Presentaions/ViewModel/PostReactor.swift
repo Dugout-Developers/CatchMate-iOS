@@ -118,11 +118,25 @@ final class PostReactor: Reactor {
                         return Observable.just(Mutation.setError(.informational(message: "이미 보낸 신청입니다.")))
                     }
                 }
+                .catch { error in
+                    if let presentationError = error as? PresentationError {
+                        return Observable.just(Mutation.setError(presentationError))
+                    } else {
+                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
         case .cancelApply:
             if let enrollId = currentState.applyInfo?.enrollId {
                 return applyHandelerUsecase.cancelApplyPost(enrollId: enrollId)
                     .flatMap { _ in
                         return Observable.just(Mutation.setApplyButtonState(.none))
+                    }
+                    .catch { error in
+                        if let presentationError = error as? PresentationError {
+                            return Observable.just(Mutation.setError(presentationError))
+                        } else {
+                            return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                        }
                     }
             } else {
                 return Observable.just(Mutation.setError(PresentationError.retryable(message: "요청을 실패했습니다. 다시 시도해주세요.")))

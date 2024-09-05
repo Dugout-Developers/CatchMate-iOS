@@ -109,6 +109,14 @@ class DIContainerService {
         return MyPageReactor(userUsecase: userUsecase, logoutUsecase: logoutUsecase)
     }
     
+    func makeSendMateReactor() -> SendMateReactor {
+        let sendAppliesDataSource = SendAppiesDataSourceImpl(tokenDataSource: tokenDS)
+        let sendAppliesRepository = SendAppiesRepositoryImpl(sendAppliesDS: sendAppliesDataSource)
+        let sendAppliesUsecase = SendAppliesUseCaseImpl(sendAppliesRepository: sendAppliesRepository)
+        
+        return SendMateReactor(sendAppliesUsecase: sendAppliesUsecase)
+    }
+    
     
     // MARK: - 특정 Usecase만 필요할 때
     func makeLogoutUseCase() -> LogoutUseCase {
