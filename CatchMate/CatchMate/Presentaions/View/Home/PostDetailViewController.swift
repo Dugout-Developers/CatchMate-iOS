@@ -237,8 +237,10 @@ final class PostDetailViewController: BaseViewController, View {
         } else {
             // 메뉴 항목 설정
             menuVC.menuItems = [
-                MenuItem(title: "찜하기", action: {
-                    print("찜하기 선택됨")
+                MenuItem(title: "찜하기", action: { [weak self] in
+                    if let isFavorite = self?.reactor.currentState.isFavorite, !isFavorite {
+                        self?.reactor.action.onNext(.changeFavorite(true))
+                    }
                 }),
                 MenuItem(title: "공유하기", action: {
                     print("공유하기 선택됨")
