@@ -93,7 +93,9 @@ class DIContainerService {
     func makeFavoriteReactor() -> FavoriteReactor {
         let loadFavoriteListDS = LoadFavoriteListDataSourceImpl(tokenDataSource: tokenDS)
         let loadFavoriteListRepository = LoadFavoriteListRepositoryImpl(loadFavorioteListDS: loadFavoriteListDS)
-        let loadFavoriteListUsecase = LoadFavoriteListUseCaseImpl(loadFavoriteListRepository: loadFavoriteListRepository)
+        let setFavoriteDS = SetFavoriteDataSourceImpl(tokenDataSource: tokenDS)
+        let setFavoroteRepository = SetFavoriteRepositoryImpl(setFavoriteDS: setFavoriteDS)
+        let loadFavoriteListUsecase = LoadFavoriteListUseCaseImpl(loadFavoriteListRepository: loadFavoriteListRepository, setFavortiteRepository: setFavoroteRepository)
         
         return FavoriteReactor(favoriteListUsecase: loadFavoriteListUsecase)
     }
