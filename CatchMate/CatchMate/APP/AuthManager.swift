@@ -13,19 +13,29 @@ import Alamofire
 
 final class AuthManager {
     private let disposeBag = DisposeBag()
-    private let userDataSource: UserDataSource
-    
-    init(userDataSource: UserDataSource) {
-        self.userDataSource = userDataSource
+    private let tokenDS: TokenDataSource
+    init(tokenDS: TokenDataSource) {
+        self.tokenDS = tokenDS
     }
-    
+    deinit {
+        print("AuthManager Deinit")
+    }
     func attemptAutoLogin() -> Observable<Bool> {
-        return userDataSource.loadMyInfo()
-            .flatMap { _ -> Observable<Bool> in
-                return Observable.just(true)
+        guard let refreshToken = tokenDS.getToken(for: .refreshToken) else {
+            return Observable.just(false)
+        }
+        return APIService.shared.refreshAccessToken(refreshToken: refreshToken)
+            .timeout(.seconds(10), scheduler: MainScheduler.instance)
+            .withUnretained(self)
+            .flatMap { manager, newToken in
+                print(newToken)
+                if manager.tokenDS.saveToken(token: newToken, for: .accessToken) {
+                    return Observable.just(true)
+                }
+                return Observable.just(false)
             }
             .catch { error in
-                LoggerService.shared.debugLog("자동 로그인 에러: - \(error)")
+                print("Error occurred: \(error)")
                 return Observable.just(false)
             }
     }
