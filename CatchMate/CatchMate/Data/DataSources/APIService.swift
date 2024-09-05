@@ -30,6 +30,8 @@ enum Endpoint: String {
     
     /// 직관 신청 /enroll/{boardId}
     case apply = "/enroll/"
+    /// 직관 신청 취소 /enroll/cancel/{enrollId}
+    case cancelApply = "/enroll/cancel/"
     /// 보낸 직관 신청 목록
     case sendApply = "/enroll/request"
     /// 받은 직관 신청 목록
@@ -58,6 +60,8 @@ enum Endpoint: String {
             return "알람 설정 API"
         case .apply:
             return "직관 신청 API"
+        case .cancelApply:
+            return "직관 신청 취소 API"
         case .sendApply:
             return "보낸 신청 목록 API"
         case .receivedApply:
@@ -86,6 +90,8 @@ enum Endpoint: String {
         case .postlist:
             return .get
         case .apply:
+            return .post
+        case .cancelApply:
             return .post
         case .sendApply:
             return .get

@@ -154,12 +154,8 @@ final class PostDetailViewController: BaseViewController, View {
         button.layer.cornerRadius = 8
         return button
     }()
-    private let applyButton = CMDefaultFilledButton(title: "직관 신청")
-    private let alreadyApplyButton: CMDefaultBorderedButton = {
-        let button = CMDefaultBorderedButton(title: "보낸 신청 보기")
-        button.isSelecte = true
-        return button
-    }()
+    private let applyButton = ApplyButton()
+    
     var reactor: PostReactor
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -297,6 +293,7 @@ final class PostDetailViewController: BaseViewController, View {
         nickNameLabel.flex.markDirty()
         genderOptionLabel.flex.markDirty()
         contentView.flex.layout(mode: .adjustHeight)
+        buttonContainer.flex.layout()
     }
     
     private func setupButton() {
@@ -380,29 +377,27 @@ extension PostDetailViewController {
         applyButton.rx.tap
             .withUnretained(self)
             .subscribe { vc, _ in
-                guard let post = vc.reactor.currentState.post else { return }
-                let applyVC = ApplyPopupViewController(post: post, reactor: reactor, apply: nil)
-                applyVC.modalPresentationStyle = .overFullScreen
-                applyVC.modalTransitionStyle = .crossDissolve
-                vc.present(applyVC, animated: true)
+                switch vc.applyButton.type {
+                case .none:
+                    vc.showApplyPopup()
+                case .applied:
+                    vc.showCancelApplyPopup()
+                case .finished:
+                    break
+                case .chat:
+                    vc.showChatRoom()
+                }
             }
             .disposed(by: disposeBag)
-        
-        
 
-        reactor.state.map{$0.isApplied}
+        reactor.state.map{$0.applyButtonState}
+            .compactMap{$0}
             .withUnretained(self)
             .subscribe(onNext: { vc, state in
-                vc.updateApplyButton(state)
+                vc.applyButton.type = state
             })
             .disposed(by: disposeBag)
         
-        reactor.state.map{$0.isFinished}
-            .withUnretained(self)
-            .subscribe(onNext: { vc, state in
-                vc.updateApplyButtonFinished(state)
-            })
-            .disposed(by: disposeBag)
         
         reactor.state.map{$0.error}
             .compactMap{$0}
@@ -422,23 +417,29 @@ extension PostDetailViewController {
         }
     }
     
-    private func updateApplyButton(_ state: Bool) {
-        if state {
-            applyButton.flex.display(.none) // applyButton을 레이아웃에서 제거
-            alreadyApplyButton.flex.display(.flex).grow(1) // alreadyApplyButton을 레이아웃에 표시
-        } else {
-            applyButton.flex.display(.flex).grow(1) // applyButton을 레이아웃에 표시
-            alreadyApplyButton.flex.display(.none) // alreadyApplyButton을 레이아웃에서 제거
-        }
-        buttonContainer.flex.layout()
+    func showApplyPopup() {
+        guard let post = reactor.currentState.post else { return }
+        let applyVC = ApplyPopupViewController(post: post, reactor: reactor, apply: nil)
+        applyVC.modalPresentationStyle = .overFullScreen
+        applyVC.modalTransitionStyle = .crossDissolve
+        present(applyVC, animated: true)
     }
     
-    private func updateApplyButtonFinished(_ state: Bool) {
-        if state {
-            applyButton.isEnabled = false
-            applyButton.setTitle("신청 마감", for: .normal)
-            applyButton.applyStyle(textStyle: FontSystem.body02_semiBold)
+    func showCancelApplyPopup() {
+        guard let post = reactor.currentState.post,
+              let applyInfo = reactor.currentState.applyInfo else {
+            showToast(message: "요청에 실패했습니다. 문제 지속 시 문의주세요.")
+            return
         }
+        print(applyInfo)
+        let applyVC = ApplyPopupViewController(post: post, reactor: reactor, apply: applyInfo)
+        applyVC.modalPresentationStyle = .overFullScreen
+        applyVC.modalTransitionStyle = .crossDissolve
+        present(applyVC, animated: true)
+    }
+    
+    func showChatRoom() {
+        print("채팅방 이동")
     }
 }
 
@@ -507,8 +508,81 @@ extension PostDetailViewController {
 
         buttonContainer.flex.direction(.row).paddingHorizontal(ButtonGridSystem.getMargin()).paddingVertical(10).define { flex in
             flex.addItem(favoriteButton).height(52).width(ButtonGridSystem.getColumnWidth(totalWidht: Screen.width)).marginRight(ButtonGridSystem.getGutter())
-            flex.addItem(applyButton).display(.flex).grow(1)
-            flex.addItem(alreadyApplyButton).display(.none)
+            flex.addItem(applyButton).grow(1)
         }
+    }
+}
+
+final class ApplyButton: UIButton {
+    var type: ApplyType = .none {
+        didSet {
+            changeButtonStyle()
+        }
+    }
+    
+    override init(frame: CGRect = .zero) {
+        super.init(frame: frame)
+        setupButton()
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
+    private func setupButton() {
+        clipsToBounds = true
+        layer.cornerRadius = 8
+        setTitle("직관 신청", for: .normal)
+        setTitleColor(.white, for: .normal)
+        backgroundColor = .cmPrimaryColor
+        applyStyle(textStyle: FontSystem.body02_semiBold)
+    }
+    
+    func changeButtonStyle() {
+        switch type {
+        case .none:
+            setTitle("직관 신청", for: .normal)
+            setTitleColor(.white, for: .normal)
+            layer.borderWidth = 0
+            backgroundColor = .cmPrimaryColor
+            isEnabled = true
+        case .applied:
+            setTitle("보낸 신청 보기", for: .normal)
+            setTitleColor(.cmPrimaryColor, for: .normal)
+            backgroundColor = .white
+            layer.borderWidth = 1
+            layer.borderColor = UIColor.cmPrimaryColor.cgColor
+            isEnabled = true
+        case .finished:
+            setTitle("신청 마감", for: .normal)
+            setTitleColor(.white, for: .normal)
+            layer.borderWidth = 0
+            backgroundColor = .cmPrimaryColor
+            isEnabled = false
+        case .chat:
+            setTitle("채팅 보기", for: .normal)
+            setTitleColor(.white, for: .normal)
+            layer.borderWidth = 0
+            backgroundColor = .cmPrimaryColor
+            isEnabled = true
+        }
+        applyStyle(textStyle: FontSystem.body02_semiBold)
+    }
+    
+    override var isHighlighted: Bool {
+        didSet {
+            if isHighlighted {
+                animate(scale: 0.95)
+            } else {
+                animate(scale: 1.0)
+            }
+        }
+    }
+    
+    private func animate(scale: CGFloat) {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.transform = CGAffineTransform(scaleX: scale, y: scale)
+        })
     }
 }

@@ -11,34 +11,28 @@ import RxAlamofire
 import Alamofire
 
 protocol UserDataSource {
-    func refreshAccessToken() -> Observable<String>
     func loadMyInfo() -> Observable<UserDTO>
 }
 
 final class UserDataSourceImpl: UserDataSource {
     private let tokenDataSource: TokenDataSource
-    
+    private var hasTriedRefreshing = false
     init(tokenDataSource: TokenDataSource) {
         self.tokenDataSource = tokenDataSource
     }
-    
-    func refreshAccessToken() -> RxSwift.Observable<String> {
-        guard let base = Bundle.main.baseURL else {
-            return Observable.error(NetworkError.notFoundBaseURL)
-        }
-        guard let token = tokenDataSource.getToken(for: .refreshToken) else {
-            return Observable.error(TokenError.notFoundRefreshToken)
-        }
-
-        return APIService.shared.refreshAccessToken(refreshToken: token)
+    deinit{
+        print("deinit")
     }
     
     func loadMyInfo() -> RxSwift.Observable<UserDTO> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
-        
-
+        guard let refeshToken = self.tokenDataSource.getToken(for: .refreshToken) else {
+            return Observable.error(TokenError.notFoundRefreshToken)
+        }
+        print("AccessToken: \(token)")
+        print("RefreshToken: \(refeshToken)")
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
@@ -47,15 +41,17 @@ final class UserDataSourceImpl: UserDataSource {
                 LoggerService.shared.log("UserDTO: \(user)")
                 return user
             }
-            .catch { [weak self] error in
-                guard let self = self else { return Observable.error(ReferenceError.notFoundSelf) }
+            .catch { error in
+                print("-------error: \(error)")
                 if error.statusCode == 401 {
-                    guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
-                        return Observable.error(TokenError.notFoundRefreshToken)
-                    }
+                    print("재발급")
                     return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
                         .flatMap { newToken -> Observable<UserDTO> in
-                            return APIService.shared.requestAPI(type: .loadMyInfo, parameters: nil, headers: headers, dataType: UserDTO.self)
+                            let newheaders: HTTPHeaders = [
+                                "AccessToken": newToken
+                            ]
+                            LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
+                            return APIService.shared.requestAPI(type: .loadMyInfo, parameters: nil, headers: newheaders, dataType: UserDTO.self)
                         }
                         .catch { error in
                             return Observable.error(error)

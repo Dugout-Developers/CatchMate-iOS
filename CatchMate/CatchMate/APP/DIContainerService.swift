@@ -62,7 +62,9 @@ class DIContainerService {
         
         let loadPostDataSource = LoadPostDataSourceImpl(tokenDataSource: tokenDS)
         let loadPostRepository = LoadPostRepositoryImpl(loadPostDS: loadPostDataSource)
-        let loadPostUsecase = LoadPostUseCaseImpl(loadPostRepository: loadPostRepository)
+        let sendAppliesDataSource = SendAppiesDataSourceImpl(tokenDataSource: tokenDS)
+        let sendAppliesRepository = SendAppiesRepositoryImpl(sendAppliesDS: sendAppliesDataSource)
+        let loadPostUsecase = PostDetailUseCaseImpl(loadPostRepository: loadPostRepository, applylistRepository: sendAppliesRepository)
         
         let loadUserDataSource = UserDataSourceImpl(tokenDataSource: tokenDS)
         let loadUserRepository = UserRepositoryImpl(userDS: loadUserDataSource)
@@ -73,13 +75,19 @@ class DIContainerService {
     func makePostReactor(_ postID: String) -> PostReactor {
         let loadPostDataSource = LoadPostDataSourceImpl(tokenDataSource: tokenDS)
         let loadPostRepository = LoadPostRepositoryImpl(loadPostDS: loadPostDataSource)
-        let loadPostUsecase = LoadPostUseCaseImpl(loadPostRepository: loadPostRepository)
+        let sendAppliesDataSource = SendAppiesDataSourceImpl(tokenDataSource: tokenDS)
+        let sendAppliesRepository = SendAppiesRepositoryImpl(sendAppliesDS: sendAppliesDataSource)
+        let loadPostUsecase = PostDetailUseCaseImpl(loadPostRepository: loadPostRepository, applylistRepository: sendAppliesRepository)
+        
+        let applyDataSource = ApplyDataSourceImpl(tokenDataSource: tokenDS)
+        let applyRepository = ApplyPostRepositoryImpl(applyDS: applyDataSource)
+        let applyUsecase = ApplyHandleUseCaseImpl(applyRepository: applyRepository)
         
         let setFavoriteDataSource = SetFavoriteDataSourceImpl(tokenDataSource: tokenDS)
         let setFavoriteRepository = SetFavoriteRepositoryImpl(setFavoriteDS: setFavoriteDataSource)
         let setFavoriteUsecase = SetFavoriteUseCaseImpl(setFavoriteRepository: setFavoriteRepository)
         
-        return PostReactor(postId: postID, postloadUsecase: loadPostUsecase, setfavoriteUsecase: setFavoriteUsecase)
+        return PostReactor(postId: postID, postloadUsecase: loadPostUsecase, setfavoriteUsecase: setFavoriteUsecase, applyHandelerUsecase: applyUsecase)
     }
     
     func makeFavoriteReactor() -> FavoriteReactor {
@@ -88,14 +96,6 @@ class DIContainerService {
         let loadFavoriteListUsecase = LoadFavoriteListUseCaseImpl(loadFavoriteListRepository: loadFavoriteListRepository)
         
         return FavoriteReactor(favoriteListUsecase: loadFavoriteListUsecase)
-    }
-    
-    func makeApplyReactor(apply: MyApplyInfo?) -> ApplyFormReactor {
-        let applyPostDS = ApplyDataSourceImpl(tokenDataSource: tokenDS)
-        let applyRepository = ApplyPostRepositoryImpl(applyDS: applyPostDS)
-        let applyUsecase = applyUseCaseImpl(applyRepository: applyRepository)
-        
-        return ApplyFormReactor(applyUsecase: applyUsecase, apply: apply)
     }
     
     func makeMypageReactor() -> MyPageReactor {

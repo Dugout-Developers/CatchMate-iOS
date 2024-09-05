@@ -12,46 +12,69 @@ import ReactorKit
 enum PostError: Error {
     case applyFailed
 }
+
+enum ApplyType {
+    case none
+    case applied
+    case finished
+    case chat
+}
+
 final class PostReactor: Reactor {
     enum Action {
         case loadPostDetails
         case loadIsFavorite
-        case loadIsApplied
-        case changeIsApplied(Bool)
+        case changeApplyButtonState(ApplyType)
+        case apply(String?)
+        case cancelApply
         case changeFavorite(Bool)
         case setError(PresentationError?)
     }
     enum Mutation {
         case setPost(Post?)
-        case setIsApplied(Bool)
+        case setApplyButtonState(ApplyType)
         case setIsFavorite(Bool)
+        case setApplyInfo(MyApplyInfo?)
         case setError(PresentationError?)
     }
     struct State {
         // View의 state를 관리한다.
         var post: Post?
-        var isApplied: Bool = false
-        var isFinished: Bool = false
+        var applyButtonState: ApplyType?
         var isFavorite: Bool = false
+        var applyInfo: MyApplyInfo?
         var error: PresentationError?
     }
     var postId: String
     var initialState: State
-    private let postloadUsecase: LoadPostUseCase
+    private let postDetailUsecase: PostDetailUseCase
     private let setFavoriteUsecase: SetFavoriteUseCase
-    init(postId: String, postloadUsecase: LoadPostUseCase, setfavoriteUsecase: SetFavoriteUseCase) {
+    private let applyHandelerUsecase: ApplyHandleUseCase
+    init(postId: String, postloadUsecase: PostDetailUseCase, setfavoriteUsecase: SetFavoriteUseCase, applyHandelerUsecase: ApplyHandleUseCase) {
         self.initialState = State()
         self.postId = postId
         LoggerService.shared.debugLog("-----------\(postId) detail Load------------")
-        self.postloadUsecase = postloadUsecase
+        self.postDetailUsecase = postloadUsecase
         self.setFavoriteUsecase = setfavoriteUsecase
+        self.applyHandelerUsecase = applyHandelerUsecase
     }
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadPostDetails:
-            return postloadUsecase.loadPost(postId: postId)
-                .map { post in
-                    return Mutation.setPost(post)
+            return postDetailUsecase.loadPost(postId: postId)
+                .flatMap { post, state in
+                    var mutations: [Observable<Mutation>] = [
+                        Observable.just(Mutation.setPost(post)),
+                        Observable.just(Mutation.setApplyButtonState(state))
+                    ]
+                    if state == .applied {
+                        let applyInfoMutation = self.postDetailUsecase.loadApplyInfo(postId: self.postId)
+                            .map { info in
+                                Mutation.setApplyInfo(info)
+                            }
+                        mutations.append(applyInfoMutation)
+                    }
+                    return Observable.concat(mutations)
                 }
                 .catch { error in
                     if let presentationError = error as? PresentationError {
@@ -60,13 +83,8 @@ final class PostReactor: Reactor {
                         return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                     }
                 }
-
-        case .loadIsApplied:
-            // TODO: - API UseCase 연결 시 신청 정보 가져와서 있는지 확인하고 result 설정
-            let result = false
-            return Observable.just(Mutation.setIsApplied(result))
-        case .changeIsApplied(let result):
-            return Observable.just(Mutation.setIsApplied(result))
+        case .changeApplyButtonState(let result):
+            return Observable.just(Mutation.setApplyButtonState(result))
         case .loadIsFavorite:
             let favoriteList = SetupInfoService.shared.loadSimplePostIds()
             let index = favoriteList.firstIndex(where: {$0 == postId})
@@ -88,6 +106,27 @@ final class PostReactor: Reactor {
                 }
         case .setError(let error):
             return Observable.just(Mutation.setError(error))
+        case .apply(let text):
+            return applyHandelerUsecase.apply(postId: postId, addText: text)
+                .flatMap { id in
+                    if id > 0 {
+                        return Observable.concat([
+                            Observable.just(Mutation.setApplyInfo(MyApplyInfo(enrollId: String(id), addInfo: text ?? ""))),
+                            Observable.just(Mutation.setApplyButtonState(.applied))
+                        ])
+                    } else {
+                        return Observable.just(Mutation.setError(.informational(message: "이미 보낸 신청입니다.")))
+                    }
+                }
+        case .cancelApply:
+            if let enrollId = currentState.applyInfo?.enrollId {
+                return applyHandelerUsecase.cancelApplyPost(enrollId: enrollId)
+                    .flatMap { _ in
+                        return Observable.just(Mutation.setApplyButtonState(.none))
+                    }
+            } else {
+                return Observable.just(Mutation.setError(PresentationError.retryable(message: "요청을 실패했습니다. 다시 시도해주세요.")))
+            }
         }
     }
     
@@ -98,16 +137,20 @@ final class PostReactor: Reactor {
             newState.post = post
             if let post = post {
                 if post.maxPerson == post.currentPerson {
-                    newState.isFinished = true
+                    newState.applyButtonState = .finished
                 }
             }
-        case .setIsApplied(let state):
-            newState.isApplied = state
+        case .setApplyButtonState(let state):
+            newState.applyButtonState = state
+            if state == .none {
+                newState.applyInfo = nil
+            }
         case .setIsFavorite(let state):
-            print(state)
             newState.isFavorite = state
         case .setError(let error):
             newState.error = error
+        case .setApplyInfo(let info):
+            newState.applyInfo = info
         }
         return newState
     }

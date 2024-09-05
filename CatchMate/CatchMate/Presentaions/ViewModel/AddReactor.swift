@@ -75,9 +75,9 @@ final class AddReactor: Reactor {
     var initialState: State
     var writer: SimpleUser?
     private let addUsecase: AddPostUseCase
-    private let loadPostDetailUsecase: LoadPostUseCase
+    private let loadPostDetailUsecase: PostDetailUseCase
     private let loadUserUsecase: UserUseCase
-    init(addUsecase: AddPostUseCase, loadPostDetailUsecase: LoadPostUseCase, loadUserUsecase: UserUseCase) {
+    init(addUsecase: AddPostUseCase, loadPostDetailUsecase: PostDetailUseCase, loadUserUsecase: UserUseCase) {
         self.initialState = State()
         self.addUsecase = addUsecase
         self.writer = nil

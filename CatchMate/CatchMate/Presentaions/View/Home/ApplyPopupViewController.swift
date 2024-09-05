@@ -16,7 +16,6 @@ final class ApplyPopupViewController: UIViewController, View {
     var apply: MyApplyInfo?
     var disposeBag: DisposeBag = DisposeBag()
     var reactor: PostReactor
-    private var applyReactor: ApplyFormReactor
     private let topContentsPadding = 36.0
     private let bottomContentsPadding = 36.0
     private let horizontalContentsPadding = 24.0
@@ -104,7 +103,7 @@ final class ApplyPopupViewController: UIViewController, View {
     init(post: Post, reactor: PostReactor, apply: MyApplyInfo?) {
         self.post = post
         self.reactor = reactor
-        self.applyReactor = DIContainerService.shared.makeApplyReactor(apply: apply)
+        self.apply = apply
         super.init(nibName: nil, bundle: nil)
     }
     @available(*, unavailable)
@@ -173,43 +172,33 @@ extension ApplyPopupViewController {
         commonButton.rx.tap
             .withUnretained(self)
             .subscribe { vc, _ in
-                if let apply = vc.apply {
-                    
-                } else {
-                    vc.dismiss(animated: true)
+                if vc.apply != nil {
+                    // 이미 보낸 신청 취소하기
+                    reactor.action.onNext(.cancelApply)
                 }
+                vc.dismiss(animated: true)
             }
             .disposed(by: disposeBag)
         
         primaryButton.rx.tap
             .withUnretained(self)
             .subscribe(onNext: { vc, _ in
-                if let apply = vc.apply {
+                if vc.apply != nil {
                     vc.dismiss(animated: true)
                 } else {
+                    // 신청하기
                     let text = vc.textView.text
-                    let apply = ApplyRequest(applyPostId: vc.post.id, addInfo: text)
-                    vc.applyReactor.action.onNext(.requestApplyForm(apply))
+                    reactor.action.onNext(.apply(text))
+                    vc.dismiss(animated: true)
                 }
             })
             .disposed(by: disposeBag)
-        
-        applyReactor.state.map{$0.appleyResult}
+
+        reactor.state.map{$0.error}
             .compactMap{$0}
             .withUnretained(self)
-            .subscribe { vc, result in
-                if Int(result.enrollId)! > 0 {
-                    vc.reactor?.action.onNext(.changeIsApplied(true))
-                } else {
-                    vc.showToast(message: "이미 신청한 게시물 입니다.", buttonContainerExists: true)
-                }
-                vc.dismiss(animated: true)
-            }
-            .disposed(by: disposeBag)
-        applyReactor.state.map{$0.error}
-            .withUnretained(self)
             .subscribe { vc, error in
-                vc.showToast(message: "신청에 실패했습니다.")
+                vc.showToast(message: error.errorDescription ?? "문제가 생겼습니다. 다시 시도해주세요.")
             }
             .disposed(by: disposeBag)
     }

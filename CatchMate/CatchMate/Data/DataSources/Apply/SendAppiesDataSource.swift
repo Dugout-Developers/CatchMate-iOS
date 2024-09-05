@@ -12,7 +12,7 @@ import Alamofire
 
 protocol SendAppiesDataSource {
     func loadSendApplies() -> Observable<[Content]>
-    func loadSendAppliesIds() -> Observable<[Int]>
+    func loadSendApplyBoardIds() -> Observable<[Int]>
 }
 
 
@@ -60,10 +60,10 @@ final class SendAppiesDataSourceImpl: SendAppiesDataSource {
             }
     }
     
-    func loadSendAppliesIds() -> RxSwift.Observable<[Int]> {
+    func loadSendApplyBoardIds() -> RxSwift.Observable<[Int]> {
         return loadSendApplies()
             .map { contents -> [Int] in
-                return contents.map { $0.enrollId }
+                return contents.map { $0.boardInfo.boardId }
             }
     }
     

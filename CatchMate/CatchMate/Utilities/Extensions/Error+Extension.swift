@@ -8,7 +8,10 @@ import Foundation
 
 extension Error {
     var statusCode: Int {
-        return (self as? LocalizedError)?.statusCode ?? -9999
+        if let localizedError = self as? LocalizedError, let statusCode = (localizedError as? CustomNSError)?.errorCode {
+            return statusCode
+        }
+        return -9999 // 기본값으로 -9999를 반환
     }
 
     var errorDescription: String? {

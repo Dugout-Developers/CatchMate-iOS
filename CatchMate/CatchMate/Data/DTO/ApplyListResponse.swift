@@ -14,6 +14,7 @@ struct UserInfo: Codable {
     let favGudan: String
     let watchStyle: String
     let gender: String
+    let birthDate: String
 }
 
 struct BoardInfo: Codable {

@@ -11,7 +11,7 @@ import RxAlamofire
 import Alamofire
 
 protocol RecivedAppiesDataSource {
-    func loadRecivedApplies() -> Observable<[Content]>
+    func loadRecivedApplies(boardId: Int) -> Observable<[Content]>
 }
 
 final class RecivedAppiesDataSourceImpl: RecivedAppiesDataSource {
@@ -21,16 +21,20 @@ final class RecivedAppiesDataSourceImpl: RecivedAppiesDataSource {
         self.tokenDataSource = tokenDataSource
     }
     
-    func loadRecivedApplies() -> RxSwift.Observable<[Content]> {
+    func loadRecivedApplies(boardId: Int) -> RxSwift.Observable<[Content]> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
+        
+        let parameters: [String: Any] = [
+            "boardId": boardId
+        ]
         LoggerService.shared.log("토큰 확인: \(headers)")
         
-        return APIService.shared.requestAPI(type: .receivedApply, parameters: nil, headers: headers, dataType: ApplyListResponse.self)
+        return APIService.shared.requestAPI(type: .receivedApply, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: ApplyListResponse.self)
             .map { response -> [Content] in
                 return response.content
             }
@@ -46,7 +50,7 @@ final class RecivedAppiesDataSourceImpl: RecivedAppiesDataSource {
                                 "AccessToken": token
                             ]
                             LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            return APIService.shared.requestAPI(type: .receivedApply, parameters: nil, headers: newHeaders, dataType: ApplyListResponse.self)
+                            return APIService.shared.requestAPI(type: .receivedApply, parameters: parameters, headers: newHeaders, encoding: URLEncoding.default, dataType: ApplyListResponse.self)
                                 .map { response -> [Content] in
                                     return response.content
                                 }

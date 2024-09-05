@@ -10,13 +10,16 @@ import RxSwift
 
 protocol applyUseCase {
     func applyPost(_ boardId: String, addInfo: String) -> Observable<MyApplyInfo>
+    func isApply(boardId: Int) -> RxSwift.Observable<Bool>
 }
 
 final class applyUseCaseImpl: applyUseCase {
     private let applyRepository: ApplyRepository
+    private let sendAppliesRepository: SendAppiesRepository
     
-    init(applyRepository: ApplyRepository) {
+    init(applyRepository: ApplyRepository, sendAppliesRepository: SendAppiesRepository) {
         self.applyRepository = applyRepository
+        self.sendAppliesRepository = sendAppliesRepository
     }
     
     func applyPost(_ boardId: String, addInfo: String) -> Observable<MyApplyInfo> {
@@ -24,5 +27,9 @@ final class applyUseCaseImpl: applyUseCase {
             .map { result in
                 return MyApplyInfo(enrollId: String(result), addInfo: addInfo)
             }
+    }
+    
+    func isApply(boardId: Int) -> RxSwift.Observable<Bool> {
+        return sendAppliesRepository.isApply(boardId: boardId)
     }
 }

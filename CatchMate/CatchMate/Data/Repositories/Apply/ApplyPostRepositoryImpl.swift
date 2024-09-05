@@ -21,4 +21,11 @@ final class ApplyPostRepositoryImpl: ApplyRepository {
                 return Observable.error(ErrorMapper.mapToPresentationError(error))
             }
     }
+    
+    func cancelApplyPost(enrollId: String) -> Observable<Bool> {
+        return applyDS.cancelApplyPost(enrollId: enrollId)
+            .catch { error in
+                return Observable.error(ErrorMapper.mapToPresentationError(error))
+            }
+    }
 }
