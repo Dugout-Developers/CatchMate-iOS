@@ -18,38 +18,6 @@ protocol KakaoDataSource {
     func getKakaoLoginToken() -> Observable<SNSLoginResponse>
 }
 
-enum KakaoLoginError: LocalizedError {
-    case kakaoLoginFailed
-    case missingUserInfo
-    case serverError(Int, String)
-    
-    var errorType: String {
-        return String(describing: self)
-    }
-    
-    var statusCode: Int {
-        switch self {
-        case .kakaoLoginFailed:
-            return -1000
-        case .missingUserInfo:
-            return -1001
-        case .serverError(let code, _):
-            return code
-        }
-    }
-    
-    var errorDescription: String? {
-        switch self {
-        case .kakaoLoginFailed:
-            return "카카오 로그인 실패"
-        case .missingUserInfo:
-            return "UserInfo 얻기 실패"
-        case .serverError(_, let string):
-            return string
-        }
-    }
-}
-
 final class KakaoDataSourceImpl: NSObject, KakaoDataSource {
     private let disposeBag = DisposeBag()
     override init() {
@@ -63,12 +31,12 @@ final class KakaoDataSourceImpl: NSObject, KakaoDataSource {
             if UserApi.isKakaoTalkLoginAvailable() {
                 UserApi.shared.loginWithKakaoTalk { [weak self] (oauthToken, error) in
                     if let error = error {
-                        LoggerService.shared.log("\(KakaoLoginError.errorType): \(error.statusCode) - \(error.localizedDescription)", level: .error)
-                        observer.onError(KakaoLoginError.serverError(error.statusCode, error.localizedDescription))
+                        LoggerService.shared.log("Kakao Login Error: \(error.statusCode) - \(error.localizedDescription)", level: .error)
+                        observer.onError(SNSLoginError.loginServerError(code: error.statusCode, description: error.localizedDescription))
                     } else {
                         guard let oauthToken = oauthToken else {
-                            LoggerService.shared.log("\(KakaoLoginError.errorType): \(KakaoLoginError.kakaoLoginFailed.statusCode) - oauthToken 없음", level: .error)
-                            observer.onError(KakaoLoginError.kakaoLoginFailed)
+                            LoggerService.shared.log("KakaoLogin - oauthToken 없음", level: .error)
+                            observer.onError(SNSLoginError.authorizationFailed)
                             return
                         }
                         self?.fetchUserInfo(oauthToken: oauthToken.accessToken, observer: observer)
@@ -78,12 +46,12 @@ final class KakaoDataSourceImpl: NSObject, KakaoDataSource {
                 // 웹뷰
                 UserApi.shared.loginWithKakaoAccount { [weak self] (oauthToken, error) in
                     if let error = error {
-                        LoggerService.shared.log("\(KakaoLoginError.errorType): \(error.statusCode) - \(error.localizedDescription)", level: .error)
-                        observer.onError(KakaoLoginError.serverError(error.statusCode, error.localizedDescription))
+                        LoggerService.shared.log("Kakao Login Error: \(error.statusCode) - \(error.localizedDescription)", level: .error)
+                        observer.onError(SNSLoginError.loginServerError(code: error.statusCode, description: error.localizedDescription))
                     } else {
                         guard let oauthToken = oauthToken else {
-                            LoggerService.shared.log("\(KakaoLoginError.errorType): \(KakaoLoginError.kakaoLoginFailed) - oauthToken 없음", level: .error)
-                            observer.onError(KakaoLoginError.kakaoLoginFailed)
+                            LoggerService.shared.log("KakaoLogin - oauthToken 없음", level: .error)
+                            observer.onError(SNSLoginError.authorizationFailed)
                             return
                         }
                         self?.fetchUserInfo(oauthToken: oauthToken.accessToken, observer: observer)
@@ -98,12 +66,12 @@ final class KakaoDataSourceImpl: NSObject, KakaoDataSource {
         LoggerService.shared.debugLog("KAKAO Login - fetchUserInfo")
         UserApi.shared.me(propertyKeys: ["properties.nickname", "properties.profile_image", "kakao_account.email"]) { user, error in
             if let error = error {
-                LoggerService.shared.log("\(KakaoLoginError.errorType): \(error.statusCode) - \(error.localizedDescription)", level: .error)
-                observer.onError(KakaoLoginError.serverError(error.statusCode, error.localizedDescription))
+                LoggerService.shared.log("KakaoLogin - \(error.localizedDescription)", level: .error)
+                observer.onError(SNSLoginError.loginServerError(code: error.statusCode, description: error.localizedDescription))
             } else {
                 guard let user = user, let id = user.id else {
-                    LoggerService.shared.log("\(KakaoLoginError.errorType): \(KakaoLoginError.missingUserInfo.statusCode) - id를 찾을 수 없음", level: .error)
-                    observer.onError(KakaoLoginError.missingUserInfo)
+                    LoggerService.shared.log("KakaoLogin Error - id를 찾을 수 없음", level: .error)
+                    observer.onError(SNSLoginError.EmptyValue)
                     return
                 }
                 LoggerService.shared.log("\(user)")

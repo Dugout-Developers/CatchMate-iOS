@@ -10,7 +10,6 @@ import UIKit
 /// 라디오버튼용 보더 버튼
 /// 높이 알맞게 설정해주기
 class CMDefaultBorderedButton: UIButton {
-
     var isSelecte: Bool = false {
         didSet {
             updateBorderColor()
@@ -30,9 +29,9 @@ class CMDefaultBorderedButton: UIButton {
     private func setupButton(_ title: String, _ isRound: Bool) {
         layer.cornerRadius = isRound ? 20 : 8
         layer.borderWidth = 1
-        layer.borderColor = UIColor.grayScale400.cgColor
+        layer.borderColor = UIColor.cmPrimaryColor.cgColor
         setTitle(title, for: .normal)
-        setTitleColor(.grayScale400, for: .normal)
+        setTitleColor(.cmPrimaryColor, for: .normal)
         applyStyle(textStyle: FontSystem.body01_semiBold)
         
         addTarget(self, action: #selector(updateBorderColor), for: .allEvents)

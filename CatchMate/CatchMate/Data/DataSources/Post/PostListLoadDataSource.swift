@@ -14,9 +14,15 @@ protocol PostListLoadDataSource {
     func loadPostList(pageNum: Int, gudan: [String], gameDate: String, people: Int) ->  Observable<[PostListDTO]>
 }
 final class PostListLoadDataSourceImpl: PostListLoadDataSource {
+    private let tokenDataSource: TokenDataSource
+   
+    init(tokenDataSource: TokenDataSource) {
+        self.tokenDataSource = tokenDataSource
+    }
+    
     func loadPostList(pageNum: Int, gudan: [String], gameDate: String, people: Int) -> RxSwift.Observable<[PostListDTO]> {
         LoggerService.shared.debugLog("<필터값> 구단: \(gudan), 날짜: \(gameDate), 페이지: \(pageNum)")
-        guard let token = KeychainService.getToken(for: .accessToken) else {
+        guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
         
@@ -34,6 +40,7 @@ final class PostListLoadDataSourceImpl: PostListLoadDataSource {
             "gameDate": gameDate,
             "people": people
         ]
+        
         LoggerService.shared.debugLog("parameters: \(parameters)")
         LoggerService.shared.debugLog("PostListLoadDataSourceImpl 토큰 확인: \(headers)")
         return APIService.shared.requestAPI(addEndPoint: String(pageNum), type: .postlist, parameters: parameters, headers: headers, encoding: CustomURLEncoding.default, dataType: [PostListDTO].self)
@@ -41,9 +48,13 @@ final class PostListLoadDataSourceImpl: PostListLoadDataSource {
                 LoggerService.shared.debugLog("PostList Load 성공: \(postListDTO)")
                 return postListDTO
             }
-            .catch { error in
-                if let networkError = error as? NetworkError, networkError.statusCode == 401 {
-                    return APIService.shared.refreshAccessToken()
+            .catch { [weak self] error in
+                guard let self = self else { return Observable.error(ReferenceError.notFoundSelf) }
+                if let error = error as? NetworkError, error.statusCode == 401 {
+                    guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
+                        return Observable.error(TokenError.notFoundRefreshToken)
+                    }
+                    return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
                         .flatMap { token -> Observable<[PostListDTO]> in
                             let newHeaders: HTTPHeaders = [
                                 "AccessToken": token
@@ -54,9 +65,9 @@ final class PostListLoadDataSourceImpl: PostListLoadDataSource {
                                     LoggerService.shared.debugLog("PostList Load 성공: \(postListDTO)")
                                     return postListDTO
                                 }
-                                .catch { error in
-                                    return Observable.error(error)
-                                }
+                        }
+                        .catch { error in
+                            return Observable.error(error)
                         }
                 }
                 return Observable.error(error)

@@ -16,7 +16,10 @@ protocol ServerLoginDataSource {
 }
 
 final class ServerLoginDataSourceImpl: ServerLoginDataSource {
-    init() {}
+    private let tokenDataSource: TokenDataSource
+    init(tokenDataSource: TokenDataSource) {
+        self.tokenDataSource = tokenDataSource
+    }
     
     func postLoginRequest(_ loginResponse: SNSLoginResponse, _ token: String) -> Observable<LoginResponse> {
         LoggerService.shared.debugLog("-----------------Servser Request Login-------------------")
@@ -31,13 +34,26 @@ final class ServerLoginDataSourceImpl: ServerLoginDataSource {
         ]
         
         return APIService.shared.requestAPI(type: .login, parameters: parameters, encoding: JSONEncoding.default, dataType: LoginResponse.self)
-            .map { response in
-                LoggerService.shared.debugLog("회원가입 성공: \(response)")
-                return response
+            .withUnretained(self)
+            .flatMap { ds, dto -> Observable<LoginResponse> in
+                LoggerService.shared.debugLog("회원가입 성공: \(dto)")
+                
+                if let accessToken = dto.accessToken, let refreshToken = dto.refreshToken {
+                    // AccessToken 및 RefreshToken 저장
+                    let accessTokenSaved = ds.tokenDataSource.saveToken(token: accessToken, for: .accessToken)
+                    let refreshTokenSaved = ds.tokenDataSource.saveToken(token: refreshToken, for: .refreshToken)
+                    
+                    // 토큰 저장 실패 시 에러 발생
+                    if !accessTokenSaved || !refreshTokenSaved {
+                        LoggerService.shared.debugLog("토큰 저장 실패")
+                        return Observable.error(TokenError.failureTokenService)
+                    }
+                }
+                
+                return Observable.just(dto)
             }
             .catch { error in
                 return Observable.error(error)
             }
-
     }
 }

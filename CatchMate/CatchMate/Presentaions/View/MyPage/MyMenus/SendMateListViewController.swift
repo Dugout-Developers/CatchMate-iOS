@@ -58,7 +58,7 @@ extension SendMateListViewController {
             .bind(to: tableView.rx.items(cellIdentifier: "ListCardViewTableViewCell", cellType: ListCardViewTableViewCell.self)) { (row, item, cell) in
                 cell.backgroundColor = .clear
                 cell.selectionStyle = .none
-                cell.setupData(SimplePost(post: item.post))
+                cell.setupData(item)
                 cell.updateConstraints()
             }
             .disposed(by: disposeBag)
@@ -67,11 +67,9 @@ extension SendMateListViewController {
             .observe(on: MainScheduler.instance)
             .withUnretained(self)
             .subscribe(onNext: { vc, indexPath in
-                let apply = reactor.currentState.sendMates[indexPath.row]
-                let cancelPopup = ApplyPopupViewController(post: apply.post, reactor: reactor, apply: apply)
-                cancelPopup.modalPresentationStyle = .overFullScreen
-                cancelPopup.modalTransitionStyle = .crossDissolve
-                vc.present(cancelPopup, animated: true)
+                let post = reactor.currentState.sendMates[indexPath.row]
+                let postDetailVC = PostDetailViewController(postID: post.id)
+                vc.navigationController?.pushViewController(postDetailVC, animated: true)
             })
             .disposed(by: disposeBag)
     }

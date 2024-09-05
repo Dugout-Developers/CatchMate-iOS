@@ -15,28 +15,6 @@ protocol AppleLoginDataSource {
     func getAppleLoginToken() -> Observable<SNSLoginResponse>
 }
 
-enum AppleLoginError: LocalizedError {
-    case authorizationFailed
-    case EmptyValue
-
-    var statusCode: Int {
-        switch self {
-        case .authorizationFailed:
-            return -1001
-        case .EmptyValue:
-            return -1003
-        }
-    }
-    
-    var errorDescription: String? {
-        switch self {
-        case .authorizationFailed:
-            return "권한 부여 실패"
-        case .EmptyValue:
-            return "빈 응답값 전달"
-        }
-    }
-}
 final class AppleLoginDataSourceImpl: NSObject, AppleLoginDataSource,  ASAuthorizationControllerDelegate {
     private let disposeBag = DisposeBag()
     override init() {
@@ -65,22 +43,22 @@ final class AppleLoginDataSourceImpl: NSObject, AppleLoginDataSource,  ASAuthori
             let userId = appleIDCredential.user
             let response = SNSLoginResponse(id: userId, email: email, loginType: .apple)
             LoggerService.shared.log("APPLE Login Response : \(response)")
-            KeychainService.saveEmail(email: email, userIdentifier: userId)
+            saveEmail(email: email, userIdentifier: userId)
             loginSubject.onNext(response)
         } else {
             if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
                 let userId = appleIDCredential.user
-                if let email = KeychainService.getEmail(userIdentifier: userId) {
+                if let email = getEmail(userIdentifier: userId) {
                     if email.isEmpty {
-                        LoggerService.shared.log("\(AppleLoginError.errorType) : \(AppleLoginError.EmptyValue.statusCode) - 이메일 없음", level: .error)
-                        loginSubject.onError(AppleLoginError.EmptyValue)
+                        LoggerService.shared.log("\(SNSLoginError.errorType) : \(SNSLoginError.EmptyValue.statusCode) - 이메일 없음", level: .error)
+                        loginSubject.onError(SNSLoginError.EmptyValue)
                     }
                     let response = SNSLoginResponse(id: userId, email: email, loginType: .apple)
                     LoggerService.shared.log("APPLE Login Response(User Defaults) : \(response)")
                     loginSubject.onNext(response)
                 } else {
-                    LoggerService.shared.log("\(AppleLoginError.errorType) : \(AppleLoginError.authorizationFailed.statusCode) - \(AppleLoginError.authorizationFailed.errorDescription ?? "인증 실패")", level: .error)
-                    loginSubject.onError(AppleLoginError.authorizationFailed)
+                    LoggerService.shared.log("\(SNSLoginError.errorType) : \(SNSLoginError.authorizationFailed.statusCode) - \(SNSLoginError.authorizationFailed.errorDescription ?? "인증 실패")", level: .error)
+                    loginSubject.onError(SNSLoginError.authorizationFailed)
                 }
             }
         }
@@ -90,4 +68,57 @@ final class AppleLoginDataSourceImpl: NSObject, AppleLoginDataSource,  ASAuthori
         LoggerService.shared.log("애플로그인 실패 : \(error)", level: .error)
         loginSubject.onError(error)
     }
+    
+    // MARK: - Appple Email 관련
+    // 이메일 저장
+    @discardableResult
+    func saveEmail(email: String, userIdentifier: String) -> Bool {
+        let data = email.data(using: .utf8)!
+        
+        let account = "email_\(userIdentifier)"
+        
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: account,
+            kSecValueData as String: data
+        ]
+        
+        let status = SecItemAdd(query as CFDictionary, nil)
+        if status == errSecDuplicateItem {
+            let updateQuery: [String: Any] = [
+                kSecClass as String: kSecClassGenericPassword,
+                kSecAttrAccount as String: account
+            ]
+            let updateAttributes: [String: Any] = [
+                kSecValueData as String: data
+            ]
+            SecItemUpdate(updateQuery as CFDictionary, updateAttributes as CFDictionary)
+        }
+        
+        return status == errSecSuccess || status == errSecDuplicateItem
+    }
+    
+    // 이메일 불러오기
+    func getEmail(userIdentifier: String) -> String? {
+        let account = "email_\(userIdentifier)"
+        
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: account,
+            kSecReturnData as String: kCFBooleanTrue!,
+            kSecMatchLimit as String: kSecMatchLimitOne
+        ]
+        
+        var dataTypeRef: AnyObject? = nil
+        let status: OSStatus = SecItemCopyMatching(query as CFDictionary, &dataTypeRef)
+        
+        if status == errSecSuccess {
+            if let retrievedData = dataTypeRef as? Data {
+                return String(data: retrievedData, encoding: .utf8)
+            }
+        }
+        
+        return nil
+    }
+
 }

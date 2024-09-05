@@ -15,11 +15,13 @@ final class ErrorMapper {
             return mapMappingError(mappingError)
         } else if let codableError = error as? CodableError {
             return mapCodableError(codableError)
-        } else if let tokenError = error as? TokenError {
+        } else if error is TokenError {
             return .unauthorized(message: "로그인 정보가 만료되었습니다. 다시 로그인해주세요.")
+        } else if let loginError = error as? SNSLoginError {
+            return mapSNSLoginError(loginError)
         }
         // 다른 에러 타입 추가 가능
-        return .contactSupport(message: "예기치 않은 오류가 발생했습니다. 지원팀에 문의해주세요.")
+        return .contactSupport(message: "예기치 않은 오류가 발생했습니다. 문제 지속 시 지원팀에 문의해주세요.")
     }
     
     private static func mapMappingError(_ error: MappingError) -> PresentationError {
@@ -89,6 +91,33 @@ final class ErrorMapper {
         switch error {
         case .notFoundSelf:
             return .informational(message: "오류가 발생했습니다. 잠시 후 다시 시도해 주세요.")
+        }
+    }
+    
+    private static func mapSNSLoginError(_ error: SNSLoginError) -> PresentationError {
+        switch error {
+        case .authorizationFailed:
+            return .retryable(message: "로그인 요청에 실패했습니다. 다시 시도해주세요.")
+        case .EmptyValue:
+            return .contactSupport(message: "로그인 정보를 가져오는데 실패했습니다. 지원팀에 문의해주세요.")
+        case .loginServerError(let code, let description):
+            switch code {
+            case 400..<500:
+                return mapClientError(code)
+            case 500..<600:
+                return mapServerError(code)
+            default:
+                return .contactSupport(message: "예기치 않은 오류가 발생했습니다. 지원팀에 문의해주세요.")
+            }
+        }
+    }
+    
+    private static func mapTokenError(_ error: TokenError) -> PresentationError {
+        switch error {
+        case .notFoundAccessToken, .notFoundRefreshToken:
+            return .unauthorized(message: "로그인 정보가 만료되었습니다. 다시 로그인해주세요.")
+        case .failureTokenService:
+            return .contactSupport(message: "예기치 않은 오류가 발생했습니다. 오류 지속 시 지원팀에 문의해주세요.")
         }
     }
 }

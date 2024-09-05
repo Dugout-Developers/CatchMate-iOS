@@ -9,5 +9,6 @@ import UIKit
 import RxSwift
 
 protocol LogoutRepository {
-    func logout(token: String) -> Observable<Bool>
+    func logout() -> Observable<Bool>
+    func deleteToken()
 }

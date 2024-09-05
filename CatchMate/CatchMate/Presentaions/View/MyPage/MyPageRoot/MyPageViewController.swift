@@ -186,8 +186,7 @@ extension MyPageViewController {
             .distinctUntilChanged()
             .subscribe { result in
                 if result {
-                    _ = KeychainService.deleteToken(for: .accessToken)
-                    _ = KeychainService.deleteToken(for: .refreshToken)
+                    UnauthorizedErrorHandler.shared.handleError()
                     LoginUserDefaultsService.shared.deleteLoginData()
                     let reactor = DIContainerService.shared.makeAuthReactor()
                     (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(UINavigationController(rootViewController: SignInViewController(reactor: reactor)), animated: true)
@@ -200,7 +199,6 @@ extension MyPageViewController {
             .distinctUntilChanged()
             .subscribe(onNext: { [weak self] user in
                 self?.user = user
-//                self?.tableview.reloadData()
             })
             .disposed(by: disposeBag)
         
@@ -221,8 +219,7 @@ extension MyPageViewController {
             .withUnretained(self)
             .subscribe { vc, error in
                 vc.showAlert(message: "유저 정보가 만료되었습니다\n다시 로그인 해주세요.") {
-                    _ = KeychainService.deleteToken(for: .accessToken)
-                    _ = KeychainService.deleteToken(for: .refreshToken)
+                    UnauthorizedErrorHandler.shared.handleError()
                     let reactor = DIContainerService.shared.makeAuthReactor()
                     (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(UINavigationController(rootViewController: SignInViewController(reactor: reactor)), animated: true)
                 }

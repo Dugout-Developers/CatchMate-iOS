@@ -22,7 +22,7 @@ final class AddReactor: Reactor {
         case changeDate(Date?)
         case changeTime(PlayTime)
         case changeGender(Gender?)
-        case changeAge([Int])
+        case changeAge(Int?)
         case changeHomeTeam(Team)
         case changeAwayTeam(Team)
         case changeAddText(String)
@@ -39,7 +39,7 @@ final class AddReactor: Reactor {
         case updateDate(Date?)
         case updateTime(PlayTime)
         case updateGender(Gender?)
-        case updateAge([Int])
+        case updateAge(Int?)
         case updateDatePickerSaveButton
         case updateHomeTeam(Team)
         case updageAwayTeam(Team)
@@ -59,7 +59,8 @@ final class AddReactor: Reactor {
         var selecteTime: PlayTime?
         var dateInfoString: String = ""
         var selectedGender: Gender?
-        var selectedAge: [Int] = []
+        var selectedAge: Int?
+//        var selectedAge: [Int] = []
         var datePickerSaveButtonState: Bool = false
         var homeTeam: Team?
         var place: String? = ""
@@ -75,9 +76,9 @@ final class AddReactor: Reactor {
     var initialState: State
     var writer: SimpleUser?
     private let addUsecase: AddPostUseCase
-    private let loadPostDetailUsecase: LoadPostUseCase
+    private let loadPostDetailUsecase: PostDetailUseCase
     private let loadUserUsecase: UserUseCase
-    init(addUsecase: AddPostUseCase, loadPostDetailUsecase: LoadPostUseCase, loadUserUsecase: UserUseCase) {
+    init(addUsecase: AddPostUseCase, loadPostDetailUsecase: PostDetailUseCase, loadUserUsecase: UserUseCase) {
         self.initialState = State()
         self.addUsecase = addUsecase
         self.writer = nil

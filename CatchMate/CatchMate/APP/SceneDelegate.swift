@@ -15,11 +15,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
     private let disposeBag = DisposeBag()
+    private var authManager: AuthManager?
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        AuthManager.shared.attemptAutoLogin()
+        let manager = AuthManager(tokenDS: TokenDataSourceImpl())
+        self.authManager = manager  // AuthManager를 강하게 참조하여 유지
+        manager.attemptAutoLogin()
             .observe(on: MainScheduler.instance)
             .withUnretained(self)
             .subscribe { scene, result in
@@ -28,9 +31,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 } else {
                     scene.moveSignIn()
                 }
+                self.authManager = nil
             } onError: { error in
                 print(error)
                 self.moveSignIn()
+                self.authManager = nil
             }
             .disposed(by: disposeBag)
 

@@ -175,6 +175,8 @@ final class SignUpViewController: BaseViewController, View {
                 case .man:
                     vc.manButton.isSelecte = true
                     vc.womanButton.isSelecte = false
+                case .none:
+                    break
                 }
             })
             .disposed(by: disposeBag)

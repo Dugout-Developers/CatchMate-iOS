@@ -9,14 +9,21 @@ import UIKit
 import RxSwift
 
 final class LogoutRepositoryImpl: LogoutRepository {
-    private let lopgoutDS: LogoutDataSourceImpl
+    private let logoutDS: LogoutDataSourceImpl
     
-    init(lopgoutDS: LogoutDataSourceImpl) {
-        self.lopgoutDS = lopgoutDS
+    init(logoutDS: LogoutDataSourceImpl) {
+        self.logoutDS = logoutDS
     }
     
-    func logout(token: String) -> RxSwift.Observable<Bool> {
-        return lopgoutDS.logout(token: token)
+    func logout() -> RxSwift.Observable<Bool> {
+        return logoutDS.logout()
+            .catch { error in
+                return Observable.error(ErrorMapper.mapToPresentationError(error))
+            }
+    }
+    
+    func deleteToken() {
+        
     }
 
 }

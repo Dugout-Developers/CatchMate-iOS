@@ -20,7 +20,7 @@ final class AddPostDataSourceTest: XCTestCase {
     override func setUp() {
         super.setUp()
         disposeBag = DisposeBag()
-        dataSource = AddPostDataSourceImpl()
+        dataSource = AddPostDataSourceImpl(tokenDataSource: MockTokenDataSource())
     }
     
     override func tearDown() {
@@ -30,7 +30,7 @@ final class AddPostDataSourceTest: XCTestCase {
     
     func testDefaultsFilter() {
         let expectation = self.expectation(description: "Post Load API Request - DefaultsFilter")
-        let mockupPost = AddPostRequsetDTO(title: "주황 이글스?", gameDate: "2024-08-31 18:00:00", location: "대전", homeTeam: "이글스", awayTeam: "위즈", cheerTeam: "이글스", maxPerson: 2, preferGender: "F", preferAge: 25, addInfo: "주황이 근본이긴 해~")
+        let mockupPost = AddPostRequsetDTO(title: "Test2", gameDate: "2024-09-05 18:30:00", location: "대전", homeTeam: "이글스", awayTeam: "위즈", cheerTeam: "이글스", maxPerson: 2, preferGender: "F", preferAge: 20, addInfo: "제발 이겨줘")
         dataSource.addPost(mockupPost)
             .subscribe (onNext: { result in
                 print(result)

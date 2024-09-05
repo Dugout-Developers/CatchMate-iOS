@@ -37,6 +37,7 @@ struct User: Codable, Equatable {
 enum Gender: String, Codable {
     case woman = "여성"
     case man = "남성"
+    case none = "성별 무관"
     
     var serverRequest: String {
         switch self {
@@ -44,16 +45,20 @@ enum Gender: String, Codable {
             "F"
         case .man:
             "M"
+        case .none:
+            "N"
         }
     }
     
     // 서버에서 받은 값을 기반으로 Gender 열거형 값을 반환하는 이니셜라이저
     init?(serverValue: String) {
         switch serverValue {
-        case "F":
+        case "F", "W":
             self = .woman
         case "M":
             self = .man
+        case "N":
+            self = .none
         default:
             return nil
         }

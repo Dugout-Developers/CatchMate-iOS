@@ -46,7 +46,7 @@ enum MypageMenu: String {
         case .write:
             return Observable.just(CustomerServiceViewController(title: self.rawValue))
         case .send:
-            return Observable.just(SendMateListViewController(reactor: SendMateReactor()))
+            return Observable.just(SendMateListViewController(reactor: DIContainerService.shared.makeSendMateReactor()))
         case .receive:
             return Observable.just(ReceiveMateListViewController(reactor: RecevieMateReactor()))
         case .auth:

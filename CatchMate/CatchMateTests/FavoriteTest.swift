@@ -21,8 +21,8 @@ final class FavoriteTest: XCTestCase {
     override func setUp() {
         super.setUp()
         disposeBag = DisposeBag()
-        dataSource = SetFavoriteDataSourceImpl() // 실제 데이터 소스
-        listLoadDataSource = LoadFavoriteListDataSourceImpl()
+        dataSource = SetFavoriteDataSourceImpl(tokenDataSource: MockTokenDataSource()) // 실제 데이터 소스
+        listLoadDataSource = LoadFavoriteListDataSourceImpl(tokenDataSource: MockTokenDataSource())
     }
     
     override func tearDown() {

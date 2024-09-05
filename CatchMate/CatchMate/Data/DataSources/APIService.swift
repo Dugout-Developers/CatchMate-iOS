@@ -28,6 +28,18 @@ enum Endpoint: String {
     /// 알람 설정
     case setNotification = "/user/alarm"
     
+    /// 직관 신청 /enroll/{boardId}
+    case apply = "/enroll/"
+    /// 직관 신청 취소 /enroll/cancel/{enrollId}
+    case cancelApply = "/enroll/cancel/"
+    /// 보낸 직관 신청 목록
+    case sendApply = "/enroll/request"
+    /// 받은 직관 신청 목록
+    case receivedApply = "/enroll/receive"
+    
+    /// 내정보 조회
+    case loadMyInfo = "/user/profile"
+    
     var apiName: String {
         switch self {
         case .login:
@@ -46,7 +58,16 @@ enum Endpoint: String {
             return "찜 상태 설정 API"
         case .setNotification:
             return "알람 설정 API"
-
+        case .apply:
+            return "직관 신청 API"
+        case .cancelApply:
+            return "직관 신청 취소 API"
+        case .sendApply:
+            return "보낸 신청 목록 API"
+        case .receivedApply:
+            return "받은 신청 목록 API"
+        case .loadMyInfo:
+            return "내 정보 조회 API"
         }
     }
     
@@ -68,6 +89,16 @@ enum Endpoint: String {
             return .post
         case .postlist:
             return .get
+        case .apply:
+            return .post
+        case .cancelApply:
+            return .post
+        case .sendApply:
+            return .get
+        case .receivedApply:
+            return .get
+        case .loadMyInfo:
+            return .get
         }
     }
 }
@@ -77,7 +108,7 @@ final class APIService {
     
     private var baseURL = Bundle.main.baseURL
     private let disposeBag = DisposeBag()
-    
+
     func requestAPI<T: Codable>(addEndPoint: String? = nil, type: Endpoint, parameters: [String: Any]?, headers: HTTPHeaders? = nil, encoding: any ParameterEncoding = URLEncoding.default, dataType: T.Type) -> Observable<T> {
         LoggerService.shared.debugLog("APIService: - Request: \(type.apiName)")
         guard let base = baseURL else {
@@ -89,15 +120,11 @@ final class APIService {
             url += addEndPoint
         }
         return RxAlamofire.requestData(type.requstType, url, parameters: parameters, encoding: encoding, headers: headers)
-            .flatMap { (response, data) -> Observable<T> in
+            .flatMap { [weak self] (response, data) -> Observable<T> in
+                guard let self = self else { return Observable.error(ReferenceError.notFoundSelf) }
                 guard 200..<300 ~= response.statusCode else {
                     LoggerService.shared.debugLog("\(type.apiName) Error : \(response.statusCode) \(response.debugDescription)")
-                    if 400..<500 ~= response.statusCode {
-                        return Observable.error(NetworkError.clientError(statusCode: response.statusCode))
-                    } else if 500..<600 ~= response.statusCode {
-                        return Observable.error(NetworkError.serverError(statusCode: response.statusCode))
-                    }
-                    return Observable.error(NetworkError.unownedError(statusCode: response.statusCode))
+                    return Observable.error(mapServerError(statusCode: response.statusCode))
                 }
                 do {
                     let dtoResponse = try JSONDecoder().decode(T.self, from: data)
@@ -167,20 +194,17 @@ final class APIService {
         }
     }
     
-    func refreshAccessToken() -> RxSwift.Observable<String> {
+    func refreshAccessToken(refreshToken: String) -> RxSwift.Observable<String> {
         LoggerService.shared.debugLog("토큰 재발급 시작")
         guard let base = Bundle.main.baseURL else {
             LoggerService.shared.log("base 찾기 실패", level: .error)
             return Observable.error(NetworkError.notFoundBaseURL)
         }
-        guard let token = KeychainService.getToken(for: .refreshToken) else {
-            LoggerService.shared.log("\(TokenError.notFoundRefreshToken.errorDescription!)", level: .error)
-            return Observable.error(TokenError.notFoundRefreshToken)
-        }
-        LoggerService.shared.debugLog("Refresh Token: \(token)")
+
+        LoggerService.shared.debugLog("Refresh Token: \(refreshToken)")
         let url = base + "/auth/reissue"
         let headers: HTTPHeaders = [
-            "RefreshToken": token
+            "RefreshToken": refreshToken
         ]
         return RxAlamofire.requestJSON(.post, url, encoding: JSONEncoding.default, headers: headers)
             .flatMap { (response, data) -> Observable<String> in
@@ -188,7 +212,6 @@ final class APIService {
                     do {
                         let jsonData = try JSONSerialization.data(withJSONObject: data, options: [])
                         let refreshResponse = try JSONDecoder().decode(RefreshTokenResponseDTO.self, from: jsonData)
-                        KeychainService.saveToken(token: refreshResponse.accessToken, for: .accessToken)
                         LoggerService.shared.debugLog("토큰 재발급 성공: \(refreshResponse.accessToken)")
                         return Observable.just(refreshResponse.accessToken)
                     } catch {
@@ -207,6 +230,17 @@ final class APIService {
                     }
                 }
             }
+    }
+    
+    func mapServerError(statusCode: Int) -> NetworkError {
+        switch statusCode {
+        case 400..<500:
+            return .clientError(statusCode: statusCode)
+        case 500..<600:
+            return .serverError(statusCode: statusCode)
+        default:
+            return .unownedError(statusCode: statusCode)
+        }
     }
 }
 

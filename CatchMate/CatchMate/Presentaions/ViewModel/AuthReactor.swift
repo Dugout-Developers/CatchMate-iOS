@@ -97,8 +97,7 @@ final class AuthReactor: Reactor {
     private func saveToken(loginModel: LoginModel) -> Bool {
         if let accessToken = loginModel.accessToken, let refreshToken = loginModel.refreshToken {
             LoggerService.shared.debugLog("saveKeychain : \(accessToken), \(refreshToken)")
-            KeychainService.saveToken(token: accessToken, for: .accessToken)
-            KeychainService.saveToken(token: refreshToken, for: .refreshToken)
+            UnauthorizedErrorHandler.shared.handleError()
             return true
         } else {
             return false

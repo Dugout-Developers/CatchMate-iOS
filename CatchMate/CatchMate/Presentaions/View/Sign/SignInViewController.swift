@@ -71,7 +71,6 @@ final class SignInViewController: BaseViewController, View {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reactor.action.onNext(.resetState)
-        print(KeychainService.getToken(for: .refreshToken))
     }
     
     override func viewDidLayoutSubviews() {

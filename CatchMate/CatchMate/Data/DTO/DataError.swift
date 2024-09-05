@@ -133,3 +133,61 @@ enum ReferenceError: LocalizedError {
         }
     }
 }
+// SNS Login 관련 Error
+enum SNSLoginError: LocalizedError {
+    case authorizationFailed
+    case EmptyValue
+    case loginServerError(code: Int, description: String)
+
+
+    var statusCode: Int {
+        switch self {
+        case .authorizationFailed:
+            return -1001
+        case .EmptyValue:
+            return -1003
+        case .loginServerError(let code, _):
+            return code
+        }
+    }
+    
+    var errorDescription: String? {
+        switch self {
+        case .authorizationFailed:
+            return "권한 부여 실패 - 토큰 없음"
+        case .EmptyValue:
+            return "빈 응답값 전달"
+        case .loginServerError(_, let message):
+            return "서버 에러: \(message)"
+        }
+    }
+}
+
+// Token KeyChain 관련 Error
+enum TokenError: LocalizedError {
+    case notFoundAccessToken
+    case notFoundRefreshToken
+    case failureTokenService
+    
+    var statusCode: Int {
+        switch self {
+        case .notFoundAccessToken:
+            return -1001
+        case .notFoundRefreshToken:
+            return -1002
+        case .failureTokenService:
+            return -1003
+        }
+    }
+    
+    var errorDescription: String? {
+        switch self {
+        case .notFoundAccessToken:
+            return "엑세스 토큰 찾기 실패"
+        case .notFoundRefreshToken:
+            return "리프레시 토큰 찾기 실패"
+        case .failureTokenService:
+            return "토큰 서비스 실행 실패"
+        }
+    }
+}

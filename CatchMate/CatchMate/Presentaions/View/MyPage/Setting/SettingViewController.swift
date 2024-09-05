@@ -84,9 +84,7 @@ final class SettingViewController: BaseViewController, UITableViewDelegate, UITa
                         case .validationFailed(let message):
                             showToast(message: message)
                         case .unauthorized(let message):
-                            showAlert(message: message) { [weak self] in
-                                self?.localLogout()
-                            }
+                            showAlert(message: message){}
                         case .timeout(let message):
                             showToast(message: message)
                         case .unknown(let message):
@@ -138,13 +136,6 @@ final class SettingViewController: BaseViewController, UITableViewDelegate, UITa
         return 8
     }
     
-    private func localLogout() {
-        _ = KeychainService.deleteToken(for: .accessToken)
-        _ = KeychainService.deleteToken(for: .refreshToken)
-        LoginUserDefaultsService.shared.deleteLoginData()
-        let reactor = DIContainerService.shared.makeAuthReactor()
-        (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(SignInViewController(reactor: reactor), animated: true)
-    }
 }
 
 

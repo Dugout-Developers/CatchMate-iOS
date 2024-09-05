@@ -11,38 +11,44 @@ import ReactorKit
 final class SendMateReactor: Reactor {
     enum Action {
         case loadSendMate
-        case cancelApply(String)
     }
     enum Mutation {
-        case setSendMate([Apply])
+        case setSendMatePost([SimplePost])
         case setError(PresentationError?)
     }
     struct State {
-        var sendMates: [Apply] = []
+        var sendMates: [SimplePost] = []
         var error: PresentationError?
     }
     
     var initialState: State
-    
-    init() {
+    private let sendAppliesUsecase: SendAppliesUseCase
+    init(sendAppliesUsecase: SendAppliesUseCase) {
         self.initialState = State()
+        self.sendAppliesUsecase = sendAppliesUsecase
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadSendMate:
-            return Observable.just(Mutation.setSendMate(Apply.dummyData))
-        case .cancelApply(let id):
-            if let index = Apply.dummyData.firstIndex(where: {$0.id == id}) {
-                Apply.dummyData.remove(at: index)
-            }
-            return Observable.just(Mutation.setSendMate(Apply.dummyData))
+            return sendAppliesUsecase.loadSendApplies()
+                .flatMap { applies in
+                    let posts = applies.map { $0.post }
+                    return Observable.just(Mutation.setSendMatePost(posts))
+                }
+                .catch { error in
+                    if let presentationError = error as? PresentationError {
+                        return Observable.just(Mutation.setError(presentationError))
+                    } else {
+                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
-        case .setSendMate(let applies):
+        case .setSendMatePost(let applies):
             newState.sendMates = applies
         case .setError(let error):
             newState.error = error

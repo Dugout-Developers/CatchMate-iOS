@@ -15,8 +15,14 @@ protocol LoadFavoriteListDataSource {
 }
 
 final class LoadFavoriteListDataSourceImpl: LoadFavoriteListDataSource {
+    private let tokenDataSource: TokenDataSource
+    
+    init(tokenDataSource: TokenDataSource) {
+        self.tokenDataSource = tokenDataSource
+    }
+    
     func loadFavoriteList() -> RxSwift.Observable<[PostListDTO]>{
-        guard let token = KeychainService.getToken(for: .accessToken) else {
+        guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
         let headers: HTTPHeaders = [
@@ -24,14 +30,18 @@ final class LoadFavoriteListDataSourceImpl: LoadFavoriteListDataSource {
         ]
         LoggerService.shared.log("토큰 확인: \(headers)")
         
-        return APIService.shared.requestAPI(type: .loadFavorite, parameters: nil, dataType: [PostListDTO].self)
+        return APIService.shared.requestAPI(type: .loadFavorite, parameters: nil, headers: headers, dataType: [PostListDTO].self)
             .map { favoriteListDTO in
                 LoggerService.shared.debugLog("Favorite List Load 성공: \(favoriteListDTO)")
                 return favoriteListDTO
             }
-            .catch { error in
-                if let networkError = error as? NetworkError, networkError.statusCode == 401 {
-                    return APIService.shared.refreshAccessToken()
+            .catch { [weak self] error in
+                guard let self = self else { return Observable.error(ReferenceError.notFoundSelf) }
+                if let error = error as? NetworkError, error.statusCode == 401 {
+                    guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
+                        return Observable.error(TokenError.notFoundRefreshToken)
+                    }
+                    return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
                         .flatMap { token -> Observable<[PostListDTO]> in
                             let newHeaders: HTTPHeaders = [
                                 "AccessToken": token

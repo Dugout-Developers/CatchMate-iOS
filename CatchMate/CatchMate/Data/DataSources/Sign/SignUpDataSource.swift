@@ -16,12 +16,12 @@ protocol SignUpDataSource {
 
 
 final class SignUpDataSourceImpl: SignUpDataSource {
+    private let tokenDataSource: TokenDataSource
+    init(tokenDataSource: TokenDataSource) {
+        self.tokenDataSource = tokenDataSource
+    }
     func saveUserModel(_ model: SignUpRequest) -> Observable<SignUpResponseDTO> {
         LoggerService.shared.debugLog("-----------------Servser Request SignUp-------------------")
-        guard let base = Bundle.main.baseURL else {
-            LoggerService.shared.log("SignUp: - BaseURL 찾기 실패", level: .error)
-            return Observable.error(NetworkError.notFoundBaseURL)
-        }
         
         var parameters: [String: Any] = [
             "email": model.email,
@@ -40,14 +40,26 @@ final class SignUpDataSourceImpl: SignUpDataSource {
         }
         LoggerService.shared.debugLog("SignUp Parameters : \(parameters)")
         return APIService.shared.requestAPI(type: .signUp, parameters: parameters, encoding: JSONEncoding.default, dataType: SignUpResponseDTO.self)
-            .map { dto in
+            .withUnretained(self)
+            .flatMap { ds, dto -> Observable<SignUpResponseDTO> in
                 LoggerService.shared.debugLog("회원가입 성공: \(dto)")
-                return dto
+                
+                // AccessToken 및 RefreshToken 저장
+                let accessTokenSaved = ds.tokenDataSource.saveToken(token: dto.accessToken, for: .accessToken)
+                let refreshTokenSaved = ds.tokenDataSource.saveToken(token: dto.refreshToken, for: .refreshToken)
+                
+                // 토큰 저장 실패 시 에러 발생
+                if !accessTokenSaved || !refreshTokenSaved {
+                    LoggerService.shared.debugLog("토큰 저장 실패")
+                    return Observable.error(TokenError.failureTokenService)
+                }
+                
+                return Observable.just(dto)
             }
             .catch { error in
                 return Observable.error(error)
             }
-       
+        
     }
 }
 

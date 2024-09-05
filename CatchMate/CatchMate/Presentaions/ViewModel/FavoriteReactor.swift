@@ -17,7 +17,6 @@ final class FavoriteReactor: Reactor {
     }
     enum Mutation {
         case setFavoritePost([SimplePost])
-        case removeFavoritePost(String)
         case setSelectedPost(String?)
         case setError(PresentationError?)
     }
@@ -49,12 +48,22 @@ final class FavoriteReactor: Reactor {
                         return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                     }
                 }
-        case .removeFavoritePost(let post):
-            // TODO: - API 연결로 변경 필요
-//            if let index = Post.dummyFavoriteList.firstIndex(of: post) {
-//                Post.dummyFavoriteList.remove(at: index)
-//            }
-            return Observable.just(Mutation.removeFavoritePost(""))
+        case .removeFavoritePost(let postId):
+            return favoriteListUsecase.cancelFavoriteList(postId)
+                .map { [weak self] _ in
+                    guard let self = self else {
+                        return Mutation.setError(ErrorMapper.mapToPresentationError(ReferenceError.notFoundSelf))
+                    }
+                    let currentList = currentState.favoritePost.filter { $0.id != postId }
+                    return Mutation.setFavoritePost(currentList)
+                }
+                .catch { error in
+                    if let presentationError = error as? PresentationError {
+                        return Observable.just(Mutation.setError(presentationError))
+                    } else {
+                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
         case .selectPost(let post):
             return Observable.just(Mutation.setSelectedPost(post))
         }
@@ -65,11 +74,6 @@ final class FavoriteReactor: Reactor {
         switch mutation {
         case .setFavoritePost(let posts):
             newState.favoritePost = posts
-        case .removeFavoritePost(let post):
-            break
-//            if let index = state.favoritePost.firstIndex(of: post) {
-//                newState.favoritePost.remove(at: index)
-//            }
         case .setSelectedPost(let postId):
             newState.selectedPost = postId
         case .setError(let error):
