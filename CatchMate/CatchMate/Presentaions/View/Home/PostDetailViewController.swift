@@ -35,8 +35,23 @@ final class PostDetailViewController: BaseViewController, View {
         label.numberOfLines = 0
         return label
     }()
-    private var ageOptionLabel = [DefaultsPaddingLabel]()
-    private var genderOptionLabel = DefaultsPaddingLabel()
+    private var ageOptionLabel: DefaultsPaddingLabel = {
+        let label = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8))
+        label.textColor = .cmNonImportantTextColor
+        label.applyStyle(textStyle: FontSystem.caption01_reguler)
+        label.backgroundColor = .grayScale100
+        label.layer.cornerRadius = 10
+        return label
+    }()
+    private var genderOptionLabel: DefaultsPaddingLabel = {
+        let label = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8))
+        label.textColor = .cmNonImportantTextColor
+        label.applyStyle(textStyle: FontSystem.caption01_reguler)
+        label.backgroundColor = .grayScale100
+        label.layer.cornerRadius = 10
+        return label
+    }()
+    
     private let dateLabel: UILabel = {
         let label = UILabel()
         label.textColor = .cmNonImportantTextColor
@@ -265,17 +280,17 @@ final class PostDetailViewController: BaseViewController, View {
 
         addInfoValueLabel.text = post.addInfo
 
-        if post.preferAge.isEmpty {
-            ageOptionLabel.append(makePreferPaddingLabel(text: "전연령"))
-        } else {
-            post.preferAge.forEach { age in
-                ageOptionLabel.append(makePreferPaddingLabel(text: String(age)+"대"))
+        if let age = post.preferAge {
+            if age == 0 {
+                ageOptionLabel.text = "전연령"
+            } else {
+                ageOptionLabel.text = "\(String(age))대"
             }
         }
         if let gender = post.preferGender {
-            genderOptionLabel = makePreferPaddingLabel(text: gender.rawValue)
+            genderOptionLabel.text = gender.rawValue
         } else {
-            genderOptionLabel = makePreferPaddingLabel(text: "성별 무관")
+            genderOptionLabel.text = "성별 무관"
         }
         setTextStyle()
         titleLabel.flex.markDirty()
@@ -287,9 +302,7 @@ final class PostDetailViewController: BaseViewController, View {
         genderLabel.flex.markDirty()
         ageLabel.flex.markDirty()
         addInfoValueLabel.flex.markDirty()
-        ageOptionLabel.forEach { label in
-            label.flex.markDirty()
-        }
+        ageOptionLabel.flex.markDirty()
         nickNameLabel.flex.markDirty()
         genderOptionLabel.flex.markDirty()
         contentView.flex.layout(mode: .adjustHeight)
@@ -314,9 +327,7 @@ final class PostDetailViewController: BaseViewController, View {
     private func setTextStyle() {
         titleLabel.applyStyle(textStyle: FontSystem.headline03_medium)
         genderOptionLabel.applyStyle(textStyle: FontSystem.caption01_reguler)
-        ageOptionLabel.forEach { label in
-            label.applyStyle(textStyle: FontSystem.caption01_reguler)
-        }
+        ageOptionLabel.applyStyle(textStyle: FontSystem.caption01_reguler)
         dateValueLabel.applyStyle(textStyle: FontSystem.body02_medium)
         placeValueLabel.applyStyle(textStyle: FontSystem.body02_medium)
         partynumValueLabel.applyStyle(textStyle: FontSystem.body02_medium)
@@ -327,14 +338,15 @@ final class PostDetailViewController: BaseViewController, View {
         addInfoValueLabel.applyStyle(textStyle: FontSystem.body02_medium)
     }
     
-    private func makePreferPaddingLabel(text: String) -> DefaultsPaddingLabel {
-        let label = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8))
-        label.textColor = .cmNonImportantTextColor
-        label.text = text
-        label.backgroundColor = .grayScale100
-        label.layer.cornerRadius = 10
-        return label
-    }
+//    private func makePreferPaddingLabel(text: String) -> DefaultsPaddingLabel {
+//        let label = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8))
+//        label.textColor = .cmNonImportantTextColor
+//        label.text = text
+//        label.applyStyle(textStyle: FontSystem.caption01_reguler)
+//        label.backgroundColor = .grayScale100
+//        label.layer.cornerRadius = 10
+//        return label
+//    }
 }
 
 // MARK: - bind
@@ -453,10 +465,8 @@ extension PostDetailViewController {
             // 게시글 정보
             flex.addItem().backgroundColor(.white).width(100%).direction(.column).justifyContent(.start).alignItems(.start).define { flex in
                 flex.addItem(titleLabel).marginBottom(6)
-                flex.addItem().direction(.row).wrap(.wrap).justifyContent(.start).define { flex in
-                    ageOptionLabel.forEach { label in
-                        flex.addItem(label).marginRight(4).marginBottom(4)
-                    }
+                flex.addItem().direction(.row).wrap(.wrap).justifyContent(.start).width(100%).define { flex in
+                    flex.addItem(ageOptionLabel).marginRight(4).marginBottom(4)
                     flex.addItem(genderOptionLabel).marginRight(4).marginBottom(4)
                 }.marginBottom(16) // 선호사항 뱃지
                 flex.addItem().direction(.column).justifyContent(.start).alignItems(.start).define({ flex in

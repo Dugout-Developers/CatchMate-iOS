@@ -14,7 +14,7 @@ struct AddPostRequsetDTO: Codable {
     let awayTeam: String
     let cheerTeam: String
     let maxPerson: Int
-    let preferGender: String
-    let preferAge: Int
+    let preferGender: String?
+    let preferAge: Int?
     let addInfo: String
 }
