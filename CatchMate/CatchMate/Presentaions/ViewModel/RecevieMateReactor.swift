@@ -11,7 +11,7 @@ import ReactorKit
 final class RecevieMateReactor: Reactor {
     enum Action {
         case loadReceiveMate
-        case selectPost([ApplyList]?)
+        case selectPost([Apply]?)
 //        case deleteApply(String)
 //        case applyMate(String)
     }
