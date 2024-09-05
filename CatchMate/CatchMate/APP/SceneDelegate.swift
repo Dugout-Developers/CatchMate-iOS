@@ -31,9 +31,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 } else {
                     scene.moveSignIn()
                 }
+                self.authManager = nil
             } onError: { error in
                 print(error)
                 self.moveSignIn()
+                self.authManager = nil
             }
             .disposed(by: disposeBag)
 

@@ -43,7 +43,7 @@ final class UserDataSourceImpl: UserDataSource {
             }
             .catch { error in
                 print("-------error: \(error)")
-                if error.statusCode == 401 {
+                if let error = error as? NetworkError, error.statusCode == 401 {
                     print("재발급")
                     return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
                         .flatMap { newToken -> Observable<UserDTO> in

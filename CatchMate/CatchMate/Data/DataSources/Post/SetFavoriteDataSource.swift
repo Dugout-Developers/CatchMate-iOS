@@ -36,7 +36,7 @@ final class SetFavoriteDataSourceImpl: SetFavoriteDataSource {
             }
             .catch { [weak self] error in
                 guard let self = self else { return Observable.error(ReferenceError.notFoundSelf) }
-                if error.statusCode == 401 {
+                if let error = error as? NetworkError, error.statusCode == 401 {
                     guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
                         return Observable.error(TokenError.notFoundRefreshToken)
                     }
