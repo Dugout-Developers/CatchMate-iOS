@@ -80,7 +80,7 @@ final class InputCheerStyleViewController: BaseViewController, View {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        scrollView.pin.all(view.pin.safeArea)
+        scrollView.pin.all(view.pin.safeArea).marginBottom(BottomMargin.safeArea-view.safeAreaInsets.bottom)
         containerView.pin.top().left().right()
         
         containerView.flex.layout(mode: .adjustHeight)

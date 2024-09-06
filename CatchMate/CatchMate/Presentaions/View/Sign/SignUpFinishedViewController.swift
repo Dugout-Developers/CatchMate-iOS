@@ -53,7 +53,7 @@ final class SignUpFinishedViewController: BaseViewController{
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        containerView.pin.all(view.pin.safeArea)
+        containerView.pin.all(view.pin.safeArea).marginBottom(BottomMargin.safeArea-view.safeAreaInsets.bottom)
         containerView.flex.layout()
     }
     

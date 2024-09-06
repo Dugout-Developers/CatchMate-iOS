@@ -122,7 +122,7 @@ final class SignUpViewController: BaseViewController, View {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        containerView.pin.all(view.pin.safeArea)
+        containerView.pin.all(view.pin.safeArea).marginBottom(BottomMargin.safeArea-view.safeAreaInsets.bottom)
         containerView.flex.layout()
     }
     
@@ -328,7 +328,8 @@ extension SignUpViewController {
                 flex.addItem(womanButton).grow(1).marginRight(9)
                 flex.addItem(manButton).grow(1)
             }
-            flex.addItem().width(100%).grow(1).direction(.column).justifyContent(.end).define { flex in
+            flex.addItem().grow(1)
+            flex.addItem().width(100%).direction(.column).justifyContent(.end).define { flex in
                 flex.addItem(nextButton).width(100%).height(50)
             }
         }

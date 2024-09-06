@@ -269,6 +269,7 @@
 		53B8E26D2C61CBD5001D0ADF /* ErrorMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E26C2C61CBD5001D0ADF /* ErrorMapper.swift */; };
 		53BE7ACF2C367008002FC64F /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7ACE2C367008002FC64F /* DateHelper.swift */; };
 		53BE7AD22C367181002FC64F /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7AD12C367181002FC64F /* Date+Extension.swift */; };
+		53C4FEB42C8AA68A00337431 /* BottomMargin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C4FEB32C8AA68A00337431 /* BottomMargin.swift */; };
 		53E4A9B82C4FF00F00D21B49 /* AuthReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E4A9B72C4FF00F00D21B49 /* AuthReactor.swift */; };
 		53E4A9BA2C4FFB1300D21B49 /* SignUpDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E4A9B92C4FFB1300D21B49 /* SignUpDataSource.swift */; };
 		53E4A9BC2C4FFB8400D21B49 /* SignUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E4A9BB2C4FFB8400D21B49 /* SignUp.swift */; };
@@ -523,6 +524,7 @@
 		53B8E26C2C61CBD5001D0ADF /* ErrorMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMapper.swift; sourceTree = "<group>"; };
 		53BE7ACE2C367008002FC64F /* DateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
 		53BE7AD12C367181002FC64F /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
+		53C4FEB32C8AA68A00337431 /* BottomMargin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomMargin.swift; sourceTree = "<group>"; };
 		53E4A9B72C4FF00F00D21B49 /* AuthReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthReactor.swift; sourceTree = "<group>"; };
 		53E4A9B92C4FFB1300D21B49 /* SignUpDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpDataSource.swift; sourceTree = "<group>"; };
 		53E4A9BB2C4FFB8400D21B49 /* SignUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUp.swift; sourceTree = "<group>"; };
@@ -652,6 +654,7 @@
 				5317865C2C1EAC4700ACEF6A /* Screen.swift */,
 				531786842C23261200ACEF6A /* SheetHeight.swift */,
 				53ACBA242C7EAE1B004FAF00 /* UserDefaultsKeys.swift */,
+				53C4FEB32C8AA68A00337431 /* BottomMargin.swift */,
 			);
 			path = Constraints;
 			sourceTree = "<group>";
@@ -1501,6 +1504,7 @@
 				53E4A9C22C500A4400D21B49 /* SignUpRepositoryImpl.swift in Sources */,
 				531963F12C645FDE00EE7F23 /* SendMateReactor.swift in Sources */,
 				534E39DC2C63CE78006D180E /* AnnouncementsViewController.swift in Sources */,
+				53C4FEB42C8AA68A00337431 /* BottomMargin.swift in Sources */,
 				5301E2B62C5BE6AF0078E910 /* LogoutUseCase.swift in Sources */,
 				537598082C46C3D2003BD8AE /* DefaultsTextView.swift in Sources */,
 				533A2B462C2C638100A59340 /* KakaoLoginUseCase.swift in Sources */,
