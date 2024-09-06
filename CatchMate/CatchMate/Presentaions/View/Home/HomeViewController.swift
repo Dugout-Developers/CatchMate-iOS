@@ -230,7 +230,7 @@ extension HomeViewController {
             present(teamFilterVC, animated: true)
         case .number:
             let numberFilterVC = NumberPickerViewController(reactor: reactor)
-            let customDetent = returnCustomDetent(height: SheetHeight.low, identifier: "NumberFilter")
+            let customDetent = returnCustomDetent(height: SheetHeight.numberFilter, identifier: "NumberFilter")
             if let sheet = numberFilterVC.sheetPresentationController {
                 sheet.detents = [customDetent]
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false

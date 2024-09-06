@@ -196,7 +196,7 @@ final class AddViewController: BaseViewController, View {
         // numberPicker Setup
         numberPickerTextField.parentViewController = self
         numberPickerTextField.pickerViewController = NumberPickerViewController(reactor: reactor)
-        numberPickerTextField.customDetent = BasePickerViewController.returnCustomDetent(height: Screen.height / 3.0 + 10.0, identifier: "NumberFilter")
+        numberPickerTextField.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.numberFilter, identifier: "NumberFilter")
         
         // TeamPicker Setup
         homeTeamPicker.parentViewController = self

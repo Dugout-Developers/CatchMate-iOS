@@ -13,4 +13,5 @@ enum SheetHeight {
     static let low = Screen.height / 3.0 + 10.0
     static let tiny = 215.0
     static let dateFilter = 516.0
+    static let numberFilter = 318.0
 }
