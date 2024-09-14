@@ -19,9 +19,9 @@ class MockTokenDataSource: TokenDataSource {
     func getToken(for type: TokenType) -> String? {
         switch type {
         case .accessToken:
-            return "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTMsImV4cCI6MTcyNTQ2MTkzMn0.N2NOmJCLeJi75em_q0GycmtYY_DwMefAb0F4Xu-EAgQ"
+            return "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTgsImV4cCI6MTcyNTk3ODY0MX0.9rkVRgaGjR7EWSNslT4RX713fX-ZWyTx5UVIYfpV9ww"
         case .refreshToken:
-            return "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTMsImV4cCI6MTcyNjY0OTE5OH0.Av82NioYk49cYPKz_moQLRPnd9fmUdJT5jlL0OXIUPw"
+            return "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTgsImV4cCI6MTcyNzA2NjM5MH0.65L3zvUNovA1QgdGCKLpB-NiVnH3aHADcsDVqzEzzng"
         }
     }
     

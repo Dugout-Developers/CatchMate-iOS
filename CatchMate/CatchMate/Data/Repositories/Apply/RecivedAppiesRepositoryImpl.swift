@@ -29,4 +29,25 @@ final class RecivedAppiesRepositoryImpl: RecivedAppiesRepository {
                 return Observable.error(ErrorMapper.mapToPresentationError(error))
             }
     }
+    func loadReceivedAppliesAll() -> RxSwift.Observable<[String: [ApplyList]]> {
+        return recivedAppiesDS.loadReceivedAppliesAll()
+            .flatMap { content -> Observable<[String: [ApplyList]]>  in
+                let mapper = ApplyMapper()
+                var mappingDic = [String: [ApplyList]]()
+                content.forEach { content in
+                    if let result = mapper.dtoToDomain(content) {
+                        let key = result.post.id
+                        if mappingDic[key] == nil {
+                            mappingDic[key] = [result]
+                        } else {
+                            mappingDic[key]?.append(result)
+                        }
+                    }
+                }
+                return Observable.just(mappingDic)
+            }
+            .catch { error in
+                return Observable.error(ErrorMapper.mapToPresentationError(error))
+            }
+    }
 }

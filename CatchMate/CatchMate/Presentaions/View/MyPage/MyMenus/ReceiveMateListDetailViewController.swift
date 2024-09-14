@@ -59,7 +59,7 @@ final class ReceiveMateListDetailViewController: BaseViewController, UICollectio
     }
 
     @objc func tappedView(_ sender: UIGestureRecognizer) {
-        dismiss(animated: true)
+        dismiss(animated: false)
     }
     func bind(reactor: ReceiveMateDetailReactor) {
         reactor.state.map { $0.applies }

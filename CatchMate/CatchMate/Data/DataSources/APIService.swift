@@ -36,6 +36,8 @@ enum Endpoint: String {
     case sendApply = "/enroll/request"
     /// 받은 직관 신청 목록
     case receivedApply = "/enroll/receive"
+    /// 받은 직관 신청 전체 목록
+    case receivedApplyAll = "/enroll/receive/all"
     
     /// 내정보 조회
     case loadMyInfo = "/user/profile"
@@ -66,6 +68,8 @@ enum Endpoint: String {
             return "보낸 신청 목록 API"
         case .receivedApply:
             return "받은 신청 목록 API"
+        case .receivedApplyAll:
+            return "받은 신청 전체 목록 API"
         case .loadMyInfo:
             return "내 정보 조회 API"
         }
@@ -97,6 +101,8 @@ enum Endpoint: String {
             return .get
         case .receivedApply:
             return .get
+        case .receivedApplyAll:
+            return .get
         case .loadMyInfo:
             return .get
         }
@@ -119,8 +125,10 @@ final class APIService {
         if let addEndPoint = addEndPoint {
             url += addEndPoint
         }
+
         return RxAlamofire.requestData(type.requstType, url, parameters: parameters, encoding: encoding, headers: headers)
             .flatMap { [weak self] (response, data) -> Observable<T> in
+                LoggerService.shared.debugLog("Request URL: \(response.url)")
                 guard let self = self else { return Observable.error(ReferenceError.notFoundSelf) }
                 guard 200..<300 ~= response.statusCode else {
                     LoggerService.shared.debugLog("\(type.apiName) Error : \(response.statusCode) \(response.debugDescription)")

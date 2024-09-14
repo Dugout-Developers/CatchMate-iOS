@@ -70,7 +70,7 @@ extension ReceiveMateListViewController {
                 let applies = reactor.currentState.receiveMates[indexPath.row]
                 let detailVC = ReceiveMateListDetailViewController(reactor: ReceiveMateDetailReactor(aplies: applies))
                 detailVC.modalPresentationStyle = .overFullScreen
-                self.present(detailVC, animated: true)
+                self.present(detailVC, animated: false)
             }
             .disposed(by: disposeBag)
     }

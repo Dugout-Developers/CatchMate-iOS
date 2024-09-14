@@ -10,4 +10,5 @@ import RxSwift
 
 protocol RecivedAppiesRepository {
     func loadRecivedApplies(boardId: Int) -> Observable<[ApplyList]>
+    func loadReceivedAppliesAll() -> Observable<[String: [ApplyList]]> 
 }
