@@ -154,7 +154,8 @@ class BaseTextView: UITextView {
         addSubview(placeholderLabel)
         
         placeholderLabel.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
+            make.top.equalToSuperview().offset(-2)
+            make.leading.trailing.equalToSuperview()
         }
 
     }

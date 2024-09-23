@@ -28,12 +28,13 @@ final class ChatingInputField: UIView {
         view.clipsToBounds = true
         return view
     }()
-    fileprivate let textField: BaseTextView = {
+    let textField: BaseTextView = {
         let textview = BaseTextView()
         textview.fontSystem = FontSystem.body02_medium
         textview.textColor = .cmHeadLineTextColor
         textview.placeholder = "내용을 입력해주세요"
         textview.backgroundColor = .clear
+        textview.isScrollEnabled = false
         return textview
     }()
     fileprivate let sendButton = SendButton()
@@ -64,12 +65,12 @@ final class ChatingInputField: UIView {
         textField.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(20)
             make.centerY.equalToSuperview()
-            make.height.equalTo(18)
+            make.height.lessThanOrEqualTo(90)
         }
         sendButton.snp.makeConstraints { make in
             make.size.equalTo(32)
             make.leading.equalTo(textField.snp.trailing).offset(20)
-            make.top.bottom.trailing.equalToSuperview().inset(6)
+            make.bottom.trailing.equalToSuperview().inset(6)
         }
     }
     

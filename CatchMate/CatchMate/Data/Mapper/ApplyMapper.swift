@@ -9,7 +9,7 @@ import Foundation
 final class ApplyMapper {
     func dtoToDomain(_ dto: Content) -> ApplyList? {
         if let status = ApplyStatus(rawValue: dto.acceptStatus), let user = userInfoMapping(dto.userInfo), let post = postInfoMapping(dto.boardInfo) {
-            return ApplyList(enrollId: String(dto.enrollId), acceptStatus: status, addText: dto.description, user: user, post: post)
+            return ApplyList(enrollId: String(dto.enrollId), acceptStatus: status, addText: dto.description ?? "", user: user, post: post)
         } else {
             LoggerService.shared.log("ApplyMapper: DTO -> Domain 변환 실패", level: .error)
             return nil

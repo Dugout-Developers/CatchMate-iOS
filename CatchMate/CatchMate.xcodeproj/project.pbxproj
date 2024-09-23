@@ -253,6 +253,8 @@
 		53B3CE4B2C88B52200116BF7 /* SendAppiesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B3CE4A2C88B52200116BF7 /* SendAppiesRepository.swift */; };
 		53B3CE4D2C88B5B000116BF7 /* SendAppiesRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B3CE4C2C88B5B000116BF7 /* SendAppiesRepositoryImpl.swift */; };
 		53B3CE502C88B68200116BF7 /* SendAppliesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B3CE4F2C88B68200116BF7 /* SendAppliesUseCase.swift */; };
+		53B895C12C9F3A4200029130 /* TempPostDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B895C02C9F3A4200029130 /* TempPostDataSource.swift */; };
+		53B895C32C9F3AEA00029130 /* TempPostRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B895C22C9F3AEA00029130 /* TempPostRequestDTO.swift */; };
 		53B8E2382C5C7BAA001D0ADF /* UserRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E2372C5C7BAA001D0ADF /* UserRepositoryImpl.swift */; };
 		53B8E23B2C5C7BCF001D0ADF /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E23A2C5C7BCF001D0ADF /* UserRepository.swift */; };
 		53B8E23E2C5C7BEB001D0ADF /* UserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E23D2C5C7BEB001D0ADF /* UserUseCase.swift */; };
@@ -510,6 +512,8 @@
 		53B3CE4A2C88B52200116BF7 /* SendAppiesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendAppiesRepository.swift; sourceTree = "<group>"; };
 		53B3CE4C2C88B5B000116BF7 /* SendAppiesRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendAppiesRepositoryImpl.swift; sourceTree = "<group>"; };
 		53B3CE4F2C88B68200116BF7 /* SendAppliesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendAppliesUseCase.swift; sourceTree = "<group>"; };
+		53B895C02C9F3A4200029130 /* TempPostDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempPostDataSource.swift; sourceTree = "<group>"; };
+		53B895C22C9F3AEA00029130 /* TempPostRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempPostRequestDTO.swift; sourceTree = "<group>"; };
 		53B8E2372C5C7BAA001D0ADF /* UserRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepositoryImpl.swift; sourceTree = "<group>"; };
 		53B8E23A2C5C7BCF001D0ADF /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		53B8E23D2C5C7BEB001D0ADF /* UserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserUseCase.swift; sourceTree = "<group>"; };
@@ -728,6 +732,7 @@
 				53E5925D2C6D0A550042E1D7 /* LoadPostDataSource.swift */,
 				533B291E2C77079100BFE9F6 /* LoadFavoriteListDataSource.swift */,
 				533B29262C770B0700BFE9F6 /* SetFavoriteDataSource.swift */,
+				53B895C02C9F3A4200029130 /* TempPostDataSource.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -1071,6 +1076,7 @@
 				531E4C272C6B55510052E754 /* PostListDTO.swift */,
 				53E592542C6D051D0042E1D7 /* PostDTO.swift */,
 				533B87342C86DF2A0058B94B /* ApplyListResponse.swift */,
+				53B895C22C9F3AEA00029130 /* TempPostRequestDTO.swift */,
 			);
 			path = DTO;
 			sourceTree = "<group>";
@@ -1491,6 +1497,7 @@
 				533A2B362C2BEA3900A59340 /* InputCheerStyleViewController.swift in Sources */,
 				537598062C46C0B0003BD8AE /* ApplyPopupViewController.swift in Sources */,
 				53FC69E52C58F98100B97AEA /* NicknameCheckRepositoryImpl.swift in Sources */,
+				53B895C12C9F3A4200029130 /* TempPostDataSource.swift in Sources */,
 				5301E2A92C5B81D10078E910 /* MypageHeader.swift in Sources */,
 				53B8E2632C612341001D0ADF /* PostMapper.swift in Sources */,
 				53E4A9C02C5009EB00D21B49 /* SignUpRepository.swift in Sources */,
@@ -1577,6 +1584,7 @@
 				531288D12C540ADF000C2FB1 /* ServerLoginRepository.swift in Sources */,
 				5337AB232C897847003A39AE /* ApplyHandleUseCase.swift in Sources */,
 				531786572C1C8F1900ACEF6A /* UIView+Extension.swift in Sources */,
+				53B895C32C9F3AEA00029130 /* TempPostRequestDTO.swift in Sources */,
 				538EB92F2C3FA27600ABA40E /* CMDatePicker.swift in Sources */,
 				5301E2B02C5BE3E20078E910 /* LogoutDataSource.swift in Sources */,
 				53FC69DD2C58DB8D00B97AEA /* TokenDataSource.swift in Sources */,
