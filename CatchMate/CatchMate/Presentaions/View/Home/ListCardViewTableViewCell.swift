@@ -107,8 +107,8 @@ final class ListCardViewTableViewCell: UITableViewCell {
         favoriteButton.isHidden = !isFavoriteCell
         favoriteButton.isEnabled = isFavoriteCell
         // MARK: - API 변경 시 isMyTeam 반영
-        homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: false, background: .grayScale50)
-        awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: false, background: .grayScale50)
+        homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.homeTeam == post.cheerTeam, background: .grayScale50)
+        awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.awayTeam == post.cheerTeam, background: .grayScale50)
         
         //info
         postTitleLabel.text = post.title
