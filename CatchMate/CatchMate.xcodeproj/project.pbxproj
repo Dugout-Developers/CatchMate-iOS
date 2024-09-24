@@ -255,6 +255,10 @@
 		53B3CE502C88B68200116BF7 /* SendAppliesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B3CE4F2C88B68200116BF7 /* SendAppliesUseCase.swift */; };
 		53B895C12C9F3A4200029130 /* TempPostDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B895C02C9F3A4200029130 /* TempPostDataSource.swift */; };
 		53B895C32C9F3AEA00029130 /* TempPostRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B895C22C9F3AEA00029130 /* TempPostRequestDTO.swift */; };
+		53B895C72CA254DE00029130 /* UserPostLoadDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B895C62CA254DE00029130 /* UserPostLoadDataSource.swift */; };
+		53B895C92CA256E100029130 /* UserPostLoadRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B895C82CA256E100029130 /* UserPostLoadRepositoryImpl.swift */; };
+		53B895CB2CA2576700029130 /* UserPostLoadRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B895CA2CA2576700029130 /* UserPostLoadRepository.swift */; };
+		53B895CD2CA2579A00029130 /* UserPostLoadUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B895CC2CA2579A00029130 /* UserPostLoadUseCase.swift */; };
 		53B8E2382C5C7BAA001D0ADF /* UserRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E2372C5C7BAA001D0ADF /* UserRepositoryImpl.swift */; };
 		53B8E23B2C5C7BCF001D0ADF /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E23A2C5C7BCF001D0ADF /* UserRepository.swift */; };
 		53B8E23E2C5C7BEB001D0ADF /* UserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E23D2C5C7BEB001D0ADF /* UserUseCase.swift */; };
@@ -514,6 +518,10 @@
 		53B3CE4F2C88B68200116BF7 /* SendAppliesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendAppliesUseCase.swift; sourceTree = "<group>"; };
 		53B895C02C9F3A4200029130 /* TempPostDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempPostDataSource.swift; sourceTree = "<group>"; };
 		53B895C22C9F3AEA00029130 /* TempPostRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempPostRequestDTO.swift; sourceTree = "<group>"; };
+		53B895C62CA254DE00029130 /* UserPostLoadDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostLoadDataSource.swift; sourceTree = "<group>"; };
+		53B895C82CA256E100029130 /* UserPostLoadRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostLoadRepositoryImpl.swift; sourceTree = "<group>"; };
+		53B895CA2CA2576700029130 /* UserPostLoadRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostLoadRepository.swift; sourceTree = "<group>"; };
+		53B895CC2CA2579A00029130 /* UserPostLoadUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostLoadUseCase.swift; sourceTree = "<group>"; };
 		53B8E2372C5C7BAA001D0ADF /* UserRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepositoryImpl.swift; sourceTree = "<group>"; };
 		53B8E23A2C5C7BCF001D0ADF /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		53B8E23D2C5C7BEB001D0ADF /* UserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserUseCase.swift; sourceTree = "<group>"; };
@@ -733,6 +741,7 @@
 				533B291E2C77079100BFE9F6 /* LoadFavoriteListDataSource.swift */,
 				533B29262C770B0700BFE9F6 /* SetFavoriteDataSource.swift */,
 				53B895C02C9F3A4200029130 /* TempPostDataSource.swift */,
+				53B895C62CA254DE00029130 /* UserPostLoadDataSource.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -745,6 +754,7 @@
 				53E5925F2C6D0A870042E1D7 /* LoadPostRepositoryImpl.swift */,
 				533B29202C77099800BFE9F6 /* LoadFavoriteListRepositoryImpl.swift */,
 				533B292A2C770F9F00BFE9F6 /* SetFavoriteRepositoryImpl.swift */,
+				53B895C82CA256E100029130 /* UserPostLoadRepositoryImpl.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -757,6 +767,7 @@
 				53E592582C6D05C70042E1D7 /* LoadPostRepository.swift */,
 				533B29222C7709C100BFE9F6 /* LoadFavoriteListRepository.swift */,
 				533B29282C770F0700BFE9F6 /* SetFavoriteRepository.swift */,
+				53B895CA2CA2576700029130 /* UserPostLoadRepository.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -1324,6 +1335,7 @@
 				5337AB222C897847003A39AE /* ApplyHandleUseCase.swift */,
 				533B29242C770A9600BFE9F6 /* LoadFavoriteListUseCase.swift */,
 				53ACBA3B2C84A98C004FAF00 /* SetFavoriteUseCase.swift */,
+				53B895CC2CA2579A00029130 /* UserPostLoadUseCase.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -1569,6 +1581,7 @@
 				5301E2AB2C5B82AA0078E910 /* MypageMenu.swift in Sources */,
 				53241F3C2C3C517600F468E1 /* GridSystem.swift in Sources */,
 				53B8E25F2C61228A001D0ADF /* AddPostRequsetDTO.swift in Sources */,
+				53B895C92CA256E100029130 /* UserPostLoadRepositoryImpl.swift in Sources */,
 				533183D92C5160220097F3F1 /* ChatData.swift in Sources */,
 				533A2B422C2C624D00A59340 /* SNSLoginRepository.swift in Sources */,
 				53E592572C6D05690042E1D7 /* SimpleUser.swift in Sources */,
@@ -1578,6 +1591,7 @@
 				531288C92C540751000C2FB1 /* FCMRepositoryImpl.swift in Sources */,
 				534E39D82C637FD3006D180E /* NotificationSettingViewController.swift in Sources */,
 				533A2B322C2BE7E600A59340 /* CheerStyles.swift in Sources */,
+				53B895CD2CA2579A00029130 /* UserPostLoadUseCase.swift in Sources */,
 				53B8E23E2C5C7BEB001D0ADF /* UserUseCase.swift in Sources */,
 				53FC69DB2C58C65700B97AEA /* RefreshTokenResponseDTO.swift in Sources */,
 				53FC69FC2C5A2DD700B97AEA /* SignUpReactor.swift in Sources */,
@@ -1608,6 +1622,7 @@
 				531E4C232C6A75320052E754 /* ChatSideSheetViewController.swift in Sources */,
 				53B8E2612C61229A001D0ADF /* AddPostRepositoryImpl.swift in Sources */,
 				536BDE382C1C07990043B1DA /* PaddingLabel.swift in Sources */,
+				53B895CB2CA2576700029130 /* UserPostLoadRepository.swift in Sources */,
 				53ACBA252C7EAE1B004FAF00 /* UserDefaultsKeys.swift in Sources */,
 				5378EA9D2C649B6900A2422C /* ReceiveMateListViewController.swift in Sources */,
 				531E4C322C6B62070052E754 /* PostListLoadUseCase.swift in Sources */,
@@ -1682,6 +1697,7 @@
 				53E4A9BE2C50046E00D21B49 /* SignUpModel.swift in Sources */,
 				534E39D62C6352EE006D180E /* AuthInfoSettingViewController.swift in Sources */,
 				53ACBA212C7DDD84004FAF00 /* SetupUseCase.swift in Sources */,
+				53B895C72CA254DE00029130 /* UserPostLoadDataSource.swift in Sources */,
 				53ACBA1D2C7D8E60004FAF00 /* CMActionMenu.swift in Sources */,
 				5382490E2C2E79A90074B583 /* AppleLoginUseCase.swift in Sources */,
 				5317866B2C200D6000ACEF6A /* BasePickerViewController.swift in Sources */,

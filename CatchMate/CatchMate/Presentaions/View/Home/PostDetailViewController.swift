@@ -319,7 +319,7 @@ final class PostDetailViewController: BaseViewController, View {
     
     @objc private func pushUserPage(_ sender: UITapGestureRecognizer) {
         if let user = reactor.currentState.post?.writer {
-            let userPageVC = OtherUserMyPageViewController(user: user, reactor: OtherUserpageReactor())
+            let userPageVC = OtherUserMyPageViewController(user: user, reactor: DIContainerService.shared.makeOtherUserPageReactor(user))
             navigationController?.pushViewController(userPageVC, animated: true)
         } else {
             showToast(message: "해당 사용자 정보에 접근할 수 없습니다. 다시 시도해주세요.", buttonContainerExists: true)

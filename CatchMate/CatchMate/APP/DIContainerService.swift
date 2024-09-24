@@ -90,6 +90,7 @@ class DIContainerService {
         return PostReactor(postId: postID, postloadUsecase: loadPostUsecase, setfavoriteUsecase: setFavoriteUsecase, applyHandelerUsecase: applyUsecase)
     }
     
+    
     func makeFavoriteReactor() -> FavoriteReactor {
         let loadFavoriteListDS = LoadFavoriteListDataSourceImpl(tokenDataSource: tokenDS)
         let loadFavoriteListRepository = LoadFavoriteListRepositoryImpl(loadFavorioteListDS: loadFavoriteListDS)
@@ -98,6 +99,13 @@ class DIContainerService {
         let loadFavoriteListUsecase = LoadFavoriteListUseCaseImpl(loadFavoriteListRepository: loadFavoriteListRepository, setFavortiteRepository: setFavoroteRepository)
         
         return FavoriteReactor(favoriteListUsecase: loadFavoriteListUsecase)
+    }
+    func makeOtherUserPageReactor(_ writer: SimpleUser) -> OtherUserpageReactor {
+        let userPostListDS = UserPostLoadDataSourceImpl(tokenDataSource: tokenDS)
+        let userPostListRepository = UserPostLoadRepositoryImpl(userPostDataSource: userPostListDS)
+        let userPostListUsecase = UserPostLoadUseCaseImpl(userPostListRepository: userPostListRepository)
+        
+        return OtherUserpageReactor(user: writer, userPostUsecase: userPostListUsecase)
     }
     
     func makeMypageReactor() -> MyPageReactor {

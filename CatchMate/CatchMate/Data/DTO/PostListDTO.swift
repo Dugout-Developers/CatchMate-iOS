@@ -14,6 +14,7 @@ struct PostListDTO: Codable {
     let location: String
     let homeTeam: String
     let awayTeam: String
+    let cheerTeam: String
     let currentPerson: Int
     let maxPerson: Int
 }
