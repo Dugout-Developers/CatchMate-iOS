@@ -33,18 +33,17 @@ enum MypageMenu: String {
         return [.auth, .noti]
     }
     
-    var navigationVC: Observable<UIViewController> {
+    func navigationVC(user: SimpleUser? = nil) -> Observable<UIViewController> {
         switch self {
         case .notices:
             return Observable.just(AnnouncementsViewController(reactor: AnnouncementsReactor()))
-        case .customerService:
-            return Observable.just(CustomerServiceViewController(title: self.rawValue))
-        case .terms:
-            return Observable.just(CustomerServiceViewController(title: self.rawValue))
-        case .info:
+        case .customerService, .terms, .info:
             return Observable.just(CustomerServiceViewController(title: self.rawValue))
         case .write:
-            return Observable.just(CustomerServiceViewController(title: self.rawValue))
+            guard let user = user else {
+                return Observable.error(PresentationError.showErrorPage(message: "요청을 처리할 수 없습니다. 다시 시도해주세요."))
+            }
+            return Observable.just(OtherUserMyPageViewController(user: user, reactor: DIContainerService.shared.makeOtherUserPageReactor(user)))
         case .send:
             return Observable.just(SendMateListViewController(reactor: DIContainerService.shared.makeSendMateReactor()))
         case .receive:

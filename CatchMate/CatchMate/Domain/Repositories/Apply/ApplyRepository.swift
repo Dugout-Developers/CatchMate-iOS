@@ -10,5 +10,5 @@ import RxSwift
 
 protocol ApplyRepository {
     func applyPost(_ boardId: String, addInfo: String) -> Observable<Int>
-    func cancelApplyPost(enrollId: String) -> Observable<Bool>
+    func cancelApplyPost(enrollId: String) -> Observable<Void>
 }

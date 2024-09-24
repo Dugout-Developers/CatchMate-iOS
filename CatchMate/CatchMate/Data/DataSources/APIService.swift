@@ -44,6 +44,7 @@ enum Endpoint: String {
     /// 내정보 조회
     case loadMyInfo = "/user/profile"
     
+    
     var apiName: String {
         switch self {
         case .login:

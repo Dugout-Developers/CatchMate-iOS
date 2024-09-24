@@ -241,7 +241,6 @@
 		53ACBA582C85B4C1004FAF00 /* ApplyDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA532C85AF07004FAF00 /* ApplyDataSource.swift */; };
 		53ACBA5A2C85B7E6004FAF00 /* ApplyRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA592C85B7E6004FAF00 /* ApplyRepository.swift */; };
 		53ACBA5D2C85B84E004FAF00 /* ApplyPostRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA5C2C85B84E004FAF00 /* ApplyPostRepositoryImpl.swift */; };
-		53ACBA602C85B8D7004FAF00 /* applyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA5F2C85B8D7004FAF00 /* applyUseCase.swift */; };
 		53B3CE3E2C884B3900116BF7 /* UnauthorizedErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B3CE3D2C884B3900116BF7 /* UnauthorizedErrorHandler.swift */; };
 		53B3CE3F2C88577500116BF7 /* SNSLoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B3E2C2C5DBC00A59340 /* SNSLoginResponse.swift */; };
 		53B3CE402C88578300116BF7 /* LoginRequset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530994552C4F6D9900ABE103 /* LoginRequset.swift */; };
@@ -507,7 +506,6 @@
 		53ACBA562C85B4AF004FAF00 /* ApplyDataSourceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyDataSourceTest.swift; sourceTree = "<group>"; };
 		53ACBA592C85B7E6004FAF00 /* ApplyRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyRepository.swift; sourceTree = "<group>"; };
 		53ACBA5C2C85B84E004FAF00 /* ApplyPostRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyPostRepositoryImpl.swift; sourceTree = "<group>"; };
-		53ACBA5F2C85B8D7004FAF00 /* applyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = applyUseCase.swift; sourceTree = "<group>"; };
 		53B3CE3D2C884B3900116BF7 /* UnauthorizedErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnauthorizedErrorHandler.swift; sourceTree = "<group>"; };
 		53B3CE422C88A39200116BF7 /* RecivedAppiesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecivedAppiesRepository.swift; sourceTree = "<group>"; };
 		53B3CE442C88AE1C00116BF7 /* ApplyList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyList.swift; sourceTree = "<group>"; };
@@ -1263,7 +1261,7 @@
 		53B3CE4E2C88B66F00116BF7 /* Apply */ = {
 			isa = PBXGroup;
 			children = (
-				53ACBA5F2C85B8D7004FAF00 /* applyUseCase.swift */,
+				5337AB222C897847003A39AE /* ApplyHandleUseCase.swift */,
 				53B3CE4F2C88B68200116BF7 /* SendAppliesUseCase.swift */,
 				5306F7BC2C9057D200292C6E /* ReceivedAppliesUseCase.swift */,
 			);
@@ -1332,7 +1330,6 @@
 				53B8E25A2C612171001D0ADF /* AddPostUseCase.swift */,
 				531E4C312C6B62070052E754 /* PostListLoadUseCase.swift */,
 				53E5925B2C6D05DD0042E1D7 /* PostDetailUseCase.swift */,
-				5337AB222C897847003A39AE /* ApplyHandleUseCase.swift */,
 				533B29242C770A9600BFE9F6 /* LoadFavoriteListUseCase.swift */,
 				53ACBA3B2C84A98C004FAF00 /* SetFavoriteUseCase.swift */,
 				53B895CC2CA2579A00029130 /* UserPostLoadUseCase.swift */,
@@ -1560,7 +1557,6 @@
 				531DCA2B2C6A0F540015AC53 /* OtherUserpageReactor.swift in Sources */,
 				536BDE292C1B53860043B1DA /* Color.swift in Sources */,
 				533B87372C86E1CD0058B94B /* RecivedAppiesDataSource.swift in Sources */,
-				53ACBA602C85B8D7004FAF00 /* applyUseCase.swift in Sources */,
 				533A2B2A2C2859D600A59340 /* CMImageButton.swift in Sources */,
 				536BDE2F2C1B55240043B1DA /* NotiViewController.swift in Sources */,
 				533A2B382C2BFD4B00A59340 /* SignUpFinishedViewController.swift in Sources */,

@@ -15,3 +15,28 @@ protocol ApplyManagementDataSource {
     func rejectApply(enrollId: String) -> Observable<Bool>
 }
 
+//final class ApplyManagementDataSourceImpl: ApplyManagementDataSource {
+//    private let tokenDataSource: TokenDataSource
+//    
+//    init(tokenDataSource: TokenDataSource) {
+//        self.tokenDataSource = tokenDataSource
+//    }
+//    
+//    func acceptApply(enrollId: String) -> RxSwift.Observable<Bool> {
+//        guard let token = tokenDataSource.getToken(for: .accessToken) else {
+//            return Observable.error(TokenError.notFoundAccessToken)
+//        }
+//        let headers: HTTPHeaders = [
+//            "AccessToken": token
+//        ]
+//        let parameters: [String: Any] = ["enrollId": enrollId]
+//        LoggerService.shared.log("토큰 확인: \(headers)")
+//        
+//        return APIService.shared.requestAPI(type: .apply, parameters: <#T##[String : Any]?#>, dataType: <#T##(Decodable & Encodable).Type#>)
+//    }
+//    
+//    func rejectApply(enrollId: String) -> RxSwift.Observable<Bool> {
+//        <#code#>
+//    }
+//    
+//}
