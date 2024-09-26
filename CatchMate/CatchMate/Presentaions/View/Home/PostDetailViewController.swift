@@ -192,6 +192,7 @@ final class PostDetailViewController: BaseViewController, View {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupErrorView()
         bind(reactor: reactor)
         reactor.action.onNext(.loadPostDetails)
 //        reactor.action.onNext(.loadIsApplied)
@@ -201,6 +202,7 @@ final class PostDetailViewController: BaseViewController, View {
         setupButton()
     }
     
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         scrollView.pin.left().right().top(view.pin.safeArea).above(of: buttonContainer)
@@ -209,8 +211,15 @@ final class PostDetailViewController: BaseViewController, View {
         contentView.flex.layout(mode: .adjustHeight)
         buttonContainer.flex.layout()
         scrollView.contentSize = contentView.frame.size
+        if let errorView = errorView {
+            errorView.pin.all(view.pin.safeArea)
+            errorView.flex.layout()
+        }
     }
-    
+    private func setupErrorView() {
+        errorView = ErrorPageView(useSnapKit: false)
+        errorView?.isHidden = true
+    }
     private func setupNavigation() {
         let reportButton = UIButton()
         reportButton.setImage(UIImage(named: "cm20kebab")?.withTintColor(.cmHeadLineTextColor, renderingMode: .alwaysOriginal), for: .normal)
@@ -339,16 +348,6 @@ final class PostDetailViewController: BaseViewController, View {
         ageLabel.applyStyle(textStyle: FontSystem.caption01_medium)
         addInfoValueLabel.applyStyle(textStyle: FontSystem.body02_medium)
     }
-    
-//    private func makePreferPaddingLabel(text: String) -> DefaultsPaddingLabel {
-//        let label = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8))
-//        label.textColor = .cmNonImportantTextColor
-//        label.text = text
-//        label.applyStyle(textStyle: FontSystem.caption01_reguler)
-//        label.backgroundColor = .grayScale100
-//        label.layer.cornerRadius = 10
-//        return label
-//    }
 }
 
 // MARK: - bind
@@ -417,7 +416,11 @@ extension PostDetailViewController {
             .compactMap{$0}
             .withUnretained(self)
             .subscribe { vc, error in
-                vc.showToast(message: "요청에 실패했습니다. 다시 시도해주세요.", buttonContainerExists: true)
+                vc.customNavigationBar.isRightItemsHidden = true
+                vc.errorView?.isHidden = false
+                vc.errorView?.flex.layout()
+                vc.view.setNeedsLayout()
+                vc.view.layoutIfNeeded()
             }
             .disposed(by: disposeBag)
         
@@ -461,6 +464,9 @@ extension PostDetailViewController {
 extension PostDetailViewController {
     private func setupUI() {
         view.addSubviews(views: [scrollView, buttonContainer])
+        if let errorView = errorView {
+            view.addSubview(errorView)
+        }
         scrollView.backgroundColor = .grayScale50
         scrollView.addSubview(contentView)
         contentView.flex.backgroundColor(.grayScale50).define { flex in
