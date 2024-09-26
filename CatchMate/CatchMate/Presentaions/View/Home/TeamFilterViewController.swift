@@ -31,6 +31,7 @@ final class TeamFilterViewController: BasePickerViewController, View, UIScrollVi
     
     var reactor: HomeReactor?
     var addReactor: AddReactor?
+    var profileEditReactor: ProfileEditReactor?
     var disposeBag = DisposeBag()
     
     init(reactor: any Reactor) {
@@ -40,6 +41,8 @@ final class TeamFilterViewController: BasePickerViewController, View, UIScrollVi
             self.reactor = homeReactor
         } else if let addReactor = reactor as? AddReactor {
             self.addReactor = addReactor
+        } else if let profileEditReactor = reactor as? ProfileEditReactor {
+            self.profileEditReactor = profileEditReactor
         }
     }
     
@@ -60,6 +63,8 @@ final class TeamFilterViewController: BasePickerViewController, View, UIScrollVi
             } else {
                 selectedTeam = addReactor.currentState.awayTeam
             }
+        } else if let profileEditReactor = profileEditReactor {
+            selectedTeam = profileEditReactor.currentState.team
         }
     }
     override func viewDidLoad() {
@@ -71,6 +76,9 @@ final class TeamFilterViewController: BasePickerViewController, View, UIScrollVi
             setupUI(isHome: true)
         } else if let addReactor = addReactor {
             bind(reactor: addReactor)
+            setupUI()
+        } else if let profileEditReactor = profileEditReactor {
+            bind(reactor: profileEditReactor)
             setupUI()
         }
     }
@@ -89,9 +97,37 @@ final class TeamFilterViewController: BasePickerViewController, View, UIScrollVi
         tableView.separatorStyle = .none
     }
 }
+// MARK: - Bind - ProfileEdit Reactor
+extension TeamFilterViewController {
+    func bind(reactor: ProfileEditReactor) {
+        Observable.just(allTeams)
+            .bind(to: tableView.rx.items(cellIdentifier: "TeamFilterTableViewCell", cellType: TeamFilterTableViewCell.self)) {[weak self] row, team, cell in
+                guard let self = self else { return }
+                cell.configure(with: team, isClicked: selectedTeam == team)
 
-// MARK: - Bind
-
+                cell.selectionStyle = .none
+                cell.checkButton.rx.tap
+                    .withUnretained(self)
+                    .subscribe { vc, _ in
+                        vc.selectedTeam = team
+                        vc.updateSelectedTeams(team)
+                    }
+                    .disposed(by: cell.disposeBag)
+            }
+            .disposed(by: disposeBag)
+        
+        saveButton.rx.tap
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                if let team = vc.selectedTeam {
+                    reactor.action.onNext(.changeTeam(team))
+                }
+                vc.dismiss(animated: true)
+            }
+            .disposed(by: disposeBag)
+    }
+}
+// MARK: - Bind - Add Reactor
 extension TeamFilterViewController {
     private func updateSelectedTeams(_ selectedTeam: Team?) {
         guard let cells = tableView.visibleCells as? [TeamFilterTableViewCell] else { return }
@@ -174,7 +210,9 @@ extension TeamFilterViewController {
             .disposed(by: disposeBag)
             
     }
-    
+}
+// MARK: - Bind - Home Reactor
+extension TeamFilterViewController {
     func bind(reactor: HomeReactor) {
         tableView.rx.itemSelected
             .withUnretained(self)
