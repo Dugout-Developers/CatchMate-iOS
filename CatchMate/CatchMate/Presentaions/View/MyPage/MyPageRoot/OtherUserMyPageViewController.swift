@@ -109,7 +109,9 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
         case 0:
             break
         case 1:
-            break
+            let post = posts[indexPath.row]
+            let detailVC = PostDetailViewController(postID: post.id)
+            navigationController?.pushViewController(detailVC, animated: true)
         default:
             break
         }

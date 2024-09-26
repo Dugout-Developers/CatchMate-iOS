@@ -17,6 +17,7 @@ enum PlayTime: String, CaseIterable {
 }
 final class AddReactor: Reactor {
     enum Action {
+        case setupEditPost(post: Post)
         case loadUser
         case changeTitle(String)
         case changeDate(Date?)
@@ -30,6 +31,7 @@ final class AddReactor: Reactor {
         case changePlcase(String)
         case changeCheerTeam(Team)
         case updatePost
+//        case updateEditPost
     }
     enum Mutation {
         // Action과 State 사이의 다리역할이다.
@@ -50,6 +52,7 @@ final class AddReactor: Reactor {
         case updateSaveButton
         case updatePlcase(String)
         case savePost(Int)
+//        case editPost(Int)
         case setError(PresentationError)
     }
     struct State {
@@ -178,6 +181,23 @@ final class AddReactor: Reactor {
                 Observable.just(Mutation.updateCheerTeam(team)),
                 Observable.just(Mutation.updateSaveButton)
             ])
+        case .setupEditPost(let post):
+            if let playTime = PlayTime(rawValue: post.playTime) {
+                return Observable.concat([
+                    Observable.just(Mutation.updateTitle(post.title)),
+                    Observable.just(Mutation.updatePartyNumber(post.maxPerson)),
+                    Observable.just(Mutation.updateDate(DateHelper.shared.toDate(from: post.date, format: "MM.dd"))),
+                    Observable.just(Mutation.updateTime(playTime)),
+                    Observable.just(Mutation.updateHomeTeam(post.homeTeam)),
+                    Observable.just(Mutation.updageAwayTeam(post.awayTeam)),
+                    Observable.just(Mutation.updateCheerTeam(post.cheerTeam)),
+                    Observable.just(Mutation.updatePlcase(post.location)),
+                    Observable.just(Mutation.updateAddText(post.addInfo)),
+                    Observable.just(Mutation.updateSaveButton)
+                ])
+            } else {
+                return Observable.just(Mutation.setError(PresentationError.showErrorPage(message: "디코딩 오류")))
+            }
         }
     }
     

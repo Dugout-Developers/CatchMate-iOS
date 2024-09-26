@@ -101,8 +101,8 @@ class FavoriteListLoadDataSourceMock: LoadFavoriteListDataSource {
     }
     
     var listLoaddataSourceMockUpData: [PostListDTO] = [
-        PostListDTO(boardId: 1, title: "잠실에 원터 보러 가실 분~", gameDate: "2024-08-12T18:00:00.000+00:00", location: "잠실", homeTeam: "두산", awayTeam: "한화", currentPerson: 2, maxPerson: 4),
-        PostListDTO(boardId: 13, title: "야구 직관 모임", gameDate: "2024-08-12T18:00:00.000+00:00", location: "잠실", homeTeam: "두산", awayTeam: "한화", currentPerson: 3, maxPerson: 4)
+        PostListDTO(boardId: 1, title: "잠실에 원터 보러 가실 분~", gameDate: "2024-08-12T18:00:00.000+00:00", location: "잠실", homeTeam: "두산", awayTeam: "한화", cheerTeam: "한화", currentPerson: 2, maxPerson: 4),
+        PostListDTO(boardId: 13, title: "야구 직관 모임", gameDate: "2024-08-12T18:00:00.000+00:00", location: "잠실", homeTeam: "두산", awayTeam: "한화", cheerTeam: "한화", currentPerson: 3, maxPerson: 4)
     ]
     
 }

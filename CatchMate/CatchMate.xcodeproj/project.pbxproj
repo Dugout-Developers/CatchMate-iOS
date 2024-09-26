@@ -292,6 +292,12 @@
 		53E5925C2C6D05DD0042E1D7 /* PostDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E5925B2C6D05DD0042E1D7 /* PostDetailUseCase.swift */; };
 		53E5925E2C6D0A550042E1D7 /* LoadPostDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E5925D2C6D0A550042E1D7 /* LoadPostDataSource.swift */; };
 		53E592602C6D0A870042E1D7 /* LoadPostRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E5925F2C6D0A870042E1D7 /* LoadPostRepositoryImpl.swift */; };
+		53E7DBA12CA52BD900DC058D /* DeletePostDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBA02CA52BD900DC058D /* DeletePostDataSource.swift */; };
+		53E7DBA32CA5663200DC058D /* DeletePostDataSourceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBA22CA5663200DC058D /* DeletePostDataSourceTest.swift */; };
+		53E7DBA42CA5664200DC058D /* DeletePostDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBA02CA52BD900DC058D /* DeletePostDataSource.swift */; };
+		53E7DBA62CA5E3A700DC058D /* DeletePostRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBA52CA5E3A700DC058D /* DeletePostRepository.swift */; };
+		53E7DBA82CA5E44000DC058D /* DeletePostRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBA72CA5E44000DC058D /* DeletePostRepositoryImpl.swift */; };
+		53E7DBAA2CA5E52800DC058D /* PostHandleUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBA92CA5E52800DC058D /* PostHandleUseCase.swift */; };
 		53F1E8C62C47A46400A962F3 /* Apply.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F1E8C52C47A46400A962F3 /* Apply.swift */; };
 		53FC69DB2C58C65700B97AEA /* RefreshTokenResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69DA2C58C65700B97AEA /* RefreshTokenResponseDTO.swift */; };
 		53FC69DD2C58DB8D00B97AEA /* TokenDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69DC2C58DB8D00B97AEA /* TokenDataSource.swift */; };
@@ -555,6 +561,11 @@
 		53E5925B2C6D05DD0042E1D7 /* PostDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailUseCase.swift; sourceTree = "<group>"; };
 		53E5925D2C6D0A550042E1D7 /* LoadPostDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadPostDataSource.swift; sourceTree = "<group>"; };
 		53E5925F2C6D0A870042E1D7 /* LoadPostRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadPostRepositoryImpl.swift; sourceTree = "<group>"; };
+		53E7DBA02CA52BD900DC058D /* DeletePostDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePostDataSource.swift; sourceTree = "<group>"; };
+		53E7DBA22CA5663200DC058D /* DeletePostDataSourceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePostDataSourceTest.swift; sourceTree = "<group>"; };
+		53E7DBA52CA5E3A700DC058D /* DeletePostRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePostRepository.swift; sourceTree = "<group>"; };
+		53E7DBA72CA5E44000DC058D /* DeletePostRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePostRepositoryImpl.swift; sourceTree = "<group>"; };
+		53E7DBA92CA5E52800DC058D /* PostHandleUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHandleUseCase.swift; sourceTree = "<group>"; };
 		53F1E8C52C47A46400A962F3 /* Apply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Apply.swift; sourceTree = "<group>"; };
 		53FC69DA2C58C65700B97AEA /* RefreshTokenResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenResponseDTO.swift; sourceTree = "<group>"; };
 		53FC69DC2C58DB8D00B97AEA /* TokenDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDataSource.swift; sourceTree = "<group>"; };
@@ -742,6 +753,7 @@
 				533B29262C770B0700BFE9F6 /* SetFavoriteDataSource.swift */,
 				53B895C02C9F3A4200029130 /* TempPostDataSource.swift */,
 				53B895C62CA254DE00029130 /* UserPostLoadDataSource.swift */,
+				53E7DBA02CA52BD900DC058D /* DeletePostDataSource.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -755,6 +767,7 @@
 				533B29202C77099800BFE9F6 /* LoadFavoriteListRepositoryImpl.swift */,
 				533B292A2C770F9F00BFE9F6 /* SetFavoriteRepositoryImpl.swift */,
 				53B895C82CA256E100029130 /* UserPostLoadRepositoryImpl.swift */,
+				53E7DBA72CA5E44000DC058D /* DeletePostRepositoryImpl.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -768,6 +781,7 @@
 				533B29222C7709C100BFE9F6 /* LoadFavoriteListRepository.swift */,
 				533B29282C770F0700BFE9F6 /* SetFavoriteRepository.swift */,
 				53B895CA2CA2576700029130 /* UserPostLoadRepository.swift */,
+				53E7DBA52CA5E3A700DC058D /* DeletePostRepository.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -895,6 +909,7 @@
 				53ACBA562C85B4AF004FAF00 /* ApplyDataSourceTest.swift */,
 				533B873A2C86E5970058B94B /* ApplyListDataSoueceTest.swift */,
 				5306F7BE2C9081C000292C6E /* ReceivedAppliesTest.swift */,
+				53E7DBA22CA5663200DC058D /* DeletePostDataSourceTest.swift */,
 			);
 			path = CatchMateTests;
 			sourceTree = "<group>";
@@ -1336,6 +1351,7 @@
 				533B29242C770A9600BFE9F6 /* LoadFavoriteListUseCase.swift */,
 				53ACBA3B2C84A98C004FAF00 /* SetFavoriteUseCase.swift */,
 				53B895CC2CA2579A00029130 /* UserPostLoadUseCase.swift */,
+				53E7DBA92CA5E52800DC058D /* PostHandleUseCase.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -1642,10 +1658,13 @@
 				536BDE312C1B55440043B1DA /* MyPageViewController.swift in Sources */,
 				531786682C20048B00ACEF6A /* CMPickerTextField.swift in Sources */,
 				531786532C1C8BFB00ACEF6A /* BaseViewController.swift in Sources */,
+				53E7DBAA2CA5E52800DC058D /* PostHandleUseCase.swift in Sources */,
+				53E7DBA12CA52BD900DC058D /* DeletePostDataSource.swift in Sources */,
 				5383BE852C327FF9008940F1 /* NonMembersAccessViewController.swift in Sources */,
 				53ACBA542C85AF07004FAF00 /* ApplyDataSource.swift in Sources */,
 				534E39E12C63D10B006D180E /* AnnouncementsListCell.swift in Sources */,
 				533183D72C515C480097F3F1 /* TeamImageView.swift in Sources */,
+				53E7DBA62CA5E3A700DC058D /* DeletePostRepository.swift in Sources */,
 				533B87352C86DF2A0058B94B /* ApplyListResponse.swift in Sources */,
 				536BDDF62C1972740043B1DA /* UserDTO.swift in Sources */,
 				5383BE8D2C34D595008940F1 /* FontUtility.swift in Sources */,
@@ -1687,6 +1706,7 @@
 				53E4A9C42C500AD500D21B49 /* SignUpUseCase.swift in Sources */,
 				53B8E26D2C61CBD5001D0ADF /* ErrorMapper.swift in Sources */,
 				53B3CE4D2C88B5B000116BF7 /* SendAppiesRepositoryImpl.swift in Sources */,
+				53E7DBA82CA5E44000DC058D /* DeletePostRepositoryImpl.swift in Sources */,
 				533B87392C86E38B0058B94B /* ApplyManagementDataSource.swift in Sources */,
 				531DCA252C67C5450015AC53 /* ReceiveMateListDetailViewController.swift in Sources */,
 				5317867F2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift in Sources */,
@@ -1729,6 +1749,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				533B293B2C771ED000BFE9F6 /* APIService.swift in Sources */,
+				53E7DBA32CA5663200DC058D /* DeletePostDataSourceTest.swift in Sources */,
 				53ACBA582C85B4C1004FAF00 /* ApplyDataSource.swift in Sources */,
 				533B29332C771E2100BFE9F6 /* SimplePost.swift in Sources */,
 				533B873E2C86E6790058B94B /* ApplyListResponse.swift in Sources */,
@@ -1744,6 +1765,7 @@
 				533B87402C86ED190058B94B /* ServerLoginDataSource.swift in Sources */,
 				533B29412C771F0A00BFE9F6 /* RequestPost.swift in Sources */,
 				53B3CE3F2C88577500116BF7 /* SNSLoginResponse.swift in Sources */,
+				53E7DBA42CA5664200DC058D /* DeletePostDataSource.swift in Sources */,
 				536BDDC52C189B240043B1DA /* CatchMateTests.swift in Sources */,
 				53ACBA312C80B6C0004FAF00 /* PostListLoadDataSource.swift in Sources */,
 				533B29482C771F5E00BFE9F6 /* UIColor+Extension.swift in Sources */,

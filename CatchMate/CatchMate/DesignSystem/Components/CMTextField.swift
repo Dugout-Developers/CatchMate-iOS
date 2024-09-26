@@ -68,6 +68,10 @@ class CMTextField: UITextField {
     
     @objc private func textFieldDidChange() {
         updateClearButtonVisibility()
+        updateTextStyle()
+    }
+    
+    func updateTextStyle() {
         if let currentText = self.text {
             self.attributedText = NSAttributedString(string: currentText, attributes: FontSystem.body02_semiBold.getAttributes())
         }

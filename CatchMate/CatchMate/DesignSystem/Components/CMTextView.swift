@@ -75,6 +75,10 @@ class CMTextView: UITextView {
     
     @objc private func textDidChange() {
         placeholderLabel.isHidden = !text.isEmpty
+        updateTextStyle()
+    }
+    
+    func updateTextStyle() {
         if let currentText = self.text {
             self.attributedText = NSAttributedString(string: currentText, attributes: FontSystem.body02_medium.getAttributes())
         }

@@ -23,6 +23,8 @@ enum Endpoint: String {
     case userPostlist = "/board/page"
     /// 게시글 조회 /board/{boardId}
     case loadPost = "/board/"
+    /// 게시글 삭제 /board/remove
+    case removePost = "/board/remove"
     /// 찜목록 조회 /board/likes
     case loadFavorite = "/board/likes"
     /// 찜 설정 /board/like/{boardID}
@@ -57,6 +59,8 @@ enum Endpoint: String {
             return "게시글 리스트 불러오기 API"
         case .loadPost:
             return "게시글 로드 API"
+        case .removePost:
+            return "게시글 삭제 API"
         case .userPostlist:
             return "유저 게시글 리스트 로드 API"
         case .loadFavorite:
@@ -92,6 +96,8 @@ enum Endpoint: String {
             return .patch
         case .loadPost:
             return .get
+        case .removePost:
+            return .delete
         case .userPostlist:
             return .get
         case .loadFavorite:

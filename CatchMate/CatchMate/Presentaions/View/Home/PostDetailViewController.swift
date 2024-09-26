@@ -236,11 +236,20 @@ final class PostDetailViewController: BaseViewController, View {
                 MenuItem(title: "끌어올리기", action: { [weak self] in
                     self?.showToast(message: "게시글을 끌어올렸어요", buttonContainerExists: true)
                 }),
-                MenuItem(title: "게시글 수정", action: {
-                    print("게시글 수정 선택됨")
+                MenuItem(title: "게시글 수정", action: { [weak self] in
+                    if let post = self?.reactor.currentState.post {
+                        let editVC = AddViewController(reactor: DIContainerService.shared.makeAddReactor(), editPost: post)
+                        self?.navigationController?.pushViewController(editVC, animated: true)
+                    } else {
+                        self?.showToast(message: "수정 페이지 불러오기 실패. 다시 시도해주세요.")
+                    }
                 }),
-                MenuItem(title: "게시글 삭제", textColor: UIColor.cmSystemRed, action: {
-                    print("게시글 삭제 선택됨")
+                MenuItem(title: "게시글 삭제", textColor: UIColor.cmSystemRed, action: { [weak self] in
+                    self?.showCMAlert(titleText: "삭제 시 채팅방도 같이 삭제됩니다\n게시글을 삭제하시겠습니까?", importantButtonText: "삭제", commonButtonText: "취소", importantAction: {
+                        self?.reactor.action.onNext(.deletePost)
+                    }, commonAction: {
+                        self?.dismiss(animated: false)
+                    })
                 })
             ]
         } else {
@@ -416,11 +425,33 @@ extension PostDetailViewController {
             .compactMap{$0}
             .withUnretained(self)
             .subscribe { vc, error in
-                vc.customNavigationBar.isRightItemsHidden = true
-                vc.errorView?.isHidden = false
-                vc.errorView?.flex.layout()
-                vc.view.setNeedsLayout()
-                vc.view.layoutIfNeeded()
+                switch error {
+                case .retryable(let message), .timeout(let message):
+                    vc.showToast(message: "다시 시도해주세요.", buttonContainerExists: true)
+                case .contactSupport(let message), .unknown(let message):
+                    vc.showToast(message: "문제가 발생했습니다. 지원팀에 문의해주세요.")
+                case .showErrorPage(message: let message):
+                    vc.customNavigationBar.isRightItemsHidden = true
+                    vc.errorView?.isHidden = false
+                    vc.errorView?.flex.layout()
+                    vc.view.setNeedsLayout()
+                    vc.view.layoutIfNeeded()
+                case .informational(let message):
+                    vc.showToast(message: message, buttonContainerExists: true)
+                case .unauthorized(message: let message):
+                    // 로그아웃 시키기
+                    break
+                case .validationFailed(let message):
+                    break
+                }
+            }
+            .disposed(by: disposeBag)
+        reactor.state.map{$0.isDelete}
+            .withUnretained(self)
+            .subscribe { vc, flag in
+                if flag {
+                    vc.navigationController?.popViewController(animated: true)
+                }
             }
             .disposed(by: disposeBag)
         
