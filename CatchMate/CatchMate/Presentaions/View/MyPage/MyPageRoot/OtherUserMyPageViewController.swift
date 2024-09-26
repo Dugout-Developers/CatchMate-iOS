@@ -39,10 +39,13 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
     }
     
     private func setupNavigation() {
-        let menuButton = UIButton()
-        menuButton.setImage(UIImage(named: "cm20kebab")?.withTintColor(.grayScale700, renderingMode: .alwaysOriginal), for: .normal)
-        menuButton.addTarget(self, action: #selector(clickMenuButton), for: .touchUpInside)
-        customNavigationBar.addRightItems(items: [menuButton])
+        if user.userId != SetupInfoService.shared.getUserInfo(type: .id) {
+            let menuButton = UIButton()
+            menuButton.setImage(UIImage(named: "cm20kebab")?.withTintColor(.grayScale700, renderingMode: .alwaysOriginal), for: .normal)
+            menuButton.addTarget(self, action: #selector(clickMenuButton), for: .touchUpInside)
+            customNavigationBar.addRightItems(items: [menuButton])
+        }
+
     }
     @objc private func clickMenuButton(_ sender: UIButton) {
 
