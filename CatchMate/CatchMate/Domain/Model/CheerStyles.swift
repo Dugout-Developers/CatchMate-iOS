@@ -35,17 +35,17 @@ enum CheerStyles: String, CaseIterable, Codable {
     var iconImage: UIImage? {
         switch self {
         case .director:
-            return UIImage(named: "EmptyDisable")
+            return UIImage(named: "director")
         case .mom:
-            return UIImage(named: "EmptyDisable")
+            return UIImage(named: "mom")
         case .eatLove:
-            return UIImage(named: "EmptyDisable")
+            return UIImage(named: "eatLove")
         case .cheerleader:
-            return UIImage(named: "EmptyDisable")
+            return UIImage(named: "cheerleader")
         case .silent:
-            return UIImage(named: "EmptyDisable")
+            return UIImage(named: "silent")
         case .bodhisattva:
-            return UIImage(named: "EmptyDisable")
+            return UIImage(named: "bodhisattva")
         }
     }
     

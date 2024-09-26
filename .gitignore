@@ -100,5 +100,6 @@ iOSInjectionProject/
 
 /**/*.xcconfig
 
+/**/MockTokenDataSource.swift
 /CatchMate/Config/
 Icon\r
