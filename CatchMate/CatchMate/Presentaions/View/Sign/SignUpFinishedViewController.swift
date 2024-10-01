@@ -16,7 +16,7 @@ final class SignUpFinishedViewController: BaseViewController{
     
     private let logoImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "EmptyPrimary")
+        imageView.image = UIImage(named: "congratulations")
         return imageView
     }()
     
