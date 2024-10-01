@@ -134,7 +134,9 @@ class DIContainerService {
     func makeReciveMateReactor() -> RecevieMateReactor {
         let recivedAppliesDataSource = RecivedAppiesDataSourceImpl(tokenDataSource: tokenDS)
         let recivedAppliesRepository = RecivedAppliesRepositoryImpl(recivedAppliesDS: recivedAppliesDataSource)
-        let receivedAppliesUsecase = ReceivedAppliesUseCaseImpl(receivedAppliesRepository: recivedAppliesRepository)
+        let applyManagementDataSource = ApplyManagementDataSourceImpl(tokenDataSource: tokenDS)
+        let applyManangementRepository = ApplyManagementRepositoryImpl(applyManagementDS: applyManagementDataSource)
+        let receivedAppliesUsecase = ReceivedAppliesUseCaseImpl(receivedAppliesRepository: recivedAppliesRepository, applyManagementRepository: applyManangementRepository)
         
         return RecevieMateReactor(recivedAppliesUsecase: receivedAppliesUsecase)
     }

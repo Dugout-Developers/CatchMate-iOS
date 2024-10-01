@@ -64,15 +64,23 @@ extension ReceiveMateListViewController {
                 cell.updateConstraints()
             }
             .disposed(by: disposeBag)
-        
         tableView.rx.itemSelected
             .subscribe { indexPath in
-                if let applies = reactor.currentState.selectedPostApplies {
-                    let detailVC = ReceiveMateListDetailViewController(reactor: ReceiveMateDetailReactor(aplies: applies))
-                    detailVC.modalPresentationStyle = .overFullScreen
-                    self.present(detailVC, animated: false)
+                let apply = reactor.currentState.recivedApplies[indexPath.row]
+                reactor.action.onNext(.selectPost(apply.post.id))
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.selectedPostApplies}
+            .withUnretained(self)
+            .subscribe { vc, dataList in
+                if let list = dataList, !list.isEmpty {
+                    let detailPopupVC = ReceiveMateListDetailViewController(reactor: reactor)
+                    detailPopupVC.modalPresentationStyle = .overFullScreen
+                    vc.present(detailPopupVC, animated: false)
                 }
             }
             .disposed(by: disposeBag)
+
     }
 }

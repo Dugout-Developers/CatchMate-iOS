@@ -20,7 +20,7 @@ struct ApplyList: Equatable {
 }
 
 enum ApplyStatus: String {
-    case accept = "ACCEPT"
+    case accept = "ACCEPTED"
     case pending = "PENDING"
     case reject = "REJECTED"
 }

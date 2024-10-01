@@ -12,11 +12,15 @@ final class RecevieMateReactor: Reactor {
     enum Action {
         case loadReceiveAppliesAll
         case selectPost(String?)
+        case acceptApply(String)
+        case rejectApply(String)
     }
     enum Mutation {
         case setReceiveAppliesAll([RecivedApplies])
         case setSelectedPostApplies([RecivedApplyData]?)
         case setError(PresentationError?)
+        case acceptApply(String)
+        case rejectApply(String)
     }
     struct State {
         var recivedApplies: [RecivedApplies] = []
@@ -61,6 +65,38 @@ final class RecevieMateReactor: Reactor {
             } else {
                 return Observable.just(Mutation.setError(PresentationError.informational(message: "요청에 실패했습니다. 다시 시도해주세요.")))
             }
+        case .acceptApply(let enrollId):
+            return recivedAppliesUsecase.acceptApply(enrollId: enrollId)
+                .map { result in
+                    if result {
+                        return Mutation.acceptApply(enrollId)
+                    } else {
+                        return Mutation.setError(PresentationError.informational(message: "다시 시도해주세요."))
+                    }
+                }
+                .catch { error in
+                    if let presentationError = error as? PresentationError {
+                        return Observable.just(Mutation.setError(presentationError))
+                    } else {
+                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
+        case .rejectApply(let enrollId):
+            return recivedAppliesUsecase.rejectApply(enrollId: enrollId)
+                .map { result in
+                    if result {
+                        return Mutation.acceptApply(enrollId)
+                    } else {
+                        return Mutation.setError(PresentationError.informational(message: "다시 시도해주세요."))
+                    }
+                }
+                .catch { error in
+                    if let presentationError = error as? PresentationError {
+                        return Observable.just(Mutation.setError(presentationError))
+                    } else {
+                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
@@ -74,6 +110,8 @@ final class RecevieMateReactor: Reactor {
             newState.error = nil
         case .setError(let error):
             newState.error = error
+        case .acceptApply(let enrollId), .rejectApply(let enrollId):
+            newState.selectedPostApplies = currentState.selectedPostApplies?.filter({ $0.enrollId != enrollId })
         }
         return newState
     }

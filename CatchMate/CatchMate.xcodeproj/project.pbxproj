@@ -59,7 +59,6 @@
 		531786852C23261200ACEF6A /* SheetHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786842C23261200ACEF6A /* SheetHeight.swift */; };
 		531963F12C645FDE00EE7F23 /* SendMateReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531963F02C645FDE00EE7F23 /* SendMateReactor.swift */; };
 		531DCA252C67C5450015AC53 /* ReceiveMateListDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531DCA242C67C5450015AC53 /* ReceiveMateListDetailViewController.swift */; };
-		531DCA272C67CC8A0015AC53 /* ReceiveMateDetailReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531DCA262C67CC8A0015AC53 /* ReceiveMateDetailReactor.swift */; };
 		531DCA292C6905430015AC53 /* OtherUserMyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531DCA282C6905430015AC53 /* OtherUserMyPageViewController.swift */; };
 		531DCA2B2C6A0F540015AC53 /* OtherUserpageReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531DCA2A2C6A0F540015AC53 /* OtherUserpageReactor.swift */; };
 		531E4C232C6A75320052E754 /* ChatSideSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E4C222C6A75320052E754 /* ChatSideSheetViewController.swift */; };
@@ -304,6 +303,8 @@
 		53E7DBB52CAB212900DC058D /* RecivedAppliesRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBAD2CAAE75500DC058D /* RecivedAppliesRepositoryImpl.swift */; };
 		53E7DBB62CAB3CB200DC058D /* ApplyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B3CE442C88AE1C00116BF7 /* ApplyList.swift */; };
 		53E7DBB72CABD91700DC058D /* ApplyMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B3CE462C88B0A000116BF7 /* ApplyMapper.swift */; };
+		53E7DBB92CAC400000DC058D /* ApplyManagementRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBB82CAC400000DC058D /* ApplyManagementRepositoryImpl.swift */; };
+		53E7DBBB2CAC401200DC058D /* ApplyManagementRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBBA2CAC401200DC058D /* ApplyManagementRepository.swift */; };
 		53F1E8C62C47A46400A962F3 /* Apply.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F1E8C52C47A46400A962F3 /* Apply.swift */; };
 		53FC69DB2C58C65700B97AEA /* RefreshTokenResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69DA2C58C65700B97AEA /* RefreshTokenResponseDTO.swift */; };
 		53FC69DD2C58DB8D00B97AEA /* TokenDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69DC2C58DB8D00B97AEA /* TokenDataSource.swift */; };
@@ -383,7 +384,6 @@
 		531786842C23261200ACEF6A /* SheetHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetHeight.swift; sourceTree = "<group>"; };
 		531963F02C645FDE00EE7F23 /* SendMateReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMateReactor.swift; sourceTree = "<group>"; };
 		531DCA242C67C5450015AC53 /* ReceiveMateListDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMateListDetailViewController.swift; sourceTree = "<group>"; };
-		531DCA262C67CC8A0015AC53 /* ReceiveMateDetailReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMateDetailReactor.swift; sourceTree = "<group>"; };
 		531DCA282C6905430015AC53 /* OtherUserMyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserMyPageViewController.swift; sourceTree = "<group>"; };
 		531DCA2A2C6A0F540015AC53 /* OtherUserpageReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserpageReactor.swift; sourceTree = "<group>"; };
 		531E4C222C6A75320052E754 /* ChatSideSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSideSheetViewController.swift; sourceTree = "<group>"; };
@@ -574,6 +574,8 @@
 		53E7DBAB2CA5EEC900DC058D /* MockTokenDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTokenDataSource.swift; sourceTree = "<group>"; };
 		53E7DBAD2CAAE75500DC058D /* RecivedAppliesRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecivedAppliesRepositoryImpl.swift; sourceTree = "<group>"; };
 		53E7DBB12CAB0F1800DC058D /* RecivedRepositoryTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecivedRepositoryTest.swift; sourceTree = "<group>"; };
+		53E7DBB82CAC400000DC058D /* ApplyManagementRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyManagementRepositoryImpl.swift; sourceTree = "<group>"; };
+		53E7DBBA2CAC401200DC058D /* ApplyManagementRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyManagementRepository.swift; sourceTree = "<group>"; };
 		53F1E8C52C47A46400A962F3 /* Apply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Apply.swift; sourceTree = "<group>"; };
 		53FC69DA2C58C65700B97AEA /* RefreshTokenResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenResponseDTO.swift; sourceTree = "<group>"; };
 		53FC69DC2C58DB8D00B97AEA /* TokenDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDataSource.swift; sourceTree = "<group>"; };
@@ -1216,7 +1218,6 @@
 				5317867E2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift */,
 				537598052C46C0B0003BD8AE /* ApplyPopupViewController.swift */,
 				53716BD12C45567C0044AD2A /* PostDetailViewController.swift */,
-				531DCA262C67CC8A0015AC53 /* ReceiveMateDetailReactor.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -1263,6 +1264,7 @@
 				53ACBA592C85B7E6004FAF00 /* ApplyRepository.swift */,
 				53B3CE422C88A39200116BF7 /* RecivedAppiesRepository.swift */,
 				53B3CE4A2C88B52200116BF7 /* SendAppiesRepository.swift */,
+				53E7DBBA2CAC401200DC058D /* ApplyManagementRepository.swift */,
 			);
 			path = Apply;
 			sourceTree = "<group>";
@@ -1273,6 +1275,7 @@
 				53ACBA5C2C85B84E004FAF00 /* ApplyPostRepositoryImpl.swift */,
 				53B3CE4C2C88B5B000116BF7 /* SendAppiesRepositoryImpl.swift */,
 				53E7DBAD2CAAE75500DC058D /* RecivedAppliesRepositoryImpl.swift */,
+				53E7DBB82CAC400000DC058D /* ApplyManagementRepositoryImpl.swift */,
 			);
 			path = Apply;
 			sourceTree = "<group>";
@@ -1609,6 +1612,7 @@
 				536BDE362C1BEC870043B1DA /* ListCardViewTableViewCell.swift in Sources */,
 				53BE7AD22C367181002FC64F /* Date+Extension.swift in Sources */,
 				53E592592C6D05C70042E1D7 /* LoadPostRepository.swift in Sources */,
+				53E7DBB92CAC400000DC058D /* ApplyManagementRepositoryImpl.swift in Sources */,
 				531288C52C5404C3000C2FB1 /* KakaoDataSource.swift in Sources */,
 				53E4A9B82C4FF00F00D21B49 /* AuthReactor.swift in Sources */,
 				531288C32C54030D000C2FB1 /* AppleLoginDataSource.swift in Sources */,
@@ -1644,7 +1648,6 @@
 				53FC69DD2C58DB8D00B97AEA /* TokenDataSource.swift in Sources */,
 				53B895CF2CA2985000029130 /* ErrorPageView.swift in Sources */,
 				53E592552C6D051D0042E1D7 /* PostDTO.swift in Sources */,
-				531DCA272C67CC8A0015AC53 /* ReceiveMateDetailReactor.swift in Sources */,
 				5301E29D2C5B38B10078E910 /* Error+Extension.swift in Sources */,
 				53716BC02C400B3E0044AD2A /* FavoriteReactor.swift in Sources */,
 				536BDDE92C1971C70043B1DA /* SignReactor.swift in Sources */,
@@ -1747,6 +1750,7 @@
 				53ACBA1D2C7D8E60004FAF00 /* CMActionMenu.swift in Sources */,
 				5382490E2C2E79A90074B583 /* AppleLoginUseCase.swift in Sources */,
 				5317866B2C200D6000ACEF6A /* BasePickerViewController.swift in Sources */,
+				53E7DBBB2CAC401200DC058D /* ApplyManagementRepository.swift in Sources */,
 				5301E2B22C5BE6350078E910 /* LogoutRepositoryImpl.swift in Sources */,
 				536BDDE22C196F510043B1DA /* Bundle+Extension.swift in Sources */,
 				533A2B272C28558600A59340 /* SignInViewController.swift in Sources */,
