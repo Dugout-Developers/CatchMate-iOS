@@ -45,10 +45,30 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
             menuButton.addTarget(self, action: #selector(clickMenuButton), for: .touchUpInside)
             customNavigationBar.addRightItems(items: [menuButton])
         }
-
+        
     }
     @objc private func clickMenuButton(_ sender: UIButton) {
-
+        let userNickname = user.nickName
+        let menuVC = CMActionMenu()
+        // 메뉴 항목 설정
+        menuVC.menuItems = [
+            MenuItem(title: "차단하기", action: { [weak self] in
+                self?.showCMAlert(titleText: "\"\(userNickname)\"\n정말 차단할까요?", importantButtonText: "차단", commonButtonText: "취소", importantAction: {
+                    self?.dismiss(animated: false, completion: {
+                        print("\(userNickname) 차단")
+                        self?.showToast(message: "차단 유저 목록은\n설정 - '차단 설정'에서 확인할 수 있어요")
+                    })
+                }, commonAction: {
+                    self?.dismiss(animated: false)
+                })
+            }),
+            MenuItem(title: "신고하기", textColor: UIColor.cmSystemRed, action: { [weak self] in
+                print("신고하기")
+            })
+        ]
+        // 메뉴 화면을 모달로 표시
+        menuVC.modalPresentationStyle = .overFullScreen
+        present(menuVC, animated: false, completion: nil)
     }
     
     private func setupTableView() {
