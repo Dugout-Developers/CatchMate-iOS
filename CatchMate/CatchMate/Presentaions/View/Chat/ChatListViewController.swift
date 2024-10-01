@@ -10,6 +10,8 @@ import RxSwift
 import SnapKit
 import ReactorKit
 import FlexLayout
+import Alamofire
+import RxAlamofire
 
 final class ChatListViewController: BaseViewController, View {
     private let chatListTableView = UITableView()
@@ -20,7 +22,39 @@ final class ChatListViewController: BaseViewController, View {
         tabBarController?.tabBar.isHidden = false
         reactor.action.onNext(.selectChat(nil))
         reactor.action.onNext(.loadChatList)
+        RecivedAppiesDataSourceImpl(tokenDataSource: TokenDataSourceImpl()).loadReceivedAppliesAll()
+            .subscribe { result in
+                print(result)
+            }
+            .disposed(by: disposeBag)
+
+//        test()
     }
+    private func test() {
+        let tokenDataSource = TokenDataSourceImpl()
+        guard let token = tokenDataSource.getToken(for: .accessToken) else {
+            print("no token")
+            return
+        }
+        let headers: HTTPHeaders = [
+            "AccessToken": token
+        ]
+        APIService.shared.requestAPI(type: .receivedApplyAll, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: ApplyListResponse.self)
+            .debug("Request API Debug", trimOutput: false)
+            .subscribe(
+                onNext: { response in
+                    print("Response received: \(response)")
+                },
+                onError: { error in
+                    print("Error: \(error)")
+                },
+                onCompleted: {
+                    print("Request completed")
+                }
+            )
+            .disposed(by: disposeBag)
+    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()

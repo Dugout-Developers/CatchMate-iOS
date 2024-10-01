@@ -13,7 +13,7 @@ import Kingfisher
 
 final class ReceiveMateListCell: UITableViewCell {
     private var disposedBag = DisposeBag()
-    private var appliesSubject = PublishSubject<[Apply]>()
+    private var appliesSubject = PublishSubject<[RecivedApplyData]>()
     private let containerView = UIView()
     private let infoLabel: UILabel = {
         let label = UILabel()
@@ -80,8 +80,8 @@ final class ReceiveMateListCell: UITableViewCell {
         containerView.flex.layout(mode: .adjustHeight)
     }
     
-    func configData(apply: [Apply]) {
-        let post = apply[0].post
+    func configData(apply: RecivedApplies) {
+        let post = apply.post
         titleLabel.text = post.title
         titleLabel.applyStyle(textStyle: FontSystem.body01_medium)
         infoLabel.text = "\(post.date) | \(post.playTime) | \(post.location)"
@@ -89,7 +89,7 @@ final class ReceiveMateListCell: UITableViewCell {
         titleLabel.lineBreakMode = .byTruncatingTail
         titleLabel.flex.markDirty()
         infoLabel.flex.markDirty()
-        appliesSubject.onNext(apply)
+        appliesSubject.onNext(apply.applies)
         containerView.flex.layout(mode: .adjustHeight)
     }
     
@@ -158,18 +158,18 @@ final class ReceiveCollectionViewCell: UICollectionViewCell {
         setupUI()
     }
     
-    func configData(apply: Apply) {
-        let user = apply.applicant
-        if let urlString = user.profilePicture, let url = URL(string: urlString) {
+    func configData(apply: RecivedApplyData) {
+        let user = apply.user
+        if let urlString = user.picture, let url = URL(string: urlString) {
             profileImageView.kf.setImage(with: url)
         } else {
             profileImageView.image = UIImage(named: "tempProfile")
         }
         nicknameLabel.text = user.nickName
         nicknameLabel.applyStyle(textStyle: FontSystem.body02_medium)
-        teamLabel.text = user.team.rawValue
+        teamLabel.text = user.favGudan.rawValue
         teamLabel.applyStyle(textStyle: FontSystem.caption01_medium)
-        teamLabel.backgroundColor = user.team.getTeamColor
+        teamLabel.backgroundColor = user.favGudan.getTeamColor
         teamLabel.textColor = .white
         if let style = user.cheerStyle {
             styleLabel.text = style.rawValue
@@ -179,7 +179,7 @@ final class ReceiveCollectionViewCell: UICollectionViewCell {
         } else {
             styleLabel.flex.width(0).height(0)
         }
-        genderLabel.text = user.gener.rawValue
+        genderLabel.text = user.gender.rawValue
         genderLabel.backgroundColor = .grayScale100
         genderLabel.applyStyle(textStyle: FontSystem.caption01_medium)
         genderLabel.textColor = .cmNonImportantTextColor

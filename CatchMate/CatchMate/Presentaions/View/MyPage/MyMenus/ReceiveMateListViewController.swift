@@ -26,7 +26,7 @@ final class ReceiveMateListViewController: BaseViewController, View {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        reactor.action.onNext(.loadReceiveMate)
+        reactor.action.onNext(.loadReceiveAppliesAll)
         reactor.action.onNext(.selectPost(nil))
     }
     
@@ -56,7 +56,7 @@ final class ReceiveMateListViewController: BaseViewController, View {
 // MARK: - Bind
 extension ReceiveMateListViewController {
     func bind(reactor: RecevieMateReactor) {
-        reactor.state.map{$0.receiveMates}
+        reactor.state.map{$0.recivedApplies}
             .bind(to: tableView.rx.items(cellIdentifier: "ReceiveMateListCell", cellType: ReceiveMateListCell.self)) { (row, item, cell) in
                 cell.backgroundColor = .clear
                 cell.selectionStyle = .none
@@ -67,10 +67,11 @@ extension ReceiveMateListViewController {
         
         tableView.rx.itemSelected
             .subscribe { indexPath in
-                let applies = reactor.currentState.receiveMates[indexPath.row]
-                let detailVC = ReceiveMateListDetailViewController(reactor: ReceiveMateDetailReactor(aplies: applies))
-                detailVC.modalPresentationStyle = .overFullScreen
-                self.present(detailVC, animated: false)
+                if let applies = reactor.currentState.selectedPostApplies {
+                    let detailVC = ReceiveMateListDetailViewController(reactor: ReceiveMateDetailReactor(aplies: applies))
+                    detailVC.modalPresentationStyle = .overFullScreen
+                    self.present(detailVC, animated: false)
+                }
             }
             .disposed(by: disposeBag)
     }

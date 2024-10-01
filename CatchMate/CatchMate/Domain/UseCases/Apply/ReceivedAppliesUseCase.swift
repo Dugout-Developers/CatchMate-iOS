@@ -9,8 +9,8 @@ import UIKit
 import RxSwift
 
 protocol ReceivedAppliesUseCase {
-    func loadRecivedApplies(boardId: Int) -> Observable<[ApplyList]>
-    func loadReceivedAppliesAll() -> Observable<[String: [ApplyList]]>
+    func loadRecivedApplies(boardId: Int) -> Observable<[RecivedApplyData]>
+    func loadReceivedAppliesAll() -> Observable<[RecivedApplies]>
 }
 
 final class ReceivedAppliesUseCaseImpl: ReceivedAppliesUseCase {
@@ -18,11 +18,11 @@ final class ReceivedAppliesUseCaseImpl: ReceivedAppliesUseCase {
     init(receivedAppliesRepository: RecivedAppiesRepository) {
         self.receivedAppliesRepository = receivedAppliesRepository
     }
-    func loadRecivedApplies(boardId: Int) -> RxSwift.Observable<[ApplyList]> {
+    func loadRecivedApplies(boardId: Int) -> RxSwift.Observable<[RecivedApplyData]> {
         return receivedAppliesRepository.loadRecivedApplies(boardId: boardId)
     }
     
-    func loadReceivedAppliesAll() -> RxSwift.Observable<[String : [ApplyList]]> {
+    func loadReceivedAppliesAll() -> RxSwift.Observable<[RecivedApplies]> {
         return receivedAppliesRepository.loadReceivedAppliesAll()
     }
 }

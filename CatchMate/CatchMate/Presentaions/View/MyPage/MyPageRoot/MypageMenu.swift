@@ -47,7 +47,7 @@ enum MypageMenu: String {
         case .send:
             return Observable.just(SendMateListViewController(reactor: DIContainerService.shared.makeSendMateReactor()))
         case .receive:
-            return Observable.just(ReceiveMateListViewController(reactor: RecevieMateReactor()))
+            return Observable.just(ReceiveMateListViewController(reactor: DIContainerService.shared.makeReciveMateReactor()))
         case .auth:
             return LoginUserDefaultsService.shared.getLoginData()
                 .map { loginData in

@@ -131,6 +131,14 @@ class DIContainerService {
         return SendMateReactor(sendAppliesUsecase: sendAppliesUsecase)
     }
     
+    func makeReciveMateReactor() -> RecevieMateReactor {
+        let recivedAppliesDataSource = RecivedAppiesDataSourceImpl(tokenDataSource: tokenDS)
+        let recivedAppliesRepository = RecivedAppliesRepositoryImpl(recivedAppliesDS: recivedAppliesDataSource)
+        let receivedAppliesUsecase = ReceivedAppliesUseCaseImpl(receivedAppliesRepository: recivedAppliesRepository)
+        
+        return RecevieMateReactor(recivedAppliesUsecase: receivedAppliesUsecase)
+    }
+    
     
     // MARK: - 특정 Usecase만 필요할 때
     func makeLogoutUseCase() -> LogoutUseCase {

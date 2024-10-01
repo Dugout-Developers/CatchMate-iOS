@@ -151,18 +151,18 @@ final class DetailCardCell: UICollectionViewCell {
         setupUI()
     }
     
-    func configData(apply: Apply) {
-        let user = apply.applicant
-        if let urlString = user.profilePicture, let url = URL(string: urlString) {
+    func configData(apply: RecivedApplyData) {
+        let user = apply.user
+        if let urlString = user.picture, let url = URL(string: urlString) {
             profileImageView.kf.setImage(with: url)
         } else {
             profileImageView.image = UIImage(named: "tempProfile")
         }
         nicknameLabel.text = user.nickName
         nicknameLabel.applyStyle(textStyle: FontSystem.body02_medium)
-        teamLabel.text = user.team.rawValue
+        teamLabel.text = user.favGudan.rawValue
         teamLabel.applyStyle(textStyle: FontSystem.caption01_medium)
-        teamLabel.backgroundColor = user.team.getTeamColor
+        teamLabel.backgroundColor = user.favGudan.getTeamColor
         teamLabel.textColor = .white
         if let style = user.cheerStyle {
             styleLabel.text = style.rawValue
@@ -172,7 +172,7 @@ final class DetailCardCell: UICollectionViewCell {
         } else {
             styleLabel.flex.width(0).height(0)
         }
-        genderLabel.text = user.gener.rawValue
+        genderLabel.text = user.gender.rawValue
         genderLabel.backgroundColor = .grayScale100
         genderLabel.applyStyle(textStyle: FontSystem.caption01_medium)
         genderLabel.textColor = .cmNonImportantTextColor
@@ -181,7 +181,8 @@ final class DetailCardCell: UICollectionViewCell {
         ageLabel.backgroundColor = .grayScale100
         ageLabel.textColor = .cmNonImportantTextColor
         ageLabel.applyStyle(textStyle: FontSystem.caption01_medium)
-        applyDateLabel.text = DateHelper.shared.toString(from: apply.applyDate, format: "M월d일 HH:mm")
+        // MARK: - API CreateDate 추가 시 수정
+        applyDateLabel.text = DateHelper.shared.toString(from: Date(), format: "M월d일 HH:mm")
         applyDateLabel.applyStyle(textStyle: FontSystem.body02_medium)
         textView.text = apply.addText
         textView.applyStyle(textStyle: FontSystem.body02_medium)
