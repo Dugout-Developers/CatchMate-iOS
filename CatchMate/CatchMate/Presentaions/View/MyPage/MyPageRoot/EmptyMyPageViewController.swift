@@ -34,6 +34,7 @@ final class EmptyMyPageViewController: BaseViewController, UITableViewDelegate, 
          tableview.estimatedSectionFooterHeight = 0
         tableview.sectionHeaderTopPadding = 0
     }
+    
     private func setupUI() {
         tableview.backgroundColor = .grayScale50
         view.addSubview(tableview)
@@ -41,60 +42,29 @@ final class EmptyMyPageViewController: BaseViewController, UITableViewDelegate, 
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
     }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return 1
-        } else {
-            return menus.count
-        }
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            let cell = MyPageProfileCell(style: .default, reuseIdentifier: nil)
-            cell.configNotuser()
-            cell.updateConstraints()
-            cell.selectionStyle = .none
-            return cell
-        } else {
-            // 나머지 섹션의 셀은 재사용
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "MypageListCell", for: indexPath) as? MypageListCell else {
-                return UITableViewCell()
-            }
-            cell.configData(title: menus[indexPath.row].rawValue)
-            cell.selectionStyle = .none
-            return cell
-        }
-    }
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
-            return nil // 첫 번째 섹션에 헤더 뷰 없음
-        }
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "MypageHeader") as? MypageHeader else { return UIView() }
-        headerView.configData(title: "지원")
-        return headerView
-    }
-
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "DividerFooterView") as? DividerFooterView else { return UIView() }
-        return footerView
+        let cell = MyPageProfileCell(style: .default, reuseIdentifier: nil)
+        cell.configNotuser()
+        cell.updateConstraints()
+        cell.selectionStyle = .none
+        return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == 0 ? 0 : 48
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let reactor = DIContainerService.shared.makeAuthReactor()
+        (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(UINavigationController(rootViewController: SignInViewController(reactor: reactor)), animated: true)
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 88
     }
 
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return 88
-        } else {
-            return 53
-        }
-    }
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 8
-    }
 }
