@@ -117,7 +117,7 @@ final class PostDetailViewController: BaseViewController, View {
         label.textColor = .white
         return label
     }()
-    private var cheerStyleLabel: DefaultsPaddingLabel? = {
+    private var cheerStyleLabel: DefaultsPaddingLabel = {
         let label = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 4, bottom: 2, right: 4))
         label.layer.cornerRadius = 2
         label.textColor = .white
@@ -288,10 +288,11 @@ final class PostDetailViewController: BaseViewController, View {
         cheerTeam.backgroundColor = post.writer.favGudan.getTeamColor
         cheerTeam.text = post.writer.favGudan.rawValue
         if let cheerStyle = post.writer.cheerStyle {
-            cheerStyleLabel?.text = cheerStyle.rawValue
-            cheerStyleLabel?.applyStyle(textStyle: FontSystem.caption01_medium)
+            cheerStyleLabel.text = cheerStyle.rawValue
+            cheerStyleLabel.applyStyle(textStyle: FontSystem.caption01_medium)
+            cheerStyleLabel.flex.display(.flex)
         } else {
-            cheerStyleLabel = nil
+            cheerStyleLabel.flex.display(.none)
         }
         genderLabel.text = post.writer.gender.rawValue
         ageLabel.text = post.writer.ageRange
@@ -318,7 +319,7 @@ final class PostDetailViewController: BaseViewController, View {
         placeValueLabel.flex.markDirty()
         partynumValueLabel.flex.markDirty()
         cheerTeam.flex.markDirty()
-        cheerStyleLabel?.flex.markDirty()
+        cheerStyleLabel.flex.markDirty()
         genderLabel.flex.markDirty()
         ageLabel.flex.markDirty()
         addInfoValueLabel.flex.markDirty()
@@ -537,9 +538,7 @@ extension PostDetailViewController {
                         flex.addItem(nickNameLabel).marginBottom(6)
                         flex.addItem().direction(.row).justifyContent(.start).alignItems(.start).define { flex in
                             flex.addItem(cheerTeam).marginRight(4)
-                            if let cheerStyleLabel = cheerStyleLabel {
-                                flex.addItem(cheerStyleLabel).marginRight(4)
-                            }
+                            flex.addItem(cheerStyleLabel).marginRight(4)
                             flex.addItem(genderLabel).marginRight(4)
                             flex.addItem(ageLabel)
                         }
