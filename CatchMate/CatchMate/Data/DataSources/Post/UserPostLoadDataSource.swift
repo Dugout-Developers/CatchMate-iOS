@@ -54,7 +54,7 @@ final class UserPostLoadDataSourceImpl: UserPostLoadDataSource {
                                 "AccessToken": token
                             ]
                             LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            return APIService.shared.requestAPI(type: .userPostlist, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: [PostListDTO].self)
+                            return APIService.shared.requestAPI(type: .userPostlist, parameters: parameters, headers: newHeaders, encoding: URLEncoding.default, dataType: [PostListDTO].self)
                                 .map { postListDTO in
                                     LoggerService.shared.debugLog("PostList Load 성공: \(postListDTO)")
                                     return postListDTO

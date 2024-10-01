@@ -427,10 +427,10 @@ extension PostDetailViewController {
             .subscribe { vc, error in
                 switch error {
                 case .retryable(let message), .timeout(let message):
-                    vc.showToast(message: "다시 시도해주세요.", buttonContainerExists: true)
-                case .contactSupport(let message), .unknown(let message):
+                    vc.showToast(message: message, buttonContainerExists: true)
+                case .contactSupport, .unknown:
                     vc.showToast(message: "문제가 발생했습니다. 지원팀에 문의해주세요.")
-                case .showErrorPage(message: let message):
+                case .showErrorPage:
                     vc.customNavigationBar.isRightItemsHidden = true
                     vc.errorView?.isHidden = false
                     vc.errorView?.flex.layout()
@@ -438,10 +438,10 @@ extension PostDetailViewController {
                     vc.view.layoutIfNeeded()
                 case .informational(let message):
                     vc.showToast(message: message, buttonContainerExists: true)
-                case .unauthorized(message: let message):
+                case .unauthorized:
                     // 로그아웃 시키기
                     break
-                case .validationFailed(let message):
+                case .validationFailed:
                     break
                 }
             }

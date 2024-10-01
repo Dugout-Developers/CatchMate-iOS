@@ -77,7 +77,12 @@ final class SettingViewController: BaseViewController, UITableViewDelegate, UITa
                             showToast(message: message)
                         case .contactSupport(let message):
                             showToast(message: message)
-                        case .showErrorPage(let message):
+                        case .showErrorPage:
+//                            customNavigationBar.isRightItemsHidden = true
+//                            errorView?.isHidden = false
+//                            errorView?.flex.layout()
+//                            view.setNeedsLayout()
+//                            view.layoutIfNeeded()
                             break
                         case .informational(let message):
                             showToast(message: message)

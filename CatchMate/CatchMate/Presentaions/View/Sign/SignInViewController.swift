@@ -140,11 +140,7 @@ extension SignInViewController {
         if !state {
             // 회원가입 이미한 유저일 경우
             let tabViewController = TabBarController()
-            DispatchQueue.main.async { [weak self] in
-                guard let self else {
-                    LoggerService.shared.debugLog("회원가입 화면 전환 self 없음")
-                    return
-                }
+            DispatchQueue.main.async { 
                 (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(tabViewController, animated: true)
             }
 

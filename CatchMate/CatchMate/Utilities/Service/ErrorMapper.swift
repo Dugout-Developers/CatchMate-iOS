@@ -100,7 +100,7 @@ final class ErrorMapper {
             return .retryable(message: "로그인 요청에 실패했습니다. 다시 시도해주세요.")
         case .EmptyValue:
             return .contactSupport(message: "로그인 정보를 가져오는데 실패했습니다. 지원팀에 문의해주세요.")
-        case .loginServerError(let code, let description):
+        case .loginServerError(let code, _):
             switch code {
             case 400..<500:
                 return mapClientError(code)

@@ -23,7 +23,7 @@ final class SignUpDataSourceImpl: SignUpDataSource {
     func saveUserModel(_ model: SignUpRequest) -> Observable<SignUpResponseDTO> {
         LoggerService.shared.debugLog("-----------------Servser Request SignUp-------------------")
         
-        var parameters: [String: Any] = [
+        let parameters: [String: Any] = [
             "email": model.email,
             "provider": model.provider,
             "providerId": model.providerId,
