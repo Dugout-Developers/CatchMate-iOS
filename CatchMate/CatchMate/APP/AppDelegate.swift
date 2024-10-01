@@ -24,15 +24,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UnauthorizedErrorHandler.shared.configure(logoutUseCase: DIContainerService.shared.makeLogoutUseCase())
         FirebaseApp.configure()
         // APNS 등록
-            if #available(iOS 10.0, *) {
-                UNUserNotificationCenter.current().delegate = self
-                let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-                UNUserNotificationCenter.current().requestAuthorization(options: authOptions, completionHandler: { _, _ in })
-            } else {
-                let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
-                application.registerUserNotificationSettings(settings)
-            }
-            application.registerForRemoteNotifications()
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().delegate = self
+            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+            UNUserNotificationCenter.current().requestAuthorization(options: authOptions, completionHandler: { _, _ in })
+        } else {
+            let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            application.registerUserNotificationSettings(settings)
+        }
+        application.registerForRemoteNotifications()
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
         UIApplication.shared.registerForRemoteNotifications()
@@ -62,14 +62,56 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         Messaging.messaging().apnsToken = deviceToken
     }
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        // TODO: - 뱃지 디스플레이
-           completionHandler([.list, .banner, .sound])
-       }
+        // TODO: - 화면 이동userInfo에 들어있는 데이터를 바탕으로 특정 화면으로 이동
+        let userInfo = notification.request.content.userInfo
+        print("푸시 알림 수신 (foreground): \(userInfo)")
+        completionHandler([.list, .banner, .sound])
+    }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        let userInfo = response.notification.request.content.userInfo
+        print("푸시 알림 수신 (background/terminated): \(userInfo)")
+        
+        if let boardIdStr = userInfo["boardId"] as? String, let boardId = Int(boardIdStr) {
+            navigateApplyDetail(boardId: boardId)
+        } else {
+            print("boardId 구할 수 없음")
+        }
         completionHandler()
     }
-        // FCM 토큰 갱신 시 호출되는 메서드
+    
+    func navigateApplyDetail(boardId: Int) {
+        if let windowScene = UIApplication.shared.connectedScenes
+            .filter({ $0.activationState == .foregroundActive })
+            .compactMap({ $0 as? UIWindowScene })
+            .first {
+            
+            // 윈도우가 있는지 확인
+            if let window = windowScene.windows.first {
+                print("윈도우 찾음: \(window)")
+                
+                // rootViewController가 있는지 확인
+                if let rootViewController = window.rootViewController as? UINavigationController {
+                    print("rootViewController 찾음: \(rootViewController)")
+                    
+                    // 상세 페이지로 이동
+                    let reactor = DIContainerService.shared.makeReciveMateReactor()
+                    reactor.action.onNext(.selectPost(String(boardId)))
+                    let applyDetailVC = ReceiveMateListDetailViewController(reactor: reactor)
+                    applyDetailVC.modalPresentationStyle = .overFullScreen
+                    rootViewController.present(applyDetailVC, animated: false)
+                } else {
+                    print("rootViewController가 설정되지 않음")
+                }
+            } else {
+                print("윈도우를 찾을 수 없음")
+            }
+        } else {
+            print("UIWindowScene을 찾을 수 없음")
+        }
+    }
+    
+    // FCM 토큰 갱신 시 호출되는 메서드
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         print("Firebase registration token: \(String(describing: fcmToken))")
         NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: ["token": fcmToken ?? ""])
