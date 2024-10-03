@@ -260,8 +260,14 @@ extension AddViewController {
             .disposed(by: disposeBag)
         
         registerButton.rx.tap
-            .map{Reactor.Action.updatePost}
-            .bind(to: reactor.action)
+            .withUnretained(self)
+            .subscribe(onNext: { vc, _ in
+                if vc.editPost != nil {
+                    reactor.action.onNext(.updateEditPost)
+                } else {
+                    reactor.action.onNext(.updatePost)
+                }
+            })
             .disposed(by: disposeBag)
         
         titleTextField.rx.text.orEmpty
@@ -379,6 +385,40 @@ extension AddViewController {
                 vc.textview.updateTextStyle()
             }
             .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.selectedAge}
+            .distinctUntilChanged()
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, age in
+                vc.ageButtons.forEach { label in
+                    label.isSelected = (age == label.tag * 10)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.selectedGender}
+            .distinctUntilChanged()
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, gender in
+                switch gender {
+                case .woman:
+                    vc.noGenderButton.isSelected = false
+                    vc.manButton.isSelected = false
+                    vc.womanButton.isSelected = true
+                case .man:
+                    vc.noGenderButton.isSelected = false
+                    vc.manButton.isSelected = true
+                    vc.womanButton.isSelected = false
+                case .none:
+                    vc.noGenderButton.isSelected = true
+                    vc.manButton.isSelected = false
+                    vc.womanButton.isSelected = false
+                }
+            }
+            .disposed(by: disposeBag)
+
     }
     
     // 작성 완료 후 호출되는 메소드
@@ -424,9 +464,6 @@ extension AddViewController {
         } else {
             selectedGenderLabel = tappedLabel
         }
-        noGenderButton.isSelected = (selectedGenderLabel == noGenderButton)
-        manButton.isSelected = (selectedGenderLabel == manButton)
-        womanButton.isSelected = (selectedGenderLabel == womanButton)
     }
     
     private func setupAgeButton() {
@@ -444,9 +481,6 @@ extension AddViewController {
             selectedAge = currentSelectAge
         }
         
-        ageButtons.forEach { label in
-            label.isSelected = (selectedAge == label.tag * 10)
-        }
     }
 //    @objc private func clickAgeButton(_ gesture: UITapGestureRecognizer) {
 //        guard let tappedLabel = gesture.view as? PaddingLabel else { return }

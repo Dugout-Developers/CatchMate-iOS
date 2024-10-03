@@ -57,7 +57,8 @@ class DIContainerService {
     }
     func makeAddReactor() -> AddReactor {
         let addDataSource = AddPostDataSourceImpl(tokenDataSource: tokenDS)
-        let addRepository = AddPostRepositoryImpl(addPostDS: addDataSource)
+        let editDataSource = EditPostDataSourceImpl(tokenDataSource: tokenDS)
+        let addRepository = AddPostRepositoryImpl(addPostDS: addDataSource, editPostDS: editDataSource)
         let addUsecase = AddPostUseCaseImpl(addPostRepository: addRepository)
         
         let loadPostDataSource = LoadPostDataSourceImpl(tokenDataSource: tokenDS)

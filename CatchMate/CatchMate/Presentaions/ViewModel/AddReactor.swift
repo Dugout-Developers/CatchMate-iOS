@@ -31,12 +31,11 @@ final class AddReactor: Reactor {
         case changePlcase(String)
         case changeCheerTeam(Team)
         case updatePost
-//        case updateEditPost
+        case updateEditPost
     }
     enum Mutation {
-        // Action과 State 사이의 다리역할이다.
-        // action stream을 변환하여 state에 전달한다.
         case setUser(SimpleUser)
+        case setEditPost(Post?)
         case updateTitle(String)
         case updateDate(Date?)
         case updateTime(PlayTime)
@@ -52,11 +51,12 @@ final class AddReactor: Reactor {
         case updateSaveButton
         case updatePlcase(String)
         case savePost(Int)
-//        case editPost(Int)
+        case editPost(Int)
         case setError(PresentationError)
     }
     struct State {
         // View의 state를 관리한다.
+        var editPost: Post?
         var title: String = ""
         var selecteDate: Date?
         var selecteTime: PlayTime?
@@ -193,11 +193,33 @@ final class AddReactor: Reactor {
                     Observable.just(Mutation.updateCheerTeam(post.cheerTeam)),
                     Observable.just(Mutation.updatePlcase(post.location)),
                     Observable.just(Mutation.updateAddText(post.addInfo)),
+                    Observable.just(Mutation.updateAge(post.preferAge)),
+                    Observable.just(Mutation.updateGender(post.preferGender)),
+                    Observable.just(Mutation.setEditPost(post)),
                     Observable.just(Mutation.updateSaveButton)
                 ])
             } else {
                 return Observable.just(Mutation.setError(PresentationError.showErrorPage(message: "디코딩 오류")))
             }
+        case .updateEditPost:
+            guard let request = validatePost(currentState) else {
+                print(currentState)
+                return Observable.just(Mutation.setError(.validationFailed(message: "입력값 확인 후 다시 시도해주세요.")))
+            }
+            guard let requestEditPost = mappingRequestEditPost(request.0) else {
+                return Observable.just(Mutation.setError(.retryable(message: "다시 시도해주세요.")))
+            }
+            return addUsecase.editPost(requestEditPost)
+                .map{ id in
+                    return Mutation.editPost(id)
+                }
+                .catch { error in
+                    if let presentationError = error as? PresentationError {
+                        return Observable.just(Mutation.setError(presentationError))
+                    } else {
+                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
         }
     }
     
@@ -257,6 +279,10 @@ final class AddReactor: Reactor {
             } else {
                 newState.isDisableCheerTeamPicker = true
             }
+        case .editPost(let postId):
+            newState.savePostResult = postId
+        case .setEditPost(let post):
+            newState.editPost = post
         }
         return newState
     }
@@ -265,6 +291,13 @@ final class AddReactor: Reactor {
            !place.isEmpty, !state.title.isEmpty, !state.addText.isEmpty {
             let request = RequestPost(title: state.title, homeTeam: homeTeam, awayTeam: awayTeam, cheerTeam: cheerTeam, date: date, playTime: time.rawValue, location: place, maxPerson: maxNum, preferGender: state.selectedGender, preferAge: state.selectedAge, addInfo: state.addText)
             return (request, user)
+        }
+        return nil
+    }
+    
+    func mappingRequestEditPost(_ post: RequestPost) -> RequestEditPost? {
+        if let prePost = currentState.editPost {
+            return RequestEditPost(id: prePost.id, title: post.title, homeTeam: post.homeTeam, awayTeam: post.awayTeam, cheerTeam: post.cheerTeam, date: post.date, playTime: post.playTime, location: post.location, currentPerson: prePost.currentPerson, maxPerson: post.maxPerson, preferGender: post.preferGender, preferAge: post.preferAge, addInfo: post.addInfo)
         }
         return nil
     }
