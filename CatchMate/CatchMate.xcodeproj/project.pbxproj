@@ -305,6 +305,8 @@
 		53E7DBB72CABD91700DC058D /* ApplyMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B3CE462C88B0A000116BF7 /* ApplyMapper.swift */; };
 		53E7DBB92CAC400000DC058D /* ApplyManagementRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBB82CAC400000DC058D /* ApplyManagementRepositoryImpl.swift */; };
 		53E7DBBB2CAC401200DC058D /* ApplyManagementRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBBA2CAC401200DC058D /* ApplyManagementRepository.swift */; };
+		53E7DBBF2CAC68FE00DC058D /* UserReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBBE2CAC68FE00DC058D /* UserReportViewController.swift */; };
+		53E7DBC12CAECC2C00DC058D /* ReportReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBC02CAECC2C00DC058D /* ReportReactor.swift */; };
 		53F1E8C62C47A46400A962F3 /* Apply.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F1E8C52C47A46400A962F3 /* Apply.swift */; };
 		53FC69DB2C58C65700B97AEA /* RefreshTokenResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69DA2C58C65700B97AEA /* RefreshTokenResponseDTO.swift */; };
 		53FC69DD2C58DB8D00B97AEA /* TokenDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69DC2C58DB8D00B97AEA /* TokenDataSource.swift */; };
@@ -576,6 +578,8 @@
 		53E7DBB12CAB0F1800DC058D /* RecivedRepositoryTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecivedRepositoryTest.swift; sourceTree = "<group>"; };
 		53E7DBB82CAC400000DC058D /* ApplyManagementRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyManagementRepositoryImpl.swift; sourceTree = "<group>"; };
 		53E7DBBA2CAC401200DC058D /* ApplyManagementRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyManagementRepository.swift; sourceTree = "<group>"; };
+		53E7DBBE2CAC68FE00DC058D /* UserReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserReportViewController.swift; sourceTree = "<group>"; };
+		53E7DBC02CAECC2C00DC058D /* ReportReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportReactor.swift; sourceTree = "<group>"; };
 		53F1E8C52C47A46400A962F3 /* Apply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Apply.swift; sourceTree = "<group>"; };
 		53FC69DA2C58C65700B97AEA /* RefreshTokenResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenResponseDTO.swift; sourceTree = "<group>"; };
 		53FC69DC2C58DB8D00B97AEA /* TokenDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDataSource.swift; sourceTree = "<group>"; };
@@ -643,6 +647,7 @@
 				534E39D42C6352DC006D180E /* Setting */,
 				534E39DD2C63CF45006D180E /* Supports */,
 				534E39EA2C63E50E006D180E /* MyMenus */,
+				53E7DBBE2CAC68FE00DC058D /* UserReportViewController.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -1023,6 +1028,7 @@
 				531963F02C645FDE00EE7F23 /* SendMateReactor.swift */,
 				5378EA9E2C649BBE00A2422C /* RecevieMateReactor.swift */,
 				531DCA2A2C6A0F540015AC53 /* OtherUserpageReactor.swift */,
+				53E7DBC02CAECC2C00DC058D /* ReportReactor.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1605,6 +1611,7 @@
 				536BDE292C1B53860043B1DA /* Color.swift in Sources */,
 				533B87372C86E1CD0058B94B /* RecivedAppiesDataSource.swift in Sources */,
 				533A2B2A2C2859D600A59340 /* CMImageButton.swift in Sources */,
+				53E7DBBF2CAC68FE00DC058D /* UserReportViewController.swift in Sources */,
 				536BDE2F2C1B55240043B1DA /* NotiViewController.swift in Sources */,
 				533A2B382C2BFD4B00A59340 /* SignUpFinishedViewController.swift in Sources */,
 				5301E2A12C5B5C280078E910 /* MyPageProfileCell.swift in Sources */,
@@ -1740,6 +1747,7 @@
 				531DCA252C67C5450015AC53 /* ReceiveMateListDetailViewController.swift in Sources */,
 				5317867F2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift in Sources */,
 				53B8E23B2C5C7BCF001D0ADF /* UserRepository.swift in Sources */,
+				53E7DBC12CAECC2C00DC058D /* ReportReactor.swift in Sources */,
 				533B29252C770A9600BFE9F6 /* LoadFavoriteListUseCase.swift in Sources */,
 				5317867B2C2077EC00ACEF6A /* NotiViewTableViewCell.swift in Sources */,
 				531786662C1F014E00ACEF6A /* CMTextField.swift in Sources */,

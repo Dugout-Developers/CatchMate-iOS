@@ -12,6 +12,7 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
     private var user: SimpleUser
     private let tableview = UITableView()
     private let reactor: OtherUserpageReactor
+    private let reportReactor: ReportReactor
     private var posts: [SimplePost] = []
     
     override func viewWillAppear(_ animated: Bool) {
@@ -25,11 +26,13 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
         setupTableView()
         setupUI()
         bind(reactor: reactor)
+        bind(reportReactor: reportReactor)
     }
     
-    init(user: SimpleUser, reactor: OtherUserpageReactor) {
+    init(user: SimpleUser, reactor: OtherUserpageReactor, reportReactor: ReportReactor) {
         self.user = user
         self.reactor = reactor
+        self.reportReactor = reportReactor
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -63,7 +66,12 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
                 })
             }),
             MenuItem(title: "신고하기", textColor: UIColor.cmSystemRed, action: { [weak self] in
-                print("신고하기")
+                if let user = self?.user, let reactor = self?.reportReactor {
+                    let reportVC = UserReportViewController(reportUser: user, reactor: reactor)
+                    self?.navigationController?.pushViewController(reportVC, animated: true)
+                } else {
+                    self?.showToast(message: "다시 시도해주세요.")
+                }
             })
         ]
         // 메뉴 화면을 모달로 표시
@@ -179,6 +187,18 @@ extension OtherUserMyPageViewController {
                 setupLeftTitle("")
             }
         }
+    }
+    
+    func bind(reportReactor: ReportReactor) {
+        reportReactor.state.map{$0.finishedReport}
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .subscribe { vc, result in
+                if result {
+                    vc.showToast(message: "신고 완료되었어요")
+                }
+            }
+            .disposed(by: disposeBag)
     }
 }
 

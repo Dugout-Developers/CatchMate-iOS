@@ -43,7 +43,7 @@ enum MypageMenu: String {
             guard let user = user else {
                 return Observable.error(PresentationError.showErrorPage(message: "요청을 처리할 수 없습니다. 다시 시도해주세요."))
             }
-            return Observable.just(OtherUserMyPageViewController(user: user, reactor: DIContainerService.shared.makeOtherUserPageReactor(user)))
+            return Observable.just(OtherUserMyPageViewController(user: user, reactor: DIContainerService.shared.makeOtherUserPageReactor(user), reportReactor: ReportReactor()))
         case .send:
             return Observable.just(SendMateListViewController(reactor: DIContainerService.shared.makeSendMateReactor()))
         case .receive:
