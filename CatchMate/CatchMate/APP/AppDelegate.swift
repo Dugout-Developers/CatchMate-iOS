@@ -37,6 +37,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UNUserNotificationCenter.current().delegate = self
         UIApplication.shared.registerForRemoteNotifications()
         
+        if let notificationOption = launchOptions?[.remoteNotification] as? [String: AnyObject] {
+            handleNotification(userInfo: notificationOption)
+        }
+        
         DispatchQueue.global(qos: .background).async {
             if let kakaoAppKey = Bundle.main.kakaoLoginAPPKey {
                 RxKakaoSDK.initSDK(appKey: kakaoAppKey)
@@ -57,12 +61,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         return true
     }
+    // 푸시 알림 처리 함수
+    private func handleNotification(userInfo: [String: AnyObject]) {
+        // userInfo에서 필요한 데이터를 추출
+        if let boardIdStr = userInfo["boardId"] as? String, let boardId = Int(boardIdStr) {
+            moveApplyDetailView(boardId: boardId)
+        } else {
+            print("boardId를 구할 수 없음")
+        }
+    }
     // 푸시 알림 등록
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         Messaging.messaging().apnsToken = deviceToken
     }
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        // TODO: - 화면 이동userInfo에 들어있는 데이터를 바탕으로 특정 화면으로 이동
         let userInfo = notification.request.content.userInfo
         print("푸시 알림 수신 (foreground): \(userInfo)")
         completionHandler([.list, .banner, .sound])
@@ -73,44 +85,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         print("푸시 알림 수신 (background/terminated): \(userInfo)")
         
         if let boardIdStr = userInfo["boardId"] as? String, let boardId = Int(boardIdStr) {
-            navigateApplyDetail(boardId: boardId)
+            moveApplyDetailView(boardId: boardId)
         } else {
             print("boardId 구할 수 없음")
         }
         completionHandler()
     }
-    
-    func navigateApplyDetail(boardId: Int) {
-        if let windowScene = UIApplication.shared.connectedScenes
-            .filter({ $0.activationState == .foregroundActive })
-            .compactMap({ $0 as? UIWindowScene })
-            .first {
-            
-            // 윈도우가 있는지 확인
-            if let window = windowScene.windows.first {
-                print("윈도우 찾음: \(window)")
-                
-                // rootViewController가 있는지 확인
-                if let rootViewController = window.rootViewController as? UINavigationController {
-                    print("rootViewController 찾음: \(rootViewController)")
-                    
-                    // 상세 페이지로 이동
-                    let reactor = DIContainerService.shared.makeReciveMateReactor()
-                    reactor.action.onNext(.selectPost(String(boardId)))
-                    let applyDetailVC = ReceiveMateListDetailViewController(reactor: reactor)
-                    applyDetailVC.modalPresentationStyle = .overFullScreen
-                    rootViewController.present(applyDetailVC, animated: false)
-                } else {
-                    print("rootViewController가 설정되지 않음")
-                }
-            } else {
-                print("윈도우를 찾을 수 없음")
-            }
-        } else {
-            print("UIWindowScene을 찾을 수 없음")
+    private func moveApplyDetailView(boardId: Int) {
+        if UIApplication.shared.connectedScenes.first?.delegate is SceneDelegate {
+            guard let rootViewController = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.window?.rootViewController else { return }
+            // 상세 페이지로 이동
+            let reactor = DIContainerService.shared.makeReciveMateReactor()
+            reactor.action.onNext(.selectPost(String(boardId)))
+            let applyDetailVC = ReceiveMateListDetailViewController(reactor: reactor)
+            applyDetailVC.modalPresentationStyle = .overFullScreen
+            rootViewController.present(applyDetailVC, animated: false)
         }
     }
-    
+
     // FCM 토큰 갱신 시 호출되는 메서드
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         print("Firebase registration token: \(String(describing: fcmToken))")
