@@ -130,8 +130,11 @@ final class AddViewController: BaseViewController, View {
     }()
     private let buttonContainer = UIView()
     private let registerButton = CMDefaultFilledButton(title: "등록")
-    init(reactor: AddReactor) {
+    
+    private let editPost: Post?
+    init(reactor: AddReactor, editPost: Post? = nil) {
         self.reactor = reactor
+        self.editPost = editPost
         super.init(nibName: nil, bundle: nil)
     }
     @available(*, unavailable)
@@ -163,6 +166,9 @@ final class AddViewController: BaseViewController, View {
         setupAgeButton()
         setupNavigationBar()
         bind(reactor: reactor)
+        if let editPost = editPost {
+            reactor.action.onNext(.setupEditPost(post: editPost))
+        }
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -196,7 +202,7 @@ final class AddViewController: BaseViewController, View {
         // numberPicker Setup
         numberPickerTextField.parentViewController = self
         numberPickerTextField.pickerViewController = NumberPickerViewController(reactor: reactor)
-        numberPickerTextField.customDetent = BasePickerViewController.returnCustomDetent(height: Screen.height / 3.0 + 10.0, identifier: "NumberFilter")
+        numberPickerTextField.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.numberFilter, identifier: "NumberFilter")
         
         // TeamPicker Setup
         homeTeamPicker.parentViewController = self
@@ -230,12 +236,14 @@ final class AddViewController: BaseViewController, View {
     }
     
     private func setupNavigationBar() {
-        let saveButton = UIButton()
-        saveButton.setTitle("임시저장", for: .normal)
-        saveButton.applyStyle(textStyle: FontSystem.body02_medium)
-        saveButton.setTitleColor(.cmHeadLineTextColor, for: .normal)
-        saveButton.addTarget(self, action: #selector(clickSaveButton), for: .touchUpInside)
-        customNavigationBar.addRightItems(items: [saveButton])
+        if editPost != nil {
+            let saveButton = UIButton()
+            saveButton.setTitle("임시저장", for: .normal)
+            saveButton.applyStyle(textStyle: FontSystem.body02_medium)
+            saveButton.setTitleColor(.cmHeadLineTextColor, for: .normal)
+            saveButton.addTarget(self, action: #selector(clickSaveButton), for: .touchUpInside)
+            customNavigationBar.addRightItems(items: [saveButton])
+        }
     }
 }
 // MARK: - Bind
@@ -252,9 +260,16 @@ extension AddViewController {
             .disposed(by: disposeBag)
         
         registerButton.rx.tap
-            .map{Reactor.Action.updatePost}
-            .bind(to: reactor.action)
+            .withUnretained(self)
+            .subscribe(onNext: { vc, _ in
+                if vc.editPost != nil {
+                    reactor.action.onNext(.updateEditPost)
+                } else {
+                    reactor.action.onNext(.updatePost)
+                }
+            })
             .disposed(by: disposeBag)
+        
         titleTextField.rx.text.orEmpty
             .map { Reactor.Action.changeTitle($0) }
             .bind(to: reactor.action)
@@ -350,6 +365,60 @@ extension AddViewController {
                 vc.numberPickerTextField.didSelectItem(String(num))
             }
             .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.title}
+            .distinctUntilChanged()
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, text in
+                vc.titleTextField.text = text
+                vc.titleTextField.updateTextStyle()
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.addText}
+            .distinctUntilChanged()
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, text in
+                vc.textview.text = text
+                vc.textview.updateTextStyle()
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.selectedAge}
+            .distinctUntilChanged()
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, age in
+                vc.ageButtons.forEach { label in
+                    label.isSelected = (age == label.tag * 10)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.selectedGender}
+            .distinctUntilChanged()
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, gender in
+                switch gender {
+                case .woman:
+                    vc.noGenderButton.isSelected = false
+                    vc.manButton.isSelected = false
+                    vc.womanButton.isSelected = true
+                case .man:
+                    vc.noGenderButton.isSelected = false
+                    vc.manButton.isSelected = true
+                    vc.womanButton.isSelected = false
+                case .none:
+                    vc.noGenderButton.isSelected = true
+                    vc.manButton.isSelected = false
+                    vc.womanButton.isSelected = false
+                }
+            }
+            .disposed(by: disposeBag)
+
     }
     
     // 작성 완료 후 호출되는 메소드
@@ -395,9 +464,6 @@ extension AddViewController {
         } else {
             selectedGenderLabel = tappedLabel
         }
-        noGenderButton.isSelected = (selectedGenderLabel == noGenderButton)
-        manButton.isSelected = (selectedGenderLabel == manButton)
-        womanButton.isSelected = (selectedGenderLabel == womanButton)
     }
     
     private func setupAgeButton() {
@@ -408,16 +474,13 @@ extension AddViewController {
     }
     @objc private func clickAgeButton(_ gesture: UITapGestureRecognizer) {
         guard let tappedLabel = gesture.view as? PaddingLabel else { return }
-        var currentSelectAge = tappedLabel.tag * 10
+        let currentSelectAge = tappedLabel.tag * 10
         if currentSelectAge == selectedAge {
             selectedAge = nil
         } else {
             selectedAge = currentSelectAge
         }
         
-        ageButtons.forEach { label in
-            label.isSelected = (selectedAge == label.tag * 10)
-        }
     }
 //    @objc private func clickAgeButton(_ gesture: UITapGestureRecognizer) {
 //        guard let tappedLabel = gesture.view as? PaddingLabel else { return }

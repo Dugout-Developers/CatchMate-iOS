@@ -8,12 +8,15 @@
 import UIKit
 import RxSwift
 import SnapKit
+import PinLayout
+import FlexLayout
 
 class BaseViewController: UIViewController {
     
     var disposeBag: DisposeBag = DisposeBag()
     let customNavigationBar = CMNavigationBar()
     private let navigationBarHeight: CGFloat = 44.0
+    var errorView: ErrorPageView? 
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,29 +27,6 @@ class BaseViewController: UIViewController {
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
-    
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        print("\(self) did Appear")
-//        if let navigationController = navigationController, navigationController.viewControllers.count > 1 {
-//            tabBarController?.tabBar.isHidden = true
-//        } else {
-//            if tabBarController?.selectedIndex != 2 {
-//                tabBarController?.tabBar.isHidden = false
-//            } else {
-//                tabBarController?.tabBar.isHidden = true
-//            }
-//        }
-//    }
-
-//    override func viewDidDisappear(_ animated: Bool) {
-//        super.viewDidDisappear(animated)
-//        if let navigationController = navigationController, navigationController.viewControllers.count <= 1 {
-//            tabBarController?.tabBar.isHidden = false
-//        }
-//        view.setNeedsLayout()
-//        view.layoutIfNeeded()
-//    }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -103,6 +83,12 @@ class BaseViewController: UIViewController {
         logoImageView.contentMode = .scaleAspectFit
         customNavigationBar.addLeftItems(items: [logoImageView])
     }
+
+     // 에러 뷰를 숨기는 함수
+     func hideErrorView() {
+         errorView?.removeFromSuperview()
+         errorView = nil
+     }
 }
 
 extension BaseViewController: UIGestureRecognizerDelegate { 

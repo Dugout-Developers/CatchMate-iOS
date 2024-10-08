@@ -12,6 +12,7 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
     private var user: SimpleUser
     private let tableview = UITableView()
     private let reactor: OtherUserpageReactor
+    private let reportReactor: ReportReactor
     private var posts: [SimplePost] = []
     
     override func viewWillAppear(_ animated: Bool) {
@@ -25,11 +26,13 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
         setupTableView()
         setupUI()
         bind(reactor: reactor)
+        bind(reportReactor: reportReactor)
     }
     
-    init(user: SimpleUser, reactor: OtherUserpageReactor) {
+    init(user: SimpleUser, reactor: OtherUserpageReactor, reportReactor: ReportReactor) {
         self.user = user
         self.reactor = reactor
+        self.reportReactor = reportReactor
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -39,13 +42,41 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
     }
     
     private func setupNavigation() {
-        let menuButton = UIButton()
-        menuButton.setImage(UIImage(named: "cm20kebab")?.withTintColor(.grayScale700, renderingMode: .alwaysOriginal), for: .normal)
-        menuButton.addTarget(self, action: #selector(clickMenuButton), for: .touchUpInside)
-        customNavigationBar.addRightItems(items: [menuButton])
+        if user.userId != SetupInfoService.shared.getUserInfo(type: .id) {
+            let menuButton = UIButton()
+            menuButton.setImage(UIImage(named: "cm20kebab")?.withTintColor(.grayScale700, renderingMode: .alwaysOriginal), for: .normal)
+            menuButton.addTarget(self, action: #selector(clickMenuButton), for: .touchUpInside)
+            customNavigationBar.addRightItems(items: [menuButton])
+        }
+        
     }
     @objc private func clickMenuButton(_ sender: UIButton) {
-
+        let userNickname = user.nickName
+        let menuVC = CMActionMenu()
+        // 메뉴 항목 설정
+        menuVC.menuItems = [
+            MenuItem(title: "차단하기", action: { [weak self] in
+                self?.showCMAlert(titleText: "\"\(userNickname)\"\n정말 차단할까요?", importantButtonText: "차단", commonButtonText: "취소", importantAction: {
+                    self?.dismiss(animated: false, completion: {
+                        print("\(userNickname) 차단")
+                        self?.showToast(message: "차단 유저 목록은\n설정 - '차단 설정'에서 확인할 수 있어요")
+                    })
+                }, commonAction: {
+                    self?.dismiss(animated: false)
+                })
+            }),
+            MenuItem(title: "신고하기", textColor: UIColor.cmSystemRed, action: { [weak self] in
+                if let user = self?.user, let reactor = self?.reportReactor {
+                    let reportVC = UserReportViewController(reportUser: user, reactor: reactor)
+                    self?.navigationController?.pushViewController(reportVC, animated: true)
+                } else {
+                    self?.showToast(message: "다시 시도해주세요.")
+                }
+            })
+        ]
+        // 메뉴 화면을 모달로 표시
+        menuVC.modalPresentationStyle = .overFullScreen
+        present(menuVC, animated: false, completion: nil)
     }
     
     private func setupTableView() {
@@ -106,7 +137,9 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
         case 0:
             break
         case 1:
-            break
+            let post = posts[indexPath.row]
+            let detailVC = PostDetailViewController(postID: post.id)
+            navigationController?.pushViewController(detailVC, animated: true)
         default:
             break
         }
@@ -154,6 +187,18 @@ extension OtherUserMyPageViewController {
                 setupLeftTitle("")
             }
         }
+    }
+    
+    func bind(reportReactor: ReportReactor) {
+        reportReactor.state.map{$0.finishedReport}
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .subscribe { vc, result in
+                if result {
+                    vc.showToast(message: "신고 완료되었어요")
+                }
+            }
+            .disposed(by: disposeBag)
     }
 }
 

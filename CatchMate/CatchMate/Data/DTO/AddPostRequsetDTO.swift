@@ -18,3 +18,18 @@ struct AddPostRequsetDTO: Codable {
     let preferAge: Int?
     let addInfo: String
 }
+
+struct EditPostRequsetDTO: Codable {
+    let boardId: Int
+    let title: String
+    let gameDate: String
+    let location: String
+    let homeTeam: String
+    let awayTeam: String
+    let cheerTeam: String
+    let currentPerson: Int
+    let maxPerson: Int
+    let preferGender: String?
+    let preferAge: Int?
+    let addInfo: String
+}

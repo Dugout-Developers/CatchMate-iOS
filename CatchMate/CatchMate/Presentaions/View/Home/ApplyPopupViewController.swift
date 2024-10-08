@@ -115,6 +115,7 @@ final class ApplyPopupViewController: UIViewController, View {
         setupView()
         setupUI()
         bind(reactor: reactor)
+        view.tappedDismissKeyboard()
     }
     
     private func setupView() {

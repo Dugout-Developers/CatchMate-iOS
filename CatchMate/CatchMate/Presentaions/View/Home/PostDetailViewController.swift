@@ -117,7 +117,7 @@ final class PostDetailViewController: BaseViewController, View {
         label.textColor = .white
         return label
     }()
-    private var cheerStyleLabel: DefaultsPaddingLabel? = {
+    private var cheerStyleLabel: DefaultsPaddingLabel = {
         let label = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 4, bottom: 2, right: 4))
         label.layer.cornerRadius = 2
         label.textColor = .white
@@ -192,6 +192,7 @@ final class PostDetailViewController: BaseViewController, View {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupErrorView()
         bind(reactor: reactor)
         reactor.action.onNext(.loadPostDetails)
 //        reactor.action.onNext(.loadIsApplied)
@@ -201,6 +202,7 @@ final class PostDetailViewController: BaseViewController, View {
         setupButton()
     }
     
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         scrollView.pin.left().right().top(view.pin.safeArea).above(of: buttonContainer)
@@ -209,8 +211,15 @@ final class PostDetailViewController: BaseViewController, View {
         contentView.flex.layout(mode: .adjustHeight)
         buttonContainer.flex.layout()
         scrollView.contentSize = contentView.frame.size
+        if let errorView = errorView {
+            errorView.pin.all(view.pin.safeArea)
+            errorView.flex.layout()
+        }
     }
-    
+    private func setupErrorView() {
+        errorView = ErrorPageView(useSnapKit: false)
+        errorView?.isHidden = true
+    }
     private func setupNavigation() {
         let reportButton = UIButton()
         reportButton.setImage(UIImage(named: "cm20kebab")?.withTintColor(.cmHeadLineTextColor, renderingMode: .alwaysOriginal), for: .normal)
@@ -227,11 +236,20 @@ final class PostDetailViewController: BaseViewController, View {
                 MenuItem(title: "끌어올리기", action: { [weak self] in
                     self?.showToast(message: "게시글을 끌어올렸어요", buttonContainerExists: true)
                 }),
-                MenuItem(title: "게시글 수정", action: {
-                    print("게시글 수정 선택됨")
+                MenuItem(title: "게시글 수정", action: { [weak self] in
+                    if let post = self?.reactor.currentState.post {
+                        let editVC = AddViewController(reactor: DIContainerService.shared.makeAddReactor(), editPost: post)
+                        self?.navigationController?.pushViewController(editVC, animated: true)
+                    } else {
+                        self?.showToast(message: "수정 페이지 불러오기 실패. 다시 시도해주세요.")
+                    }
                 }),
-                MenuItem(title: "게시글 삭제", textColor: UIColor.cmSystemRed, action: {
-                    print("게시글 삭제 선택됨")
+                MenuItem(title: "게시글 삭제", textColor: UIColor.cmSystemRed, action: { [weak self] in
+                    self?.showCMAlert(titleText: "삭제 시 채팅방도 같이 삭제됩니다\n게시글을 삭제하시겠습니까?", importantButtonText: "삭제", commonButtonText: "취소", importantAction: {
+                        self?.reactor.action.onNext(.deletePost)
+                    }, commonAction: {
+                        self?.dismiss(animated: false)
+                    })
                 })
             ]
         } else {
@@ -270,10 +288,11 @@ final class PostDetailViewController: BaseViewController, View {
         cheerTeam.backgroundColor = post.writer.favGudan.getTeamColor
         cheerTeam.text = post.writer.favGudan.rawValue
         if let cheerStyle = post.writer.cheerStyle {
-            cheerStyleLabel?.text = cheerStyle.rawValue
-            cheerStyleLabel?.applyStyle(textStyle: FontSystem.caption01_medium)
+            cheerStyleLabel.text = cheerStyle.rawValue
+            cheerStyleLabel.applyStyle(textStyle: FontSystem.caption01_medium)
+            cheerStyleLabel.flex.display(.flex)
         } else {
-            cheerStyleLabel = nil
+            cheerStyleLabel.flex.display(.none)
         }
         genderLabel.text = post.writer.gender.rawValue
         ageLabel.text = post.writer.ageRange
@@ -300,7 +319,7 @@ final class PostDetailViewController: BaseViewController, View {
         placeValueLabel.flex.markDirty()
         partynumValueLabel.flex.markDirty()
         cheerTeam.flex.markDirty()
-        cheerStyleLabel?.flex.markDirty()
+        cheerStyleLabel.flex.markDirty()
         genderLabel.flex.markDirty()
         ageLabel.flex.markDirty()
         addInfoValueLabel.flex.markDirty()
@@ -319,7 +338,7 @@ final class PostDetailViewController: BaseViewController, View {
     
     @objc private func pushUserPage(_ sender: UITapGestureRecognizer) {
         if let user = reactor.currentState.post?.writer {
-            let userPageVC = OtherUserMyPageViewController(user: user, reactor: OtherUserpageReactor())
+            let userPageVC = OtherUserMyPageViewController(user: user, reactor: DIContainerService.shared.makeOtherUserPageReactor(user), reportReactor: ReportReactor())
             navigationController?.pushViewController(userPageVC, animated: true)
         } else {
             showToast(message: "해당 사용자 정보에 접근할 수 없습니다. 다시 시도해주세요.", buttonContainerExists: true)
@@ -339,16 +358,6 @@ final class PostDetailViewController: BaseViewController, View {
         ageLabel.applyStyle(textStyle: FontSystem.caption01_medium)
         addInfoValueLabel.applyStyle(textStyle: FontSystem.body02_medium)
     }
-    
-//    private func makePreferPaddingLabel(text: String) -> DefaultsPaddingLabel {
-//        let label = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8))
-//        label.textColor = .cmNonImportantTextColor
-//        label.text = text
-//        label.applyStyle(textStyle: FontSystem.caption01_reguler)
-//        label.backgroundColor = .grayScale100
-//        label.layer.cornerRadius = 10
-//        return label
-//    }
 }
 
 // MARK: - bind
@@ -417,7 +426,33 @@ extension PostDetailViewController {
             .compactMap{$0}
             .withUnretained(self)
             .subscribe { vc, error in
-                vc.showToast(message: "요청에 실패했습니다. 다시 시도해주세요.", buttonContainerExists: true)
+                switch error {
+                case .retryable(let message), .timeout(let message):
+                    vc.showToast(message: message, buttonContainerExists: true)
+                case .contactSupport, .unknown:
+                    vc.showToast(message: "문제가 발생했습니다. 지원팀에 문의해주세요.")
+                case .showErrorPage:
+                    vc.customNavigationBar.isRightItemsHidden = true
+                    vc.errorView?.isHidden = false
+                    vc.errorView?.flex.layout()
+                    vc.view.setNeedsLayout()
+                    vc.view.layoutIfNeeded()
+                case .informational(let message):
+                    vc.showToast(message: message, buttonContainerExists: true)
+                case .unauthorized:
+                    // 로그아웃 시키기
+                    break
+                case .validationFailed:
+                    break
+                }
+            }
+            .disposed(by: disposeBag)
+        reactor.state.map{$0.isDelete}
+            .withUnretained(self)
+            .subscribe { vc, flag in
+                if flag {
+                    vc.navigationController?.popViewController(animated: true)
+                }
             }
             .disposed(by: disposeBag)
         
@@ -461,6 +496,9 @@ extension PostDetailViewController {
 extension PostDetailViewController {
     private func setupUI() {
         view.addSubviews(views: [scrollView, buttonContainer])
+        if let errorView = errorView {
+            view.addSubview(errorView)
+        }
         scrollView.backgroundColor = .grayScale50
         scrollView.addSubview(contentView)
         contentView.flex.backgroundColor(.grayScale50).define { flex in
@@ -500,9 +538,7 @@ extension PostDetailViewController {
                         flex.addItem(nickNameLabel).marginBottom(6)
                         flex.addItem().direction(.row).justifyContent(.start).alignItems(.start).define { flex in
                             flex.addItem(cheerTeam).marginRight(4)
-                            if let cheerStyleLabel = cheerStyleLabel {
-                                flex.addItem(cheerStyleLabel).marginRight(4)
-                            }
+                            flex.addItem(cheerStyleLabel).marginRight(4)
                             flex.addItem(genderLabel).marginRight(4)
                             flex.addItem(ageLabel)
                         }

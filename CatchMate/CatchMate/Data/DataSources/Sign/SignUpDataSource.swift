@@ -23,7 +23,7 @@ final class SignUpDataSourceImpl: SignUpDataSource {
     func saveUserModel(_ model: SignUpRequest) -> Observable<SignUpResponseDTO> {
         LoggerService.shared.debugLog("-----------------Servser Request SignUp-------------------")
         
-        var parameters: [String: Any] = [
+        let parameters: [String: Any] = [
             "email": model.email,
             "provider": model.provider,
             "providerId": model.providerId,
@@ -32,12 +32,10 @@ final class SignUpDataSourceImpl: SignUpDataSource {
             "fcmToken": model.fcmToken,
             "nickName": model.nickName,
             "birthDate": model.birthDate,
-            "favGudan": model.favGudan
+            "favGudan": model.favGudan,
+            "watchStyle": model.watchStyle ?? ""
         ]
-        
-        if let watchStyle = model.watchStyle {
-            parameters["watchStyle"] = watchStyle
-        }
+         
         LoggerService.shared.debugLog("SignUp Parameters : \(parameters)")
         return APIService.shared.requestAPI(type: .signUp, parameters: parameters, encoding: JSONEncoding.default, dataType: SignUpResponseDTO.self)
             .withUnretained(self)

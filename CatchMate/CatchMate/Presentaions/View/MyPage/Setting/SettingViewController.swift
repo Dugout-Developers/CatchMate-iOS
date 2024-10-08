@@ -19,6 +19,7 @@ final class SettingViewController: BaseViewController, UITableViewDelegate, UITa
         setupNavigation()
         setupTableView()
         setupUI()
+        tabBarController?.tabBar.isHidden = true
     }
     
     private func setupNavigation() {
@@ -68,7 +69,7 @@ final class SettingViewController: BaseViewController, UITableViewDelegate, UITa
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
-            settingMenus[indexPath.row].navigationVC
+            settingMenus[indexPath.row].navigationVC()
                 .catch({ [weak self] error in
                     guard let self = self else { return Observable.empty() }
                     if let error = error as? PresentationError {
@@ -77,7 +78,12 @@ final class SettingViewController: BaseViewController, UITableViewDelegate, UITa
                             showToast(message: message)
                         case .contactSupport(let message):
                             showToast(message: message)
-                        case .showErrorPage(let message):
+                        case .showErrorPage:
+//                            customNavigationBar.isRightItemsHidden = true
+//                            errorView?.isHidden = false
+//                            errorView?.flex.layout()
+//                            view.setNeedsLayout()
+//                            view.layoutIfNeeded()
                             break
                         case .informational(let message):
                             showToast(message: message)
@@ -100,7 +106,7 @@ final class SettingViewController: BaseViewController, UITableViewDelegate, UITa
                 }
                 .disposed(by: disposeBag)
         case 1:
-            supportMenus[indexPath.row].navigationVC
+            supportMenus[indexPath.row].navigationVC()
                 .withUnretained(self)
                 .subscribe { vc, nextVC in
                     vc.navigationController?.pushViewController(nextVC, animated: true)

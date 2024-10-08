@@ -14,8 +14,8 @@ import ReactorKit
 final class ReceiveMateListDetailViewController: BaseViewController, UICollectionViewDelegateFlowLayout, View {
     
     var collectionView: UICollectionView!
-    var reactor: ReceiveMateDetailReactor
-    init(reactor: ReceiveMateDetailReactor) {
+    var reactor: RecevieMateReactor
+    init(reactor: RecevieMateReactor) {
         self.reactor = reactor
         super.init(nibName: nil, bundle: nil)
     }
@@ -59,12 +59,34 @@ final class ReceiveMateListDetailViewController: BaseViewController, UICollectio
     }
 
     @objc func tappedView(_ sender: UIGestureRecognizer) {
-        dismiss(animated: true)
+        dismiss(animated: false)
     }
-    func bind(reactor: ReceiveMateDetailReactor) {
-        reactor.state.map { $0.applies }
+    func bind(reactor: RecevieMateReactor) {
+        reactor.state.map { $0.selectedPostApplies }
+            .compactMap{$0}
             .bind(to: collectionView.rx.items(cellIdentifier: "DetailCardCell", cellType: DetailCardCell.self)) { index, apply, cell in
                 cell.configData(apply: apply)
+                cell.primaryButton.rx.tap
+                    .subscribe { _ in
+                        // 직관 신청 수락
+                        reactor.action.onNext(.acceptApply(apply.enrollId))
+                    }
+                    .disposed(by: cell.disposeBag)
+                cell.commonButton.rx.tap
+                    .subscribe { _ in
+                        // 직관 신청 거절
+                        reactor.action.onNext(.rejectApply(apply.enrollId))
+                    }
+                    .disposed(by: cell.disposeBag)
+            }
+            .disposed(by: disposeBag)
+        reactor.state.map { $0.selectedPostApplies }
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, list in
+                if list.isEmpty {
+                    vc.dismiss(animated: false)
+                }
             }
             .disposed(by: disposeBag)
     }
@@ -119,7 +141,7 @@ final class DetailCardCell: UICollectionViewCell {
         textView.showsVerticalScrollIndicator = true
         return textView
     }()
-    private let primaryButton: UIButton = {
+    let primaryButton: UIButton = {
         let button = UIButton()
         button.setTitle("수락", for: .normal)
         button.setTitleColor(.cmPrimaryColor, for: .normal)
@@ -129,7 +151,7 @@ final class DetailCardCell: UICollectionViewCell {
         return button
     }()
     
-    private let commonButton: UIButton = {
+    let commonButton: UIButton = {
         let button = UIButton()
         button.setTitle("거절", for: .normal)
         button.setTitleColor(.cmHeadLineTextColor, for: .normal)
@@ -143,7 +165,6 @@ final class DetailCardCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
-        bind()
     }
     @available(*, unavailable)
     required init?(coder: NSCoder) {
@@ -151,18 +172,18 @@ final class DetailCardCell: UICollectionViewCell {
         setupUI()
     }
     
-    func configData(apply: Apply) {
-        let user = apply.applicant
-        if let urlString = user.profilePicture, let url = URL(string: urlString) {
+    func configData(apply: RecivedApplyData) {
+        let user = apply.user
+        if let urlString = user.picture, let url = URL(string: urlString) {
             profileImageView.kf.setImage(with: url)
         } else {
             profileImageView.image = UIImage(named: "tempProfile")
         }
         nicknameLabel.text = user.nickName
         nicknameLabel.applyStyle(textStyle: FontSystem.body02_medium)
-        teamLabel.text = user.team.rawValue
+        teamLabel.text = user.favGudan.rawValue
         teamLabel.applyStyle(textStyle: FontSystem.caption01_medium)
-        teamLabel.backgroundColor = user.team.getTeamColor
+        teamLabel.backgroundColor = user.favGudan.getTeamColor
         teamLabel.textColor = .white
         if let style = user.cheerStyle {
             styleLabel.text = style.rawValue
@@ -172,7 +193,7 @@ final class DetailCardCell: UICollectionViewCell {
         } else {
             styleLabel.flex.width(0).height(0)
         }
-        genderLabel.text = user.gener.rawValue
+        genderLabel.text = user.gender.rawValue
         genderLabel.backgroundColor = .grayScale100
         genderLabel.applyStyle(textStyle: FontSystem.caption01_medium)
         genderLabel.textColor = .cmNonImportantTextColor
@@ -181,7 +202,8 @@ final class DetailCardCell: UICollectionViewCell {
         ageLabel.backgroundColor = .grayScale100
         ageLabel.textColor = .cmNonImportantTextColor
         ageLabel.applyStyle(textStyle: FontSystem.caption01_medium)
-        applyDateLabel.text = DateHelper.shared.toString(from: apply.applyDate, format: "M월d일 HH:mm")
+        // MARK: - API CreateDate 추가 시 수정
+        applyDateLabel.text = DateHelper.shared.toString(from: Date(), format: "M월d일 HH:mm")
         applyDateLabel.applyStyle(textStyle: FontSystem.body02_medium)
         textView.text = apply.addText
         textView.applyStyle(textStyle: FontSystem.body02_medium)
@@ -214,16 +236,6 @@ final class DetailCardCell: UICollectionViewCell {
         ageLabel.flex.markDirty()
         textView.flex.markDirty()
         containerView.flex.layout()
-    }
-    
-    private func bind() {
-        primaryButton.rx.tap
-            .subscribe { _ in
-                print("수락")
-            }
-            .disposed(by: disposeBag)
-        
-        
     }
     
     private func setupUI(){

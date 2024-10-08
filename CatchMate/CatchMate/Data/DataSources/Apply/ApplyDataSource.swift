@@ -12,7 +12,7 @@ import Alamofire
 
 protocol ApplyDataSource {
     func applyPost(boardID: String, addInfo: String) -> Observable<Int>
-    func cancelApplyPost(enrollId: String) -> Observable<Bool>
+    func cancelApplyPost(enrollId: String) -> Observable<Void>
 }
 
 final class ApplyDataSourceImpl: ApplyDataSource {
@@ -71,7 +71,7 @@ final class ApplyDataSourceImpl: ApplyDataSource {
 
     }
     
-    func cancelApplyPost(enrollId: String) -> Observable<Bool> {
+    func cancelApplyPost(enrollId: String) -> Observable<Void> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
@@ -84,22 +84,22 @@ final class ApplyDataSourceImpl: ApplyDataSource {
         LoggerService.shared.log("토큰 확인: \(headers)")
         
         return APIService.shared.requestAPI(addEndPoint: enrollId, type: .cancelApply, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: CancelApplyPostResponse.self)
-            .map { _ in
+            .map { _ -> Void in
                 LoggerService.shared.debugLog("신청 취소 성공")
-                return true
+                return ()
             }
             .catch { error in
                 if error.statusCode == 401 {
                     return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
-                        .flatMap { token -> Observable<Bool> in
+                        .flatMap { token -> Observable<Void> in
                             let headers: HTTPHeaders = [
                                 "AccessToken": token
                             ]
                             LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
                             return APIService.shared.requestAPI(addEndPoint: enrollId, type: .cancelApply, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: CancelApplyPostResponse.self)
-                                .map { _ in
+                                .map { _ -> Void in
                                     LoggerService.shared.debugLog("신청 취소 성공")
-                                    return true
+                                    return ()
                                 }
                         }
                         .catch { error in

@@ -11,7 +11,7 @@ struct SimplePost: Identifiable, Equatable {
     let title: String
     let homeTeam: Team
     let awayTeam: Team
-//    let cheerTeam: Team
+    let cheerTeam: Team
     let date: String
     let playTime: String
     let location: String
@@ -29,11 +29,12 @@ struct SimplePost: Identifiable, Equatable {
         return lhs.id == rhs.id
     }
     
-    init(id: String = UUID().uuidString, title: String, homeTeam: Team, awayTeam: Team, date: String, playTime: String, location: String, maxPerson: Int, currentPerson: Int) {
+    init(id: String = UUID().uuidString, title: String, homeTeam: Team, awayTeam: Team, cheerTeam: Team, date: String, playTime: String, location: String, maxPerson: Int, currentPerson: Int) {
         self.id = id
         self.title = title
         self.homeTeam = homeTeam
         self.awayTeam = awayTeam
+        self.cheerTeam = cheerTeam
         self.date = date
         self.playTime = playTime
         self.location = location
@@ -46,6 +47,7 @@ struct SimplePost: Identifiable, Equatable {
         self.title = post.title
         self.homeTeam = post.homeTeam
         self.awayTeam = post.awayTeam
+        self.cheerTeam = post.cheerTeam
         self.date = post.date
         self.playTime = post.playTime
         self.location = post.location

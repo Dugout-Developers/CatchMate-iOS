@@ -16,7 +16,7 @@ final class SignUpFinishedViewController: BaseViewController{
     
     private let logoImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "EmptyPrimary")
+        imageView.image = UIImage(named: "congratulations")
         return imageView
     }()
     
@@ -53,7 +53,7 @@ final class SignUpFinishedViewController: BaseViewController{
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        containerView.pin.all(view.pin.safeArea)
+        containerView.pin.all(view.pin.safeArea).marginBottom(BottomMargin.safeArea-view.safeAreaInsets.bottom)
         containerView.flex.layout()
     }
     

@@ -20,6 +20,7 @@ enum MypageMenu: String {
     
     case auth = "계정 정보"
     case noti = "알림 설정"
+    case block = "차단 설정"
     
     static var supportMenus: [MypageMenu] {
         return [.notices, .customerService, .terms, .info]
@@ -30,25 +31,24 @@ enum MypageMenu: String {
     }
     
     static var settingMenus: [MypageMenu] {
-        return [.auth, .noti]
+        return [.auth, .noti, .block]
     }
     
-    var navigationVC: Observable<UIViewController> {
+    func navigationVC(user: SimpleUser? = nil) -> Observable<UIViewController> {
         switch self {
         case .notices:
             return Observable.just(AnnouncementsViewController(reactor: AnnouncementsReactor()))
-        case .customerService:
-            return Observable.just(CustomerServiceViewController(title: self.rawValue))
-        case .terms:
-            return Observable.just(CustomerServiceViewController(title: self.rawValue))
-        case .info:
+        case .customerService, .terms, .info:
             return Observable.just(CustomerServiceViewController(title: self.rawValue))
         case .write:
-            return Observable.just(CustomerServiceViewController(title: self.rawValue))
+            guard let user = user else {
+                return Observable.error(PresentationError.showErrorPage(message: "요청을 처리할 수 없습니다. 다시 시도해주세요."))
+            }
+            return Observable.just(OtherUserMyPageViewController(user: user, reactor: DIContainerService.shared.makeOtherUserPageReactor(user), reportReactor: ReportReactor()))
         case .send:
             return Observable.just(SendMateListViewController(reactor: DIContainerService.shared.makeSendMateReactor()))
         case .receive:
-            return Observable.just(ReceiveMateListViewController(reactor: RecevieMateReactor()))
+            return Observable.just(ReceiveMateListViewController(reactor: DIContainerService.shared.makeReciveMateReactor()))
         case .auth:
             return LoginUserDefaultsService.shared.getLoginData()
                 .map { loginData in
@@ -60,6 +60,8 @@ enum MypageMenu: String {
                 }
         case .noti:
             return Observable.just(NotificationSettingViewController(reactor: NotificationSettingReactor()))
+        case .block:
+            return Observable.just(BlockSettingViewController(reactor: BlockUserReactor()))
         }
     }
 }

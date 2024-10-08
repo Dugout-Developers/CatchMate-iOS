@@ -75,6 +75,10 @@ class CMTextView: UITextView {
     
     @objc private func textDidChange() {
         placeholderLabel.isHidden = !text.isEmpty
+        updateTextStyle()
+    }
+    
+    func updateTextStyle() {
         if let currentText = self.text {
             self.attributedText = NSAttributedString(string: currentText, attributes: FontSystem.body02_medium.getAttributes())
         }
@@ -154,7 +158,8 @@ class BaseTextView: UITextView {
         addSubview(placeholderLabel)
         
         placeholderLabel.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
+            make.top.equalToSuperview().offset(-2)
+            make.leading.trailing.equalToSuperview()
         }
 
     }

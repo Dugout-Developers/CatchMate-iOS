@@ -33,7 +33,7 @@ struct BoardInfo: Codable {
 struct Content: Codable {
     let enrollId: Int
     let acceptStatus: String
-    let description: String
+    let description: String?
     let userInfo: UserInfo
     let boardInfo: BoardInfo
 }

@@ -17,6 +17,7 @@ final class ChatRoomViewController: BaseViewController, View {
     var reactor: ChatRoomReactor
     private var keyboardManager: KeyboardManager?
     private var bottomConstraint: Constraint?
+    private var inputViewHeightConstraint: Constraint?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -34,7 +35,7 @@ final class ChatRoomViewController: BaseViewController, View {
         setupNavigation()
         setupUI()
         bind(reactor: reactor)
-
+        textViewBind()
         keyboardManager = KeyboardManager(view: view, bottomConstraint: bottomConstraint, keyboardWillShowHandler: { [weak self] in
             self?.scrollToBottom(animated: true)
         })
@@ -72,7 +73,7 @@ final class ChatRoomViewController: BaseViewController, View {
         tableView.keyboardDismissMode = .onDrag
         tableView.tableHeaderView = UIView()
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 200
+        tableView.estimatedRowHeight = 44
         tableView.backgroundColor = .grayScale50
     }
     private func setupNavigation() {
@@ -114,7 +115,7 @@ final class ChatRoomViewController: BaseViewController, View {
         inputview.snp.makeConstraints { make in
             make.top.equalTo(tableView.snp.bottom)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(52)
+            inputViewHeightConstraint = make.height.equalTo(52).constraint
             bottomConstraint = make.bottom.equalTo(view.safeAreaLayoutGuide).constraint
         }
     }
@@ -122,19 +123,40 @@ final class ChatRoomViewController: BaseViewController, View {
 
 // MARK: - Bind
 extension ChatRoomViewController {
-    func bind(reactor: ChatRoomReactor) {
-        reactor.state.map { $0.messages }
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] messages in
-                self?.tableView.beginUpdates()
-                self?.tableView.endUpdates()
+    func textViewBind() {
+        inputview.textField.rx.text
+            .compactMap { $0 }
+            .withUnretained(self)
+            .subscribe(onNext: { vc, text in
+                vc.inputview.textField.isScrollEnabled = false
+                let size = CGSize(width: vc.inputview.textField.frame.width, height: .infinity)
+                let estimatedSize = vc.inputview.textField.sizeThatFits(size)
+
+                // 최대 높이를 넘어가는지 여부 확인
+                let isMaxHeight = estimatedSize.height >= 90
+
+                if isMaxHeight {
+                    vc.inputview.textField.isScrollEnabled = true
+                    vc.updateInputViewHeight(newHeight: 90)
+                } else {
+                    vc.inputview.textField.isScrollEnabled = false
+                    vc.updateInputViewHeight(newHeight: estimatedSize.height+34)
+                }
             })
             .disposed(by: disposeBag)
+    }
+    // inputview의 높이를 동적으로 업데이트하는 함수
+    func updateInputViewHeight(newHeight: CGFloat) {
+        inputViewHeightConstraint?.update(offset: newHeight)
+        view.layoutIfNeeded()
+    }
+    func bind(reactor: ChatRoomReactor) {
         reactor.state.map{$0.messages}
             .subscribe(onNext: { [weak self] messages in
                 guard let self = self else { return }
                 DispatchQueue.main.async {
-                    if messages.count > 0 {
+                    if messages.count > 0 {         
+                        self.tableView.reloadData()
                         let indexPath = IndexPath(row: messages.count - 1, section: 0)
                         self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
                     }

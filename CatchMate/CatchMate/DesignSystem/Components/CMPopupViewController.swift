@@ -74,6 +74,7 @@ final class CMPopupViewController: UIViewController {
         commonButton.setTitle(commonButtonText, for: .normal)
         commonButton.setTitleColor(.cmHeadLineTextColor, for: .normal)
         commonButton.applyStyle(textStyle: FontSystem.body02_medium)
+        titleLabel.textAlignment = .center
     }
     private func setupButtons() {
         importantButton.addTarget(self, action: #selector(clickedImportantButton), for: .touchUpInside)

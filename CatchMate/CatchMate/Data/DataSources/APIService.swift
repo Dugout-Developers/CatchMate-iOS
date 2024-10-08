@@ -10,36 +10,94 @@ import RxSwift
 import RxAlamofire
 import Alamofire
 
-enum Endpoint: String {
+enum Endpoint {
     /// 로그인
-    case login = "/auth/login"
+    case login
     /// 회원가입
-    case signUp = "/user/additional-info"
+    case signUp
     /// 게시글 저장
-    case savePost = "/board/write"
-    /// 게시글 리스트 /board/page/{pageNum}
-    case postlist = "/board/page/"
-    /// 게시글 조회 /board/{boardId}
-    case loadPost = "/board/"
-    /// 찜목록 조회 /board/likes
-    case loadFavorite = "/board/likes"
-    /// 찜 설정 /board/like/{boardID}
-    case setFavorite = "/board/like/"
+    case savePost
+    /// 게시글 수정
+    case editPost
+    /// 게시글 리스트
+    case postlist
+    /// user 게시글 조회
+    case userPostlist
+    /// 게시글 조회
+    case loadPost
+    /// 게시글 삭제
+    case removePost
+    /// 찜목록 조회
+    case loadFavorite
+    /// 찜 설정
+    case setFavorite
     /// 알람 설정
-    case setNotification = "/user/alarm"
+    case setNotification
     
-    /// 직관 신청 /enroll/{boardId}
-    case apply = "/enroll/"
-    /// 직관 신청 취소 /enroll/cancel/{enrollId}
-    case cancelApply = "/enroll/cancel/"
+    /// 직관 신청
+    case apply
+    /// 직관 신청 취소
+    case cancelApply
     /// 보낸 직관 신청 목록
-    case sendApply = "/enroll/request"
+    case sendApply
     /// 받은 직관 신청 목록
-    case receivedApply = "/enroll/receive"
+    case receivedApply
+    /// 받은 직관 신청 전체 목록
+    case receivedApplyAll
+    /// 직관 신청 수락
+    case acceptApply
+    /// 직관 신청 거절
+    case rejectApply
     
     /// 내정보 조회
-    case loadMyInfo = "/user/profile"
+    case loadMyInfo
     
+    var endPoint: String {
+        switch self {
+        case .login:
+            return "/auth/login"
+        case .signUp:
+            return "/user/additional-info"
+        case .savePost:
+            return "/board/write"
+        case .editPost:
+            return "/board/edit"
+        case .postlist:
+            /// 게시글 리스트 /board/page/{pageNum}
+            return "/board/page/"
+        case .userPostlist:
+            return "/board/page"
+        case .loadPost:
+            /// 게시글 조회 /board/{boardId}
+            return "/board/"
+        case .removePost:
+            return "/board/remove"
+        case .loadFavorite:
+            return "/board/likes"
+        case .setFavorite:
+            /// 찜 설정 /board/like/{boardID}
+            return "/board/like/"
+        case .setNotification:
+            return "/user/alarm"
+        case .apply:
+            /// 직관 신청 /enroll/{boardId}
+            return "/enroll/"
+        case .cancelApply:
+            return "/enroll/cancel/"
+        case .sendApply:
+            return "/enroll/request"
+        case .receivedApply:
+            return "/enroll/receive"
+        case .receivedApplyAll:
+            return "/enroll/receive/all"
+        case .acceptApply, .rejectApply:
+            /// acceptApply = /enroll/{enrollId}/accept
+            /// rejectApply = /enroll/{enrollId}/reject
+            return "/enroll/"
+        case .loadMyInfo:
+            return "/user/profile"
+        }
+    }
     var apiName: String {
         switch self {
         case .login:
@@ -47,11 +105,17 @@ enum Endpoint: String {
         case .signUp:
             return "회원가입 API"
         case .savePost:
-            return "게시글 요청 API"
+            return "게시글 저장 API"
+        case .editPost:
+            return "게시글 수정 API"
         case .postlist:
             return "게시글 리스트 불러오기 API"
         case .loadPost:
             return "게시글 로드 API"
+        case .removePost:
+            return "게시글 삭제 API"
+        case .userPostlist:
+            return "유저 게시글 리스트 로드 API"
         case .loadFavorite:
             return "찜목록 로드 API"
         case .setFavorite:
@@ -66,6 +130,12 @@ enum Endpoint: String {
             return "보낸 신청 목록 API"
         case .receivedApply:
             return "받은 신청 목록 API"
+        case .receivedApplyAll:
+            return "받은 신청 전체 목록 API"
+        case .acceptApply:
+            return "직관 신청 수락 API"
+        case .rejectApply:
+            return "직관 신청 거절 API"
         case .loadMyInfo:
             return "내 정보 조회 API"
         }
@@ -79,9 +149,15 @@ enum Endpoint: String {
             return .post
         case .savePost:
             return .post
+        case .editPost:
+            return .put
         case .setNotification:
             return .patch
         case .loadPost:
+            return .get
+        case .removePost:
+            return .delete
+        case .userPostlist:
             return .get
         case .loadFavorite:
             return .get
@@ -92,11 +168,17 @@ enum Endpoint: String {
         case .apply:
             return .post
         case .cancelApply:
-            return .post
+            return .delete
         case .sendApply:
             return .get
         case .receivedApply:
             return .get
+        case .receivedApplyAll:
+            return .get
+        case .acceptApply:
+            return .patch
+        case .rejectApply:
+            return .patch
         case .loadMyInfo:
             return .get
         }
@@ -115,12 +197,14 @@ final class APIService {
             LoggerService.shared.log("base 찾기 실패", level: .error)
             return Observable.error(NetworkError.notFoundBaseURL)
         }
-        var url = base + type.rawValue
+        var url = base + type.endPoint
         if let addEndPoint = addEndPoint {
             url += addEndPoint
         }
+
         return RxAlamofire.requestData(type.requstType, url, parameters: parameters, encoding: encoding, headers: headers)
             .flatMap { [weak self] (response, data) -> Observable<T> in
+                LoggerService.shared.debugLog("Request URL: \(String(describing: response.url))")
                 guard let self = self else { return Observable.error(ReferenceError.notFoundSelf) }
                 guard 200..<300 ~= response.statusCode else {
                     LoggerService.shared.debugLog("\(type.apiName) Error : \(response.statusCode) \(response.debugDescription)")
@@ -158,7 +242,7 @@ final class APIService {
             return Observable.error(NetworkError.notFoundBaseURL)
         }
         
-        var url = base + type.rawValue
+        var url = base + type.endPoint
         if let addEndPoint = addEndPoint {
             url += addEndPoint
         }

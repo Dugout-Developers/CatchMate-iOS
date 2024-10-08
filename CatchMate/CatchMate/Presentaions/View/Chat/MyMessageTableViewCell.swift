@@ -53,7 +53,6 @@ final class MyMessageTableViewCell: UITableViewCell {
         messageLabel.text = chat.text
         messageLabel.applyStyle(textStyle: FontSystem.body02_medium)
         timeLabel.textAlignment = .right
-        updateUI()
     }
     
     private func setupUI() {
@@ -64,33 +63,27 @@ final class MyMessageTableViewCell: UITableViewCell {
         containerView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(4)
             make.trailing.equalToSuperview().inset(MainGridSystem.getMargin())
-            make.leading.equalToSuperview().offset(MainGridSystem.getMargin())
-            make.width.lessThanOrEqualTo(maxWidth).priority(.init(998))
+            make.width.lessThanOrEqualTo(maxWidth).priority(.init(999))
+            make.centerY.equalToSuperview()
+        }
+        messageLabel.snp.makeConstraints { make in
+            make.trailing.equalToSuperview()
+            make.top.bottom.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.height.greaterThanOrEqualTo(40).priority(.medium)
+        }
+        timeLabel.snp.makeConstraints { make in
+            make.trailing.equalTo(messageLabel.snp.leading).offset(-8)
+            make.bottom.equalTo(messageLabel.snp.bottom)
+            make.leading.equalToSuperview()
         }
 
         // 우선순위 설정
-        timeLabel.setContentCompressionResistancePriority(.init(999), for: .horizontal)
-        timeLabel.setContentHuggingPriority(.init(990), for: .horizontal)
-        messageLabel.setContentCompressionResistancePriority(.init(999), for: .horizontal)
-        messageLabel.setContentHuggingPriority(.init(999), for: .horizontal)
-
-        updateUI()
+        timeLabel.setContentCompressionResistancePriority(.init(998), for: .horizontal)
+        timeLabel.setContentHuggingPriority(.init(998), for: .horizontal)
+        messageLabel.setContentCompressionResistancePriority(.init(997), for: .horizontal)
+        messageLabel.setContentHuggingPriority(.init(997), for: .horizontal)
+        
     }
 
-    private func updateUI() {
-    let maxWidth = (UIScreen.main.bounds.width - (2 * MainGridSystem.getMargin())) * (5/6)
-        timeLabel.snp.remakeConstraints { make in
-            make.leading.bottom.equalToSuperview()
-            make.top.equalToSuperview().priority(.low)  // Optional: 높이를 확장할 필요가 없는 경우
-        }
-
-        messageLabel.snp.remakeConstraints { make in
-            make.top.bottom.trailing.equalToSuperview()
-            make.leading.equalTo(timeLabel.snp.trailing).offset(8)
-            make.width.lessThanOrEqualTo(maxWidth - timeLabel.intrinsicContentSize.width - 8) // 추가
-        }
-
-        containerView.setNeedsLayout()
-        containerView.layoutIfNeeded()
-    }
 }

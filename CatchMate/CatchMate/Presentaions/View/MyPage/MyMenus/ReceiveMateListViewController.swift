@@ -26,7 +26,7 @@ final class ReceiveMateListViewController: BaseViewController, View {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        reactor.action.onNext(.loadReceiveMate)
+        reactor.action.onNext(.loadReceiveAppliesAll)
         reactor.action.onNext(.selectPost(nil))
     }
     
@@ -56,7 +56,7 @@ final class ReceiveMateListViewController: BaseViewController, View {
 // MARK: - Bind
 extension ReceiveMateListViewController {
     func bind(reactor: RecevieMateReactor) {
-        reactor.state.map{$0.receiveMates}
+        reactor.state.map{$0.recivedApplies}
             .bind(to: tableView.rx.items(cellIdentifier: "ReceiveMateListCell", cellType: ReceiveMateListCell.self)) { (row, item, cell) in
                 cell.backgroundColor = .clear
                 cell.selectionStyle = .none
@@ -64,14 +64,23 @@ extension ReceiveMateListViewController {
                 cell.updateConstraints()
             }
             .disposed(by: disposeBag)
-        
         tableView.rx.itemSelected
             .subscribe { indexPath in
-                let applies = reactor.currentState.receiveMates[indexPath.row]
-                let detailVC = ReceiveMateListDetailViewController(reactor: ReceiveMateDetailReactor(aplies: applies))
-                detailVC.modalPresentationStyle = .overFullScreen
-                self.present(detailVC, animated: true)
+                let apply = reactor.currentState.recivedApplies[indexPath.row]
+                reactor.action.onNext(.selectPost(apply.post.id))
             }
             .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.selectedPostApplies}
+            .withUnretained(self)
+            .subscribe { vc, dataList in
+                if let list = dataList, !list.isEmpty {
+                    let detailPopupVC = ReceiveMateListDetailViewController(reactor: reactor)
+                    detailPopupVC.modalPresentationStyle = .overFullScreen
+                    vc.present(detailPopupVC, animated: false)
+                }
+            }
+            .disposed(by: disposeBag)
+
     }
 }

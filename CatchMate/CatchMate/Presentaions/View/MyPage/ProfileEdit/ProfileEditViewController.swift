@@ -39,6 +39,26 @@ final class ProfileEditViewController: BaseViewController, View {
         return label
     }()
     private let nicknameTextField = CMTextField(placeHolder: "닉네임을 입력해주세요")
+    
+    private let teamSection = UIView()
+    private let teamLabel: UILabel = {
+        let label = UILabel()
+        label.text = "나의 응원 구단"
+        label.applyStyle(textStyle: FontSystem.body02_medium)
+        label.textColor = .cmNonImportantTextColor
+        return label
+    }()
+    private let teamPicker = CMPickerTextField(placeHolder: "응원 구단을 선택해주세요", isFlex: true)
+    
+    private let cheerStyleSection = UIView()
+    private let cheerStyleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "나의 응원 스타일"
+        label.applyStyle(textStyle: FontSystem.body02_medium)
+        label.textColor = .cmNonImportantTextColor
+        return label
+    }()
+    private let cheerStylePicker = CMPickerTextField(placeHolder: "응원 스타일을을 선택해보세요", isFlex: true)
     init(reactor: ProfileEditReactor, imageString: String?) {
         self.reactor = reactor
         self.profileImageString = imageString
@@ -60,6 +80,7 @@ final class ProfileEditViewController: BaseViewController, View {
         setupLeftTitle("프로필 편집")
         setupUI()
         setupImage()
+        setupPicker()
         bind(reactor: reactor)
     }
     private func setupImage() {
@@ -68,6 +89,12 @@ final class ProfileEditViewController: BaseViewController, View {
         } else {
             profileImageView.image = UIImage(named: "tempProfile")
         }
+    }
+    private func setupPicker() {
+        // Team Picker
+        teamPicker.parentViewController = self
+        teamPicker.pickerViewController = TeamFilterViewController(reactor: reactor)
+        teamPicker.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.large, identifier: "ProfileEditTeamPicker")
     }
 }
 
@@ -107,6 +134,24 @@ extension ProfileEditViewController {
                 vc.nicknameCountLabel.applyStyle(textStyle: FontSystem.body02_medium)
             }
             .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.team}
+            .withUnretained(self)
+            .subscribe { vc, team in
+                vc.teamPicker.didSelectItem(team.rawValue)
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.cheerStyle}
+            .withUnretained(self)
+            .subscribe { vc, style in
+                var text = ""
+                if let style = style {
+                    text = style.rawValue + " 스타일"
+                }
+                vc.cheerStylePicker.didSelectItem(text)
+            }
+            .disposed(by: disposeBag)
 // 닉네임 중복 검사 -> 나중에 연결
 //        nicknameTextField.rx.text.orEmpty
 //            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
@@ -132,13 +177,26 @@ extension ProfileEditViewController {
                     flex.addItem(profileImageView).size(68).cornerRadius(68/2)
                     flex.addItem(imageEditButton).size(68).cornerRadius(68/2).position(.absolute).all(0)
                 }).marginTop(16).marginBottom(24)
-
+                
                 flex.addItem().direction(.row).width(100%).justifyContent(.spaceBetween).alignItems(.center).define { flex in
                     flex.addItem(nicknameLabel)
                     flex.addItem(nicknameCountLabel)
                 }.marginBottom(12)
-                flex.addItem(nicknameTextField).marginBottom(12).width(100%)
-            }
+                flex.addItem(nicknameTextField).marginBottom(20).width(100%)
+            }.marginBottom(8)
+            flex.addItem(teamSection).direction(.column).backgroundColor(.white).justifyContent(.start).alignItems(.start).paddingHorizontal(MainGridSystem.getMargin()).define { flex in
+                flex.addItem().direction(.row).width(100%).justifyContent(.start).alignItems(.center).define { flex in
+                    let requiredMark = UIImageView(image: UIImage(named: "requiredMark"))
+                    requiredMark.contentMode = .scaleAspectFit
+                    flex.addItem(teamLabel).marginTop(20).marginRight(3)
+                    flex.addItem(requiredMark).size(6)
+                }.marginBottom(12)
+                flex.addItem(teamPicker).marginBottom(20).width(100%)
+            }.marginBottom(8)
+            flex.addItem(cheerStyleSection).direction(.column).backgroundColor(.white).justifyContent(.start).alignItems(.start).paddingHorizontal(MainGridSystem.getMargin()).define { flex in
+                flex.addItem(cheerStyleLabel).marginTop(20).marginBottom(12)
+                flex.addItem(cheerStylePicker).marginBottom(20).width(100%)
+            }.marginBottom(8)
         }
     }
 }

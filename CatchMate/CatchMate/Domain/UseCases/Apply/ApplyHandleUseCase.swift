@@ -10,7 +10,7 @@ import RxSwift
 
 protocol ApplyHandleUseCase {
     func apply(postId: String, addText: String?) -> Observable<Int>
-    func cancelApplyPost(enrollId: String) -> Observable<Bool>
+    func cancelApplyPost(enrollId: String) -> Observable<Void>
 }
 final class ApplyHandleUseCaseImpl: ApplyHandleUseCase {
     private let applyRepository: ApplyRepository
@@ -23,7 +23,7 @@ final class ApplyHandleUseCaseImpl: ApplyHandleUseCase {
         return applyRepository.applyPost(postId, addInfo: addText ?? "")
     }
     
-    func cancelApplyPost(enrollId: String) -> Observable<Bool> {
+    func cancelApplyPost(enrollId: String) -> Observable<Void> {
         return applyRepository.cancelApplyPost(enrollId: enrollId)
     }
 }

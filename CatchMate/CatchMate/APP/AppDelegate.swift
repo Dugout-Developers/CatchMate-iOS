@@ -24,18 +24,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UnauthorizedErrorHandler.shared.configure(logoutUseCase: DIContainerService.shared.makeLogoutUseCase())
         FirebaseApp.configure()
         // APNS 등록
-            if #available(iOS 10.0, *) {
-                UNUserNotificationCenter.current().delegate = self
-                let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-                UNUserNotificationCenter.current().requestAuthorization(options: authOptions, completionHandler: { _, _ in })
-            } else {
-                let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
-                application.registerUserNotificationSettings(settings)
-            }
-            application.registerForRemoteNotifications()
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().delegate = self
+            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+            UNUserNotificationCenter.current().requestAuthorization(options: authOptions, completionHandler: { _, _ in })
+        } else {
+            let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            application.registerUserNotificationSettings(settings)
+        }
+        application.registerForRemoteNotifications()
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
         UIApplication.shared.registerForRemoteNotifications()
+        
+        if let notificationOption = launchOptions?[.remoteNotification] as? [String: AnyObject] {
+            handleNotification(userInfo: notificationOption)
+        }
         
         DispatchQueue.global(qos: .background).async {
             if let kakaoAppKey = Bundle.main.kakaoLoginAPPKey {
@@ -57,19 +61,49 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         return true
     }
+    // 푸시 알림 처리 함수
+    private func handleNotification(userInfo: [String: AnyObject]) {
+        // userInfo에서 필요한 데이터를 추출
+        if let boardIdStr = userInfo["boardId"] as? String, let boardId = Int(boardIdStr) {
+            moveApplyDetailView(boardId: boardId)
+        } else {
+            print("boardId를 구할 수 없음")
+        }
+    }
     // 푸시 알림 등록
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         Messaging.messaging().apnsToken = deviceToken
     }
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        // TODO: - 뱃지 디스플레이
-           completionHandler([.list, .banner, .sound])
-       }
+        let userInfo = notification.request.content.userInfo
+        print("푸시 알림 수신 (foreground): \(userInfo)")
+        completionHandler([.list, .banner, .sound])
+    }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        let userInfo = response.notification.request.content.userInfo
+        print("푸시 알림 수신 (background/terminated): \(userInfo)")
+        
+        if let boardIdStr = userInfo["boardId"] as? String, let boardId = Int(boardIdStr) {
+            moveApplyDetailView(boardId: boardId)
+        } else {
+            print("boardId 구할 수 없음")
+        }
         completionHandler()
     }
-        // FCM 토큰 갱신 시 호출되는 메서드
+    private func moveApplyDetailView(boardId: Int) {
+        if UIApplication.shared.connectedScenes.first?.delegate is SceneDelegate {
+            guard let rootViewController = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.window?.rootViewController else { return }
+            // 상세 페이지로 이동
+            let reactor = DIContainerService.shared.makeReciveMateReactor()
+            reactor.action.onNext(.selectPost(String(boardId)))
+            let applyDetailVC = ReceiveMateListDetailViewController(reactor: reactor)
+            applyDetailVC.modalPresentationStyle = .overFullScreen
+            rootViewController.present(applyDetailVC, animated: false)
+        }
+    }
+
+    // FCM 토큰 갱신 시 호출되는 메서드
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         print("Firebase registration token: \(String(describing: fcmToken))")
         NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: ["token": fcmToken ?? ""])

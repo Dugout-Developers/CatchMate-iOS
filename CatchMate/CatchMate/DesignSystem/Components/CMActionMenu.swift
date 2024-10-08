@@ -98,10 +98,12 @@ final class CMActionMenu: UIViewController {
     }
     
     @objc private func menuItemTapped(_ sender: UITapGestureRecognizer) {
-        if let tag = sender.view?.tag, menuItems.indices.contains(tag) {
-            menuItems[tag].action()
+        dismiss(animated: false) { [weak self] in
+            guard let self = self else { return }
+            if let tag = sender.view?.tag, menuItems.indices.contains(tag) {
+                menuItems[tag].action()
+            }
         }
-        dismissMenu()
     }
     
     @objc private func dismissMenu() {

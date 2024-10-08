@@ -59,10 +59,6 @@ class DefaultsTextView: UITextView {
             self.attributedText = NSAttributedString(string: currentText, attributes: FontSystem.body02_medium.getAttributes())
         }
     }
-    // Remove observer
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
 
     // Layout subviews
     override func layoutSubviews() {

@@ -124,15 +124,17 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
             profileEditVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(profileEditVC, animated: true)
         case 1:
-            myMenus[indexPath.row].navigationVC
-                .withUnretained(self)
-                .subscribe { vc, nextVC in
-                    nextVC.hidesBottomBarWhenPushed = true
-                    vc.navigationController?.pushViewController(nextVC, animated: true)
-                }
-                .disposed(by: disposeBag)
+            if let user = user {
+                myMenus[indexPath.row].navigationVC(user: SimpleUser(user: user))
+                    .withUnretained(self)
+                    .subscribe { vc, nextVC in
+                        nextVC.hidesBottomBarWhenPushed = true
+                        vc.navigationController?.pushViewController(nextVC, animated: true)
+                    }
+                    .disposed(by: disposeBag)
+            }
         case 2:
-            supportMenus[indexPath.row].navigationVC
+            supportMenus[indexPath.row].navigationVC()
                 .withUnretained(self)
                 .subscribe { vc, nextVC in
                     nextVC.hidesBottomBarWhenPushed = true

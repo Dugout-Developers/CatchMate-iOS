@@ -39,6 +39,12 @@ final class CMNavigationBar: UIView {
         }
     }
     
+    var isRightItemsHidden: Bool = false {
+        didSet {
+            rightStackView.isHidden = isRightItemsHidden
+        }
+    }
+    
     private var leftItems: [UIView] = [] {
         didSet {
             configureItems(stackView: leftStackView, items: leftItems, includeBackButton: true)
