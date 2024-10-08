@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Notification: Codable {
+struct NotificationDTO: Codable {
     let notificationId: Int
     let boardId: Int
     let title: String
@@ -19,5 +19,5 @@ struct Notification: Codable {
 }
 
 struct NotificationListResponse: Codable {
-    let content: [Notification]
+    let content: [NotificationDTO]
 }

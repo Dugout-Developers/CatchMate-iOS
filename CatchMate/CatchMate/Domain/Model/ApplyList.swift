@@ -13,7 +13,7 @@ struct ApplyList: Equatable {
     let addText: String
     let user: SimpleUser
     let post: SimplePost
-    
+    let new: Bool
     static func == (lhs: ApplyList, rhs: ApplyList) -> Bool {
         return lhs.enrollId == rhs.enrollId
     }
@@ -41,14 +41,24 @@ struct RecivedApplies: Equatable, Comparable {
     mutating func appendApply(apply: RecivedApplyData) {
         self.applies.append(apply)
     }
+    mutating func changeNew() {
+        for i in 0..<applies.count {
+            applies[i].changeNewState() // 각 apply의 new 상태를 변경
+        }
+    }
 }
 
 struct RecivedApplyData: Equatable {
     let enrollId: String
     let user: SimpleUser
     let addText: String
+    var new: Bool
     
     static func == (lhs: RecivedApplyData, rhs: RecivedApplyData) -> Bool {
         return lhs.enrollId == rhs.enrollId
+    }
+    
+    mutating func changeNewState() {
+        self.new = false
     }
 }

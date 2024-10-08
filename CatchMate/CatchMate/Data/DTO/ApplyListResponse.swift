@@ -36,6 +36,7 @@ struct Content: Codable {
     let description: String?
     let userInfo: UserInfo
     let boardInfo: BoardInfo
+    let new: Bool?
 }
 
 struct ApplyListResponse: Codable {
