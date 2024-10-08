@@ -19,6 +19,7 @@ final class SettingViewController: BaseViewController, UITableViewDelegate, UITa
         setupNavigation()
         setupTableView()
         setupUI()
+        tabBarController?.tabBar.isHidden = true
     }
     
     private func setupNavigation() {

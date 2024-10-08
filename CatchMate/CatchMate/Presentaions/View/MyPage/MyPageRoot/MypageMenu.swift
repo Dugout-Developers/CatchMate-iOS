@@ -20,6 +20,7 @@ enum MypageMenu: String {
     
     case auth = "계정 정보"
     case noti = "알림 설정"
+    case block = "차단 설정"
     
     static var supportMenus: [MypageMenu] {
         return [.notices, .customerService, .terms, .info]
@@ -30,7 +31,7 @@ enum MypageMenu: String {
     }
     
     static var settingMenus: [MypageMenu] {
-        return [.auth, .noti]
+        return [.auth, .noti, .block]
     }
     
     func navigationVC(user: SimpleUser? = nil) -> Observable<UIViewController> {
@@ -59,6 +60,8 @@ enum MypageMenu: String {
                 }
         case .noti:
             return Observable.just(NotificationSettingViewController(reactor: NotificationSettingReactor()))
+        case .block:
+            return Observable.just(BlockSettingViewController(reactor: BlockUserReactor()))
         }
     }
 }

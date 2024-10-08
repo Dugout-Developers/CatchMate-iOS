@@ -168,7 +168,7 @@ enum Endpoint {
         case .apply:
             return .post
         case .cancelApply:
-            return .post
+            return .delete
         case .sendApply:
             return .get
         case .receivedApply:
