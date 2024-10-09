@@ -52,6 +52,9 @@ enum Endpoint {
     /// 내정보 조회
     case loadMyInfo
     
+    /// 알람 리스트 조회
+    case notificationList
+    
     var endPoint: String {
         switch self {
         case .login:
@@ -96,6 +99,8 @@ enum Endpoint {
             return "/enroll/"
         case .loadMyInfo:
             return "/user/profile"
+        case .notificationList:
+            return "/notification/receive"
         }
     }
     var apiName: String {
@@ -138,6 +143,8 @@ enum Endpoint {
             return "직관 신청 거절 API"
         case .loadMyInfo:
             return "내 정보 조회 API"
+        case .notificationList:
+            return "알림 리스트 조회 API"
         }
     }
     
@@ -180,6 +187,8 @@ enum Endpoint {
         case .rejectApply:
             return .patch
         case .loadMyInfo:
+            return .get
+        case .notificationList:
             return .get
         }
     }

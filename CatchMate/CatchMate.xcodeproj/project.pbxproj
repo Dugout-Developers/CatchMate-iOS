@@ -311,6 +311,7 @@
 		53E7DBC52CAFD2F600DC058D /* BlockSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBC42CAFD2F600DC058D /* BlockSettingViewController.swift */; };
 		53E7DBC72CB503DB00DC058D /* BlockUserReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBC62CB503DB00DC058D /* BlockUserReactor.swift */; };
 		53E7DBC92CB5357900DC058D /* NotificationListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBC82CB5357900DC058D /* NotificationListResponse.swift */; };
+		53E7DBCB2CB5641400DC058D /* NotificationListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBCA2CB5641400DC058D /* NotificationListDataSource.swift */; };
 		53F1E8C62C47A46400A962F3 /* Apply.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F1E8C52C47A46400A962F3 /* Apply.swift */; };
 		53FC69DB2C58C65700B97AEA /* RefreshTokenResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69DA2C58C65700B97AEA /* RefreshTokenResponseDTO.swift */; };
 		53FC69DD2C58DB8D00B97AEA /* TokenDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69DC2C58DB8D00B97AEA /* TokenDataSource.swift */; };
@@ -588,6 +589,7 @@
 		53E7DBC42CAFD2F600DC058D /* BlockSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockSettingViewController.swift; sourceTree = "<group>"; };
 		53E7DBC62CB503DB00DC058D /* BlockUserReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserReactor.swift; sourceTree = "<group>"; };
 		53E7DBC82CB5357900DC058D /* NotificationListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListResponse.swift; sourceTree = "<group>"; };
+		53E7DBCA2CB5641400DC058D /* NotificationListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListDataSource.swift; sourceTree = "<group>"; };
 		53F1E8C52C47A46400A962F3 /* Apply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Apply.swift; sourceTree = "<group>"; };
 		53FC69DA2C58C65700B97AEA /* RefreshTokenResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenResponseDTO.swift; sourceTree = "<group>"; };
 		53FC69DC2C58DB8D00B97AEA /* TokenDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDataSource.swift; sourceTree = "<group>"; };
@@ -1161,6 +1163,7 @@
 				53B8E2362C5C7530001D0ADF /* User */,
 				531E4C262C6B54A60052E754 /* Post */,
 				53ACBA552C85AF0D004FAF00 /* Apply */,
+				53E7DBCC2CB5641800DC058D /* Notification */,
 			);
 			path = DataSources;
 			sourceTree = "<group>";
@@ -1401,6 +1404,14 @@
 				53E7DBA22CA5663200DC058D /* DeletePostDataSourceTest.swift */,
 			);
 			path = DataSourceTest;
+			sourceTree = "<group>";
+		};
+		53E7DBCC2CB5641800DC058D /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				53E7DBCA2CB5641400DC058D /* NotificationListDataSource.swift */,
+			);
+			path = Notification;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1734,6 +1745,7 @@
 				53B3CE472C88B0A000116BF7 /* ApplyMapper.swift in Sources */,
 				530994542C4F6CEB00ABE103 /* LoginResult.swift in Sources */,
 				53B8E2462C5E7BF1001D0ADF /* APIService.swift in Sources */,
+				53E7DBCB2CB5641400DC058D /* NotificationListDataSource.swift in Sources */,
 				536BDE122C1B51FD0043B1DA /* TabBarController.swift in Sources */,
 				536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */,
 				53ACBA372C81A91E004FAF00 /* CheerTeamPickerViewController.swift in Sources */,
