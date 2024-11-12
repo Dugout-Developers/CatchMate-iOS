@@ -44,6 +44,8 @@ enum Endpoint {
     case receivedApply
     /// 받은 직관 신청 전체 목록
     case receivedApplyAll
+    /// 받은 직관 신청 미확인 갯수
+    case receivedCount
     /// 직관 신청 수락
     case acceptApply
     /// 직관 신청 거절
@@ -93,6 +95,8 @@ enum Endpoint {
             return "/enroll/receive"
         case .receivedApplyAll:
             return "/enroll/receive/all"
+        case .receivedCount:
+            return "/enroll/new-count"
         case .acceptApply, .rejectApply:
             /// acceptApply = /enroll/{enrollId}/accept
             /// rejectApply = /enroll/{enrollId}/reject
@@ -137,6 +141,8 @@ enum Endpoint {
             return "받은 신청 목록 API"
         case .receivedApplyAll:
             return "받은 신청 전체 목록 API"
+        case .receivedCount:
+            return "미확인 받은 신청 개수 API"
         case .acceptApply:
             return "직관 신청 수락 API"
         case .rejectApply:
@@ -181,6 +187,8 @@ enum Endpoint {
         case .receivedApply:
             return .get
         case .receivedApplyAll:
+            return .get
+        case .receivedCount:
             return .get
         case .acceptApply:
             return .patch

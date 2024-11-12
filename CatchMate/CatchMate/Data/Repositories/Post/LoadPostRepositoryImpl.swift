@@ -20,7 +20,7 @@ final class LoadPostRepositoryImpl: LoadPostRepository {
             LoggerService.shared.log("postId Int 변환 실패 형식 오류", level: .error)
             return Observable.error(PresentationError.informational(message: "게시글을 불러올 수 없습니다."))
         }
-        return loadPostDS.laodPost(postId: id)
+        return loadPostDS.loadPost(postId: id)
             .flatMap { dto -> Observable<Post> in
                 if let mapResult = PostMapper().dtoToDomain(dto) {
                     return Observable.just(mapResult)

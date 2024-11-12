@@ -17,6 +17,7 @@ final class MyPageReactor: Reactor {
     enum Mutation {
         case setLoading(Bool)
         case setUser(User)
+        case setCount(Int)
         case setError(Error?)
         case logout(Bool)
     }
@@ -24,6 +25,7 @@ final class MyPageReactor: Reactor {
         var isLoading: Bool = false
         var user: User?
         var error: Error?
+        var count: Int = 0
         var logoutResult: Bool = false
     }
     
@@ -47,6 +49,9 @@ final class MyPageReactor: Reactor {
                 userUseCase.loadUser()
                     .map { Mutation.setUser($0) }
                     .catch { .just(Mutation.setError($0)) },
+                userUseCase.loadCount()
+                    .map{ Mutation.setCount($0) }
+                    .catch { .just(Mutation.setError($0)) },
                 Observable.just(Mutation.setLoading(false))
             ])
         case .logout:
@@ -67,6 +72,8 @@ final class MyPageReactor: Reactor {
             newState.error = error
         case .logout(let result):
             newState.logoutResult = result
+        case .setCount(let count):
+            newState.count = count
         }
         return newState
     }

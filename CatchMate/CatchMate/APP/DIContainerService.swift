@@ -69,7 +69,9 @@ class DIContainerService {
         
         let loadUserDataSource = UserDataSourceImpl(tokenDataSource: tokenDS)
         let loadUserRepository = UserRepositoryImpl(userDS: loadUserDataSource)
-        let loadUserUsecase = UserUseCaseImpl(userRepository: loadUserRepository)
+        let loadCountDataSource = RecivedCountDataSourceImpl(tokenDataSource: tokenDS)
+        let loadCountRepository = ReceivedCountRepositoryIml(loadCountDS: loadCountDataSource)
+        let loadUserUsecase = UserUseCaseImpl(userRepository: loadUserRepository, loadCountRepository: loadCountRepository)
         return AddReactor(addUsecase: addUsecase, loadPostDetailUsecase: loadPostUsecase, loadUserUsecase: loadUserUsecase)
     }
     
@@ -118,7 +120,11 @@ class DIContainerService {
         let logoutDataSource = LogoutDataSourceImpl(tokenDataSource: tokenDS)
         let userRepository = UserRepositoryImpl(userDS: userDataSource)
         let logoutRepository = LogoutRepositoryImpl(logoutDS: logoutDataSource)
-        let userUsecase = UserUseCaseImpl(userRepository: userRepository)
+        let loadUserDataSource = UserDataSourceImpl(tokenDataSource: tokenDS)
+        let loadUserRepository = UserRepositoryImpl(userDS: loadUserDataSource)
+        let loadCountDataSource = RecivedCountDataSourceImpl(tokenDataSource: tokenDS)
+        let loadCountRepository = ReceivedCountRepositoryIml(loadCountDS: loadCountDataSource)
+        let userUsecase = UserUseCaseImpl(userRepository: userRepository, loadCountRepository: loadCountRepository)
         let logoutUsecase = LogoutUseCaseImpl(repository: logoutRepository)
         
         return MyPageReactor(userUsecase: userUsecase, logoutUsecase: logoutUsecase)

@@ -11,6 +11,7 @@ import ReactorKit
 
 class MyPageViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource, View  {
     private var user: User?
+    private var receiveCount: Int?
     private let tableview = UITableView()
     private let supportMenus = MypageMenu.supportMenus
     private let myMenus = MypageMenu.myMenus
@@ -21,6 +22,7 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = false
         reactor.action.onNext(.loadUser)
+        
     }
     
     override func viewDidLoad() {
@@ -108,7 +110,8 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
                 return UITableViewCell()
             }
             let menu = indexPath.section == 1 ? myMenus[indexPath.row] : supportMenus[indexPath.row]
-            cell.configData(title: menu.rawValue)
+            let bedge = indexPath.section == 1 && indexPath.row == 2 ? receiveCount : nil
+            cell.configData(title: menu.rawValue, bedge: bedge)
             cell.selectionStyle = .none
             return cell
         default:
@@ -225,6 +228,14 @@ extension MyPageViewController {
                     let reactor = DIContainerService.shared.makeAuthReactor()
                     (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(UINavigationController(rootViewController: SignInViewController(reactor: reactor)), animated: true)
                 }
+            }
+            .disposed(by: disposeBag)
+        reactor.state.map{$0.count}
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .subscribe { vc, count in
+                vc.receiveCount = count
+                vc.tableview.reloadData()
             }
             .disposed(by: disposeBag)
     }
