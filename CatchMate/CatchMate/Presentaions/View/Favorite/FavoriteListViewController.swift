@@ -15,7 +15,7 @@ final class FavoriteListViewController: BaseViewController ,View {
     private let reactor: FavoriteReactor
     private let emptyViewContainer = UIView()
     private let imageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "EmptyDisable"))
+        let imageView = UIImageView(image: UIImage(named: "favoriteNone"))
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -30,9 +30,9 @@ final class FavoriteListViewController: BaseViewController ,View {
         let label = UILabel()
         label.text = "야구 팬들이 올린 다양한 글을 둘러보고\n마음에 드는 직관 글을 저장해보세요!"
         label.numberOfLines = 0
-        label.textAlignment = .center
         label.textColor = .cmNonImportantTextColor
         label.applyStyle(textStyle: FontSystem.contents)
+        label.textAlignment = .center
         return label
     }()
     
