@@ -38,7 +38,7 @@ final class LoadPostDetailDataSourceTests: XCTestCase {
         for (index, id) in mockupPostIds.enumerated() {
             let delay = DispatchTime.now() + Double(index) * 0.5
             DispatchQueue.main.asyncAfter(deadline: delay) {
-                self.dataSource.laodPost(postId: id)
+                self.dataSource.loadPost(postId: id)
                     .subscribe(onNext: { result in
                         LoggerService.shared.debugLog("\(id) 호출 결과: \(result)")
                         XCTAssertTrue(result.boardId == id, "\(id) 호출 결과가 기대한 값과 다릅니다.")

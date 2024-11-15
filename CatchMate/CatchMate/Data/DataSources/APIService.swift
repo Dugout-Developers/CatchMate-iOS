@@ -25,6 +25,8 @@ enum Endpoint {
     case userPostlist
     /// 게시글 조회
     case loadPost
+    /// 게시글 끌어올리기
+    case upPost
     /// 게시글 삭제
     case removePost
     /// 찜목록 조회
@@ -75,6 +77,8 @@ enum Endpoint {
         case .loadPost:
             /// 게시글 조회 /board/{boardId}
             return "/board/"
+        case .upPost:
+            return "/board/up"
         case .removePost:
             return "/board/remove"
         case .loadFavorite:
@@ -121,6 +125,8 @@ enum Endpoint {
             return "게시글 리스트 불러오기 API"
         case .loadPost:
             return "게시글 로드 API"
+        case .upPost:
+            return "게시글 끌어올리기 API"
         case .removePost:
             return "게시글 삭제 API"
         case .userPostlist:
@@ -168,6 +174,8 @@ enum Endpoint {
             return .patch
         case .loadPost:
             return .get
+        case .upPost:
+            return .patch
         case .removePost:
             return .delete
         case .userPostlist:

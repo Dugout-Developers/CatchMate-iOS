@@ -143,9 +143,9 @@ enum SNSLoginError: LocalizedError {
     var statusCode: Int {
         switch self {
         case .authorizationFailed:
-            return -1001
+            return -5002
         case .EmptyValue:
-            return -1003
+            return -5003
         case .loginServerError(let code, _):
             return code
         }
@@ -167,6 +167,7 @@ enum SNSLoginError: LocalizedError {
 enum TokenError: LocalizedError {
     case notFoundAccessToken
     case notFoundRefreshToken
+    case failureSaveToken
     case failureTokenService
     
     var statusCode: Int {
@@ -175,8 +176,10 @@ enum TokenError: LocalizedError {
             return -1001
         case .notFoundRefreshToken:
             return -1002
-        case .failureTokenService:
+        case .failureSaveToken:
             return -1003
+        case .failureTokenService:
+            return -1004
         }
     }
     
@@ -186,8 +189,28 @@ enum TokenError: LocalizedError {
             return "엑세스 토큰 찾기 실패"
         case .notFoundRefreshToken:
             return "리프레시 토큰 찾기 실패"
+        case .failureSaveToken:
+            return "토큰 저장 실패"
         case .failureTokenService:
             return "토큰 서비스 실행 실패"
+        }
+    }
+}
+
+enum OtherError: LocalizedError {
+    case invalidURL
+    
+    var statusCode: Int {
+        switch self {
+        case .invalidURL:
+            return -6001
+        }
+    }
+    
+    var errorDescription: String? {
+        switch self {
+        case .invalidURL:
+            return "URL 형식이 잘못되었습니다."
         }
     }
 }

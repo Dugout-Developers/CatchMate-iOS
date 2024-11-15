@@ -118,6 +118,8 @@ final class ErrorMapper {
             return .unauthorized(message: "로그인 정보가 만료되었습니다. 다시 로그인해주세요.")
         case .failureTokenService:
             return .contactSupport(message: "예기치 않은 오류가 발생했습니다. 오류 지속 시 지원팀에 문의해주세요.")
+        case .failureSaveToken:
+            return .unauthorized(message: "로그인 정보가 만료되었습니다. 다시 로그인해주세요.")
         }
     }
 }
