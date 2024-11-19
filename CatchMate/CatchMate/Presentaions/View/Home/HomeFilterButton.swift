@@ -69,7 +69,7 @@ final class OptionButtonView: UIButton {
     private func setupButton() {
         // 버튼 스타일 설정
         backgroundColor = UIColor.white
-        layer.cornerRadius = 20
+        layer.cornerRadius = 8
         self.addTarget(self, action: #selector(buttonPressed), for: [.touchDown, .touchDragInside])
         self.addTarget(self, action: #selector(buttonReleased), for: [.touchUpInside, .touchUpOutside, .touchCancel])
     }
