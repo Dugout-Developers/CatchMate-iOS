@@ -59,6 +59,7 @@ final class ProfileEditViewController: BaseViewController, View {
         return label
     }()
     private let cheerStylePicker = CMPickerTextField(placeHolder: "응원 스타일을을 선택해보세요", isFlex: true)
+    
     init(reactor: ProfileEditReactor, imageString: String?) {
         self.reactor = reactor
         self.profileImageString = imageString
@@ -95,6 +96,11 @@ final class ProfileEditViewController: BaseViewController, View {
         teamPicker.parentViewController = self
         teamPicker.pickerViewController = TeamFilterViewController(reactor: reactor)
         teamPicker.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.large, identifier: "ProfileEditTeamPicker")
+        
+        // CheerStyle Picker
+        cheerStylePicker.parentViewController = self
+        cheerStylePicker.pickerViewController = CheerStylePickerViewController(reactor: reactor)
+        cheerStylePicker.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.large, identifier: "ProfileEditCheerStylePicker")
     }
 }
 

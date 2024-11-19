@@ -282,6 +282,7 @@
 		53C6DA062CE47A3000918718 /* UpPostDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C6DA052CE47A2800918718 /* UpPostDataSource.swift */; };
 		53C6DA072CE47A3000918718 /* UpPostDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C6DA052CE47A2800918718 /* UpPostDataSource.swift */; };
 		53C6DA092CE5D08C00918718 /* UpPostDataSourceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C6DA082CE5D08000918718 /* UpPostDataSourceTest.swift */; };
+		53C6DA0B2CE7233100918718 /* CheerStylePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C6DA0A2CE7232100918718 /* CheerStylePickerViewController.swift */; };
 		53E4A9B82C4FF00F00D21B49 /* AuthReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E4A9B72C4FF00F00D21B49 /* AuthReactor.swift */; };
 		53E4A9BA2C4FFB1300D21B49 /* SignUpDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E4A9B92C4FFB1300D21B49 /* SignUpDataSource.swift */; };
 		53E4A9BC2C4FFB8400D21B49 /* SignUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E4A9BB2C4FFB8400D21B49 /* SignUp.swift */; };
@@ -570,6 +571,7 @@
 		53C6DA032CE3A93900918718 /* ReceivedCountRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceivedCountRepository.swift; sourceTree = "<group>"; };
 		53C6DA052CE47A2800918718 /* UpPostDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpPostDataSource.swift; sourceTree = "<group>"; };
 		53C6DA082CE5D08000918718 /* UpPostDataSourceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpPostDataSourceTest.swift; sourceTree = "<group>"; };
+		53C6DA0A2CE7232100918718 /* CheerStylePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheerStylePickerViewController.swift; sourceTree = "<group>"; };
 		53E4A9B72C4FF00F00D21B49 /* AuthReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthReactor.swift; sourceTree = "<group>"; };
 		53E4A9B92C4FFB1300D21B49 /* SignUpDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpDataSource.swift; sourceTree = "<group>"; };
 		53E4A9BB2C4FFB8400D21B49 /* SignUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUp.swift; sourceTree = "<group>"; };
@@ -861,6 +863,7 @@
 		534E39CF2C63423F006D180E /* ProfileEdit */ = {
 			isa = PBXGroup;
 			children = (
+				53C6DA0A2CE7232100918718 /* CheerStylePickerViewController.swift */,
 				53B8E2412C5D0A2D001D0ADF /* ProfileEditViewController.swift */,
 			);
 			path = ProfileEdit;
@@ -1725,6 +1728,7 @@
 				53716BC42C42B72F0044AD2A /* CMNavigationBar.swift in Sources */,
 				53B3CE502C88B68200116BF7 /* SendAppliesUseCase.swift in Sources */,
 				533A2B232C27FF6A00A59340 /* CMTextView.swift in Sources */,
+				53C6DA0B2CE7233100918718 /* CheerStylePickerViewController.swift in Sources */,
 				536BDE2B2C1B54C80043B1DA /* ChatListViewController.swift in Sources */,
 				53716BD22C45567C0044AD2A /* PostDetailViewController.swift in Sources */,
 				533183D52C5150B60097F3F1 /* OtherMessageTableViewCell.swift in Sources */,
