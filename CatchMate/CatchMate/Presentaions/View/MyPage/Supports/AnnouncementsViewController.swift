@@ -10,6 +10,13 @@ import RxSwift
 import ReactorKit
 import SnapKit
 final class AnnouncementsViewController: BaseViewController, View {
+    override var useSnapKit: Bool {
+        return true
+    }
+    override var buttonContainerExists: Bool {
+        return false
+    }
+    
     var reactor: AnnouncementsReactor
     private let tableView = UITableView()
     

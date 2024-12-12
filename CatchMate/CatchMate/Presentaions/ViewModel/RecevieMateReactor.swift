@@ -68,7 +68,7 @@ final class RecevieMateReactor: Reactor {
                     loadAppiles
                 ])
             } else {
-                return Observable.just(Mutation.setError(PresentationError.informational(message: "요청에 실패했습니다. 다시 시도해주세요.")))
+                return Observable.just(Mutation.setError(PresentationError.showToastMessage(message: "요청에 실패했습니다. 다시 시도해주세요.")))
             }
         case .acceptApply(let enrollId):
             return recivedAppliesUsecase.acceptApply(enrollId: enrollId)
@@ -76,7 +76,7 @@ final class RecevieMateReactor: Reactor {
                     if result {
                         return Mutation.acceptApply(enrollId)
                     } else {
-                        return Mutation.setError(PresentationError.informational(message: "다시 시도해주세요."))
+                        return Mutation.setError(PresentationError.showToastMessage(message: "요청에 실패했습니다. 다시 시도해주세요."))
                     }
                 }
                 .catch { error in
@@ -92,7 +92,7 @@ final class RecevieMateReactor: Reactor {
                     if result {
                         return Mutation.acceptApply(enrollId)
                     } else {
-                        return Mutation.setError(PresentationError.informational(message: "다시 시도해주세요."))
+                        return Mutation.setError(PresentationError.showToastMessage(message: "요청에 실패했습니다. 다시 시도해주세요."))
                     }
                 }
                 .catch { error in

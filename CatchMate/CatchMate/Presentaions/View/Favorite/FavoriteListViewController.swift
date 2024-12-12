@@ -11,6 +11,12 @@ import ReactorKit
 import SnapKit
 
 final class FavoriteListViewController: BaseViewController ,View {
+    override var useSnapKit: Bool {
+        return true
+    }
+    override var buttonContainerExists: Bool {
+        return false
+    }
     private let tableView = UITableView()
     private let reactor: FavoriteReactor
     private let emptyViewContainer = UIView()

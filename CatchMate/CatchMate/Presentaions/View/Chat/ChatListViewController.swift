@@ -14,6 +14,12 @@ import Alamofire
 import RxAlamofire
 
 final class ChatListViewController: BaseViewController, View {
+    override var useSnapKit: Bool {
+        return true
+    }
+    override var buttonContainerExists: Bool {
+        return false
+    }
     private let chatListTableView = UITableView()
     var reactor: ChatListReactor
     

@@ -10,6 +10,12 @@ import RxSwift
 import ReactorKit
 
 class MyPageViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource, View  {
+    override var useSnapKit: Bool {
+        return true
+    }
+    override var buttonContainerExists: Bool {
+        return true
+    }
     private var user: User?
     private var receiveCount: Int?
     private let tableview = UITableView()
@@ -223,11 +229,7 @@ extension MyPageViewController {
             .compactMap{$0}
             .withUnretained(self)
             .subscribe { vc, error in
-                vc.showAlert(message: "유저 정보가 만료되었습니다\n다시 로그인 해주세요.") {
-                    UnauthorizedErrorHandler.shared.handleError()
-                    let reactor = DIContainerService.shared.makeAuthReactor()
-                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(UINavigationController(rootViewController: SignInViewController(reactor: reactor)), animated: true)
-                }
+                vc.logout()
             }
             .disposed(by: disposeBag)
         reactor.state.map{$0.count}

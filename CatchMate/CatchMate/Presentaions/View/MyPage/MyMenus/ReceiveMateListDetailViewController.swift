@@ -12,7 +12,12 @@ import PinLayout
 import ReactorKit
 
 final class ReceiveMateListDetailViewController: BaseViewController, UICollectionViewDelegateFlowLayout, View {
-    
+    override var useSnapKit: Bool {
+        return true
+    }
+    override var buttonContainerExists: Bool {
+        return false
+    }
     var collectionView: UICollectionView!
     var reactor: RecevieMateReactor
     init(reactor: RecevieMateReactor) {

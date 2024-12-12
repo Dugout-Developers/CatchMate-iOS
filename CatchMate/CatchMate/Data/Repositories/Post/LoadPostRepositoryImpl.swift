@@ -18,7 +18,7 @@ final class LoadPostRepositoryImpl: LoadPostRepository {
     func loadPost(postId: String) -> Observable<Post> {
         guard let id = Int(postId) else {
             LoggerService.shared.log("postId Int 변환 실패 형식 오류", level: .error)
-            return Observable.error(PresentationError.informational(message: "게시글을 불러올 수 없습니다."))
+            return Observable.error(PresentationError.showErrorPage)
         }
         return loadPostDS.loadPost(postId: id)
             .flatMap { dto -> Observable<Post> in

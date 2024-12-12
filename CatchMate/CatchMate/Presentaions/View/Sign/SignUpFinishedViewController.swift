@@ -12,6 +12,12 @@ import RxSwift
 import RxCocoa
 
 final class SignUpFinishedViewController: BaseViewController{
+    override var useSnapKit: Bool {
+        return false
+    }
+    override var buttonContainerExists: Bool {
+        return true
+    }
     private let containerView = UIView()
     
     private let logoImageView: UIImageView = {

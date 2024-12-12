@@ -12,6 +12,12 @@ import FlexLayout
 import PinLayout
 
 final class ProfileEditViewController: BaseViewController, View {
+    override var useSnapKit: Bool {
+        return false
+    }
+    override var buttonContainerExists: Bool {
+        return true
+    }
     var reactor: ProfileEditReactor
     private var profileImageString: String?
     private let containerView = UIView()

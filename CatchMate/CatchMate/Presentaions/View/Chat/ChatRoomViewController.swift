@@ -11,6 +11,12 @@ import ReactorKit
 import RxSwift
 
 final class ChatRoomViewController: BaseViewController, View {
+    override var useSnapKit: Bool {
+        return true
+    }
+    override var buttonContainerExists: Bool {
+        return true
+    }
     private let tableView: UITableView = UITableView()
     private let inputview: ChatingInputField = ChatingInputField()
     private var chat: Chat

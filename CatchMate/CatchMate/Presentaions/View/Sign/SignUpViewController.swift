@@ -14,7 +14,12 @@ import RxCocoa
 
 final class SignUpViewController: BaseViewController, View {
     var reactor: SignReactor
-    
+    override var useSnapKit: Bool {
+        return false
+    }
+    override var buttonContainerExists: Bool {
+        return true
+    }
     private let containerView = UIView()
     private let titleLabel1: UILabel = {
         let label = UILabel()

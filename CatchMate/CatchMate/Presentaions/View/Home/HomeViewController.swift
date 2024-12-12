@@ -19,6 +19,12 @@ enum Filter {
 
 final class HomeViewController: BaseViewController, View {
     private let reactor: HomeReactor
+    override var useSnapKit: Bool {
+        return false
+    }
+    override var buttonContainerExists: Bool {
+        return false
+    }
     private let filterScrollView = UIScrollView()
     private let filterContainerView = UIView()
     private let dateFilterButton = OptionButtonView(title: "경기 날짜", filter: .date)

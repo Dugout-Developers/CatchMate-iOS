@@ -14,6 +14,12 @@ import PinLayout
 
 final class SignInViewController: BaseViewController, View {
     var reactor: AuthReactor
+    override var useSnapKit: Bool {
+        return false
+    }
+    override var buttonContainerExists: Bool {
+        return false
+    }
     private let containerView = UIView()
     private let logoContainerView = UIView()
     private let logoImageView: UIImageView = {

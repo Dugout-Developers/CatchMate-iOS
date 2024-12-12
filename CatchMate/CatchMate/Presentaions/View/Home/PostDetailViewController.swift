@@ -18,6 +18,12 @@ extension Reactive where Base: PostDetailViewController {
     }
 }
 final class PostDetailViewController: BaseViewController, View {
+    override var useSnapKit: Bool {
+        return false
+    }
+    override var buttonContainerExists: Bool {
+        return false
+    }
     private var isFirstFavoriteState: Bool = true
     private var isFavorite: Bool = false {
         didSet {
@@ -192,7 +198,6 @@ final class PostDetailViewController: BaseViewController, View {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupErrorView()
         bind(reactor: reactor)
         reactor.action.onNext(.loadPostDetails)
 //        reactor.action.onNext(.loadIsApplied)
@@ -201,7 +206,7 @@ final class PostDetailViewController: BaseViewController, View {
         setupNavigation()
         setupButton()
     }
-    
+
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -211,15 +216,8 @@ final class PostDetailViewController: BaseViewController, View {
         contentView.flex.layout(mode: .adjustHeight)
         buttonContainer.flex.layout()
         scrollView.contentSize = contentView.frame.size
-        if let errorView = errorView {
-            errorView.pin.all(view.pin.safeArea)
-            errorView.flex.layout()
-        }
     }
-    private func setupErrorView() {
-        errorView = ErrorPageView(useSnapKit: false)
-        errorView?.isHidden = true
-    }
+
     private func setupNavigation() {
         let reportButton = UIButton()
         reportButton.setImage(UIImage(named: "cm20kebab")?.withTintColor(.cmHeadLineTextColor, renderingMode: .alwaysOriginal), for: .normal)
@@ -426,27 +424,10 @@ extension PostDetailViewController {
             .compactMap{$0}
             .withUnretained(self)
             .subscribe { vc, error in
-                switch error {
-                case .retryable(let message), .timeout(let message):
-                    vc.showToast(message: message, buttonContainerExists: true)
-                case .contactSupport, .unknown:
-                    vc.showToast(message: "문제가 발생했습니다. 지원팀에 문의해주세요.")
-                case .showErrorPage:
-                    vc.customNavigationBar.isRightItemsHidden = true
-                    vc.errorView?.isHidden = false
-                    vc.errorView?.flex.layout()
-                    vc.view.setNeedsLayout()
-                    vc.view.layoutIfNeeded()
-                case .informational(let message):
-                    vc.showToast(message: message, buttonContainerExists: true)
-                case .unauthorized:
-                    // 로그아웃 시키기
-                    break
-                case .validationFailed:
-                    break
-                }
+                vc.handleError(error)
             }
             .disposed(by: disposeBag)
+        
         reactor.state.map{$0.isDelete}
             .withUnretained(self)
             .subscribe { vc, flag in
@@ -496,9 +477,6 @@ extension PostDetailViewController {
 extension PostDetailViewController {
     private func setupUI() {
         view.addSubviews(views: [scrollView, buttonContainer])
-        if let errorView = errorView {
-            view.addSubview(errorView)
-        }
         scrollView.backgroundColor = .grayScale50
         scrollView.addSubview(contentView)
         contentView.flex.backgroundColor(.grayScale50).define { flex in

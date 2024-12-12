@@ -18,6 +18,12 @@ extension Reactive where Base: AddViewController {
     }
 }
 final class AddViewController: BaseViewController, View {
+    override var useSnapKit: Bool {
+        return false
+    }
+    override var buttonContainerExists: Bool {
+        return true
+    }
     private let reactor: AddReactor
     private var isSaved: Bool = false
     private var placeCount = 0 {

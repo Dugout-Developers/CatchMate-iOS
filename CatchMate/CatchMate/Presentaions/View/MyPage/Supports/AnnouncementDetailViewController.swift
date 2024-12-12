@@ -10,6 +10,13 @@ import FlexLayout
 import PinLayout
 
 final class AnnouncementDetailViewController: BaseViewController {
+    override var useSnapKit: Bool {
+        return false
+    }
+    override var buttonContainerExists: Bool {
+        return false
+    }
+    
     private let announcement: Announcement
     
     private let scrollView = UIScrollView()

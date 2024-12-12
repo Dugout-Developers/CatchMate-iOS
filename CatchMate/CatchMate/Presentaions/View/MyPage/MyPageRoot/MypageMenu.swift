@@ -42,7 +42,7 @@ enum MypageMenu: String {
             return Observable.just(CustomerServiceViewController(title: self.rawValue))
         case .write:
             guard let user = user else {
-                return Observable.error(PresentationError.showErrorPage(message: "요청을 처리할 수 없습니다. 다시 시도해주세요."))
+                return Observable.error(PresentationError.showErrorPage)
             }
             return Observable.just(OtherUserMyPageViewController(user: user, reactor: DIContainerService.shared.makeOtherUserPageReactor(user), reportReactor: ReportReactor()))
         case .send:
@@ -56,7 +56,7 @@ enum MypageMenu: String {
                     return vc
                 }
                 .catch { _ in
-                    return Observable.error(PresentationError.unauthorized(message: "계정 정보를 찾을 수 없습니다. 다시 로그인해주세요."))
+                    return Observable.error(PresentationError.unauthorized)
                 }
         case .noti:
             return Observable.just(NotificationSettingViewController(reactor: NotificationSettingReactor()))

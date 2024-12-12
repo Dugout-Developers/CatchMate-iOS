@@ -15,6 +15,12 @@ import RxCocoa
 final class InputCheerStyleViewController: BaseViewController, View {
     var reactor: SignReactor
     var signUpReactor: SignUpReactor?
+    override var useSnapKit: Bool {
+        return false
+    }
+    override var buttonContainerExists: Bool {
+        return true
+    }
     private let scrollView = UIScrollView()
     private let containerView = UIView()
     private let styleButtonTapPublisher = PublishSubject<CheerStyles?>().asObserver()

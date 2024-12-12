@@ -9,6 +9,12 @@ import RxSwift
 import ReactorKit
 
 final class OtherUserMyPageViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource, View  {
+    override var useSnapKit: Bool {
+        return true
+    }
+    override var buttonContainerExists: Bool {
+        return false
+    }
     private var user: SimpleUser
     private let tableview = UITableView()
     private let reactor: OtherUserpageReactor

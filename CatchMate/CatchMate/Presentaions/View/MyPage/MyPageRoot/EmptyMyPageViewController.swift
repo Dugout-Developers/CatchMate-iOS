@@ -9,6 +9,12 @@ import UIKit
 import RxSwift
 import SnapKit
 final class EmptyMyPageViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource {
+    override var useSnapKit: Bool {
+        return true
+    }
+    override var buttonContainerExists: Bool {
+        return true
+    }
     private let tableview = UITableView()
     private let menus = MypageMenu.supportMenus
     override func viewDidLoad() {
