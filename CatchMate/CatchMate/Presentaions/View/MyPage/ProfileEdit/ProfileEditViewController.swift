@@ -136,6 +136,22 @@ extension ProfileEditViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
+        saveButton.rx.tap
+            .subscribe { _ in
+                reactor.action.onNext(.editProfile)
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.editProfileSucess}
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .subscribe { vc, state in
+                if state {
+                    vc.navigationController?.popViewController(animated: true)
+                }
+            }
+            .disposed(by: disposeBag)
+        
         reactor.state.map{$0.nickname}
             .withUnretained(self)
             .subscribe { vc, nickname in

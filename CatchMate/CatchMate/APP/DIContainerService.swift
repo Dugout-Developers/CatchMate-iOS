@@ -156,4 +156,11 @@ class DIContainerService {
         let logoutUsecase = LogoutUseCaseImpl(repository: logoutRepository)
         return logoutUsecase
     }
+    
+    func makeProfileEditUseCase() -> ProfileEditUseCase {
+        let profileEditDataSource = ProfileEditDataSourceImpl(tokenDataSource: tokenDS)
+        let profileEditRepository = ProfileEditRepositoryImpl(profileEditDS: profileEditDataSource)
+        let profileEditUsecase = ProfileEditUseCaseImpl(repository: profileEditRepository)
+        return profileEditUsecase
+    }
 }

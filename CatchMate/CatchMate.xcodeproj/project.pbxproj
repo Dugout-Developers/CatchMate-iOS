@@ -319,6 +319,16 @@
 		53E7DBC72CB503DB00DC058D /* BlockUserReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBC62CB503DB00DC058D /* BlockUserReactor.swift */; };
 		53E7DBC92CB5357900DC058D /* NotificationListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBC82CB5357900DC058D /* NotificationListResponse.swift */; };
 		53E7DBCB2CB5641400DC058D /* NotificationListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBCA2CB5641400DC058D /* NotificationListDataSource.swift */; };
+		53EECAE62D0B2E8300775FD6 /* ProfileEditUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECAE52D0B2E7C00775FD6 /* ProfileEditUseCase.swift */; };
+		53EECAE82D0B2F8700775FD6 /* ProfileEditResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECAE72D0B2F6F00775FD6 /* ProfileEditResponseDTO.swift */; };
+		53EECAE92D0B2F8700775FD6 /* ProfileEditResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECAE72D0B2F6F00775FD6 /* ProfileEditResponseDTO.swift */; };
+		53EECAEB2D0B2FFE00775FD6 /* ProfileEditRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECAEA2D0B2FFC00775FD6 /* ProfileEditRepository.swift */; };
+		53EECAED2D0B304A00775FD6 /* ProfileEditRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECAEC2D0B304000775FD6 /* ProfileEditRequestDTO.swift */; };
+		53EECAEE2D0B304A00775FD6 /* ProfileEditRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECAEC2D0B304000775FD6 /* ProfileEditRequestDTO.swift */; };
+		53EECAF02D0B30B300775FD6 /* ProfileEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECAEF2D0B30A900775FD6 /* ProfileEdit.swift */; };
+		53EECAF12D0B30B300775FD6 /* ProfileEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECAEF2D0B30A900775FD6 /* ProfileEdit.swift */; };
+		53EECAF32D0BD17300775FD6 /* ProfileEditRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECAF22D0BD17100775FD6 /* ProfileEditRepositoryImpl.swift */; };
+		53EECAF72D0BD30E00775FD6 /* ProfileEditDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECAF62D0BD30500775FD6 /* ProfileEditDataSource.swift */; };
 		53F1E8C62C47A46400A962F3 /* Apply.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F1E8C52C47A46400A962F3 /* Apply.swift */; };
 		53FC69DB2C58C65700B97AEA /* RefreshTokenResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69DA2C58C65700B97AEA /* RefreshTokenResponseDTO.swift */; };
 		53FC69DD2C58DB8D00B97AEA /* TokenDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69DC2C58DB8D00B97AEA /* TokenDataSource.swift */; };
@@ -603,6 +613,13 @@
 		53E7DBC62CB503DB00DC058D /* BlockUserReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserReactor.swift; sourceTree = "<group>"; };
 		53E7DBC82CB5357900DC058D /* NotificationListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListResponse.swift; sourceTree = "<group>"; };
 		53E7DBCA2CB5641400DC058D /* NotificationListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListDataSource.swift; sourceTree = "<group>"; };
+		53EECAE52D0B2E7C00775FD6 /* ProfileEditUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditUseCase.swift; sourceTree = "<group>"; };
+		53EECAE72D0B2F6F00775FD6 /* ProfileEditResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditResponseDTO.swift; sourceTree = "<group>"; };
+		53EECAEA2D0B2FFC00775FD6 /* ProfileEditRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditRepository.swift; sourceTree = "<group>"; };
+		53EECAEC2D0B304000775FD6 /* ProfileEditRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditRequestDTO.swift; sourceTree = "<group>"; };
+		53EECAEF2D0B30A900775FD6 /* ProfileEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEdit.swift; sourceTree = "<group>"; };
+		53EECAF22D0BD17100775FD6 /* ProfileEditRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditRepositoryImpl.swift; sourceTree = "<group>"; };
+		53EECAF62D0BD30500775FD6 /* ProfileEditDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditDataSource.swift; sourceTree = "<group>"; };
 		53F1E8C52C47A46400A962F3 /* Apply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Apply.swift; sourceTree = "<group>"; };
 		53FC69DA2C58C65700B97AEA /* RefreshTokenResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenResponseDTO.swift; sourceTree = "<group>"; };
 		53FC69DC2C58DB8D00B97AEA /* TokenDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDataSource.swift; sourceTree = "<group>"; };
@@ -1074,6 +1091,7 @@
 		536BDDED2C1972120043B1DA /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				53EECAEF2D0B30A900775FD6 /* ProfileEdit.swift */,
 				53B8E2682C613127001D0ADF /* PresentationError.swift */,
 				536BDDEB2C19720E0043B1DA /* User.swift */,
 				531786632C1EF30F00ACEF6A /* Team.swift */,
@@ -1130,6 +1148,8 @@
 		536BDDF72C1972780043B1DA /* DTO */ = {
 			isa = PBXGroup;
 			children = (
+				53EECAEC2D0B304000775FD6 /* ProfileEditRequestDTO.swift */,
+				53EECAE72D0B2F6F00775FD6 /* ProfileEditResponseDTO.swift */,
 				53B8E26A2C613613001D0ADF /* DataError.swift */,
 				536BDDF52C1972740043B1DA /* UserDTO.swift */,
 				533A2B3E2C2C5DBC00A59340 /* SNSLoginResponse.swift */,
@@ -1329,6 +1349,7 @@
 		53B8E2362C5C7530001D0ADF /* User */ = {
 			isa = PBXGroup;
 			children = (
+				53EECAF62D0BD30500775FD6 /* ProfileEditDataSource.swift */,
 				53C6D9FF2CE39DCD00918718 /* ReceivedCountDataSource.swift */,
 				53FC69DE2C58E00A00B97AEA /* UserDataSource.swift */,
 				5301E2AF2C5BE3E20078E910 /* LogoutDataSource.swift */,
@@ -1339,6 +1360,7 @@
 		53B8E2392C5C7BB8001D0ADF /* User */ = {
 			isa = PBXGroup;
 			children = (
+				53EECAF22D0BD17100775FD6 /* ProfileEditRepositoryImpl.swift */,
 				53C6DA012CE3A90200918718 /* ReceivedCountRepositoryImpl.swift */,
 				5301E2B12C5BE6350078E910 /* LogoutRepositoryImpl.swift */,
 				53B8E2372C5C7BAA001D0ADF /* UserRepositoryImpl.swift */,
@@ -1349,6 +1371,7 @@
 		53B8E23C2C5C7BD3001D0ADF /* User */ = {
 			isa = PBXGroup;
 			children = (
+				53EECAEA2D0B2FFC00775FD6 /* ProfileEditRepository.swift */,
 				53C6DA032CE3A93900918718 /* ReceivedCountRepository.swift */,
 				5301E2B32C5BE6570078E910 /* LogoutRepository.swift */,
 				53B8E23A2C5C7BCF001D0ADF /* UserRepository.swift */,
@@ -1359,6 +1382,7 @@
 		53B8E23F2C5C7BF3001D0ADF /* User */ = {
 			isa = PBXGroup;
 			children = (
+				53EECAE52D0B2E7C00775FD6 /* ProfileEditUseCase.swift */,
 				5301E2B52C5BE6AF0078E910 /* LogoutUseCase.swift */,
 				53B8E23D2C5C7BEB001D0ADF /* UserUseCase.swift */,
 				53B3CE3D2C884B3900116BF7 /* UnauthorizedErrorHandler.swift */,
@@ -1597,6 +1621,7 @@
 				536BDDB22C189B230043B1DA /* HomeViewController.swift in Sources */,
 				53B3CE3E2C884B3900116BF7 /* UnauthorizedErrorHandler.swift in Sources */,
 				531DCA292C6905430015AC53 /* OtherUserMyPageViewController.swift in Sources */,
+				53EECAEB2D0B2FFE00775FD6 /* ProfileEditRepository.swift in Sources */,
 				531288CD2C5408FF000C2FB1 /* LoginModel.swift in Sources */,
 				534E39EC2C63E771006D180E /* SendMateListCell.swift in Sources */,
 				533A2B362C2BEA3900A59340 /* InputCheerStyleViewController.swift in Sources */,
@@ -1632,6 +1657,7 @@
 				53E4A9BC2C4FFB8400D21B49 /* SignUp.swift in Sources */,
 				5301E2A72C5B7F740078E910 /* MypageListCell.swift in Sources */,
 				53B8E2692C613127001D0ADF /* PresentationError.swift in Sources */,
+				53EECAF12D0B30B300775FD6 /* ProfileEdit.swift in Sources */,
 				5306F7BD2C9057D200292C6E /* ReceivedAppliesUseCase.swift in Sources */,
 				531786602C1EB24D00ACEF6A /* TeamFilterViewController.swift in Sources */,
 				533B292B2C770F9F00BFE9F6 /* SetFavoriteRepositoryImpl.swift in Sources */,
@@ -1696,6 +1722,7 @@
 				5337AB232C897847003A39AE /* ApplyHandleUseCase.swift in Sources */,
 				531786572C1C8F1900ACEF6A /* UIView+Extension.swift in Sources */,
 				53B895C32C9F3AEA00029130 /* TempPostRequestDTO.swift in Sources */,
+				53EECAF72D0BD30E00775FD6 /* ProfileEditDataSource.swift in Sources */,
 				538EB92F2C3FA27600ABA40E /* CMDatePicker.swift in Sources */,
 				5301E2B02C5BE3E20078E910 /* LogoutDataSource.swift in Sources */,
 				53FC69DD2C58DB8D00B97AEA /* TokenDataSource.swift in Sources */,
@@ -1774,11 +1801,13 @@
 				536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */,
 				53ACBA372C81A91E004FAF00 /* CheerTeamPickerViewController.swift in Sources */,
 				53B8E2382C5C7BAA001D0ADF /* UserRepositoryImpl.swift in Sources */,
+				53EECAE82D0B2F8700775FD6 /* ProfileEditResponseDTO.swift in Sources */,
 				5301E2A52C5B7DB70078E910 /* EmptyMyPageViewController.swift in Sources */,
 				531786642C1EF30F00ACEF6A /* Team.swift in Sources */,
 				533B29212C77099800BFE9F6 /* LoadFavoriteListRepositoryImpl.swift in Sources */,
 				53B8E2652C61280D001D0ADF /* RequestPost.swift in Sources */,
 				53E5925C2C6D05DD0042E1D7 /* PostDetailUseCase.swift in Sources */,
+				53EECAE62D0B2E8300775FD6 /* ProfileEditUseCase.swift in Sources */,
 				531E4C252C6B549B0052E754 /* PostListLoadDataSource.swift in Sources */,
 				538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */,
 				530DD6122C4F839600A7D6CE /* ServerLoginDataSource.swift in Sources */,
@@ -1821,8 +1850,10 @@
 				53B3CE452C88AE1C00116BF7 /* ApplyList.swift in Sources */,
 				533B29232C7709C100BFE9F6 /* LoadFavoriteListRepository.swift in Sources */,
 				53ACBA272C7EB493004FAF00 /* UserInfoDTO.swift in Sources */,
+				53EECAF32D0BD17300775FD6 /* ProfileEditRepositoryImpl.swift in Sources */,
 				53ACBA5A2C85B7E6004FAF00 /* ApplyRepository.swift in Sources */,
 				5383BE8F2C34DF27008940F1 /* Font.swift in Sources */,
+				53EECAEE2D0B304A00775FD6 /* ProfileEditRequestDTO.swift in Sources */,
 				53716BC82C43EEB50044AD2A /* CMToastMessage.swift in Sources */,
 				533183CF2C5141BC0097F3F1 /* MyMessageTableViewCell.swift in Sources */,
 				5301E2B82C5BECBB0078E910 /* MyPageReactor.swift in Sources */,
@@ -1848,6 +1879,7 @@
 				533B294A2C771F6300BFE9F6 /* Error+Extension.swift in Sources */,
 				533B293D2C771EEA00BFE9F6 /* DataError.swift in Sources */,
 				53C6DA062CE47A3000918718 /* UpPostDataSource.swift in Sources */,
+				53EECAED2D0B304A00775FD6 /* ProfileEditRequestDTO.swift in Sources */,
 				533B29352C771E6000BFE9F6 /* Post.swift in Sources */,
 				533B292E2C771C7D00BFE9F6 /* SetFavoriteRepositoryImpl.swift in Sources */,
 				533B873D2C86E5C80058B94B /* RecivedAppiesDataSource.swift in Sources */,
@@ -1864,6 +1896,7 @@
 				53E7DBB72CABD91700DC058D /* ApplyMapper.swift in Sources */,
 				533B873C2C86E5C60058B94B /* SendAppiesDataSource.swift in Sources */,
 				533B29462C771F4700BFE9F6 /* Color.swift in Sources */,
+				53EECAE92D0B2F8700775FD6 /* ProfileEditResponseDTO.swift in Sources */,
 				53B3CE412C8857E300116BF7 /* LoginMapper.swift in Sources */,
 				53C6DA092CE5D08C00918718 /* UpPostDataSourceTest.swift in Sources */,
 				533B294E2C773AB700BFE9F6 /* LoadFavoriteListRepositoryImpl.swift in Sources */,
@@ -1897,6 +1930,7 @@
 				533B29442C771F2E00BFE9F6 /* AddPostRequsetDTO.swift in Sources */,
 				53ACBA392C8330C9004FAF00 /* LoadPostDetailDataSourceTests.swift in Sources */,
 				533B29302C771C8F00BFE9F6 /* LoadFavoriteListUseCase.swift in Sources */,
+				53EECAF02D0B30B300775FD6 /* ProfileEdit.swift in Sources */,
 				53ACBA3A2C8330E1004FAF00 /* LoadPostDataSource.swift in Sources */,
 				53E7DBB52CAB212900DC058D /* RecivedAppliesRepositoryImpl.swift in Sources */,
 				53E7DBB22CAB0F1800DC058D /* RecivedRepositoryTest.swift in Sources */,

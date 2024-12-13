@@ -109,6 +109,9 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyPageProfileCell", for: indexPath) as? MyPageProfileCell else {
                 return UITableViewCell()
             }
+            if let user {
+                cell.configData(SimpleUser(user: user))
+            }
             cell.selectionStyle = .none
             return cell
         case 1, 2:
@@ -129,7 +132,8 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
         switch indexPath.section {
         case 0:
             guard let user = user else { return }
-            let profileEditVC = ProfileEditViewController(reactor: ProfileEditReactor(user: user), imageString: user.profilePicture)
+            let profileEditUseCase = DIContainerService.shared.makeProfileEditUseCase()
+            let profileEditVC = ProfileEditViewController(reactor: ProfileEditReactor(user: user, usecase: profileEditUseCase), imageString: user.profilePicture)
             profileEditVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(profileEditVC, animated: true)
         case 1:
@@ -207,9 +211,11 @@ extension MyPageViewController {
         
         reactor.state.map { $0.user }
             .compactMap{$0}
-            .distinctUntilChanged()
             .subscribe(onNext: { [weak self] user in
+                let prevUser = self?.user
                 self?.user = user
+                if prevUser?.nickName != user.nickName || prevUser?.cheerStyle != user.cheerStyle || prevUser?.profilePicture != user.profilePicture || prevUser?.team != user.team {                    self?.tableview.reloadData()
+                }
             })
             .disposed(by: disposeBag)
         

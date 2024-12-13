@@ -55,6 +55,8 @@ enum Endpoint {
     
     /// 내정보 조회
     case loadMyInfo
+    /// 내정보 수정
+    case editProfile
     
     /// 알람 리스트 조회
     case notificationList
@@ -107,6 +109,8 @@ enum Endpoint {
             return "/enroll/"
         case .loadMyInfo:
             return "/user/profile"
+        case .editProfile:
+            return "/user/profile"
         case .notificationList:
             return "/notification/receive"
         }
@@ -155,6 +159,8 @@ enum Endpoint {
             return "직관 신청 거절 API"
         case .loadMyInfo:
             return "내 정보 조회 API"
+        case .editProfile:
+            return "내 정보 수정 API"
         case .notificationList:
             return "알림 리스트 조회 API"
         }
@@ -204,6 +210,8 @@ enum Endpoint {
             return .patch
         case .loadMyInfo:
             return .get
+        case .editProfile:
+            return .patch
         case .notificationList:
             return .get
         }

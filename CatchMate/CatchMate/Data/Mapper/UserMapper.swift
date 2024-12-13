@@ -11,4 +11,7 @@ final class UserMapper {
         let gender = Gender(serverValue: dto.gender) ?? .man
         return User(id: String(dto.userID), email: dto.email, nickName: dto.nickName, birth: dto.birthDate, team: team, gener: gender, cheerStyle: CheerStyles(rawValue: dto.watchStyle ?? ""), profilePicture: dto.picture, pushAgreement: dto.pushAgreement == "Y" ? true : false, description: dto.description)
     }
+    func profileEditRequestDomainToDTO(domain: ProfileEdit) -> ProfileEditRequestDTO {
+        return ProfileEditRequestDTO(nickname: domain.nickName, description: "", favGudan: domain.team.rawValue, watchStyle: domain.style.rawValue)
+    }
 }
