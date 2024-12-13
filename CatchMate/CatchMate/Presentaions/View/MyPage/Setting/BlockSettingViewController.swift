@@ -13,6 +13,12 @@ import PinLayout
 import ReactorKit
 
 final class BlockSettingViewController: BaseViewController, View {
+    override var useSnapKit: Bool {
+        return false
+    }
+    override var buttonContainerExists: Bool {
+        return true
+    }
     private let reactor: BlockUserReactor
     private let tableView = UITableView()
     private let emptyViewContainer = UIView()

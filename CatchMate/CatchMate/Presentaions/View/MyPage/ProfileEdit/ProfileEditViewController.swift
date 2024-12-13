@@ -12,6 +12,12 @@ import FlexLayout
 import PinLayout
 
 final class ProfileEditViewController: BaseViewController, View {
+    override var useSnapKit: Bool {
+        return false
+    }
+    override var buttonContainerExists: Bool {
+        return true
+    }
     var reactor: ProfileEditReactor
     private var profileImageString: String?
     private let containerView = UIView()
@@ -59,6 +65,9 @@ final class ProfileEditViewController: BaseViewController, View {
         return label
     }()
     private let cheerStylePicker = CMPickerTextField(placeHolder: "응원 스타일을을 선택해보세요", isFlex: true)
+    private let buttonContainer = UIView()
+    private let saveButton = CMDefaultFilledButton(title: "완료")
+    
     init(reactor: ProfileEditReactor, imageString: String?) {
         self.reactor = reactor
         self.profileImageString = imageString
@@ -71,8 +80,10 @@ final class ProfileEditViewController: BaseViewController, View {
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        containerView.pin.all(view.pin.safeArea)
+        containerView.pin.left().right().top(view.pin.safeArea).above(of: saveButton)
+        buttonContainer.pin.left().right().bottom(view.pin.safeArea).height(72)
         containerView.flex.layout()
+        buttonContainer.flex.layout()
     }
     
     override func viewDidLoad() {
@@ -82,6 +93,7 @@ final class ProfileEditViewController: BaseViewController, View {
         setupImage()
         setupPicker()
         bind(reactor: reactor)
+        view.backgroundColor = .grayScale50
     }
     private func setupImage() {
         if let string = profileImageString, let url = URL(string: string) {
@@ -95,6 +107,11 @@ final class ProfileEditViewController: BaseViewController, View {
         teamPicker.parentViewController = self
         teamPicker.pickerViewController = TeamFilterViewController(reactor: reactor)
         teamPicker.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.large, identifier: "ProfileEditTeamPicker")
+        
+        // CheerStyle Picker
+        cheerStylePicker.parentViewController = self
+        cheerStylePicker.pickerViewController = CheerStylePickerViewController(reactor: reactor)
+        cheerStylePicker.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.large, identifier: "ProfileEditCheerStylePicker")
     }
 }
 
@@ -117,6 +134,22 @@ extension ProfileEditViewController {
             }
             .map { Reactor.Action.changeNickname($0) }
             .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        saveButton.rx.tap
+            .subscribe { _ in
+                reactor.action.onNext(.editProfile)
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.editProfileSucess}
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .subscribe { vc, state in
+                if state {
+                    vc.navigationController?.popViewController(animated: true)
+                }
+            }
             .disposed(by: disposeBag)
         
         reactor.state.map{$0.nickname}
@@ -170,7 +203,7 @@ extension ProfileEditViewController {
 // MARK: - UI
 extension ProfileEditViewController {
     private func setupUI() {
-        view.addSubview(containerView)
+        view.addSubviews(views: [containerView, buttonContainer])
         containerView.flex.width(100%).backgroundColor(.grayScale50).define { flex in
             flex.addItem(section1).direction(.column).backgroundColor(.white).justifyContent(.start).alignItems(.center).paddingHorizontal(MainGridSystem.getMargin()).define { flex in
                 flex.addItem().define({ flex in
@@ -198,6 +231,9 @@ extension ProfileEditViewController {
                 flex.addItem(cheerStylePicker).marginBottom(20).width(100%)
             }.marginBottom(8)
         }
+        buttonContainer.flex.direction(.column).justifyContent(.start).alignItems(.center).define { flex in
+            flex.addItem(saveButton).height(52).width(100%)
+        }.marginHorizontal(ButtonGridSystem.getMargin()).backgroundColor(.grayScale50)
     }
 }
 

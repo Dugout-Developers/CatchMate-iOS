@@ -11,6 +11,13 @@ import RxSwift
 import ReactorKit
 
 final class SendMateListViewController: BaseViewController, View {
+    override var useSnapKit: Bool {
+        return true
+    }
+    override var buttonContainerExists: Bool {
+        return false
+    }
+    
     private let tableView = UITableView()
     var reactor: SendMateReactor
     

@@ -25,7 +25,7 @@ final class PostDetailUseCaseImpl: PostDetailUseCase {
             .concatMap { post -> Observable<(post: Post, type: ApplyType)>  in
                 // 첫 번째 로직 완료 후 두 번째 Observable 실행
                 guard let myUserId = SetupInfoService.shared.getUserInfo(type: .id) else {
-                    return Observable.error(PresentationError.unauthorized(message: "다시 로그인해주세요."))
+                    return Observable.error(PresentationError.unauthorized)
                 }
 
                 // 두 번째 Observable 실행

@@ -11,15 +11,27 @@ import SnapKit
 import PinLayout
 import FlexLayout
 
-class BaseViewController: UIViewController {
-    
+protocol LayoutConfigurable: AnyObject {
+    var useSnapKit: Bool { get }
+    var buttonContainerExists: Bool { get }
+
+}
+
+class BaseViewController: UIViewController, LayoutConfigurable {
+    var useSnapKit: Bool {
+        fatalError("useSnapKit는 반드시 하위 클래스에서 구현해야 합니다.")
+    }
+    var buttonContainerExists: Bool {
+        fatalError("buttonContainerExists는 반드시 하위 클래스에서 구현해야 합니다.")
+    }
     var disposeBag: DisposeBag = DisposeBag()
     let customNavigationBar = CMNavigationBar()
     private let navigationBarHeight: CGFloat = 44.0
-    var errorView: ErrorPageView? 
+    var errorView: ErrorPageView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupErrorView()
         setupViewController()
         setupCustomNavigationBar()
         setupbackButton()
@@ -34,6 +46,18 @@ class BaseViewController: UIViewController {
             additionalSafeAreaInsets.top = navigationBarHeight
         }
     }
+    private func setupErrorView() {
+        errorView = ErrorPageView(useSnapKit: useSnapKit)
+        errorView?.isHidden = true
+        if let errorView {
+            view.addSubview(errorView)
+        }
+        if useSnapKit {
+            errorView?.snp.remakeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+        }
+    }
     private func setupCustomNavigationBar() {
         view.addSubview(customNavigationBar)
         customNavigationBar.snp.makeConstraints { make in
@@ -41,17 +65,21 @@ class BaseViewController: UIViewController {
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(navigationBarHeight)
         }
+        if let errorView = errorView, !useSnapKit {
+            errorView.pin.all(view.pin.safeArea)
+            errorView.flex.layout()
+        }
     }
     
     private func setupViewController() {
         navigationController?.isNavigationBarHidden = true
         view.tappedDismissKeyboard()
         // 제스처 인식기 delegate 설정
-          if let gestureRecognizers = self.view.gestureRecognizers {
-              for gesture in gestureRecognizers {
-                  gesture.delegate = self
-              }
-          }
+        if let gestureRecognizers = self.view.gestureRecognizers {
+            for gesture in gestureRecognizers {
+                gesture.delegate = self
+            }
+        }
     }
     
     private func setupbackButton() {
@@ -83,12 +111,42 @@ class BaseViewController: UIViewController {
         logoImageView.contentMode = .scaleAspectFit
         customNavigationBar.addLeftItems(items: [logoImageView])
     }
-
-     // 에러 뷰를 숨기는 함수
-     func hideErrorView() {
-         errorView?.removeFromSuperview()
-         errorView = nil
-     }
+    
+    // 에러 뷰를 숨기는 함수
+    func hideErrorView() {
+        errorView?.isHidden = true
+    }
+    
+    func handleError(_ error: PresentationError, toastAction: (() -> Void)? = nil) {
+        switch error {
+        case .showErrorPage:
+            if let errorView {
+                view.bringSubviewToFront(errorView)
+            }
+            view.bringSubviewToFront(customNavigationBar)
+            customNavigationBar.isRightItemsHidden = true
+            errorView?.isHidden = false
+            if !useSnapKit {
+                errorView?.flex.layout()
+                view.setNeedsLayout()
+                view.layoutIfNeeded()
+            }
+        case .showToastMessage(let message):
+            showToast(message: message, buttonContainerExists: buttonContainerExists) {
+                toastAction?()
+            }
+        case .unauthorized:
+            logout()
+        }
+    }
+    
+    func logout() {
+        showAlert(message: "유저 정보가 만료되었습니다\n다시 로그인 해주세요.") {
+            UnauthorizedErrorHandler.shared.handleError()
+            let reactor = DIContainerService.shared.makeAuthReactor()
+            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(UINavigationController(rootViewController: SignInViewController(reactor: reactor)), animated: true)
+        }
+    }
 }
 
 extension BaseViewController: UIGestureRecognizerDelegate { 

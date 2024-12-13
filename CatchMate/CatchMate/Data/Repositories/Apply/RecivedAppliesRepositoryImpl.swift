@@ -21,7 +21,7 @@ final class RecivedAppliesRepositoryImpl: RecivedAppiesRepository {
                 var mappingList = [RecivedApplyData]()
                 contents.forEach { content in
                     if let result = mapper.dtoToDomain(content) {
-                        mappingList.append(RecivedApplyData(enrollId: result.enrollId, user: result.user, addText: result.addText))
+                        mappingList.append(RecivedApplyData(enrollId: result.enrollId, user: result.user, addText: result.addText, new: result.new))
                     }
                 }
                 return Observable.just(mappingList)
@@ -39,7 +39,7 @@ final class RecivedAppliesRepositoryImpl: RecivedAppiesRepository {
                 contents.forEach { content in
                     if let result = mapper.dtoToDomain(content) {
                         let postId = result.post.id
-                        let apply = RecivedApplyData(enrollId: result.enrollId, user: result.user, addText: result.addText)
+                        let apply = RecivedApplyData(enrollId: result.enrollId, user: result.user, addText: result.addText, new: result.new)
                         if let index = mappingList.firstIndex(where: { $0.post.id == postId}) {
                             mappingList[index].appendApply(apply: apply)
                         } else {

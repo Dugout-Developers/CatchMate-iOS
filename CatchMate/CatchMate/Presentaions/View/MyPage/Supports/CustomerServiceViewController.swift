@@ -8,6 +8,12 @@
 import UIKit
 
 final class CustomerServiceViewController: BaseViewController {
+    override var useSnapKit: Bool {
+        return true
+    }
+    override var buttonContainerExists: Bool {
+        return true
+    }
     private let navtitle: String
     
     override func viewDidLoad() {

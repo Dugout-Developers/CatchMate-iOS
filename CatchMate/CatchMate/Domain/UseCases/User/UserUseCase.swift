@@ -10,16 +10,22 @@ import RxSwift
 
 protocol UserUseCase {
     func loadUser() -> Observable<User>
+    func loadCount() -> Observable<Int>
 }
 
 final class UserUseCaseImpl: UserUseCase {
     private let userRepository: UserRepository
+    private let loadCountRepository: ReceivedCountRepository
     
-    init(userRepository: UserRepository) {
+    init(userRepository: UserRepository, loadCountRepository: ReceivedCountRepository) {
         self.userRepository = userRepository
+        self.loadCountRepository = loadCountRepository
     }
     
     func loadUser() -> Observable<User> {
         return userRepository.loadUser()
+    }
+    func loadCount() -> Observable<Int> {
+        return loadCountRepository.loadCount()
     }
 }

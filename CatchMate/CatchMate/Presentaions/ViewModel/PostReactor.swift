@@ -100,7 +100,7 @@ final class PostReactor: Reactor {
                     if result {
                         return Mutation.setIsFavorite(state)
                     }
-                    return Mutation.setError(PresentationError.retryable(message: "찜하기 요청 실패. 다시 시도해주세요."))
+                    return Mutation.setError(PresentationError.showToastMessage(message: "찜하기 요청 실패. 다시 시도해주세요."))
                 }
                 .catch { error in
                     if let presentationError = error as? PresentationError {
@@ -120,7 +120,7 @@ final class PostReactor: Reactor {
                             Observable.just(Mutation.setApplyButtonState(.applied))
                         ])
                     } else {
-                        return Observable.just(Mutation.setError(.informational(message: "이미 보낸 신청입니다.")))
+                        return Observable.just(Mutation.setError(.showToastMessage(message: "이미 보낸 신청입니다.")))
                     }
                 }
                 .catch { error in
@@ -144,7 +144,7 @@ final class PostReactor: Reactor {
                         }
                     }
             } else {
-                return Observable.just(Mutation.setError(PresentationError.retryable(message: "요청을 실패했습니다. 다시 시도해주세요.")))
+                return Observable.just(Mutation.setError(PresentationError.showToastMessage(message: "요청을 실패했습니다. 다시 시도해주세요.")))
             }
         case .deletePost:
             if let postId = Int(postId) {
@@ -160,7 +160,7 @@ final class PostReactor: Reactor {
                         }
                     }
             } else {
-                return Observable.just(Mutation.setError(PresentationError.informational(message: "메시지 삭제 실패. 다시 시도해주세요.")))
+                return Observable.just(Mutation.setError(PresentationError.showToastMessage(message: "삭제 실패. 다시 시도해주세요.")))
             }
         }
     }

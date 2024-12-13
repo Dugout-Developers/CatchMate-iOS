@@ -10,7 +10,14 @@ import RxSwift
 import ReactorKit
 
 class MyPageViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource, View  {
+    override var useSnapKit: Bool {
+        return true
+    }
+    override var buttonContainerExists: Bool {
+        return true
+    }
     private var user: User?
+    private var receiveCount: Int?
     private let tableview = UITableView()
     private let supportMenus = MypageMenu.supportMenus
     private let myMenus = MypageMenu.myMenus
@@ -21,6 +28,7 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = false
         reactor.action.onNext(.loadUser)
+        
     }
     
     override func viewDidLoad() {
@@ -101,6 +109,9 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyPageProfileCell", for: indexPath) as? MyPageProfileCell else {
                 return UITableViewCell()
             }
+            if let user {
+                cell.configData(SimpleUser(user: user))
+            }
             cell.selectionStyle = .none
             return cell
         case 1, 2:
@@ -108,7 +119,8 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
                 return UITableViewCell()
             }
             let menu = indexPath.section == 1 ? myMenus[indexPath.row] : supportMenus[indexPath.row]
-            cell.configData(title: menu.rawValue)
+            let bedge = indexPath.section == 1 && indexPath.row == 2 ? receiveCount : nil
+            cell.configData(title: menu.rawValue, bedge: bedge)
             cell.selectionStyle = .none
             return cell
         default:
@@ -120,7 +132,8 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
         switch indexPath.section {
         case 0:
             guard let user = user else { return }
-            let profileEditVC = ProfileEditViewController(reactor: ProfileEditReactor(user: user), imageString: user.profilePicture)
+            let profileEditUseCase = DIContainerService.shared.makeProfileEditUseCase()
+            let profileEditVC = ProfileEditViewController(reactor: ProfileEditReactor(user: user, usecase: profileEditUseCase), imageString: user.profilePicture)
             profileEditVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(profileEditVC, animated: true)
         case 1:
@@ -198,9 +211,11 @@ extension MyPageViewController {
         
         reactor.state.map { $0.user }
             .compactMap{$0}
-            .distinctUntilChanged()
             .subscribe(onNext: { [weak self] user in
+                let prevUser = self?.user
                 self?.user = user
+                if prevUser?.nickName != user.nickName || prevUser?.cheerStyle != user.cheerStyle || prevUser?.profilePicture != user.profilePicture || prevUser?.team != user.team {                    self?.tableview.reloadData()
+                }
             })
             .disposed(by: disposeBag)
         
@@ -220,11 +235,15 @@ extension MyPageViewController {
             .compactMap{$0}
             .withUnretained(self)
             .subscribe { vc, error in
-                vc.showAlert(message: "유저 정보가 만료되었습니다\n다시 로그인 해주세요.") {
-                    UnauthorizedErrorHandler.shared.handleError()
-                    let reactor = DIContainerService.shared.makeAuthReactor()
-                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(UINavigationController(rootViewController: SignInViewController(reactor: reactor)), animated: true)
-                }
+                vc.logout()
+            }
+            .disposed(by: disposeBag)
+        reactor.state.map{$0.count}
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .subscribe { vc, count in
+                vc.receiveCount = count
+                vc.tableview.reloadData()
             }
             .disposed(by: disposeBag)
     }

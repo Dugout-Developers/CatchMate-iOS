@@ -81,7 +81,7 @@ final class TeamSelectButton: UIView {
 }
 
 final class CheerStyleButton: UIView {
-    let item: CheerStyles
+    var item: CheerStyles?
     var isSelected: Bool = false {
         willSet {
             updateFocus(newValue)
@@ -115,14 +115,14 @@ final class CheerStyleButton: UIView {
         return label
     }()
     
-    init(item: CheerStyles) {
+    init(item: CheerStyles?) {
         self.item = item
         super.init(frame: .zero)
         setupData()
         setupUI()
     }
     
-    @available (*, unavailable)
+    @available(*, unavailable)
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -143,13 +143,30 @@ final class CheerStyleButton: UIView {
         }
     }
     
+    func updateData(_ item: CheerStyles) {
+        self.item = item
+        setupData()
+        titleLabel.flex.markDirty()
+        subInfoLabel.flex.markDirty()
+        itemImage.flex.markDirty()
+        containerView.flex.layout()
+    }
     
     private func setupData() {
-        titleLabel.text = item.rawValue + " 스타일"
-        titleLabel.applyStyle(textStyle: FontSystem.body01_medium)
-        subInfoLabel.text = item.subInfo
-        subInfoLabel.applyStyle(textStyle: FontSystem.body03_medium)
-        itemImage.image = item.iconImage
+        if let item {
+            titleLabel.text = item.rawValue + " 스타일"
+            titleLabel.applyStyle(textStyle: FontSystem.body01_medium)
+            subInfoLabel.text = item.subInfo
+            subInfoLabel.applyStyle(textStyle: FontSystem.body03_medium)
+            itemImage.image = item.iconImage
+        } else {
+            titleLabel.text = "스타일"
+            titleLabel.applyStyle(textStyle: FontSystem.body01_medium)
+            subInfoLabel.text = "스타일을 선택해주세요."
+            subInfoLabel.applyStyle(textStyle: FontSystem.body03_medium)
+            itemImage.image = UIImage(named: "logo")
+        }
+
     }
     private func setupUI() {
         addSubview(containerView)

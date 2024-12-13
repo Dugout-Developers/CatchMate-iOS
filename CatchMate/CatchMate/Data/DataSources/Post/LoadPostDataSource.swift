@@ -11,7 +11,7 @@ import RxAlamofire
 import Alamofire
 
 protocol LoadPostDataSource {
-    func laodPost(postId: Int) ->  Observable<PostDTO>
+    func loadPost(postId: Int) ->  Observable<PostDTO>
 }
 
 final class LoadPostDataSourceImpl: LoadPostDataSource {
@@ -20,7 +20,7 @@ final class LoadPostDataSourceImpl: LoadPostDataSource {
     init(tokenDataSource: TokenDataSource) {
         self.tokenDataSource = tokenDataSource
     }
-    func laodPost(postId: Int) -> RxSwift.Observable<PostDTO> {
+    func loadPost(postId: Int) -> RxSwift.Observable<PostDTO> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }

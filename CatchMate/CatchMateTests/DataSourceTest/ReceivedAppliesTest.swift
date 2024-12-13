@@ -28,7 +28,7 @@ final class ReceivedAppliesTest: XCTestCase {
     }
     
     func testLoadPostId() {
-        let postId = 58
+        let postId = 1
         let expectation = self.expectation(description: "Received \(postId)Post Apply List Load API Request")
         self.receiveDataSource.loadRecivedApplies(boardId: postId)
             .subscribe (onNext: { result in
@@ -41,7 +41,7 @@ final class ReceivedAppliesTest: XCTestCase {
             })
             .disposed(by: disposeBag)
         
-        waitForExpectations(timeout: 100, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
 
     }
     
@@ -59,6 +59,6 @@ final class ReceivedAppliesTest: XCTestCase {
             })
             .disposed(by: disposeBag)
         
-        waitForExpectations(timeout: 100, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
     }
 }

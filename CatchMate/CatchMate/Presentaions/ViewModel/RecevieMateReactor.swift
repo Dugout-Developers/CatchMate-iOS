@@ -51,7 +51,8 @@ final class RecevieMateReactor: Reactor {
                 }
         case .selectPost(let postId):
             if let postId = postId, let intId = Int(postId) {
-                return recivedAppliesUsecase.loadRecivedApplies(boardId: intId)
+                let list = resetNew(postId)
+                let loadAppiles = recivedAppliesUsecase.loadRecivedApplies(boardId: intId)
                     .map { result in
                         return Mutation.setSelectedPostApplies(result)
                     }
@@ -62,8 +63,12 @@ final class RecevieMateReactor: Reactor {
                             return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                         }
                     }
+                return Observable.concat([
+                    Observable.just(Mutation.setReceiveAppliesAll(list)),
+                    loadAppiles
+                ])
             } else {
-                return Observable.just(Mutation.setError(PresentationError.informational(message: "요청에 실패했습니다. 다시 시도해주세요.")))
+                return Observable.just(Mutation.setError(PresentationError.showToastMessage(message: "요청에 실패했습니다. 다시 시도해주세요.")))
             }
         case .acceptApply(let enrollId):
             return recivedAppliesUsecase.acceptApply(enrollId: enrollId)
@@ -71,7 +76,7 @@ final class RecevieMateReactor: Reactor {
                     if result {
                         return Mutation.acceptApply(enrollId)
                     } else {
-                        return Mutation.setError(PresentationError.informational(message: "다시 시도해주세요."))
+                        return Mutation.setError(PresentationError.showToastMessage(message: "요청에 실패했습니다. 다시 시도해주세요."))
                     }
                 }
                 .catch { error in
@@ -87,7 +92,7 @@ final class RecevieMateReactor: Reactor {
                     if result {
                         return Mutation.acceptApply(enrollId)
                     } else {
-                        return Mutation.setError(PresentationError.informational(message: "다시 시도해주세요."))
+                        return Mutation.setError(PresentationError.showToastMessage(message: "요청에 실패했습니다. 다시 시도해주세요."))
                     }
                 }
                 .catch { error in
@@ -114,5 +119,12 @@ final class RecevieMateReactor: Reactor {
             newState.selectedPostApplies = currentState.selectedPostApplies?.filter({ $0.enrollId != enrollId })
         }
         return newState
+    }
+    private func resetNew(_ id: String) -> [RecivedApplies] {
+        var list = currentState.recivedApplies
+        if let index = list.firstIndex(where: {$0.post.id == id}) {
+            list[index].changeNew()
+        }
+        return list
     }
 }

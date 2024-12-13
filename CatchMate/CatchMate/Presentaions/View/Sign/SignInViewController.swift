@@ -14,11 +14,17 @@ import PinLayout
 
 final class SignInViewController: BaseViewController, View {
     var reactor: AuthReactor
+    override var useSnapKit: Bool {
+        return false
+    }
+    override var buttonContainerExists: Bool {
+        return false
+    }
     private let containerView = UIView()
     private let logoContainerView = UIView()
     private let logoImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "EmptyPrimary")
+        imageView.image = UIImage(named: "logo")
         return imageView
     }()
 
@@ -75,7 +81,7 @@ final class SignInViewController: BaseViewController, View {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        containerView.pin.all()
+        containerView.pin.all(view.pin.safeArea)
         containerView.flex.layout()
     }
     
@@ -168,9 +174,9 @@ extension SignInViewController {
         view.addSubview(containerView)
         
         containerView.flex.direction(.column).justifyContent(.start).alignItems(.center).marginHorizontal(24).define { flex in
-            flex.addItem(logoContainerView).width(100%).height(Screen.height / 2).justifyContent(.center).alignItems(.center).define { flex in
-                flex.addItem(logoImageView).size(80)
-            }.marginBottom(19)
+            flex.addItem(logoContainerView).width(100%).height(Screen.height / 2-60).justifyContent(.center).alignItems(.center).define { flex in
+                flex.addItem(logoImageView).size(120)
+            }
             flex.addItem(simpleLoginLabelImageView).width(134).height(33).marginBottom(9)
             flex.addItem(kakaoLoginButton).height(50).marginBottom(25)
             flex.addItem().direction(.row).justifyContent(.spaceBetween).alignItems(.center).width(100%).define { flex in

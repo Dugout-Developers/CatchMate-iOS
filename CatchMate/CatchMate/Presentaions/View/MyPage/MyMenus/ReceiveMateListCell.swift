@@ -130,6 +130,13 @@ final class ReceiveCollectionViewCell: UICollectionViewCell {
         view.layer.cornerRadius = 12
         return view
     }()
+    private let newBedge: UILabel = {
+        let label = UILabel()
+        label.text = "N"
+        label.applyStyle(textStyle: FontSystem.caption01_semiBold)
+        label.textColor = .cmPrimaryColor
+        return label
+    }()
     private let profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -188,11 +195,14 @@ final class ReceiveCollectionViewCell: UICollectionViewCell {
         ageLabel.backgroundColor = .grayScale100
         ageLabel.textColor = .cmNonImportantTextColor
         ageLabel.applyStyle(textStyle: FontSystem.caption01_medium)
+        
+        newBedge.isHidden = !apply.new
         retryUI()
     }
     override func layoutSubviews() {
         super.layoutSubviews()
         containerView.pin.all()
+        newBedge.pin.topRight(12).height(15).width(8)
         containerView.flex.layout(mode: .adjustHeight)
     }
     
@@ -204,6 +214,7 @@ final class ReceiveCollectionViewCell: UICollectionViewCell {
         genderLabel.text = ""
         ageLabel.text = ""
         profileImageView.image = nil
+        newBedge.isHidden = true
         styleLabel.flex.width(nil).height(nil)
         retryUI()
     }
@@ -214,11 +225,13 @@ final class ReceiveCollectionViewCell: UICollectionViewCell {
         styleLabel.flex.markDirty()
         genderLabel.flex.markDirty()
         ageLabel.flex.markDirty()
+        newBedge.flex.markDirty()
         containerView.flex.layout(mode: .adjustHeight)
     }
     
     private func setupUI(){
         contentView.addSubview(containerView)
+        contentView.addSubview(newBedge)
         containerView.flex.direction(.column).justifyContent(.start).alignItems(.center).paddingVertical(20).paddingHorizontal(27).define { flex in
             flex.addItem(profileImageView).size(56).cornerRadius(56/2).marginBottom(12)
             flex.addItem(nicknameLabel).marginBottom(8)

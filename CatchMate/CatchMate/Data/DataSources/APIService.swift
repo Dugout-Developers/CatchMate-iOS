@@ -25,6 +25,8 @@ enum Endpoint {
     case userPostlist
     /// 게시글 조회
     case loadPost
+    /// 게시글 끌어올리기
+    case upPost
     /// 게시글 삭제
     case removePost
     /// 찜목록 조회
@@ -44,6 +46,8 @@ enum Endpoint {
     case receivedApply
     /// 받은 직관 신청 전체 목록
     case receivedApplyAll
+    /// 받은 직관 신청 미확인 갯수
+    case receivedCount
     /// 직관 신청 수락
     case acceptApply
     /// 직관 신청 거절
@@ -51,6 +55,11 @@ enum Endpoint {
     
     /// 내정보 조회
     case loadMyInfo
+    /// 내정보 수정
+    case editProfile
+    
+    /// 알람 리스트 조회
+    case notificationList
     
     var endPoint: String {
         switch self {
@@ -70,6 +79,8 @@ enum Endpoint {
         case .loadPost:
             /// 게시글 조회 /board/{boardId}
             return "/board/"
+        case .upPost:
+            return "/board/up"
         case .removePost:
             return "/board/remove"
         case .loadFavorite:
@@ -90,12 +101,18 @@ enum Endpoint {
             return "/enroll/receive"
         case .receivedApplyAll:
             return "/enroll/receive/all"
+        case .receivedCount:
+            return "/enroll/new-count"
         case .acceptApply, .rejectApply:
             /// acceptApply = /enroll/{enrollId}/accept
             /// rejectApply = /enroll/{enrollId}/reject
             return "/enroll/"
         case .loadMyInfo:
             return "/user/profile"
+        case .editProfile:
+            return "/user/profile"
+        case .notificationList:
+            return "/notification/receive"
         }
     }
     var apiName: String {
@@ -112,6 +129,8 @@ enum Endpoint {
             return "게시글 리스트 불러오기 API"
         case .loadPost:
             return "게시글 로드 API"
+        case .upPost:
+            return "게시글 끌어올리기 API"
         case .removePost:
             return "게시글 삭제 API"
         case .userPostlist:
@@ -132,12 +151,18 @@ enum Endpoint {
             return "받은 신청 목록 API"
         case .receivedApplyAll:
             return "받은 신청 전체 목록 API"
+        case .receivedCount:
+            return "미확인 받은 신청 개수 API"
         case .acceptApply:
             return "직관 신청 수락 API"
         case .rejectApply:
             return "직관 신청 거절 API"
         case .loadMyInfo:
             return "내 정보 조회 API"
+        case .editProfile:
+            return "내 정보 수정 API"
+        case .notificationList:
+            return "알림 리스트 조회 API"
         }
     }
     
@@ -155,6 +180,8 @@ enum Endpoint {
             return .patch
         case .loadPost:
             return .get
+        case .upPost:
+            return .patch
         case .removePost:
             return .delete
         case .userPostlist:
@@ -175,11 +202,17 @@ enum Endpoint {
             return .get
         case .receivedApplyAll:
             return .get
+        case .receivedCount:
+            return .get
         case .acceptApply:
             return .patch
         case .rejectApply:
             return .patch
         case .loadMyInfo:
+            return .get
+        case .editProfile:
+            return .patch
+        case .notificationList:
             return .get
         }
     }

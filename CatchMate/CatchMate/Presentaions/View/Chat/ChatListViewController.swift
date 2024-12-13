@@ -14,6 +14,12 @@ import Alamofire
 import RxAlamofire
 
 final class ChatListViewController: BaseViewController, View {
+    override var useSnapKit: Bool {
+        return true
+    }
+    override var buttonContainerExists: Bool {
+        return false
+    }
     private let chatListTableView = UITableView()
     var reactor: ChatListReactor
     
@@ -22,36 +28,10 @@ final class ChatListViewController: BaseViewController, View {
         tabBarController?.tabBar.isHidden = false
         reactor.action.onNext(.selectChat(nil))
         reactor.action.onNext(.loadChatList)
-        RecivedAppiesDataSourceImpl(tokenDataSource: TokenDataSourceImpl()).loadReceivedAppliesAll()
-            .subscribe { result in
-                print(result)
+        NotificationListDataSourceImpl(tokenDataSource: TokenDataSourceImpl()).loadNotificationList()
+            .subscribe { dtoList in
+                print(dtoList)
             }
-            .disposed(by: disposeBag)
-
-//        test()
-    }
-    private func test() {
-        let tokenDataSource = TokenDataSourceImpl()
-        guard let token = tokenDataSource.getToken(for: .accessToken) else {
-            print("no token")
-            return
-        }
-        let headers: HTTPHeaders = [
-            "AccessToken": token
-        ]
-        APIService.shared.requestAPI(type: .receivedApplyAll, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: ApplyListResponse.self)
-            .debug("Request API Debug", trimOutput: false)
-            .subscribe(
-                onNext: { response in
-                    print("Response received: \(response)")
-                },
-                onError: { error in
-                    print("Error: \(error)")
-                },
-                onCompleted: {
-                    print("Request completed")
-                }
-            )
             .disposed(by: disposeBag)
     }
 

@@ -9,6 +9,12 @@ import UIKit
 import SnapKit
 
 final class AuthInfoSettingViewController: BaseViewController {
+    override var useSnapKit: Bool {
+        return true
+    }
+    override var buttonContainerExists: Bool {
+        return false
+    }
     private let loginInfoLabel: UILabel = {
         let label = UILabel()
         label.text = "로그인 정보"

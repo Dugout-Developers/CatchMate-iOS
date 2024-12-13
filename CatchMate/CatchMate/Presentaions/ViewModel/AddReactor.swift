@@ -152,7 +152,7 @@ final class AddReactor: Reactor {
         case .updatePost:
             guard let request = validatePost(currentState) else {
                 print(currentState)
-                return Observable.just(Mutation.setError(.validationFailed(message: "입력값 확인 후 다시 시도해주세요.")))
+                return Observable.just(Mutation.setError(.showToastMessage(message: "입력값 확인 후 다시 시도해주세요.")))
             }
             print(request.0)
             return addUsecase.addPost(request.0)
@@ -199,15 +199,15 @@ final class AddReactor: Reactor {
                     Observable.just(Mutation.updateSaveButton)
                 ])
             } else {
-                return Observable.just(Mutation.setError(PresentationError.showErrorPage(message: "디코딩 오류")))
+                return Observable.just(Mutation.setError(PresentationError.showErrorPage))
             }
         case .updateEditPost:
             guard let request = validatePost(currentState) else {
                 print(currentState)
-                return Observable.just(Mutation.setError(.validationFailed(message: "입력값 확인 후 다시 시도해주세요.")))
+                return Observable.just(Mutation.setError(.showToastMessage(message: "입력값 확인 후 다시 시도해주세요.")))
             }
             guard let requestEditPost = mappingRequestEditPost(request.0) else {
-                return Observable.just(Mutation.setError(.retryable(message: "다시 시도해주세요.")))
+                return Observable.just(Mutation.setError(.showToastMessage(message: "다시 시도해주세요.")))
             }
             return addUsecase.editPost(requestEditPost)
                 .map{ id in

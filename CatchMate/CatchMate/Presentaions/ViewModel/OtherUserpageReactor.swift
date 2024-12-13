@@ -46,7 +46,7 @@ final class OtherUserpageReactor: Reactor {
                         }
                     }
             } else {
-                return Observable.just(Mutation.setError(PresentationError.showErrorPage(message: "정보를 불러올 수 없습니다. 다시 시도해주세요.")))
+                return Observable.just(Mutation.setError(PresentationError.showErrorPage))
             }
         }
     }

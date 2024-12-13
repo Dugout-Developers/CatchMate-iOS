@@ -45,7 +45,7 @@ final class SignUpReactor: Reactor {
                     if let presentaionError = error as? PresentationError {
                         return Observable.just(.setError(presentaionError))
                     } else {
-                        return Observable.just(.setError(.unknown(message: error.localizedDescription)))
+                        return Observable.just(.setError(.showErrorPage))
                     }
                 }
         }
