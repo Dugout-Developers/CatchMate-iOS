@@ -16,6 +16,7 @@ final class CMPopupViewController: UIViewController {
     var importantAction: (() -> Void)?
     var commonAction: (() -> Void)?
     
+    private var isOnlyOkButton: Bool
     private let verticalTextPadding = 36.0
     private let horizontalTextPadding = 24.0
     private let dimView: UIView = {
@@ -56,6 +57,17 @@ final class CMPopupViewController: UIViewController {
     
     private let horizontralDivider = UIView()
     private let verticalDivider = UIView()
+    
+  
+   init(isOnlyOkButton: Bool = false) {
+        self.isOnlyOkButton = isOnlyOkButton
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -104,10 +116,16 @@ final class CMPopupViewController: UIViewController {
             flex.addItem(alertView).direction(.column).justifyContent(.start).width(100%).alignItems(.center).define { flex in
                 flex.addItem(titleLabel).marginVertical(verticalTextPadding).marginHorizontal(horizontalTextPadding)
                 flex.addItem(horizontralDivider).width(100%).height(1).backgroundColor(.grayScale100)
-                flex.addItem().direction(.row).justifyContent(.start).alignItems(.center).width(100%).paddingTop(16).paddingBottom(24).paddingHorizontal(24).define { flex in
-                    flex.addItem(commonButton).grow(1).shrink(0)
-                    flex.addItem(verticalDivider).width(1).height(18).backgroundColor(.grayScale100).marginHorizontal(10)
-                    flex.addItem(importantButton).grow(1).shrink(0)
+                if isOnlyOkButton {
+                    flex.addItem().direction(.row).justifyContent(.center).alignItems(.center).width(100%).paddingTop(16).paddingBottom(24).paddingHorizontal(24).define { flex in
+                        flex.addItem(importantButton)
+                    }
+                } else {
+                    flex.addItem().direction(.row).justifyContent(.start).alignItems(.center).width(100%).paddingTop(16).paddingBottom(24).paddingHorizontal(24).define { flex in
+                        flex.addItem(commonButton).grow(1).shrink(0)
+                        flex.addItem(verticalDivider).width(1).height(18).backgroundColor(.grayScale100).marginHorizontal(10)
+                        flex.addItem(importantButton).grow(1).shrink(0)
+                    }
                 }
             }
         }
@@ -119,15 +137,17 @@ extension UIViewController {
     func showCMAlert(
         titleText: String,
         importantButtonText: String,
-        commonButtonText: String,
+        commonButtonText: String?,
         importantAction: (() -> Void)? = nil,
         commonAction: (() -> Void)? = nil) {
-            let alertView = CMPopupViewController()
+            let alertView = CMPopupViewController(isOnlyOkButton: commonButtonText == nil ? true : false)
             alertView.modalPresentationStyle = .overFullScreen
             
             alertView.modalTransitionStyle = .crossDissolve
             alertView.messageText = titleText
-            alertView.commonButtonText = commonButtonText
+            if let commonButtonText {
+                alertView.commonButtonText = commonButtonText
+            }
             alertView.importantButtonText = importantButtonText
             alertView.importantAction = importantAction
             alertView.commonAction = commonAction
