@@ -61,6 +61,11 @@ final class NotificationSettingViewController: BaseViewController, View {
         reactor.state.map { $0.settings }
             .bind(to: tableView.rx.items(cellIdentifier: "NotificationSettingCell", cellType: NotificationSettingCell.self)) { _, setting, cell in
                 cell.configData(setting: setting)
+                cell.switchStateSubject
+                    .bind { state in
+                        print("\(setting.title) switch state: \(state)")
+                    }
+                    .disposed(by: cell.disposeBag)
             }
             .disposed(by: disposeBag)
     }
@@ -81,6 +86,7 @@ final class NotificationSettingCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupSwitch()
+        setupUI()
     }
     
     @available(*, unavailable)
@@ -88,7 +94,6 @@ final class NotificationSettingCell: UITableViewCell {
         super.init(coder: coder)
     }
     private func setupSwitch() {
-        accessoryView = switchView
         switchView.rx_isOn()
             .bind(to: switchStateSubject)
             .disposed(by: disposeBag)
@@ -97,7 +102,6 @@ final class NotificationSettingCell: UITableViewCell {
     func configData(setting: NotificationSetting) {
         notiTitleLabel.text = setting.title
         notiTitleLabel.applyStyle(textStyle: FontSystem.body01_medium)
-        setupUI()
     }
     
     private func setupUI() {
