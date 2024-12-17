@@ -75,7 +75,7 @@ final class ApplyManagementDataSourceImpl: ApplyManagementDataSource {
             "AccessToken": token
         ]
         let addEndpoint = "\(enrollId)/reject"
-        return APIService.shared.requestAPI(addEndPoint: addEndpoint, type: .rejectApply, parameters: nil, encoding: URLEncoding.default, dataType: ApplyManagementResponse.self)
+        return APIService.shared.requestAPI(addEndPoint: addEndpoint, type: .rejectApply, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: ApplyManagementResponse.self)
             .flatMap { response -> Observable<Bool> in
                 if response.acceptStatus == "REJECTED" {
                     return Observable.just(true)
@@ -95,7 +95,7 @@ final class ApplyManagementDataSourceImpl: ApplyManagementDataSource {
                                 "AccessToken": token
                             ]
                             LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            return APIService.shared.requestAPI(addEndPoint: addEndpoint, type: .rejectApply, parameters: nil, encoding: URLEncoding.default, dataType: ApplyManagementResponse.self)
+                            return APIService.shared.requestAPI(addEndPoint: addEndpoint, type: .rejectApply, parameters: nil, headers: newHeaders, encoding: URLEncoding.default, dataType: ApplyManagementResponse.self)
                                 .flatMap { response -> Observable<Bool> in
                                     if response.acceptStatus == "REJECTED" {
                                         return Observable.just(true)
