@@ -134,19 +134,24 @@ class DIContainerService {
     func makeSendMateReactor() -> SendMateReactor {
         let sendAppliesDataSource = SendAppiesDataSourceImpl(tokenDataSource: tokenDS)
         let sendAppliesRepository = SendAppiesRepositoryImpl(sendAppliesDS: sendAppliesDataSource)
-        let sendAppliesUsecase = SendAppliesUseCaseImpl(sendAppliesRepository: sendAppliesRepository)
+        let sendAppliesUsecase = LoadSendAppliesUseCaseImpl(sendAppliesRepository: sendAppliesRepository)
         
         return SendMateReactor(sendAppliesUsecase: sendAppliesUsecase)
     }
     
     func makeReciveMateReactor() -> RecevieMateReactor {
         let recivedAppliesDataSource = RecivedAppiesDataSourceImpl(tokenDataSource: tokenDS)
-        let recivedAppliesRepository = RecivedAppliesRepositoryImpl(recivedAppliesDS: recivedAppliesDataSource)
+        let receivedAppliesRepository = RecivedAppliesRepositoryImpl(recivedAppliesDS: recivedAppliesDataSource)
         let applyManagementDataSource = ApplyManagementDataSourceImpl(tokenDataSource: tokenDS)
-        let applyManangementRepository = ApplyManagementRepositoryImpl(applyManagementDS: applyManagementDataSource)
-        let receivedAppliesUsecase = ReceivedAppliesUseCaseImpl(receivedAppliesRepository: recivedAppliesRepository, applyManagementRepository: applyManangementRepository)
+        let applyManagementRepository = ApplyManagementRepositoryImpl(applyManagementDS: applyManagementDataSource)
+        let acceptApplyUsecase = AcceptApplyUseCaseImpl(applyManagementRepository: applyManagementRepository)
+        let rejectApplyUsecase = RejectApplyUseCaseImpl(applyManagementRepository: applyManagementRepository)
         
-        return RecevieMateReactor(recivedAppliesUsecase: receivedAppliesUsecase)
+        let loadReceivedAppliesUseCase = LoadReceivedAppliesUseCaseImpl(receivedAppliesRepository: receivedAppliesRepository)
+        let loadAllReceiveAppliesUseCase = LoadAllReceiveAppliesUseCaseImpl(recivedAppliesRepository: receivedAppliesRepository)
+        let applyManageUsecase = ApplyManageUseCaseImpl(acceptApplyUseCase: acceptApplyUsecase, rejectApplyUseCase: rejectApplyUsecase)
+        
+        return RecevieMateReactor(receivedAppliesUsecase: loadReceivedAppliesUseCase, receivedAllAppliesUsecase: loadAllReceiveAppliesUseCase, applyManageUsecase: applyManageUsecase)
     }
     
     
