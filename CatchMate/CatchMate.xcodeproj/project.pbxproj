@@ -259,7 +259,7 @@
 		53B895CF2CA2985000029130 /* ErrorPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B895CE2CA2985000029130 /* ErrorPageView.swift */; };
 		53B8E2382C5C7BAA001D0ADF /* UserRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E2372C5C7BAA001D0ADF /* UserRepositoryImpl.swift */; };
 		53B8E23B2C5C7BCF001D0ADF /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E23A2C5C7BCF001D0ADF /* UserRepository.swift */; };
-		53B8E23E2C5C7BEB001D0ADF /* UserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E23D2C5C7BEB001D0ADF /* UserUseCase.swift */; };
+		53B8E23E2C5C7BEB001D0ADF /* LoadMyInfoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E23D2C5C7BEB001D0ADF /* LoadMyInfoUseCase.swift */; };
 		53B8E2422C5D0A2D001D0ADF /* ProfileEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E2412C5D0A2D001D0ADF /* ProfileEditViewController.swift */; };
 		53B8E2442C5D2436001D0ADF /* ProfileEditReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E2432C5D2436001D0ADF /* ProfileEditReactor.swift */; };
 		53B8E2462C5E7BF1001D0ADF /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B8E2452C5E7BF1001D0ADF /* APIService.swift */; };
@@ -334,6 +334,7 @@
 		53EECAFF2D11502C00775FD6 /* RejectApplyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECAFE2D11502500775FD6 /* RejectApplyUseCase.swift */; };
 		53EECB012D1150C100775FD6 /* ApplyManageUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECB002D1150A700775FD6 /* ApplyManageUseCase.swift */; };
 		53EECB032D1151EE00775FD6 /* LoadAllReceiveAppliesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECB022D1151CA00775FD6 /* LoadAllReceiveAppliesUseCase.swift */; };
+		53EECB052D11B07600775FD6 /* LoadReceivedCountUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECB042D11B05A00775FD6 /* LoadReceivedCountUseCase.swift */; };
 		53F1E8C62C47A46400A962F3 /* Apply.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F1E8C52C47A46400A962F3 /* Apply.swift */; };
 		53FC69DB2C58C65700B97AEA /* RefreshTokenResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69DA2C58C65700B97AEA /* RefreshTokenResponseDTO.swift */; };
 		53FC69DD2C58DB8D00B97AEA /* TokenDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69DC2C58DB8D00B97AEA /* TokenDataSource.swift */; };
@@ -564,7 +565,7 @@
 		53B895CE2CA2985000029130 /* ErrorPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorPageView.swift; sourceTree = "<group>"; };
 		53B8E2372C5C7BAA001D0ADF /* UserRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepositoryImpl.swift; sourceTree = "<group>"; };
 		53B8E23A2C5C7BCF001D0ADF /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
-		53B8E23D2C5C7BEB001D0ADF /* UserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserUseCase.swift; sourceTree = "<group>"; };
+		53B8E23D2C5C7BEB001D0ADF /* LoadMyInfoUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMyInfoUseCase.swift; sourceTree = "<group>"; };
 		53B8E2412C5D0A2D001D0ADF /* ProfileEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditViewController.swift; sourceTree = "<group>"; };
 		53B8E2432C5D2436001D0ADF /* ProfileEditReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditReactor.swift; sourceTree = "<group>"; };
 		53B8E2452C5E7BF1001D0ADF /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
@@ -630,6 +631,7 @@
 		53EECAFE2D11502500775FD6 /* RejectApplyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RejectApplyUseCase.swift; sourceTree = "<group>"; };
 		53EECB002D1150A700775FD6 /* ApplyManageUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyManageUseCase.swift; sourceTree = "<group>"; };
 		53EECB022D1151CA00775FD6 /* LoadAllReceiveAppliesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadAllReceiveAppliesUseCase.swift; sourceTree = "<group>"; };
+		53EECB042D11B05A00775FD6 /* LoadReceivedCountUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadReceivedCountUseCase.swift; sourceTree = "<group>"; };
 		53F1E8C52C47A46400A962F3 /* Apply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Apply.swift; sourceTree = "<group>"; };
 		53FC69DA2C58C65700B97AEA /* RefreshTokenResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenResponseDTO.swift; sourceTree = "<group>"; };
 		53FC69DC2C58DB8D00B97AEA /* TokenDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDataSource.swift; sourceTree = "<group>"; };
@@ -1399,7 +1401,8 @@
 			children = (
 				53EECAE52D0B2E7C00775FD6 /* ProfileEditUseCase.swift */,
 				5301E2B52C5BE6AF0078E910 /* LogoutUseCase.swift */,
-				53B8E23D2C5C7BEB001D0ADF /* UserUseCase.swift */,
+				53B8E23D2C5C7BEB001D0ADF /* LoadMyInfoUseCase.swift */,
+				53EECB042D11B05A00775FD6 /* LoadReceivedCountUseCase.swift */,
 				53B3CE3D2C884B3900116BF7 /* UnauthorizedErrorHandler.swift */,
 			);
 			path = User;
@@ -1729,7 +1732,7 @@
 				534E39D82C637FD3006D180E /* NotificationSettingViewController.swift in Sources */,
 				533A2B322C2BE7E600A59340 /* CheerStyles.swift in Sources */,
 				53B895CD2CA2579A00029130 /* UserPostLoadUseCase.swift in Sources */,
-				53B8E23E2C5C7BEB001D0ADF /* UserUseCase.swift in Sources */,
+				53B8E23E2C5C7BEB001D0ADF /* LoadMyInfoUseCase.swift in Sources */,
 				53FC69DB2C58C65700B97AEA /* RefreshTokenResponseDTO.swift in Sources */,
 				53FC69FC2C5A2DD700B97AEA /* SignUpReactor.swift in Sources */,
 				531288D12C540ADF000C2FB1 /* ServerLoginRepository.swift in Sources */,
@@ -1817,6 +1820,7 @@
 				53E7DBCB2CB5641400DC058D /* NotificationListDataSource.swift in Sources */,
 				536BDE122C1B51FD0043B1DA /* TabBarController.swift in Sources */,
 				53C6DA072CE47A3000918718 /* UpPostDataSource.swift in Sources */,
+				53EECB052D11B07600775FD6 /* LoadReceivedCountUseCase.swift in Sources */,
 				536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */,
 				53ACBA372C81A91E004FAF00 /* CheerTeamPickerViewController.swift in Sources */,
 				53B8E2382C5C7BAA001D0ADF /* UserRepositoryImpl.swift in Sources */,

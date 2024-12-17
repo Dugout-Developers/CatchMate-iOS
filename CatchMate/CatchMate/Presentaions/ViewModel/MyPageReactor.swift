@@ -30,15 +30,18 @@ final class MyPageReactor: Reactor {
     }
     
     var initialState: State
-    private let userUseCase: UserUseCase
+    private let userUseCase: LoadMyInfoUseCase
+    private let loadReceivedCountUsecase: LoadReceivedCountUseCase
     private let logoutUseCase: LogoutUseCase
     deinit {
         print("Logout Reactor deinit")
     }
-    init(userUsecase: UserUseCase, logoutUsecase: LogoutUseCase) {
+    
+    init(userUsecase: LoadMyInfoUseCase, logoutUsecase: LogoutUseCase, loadReceivedCountUsecase: LoadReceivedCountUseCase) {
         self.initialState = State()
         self.userUseCase = userUsecase
         self.logoutUseCase = logoutUsecase
+        self.loadReceivedCountUsecase = loadReceivedCountUsecase
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
@@ -46,10 +49,10 @@ final class MyPageReactor: Reactor {
         case .loadUser:
             return Observable.concat([
                 Observable.just(Mutation.setLoading(true)),
-                userUseCase.loadUser()
+                userUseCase.execute()
                     .map { Mutation.setUser($0) }
                     .catch { .just(Mutation.setError($0)) },
-                userUseCase.loadCount()
+                loadReceivedCountUsecase.execute()
                     .map{ Mutation.setCount($0) }
                     .catch { .just(Mutation.setError($0)) },
                 Observable.just(Mutation.setLoading(false))

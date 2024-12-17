@@ -71,7 +71,7 @@ class DIContainerService {
         let loadUserRepository = UserRepositoryImpl(userDS: loadUserDataSource)
         let loadCountDataSource = RecivedCountDataSourceImpl(tokenDataSource: tokenDS)
         let loadCountRepository = ReceivedCountRepositoryIml(loadCountDS: loadCountDataSource)
-        let loadUserUsecase = UserUseCaseImpl(userRepository: loadUserRepository, loadCountRepository: loadCountRepository)
+        let loadUserUsecase = UserUseCaseImpl(userRepository: loadUserRepository)
         return AddReactor(addUsecase: addUsecase, loadPostDetailUsecase: loadPostUsecase, loadUserUsecase: loadUserUsecase)
     }
     
@@ -125,10 +125,12 @@ class DIContainerService {
         let loadUserRepository = UserRepositoryImpl(userDS: loadUserDataSource)
         let loadCountDataSource = RecivedCountDataSourceImpl(tokenDataSource: tokenDS)
         let loadCountRepository = ReceivedCountRepositoryIml(loadCountDS: loadCountDataSource)
-        let userUsecase = UserUseCaseImpl(userRepository: userRepository, loadCountRepository: loadCountRepository)
+        
+        let userUsecase = UserUseCaseImpl(userRepository: userRepository)
+        let countUsecase = LoadReceivedCountUseCaseImpl(loadCountRepository: loadCountRepository)
         let logoutUsecase = LogoutUseCaseImpl(repository: logoutRepository)
         
-        return MyPageReactor(userUsecase: userUsecase, logoutUsecase: logoutUsecase)
+        return MyPageReactor(userUsecase: userUsecase, logoutUsecase: logoutUsecase, loadReceivedCountUsecase: countUsecase)
     }
     
     func makeSendMateReactor() -> SendMateReactor {

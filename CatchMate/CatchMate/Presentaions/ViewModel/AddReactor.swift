@@ -80,8 +80,8 @@ final class AddReactor: Reactor {
     var writer: SimpleUser?
     private let addUsecase: AddPostUseCase
     private let loadPostDetailUsecase: PostDetailUseCase
-    private let loadUserUsecase: UserUseCase
-    init(addUsecase: AddPostUseCase, loadPostDetailUsecase: PostDetailUseCase, loadUserUsecase: UserUseCase) {
+    private let loadUserUsecase: LoadMyInfoUseCase
+    init(addUsecase: AddPostUseCase, loadPostDetailUsecase: PostDetailUseCase, loadUserUsecase: LoadMyInfoUseCase) {
         self.initialState = State()
         self.addUsecase = addUsecase
         self.writer = nil
@@ -92,7 +92,7 @@ final class AddReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadUser:
-            return loadUserUsecase.loadUser()
+            return loadUserUsecase.execute()
                 .map { user in
                     let simpleUser = SimpleUser(user: user)
                     return Mutation.setUser(simpleUser)
