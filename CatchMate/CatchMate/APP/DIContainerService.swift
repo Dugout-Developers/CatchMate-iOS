@@ -95,7 +95,7 @@ class DIContainerService {
         let deletePostRepository = DeletePostRepositoryImpl(deletePostDS: deletePostDS)
         let postHandleUsecase = DeletePostUseCaseImpl(deleteRepository: deletePostRepository)
         
-        return PostReactor(postId: postID, postloadUsecase: loadPostUsecase, setfavoriteUsecase: setFavoriteUsecase, applyHandelerUsecase: applyUsecase, postHandleUsecase: postHandleUsecase)
+        return PostReactor(postId: postID, postloadUsecase: loadPostUsecase, setfavoriteUsecase: setFavoriteUsecase, applyUsecase: applyUsecase, cancelApplyUsecase: cancelApplyUsecase, postHandleUsecase: postHandleUsecase)
     }
     
     
