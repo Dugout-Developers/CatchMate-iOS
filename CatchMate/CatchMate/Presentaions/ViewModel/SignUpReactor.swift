@@ -37,7 +37,7 @@ final class SignUpReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .signUpUser:
-            return signupUseCase.signup(loginModel, signupInfo: signUpModel)
+            return signupUseCase.execute(loginModel, signupInfo: signUpModel)
                 .map { response in
                     return Mutation.setSignUpResponse(response)
                 }

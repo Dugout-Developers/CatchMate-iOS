@@ -8,7 +8,7 @@
 import RxSwift
 
 protocol NicknameCheckUseCase {
-    func checkNickname(_ nickname: String) -> Observable<Bool>
+    func execute(_ nickname: String) -> Observable<Bool>
 }
 
 final class NicknameCheckUseCaseImpl: NicknameCheckUseCase {
@@ -18,8 +18,7 @@ final class NicknameCheckUseCaseImpl: NicknameCheckUseCase {
         self.nicknameRepository = nicknameRepository
     }
     
-    func checkNickname(_ nickname: String) -> Observable<Bool> {
-        print(nickname)
+    func execute(_ nickname: String) -> Observable<Bool> {
         return nicknameRepository.checkNickName(nickname)
     }
 }

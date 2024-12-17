@@ -9,11 +9,11 @@ import UIKit
 import RxSwift
 
 protocol SignUpUseCase {
-    func signup(_ model: LoginModel, signupInfo: SignUpModel) -> Observable<SignUpResponse>
+    func execute(_ model: LoginModel, signupInfo: SignUpModel) -> Observable<SignUpResponse>
 }
 
 final class SignUpUseCaseImpl: SignUpUseCase {
-    func signup(_ model: LoginModel, signupInfo: SignUpModel) -> RxSwift.Observable<SignUpResponse> {
+    func execute(_ model: LoginModel, signupInfo: SignUpModel) -> RxSwift.Observable<SignUpResponse> {
         return repository.requestSignup(model, signupInfo: signupInfo)
     }
     

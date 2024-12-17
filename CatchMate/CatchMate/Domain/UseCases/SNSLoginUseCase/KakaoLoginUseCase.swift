@@ -8,7 +8,7 @@
 import RxSwift
 
 protocol KakaoLoginUseCase {
-    func login() -> Observable<LoginModel>
+    func execute() -> Observable<LoginModel>
 }
 
 final class KakaoLoginUseCaseImpl: KakaoLoginUseCase {
@@ -20,7 +20,7 @@ final class KakaoLoginUseCaseImpl: KakaoLoginUseCase {
         self.fcmRepository = fcmRepository
         self.serverRepository = serverRepository
     }
-    func login() -> RxSwift.Observable<LoginModel> {
+    func execute() -> RxSwift.Observable<LoginModel> {
         return Observable.zip(
             snsRepository.kakaoLogin(),
             fcmRepository.getFCMToken()

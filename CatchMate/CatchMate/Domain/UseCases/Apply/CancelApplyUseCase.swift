@@ -5,6 +5,9 @@
 //  Created by 방유빈 on 12/17/24.
 //
 
+import UIKit
+import RxSwift
+
 /// 신청 취소
 protocol CancelApplyUseCase {
     func excute(enrollId: String) -> Observable<Void>
