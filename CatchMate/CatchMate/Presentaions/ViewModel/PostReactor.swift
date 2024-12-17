@@ -52,16 +52,19 @@ final class PostReactor: Reactor {
     var initialState: State
     private let postDetailUsecase: PostDetailUseCase
     private let setFavoriteUsecase: SetFavoriteUseCase
-    private let applyHandelerUsecase: ApplyHandleUseCase
-    private let postHandleUsecase: PostHandleUseCase
-    init(postId: String, postloadUsecase: PostDetailUseCase, setfavoriteUsecase: SetFavoriteUseCase, applyHandelerUsecase: ApplyHandleUseCase, postHandleUsecase: PostHandleUseCase) {
+    private let applyUsecase: ApplyUseCase
+    private let cancelApplyUsecase: CancelApplyUseCase
+    private let deletePostUsecase: DeletePostUseCase
+    
+    init(postId: String, postloadUsecase: PostDetailUseCase, setfavoriteUsecase: SetFavoriteUseCase, applyUsecase: ApplyUseCase, cancelApplyUsecase: CancelApplyUseCase, postHandleUsecase: DeletePostUseCase) {
         self.initialState = State()
         self.postId = postId
         LoggerService.shared.debugLog("-----------\(postId) detail Load------------")
         self.postDetailUsecase = postloadUsecase
         self.setFavoriteUsecase = setfavoriteUsecase
-        self.applyHandelerUsecase = applyHandelerUsecase
-        self.postHandleUsecase = postHandleUsecase
+        self.applyUsecase = applyUsecase
+        self.cancelApplyUsecase = cancelApplyUsecase
+        self.deletePostUsecase = postHandleUsecase
     }
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -112,7 +115,7 @@ final class PostReactor: Reactor {
         case .setError(let error):
             return Observable.just(Mutation.setError(error))
         case .apply(let text):
-            return applyHandelerUsecase.apply(postId: postId, addText: text)
+            return applyUsecase.excute(postId: postId, addText: text)
                 .flatMap { id in
                     if id > 0 {
                         return Observable.concat([
@@ -132,7 +135,7 @@ final class PostReactor: Reactor {
                 }
         case .cancelApply:
             if let enrollId = currentState.applyInfo?.enrollId {
-                return applyHandelerUsecase.cancelApplyPost(enrollId: enrollId)
+                return cancelApplyUsecase.excute(enrollId: enrollId)
                     .flatMap { _ in
                         return Observable.just(Mutation.setApplyButtonState(.none))
                     }
@@ -148,7 +151,7 @@ final class PostReactor: Reactor {
             }
         case .deletePost:
             if let postId = Int(postId) {
-                return postHandleUsecase.deletePost(postId: postId)
+                return deletePostUsecase.deletePost(postId: postId)
                     .flatMap { _ in
                         return Observable.just(Mutation.deletePost)
                     }

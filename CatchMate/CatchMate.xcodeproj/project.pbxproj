@@ -82,7 +82,7 @@
 		533183D92C5160220097F3F1 /* ChatData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533183D82C5160220097F3F1 /* ChatData.swift */; };
 		533183DB2C51E87E0097F3F1 /* ChatRoomReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533183DA2C51E87E0097F3F1 /* ChatRoomReactor.swift */; };
 		533183DD2C51F5370097F3F1 /* ChatingInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533183DC2C51F5370097F3F1 /* ChatingInputField.swift */; };
-		5337AB232C897847003A39AE /* ApplyHandleUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5337AB222C897847003A39AE /* ApplyHandleUseCase.swift */; };
+		5337AB232C897847003A39AE /* ApplyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5337AB222C897847003A39AE /* ApplyUseCase.swift */; };
 		533A2B232C27FF6A00A59340 /* CMTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B222C27FF6A00A59340 /* CMTextView.swift */; };
 		533A2B252C280E0500A59340 /* CMDefaultFilledButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B242C280E0500A59340 /* CMDefaultFilledButton.swift */; };
 		533A2B272C28558600A59340 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B262C28558600A59340 /* SignInViewController.swift */; };
@@ -302,7 +302,7 @@
 		53E7DBA42CA5664200DC058D /* DeletePostDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBA02CA52BD900DC058D /* DeletePostDataSource.swift */; };
 		53E7DBA62CA5E3A700DC058D /* DeletePostRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBA52CA5E3A700DC058D /* DeletePostRepository.swift */; };
 		53E7DBA82CA5E44000DC058D /* DeletePostRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBA72CA5E44000DC058D /* DeletePostRepositoryImpl.swift */; };
-		53E7DBAA2CA5E52800DC058D /* PostHandleUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBA92CA5E52800DC058D /* PostHandleUseCase.swift */; };
+		53E7DBAA2CA5E52800DC058D /* DeletePostUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBA92CA5E52800DC058D /* DeletePostUseCase.swift */; };
 		53E7DBAC2CA5EEC900DC058D /* MockTokenDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBAB2CA5EEC900DC058D /* MockTokenDataSource.swift */; };
 		53E7DBAE2CAAE75500DC058D /* RecivedAppliesRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBAD2CAAE75500DC058D /* RecivedAppliesRepositoryImpl.swift */; };
 		53E7DBB22CAB0F1800DC058D /* RecivedRepositoryTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7DBB12CAB0F1800DC058D /* RecivedRepositoryTest.swift */; };
@@ -329,6 +329,7 @@
 		53EECAF12D0B30B300775FD6 /* ProfileEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECAEF2D0B30A900775FD6 /* ProfileEdit.swift */; };
 		53EECAF32D0BD17300775FD6 /* ProfileEditRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECAF22D0BD17100775FD6 /* ProfileEditRepositoryImpl.swift */; };
 		53EECAF72D0BD30E00775FD6 /* ProfileEditDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECAF62D0BD30500775FD6 /* ProfileEditDataSource.swift */; };
+		53EECAF92D114B4500775FD6 /* CancelApplyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECAF82D114B3F00775FD6 /* CancelApplyUseCase.swift */; };
 		53F1E8C62C47A46400A962F3 /* Apply.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F1E8C52C47A46400A962F3 /* Apply.swift */; };
 		53FC69DB2C58C65700B97AEA /* RefreshTokenResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69DA2C58C65700B97AEA /* RefreshTokenResponseDTO.swift */; };
 		53FC69DD2C58DB8D00B97AEA /* TokenDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69DC2C58DB8D00B97AEA /* TokenDataSource.swift */; };
@@ -432,7 +433,7 @@
 		533183D82C5160220097F3F1 /* ChatData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatData.swift; sourceTree = "<group>"; };
 		533183DA2C51E87E0097F3F1 /* ChatRoomReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomReactor.swift; sourceTree = "<group>"; };
 		533183DC2C51F5370097F3F1 /* ChatingInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatingInputField.swift; sourceTree = "<group>"; };
-		5337AB222C897847003A39AE /* ApplyHandleUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyHandleUseCase.swift; sourceTree = "<group>"; };
+		5337AB222C897847003A39AE /* ApplyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyUseCase.swift; sourceTree = "<group>"; };
 		533A2B222C27FF6A00A59340 /* CMTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMTextView.swift; sourceTree = "<group>"; };
 		533A2B242C280E0500A59340 /* CMDefaultFilledButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMDefaultFilledButton.swift; sourceTree = "<group>"; };
 		533A2B262C28558600A59340 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
@@ -600,7 +601,7 @@
 		53E7DBA22CA5663200DC058D /* DeletePostDataSourceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePostDataSourceTest.swift; sourceTree = "<group>"; };
 		53E7DBA52CA5E3A700DC058D /* DeletePostRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePostRepository.swift; sourceTree = "<group>"; };
 		53E7DBA72CA5E44000DC058D /* DeletePostRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePostRepositoryImpl.swift; sourceTree = "<group>"; };
-		53E7DBA92CA5E52800DC058D /* PostHandleUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHandleUseCase.swift; sourceTree = "<group>"; };
+		53E7DBA92CA5E52800DC058D /* DeletePostUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePostUseCase.swift; sourceTree = "<group>"; };
 		53E7DBAB2CA5EEC900DC058D /* MockTokenDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTokenDataSource.swift; sourceTree = "<group>"; };
 		53E7DBAD2CAAE75500DC058D /* RecivedAppliesRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecivedAppliesRepositoryImpl.swift; sourceTree = "<group>"; };
 		53E7DBB12CAB0F1800DC058D /* RecivedRepositoryTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecivedRepositoryTest.swift; sourceTree = "<group>"; };
@@ -620,6 +621,7 @@
 		53EECAEF2D0B30A900775FD6 /* ProfileEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEdit.swift; sourceTree = "<group>"; };
 		53EECAF22D0BD17100775FD6 /* ProfileEditRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditRepositoryImpl.swift; sourceTree = "<group>"; };
 		53EECAF62D0BD30500775FD6 /* ProfileEditDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditDataSource.swift; sourceTree = "<group>"; };
+		53EECAF82D114B3F00775FD6 /* CancelApplyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelApplyUseCase.swift; sourceTree = "<group>"; };
 		53F1E8C52C47A46400A962F3 /* Apply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Apply.swift; sourceTree = "<group>"; };
 		53FC69DA2C58C65700B97AEA /* RefreshTokenResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenResponseDTO.swift; sourceTree = "<group>"; };
 		53FC69DC2C58DB8D00B97AEA /* TokenDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDataSource.swift; sourceTree = "<group>"; };
@@ -1339,7 +1341,8 @@
 		53B3CE4E2C88B66F00116BF7 /* Apply */ = {
 			isa = PBXGroup;
 			children = (
-				5337AB222C897847003A39AE /* ApplyHandleUseCase.swift */,
+				53EECAF82D114B3F00775FD6 /* CancelApplyUseCase.swift */,
+				5337AB222C897847003A39AE /* ApplyUseCase.swift */,
 				53B3CE4F2C88B68200116BF7 /* SendAppliesUseCase.swift */,
 				5306F7BC2C9057D200292C6E /* ReceivedAppliesUseCase.swift */,
 			);
@@ -1418,7 +1421,7 @@
 				533B29242C770A9600BFE9F6 /* LoadFavoriteListUseCase.swift */,
 				53ACBA3B2C84A98C004FAF00 /* SetFavoriteUseCase.swift */,
 				53B895CC2CA2579A00029130 /* UserPostLoadUseCase.swift */,
-				53E7DBA92CA5E52800DC058D /* PostHandleUseCase.swift */,
+				53E7DBA92CA5E52800DC058D /* DeletePostUseCase.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -1719,7 +1722,7 @@
 				531288D12C540ADF000C2FB1 /* ServerLoginRepository.swift in Sources */,
 				53E7DBC72CB503DB00DC058D /* BlockUserReactor.swift in Sources */,
 				53E7DBC92CB5357900DC058D /* NotificationListResponse.swift in Sources */,
-				5337AB232C897847003A39AE /* ApplyHandleUseCase.swift in Sources */,
+				5337AB232C897847003A39AE /* ApplyUseCase.swift in Sources */,
 				531786572C1C8F1900ACEF6A /* UIView+Extension.swift in Sources */,
 				53B895C32C9F3AEA00029130 /* TempPostRequestDTO.swift in Sources */,
 				53EECAF72D0BD30E00775FD6 /* ProfileEditDataSource.swift in Sources */,
@@ -1733,6 +1736,7 @@
 				536BDDE92C1971C70043B1DA /* SignReactor.swift in Sources */,
 				534E39D12C634255006D180E /* SettingViewController.swift in Sources */,
 				53820CC22C8601120059A1F8 /* SendAppiesDataSource.swift in Sources */,
+				53EECAF92D114B4500775FD6 /* CancelApplyUseCase.swift in Sources */,
 				531786552C1C8E7800ACEF6A /* UIImage+Extension.swift in Sources */,
 				530DD6142C4F85BF00A7D6CE /* FCMTokenDataSource.swift in Sources */,
 				536BDE342C1B57B10043B1DA /* HomeFilterButton.swift in Sources */,
@@ -1768,7 +1772,7 @@
 				536BDE312C1B55440043B1DA /* MyPageViewController.swift in Sources */,
 				531786682C20048B00ACEF6A /* CMPickerTextField.swift in Sources */,
 				531786532C1C8BFB00ACEF6A /* BaseViewController.swift in Sources */,
-				53E7DBAA2CA5E52800DC058D /* PostHandleUseCase.swift in Sources */,
+				53E7DBAA2CA5E52800DC058D /* DeletePostUseCase.swift in Sources */,
 				53E7DBA12CA52BD900DC058D /* DeletePostDataSource.swift in Sources */,
 				5383BE852C327FF9008940F1 /* NonMembersAccessViewController.swift in Sources */,
 				53ACBA542C85AF07004FAF00 /* ApplyDataSource.swift in Sources */,

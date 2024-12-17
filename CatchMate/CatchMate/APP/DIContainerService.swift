@@ -84,7 +84,8 @@ class DIContainerService {
         
         let applyDataSource = ApplyDataSourceImpl(tokenDataSource: tokenDS)
         let applyRepository = ApplyPostRepositoryImpl(applyDS: applyDataSource)
-        let applyUsecase = ApplyHandleUseCaseImpl(applyRepository: applyRepository)
+        let applyUsecase = ApplyUseCaseImpl(applyRepository: applyRepository)
+        let cancelApplyUsecase = CancelApplyUseCaseImpl(applyRepository: applyRepository)
         
         let setFavoriteDataSource = SetFavoriteDataSourceImpl(tokenDataSource: tokenDS)
         let setFavoriteRepository = SetFavoriteRepositoryImpl(setFavoriteDS: setFavoriteDataSource)
@@ -92,7 +93,7 @@ class DIContainerService {
         
         let deletePostDS = DeletePostDataSourceImpl(tokenDataSource: tokenDS)
         let deletePostRepository = DeletePostRepositoryImpl(deletePostDS: deletePostDS)
-        let postHandleUsecase = PostHandleUseCaseImpl(deleteRepository: deletePostRepository)
+        let postHandleUsecase = DeletePostUseCaseImpl(deleteRepository: deletePostRepository)
         
         return PostReactor(postId: postID, postloadUsecase: loadPostUsecase, setfavoriteUsecase: setFavoriteUsecase, applyHandelerUsecase: applyUsecase, postHandleUsecase: postHandleUsecase)
     }
