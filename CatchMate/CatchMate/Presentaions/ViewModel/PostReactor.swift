@@ -70,10 +70,11 @@ final class PostReactor: Reactor {
         switch action {
         case .loadPostDetails:
             return postDetailUsecase.loadPost(postId: postId)
-                .flatMap { post, state in
+                .flatMap { post, state, favorite in
                     var mutations: [Observable<Mutation>] = [
                         Observable.just(Mutation.setPost(post)),
-                        Observable.just(Mutation.setApplyButtonState(state))
+                        Observable.just(Mutation.setApplyButtonState(state)),
+                        Observable.just(Mutation.setIsFavorite(favorite))
                     ]
                     if state == .applied {
                         let applyInfoMutation = self.postDetailUsecase.loadApplyInfo(postId: self.postId)
@@ -98,7 +99,7 @@ final class PostReactor: Reactor {
             let index = favoriteList.firstIndex(where: {$0 == postId})
             return Observable.just(Mutation.setIsFavorite(index != nil ? true : false))
         case .changeFavorite(let state):
-            return setFavoriteUsecase.setFavorite(state, postId)
+            return setFavoriteUsecase.execute(state, postId)
                 .map { result in
                     if result {
                         return Mutation.setIsFavorite(state)

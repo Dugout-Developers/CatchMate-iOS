@@ -9,8 +9,7 @@ import UIKit
 import RxSwift
 
 protocol SetFavoriteUseCase {
-    func setFavorite(_ state: Bool, _ boardId: String) -> Observable<Bool>
-    func syncWithLocalDatabase(_ state: Bool, _ boardId: String)
+    func execute(_ state: Bool, _ boardId: String) -> Observable<Bool>
 }
 
 final class SetFavoriteUseCaseImpl: SetFavoriteUseCase {
@@ -20,21 +19,7 @@ final class SetFavoriteUseCaseImpl: SetFavoriteUseCase {
         self.setFavoriteRepository = setFavoriteRepository
     }
     
-    func setFavorite(_ state: Bool, _ boardId: String) -> Observable<Bool> {
+    func execute(_ state: Bool, _ boardId: String) -> Observable<Bool> {
         return setFavoriteRepository.setFavorite(state, boardId)
-            .do(onNext: { [weak self] result in
-                if result {
-                    self?.syncWithLocalDatabase(state, boardId)
-                }
-            })
-
-    }
-    
-    func syncWithLocalDatabase(_ state: Bool, _ boardId: String) {
-        if state {
-            SetupInfoService.shared.addSimplePostId(boardId)
-        } else {
-            SetupInfoService.shared.removeSimplePostId(boardId)
-        }
     }
 }

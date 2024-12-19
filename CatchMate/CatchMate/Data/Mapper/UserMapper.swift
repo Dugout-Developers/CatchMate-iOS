@@ -9,7 +9,8 @@ final class UserMapper {
     func userToDomain(_ dto: UserDTO) -> User {
         let team = Team(rawValue: dto.favoriteGudan) ?? .allTeamLove
         let gender = Gender(serverValue: dto.gender) ?? .man
-        return User(id: String(dto.userID), email: dto.email, nickName: dto.nickName, birth: dto.birthDate, team: team, gener: gender, cheerStyle: CheerStyles(rawValue: dto.watchStyle ?? ""), profilePicture: dto.picture, pushAgreement: dto.pushAgreement == "Y" ? true : false, description: dto.description)
+        return User(id: String(dto.userID), email: dto.email, nickName: dto.nickName, birth: dto.birthDate, team: team, gener: gender, cheerStyle: CheerStyles(rawValue: dto.watchStyle ?? ""), profilePicture: dto.picture, allAlarm: dto.allAlarm == "Y" ? true : false, chatAlarm: dto.chatAlarm == "Y" ? true : false, enrollAlarm: dto.enrollAlarm == "Y" ? true : false, eventAlarm: dto.eventAlarm == "Y" ? true : false, description: dto.description)
+//        User(id: String(dto.userID), email: dto.email, nickName: dto.nickName, birth: dto.birthDate, team: team, gener: gender, cheerStyle: CheerStyles(rawValue: dto.watchStyle ?? ""), profilePicture: dto.picture, pushAgreement: dto.pushAgreement == "Y" ? true : false, description: dto.description)
     }
     func profileEditRequestDomainToDTO(domain: ProfileEdit) -> ProfileEditRequestDTO {
         return ProfileEditRequestDTO(nickname: domain.nickName, description: "", favGudan: domain.team.rawValue, watchStyle: domain.style.rawValue)

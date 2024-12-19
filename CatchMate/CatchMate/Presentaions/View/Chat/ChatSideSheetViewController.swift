@@ -11,7 +11,7 @@ import FlexLayout
 import RxSwift
 
 final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate , UITableViewDataSource {
-    private let user = SimpleUser(user: User(id: "1", email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4MTkSLvHP365kTge2U5CHc-smH-Z2Xq5p-A&s", pushAgreement: true, description: ""))
+    private let user = SimpleUser(user: User(id: "1", email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4MTkSLvHP365kTge2U5CHc-smH-Z2Xq5p-A&s", allAlarm: true, chatAlarm: true, enrollAlarm: true, eventAlarm: true, description: ""))
     private let chat: Chat
     private let dimView: UIView = {
         let view = UIView()

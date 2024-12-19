@@ -9,27 +9,19 @@ import UIKit
 import RxSwift
 
 protocol LoadFavoriteListUseCase {
-    func loadFavoriteList() -> Observable<[SimplePost]>
-    func cancelFavoriteList(_ postId: String) -> Observable<Void>
+    func execute() -> Observable<[SimplePost]>
+    
 }
 
 final class LoadFavoriteListUseCaseImpl: LoadFavoriteListUseCase {
     private let loadFavoriteListRepository: LoadFavoriteListRepository
-    private let setFavortiteRepository: SetFavoriteRepository
     
-    init(loadFavoriteListRepository: LoadFavoriteListRepository, setFavortiteRepository: SetFavoriteRepository) {
+    init(loadFavoriteListRepository: LoadFavoriteListRepository) {
         self.loadFavoriteListRepository = loadFavoriteListRepository
-        self.setFavortiteRepository = setFavortiteRepository
     }
     
-    func loadFavoriteList() -> RxSwift.Observable<[SimplePost]> {
+    func execute() -> RxSwift.Observable<[SimplePost]> {
         return loadFavoriteListRepository.loadFavoriteList()
-    }
-    func cancelFavoriteList(_ postId: String) -> Observable<Void> {
-        return setFavortiteRepository.setFavorite(false, postId)
-            .map { _ in
-                return ()
-            }
     }
     
 }

@@ -9,20 +9,22 @@ import UIKit
 import RxSwift
 
 protocol PostDetailUseCase {
-    func loadPost(postId: String) -> Observable<(post: Post, type: ApplyType)>
+    func loadPost(postId: String) -> Observable<(post: Post, type: ApplyType, favorite: Bool)>
     func loadApplyInfo(postId: String) -> Observable<MyApplyInfo?>
 }
 
 final class PostDetailUseCaseImpl: PostDetailUseCase {
     private let loadPostRepository: LoadPostRepository
+    private let loadFavoriteListRepository: LoadFavoriteListRepository
     private let applylistRepository: SendAppiesRepository
-    init(loadPostRepository: LoadPostRepository, applylistRepository: SendAppiesRepository) {
+    init(loadPostRepository: LoadPostRepository, applylistRepository: SendAppiesRepository, loadFavoriteListRepository: LoadFavoriteListRepository) {
         self.loadPostRepository = loadPostRepository
         self.applylistRepository = applylistRepository
+        self.loadFavoriteListRepository = loadFavoriteListRepository
     }
-    func loadPost(postId: String) -> Observable<(post: Post, type: ApplyType)> {
+    func loadPost(postId: String) -> Observable<(post: Post, type: ApplyType, favorite: Bool)> {
         return loadPostRepository.loadPost(postId: postId)  // 첫 번째 Observable 실행
-            .concatMap { post -> Observable<(post: Post, type: ApplyType)>  in
+            .concatMap { post -> Observable<(post: Post, type: ApplyType, favorite: Bool)>  in
                 // 첫 번째 로직 완료 후 두 번째 Observable 실행
                 guard let myUserId = SetupInfoService.shared.getUserInfo(type: .id) else {
                     return Observable.error(PresentationError.unauthorized)
@@ -30,7 +32,7 @@ final class PostDetailUseCaseImpl: PostDetailUseCase {
 
                 // 두 번째 Observable 실행
                 return self.applylistRepository.isApply(boardId: Int(postId)!)
-                    .map { isApplied in
+                    .map { isApplied -> ApplyType in
                         var state: ApplyType = .none
                         
                         if post.writer.userId == myUserId {
@@ -40,9 +42,14 @@ final class PostDetailUseCaseImpl: PostDetailUseCase {
                         } else if isApplied {
                             state = .applied
                         }
-
-                        // 최종 결과 반환
-                        return (post, state)
+                        return state
+                    }
+                    .flatMap { state -> Observable<(post: Post, type: ApplyType, favorite: Bool)> in
+                        return self.loadFavoriteListRepository.loadFavoriteList()
+                            .map { posts in
+                                let favorite = posts.contains(where: { $0.id == postId })
+                                return (post, state, favorite)
+                            }
                     }
             }
     }
