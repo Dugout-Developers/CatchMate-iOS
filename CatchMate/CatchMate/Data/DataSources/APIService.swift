@@ -58,7 +58,7 @@ enum Endpoint {
     /// 내정보 수정
     case editProfile
     
-    /// 알람 리스트 조회
+    /// 알림 리스트 조회
     case notificationList
     
     var endPoint: String {

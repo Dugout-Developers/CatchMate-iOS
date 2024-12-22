@@ -71,8 +71,6 @@ class DIContainerService {
         
         let loadUserDataSource = UserDataSourceImpl(tokenDataSource: tokenDS)
         let loadUserRepository = UserRepositoryImpl(userDS: loadUserDataSource)
-        let loadCountDataSource = RecivedCountDataSourceImpl(tokenDataSource: tokenDS)
-        let loadCountRepository = ReceivedCountRepositoryIml(loadCountDS: loadCountDataSource)
         let loadUserUsecase = UserUseCaseImpl(userRepository: loadUserRepository)
         return AddReactor(addUsecase: addUsecase, loadPostDetailUsecase: loadPostUsecase, loadUserUsecase: loadUserUsecase)
     }
@@ -127,8 +125,6 @@ class DIContainerService {
         let logoutDataSource = LogoutDataSourceImpl(tokenDataSource: tokenDS)
         let userRepository = UserRepositoryImpl(userDS: userDataSource)
         let logoutRepository = LogoutRepositoryImpl(logoutDS: logoutDataSource)
-        let loadUserDataSource = UserDataSourceImpl(tokenDataSource: tokenDS)
-        let loadUserRepository = UserRepositoryImpl(userDS: loadUserDataSource)
         let loadCountDataSource = RecivedCountDataSourceImpl(tokenDataSource: tokenDS)
         let loadCountRepository = ReceivedCountRepositoryIml(loadCountDS: loadCountDataSource)
         
@@ -160,6 +156,17 @@ class DIContainerService {
         let applyManageUsecase = ApplyManageUseCaseImpl(acceptApplyUseCase: acceptApplyUsecase, rejectApplyUseCase: rejectApplyUsecase)
         
         return RecevieMateReactor(receivedAppliesUsecase: loadReceivedAppliesUseCase, receivedAllAppliesUsecase: loadAllReceiveAppliesUseCase, applyManageUsecase: applyManageUsecase)
+    }
+    
+    func makeNotifiacationSettingReactor() -> NotificationSettingReactor {
+        let userDataSource = UserDataSourceImpl(tokenDataSource: tokenDS)
+        let userRepository = UserRepositoryImpl(userDS: userDataSource)
+        let loadNotificationInfoUsecase = LoadNotificationUseCaseImpl(userRepository: userRepository)
+        let setNotificationDataSource = SetNotificationDataSourceImpl(tokenDataSource: tokenDS)
+        let setNotificationRepository = SetNotificationRepositoryImpl(setNotificationDS: setNotificationDataSource)
+        let setNotificationUsecase = SetNotificationUseCaseImpl(setNotificationRepository: setNotificationRepository)
+        
+        return NotificationSettingReactor(notificationInfoUsecase: loadNotificationInfoUsecase, setNotificationUsecase: setNotificationUsecase)
     }
     
     

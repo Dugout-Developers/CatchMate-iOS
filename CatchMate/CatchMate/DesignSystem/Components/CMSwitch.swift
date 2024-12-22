@@ -10,8 +10,8 @@ import RxSwift
 import RxCocoa
 
 class CMSwitch: UIControl {
-    private let disposeBag = DisposeBag()
-    
+    let disposeBag = DisposeBag()
+    private var previousOffset: CGFloat?
     private let backgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.brandColor50
@@ -28,11 +28,7 @@ class CMSwitch: UIControl {
     
     private var thumbLeadingConstraint: NSLayoutConstraint!
     
-    private var isOn: Bool = false {
-        didSet {
-            updateUI(animated: true)
-        }
-    }
+    private(set) var isOn: Bool = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -100,14 +96,10 @@ class CMSwitch: UIControl {
     }
     
     func setOn(_ on: Bool, animated: Bool) {
+        guard isOn != on else { return }
         self.isOn = on
+        print(animated)
         updateUI(animated: animated)
-    }
-    
-    func bind(to observable: Observable<Bool>) {
-        observable.bind(onNext: { [weak self] isOn in
-            self?.setOn(isOn, animated: true)
-        }).disposed(by: disposeBag)
     }
     
     func rx_isOn() -> ControlProperty<Bool> {
@@ -115,7 +107,7 @@ class CMSwitch: UIControl {
             values: self.rx.controlEvent(.valueChanged)
                 .map { self.isOn },
             valueSink: Binder(self) { control, value in
-                control.setOn(value, animated: true)
+                control.setOn(value, animated: false)
             }
         )
     }

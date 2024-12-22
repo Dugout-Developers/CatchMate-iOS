@@ -29,7 +29,10 @@ final class NotificationSettingViewController: BaseViewController, View {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        reactor.action.onNext(.loadNotificationInfo)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLeftTitle("알림 설정")
@@ -49,22 +52,37 @@ final class NotificationSettingViewController: BaseViewController, View {
             make.leading.trailing.equalToSuperview().inset(MainGridSystem.getMargin())
         }
     }
+    private func getToggleState(type: NotificationType) -> Bool {
+        switch type {
+        case .all:
+            return !reactor.currentState.allAlarm
+        case .apply:
+            return !reactor.currentState.applyAlarm
+        case .chat:
+            return !reactor.currentState.chatAlarm
+        case .event:
+            return !reactor.currentState.eventAlarm
+        }
+    }
     func bind(reactor: NotificationSettingReactor) {
-        tableView.rx.itemSelected
-            .map { indexPath in
-                return NotificationSettingReactor.Action.toggleSwitch(indexPath)
-            }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-
         // 상태 바인딩: 테이블뷰 데이터 소스 설정
-        reactor.state.map { $0.settings }
-            .bind(to: tableView.rx.items(cellIdentifier: "NotificationSettingCell", cellType: NotificationSettingCell.self)) { _, setting, cell in
-                cell.configData(setting: setting)
-                cell.switchStateSubject
-                    .bind { state in
-                        print("\(setting.title) switch state: \(state)")
+        reactor.state
+            .map { state in
+            [
+                (NotificationType.all, state.allAlarm),
+                (NotificationType.apply, state.applyAlarm),
+                (NotificationType.chat, state.chatAlarm),
+                (NotificationType.event, state.eventAlarm)
+            ]
+            }
+            .bind(to: tableView.rx.items(cellIdentifier: "NotificationSettingCell", cellType: NotificationSettingCell.self)) { row, item, cell in
+                let (type, state) = item
+                cell.configData(type: type, state: state)
+                cell.switchView.rx_isOn()
+                    .map { isOn in
+                        NotificationSettingReactor.Action.toggleSwitch((type: type, state: isOn))
                     }
+                    .bind(to: reactor.action)
                     .disposed(by: cell.disposeBag)
             }
             .disposed(by: disposeBag)
@@ -79,13 +97,11 @@ final class NotificationSettingCell: UITableViewCell {
         label.textColor = .cmHeadLineTextColor
         return label
     }()
-    var disposeBag = DisposeBag() 
-    var switchStateSubject = PublishSubject<Bool>()
-    private let switchView = CMSwitch()
+    var disposeBag = DisposeBag()
+    let switchView = CMSwitch()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupSwitch()
         setupUI()
     }
     
@@ -93,14 +109,19 @@ final class NotificationSettingCell: UITableViewCell {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-    private func setupSwitch() {
-        switchView.rx_isOn()
-            .bind(to: switchStateSubject)
-            .disposed(by: disposeBag)
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
     }
     
-    func configData(setting: NotificationSetting) {
-        notiTitleLabel.text = setting.title
+    
+    func configData(type: NotificationType, state: Bool) {
+        // 상태가 다를 때만 업데이트
+        if switchView.isOn != state {
+            switchView.setOn(state, animated: false)
+        }
+        notiTitleLabel.text = type.settingViewName
         notiTitleLabel.applyStyle(textStyle: FontSystem.body01_medium)
     }
     

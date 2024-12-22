@@ -59,7 +59,7 @@ enum MypageMenu: String {
                     return Observable.error(PresentationError.unauthorized)
                 }
         case .noti:
-            return Observable.just(NotificationSettingViewController(reactor: NotificationSettingReactor()))
+            return Observable.just(NotificationSettingViewController(reactor: DIContainerService.shared.makeNotifiacationSettingReactor()))
         case .block:
             return Observable.just(BlockSettingViewController(reactor: BlockUserReactor()))
         }
