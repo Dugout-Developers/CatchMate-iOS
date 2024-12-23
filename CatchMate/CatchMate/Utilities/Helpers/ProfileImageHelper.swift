@@ -44,4 +44,10 @@ final class ProfileImageHelper {
         let base64Regex = #"^[A-Za-z0-9+/=]+\Z"#
         return string.range(of: base64Regex, options: .regularExpression) != nil
     }
+    
+    /// 이미지 -> Base64 문자열 변환
+    func convertImageToBase64String(image: UIImage) -> String? {
+        guard let imageData = image.jpegData(compressionQuality: 0.7) else { return nil }
+        return imageData.base64EncodedString()
+    }
 }

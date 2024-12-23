@@ -11,6 +11,7 @@ import ReactorKit
 
 final class ProfileEditReactor: Reactor {
     enum Action {
+        case changeImage(UIImage?)
         case changeNickname(String)
         case changeTeam(Team)
         case changeCheerStyle(CheerStyles?)
@@ -18,6 +19,7 @@ final class ProfileEditReactor: Reactor {
         case setError(PresentationError)
     }
     enum Mutation {
+        case setProfileImage(UIImage?)
         case setNickName(String)
         case setNickNameCount(Int)
         case setTeam(Team)
@@ -26,6 +28,7 @@ final class ProfileEditReactor: Reactor {
         case setError(PresentationError)
     }
     struct State {
+        var profileImage: UIImage?
         var nickname: String
         var nickNameCount: Int
         var team: Team
@@ -45,6 +48,8 @@ final class ProfileEditReactor: Reactor {
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+        case .changeImage(let image):
+            return Observable.just(Mutation.setProfileImage(image))
         case .changeNickname(let nickname):
             return Observable.concat([
                 Observable.just(Mutation.setNickName(nickname)),
@@ -80,6 +85,9 @@ final class ProfileEditReactor: Reactor {
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
+        case .setProfileImage(let image):
+            newState.error = nil
+            newState.profileImage = image
         case .setNickName(let nickname):
             newState.error = nil
             newState.nickname = nickname
