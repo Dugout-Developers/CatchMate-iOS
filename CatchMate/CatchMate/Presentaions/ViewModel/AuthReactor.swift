@@ -43,7 +43,7 @@ final class AuthReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .kakaoLogin:
-            return kakaoLoginUseCase.login()
+            return kakaoLoginUseCase.execute()
                 .map { loginModel in
                     return Mutation.setLoginInfo(loginModel)
                 }
@@ -51,7 +51,7 @@ final class AuthReactor: Reactor {
                     return Observable.just(Mutation.setError(error))
                 }
         case .appleLogin:
-            return appleLoginUseCase.login()
+            return appleLoginUseCase.execute()
                 .map { loginModel in
                     return Mutation.setLoginInfo(loginModel)
                 }
@@ -59,7 +59,7 @@ final class AuthReactor: Reactor {
                     return Observable.just(Mutation.setError(error))
                 }
         case .naverLogin:
-            return naverLoginUseCase.login()
+            return naverLoginUseCase.execute()
                 .map { loginModel in
                     return Mutation.setLoginInfo(loginModel)
                 }

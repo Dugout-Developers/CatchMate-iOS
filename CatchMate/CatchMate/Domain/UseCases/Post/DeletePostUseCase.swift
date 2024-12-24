@@ -8,12 +8,12 @@
 import UIKit
 import RxSwift
 
-protocol PostHandleUseCase {
+protocol DeletePostUseCase {
     func deletePost(postId: Int) -> Observable<Void>
     // 게시글 수정 필요
 }
 
-final class PostHandleUseCaseImpl: PostHandleUseCase {
+final class DeletePostUseCaseImpl: DeletePostUseCase {
     private let deleteRepository: DeletePostRepository
     init(deleteRepository: DeletePostRepository) {
         self.deleteRepository = deleteRepository

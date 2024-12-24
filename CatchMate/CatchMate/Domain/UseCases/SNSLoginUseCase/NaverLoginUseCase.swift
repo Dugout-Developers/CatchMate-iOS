@@ -8,7 +8,7 @@
 import RxSwift
 
 protocol NaverLoginUseCase {
-    func login() -> Observable<LoginModel>
+    func execute() -> Observable<LoginModel>
 }
 
 final class NaverLoginUseCaseImpl: NaverLoginUseCase {
@@ -20,7 +20,7 @@ final class NaverLoginUseCaseImpl: NaverLoginUseCase {
         self.fcmRepository = fcmRepository
         self.serverRepository = serverRepository
     }
-    func login() -> RxSwift.Observable<LoginModel> {
+    func execute() -> RxSwift.Observable<LoginModel> {
         return Observable.zip(
             snsRepository.naverLogin(),
             fcmRepository.getFCMToken()

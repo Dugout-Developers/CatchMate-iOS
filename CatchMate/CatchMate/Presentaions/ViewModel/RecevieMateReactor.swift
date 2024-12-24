@@ -29,16 +29,20 @@ final class RecevieMateReactor: Reactor {
     }
     
     var initialState: State
-    private let recivedAppliesUsecase: ReceivedAppliesUseCase
-    init(recivedAppliesUsecase: ReceivedAppliesUseCase) {
+    private let receivedAppliesUsecase: LoadReceivedAppliesUseCase
+    private let receivedAllAppliesUsecase: LoadAllReceiveAppliesUseCase
+    private let applyManageUsecase: ApplyManageUseCase
+    init(receivedAppliesUsecase: LoadReceivedAppliesUseCase, receivedAllAppliesUsecase: LoadAllReceiveAppliesUseCase, applyManageUsecase: ApplyManageUseCase) {
         self.initialState = State()
-        self.recivedAppliesUsecase = recivedAppliesUsecase
+        self.receivedAppliesUsecase = receivedAppliesUsecase
+        self.receivedAllAppliesUsecase = receivedAllAppliesUsecase
+        self.applyManageUsecase = applyManageUsecase
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadReceiveAppliesAll:
-            return recivedAppliesUsecase.loadReceivedAppliesAll()
+            return receivedAllAppliesUsecase.execute()
                 .map { result in
                     return Mutation.setReceiveAppliesAll(result)
                 }
@@ -52,7 +56,7 @@ final class RecevieMateReactor: Reactor {
         case .selectPost(let postId):
             if let postId = postId, let intId = Int(postId) {
                 let list = resetNew(postId)
-                let loadAppiles = recivedAppliesUsecase.loadRecivedApplies(boardId: intId)
+                let loadAppiles = receivedAppliesUsecase.execute(boardId: intId)
                     .map { result in
                         return Mutation.setSelectedPostApplies(result)
                     }
@@ -71,7 +75,7 @@ final class RecevieMateReactor: Reactor {
                 return Observable.just(Mutation.setError(PresentationError.showToastMessage(message: "요청에 실패했습니다. 다시 시도해주세요.")))
             }
         case .acceptApply(let enrollId):
-            return recivedAppliesUsecase.acceptApply(enrollId: enrollId)
+            return applyManageUsecase.execute(type: .accept, enrollId: enrollId)
                 .map { result in
                     if result {
                         return Mutation.acceptApply(enrollId)
@@ -87,7 +91,7 @@ final class RecevieMateReactor: Reactor {
                     }
                 }
         case .rejectApply(let enrollId):
-            return recivedAppliesUsecase.rejectApply(enrollId: enrollId)
+            return applyManageUsecase.execute(type: .reject, enrollId: enrollId)
                 .map { result in
                     if result {
                         return Mutation.acceptApply(enrollId)

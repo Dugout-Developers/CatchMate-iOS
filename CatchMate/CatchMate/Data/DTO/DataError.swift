@@ -7,8 +7,42 @@
 
 import Foundation
 
+// Token KeyChain 관련 Error
+enum TokenError: Error {
+    case notFoundAccessToken
+    case notFoundRefreshToken
+    case failureSaveToken
+    case failureTokenService
+    
+    var statusCode: Int {
+        switch self {
+        case .notFoundAccessToken:
+            return -1001
+        case .notFoundRefreshToken:
+            return -1002
+        case .failureSaveToken:
+            return -1003
+        case .failureTokenService:
+            return -1004
+        }
+    }
+    
+    var errorDescription: String? {
+        switch self {
+        case .notFoundAccessToken:
+            return "엑세스 토큰 찾기 실패"
+        case .notFoundRefreshToken:
+            return "리프레시 토큰 찾기 실패"
+        case .failureSaveToken:
+            return "토큰 저장 실패"
+        case .failureTokenService:
+            return "토큰 서비스 실행 실패"
+        }
+    }
+}
+
 // 네트워크 에러
-enum NetworkError: LocalizedError {
+enum NetworkError: Error {
     case notFoundBaseURL
     case disconnected
     case slowConnection
@@ -66,7 +100,7 @@ enum NetworkError: LocalizedError {
 }
 
 // 매핑 에러
-enum MappingError: LocalizedError {
+enum MappingError: Error {
     ///DomainModel -> DTO
     case mappingFailed
     ///DTO -> DomainModel
@@ -91,7 +125,7 @@ enum MappingError: LocalizedError {
 }
 
 // 디코딩 에러
-enum CodableError: LocalizedError {
+enum CodableError: Error {
     case decodingFailed
     case encodingFailed
     case missingFields
@@ -118,23 +152,8 @@ enum CodableError: LocalizedError {
     }
 }
 
-enum ReferenceError: LocalizedError {
-    case notFoundSelf
-    var statusCode: Int {
-        switch self {
-        case .notFoundSelf:
-            return -5001
-        }
-    }
-    var errorDescription: String? {
-        switch self {
-        case .notFoundSelf:
-            return "self 참조 실패"
-        }
-    }
-}
 // SNS Login 관련 Error
-enum SNSLoginError: LocalizedError {
+enum SNSLoginError: Error {
     case authorizationFailed
     case EmptyValue
     case loginServerError(code: Int, description: String)
@@ -143,9 +162,9 @@ enum SNSLoginError: LocalizedError {
     var statusCode: Int {
         switch self {
         case .authorizationFailed:
-            return -5002
+            return -5001
         case .EmptyValue:
-            return -5003
+            return -5002
         case .loginServerError(let code, _):
             return code
         }
@@ -163,47 +182,16 @@ enum SNSLoginError: LocalizedError {
     }
 }
 
-// Token KeyChain 관련 Error
-enum TokenError: LocalizedError {
-    case notFoundAccessToken
-    case notFoundRefreshToken
-    case failureSaveToken
-    case failureTokenService
-    
-    var statusCode: Int {
-        switch self {
-        case .notFoundAccessToken:
-            return -1001
-        case .notFoundRefreshToken:
-            return -1002
-        case .failureSaveToken:
-            return -1003
-        case .failureTokenService:
-            return -1004
-        }
-    }
-    
-    var errorDescription: String? {
-        switch self {
-        case .notFoundAccessToken:
-            return "엑세스 토큰 찾기 실패"
-        case .notFoundRefreshToken:
-            return "리프레시 토큰 찾기 실패"
-        case .failureSaveToken:
-            return "토큰 저장 실패"
-        case .failureTokenService:
-            return "토큰 서비스 실행 실패"
-        }
-    }
-}
-
-enum OtherError: LocalizedError {
+enum OtherError: Error {
     case invalidURL
+    case notFoundSelf
     
     var statusCode: Int {
         switch self {
         case .invalidURL:
             return -6001
+        case .notFoundSelf:
+            return -6002
         }
     }
     
@@ -211,6 +199,8 @@ enum OtherError: LocalizedError {
         switch self {
         case .invalidURL:
             return "URL 형식이 잘못되었습니다."
+        case .notFoundSelf:
+            return "self 참조 "
         }
     }
 }

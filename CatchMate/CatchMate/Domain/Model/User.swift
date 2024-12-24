@@ -16,7 +16,7 @@ struct User: Codable, Equatable {
     let gener: Gender
     let cheerStyle: CheerStyles?
     let profilePicture: String?
-    let pushAgreement: Bool
+    let allAlarm, chatAlarm, enrollAlarm, eventAlarm: Bool
     let description: String?
     
     var age: UInt {

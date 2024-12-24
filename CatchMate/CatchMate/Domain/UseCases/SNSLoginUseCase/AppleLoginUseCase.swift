@@ -8,7 +8,7 @@
 import RxSwift
 
 protocol AppleLoginUseCase {
-    func login() -> Observable<LoginModel>
+    func execute() -> Observable<LoginModel>
 }
 
 final class AppleLoginUseCaseImpl: AppleLoginUseCase {
@@ -20,7 +20,7 @@ final class AppleLoginUseCaseImpl: AppleLoginUseCase {
         self.fcmRepository = fcmRepository
         self.serverRepository = serverRepository
     }
-    func login() -> RxSwift.Observable<LoginModel> {
+    func execute() -> RxSwift.Observable<LoginModel> {
         return Observable.zip(
             snsRepository.appleLogin(),
             fcmRepository.getFCMToken()

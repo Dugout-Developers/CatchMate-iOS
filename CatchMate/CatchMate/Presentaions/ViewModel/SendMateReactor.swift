@@ -22,8 +22,8 @@ final class SendMateReactor: Reactor {
     }
     
     var initialState: State
-    private let sendAppliesUsecase: SendAppliesUseCase
-    init(sendAppliesUsecase: SendAppliesUseCase) {
+    private let sendAppliesUsecase: LoadSendAppliesUseCase
+    init(sendAppliesUsecase: LoadSendAppliesUseCase) {
         self.initialState = State()
         self.sendAppliesUsecase = sendAppliesUsecase
     }
@@ -31,7 +31,7 @@ final class SendMateReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadSendMate:
-            return sendAppliesUsecase.loadSendApplies()
+            return sendAppliesUsecase.execute()
                 .flatMap { applies in
                     let posts = applies.map { $0.post }
                     return Observable.just(Mutation.setSendMatePost(posts))

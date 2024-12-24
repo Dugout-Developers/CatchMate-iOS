@@ -29,13 +29,8 @@ final class ProfileEditDataSourceImpl: ProfileEditDataSource {
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
-        let parameters: [String: Any] = [
-            "nickName": editModel.nickname,
-            "description": editModel.description,
-            "favGudan": editModel.favGudan,
-            "watchStyle": editModel.watchStyle
-        ]
-        
+        let parameters = APIService.shared.convertToDictionary(editModel)
+
         return APIService.shared.requestAPI(type: .editProfile, parameters: parameters, headers: headers, encoding: JSONEncoding.default, dataType: ProfileEditResponseDTO.self)
             .map { dto in
                 LoggerService.shared.debugLog("Profile Edit 성공: \(dto)")
@@ -43,7 +38,7 @@ final class ProfileEditDataSourceImpl: ProfileEditDataSource {
             }
             .catch { [weak self] error in
                 guard let self else {
-                    return Observable.error(ReferenceError.notFoundSelf)
+                    return Observable.error(OtherError.notFoundSelf)
                 }
                 if let error = error as? NetworkError, error.statusCode == 401 {
                     guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {

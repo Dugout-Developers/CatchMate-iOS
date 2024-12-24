@@ -86,7 +86,7 @@ final class SignReactor: Reactor {
             ])
         case .endEditNickname:
             if !currentState.nickName.isEmpty {
-                return nicknameUseCase.checkNickname(currentState.nickName)
+                return nicknameUseCase.execute(currentState.nickName)
                     .flatMap { result in
                         return Observable.just(Mutation.endEditingNickname(result))
                     }

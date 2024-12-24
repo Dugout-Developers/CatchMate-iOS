@@ -28,16 +28,18 @@ final class FavoriteReactor: Reactor {
     
     var initialState: State
     private let favoriteListUsecase: LoadFavoriteListUseCase
-    init(favoriteListUsecase: LoadFavoriteListUseCase) {
+    private let setFavoriteUsecase: SetFavoriteUseCase
+    init(favoriteListUsecase: LoadFavoriteListUseCase, setFavoriteUsecase: SetFavoriteUseCase) {
         self.initialState = State()
         self.favoriteListUsecase = favoriteListUsecase
+        self.setFavoriteUsecase = setFavoriteUsecase
     }
     
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadFavoritePost:
-            return favoriteListUsecase.loadFavoriteList()
+            return favoriteListUsecase.execute()
                 .map { list in
                     return Mutation.setFavoritePost(list)
                 }
@@ -49,10 +51,10 @@ final class FavoriteReactor: Reactor {
                     }
                 }
         case .removeFavoritePost(let postId):
-            return favoriteListUsecase.cancelFavoriteList(postId)
+            return setFavoriteUsecase.execute(false, postId)
                 .map { [weak self] _ in
                     guard let self = self else {
-                        return Mutation.setError(ErrorMapper.mapToPresentationError(ReferenceError.notFoundSelf))
+                        return Mutation.setError(ErrorMapper.mapToPresentationError(OtherError.notFoundSelf))
                     }
                     let currentList = currentState.favoritePost.filter { $0.id != postId }
                     return Mutation.setFavoritePost(currentList)

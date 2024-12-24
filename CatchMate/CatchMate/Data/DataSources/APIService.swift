@@ -58,7 +58,7 @@ enum Endpoint {
     /// 내정보 수정
     case editProfile
     
-    /// 알람 리스트 조회
+    /// 알림 리스트 조회
     case notificationList
     
     var endPoint: String {
@@ -223,7 +223,18 @@ final class APIService {
     
     private var baseURL = Bundle.main.baseURL
     private let disposeBag = DisposeBag()
-
+    
+    func convertToDictionary<T: Encodable>(_ encodable: T) -> [String: Any]? {
+        do {
+            let data = try JSONEncoder().encode(encodable)
+            let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+            return jsonObject as? [String: Any]
+        } catch {
+            print("JSON 변환 실패: \(error)")
+            return nil
+        }
+    }
+    
     func requestAPI<T: Codable>(addEndPoint: String? = nil, type: Endpoint, parameters: [String: Any]?, headers: HTTPHeaders? = nil, encoding: any ParameterEncoding = URLEncoding.default, dataType: T.Type) -> Observable<T> {
         LoggerService.shared.debugLog("APIService: - Request: \(type.apiName)")
         guard let base = baseURL else {
@@ -238,7 +249,7 @@ final class APIService {
         return RxAlamofire.requestData(type.requstType, url, parameters: parameters, encoding: encoding, headers: headers)
             .flatMap { [weak self] (response, data) -> Observable<T> in
                 LoggerService.shared.debugLog("Request URL: \(String(describing: response.url))")
-                guard let self = self else { return Observable.error(ReferenceError.notFoundSelf) }
+                guard let self = self else { return Observable.error(OtherError.notFoundSelf) }
                 guard 200..<300 ~= response.statusCode else {
                     LoggerService.shared.debugLog("\(type.apiName) Error : \(response.statusCode) \(response.debugDescription)")
                     return Observable.error(mapServerError(statusCode: response.statusCode))
@@ -281,7 +292,7 @@ final class APIService {
         }
         return Observable<Void>.create { [weak self] observer in
             guard let self = self else {
-                observer.onError(ReferenceError.notFoundSelf)
+                observer.onError(OtherError.notFoundSelf)
                 return Disposables.create()
             }
             

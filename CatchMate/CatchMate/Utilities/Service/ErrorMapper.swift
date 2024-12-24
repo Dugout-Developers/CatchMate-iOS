@@ -83,13 +83,6 @@ final class ErrorMapper {
         return .showErrorPage
     }
     
-    private static func mapReferenceError(_ error: ReferenceError) -> PresentationError {
-        switch error {
-        case .notFoundSelf:
-            return .showErrorPage
-        }
-    }
-    
     private static func mapSNSLoginError(_ error: SNSLoginError) -> PresentationError {
         switch error {
         case .authorizationFailed:
@@ -116,6 +109,15 @@ final class ErrorMapper {
             return .showErrorPage
         case .failureSaveToken:
             return .unauthorized
+        }
+    }
+    
+    private static func mapOtherError(_ error: OtherError) -> PresentationError {
+        switch error {
+        case .invalidURL:
+            return .showToastMessage(message: "다시 한 번 시도해주세요.")
+        case .notFoundSelf:
+            return .showErrorPage
         }
     }
 }

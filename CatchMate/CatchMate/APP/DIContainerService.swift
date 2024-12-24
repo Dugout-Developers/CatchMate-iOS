@@ -65,13 +65,13 @@ class DIContainerService {
         let loadPostRepository = LoadPostRepositoryImpl(loadPostDS: loadPostDataSource)
         let sendAppliesDataSource = SendAppiesDataSourceImpl(tokenDataSource: tokenDS)
         let sendAppliesRepository = SendAppiesRepositoryImpl(sendAppliesDS: sendAppliesDataSource)
-        let loadPostUsecase = PostDetailUseCaseImpl(loadPostRepository: loadPostRepository, applylistRepository: sendAppliesRepository)
+        let loadFavoriteListDS = LoadFavoriteListDataSourceImpl(tokenDataSource: tokenDS)
+        let loadFavoriteListRepository = LoadFavoriteListRepositoryImpl(loadFavorioteListDS: loadFavoriteListDS)
+        let loadPostUsecase = PostDetailUseCaseImpl(loadPostRepository: loadPostRepository, applylistRepository: sendAppliesRepository, loadFavoriteListRepository: loadFavoriteListRepository)
         
         let loadUserDataSource = UserDataSourceImpl(tokenDataSource: tokenDS)
         let loadUserRepository = UserRepositoryImpl(userDS: loadUserDataSource)
-        let loadCountDataSource = RecivedCountDataSourceImpl(tokenDataSource: tokenDS)
-        let loadCountRepository = ReceivedCountRepositoryIml(loadCountDS: loadCountDataSource)
-        let loadUserUsecase = UserUseCaseImpl(userRepository: loadUserRepository, loadCountRepository: loadCountRepository)
+        let loadUserUsecase = UserUseCaseImpl(userRepository: loadUserRepository)
         return AddReactor(addUsecase: addUsecase, loadPostDetailUsecase: loadPostUsecase, loadUserUsecase: loadUserUsecase)
     }
     
@@ -80,11 +80,14 @@ class DIContainerService {
         let loadPostRepository = LoadPostRepositoryImpl(loadPostDS: loadPostDataSource)
         let sendAppliesDataSource = SendAppiesDataSourceImpl(tokenDataSource: tokenDS)
         let sendAppliesRepository = SendAppiesRepositoryImpl(sendAppliesDS: sendAppliesDataSource)
-        let loadPostUsecase = PostDetailUseCaseImpl(loadPostRepository: loadPostRepository, applylistRepository: sendAppliesRepository)
+        let loadFavoriteListDS = LoadFavoriteListDataSourceImpl(tokenDataSource: tokenDS)
+        let loadFavoriteListRepository = LoadFavoriteListRepositoryImpl(loadFavorioteListDS: loadFavoriteListDS)
+        let loadPostUsecase = PostDetailUseCaseImpl(loadPostRepository: loadPostRepository, applylistRepository: sendAppliesRepository, loadFavoriteListRepository: loadFavoriteListRepository)
         
         let applyDataSource = ApplyDataSourceImpl(tokenDataSource: tokenDS)
         let applyRepository = ApplyPostRepositoryImpl(applyDS: applyDataSource)
-        let applyUsecase = ApplyHandleUseCaseImpl(applyRepository: applyRepository)
+        let applyUsecase = ApplyUseCaseImpl(applyRepository: applyRepository)
+        let cancelApplyUsecase = CancelApplyUseCaseImpl(applyRepository: applyRepository)
         
         let setFavoriteDataSource = SetFavoriteDataSourceImpl(tokenDataSource: tokenDS)
         let setFavoriteRepository = SetFavoriteRepositoryImpl(setFavoriteDS: setFavoriteDataSource)
@@ -92,9 +95,9 @@ class DIContainerService {
         
         let deletePostDS = DeletePostDataSourceImpl(tokenDataSource: tokenDS)
         let deletePostRepository = DeletePostRepositoryImpl(deletePostDS: deletePostDS)
-        let postHandleUsecase = PostHandleUseCaseImpl(deleteRepository: deletePostRepository)
+        let postHandleUsecase = DeletePostUseCaseImpl(deleteRepository: deletePostRepository)
         
-        return PostReactor(postId: postID, postloadUsecase: loadPostUsecase, setfavoriteUsecase: setFavoriteUsecase, applyHandelerUsecase: applyUsecase, postHandleUsecase: postHandleUsecase)
+        return PostReactor(postId: postID, postloadUsecase: loadPostUsecase, setfavoriteUsecase: setFavoriteUsecase, applyUsecase: applyUsecase, cancelApplyUsecase: cancelApplyUsecase, postHandleUsecase: postHandleUsecase)
     }
     
     
@@ -103,9 +106,11 @@ class DIContainerService {
         let loadFavoriteListRepository = LoadFavoriteListRepositoryImpl(loadFavorioteListDS: loadFavoriteListDS)
         let setFavoriteDS = SetFavoriteDataSourceImpl(tokenDataSource: tokenDS)
         let setFavoroteRepository = SetFavoriteRepositoryImpl(setFavoriteDS: setFavoriteDS)
-        let loadFavoriteListUsecase = LoadFavoriteListUseCaseImpl(loadFavoriteListRepository: loadFavoriteListRepository, setFavortiteRepository: setFavoroteRepository)
         
-        return FavoriteReactor(favoriteListUsecase: loadFavoriteListUsecase)
+        let setFavoriteUseCase = SetFavoriteUseCaseImpl(setFavoriteRepository: setFavoroteRepository)
+        let loadFavoriteListUsecase = LoadFavoriteListUseCaseImpl(loadFavoriteListRepository: loadFavoriteListRepository)
+        
+        return FavoriteReactor(favoriteListUsecase: loadFavoriteListUsecase, setFavoriteUsecase: setFavoriteUseCase)
     }
     func makeOtherUserPageReactor(_ writer: SimpleUser) -> OtherUserpageReactor {
         let userPostListDS = UserPostLoadDataSourceImpl(tokenDataSource: tokenDS)
@@ -120,32 +125,48 @@ class DIContainerService {
         let logoutDataSource = LogoutDataSourceImpl(tokenDataSource: tokenDS)
         let userRepository = UserRepositoryImpl(userDS: userDataSource)
         let logoutRepository = LogoutRepositoryImpl(logoutDS: logoutDataSource)
-        let loadUserDataSource = UserDataSourceImpl(tokenDataSource: tokenDS)
-        let loadUserRepository = UserRepositoryImpl(userDS: loadUserDataSource)
         let loadCountDataSource = RecivedCountDataSourceImpl(tokenDataSource: tokenDS)
         let loadCountRepository = ReceivedCountRepositoryIml(loadCountDS: loadCountDataSource)
-        let userUsecase = UserUseCaseImpl(userRepository: userRepository, loadCountRepository: loadCountRepository)
+        
+        let userUsecase = UserUseCaseImpl(userRepository: userRepository)
+        let countUsecase = LoadReceivedCountUseCaseImpl(loadCountRepository: loadCountRepository)
         let logoutUsecase = LogoutUseCaseImpl(repository: logoutRepository)
         
-        return MyPageReactor(userUsecase: userUsecase, logoutUsecase: logoutUsecase)
+        return MyPageReactor(userUsecase: userUsecase, logoutUsecase: logoutUsecase, loadReceivedCountUsecase: countUsecase)
     }
     
     func makeSendMateReactor() -> SendMateReactor {
         let sendAppliesDataSource = SendAppiesDataSourceImpl(tokenDataSource: tokenDS)
         let sendAppliesRepository = SendAppiesRepositoryImpl(sendAppliesDS: sendAppliesDataSource)
-        let sendAppliesUsecase = SendAppliesUseCaseImpl(sendAppliesRepository: sendAppliesRepository)
+        let sendAppliesUsecase = LoadSendAppliesUseCaseImpl(sendAppliesRepository: sendAppliesRepository)
         
         return SendMateReactor(sendAppliesUsecase: sendAppliesUsecase)
     }
     
     func makeReciveMateReactor() -> RecevieMateReactor {
         let recivedAppliesDataSource = RecivedAppiesDataSourceImpl(tokenDataSource: tokenDS)
-        let recivedAppliesRepository = RecivedAppliesRepositoryImpl(recivedAppliesDS: recivedAppliesDataSource)
+        let receivedAppliesRepository = RecivedAppliesRepositoryImpl(recivedAppliesDS: recivedAppliesDataSource)
         let applyManagementDataSource = ApplyManagementDataSourceImpl(tokenDataSource: tokenDS)
-        let applyManangementRepository = ApplyManagementRepositoryImpl(applyManagementDS: applyManagementDataSource)
-        let receivedAppliesUsecase = ReceivedAppliesUseCaseImpl(receivedAppliesRepository: recivedAppliesRepository, applyManagementRepository: applyManangementRepository)
+        let applyManagementRepository = ApplyManagementRepositoryImpl(applyManagementDS: applyManagementDataSource)
+        let acceptApplyUsecase = AcceptApplyUseCaseImpl(applyManagementRepository: applyManagementRepository)
+        let rejectApplyUsecase = RejectApplyUseCaseImpl(applyManagementRepository: applyManagementRepository)
         
-        return RecevieMateReactor(recivedAppliesUsecase: receivedAppliesUsecase)
+        let loadReceivedAppliesUseCase = LoadReceivedAppliesUseCaseImpl(receivedAppliesRepository: receivedAppliesRepository)
+        let loadAllReceiveAppliesUseCase = LoadAllReceiveAppliesUseCaseImpl(recivedAppliesRepository: receivedAppliesRepository)
+        let applyManageUsecase = ApplyManageUseCaseImpl(acceptApplyUseCase: acceptApplyUsecase, rejectApplyUseCase: rejectApplyUsecase)
+        
+        return RecevieMateReactor(receivedAppliesUsecase: loadReceivedAppliesUseCase, receivedAllAppliesUsecase: loadAllReceiveAppliesUseCase, applyManageUsecase: applyManageUsecase)
+    }
+    
+    func makeNotifiacationSettingReactor() -> NotificationSettingReactor {
+        let userDataSource = UserDataSourceImpl(tokenDataSource: tokenDS)
+        let userRepository = UserRepositoryImpl(userDS: userDataSource)
+        let loadNotificationInfoUsecase = LoadNotificationUseCaseImpl(userRepository: userRepository)
+        let setNotificationDataSource = SetNotificationDataSourceImpl(tokenDataSource: tokenDS)
+        let setNotificationRepository = SetNotificationRepositoryImpl(setNotificationDS: setNotificationDataSource)
+        let setNotificationUsecase = SetNotificationUseCaseImpl(setNotificationRepository: setNotificationRepository)
+        
+        return NotificationSettingReactor(notificationInfoUsecase: loadNotificationInfoUsecase, setNotificationUsecase: setNotificationUsecase)
     }
     
     

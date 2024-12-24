@@ -7,11 +7,14 @@
 
 import UIKit
 import RxSwift
+import RxCocoa
 import ReactorKit
 import FlexLayout
 import PinLayout
 
 final class ProfileEditViewController: BaseViewController, View {
+    private var initImageStr: String?
+    let imgPicker = UIImagePickerController()
     override var useSnapKit: Bool {
         return false
     }
@@ -19,13 +22,12 @@ final class ProfileEditViewController: BaseViewController, View {
         return true
     }
     var reactor: ProfileEditReactor
-    private var profileImageString: String?
     private let containerView = UIView()
     private let section1 = UIView()
     private let profileImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "profile"))
         imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     private let imageEditButton = ProfileImageEditButton()
@@ -70,7 +72,7 @@ final class ProfileEditViewController: BaseViewController, View {
     
     init(reactor: ProfileEditReactor, imageString: String?) {
         self.reactor = reactor
-        self.profileImageString = imageString
+        self.initImageStr = imageString
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -90,17 +92,11 @@ final class ProfileEditViewController: BaseViewController, View {
         super.viewDidLoad()
         setupLeftTitle("프로필 편집")
         setupUI()
-        setupImage()
         setupPicker()
         bind(reactor: reactor)
         view.backgroundColor = .grayScale50
-    }
-    private func setupImage() {
-        if let string = profileImageString, let url = URL(string: string) {
-            profileImageView.kf.setImage(with: url)
-        } else {
-            profileImageView.image = UIImage(named: "tempProfile")
-        }
+        imgPicker.delegate = self
+        ProfileImageHelper.loadImage(profileImageView, pictureString: initImageStr)
     }
     private func setupPicker() {
         // Team Picker
@@ -114,10 +110,32 @@ final class ProfileEditViewController: BaseViewController, View {
         cheerStylePicker.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.large, identifier: "ProfileEditCheerStylePicker")
     }
 }
-
+// MARK: - ImagePicker
+extension ProfileEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[.originalImage] as? UIImage {
+            if let validImage = UIImage(data: image.jpegData(compressionQuality: 0.5)!) {
+                reactor.action.onNext(.changeImage(validImage))
+            } else {
+                print("이미지가 유효하지 않습니다.")
+            }
+        }
+        dismiss(animated: true, completion: nil)
+    }
+}
 // MARK: - Bind
 extension ProfileEditViewController {
+    private func openLibrary(){
+        imgPicker.sourceType = .photoLibrary
+        present(imgPicker, animated: false, completion: nil)
+    }
     func bind(reactor: ProfileEditReactor) {
+        imageEditButton.rx.tap
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                vc.openLibrary()
+            }
+            .disposed(by: disposeBag)
         self.nicknameTextField.text = reactor.currentState.nickname
         self.nicknameTextField.applyStyle(textStyle: FontSystem.body02_semiBold)
         self.nicknameCountLabel.text = "\(reactor.currentState.nickNameCount)/10"
@@ -185,6 +203,14 @@ extension ProfileEditViewController {
                 vc.cheerStylePicker.didSelectItem(text)
             }
             .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.profileImage}
+            .withUnretained(self)
+            .subscribe { vc, image in
+                vc.profileImageView.image = image
+            }
+            .disposed(by: disposeBag)
+
 // 닉네임 중복 검사 -> 나중에 연결
 //        nicknameTextField.rx.text.orEmpty
 //            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
@@ -239,37 +265,44 @@ extension ProfileEditViewController {
 
 final class ProfileImageEditButton: UIButton {
     private let dimView = UIView()
-       private let iconImageView = UIImageView()
-       
-       override init(frame: CGRect) {
-           super.init(frame: frame)
-           clipsToBounds = true
-           setupViews()
-       }
-       @available(*, unavailable)
-       required init?(coder: NSCoder) {
-           fatalError("init(coder:) has not been implemented")
-       }
-       
-       private func setupViews() {
-           // Dim View 설정
-           dimView.backgroundColor = .opacity600
-           addSubview(dimView)
-           
-           // Icon ImageView 설정
-           iconImageView.contentMode = .scaleAspectFit
-           iconImageView.image = UIImage(systemName: "camera")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-           iconImageView.tintColor = .white
-           addSubview(iconImageView)
-           
-           // SnapKit 제약 조건
-           dimView.snp.makeConstraints { make in
-               make.edges.equalToSuperview()
-           }
-           
-           iconImageView.snp.makeConstraints { make in
-               make.center.equalToSuperview()
-               make.width.height.equalTo(24)
-           }
-       }
+    private let iconImageView = UIImageView()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        clipsToBounds = true
+        setupViews()
+    }
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupViews() {
+        // Dim View 설정
+        dimView.backgroundColor = .opacity600
+        dimView.isUserInteractionEnabled = false
+        addSubview(dimView)
+        
+        // Icon ImageView 설정
+        iconImageView.contentMode = .scaleAspectFit
+        iconImageView.image = UIImage(systemName: "camera")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        iconImageView.tintColor = .white
+        iconImageView.isUserInteractionEnabled = false
+        addSubview(iconImageView)
+        
+        // SnapKit 제약 조건
+        dimView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        iconImageView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.height.equalTo(24)
+        }
+    }
+}
+extension Reactive where Base: ProfileImageEditButton {
+    var tap: ControlEvent<Void> {
+        return controlEvent(.touchUpInside)
+    }
 }

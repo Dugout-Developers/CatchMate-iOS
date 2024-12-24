@@ -8,5 +8,6 @@
 struct ProfileEdit {
     let nickName: String
     let team: Team
-    let style: CheerStyles
+    let style: CheerStyles?
+    let imageDataStr: String?
 }
