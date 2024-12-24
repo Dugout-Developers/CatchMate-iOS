@@ -54,7 +54,7 @@ final class FavoriteReactor: Reactor {
             return setFavoriteUsecase.execute(false, postId)
                 .map { [weak self] _ in
                     guard let self = self else {
-                        return Mutation.setError(ErrorMapper.mapToPresentationError(ReferenceError.notFoundSelf))
+                        return Mutation.setError(ErrorMapper.mapToPresentationError(OtherError.notFoundSelf))
                     }
                     let currentList = currentState.favoritePost.filter { $0.id != postId }
                     return Mutation.setFavoritePost(currentList)

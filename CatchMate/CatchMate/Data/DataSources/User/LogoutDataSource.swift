@@ -38,7 +38,7 @@ final class LogoutDataSourceImpl: LogoutDataSource {
         ]
         return RxAlamofire.requestJSON(.delete, url, encoding: JSONEncoding.default, headers: headers)
             .flatMap { [weak self] (response, data) -> Observable<Bool> in
-                guard let self = self else { return Observable.error(ReferenceError.notFoundSelf) }
+                guard let self = self else { return Observable.error(OtherError.notFoundSelf) }
                 if response.statusCode == 200 {
                     do {
                         let jsonData = try JSONSerialization.data(withJSONObject: data, options: [])

@@ -38,7 +38,7 @@ final class ProfileEditDataSourceImpl: ProfileEditDataSource {
             }
             .catch { [weak self] error in
                 guard let self else {
-                    return Observable.error(ReferenceError.notFoundSelf)
+                    return Observable.error(OtherError.notFoundSelf)
                 }
                 if let error = error as? NetworkError, error.statusCode == 401 {
                     guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {

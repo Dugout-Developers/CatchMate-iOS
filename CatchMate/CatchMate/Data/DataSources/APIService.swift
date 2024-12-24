@@ -249,7 +249,7 @@ final class APIService {
         return RxAlamofire.requestData(type.requstType, url, parameters: parameters, encoding: encoding, headers: headers)
             .flatMap { [weak self] (response, data) -> Observable<T> in
                 LoggerService.shared.debugLog("Request URL: \(String(describing: response.url))")
-                guard let self = self else { return Observable.error(ReferenceError.notFoundSelf) }
+                guard let self = self else { return Observable.error(OtherError.notFoundSelf) }
                 guard 200..<300 ~= response.statusCode else {
                     LoggerService.shared.debugLog("\(type.apiName) Error : \(response.statusCode) \(response.debugDescription)")
                     return Observable.error(mapServerError(statusCode: response.statusCode))
@@ -292,7 +292,7 @@ final class APIService {
         }
         return Observable<Void>.create { [weak self] observer in
             guard let self = self else {
-                observer.onError(ReferenceError.notFoundSelf)
+                observer.onError(OtherError.notFoundSelf)
                 return Disposables.create()
             }
             

@@ -36,7 +36,7 @@ final class DeletePostDataSourceImpl: DeletePostDataSource {
         
         return APIService.shared.requestVoidAPI(type: .removePost, parameters: parameters, headers: headers, encoding: JSONEncoding.default)
             .catch { [weak self] error in
-                guard let self = self else { return Observable.error(ReferenceError.notFoundSelf) }
+                guard let self = self else { return Observable.error(OtherError.notFoundSelf) }
                 if let error = error as? NetworkError, error.statusCode == 401 {
                     guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
                         return Observable.error(TokenError.notFoundRefreshToken)

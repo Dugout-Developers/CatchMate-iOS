@@ -37,11 +37,11 @@ final class UpPostDataSourceImpl: UpPostDataSource {
                             retryCount += 1
                             return self?.refreshToken()
                                 .flatMap { _ in
-                                    self?.makeRequest(postId: postId, url: url) ?? Observable.error(ReferenceError.notFoundSelf)
-                                } ?? Observable.error(ReferenceError.notFoundSelf)
+                                    self?.makeRequest(postId: postId, url: url) ?? Observable.error(OtherError.notFoundSelf)
+                                } ?? Observable.error(OtherError.notFoundSelf)
                         }
                         return Observable.error(error)
-                    } ?? Observable.error(ReferenceError.notFoundSelf)
+                    } ?? Observable.error(OtherError.notFoundSelf)
             }
     }
     

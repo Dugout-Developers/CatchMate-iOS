@@ -7,6 +7,10 @@
 import Foundation
 
 extension Error {
+    static var errorType: String {
+        return String(describing: self)
+    }
+    
     var statusCode: Int {
         if let localizedError = self as? LocalizedError, let statusCode = (localizedError as? CustomNSError)?.errorCode {
             return statusCode
@@ -16,12 +20,5 @@ extension Error {
 
     var errorDescription: String? {
         return (self as? LocalizedError)?.errorDescription ?? "An unexpected error occurred.: \(self.localizedDescription)"
-    }
-}
-
-
-extension LocalizedError {
-    static var errorType: String {
-        return String(describing: self)
     }
 }

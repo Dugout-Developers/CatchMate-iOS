@@ -37,7 +37,7 @@ final class SetNotificationDataSourceImpl: SetNotificationDataSource {
                 LoggerService.shared.debugLog("\(Endpoint.setNotification.apiName) Success - \(dto)")
             })
             .catch { [weak self] error in
-                guard let self else { return Observable.error(ReferenceError.notFoundSelf) }
+                guard let self else { return Observable.error(OtherError.notFoundSelf) }
                 if let error = error as? NetworkError, error.statusCode == 401 {
                     guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
                         return Observable.error(TokenError.notFoundRefreshToken)

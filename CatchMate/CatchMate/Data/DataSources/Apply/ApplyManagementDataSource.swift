@@ -39,7 +39,7 @@ final class ApplyManagementDataSourceImpl: ApplyManagementDataSource {
                 }
             }
             .catch { [weak self] error in
-                guard let self = self else { return Observable.error(ReferenceError.notFoundSelf) }
+                guard let self = self else { return Observable.error(OtherError.notFoundSelf) }
                 if let error = error as? NetworkError, error.statusCode == 401 {
                     guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
                         return Observable.error(TokenError.notFoundRefreshToken)
@@ -84,7 +84,7 @@ final class ApplyManagementDataSourceImpl: ApplyManagementDataSource {
                 }
             }
             .catch { [weak self] error in
-                guard let self = self else { return Observable.error(ReferenceError.notFoundSelf) }
+                guard let self = self else { return Observable.error(OtherError.notFoundSelf) }
                 if let error = error as? NetworkError, error.statusCode == 401 {
                     guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
                         return Observable.error(TokenError.notFoundRefreshToken)
