@@ -223,7 +223,18 @@ final class APIService {
     
     private var baseURL = Bundle.main.baseURL
     private let disposeBag = DisposeBag()
-
+    
+    func convertToDictionary<T: Encodable>(_ encodable: T) -> [String: Any]? {
+        do {
+            let data = try JSONEncoder().encode(encodable)
+            let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+            return jsonObject as? [String: Any]
+        } catch {
+            print("JSON 변환 실패: \(error)")
+            return nil
+        }
+    }
+    
     func requestAPI<T: Codable>(addEndPoint: String? = nil, type: Endpoint, parameters: [String: Any]?, headers: HTTPHeaders? = nil, encoding: any ParameterEncoding = URLEncoding.default, dataType: T.Type) -> Observable<T> {
         LoggerService.shared.debugLog("APIService: - Request: \(type.apiName)")
         guard let base = baseURL else {

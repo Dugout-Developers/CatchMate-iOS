@@ -13,6 +13,6 @@ final class UserMapper {
     }
     
     func profileEditRequestDomainToDTO(domain: ProfileEdit) -> ProfileEditRequestDTO {
-        return ProfileEditRequestDTO(nickname: domain.nickName, description: "", favGudan: domain.team.rawValue, watchStyle: domain.style.rawValue)
+        return ProfileEditRequestDTO(request: ProfileEditRequestDTO.Request(nickName: domain.nickName, favGudan: domain.team.rawValue, watchStyle: domain.style != nil ? domain.style!.rawValue : ""), profileImage: domain.imageDataStr ?? "")
     }
 }

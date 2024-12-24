@@ -6,8 +6,12 @@
 //
 
 struct ProfileEditRequestDTO: Codable {
-    let nickname: String
-    let description: String
-    let favGudan: String
-    let watchStyle: String
+    let request: Request
+    let profileImage: String
+    
+    struct Request: Codable {
+        let nickName: String
+        let favGudan: String
+        let watchStyle: String
+    }
 }

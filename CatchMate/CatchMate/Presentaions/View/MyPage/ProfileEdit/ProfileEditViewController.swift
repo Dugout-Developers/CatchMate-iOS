@@ -114,7 +114,7 @@ final class ProfileEditViewController: BaseViewController, View {
 extension ProfileEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[.originalImage] as? UIImage {
-            if let validImage = UIImage(data: image.jpegData(compressionQuality: 1.0)!) {
+            if let validImage = UIImage(data: image.jpegData(compressionQuality: 0.5)!) {
                 reactor.action.onNext(.changeImage(validImage))
             } else {
                 print("이미지가 유효하지 않습니다.")

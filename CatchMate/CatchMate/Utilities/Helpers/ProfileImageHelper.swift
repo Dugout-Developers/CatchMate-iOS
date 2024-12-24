@@ -46,8 +46,16 @@ final class ProfileImageHelper {
     }
     
     /// 이미지 -> Base64 문자열 변환
-    func convertImageToBase64String(image: UIImage) -> String? {
-        guard let imageData = image.jpegData(compressionQuality: 0.7) else { return nil }
+    static func convertImageToBase64String(image: UIImage?) -> String? {
+        guard let image else { return "" }
+        guard let resizeImage = resizeImage(image, to: CGSize(width: 150, height: 150)), let imageData = resizeImage.jpegData(compressionQuality: 0.2) else { return nil }
         return imageData.base64EncodedString()
+    }
+    
+    static func resizeImage(_ image: UIImage, to targetSize: CGSize) -> UIImage? {
+        let renderer = UIGraphicsImageRenderer(size: targetSize)
+        return renderer.image { _ in
+            image.draw(in: CGRect(origin: .zero, size: targetSize))
+        }
     }
 }

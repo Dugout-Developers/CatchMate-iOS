@@ -29,13 +29,8 @@ final class ProfileEditDataSourceImpl: ProfileEditDataSource {
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
-        let parameters: [String: Any] = [
-            "nickName": editModel.nickname,
-            "description": editModel.description,
-            "favGudan": editModel.favGudan,
-            "watchStyle": editModel.watchStyle
-        ]
-        
+        let parameters = APIService.shared.convertToDictionary(editModel)
+
         return APIService.shared.requestAPI(type: .editProfile, parameters: parameters, headers: headers, encoding: JSONEncoding.default, dataType: ProfileEditResponseDTO.self)
             .map { dto in
                 LoggerService.shared.debugLog("Profile Edit 성공: \(dto)")
