@@ -63,10 +63,11 @@ final class ProfileEditReactor: Reactor {
             let nickname = currentState.nickname
             let team = currentState.team
             let style = currentState.cheerStyle
-            guard let imageData = ProfileImageHelper.convertImageToBase64String(image: currentState.profileImage) else {
-                return Observable.just(Mutation.setError(.showToastMessage(message: "프로필 변경에 실패했습니다. 다시 시도해주세요.")))
-            }
-            return profileEditUseCase.editProfile(nickname: nickname, team: team, style: style, image: imageData)
+            let image = currentState.profileImage
+//            guard let imageData = ProfileImageHelper.convertImageToBase64String(image: currentState.profileImage) else {
+//                return Observable.just(Mutation.setError(.showToastMessage(message: "프로필 변경에 실패했습니다. 다시 시도해주세요.")))
+//            }
+            return profileEditUseCase.editProfile(nickname: nickname, team: team, style: style, image: image)
                 .map ({ state in
                     if state {
                         return Mutation.setEditProfileSuccess(state)

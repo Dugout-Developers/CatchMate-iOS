@@ -28,18 +28,21 @@ final class ProfileImageHelper {
         }
     }
 
-    private static func processString(_ string: String) -> String? {
-        if isBase64Encoded(string),
-           let data = Data(base64Encoded: string),
-           let decodedString = String(data: data, encoding: .utf8) {
-            // Base64 디코딩 성공
-            return decodedString
+    static func processString(_ string: String) -> String? {
+        if isBase64Encoded(string) {
+            if let data = Data(base64Encoded: string, options: .ignoreUnknownCharacters),
+                let decodedString = String(data: data, encoding: .utf8) {
+                    // Base64 디코딩 성공
+                    return decodedString
+            } else {
+                return nil
+            }
         }
         // Base64가 아니면 원본 반환
         return string
     }
 
-    private static func isBase64Encoded(_ string: String) -> Bool {
+    static func isBase64Encoded(_ string: String) -> Bool {
         // Base64 문자열인지 확인 (알파벳, 숫자, +, /, = 조합)
         let base64Regex = #"^[A-Za-z0-9+/=]+\Z"#
         return string.range(of: base64Regex, options: .regularExpression) != nil

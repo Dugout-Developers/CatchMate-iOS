@@ -9,5 +9,5 @@ import UIKit
 import RxSwift
 
 protocol ProfileEditRepository {
-    func editProfile(nickname: String, team: Team, style: CheerStyles?, image: String?) -> Observable<Bool>
+    func editProfile(nickname: String, team: Team, style: CheerStyles?, image: UIImage?) -> Observable<Bool>
 }

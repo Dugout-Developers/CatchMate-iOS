@@ -206,6 +206,8 @@
 		537598062C46C0B0003BD8AE /* ApplyPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537598052C46C0B0003BD8AE /* ApplyPopupViewController.swift */; };
 		537598082C46C3D2003BD8AE /* DefaultsTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537598072C46C3D2003BD8AE /* DefaultsTextView.swift */; };
 		5375980C2C46DC45003BD8AE /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375980B2C46DC45003BD8AE /* ChatRoomViewController.swift */; };
+		5375B1472D1AEECE000581B3 /* ProfileImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B28F62C75BC2800BFE9F6 /* ProfileImageHelper.swift */; };
+		5375B1492D1AEEEE000581B3 /* ImageStringDecodingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B1482D1AEED7000581B3 /* ImageStringDecodingTest.swift */; };
 		5378EA9B2C6487A600A2422C /* ReceiveMateListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5378EA9A2C6487A600A2422C /* ReceiveMateListCell.swift */; };
 		5378EA9D2C649B6900A2422C /* ReceiveMateListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5378EA9C2C649B6900A2422C /* ReceiveMateListViewController.swift */; };
 		5378EA9F2C649BBE00A2422C /* RecevieMateReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5378EA9E2C649BBE00A2422C /* RecevieMateReactor.swift */; };
@@ -528,6 +530,7 @@
 		537598052C46C0B0003BD8AE /* ApplyPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyPopupViewController.swift; sourceTree = "<group>"; };
 		537598072C46C3D2003BD8AE /* DefaultsTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsTextView.swift; sourceTree = "<group>"; };
 		5375980B2C46DC45003BD8AE /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
+		5375B1482D1AEED7000581B3 /* ImageStringDecodingTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStringDecodingTest.swift; sourceTree = "<group>"; };
 		5378EA9A2C6487A600A2422C /* ReceiveMateListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMateListCell.swift; sourceTree = "<group>"; };
 		5378EA9C2C649B6900A2422C /* ReceiveMateListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMateListViewController.swift; sourceTree = "<group>"; };
 		5378EA9E2C649BBE00A2422C /* RecevieMateReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecevieMateReactor.swift; sourceTree = "<group>"; };
@@ -988,6 +991,7 @@
 		536BDDC32C189B240043B1DA /* CatchMateTests */ = {
 			isa = PBXGroup;
 			children = (
+				5375B1482D1AEED7000581B3 /* ImageStringDecodingTest.swift */,
 				53E7DBAF2CAB0E8C00DC058D /* RepositoryTest */,
 				53E7DBB02CAB0EA400DC058D /* DataSourceTest */,
 				53E7DBAB2CA5EEC900DC058D /* MockTokenDataSource.swift */,
@@ -1941,6 +1945,7 @@
 				53EECB112D14F06300775FD6 /* SetNotificationResponseDTO.swift in Sources */,
 				533B873E2C86E6790058B94B /* ApplyListResponse.swift in Sources */,
 				53ACBA302C80B68E004FAF00 /* ListLoadDataSourceTest.swift in Sources */,
+				5375B1492D1AEEEE000581B3 /* ImageStringDecodingTest.swift in Sources */,
 				53ACBA3E2C84AA3D004FAF00 /* SetFavoriteDataSourceTest.swift in Sources */,
 				533B294A2C771F6300BFE9F6 /* Error+Extension.swift in Sources */,
 				533B293D2C771EEA00BFE9F6 /* DataError.swift in Sources */,
@@ -1950,6 +1955,7 @@
 				533B292E2C771C7D00BFE9F6 /* SetFavoriteRepositoryImpl.swift in Sources */,
 				533B873D2C86E5C80058B94B /* RecivedAppiesDataSource.swift in Sources */,
 				533B293C2C771ED500BFE9F6 /* PresentationError.swift in Sources */,
+				5375B1472D1AEECE000581B3 /* ProfileImageHelper.swift in Sources */,
 				533B292F2C771C8600BFE9F6 /* SetFavoriteRepository.swift in Sources */,
 				533B87402C86ED190058B94B /* ServerLoginDataSource.swift in Sources */,
 				533B29412C771F0A00BFE9F6 /* RequestPost.swift in Sources */,
