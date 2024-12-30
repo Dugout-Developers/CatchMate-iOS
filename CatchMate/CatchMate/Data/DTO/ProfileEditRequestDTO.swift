@@ -4,10 +4,11 @@
 //
 //  Created by 방유빈 on 12/12/24.
 //
+import UIKit
 
-struct ProfileEditRequestDTO: Codable {
+struct ProfileEditRequestDTO {
     let request: Request
-    let profileImage: String
+    let profileImage: UIImage
     
     struct Request: Codable {
         let nickName: String

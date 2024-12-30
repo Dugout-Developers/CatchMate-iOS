@@ -5,6 +5,8 @@
 //  Created by 방유빈 on 8/2/24.
 //
 
+import UIKit
+
 final class UserMapper {
     func userToDomain(_ dto: UserDTO) -> User {
         let team = Team(rawValue: dto.favoriteGudan) ?? .allTeamLove
@@ -13,6 +15,7 @@ final class UserMapper {
     }
     
     func profileEditRequestDomainToDTO(domain: ProfileEdit) -> ProfileEditRequestDTO {
-        return ProfileEditRequestDTO(request: ProfileEditRequestDTO.Request(nickName: domain.nickName, favGudan: domain.team.rawValue, watchStyle: domain.style != nil ? domain.style!.rawValue : ""), profileImage: domain.imageDataStr ?? "")
+        print("------------Mapping: \(domain.image)")
+        return ProfileEditRequestDTO(request: ProfileEditRequestDTO.Request(nickName: domain.nickName, favGudan: domain.team.rawValue, watchStyle: domain.style != nil ? domain.style!.rawValue : ""), profileImage: domain.image ?? UIImage(named: "tempProfile")!)
     }
 }

@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 
 protocol ProfileEditUseCase {
-    func editProfile(nickname: String, team: Team, style: CheerStyles?, image: String?) -> Observable<Bool>
+    func editProfile(nickname: String, team: Team, style: CheerStyles?, image: UIImage?) -> Observable<Bool>
 }
 
 final class ProfileEditUseCaseImpl: ProfileEditUseCase {
@@ -19,7 +19,7 @@ final class ProfileEditUseCaseImpl: ProfileEditUseCase {
         self.repository = repository
     }
     
-    func editProfile(nickname: String, team: Team, style: CheerStyles?, image: String?) -> Observable<Bool> {
+    func editProfile(nickname: String, team: Team, style: CheerStyles?, image: UIImage?) -> Observable<Bool> {
         return repository.editProfile(nickname: nickname, team: team, style: style, image: image)
     }
 }

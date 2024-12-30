@@ -15,9 +15,9 @@ final class ProfileEditRepositoryImpl: ProfileEditRepository {
         self.profileEditDS = profileEditDS
     }
     
-    func editProfile(nickname: String, team: Team, style: CheerStyles?, image: String?) -> RxSwift.Observable<Bool> {
+    func editProfile(nickname: String, team: Team, style: CheerStyles?, image: UIImage?) -> RxSwift.Observable<Bool> {
         
-        let requestModel = ProfileEdit(nickName: nickname, team: team, style: style, imageDataStr: image)
+        let requestModel = ProfileEdit(nickName: nickname, team: team, style: style, image: image)
         let dto = UserMapper().profileEditRequestDomainToDTO(domain: requestModel)
         return profileEditDS.editProfile(editModel: dto)
             .map { dto -> Bool in
