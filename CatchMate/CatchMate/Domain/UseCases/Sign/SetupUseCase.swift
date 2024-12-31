@@ -31,7 +31,8 @@ final class SetupUseCaseImpl: SetupUseCase {
             return SetupResult(user: user, favoriteList: ids)
         }
         .catch { error in
-            return Observable.error(DomainError(error: error, context: .tokenUnavailable).toPresentationError())
+            // MARK: - 임시 에러수정 -> 서버 옮기기 후 토큰 에러로 되돌리기
+            return Observable.error(DomainError(error: error, context: .pageLoad).toPresentationError())
         }
     }
 }

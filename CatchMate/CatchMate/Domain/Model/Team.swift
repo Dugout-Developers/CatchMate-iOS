@@ -51,6 +51,66 @@ enum Team: String, CaseIterable, Codable {
             return nil
         }
     }
+    
+    init?(serverId: Int) {
+        switch serverId {
+        case 1:
+            self = .kia
+        case 2:
+            self = .samsung
+        case 3:
+            self = .lg
+        case 4:
+            self = .dosun
+        case 5:
+            self = .kt
+        case 6:
+            self = .ssg
+        case 7:
+            self = .lotte
+        case 8:
+            self = .hanhwa
+        case 9:
+            self = .nc
+        case 10:
+            self = .kiwoom
+        case 11:
+            self = .allTeamLove
+        case 12:
+            self = .yarine
+        default:
+            return nil
+        }
+    }
+    
+    var serverId: Int {
+        switch self {
+        case .nc:
+            return 9
+        case .samsung:
+            return 2
+        case .ssg:
+            return 6
+        case .dosun:
+            return 4
+        case .kt:
+            return 5
+        case .hanhwa:
+            return 8
+        case .lotte:
+            return 7
+        case .kia:
+            return 1
+        case .lg:
+            return 3
+        case .kiwoom:
+            return 10
+        case .allTeamLove:
+            return 11
+        case .yarine:
+            return 12
+        }
+    }
     var fullName: String {
         switch self {
         case .nc:
