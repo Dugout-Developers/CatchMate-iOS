@@ -10,7 +10,7 @@ import RxSwift
 
 /// 신청 취소
 protocol CancelApplyUseCase {
-    func excute(enrollId: String) -> Observable<Void>
+    func execute(enrollId: String) -> Observable<Void>
 }
 final class CancelApplyUseCaseImpl: CancelApplyUseCase {
     private let applyRepository: ApplyRepository
@@ -18,7 +18,10 @@ final class CancelApplyUseCaseImpl: CancelApplyUseCase {
         self.applyRepository = applyRepository
     }
     
-    func excute(enrollId: String) -> Observable<Void> {
+    func execute(enrollId: String) -> Observable<Void> {
         return applyRepository.cancelApplyPost(enrollId: enrollId)
+            .catch { error in
+                return Observable.error(DomainError(error: error, context: .action, message: "요청에 실패했습니다.").toPresentationError())
+            }
     }
 }

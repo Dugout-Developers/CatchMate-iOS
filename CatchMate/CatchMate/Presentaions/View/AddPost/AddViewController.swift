@@ -425,6 +425,13 @@ extension AddViewController {
             }
             .disposed(by: disposeBag)
 
+        reactor.state.map{$0.error}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, error in
+                vc.handleError(error)
+            }
+            .disposed(by: disposeBag)
     }
     
     // 작성 완료 후 호출되는 메소드

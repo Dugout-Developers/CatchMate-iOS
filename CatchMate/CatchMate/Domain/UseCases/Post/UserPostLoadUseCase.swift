@@ -20,6 +20,9 @@ final class UserPostLoadUseCaseImpl: UserPostLoadUseCase {
     }
     func loadPostList(userId: Int, page: Int) -> Observable<[SimplePost]>{
         return userPostListRepository.loadPostList(userId: userId, page: page)
+            .catch { error in
+                return Observable.error(DomainError(error: error, context: .pageLoad).toPresentationError())
+            }
     }
     
 }

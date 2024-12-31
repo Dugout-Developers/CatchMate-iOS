@@ -8,7 +8,7 @@
 import Foundation
 
 // Token KeyChain 관련 Error
-enum TokenError: Error {
+enum TokenError: LocalizedError {
     case notFoundAccessToken
     case notFoundRefreshToken
     case failureSaveToken
@@ -42,7 +42,7 @@ enum TokenError: Error {
 }
 
 // 네트워크 에러
-enum NetworkError: Error {
+enum NetworkError: LocalizedError {
     case notFoundBaseURL
     case disconnected
     case slowConnection
@@ -100,7 +100,7 @@ enum NetworkError: Error {
 }
 
 // 매핑 에러
-enum MappingError: Error {
+enum MappingError: LocalizedError {
     ///DomainModel -> DTO
     case mappingFailed
     ///DTO -> DomainModel
@@ -125,7 +125,7 @@ enum MappingError: Error {
 }
 
 // 디코딩 에러
-enum CodableError: Error {
+enum CodableError: LocalizedError {
     case decodingFailed
     case encodingFailed
     case missingFields
@@ -153,10 +153,10 @@ enum CodableError: Error {
 }
 
 // SNS Login 관련 Error
-enum SNSLoginError: Error {
+enum SNSLoginError: LocalizedError {
     case authorizationFailed
     case EmptyValue
-    case loginServerError(code: Int, description: String)
+    case loginServerError(description: String)
 
 
     var statusCode: Int {
@@ -165,8 +165,8 @@ enum SNSLoginError: Error {
             return -5001
         case .EmptyValue:
             return -5002
-        case .loginServerError(let code, _):
-            return code
+        case .loginServerError:
+            return -5000
         }
     }
     
@@ -176,13 +176,13 @@ enum SNSLoginError: Error {
             return "권한 부여 실패 - 토큰 없음"
         case .EmptyValue:
             return "빈 응답값 전달"
-        case .loginServerError(_, let message):
+        case .loginServerError(let message):
             return "서버 에러: \(message)"
         }
     }
 }
 
-enum OtherError: Error {
+enum OtherError: LocalizedError {
     case invalidURL
     case notFoundSelf
     
@@ -200,7 +200,7 @@ enum OtherError: Error {
         case .invalidURL:
             return "URL 형식이 잘못되었습니다."
         case .notFoundSelf:
-            return "self 참조 "
+            return "self 참조 실패"
         }
     }
 }

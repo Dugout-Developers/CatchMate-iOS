@@ -10,7 +10,6 @@ import RxSwift
 
 protocol DeletePostUseCase {
     func deletePost(postId: Int) -> Observable<Void>
-    // 게시글 수정 필요
 }
 
 final class DeletePostUseCaseImpl: DeletePostUseCase {
@@ -21,5 +20,8 @@ final class DeletePostUseCaseImpl: DeletePostUseCase {
     
     func deletePost(postId: Int) -> RxSwift.Observable<Void> {
         return deleteRepository.deletePost(postId: postId)
+            .catch { error in
+                return Observable.error(DomainError(error: error, context: .action, message: "게시물 삭제에 실패했습니다.").toPresentationError())
+            }
     }
 }

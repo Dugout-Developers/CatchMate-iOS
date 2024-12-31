@@ -18,13 +18,13 @@ final class MyPageReactor: Reactor {
         case setLoading(Bool)
         case setUser(User)
         case setCount(Int)
-        case setError(Error?)
+        case setError(PresentationError?)
         case logout(Bool)
     }
     struct State {
         var isLoading: Bool = false
         var user: User?
-        var error: Error?
+        var error: PresentationError?
         var count: Int = 0
         var logoutResult: Bool = false
     }
@@ -51,16 +51,16 @@ final class MyPageReactor: Reactor {
                 Observable.just(Mutation.setLoading(true)),
                 userUseCase.execute()
                     .map { Mutation.setUser($0) }
-                    .catch { .just(Mutation.setError($0)) },
+                    .catch { return Observable.just(Mutation.setError($0.toPresentationError())) },
                 loadReceivedCountUsecase.execute()
                     .map{ Mutation.setCount($0) }
-                    .catch { .just(Mutation.setError($0)) },
+                    .catch { return Observable.just(Mutation.setError($0.toPresentationError())) },
                 Observable.just(Mutation.setLoading(false))
             ])
         case .logout:
             return logoutUseCase.logout()
                 .map { Mutation.logout($0) }
-                .catch { .just(Mutation.setError($0))}
+                .catch { return Observable.just(Mutation.setError($0.toPresentationError())) }
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {

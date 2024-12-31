@@ -13,14 +13,16 @@ protocol SignUpUseCase {
 }
 
 final class SignUpUseCaseImpl: SignUpUseCase {
-    func execute(_ model: LoginModel, signupInfo: SignUpModel) -> RxSwift.Observable<SignUpResponse> {
-        return repository.requestSignup(model, signupInfo: signupInfo)
-    }
-    
     private let repository: SignUpRepository
     
     init(repository: SignUpRepository) {
         self.repository = repository
     }
-
+    
+    func execute(_ model: LoginModel, signupInfo: SignUpModel) -> RxSwift.Observable<SignUpResponse> {
+        return repository.requestSignup(model, signupInfo: signupInfo)
+            .catch { error in
+                return Observable.error(DomainError(error: error, context: .action, message: "회원가입에 실패했습니다.").toPresentationError())
+            }
+    }
 }

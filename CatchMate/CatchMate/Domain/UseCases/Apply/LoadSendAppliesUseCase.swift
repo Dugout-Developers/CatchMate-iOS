@@ -20,5 +20,8 @@ final class LoadSendAppliesUseCaseImpl: LoadSendAppliesUseCase {
     }
     func execute() -> RxSwift.Observable<[ApplyList]> {
         return sendAppliesRepository.loadSendApplies()
+            .catch { error in
+                return Observable.error(DomainError(error: error, context: .pageLoad).toPresentationError())
+            }
     }
 }

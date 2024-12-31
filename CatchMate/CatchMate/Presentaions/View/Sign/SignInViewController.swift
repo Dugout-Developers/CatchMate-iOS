@@ -108,14 +108,12 @@ extension SignInViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        reactor.state
-            .map { $0.errorMessage }
-            .distinctUntilChanged()
-            .compactMap { $0 }
-            .subscribe(onNext: { errorMessage in
-                print("로그인 실패: \(errorMessage)")
-                // 에러 메시지 표시
-            })
+        reactor.state.map{$0.error}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, error in
+                vc.handleError(error)
+            }
             .disposed(by: disposeBag)
         
         appleLoginButton.rx.tap

@@ -10,7 +10,7 @@ import RxSwift
 
 /// 신청하기
 protocol ApplyUseCase {
-    func excute(postId: String, addText: String?) -> Observable<Int>
+    func execute(postId: String, addText: String?) -> Observable<Int>
 }
 final class ApplyUseCaseImpl: ApplyUseCase {
     private let applyRepository: ApplyRepository
@@ -18,8 +18,11 @@ final class ApplyUseCaseImpl: ApplyUseCase {
         self.applyRepository = applyRepository
     }
     
-    func excute(postId: String, addText: String?) -> Observable<Int> {
+    func execute(postId: String, addText: String?) -> Observable<Int> {
         return applyRepository.applyPost(postId, addInfo: addText ?? "")
+            .catch { error in
+                return Observable.error(DomainError(error: error, context: .action, message: "요청에 실패했습니다.").toPresentationError())
+            }
     }
 }
 

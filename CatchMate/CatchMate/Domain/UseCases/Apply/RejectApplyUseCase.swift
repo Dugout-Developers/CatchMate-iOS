@@ -22,5 +22,8 @@ final class RejectApplyUseCaseImpl: RejectApplyUseCase {
     
     func execute(enrollId: String) -> Observable<Bool> {
         return applyManagementRepository.rejectApply(enrollId: enrollId)
+            .catch { error in
+                return Observable.error(DomainError(error: error, context: .action, message: "요청에 실패했습니다.").toPresentationError())
+            }
     }
 }

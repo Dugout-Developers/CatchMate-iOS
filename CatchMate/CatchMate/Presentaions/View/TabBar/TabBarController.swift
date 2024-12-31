@@ -41,7 +41,8 @@ final class TabBarController: UITabBarController, UITabBarControllerDelegate {
     private func settupTabbar() {
         let homeViewController = UINavigationController(rootViewController: HomeViewController(reactor: DIContainerService.shared.makeHomeReactor()))
         let favoriteViewController = isNonMember ? UINavigationController(rootViewController: NonMembersAccessViewController(title: "찜 목록")) : UINavigationController(rootViewController: FavoriteListViewController(reactor: DIContainerService.shared.makeFavoriteReactor()))
-        let addViewController = UINavigationController(rootViewController: BaseViewController()) // 네비게이션으로 연결할거기에 탭에는 빈 뷰컨트롤러 연결
+    
+        let addViewController = UINavigationController(rootViewController: UIViewController()) // 네비게이션으로 연결할거기에 탭에는 빈 뷰컨트롤러 연결
         let chatViewController = isNonMember ? UINavigationController(rootViewController: NonMembersAccessViewController(title: "채팅 목록")) : UINavigationController(rootViewController: ChatListViewController())
         let mypageViewController = isNonMember ? UINavigationController(rootViewController: EmptyMyPageViewController()) : UINavigationController(rootViewController: MyPageViewController(reactor: DIContainerService.shared.makeMypageReactor()))
         

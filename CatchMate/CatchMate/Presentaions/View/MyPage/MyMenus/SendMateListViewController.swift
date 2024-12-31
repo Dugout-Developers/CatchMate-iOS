@@ -79,5 +79,13 @@ extension SendMateListViewController {
                 vc.navigationController?.pushViewController(postDetailVC, animated: true)
             })
             .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.error}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, error in
+                vc.handleError(error)
+            }
+            .disposed(by: disposeBag)
     }
 }

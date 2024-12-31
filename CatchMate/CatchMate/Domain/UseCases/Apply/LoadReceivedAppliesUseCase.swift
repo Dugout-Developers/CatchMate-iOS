@@ -22,5 +22,8 @@ final class LoadReceivedAppliesUseCaseImpl: LoadReceivedAppliesUseCase {
     
     func execute(boardId: Int) -> RxSwift.Observable<[RecivedApplyData]> {
         return receivedAppliesRepository.loadRecivedApplies(boardId: boardId)
+            .catch { error in
+                return Observable.error(DomainError(error: error, context: .action, message: "요청에 실패했습니다.").toPresentationError())
+            }
     }
 }

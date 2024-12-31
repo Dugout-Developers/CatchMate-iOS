@@ -206,8 +206,11 @@
 		537598062C46C0B0003BD8AE /* ApplyPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537598052C46C0B0003BD8AE /* ApplyPopupViewController.swift */; };
 		537598082C46C3D2003BD8AE /* DefaultsTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537598072C46C3D2003BD8AE /* DefaultsTextView.swift */; };
 		5375980C2C46DC45003BD8AE /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375980B2C46DC45003BD8AE /* ChatRoomViewController.swift */; };
+		5375B13D2D1A85F6000581B3 /* DomainError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B13C2D1A85EA000581B3 /* DomainError.swift */; };
+		5375B13E2D1A85F6000581B3 /* DomainError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B13C2D1A85EA000581B3 /* DomainError.swift */; };
 		5375B1472D1AEECE000581B3 /* ProfileImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B28F62C75BC2800BFE9F6 /* ProfileImageHelper.swift */; };
 		5375B1492D1AEEEE000581B3 /* ImageStringDecodingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B1482D1AEED7000581B3 /* ImageStringDecodingTest.swift */; };
+		5375B1572D228F25000581B3 /* BaseReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B1562D228F1F000581B3 /* BaseReactor.swift */; };
 		5378EA9B2C6487A600A2422C /* ReceiveMateListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5378EA9A2C6487A600A2422C /* ReceiveMateListCell.swift */; };
 		5378EA9D2C649B6900A2422C /* ReceiveMateListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5378EA9C2C649B6900A2422C /* ReceiveMateListViewController.swift */; };
 		5378EA9F2C649BBE00A2422C /* RecevieMateReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5378EA9E2C649BBE00A2422C /* RecevieMateReactor.swift */; };
@@ -337,7 +340,7 @@
 		53EECB012D1150C100775FD6 /* ApplyManageUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECB002D1150A700775FD6 /* ApplyManageUseCase.swift */; };
 		53EECB032D1151EE00775FD6 /* LoadAllReceiveAppliesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECB022D1151CA00775FD6 /* LoadAllReceiveAppliesUseCase.swift */; };
 		53EECB052D11B07600775FD6 /* LoadReceivedCountUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECB042D11B05A00775FD6 /* LoadReceivedCountUseCase.swift */; };
-		53EECB092D13E4B000775FD6 /* LoadNotificationIfoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECB082D13E4A400775FD6 /* LoadNotificationIfoUseCase.swift */; };
+		53EECB092D13E4B000775FD6 /* LoadNotificationInfoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECB082D13E4A400775FD6 /* LoadNotificationInfoUseCase.swift */; };
 		53EECB0B2D13E4CF00775FD6 /* NotificationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECB0A2D13E4CB00775FD6 /* NotificationInfo.swift */; };
 		53EECB0C2D13E4CF00775FD6 /* NotificationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECB0A2D13E4CB00775FD6 /* NotificationInfo.swift */; };
 		53EECB0F2D14F00D00775FD6 /* SetNotificationDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECB0E2D14F00100775FD6 /* SetNotificationDataSource.swift */; };
@@ -530,7 +533,9 @@
 		537598052C46C0B0003BD8AE /* ApplyPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyPopupViewController.swift; sourceTree = "<group>"; };
 		537598072C46C3D2003BD8AE /* DefaultsTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsTextView.swift; sourceTree = "<group>"; };
 		5375980B2C46DC45003BD8AE /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
+		5375B13C2D1A85EA000581B3 /* DomainError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainError.swift; sourceTree = "<group>"; };
 		5375B1482D1AEED7000581B3 /* ImageStringDecodingTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStringDecodingTest.swift; sourceTree = "<group>"; };
+		5375B1562D228F1F000581B3 /* BaseReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseReactor.swift; sourceTree = "<group>"; };
 		5378EA9A2C6487A600A2422C /* ReceiveMateListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMateListCell.swift; sourceTree = "<group>"; };
 		5378EA9C2C649B6900A2422C /* ReceiveMateListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMateListViewController.swift; sourceTree = "<group>"; };
 		5378EA9E2C649BBE00A2422C /* RecevieMateReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecevieMateReactor.swift; sourceTree = "<group>"; };
@@ -642,7 +647,7 @@
 		53EECB002D1150A700775FD6 /* ApplyManageUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyManageUseCase.swift; sourceTree = "<group>"; };
 		53EECB022D1151CA00775FD6 /* LoadAllReceiveAppliesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadAllReceiveAppliesUseCase.swift; sourceTree = "<group>"; };
 		53EECB042D11B05A00775FD6 /* LoadReceivedCountUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadReceivedCountUseCase.swift; sourceTree = "<group>"; };
-		53EECB082D13E4A400775FD6 /* LoadNotificationIfoUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadNotificationIfoUseCase.swift; sourceTree = "<group>"; };
+		53EECB082D13E4A400775FD6 /* LoadNotificationInfoUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadNotificationInfoUseCase.swift; sourceTree = "<group>"; };
 		53EECB0A2D13E4CB00775FD6 /* NotificationInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationInfo.swift; sourceTree = "<group>"; };
 		53EECB0E2D14F00100775FD6 /* SetNotificationDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNotificationDataSource.swift; sourceTree = "<group>"; };
 		53EECB102D14F04B00775FD6 /* SetNotificationResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNotificationResponseDTO.swift; sourceTree = "<group>"; };
@@ -776,6 +781,7 @@
 		531786692C200D4700ACEF6A /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				5375B1562D228F1F000581B3 /* BaseReactor.swift */,
 				53241F3B2C3C517600F468E1 /* GridSystem.swift */,
 				531786522C1C8BFB00ACEF6A /* BaseViewController.swift */,
 				5317866A2C200D6000ACEF6A /* BasePickerViewController.swift */,
@@ -1124,6 +1130,7 @@
 		536BDDED2C1972120043B1DA /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				5375B13C2D1A85EA000581B3 /* DomainError.swift */,
 				53EECB0A2D13E4CB00775FD6 /* NotificationInfo.swift */,
 				53EECAEF2D0B30A900775FD6 /* ProfileEdit.swift */,
 				53B8E2682C613127001D0ADF /* PresentationError.swift */,
@@ -1425,7 +1432,7 @@
 		53B8E23F2C5C7BF3001D0ADF /* User */ = {
 			isa = PBXGroup;
 			children = (
-				53EECB082D13E4A400775FD6 /* LoadNotificationIfoUseCase.swift */,
+				53EECB082D13E4A400775FD6 /* LoadNotificationInfoUseCase.swift */,
 				53EECAE52D0B2E7C00775FD6 /* ProfileEditUseCase.swift */,
 				5301E2B52C5BE6AF0078E910 /* LogoutUseCase.swift */,
 				53B8E23D2C5C7BEB001D0ADF /* LoadMyInfoUseCase.swift */,
@@ -1876,6 +1883,8 @@
 				53E5925C2C6D05DD0042E1D7 /* PostDetailUseCase.swift in Sources */,
 				53EECAE62D0B2E8300775FD6 /* ProfileEditUseCase.swift in Sources */,
 				531E4C252C6B549B0052E754 /* PostListLoadDataSource.swift in Sources */,
+				5375B1572D228F25000581B3 /* BaseReactor.swift in Sources */,
+				5375B13E2D1A85F6000581B3 /* DomainError.swift in Sources */,
 				538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */,
 				530DD6122C4F839600A7D6CE /* ServerLoginDataSource.swift in Sources */,
 				5317867D2C216CBE00ACEF6A /* NumberPickerViewController.swift in Sources */,
@@ -1917,7 +1926,7 @@
 				53B8E25D2C612245001D0ADF /* AddPostRepository.swift in Sources */,
 				53B3CE452C88AE1C00116BF7 /* ApplyList.swift in Sources */,
 				533B29232C7709C100BFE9F6 /* LoadFavoriteListRepository.swift in Sources */,
-				53EECB092D13E4B000775FD6 /* LoadNotificationIfoUseCase.swift in Sources */,
+				53EECB092D13E4B000775FD6 /* LoadNotificationInfoUseCase.swift in Sources */,
 				53ACBA272C7EB493004FAF00 /* UserInfoDTO.swift in Sources */,
 				53EECAF32D0BD17300775FD6 /* ProfileEditRepositoryImpl.swift in Sources */,
 				53ACBA5A2C85B7E6004FAF00 /* ApplyRepository.swift in Sources */,
@@ -1962,6 +1971,7 @@
 				53B3CE3F2C88577500116BF7 /* SNSLoginResponse.swift in Sources */,
 				53E7DBA42CA5664200DC058D /* DeletePostDataSource.swift in Sources */,
 				536BDDC52C189B240043B1DA /* CatchMateTests.swift in Sources */,
+				5375B13D2D1A85F6000581B3 /* DomainError.swift in Sources */,
 				53ACBA312C80B6C0004FAF00 /* PostListLoadDataSource.swift in Sources */,
 				533B29482C771F5E00BFE9F6 /* UIColor+Extension.swift in Sources */,
 				533B873B2C86E5970058B94B /* ApplyListDataSoueceTest.swift in Sources */,

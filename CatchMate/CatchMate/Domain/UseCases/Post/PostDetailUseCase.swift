@@ -52,6 +52,9 @@ final class PostDetailUseCaseImpl: PostDetailUseCase {
                             }
                     }
             }
+            .catch { error in
+                return Observable.error(DomainError(error: error, context: .pageLoad).toPresentationError())
+            }
     }
 
     
@@ -65,6 +68,9 @@ final class PostDetailUseCaseImpl: PostDetailUseCase {
                 } else {
                     return Observable.just(nil)
                 }
+            }
+            .catch { error in
+                return Observable.error(DomainError(error: error, context: .pageLoad).toPresentationError())
             }
     }
 }

@@ -30,6 +30,9 @@ final class NaverLoginUseCaseImpl: NaverLoginUseCase {
             let (snsModel, token) = arg1
             return usecase.serverRepository.login(snsModel: snsModel, token: token)
         }
+        .catch { error in
+            return Observable.error(DomainError(error: error, context: .action, message: "로그인에 실패했습니다.").toPresentationError())
+        }
     }
 }
 
