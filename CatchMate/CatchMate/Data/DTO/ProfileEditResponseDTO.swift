@@ -6,6 +6,5 @@
 //
 
 struct ProfileEditResponseDTO: Codable {
-    let userId: Int
-    let createdAt: String
+    let state: Bool
 }

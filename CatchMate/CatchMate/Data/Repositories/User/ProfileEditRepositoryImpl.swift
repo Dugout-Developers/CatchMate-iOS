@@ -21,7 +21,7 @@ final class ProfileEditRepositoryImpl: ProfileEditRepository {
         let dto = UserMapper().profileEditRequestDomainToDTO(domain: requestModel)
         return profileEditDS.editProfile(editModel: dto)
             .map { dto -> Bool in
-                return true
+                return dto.state
             }
             .catch { error in
                 return Observable.error(ErrorMapper.mapToPresentationError(error))
