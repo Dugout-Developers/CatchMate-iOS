@@ -61,11 +61,7 @@ final class RecevieMateReactor: Reactor {
                         return Mutation.setSelectedPostApplies(result)
                     }
                     .catch { error in
-                        if let presentationError = error as? PresentationError {
-                            return Observable.just(Mutation.setError(presentationError))
-                        } else {
-                            return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
-                        }
+                        return Observable.just(Mutation.setError(error.toPresentationError()))
                     }
                 return Observable.concat([
                     Observable.just(Mutation.setReceiveAppliesAll(list)),
@@ -84,11 +80,7 @@ final class RecevieMateReactor: Reactor {
                     }
                 }
                 .catch { error in
-                    if let presentationError = error as? PresentationError {
-                        return Observable.just(Mutation.setError(presentationError))
-                    } else {
-                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
-                    }
+                    return Observable.just(Mutation.setError(error.toPresentationError()))
                 }
         case .rejectApply(let enrollId):
             return applyManageUsecase.execute(type: .reject, enrollId: enrollId)
@@ -100,11 +92,7 @@ final class RecevieMateReactor: Reactor {
                     }
                 }
                 .catch { error in
-                    if let presentationError = error as? PresentationError {
-                        return Observable.just(Mutation.setError(presentationError))
-                    } else {
-                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
-                    }
+                    return Observable.just(Mutation.setError(error.toPresentationError()))
                 }
         }
     }

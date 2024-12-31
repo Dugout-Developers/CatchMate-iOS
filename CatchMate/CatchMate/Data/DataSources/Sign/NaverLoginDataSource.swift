@@ -132,7 +132,7 @@ final class NaverLoginDataSourceImpl: NSObject, NaverLoginDataSource, NaverThird
         print("Error: \(error.localizedDescription)")
         LoggerService.shared.log("NAVER API ERROR - \(error.localizedDescription)", level: .error)
         if let observer = naverLoginSubject {
-            observer.onError(SNSLoginError.loginServerError(code: error.statusCode, description: error.localizedDescription))
+            observer.onError(SNSLoginError.loginServerError(description: error.localizedDescription))
         }
     }
     

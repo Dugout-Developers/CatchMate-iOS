@@ -21,5 +21,8 @@ final class SetFavoriteUseCaseImpl: SetFavoriteUseCase {
     
     func execute(_ state: Bool, _ boardId: String) -> Observable<Bool> {
         return setFavoriteRepository.setFavorite(state, boardId)
+            .catch { error in
+                return Observable.error(DomainError(error: error, context: .action, message: "요청에 실패했습니다.").toPresentationError())
+            }
     }
 }

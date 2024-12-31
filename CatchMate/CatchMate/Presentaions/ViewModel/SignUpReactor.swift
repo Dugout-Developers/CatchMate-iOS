@@ -42,11 +42,7 @@ final class SignUpReactor: Reactor {
                     return Mutation.setSignUpResponse(response)
                 }
                 .catch { error in
-                    if let presentaionError = error as? PresentationError {
-                        return Observable.just(.setError(presentaionError))
-                    } else {
-                        return Observable.just(.setError(.showErrorPage))
-                    }
+                    return Observable.just(Mutation.setError(error.toPresentationError()))
                 }
         }
     }

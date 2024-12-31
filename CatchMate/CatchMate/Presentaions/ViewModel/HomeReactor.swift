@@ -86,9 +86,8 @@ final class HomeReactor: Reactor {
                 .flatMap({ reactor, _ in
                     return reactor.updateFiltersAndLoadPosts(date: nil, teams: nil, number: nil)
                 })
-                .catch { [weak self] error in
-                    guard let self = self else { return .empty()}
-                    return handlePresentationError(error)
+                .catch { error in
+                    return Observable.just(Mutation.setError(error.toPresentationError()))
                 }
             
         case .loadNextPage:
@@ -104,9 +103,8 @@ final class HomeReactor: Reactor {
                     }
                     return .empty()
                 }
-                .catch { [weak self] error in
-                    guard let self = self else { return .empty() }
-                    return self.handlePresentationError(error)
+                .catch { error in
+                    return Observable.just(Mutation.setError(error.toPresentationError()))
                 }
         case .refreshPage:
             return Observable.concat([
@@ -165,9 +163,8 @@ final class HomeReactor: Reactor {
             .map { list in
                 Mutation.loadPost(list, append: false)
             }
-            .catch { [weak self] error in
-                guard let self = self else { return .empty()}
-                return handlePresentationError(error)
+            .catch { error in
+                return Observable.just(Mutation.setError(error.toPresentationError()))
             }
         
         return Observable.concat([
@@ -177,14 +174,5 @@ final class HomeReactor: Reactor {
             loadList,
             Observable.just(Mutation.incrementPage)
         ])
-    }
-    
-    // Helper Method: 에러 처리
-    private func handlePresentationError(_ error: Error) -> Observable<Mutation> {
-        if let presentationError = error as? PresentationError {
-            return Observable.just(Mutation.setError(presentationError))
-        } else {
-            return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
-        }
     }
 }

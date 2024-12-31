@@ -20,5 +20,8 @@ final class NicknameCheckUseCaseImpl: NicknameCheckUseCase {
     
     func execute(_ nickname: String) -> Observable<Bool> {
         return nicknameRepository.checkNickName(nickname)
+            .catch { error in
+                return Observable.just(false)
+            }
     }
 }

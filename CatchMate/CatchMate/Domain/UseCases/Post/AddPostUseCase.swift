@@ -21,13 +21,17 @@ final class AddPostUseCaseImpl: AddPostUseCase {
     }
     
     func addPost(_ post: RequestPost) -> Observable<Int> {
-        print("useCase:\(post)")
         return addPostRepository.addPost(post)
+            .catch { error in
+                return Observable.error(DomainError(error: error, context: .action))
+            }
     }
     
     func editPost(_ post: RequestEditPost) -> Observable<Int> {
-        print("useCase:\(post)")
         return addPostRepository.editPost(post)
+            .catch { error in
+                return Observable.error(DomainError(error: error, context: .action, message: "요청에 실패했습니다.").toPresentationError())
+            }
     }
 }
 

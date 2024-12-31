@@ -194,6 +194,14 @@ extension HomeViewController {
                 vc.updateFilterContainerLayout()
             }
             .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.error}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, error in
+                vc.handleError(error)
+            }
+            .disposed(by: disposeBag)
     
     }
     private func updateFilterContainerLayout() {

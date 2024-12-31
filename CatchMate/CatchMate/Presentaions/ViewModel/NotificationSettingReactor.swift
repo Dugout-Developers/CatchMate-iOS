@@ -33,10 +33,10 @@ final class NotificationSettingReactor: Reactor {
     }
     
     var initialState: State
-    private let notificationInfoUsecase: LoadNotificationIfoUseCase
+    private let notificationInfoUsecase: LoadNotificationInfoUseCase
     private let setNotificationUsecase: SetNotificationUseCase
     
-    init(notificationInfoUsecase: LoadNotificationIfoUseCase, setNotificationUsecase: SetNotificationUseCase) {
+    init(notificationInfoUsecase: LoadNotificationInfoUseCase, setNotificationUsecase: SetNotificationUseCase) {
         self.initialState = State()
         self.notificationInfoUsecase = notificationInfoUsecase
         self.setNotificationUsecase = setNotificationUsecase
@@ -50,11 +50,7 @@ final class NotificationSettingReactor: Reactor {
                     return Mutation.setNotificationInfo(info)
                 }
                 .catch { error in
-                    if let presentationError = error as? PresentationError {
-                        return Observable.just(Mutation.setError(presentationError))
-                    } else {
-                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
-                    }
+                    return Observable.just(Mutation.setError(error.toPresentationError()))
                 }
         case .toggleSwitch((let type, let state)):
             print("\(type.rawValue) state changed to \(state)")

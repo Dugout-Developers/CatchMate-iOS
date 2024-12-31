@@ -21,5 +21,8 @@ final class SetNotificationUseCaseImpl: SetNotificationUseCase {
     
     func execute(type: NotificationType, state: Bool) -> Observable<Bool> {
         return setNotificationRepository.setNotificationRepository(type: type, state: state)
+            .catch { error in
+                return Observable.error(DomainError(error: error, context: .action, message: "요청에 실패했습니다.").toPresentationError())
+            }
     }
 }

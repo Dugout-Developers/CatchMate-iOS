@@ -86,11 +86,7 @@ final class PostReactor: Reactor {
                     return Observable.concat(mutations)
                 }
                 .catch { error in
-                    if let presentationError = error as? PresentationError {
-                        return Observable.just(Mutation.setError(presentationError))
-                    } else {
-                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
-                    }
+                    return Observable.just(Mutation.setError(error.toPresentationError()))
                 }
         case .changeApplyButtonState(let result):
             return Observable.just(Mutation.setApplyButtonState(result))
@@ -107,16 +103,12 @@ final class PostReactor: Reactor {
                     return Mutation.setError(PresentationError.showToastMessage(message: "찜하기 요청 실패. 다시 시도해주세요."))
                 }
                 .catch { error in
-                    if let presentationError = error as? PresentationError {
-                        return Observable.just(Mutation.setError(presentationError))
-                    } else {
-                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
-                    }
+                    return Observable.just(Mutation.setError(error.toPresentationError()))
                 }
         case .setError(let error):
             return Observable.just(Mutation.setError(error))
         case .apply(let text):
-            return applyUsecase.excute(postId: postId, addText: text)
+            return applyUsecase.execute(postId: postId, addText: text)
                 .flatMap { id in
                     if id > 0 {
                         return Observable.concat([
@@ -128,24 +120,16 @@ final class PostReactor: Reactor {
                     }
                 }
                 .catch { error in
-                    if let presentationError = error as? PresentationError {
-                        return Observable.just(Mutation.setError(presentationError))
-                    } else {
-                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
-                    }
+                    return Observable.just(Mutation.setError(error.toPresentationError()))
                 }
         case .cancelApply:
             if let enrollId = currentState.applyInfo?.enrollId {
-                return cancelApplyUsecase.excute(enrollId: enrollId)
+                return cancelApplyUsecase.execute(enrollId: enrollId)
                     .flatMap { _ in
                         return Observable.just(Mutation.setApplyButtonState(.none))
                     }
                     .catch { error in
-                        if let presentationError = error as? PresentationError {
-                            return Observable.just(Mutation.setError(presentationError))
-                        } else {
-                            return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
-                        }
+                        return Observable.just(Mutation.setError(error.toPresentationError()))
                     }
             } else {
                 return Observable.just(Mutation.setError(PresentationError.showToastMessage(message: "요청을 실패했습니다. 다시 시도해주세요.")))
@@ -157,11 +141,7 @@ final class PostReactor: Reactor {
                         return Observable.just(Mutation.deletePost)
                     }
                     .catch { error in
-                        if let presentationError = error as? PresentationError {
-                            return Observable.just(Mutation.setError(presentationError))
-                        } else {
-                            return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
-                        }
+                        return Observable.just(Mutation.setError(error.toPresentationError()))
                     }
             } else {
                 return Observable.just(Mutation.setError(PresentationError.showToastMessage(message: "삭제 실패. 다시 시도해주세요.")))

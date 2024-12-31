@@ -210,6 +210,14 @@ extension ProfileEditViewController {
                 vc.profileImageView.image = image
             }
             .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.error}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, error in
+                vc.handleError(error)
+            }
+            .disposed(by: disposeBag)
 
 // 닉네임 중복 검사 -> 나중에 연결
 //        nicknameTextField.rx.text.orEmpty

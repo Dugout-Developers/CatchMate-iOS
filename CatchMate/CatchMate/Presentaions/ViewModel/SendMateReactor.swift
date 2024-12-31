@@ -37,11 +37,7 @@ final class SendMateReactor: Reactor {
                     return Observable.just(Mutation.setSendMatePost(posts))
                 }
                 .catch { error in
-                    if let presentationError = error as? PresentationError {
-                        return Observable.just(Mutation.setError(presentationError))
-                    } else {
-                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
-                    }
+                    return Observable.just(Mutation.setError(error.toPresentationError()))
                 }
         }
     }

@@ -16,16 +16,16 @@ final class AuthReactor: Reactor {
         case kakaoLogin
         case appleLogin
         case naverLogin
-        case setError(Error)
+        case setError(PresentationError?)
     }
     enum Mutation {
         case resetState
         case setLoginInfo(LoginModel)
-        case setError(Error)
+        case setError(PresentationError?)
     }
     struct State {
         var loginModel: LoginModel?
-        var errorMessage: String?
+        var error: PresentationError?
     }
     
     var initialState: State
@@ -48,7 +48,7 @@ final class AuthReactor: Reactor {
                     return Mutation.setLoginInfo(loginModel)
                 }
                 .catch { error in
-                    return Observable.just(Mutation.setError(error))
+                    return Observable.just(Mutation.setError(error.toPresentationError()))
                 }
         case .appleLogin:
             return appleLoginUseCase.execute()
@@ -56,7 +56,7 @@ final class AuthReactor: Reactor {
                     return Mutation.setLoginInfo(loginModel)
                 }
                 .catch { error in
-                    return Observable.just(Mutation.setError(error))
+                    return Observable.just(Mutation.setError(error.toPresentationError()))
                 }
         case .naverLogin:
             return naverLoginUseCase.execute()
@@ -64,7 +64,7 @@ final class AuthReactor: Reactor {
                     return Mutation.setLoginInfo(loginModel)
                 }
                 .catch { error in
-                    return Observable.just(Mutation.setError(error))
+                    return Observable.just(Mutation.setError(error.toPresentationError()))
                 }
             
         case .setError(let error):
@@ -81,15 +81,14 @@ final class AuthReactor: Reactor {
             newState.loginModel = loginModel
             if !loginModel.isFirstLogin {
                 if !saveToken(loginModel: loginModel) {
-                    newState.errorMessage = "토큰 없음"
+                    newState.error = PresentationError.showToastMessage(message: "로그인 실패")
                 }
             }
         case .setError(let error):
-            print(error.localizedDescription)
-            newState.errorMessage = error.localizedDescription
+            newState.error = error
         case .resetState:
             newState.loginModel = nil
-            newState.errorMessage = nil
+            newState.error = nil
         }
         return newState
     }

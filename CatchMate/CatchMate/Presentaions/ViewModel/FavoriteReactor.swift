@@ -44,11 +44,7 @@ final class FavoriteReactor: Reactor {
                     return Mutation.setFavoritePost(list)
                 }
                 .catch { error in
-                    if let presentationError = error as? PresentationError {
-                        return Observable.just(Mutation.setError(presentationError))
-                    } else {
-                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
-                    }
+                    return Observable.just(Mutation.setError(error.toPresentationError()))
                 }
         case .removeFavoritePost(let postId):
             return setFavoriteUsecase.execute(false, postId)
@@ -60,11 +56,7 @@ final class FavoriteReactor: Reactor {
                     return Mutation.setFavoritePost(currentList)
                 }
                 .catch { error in
-                    if let presentationError = error as? PresentationError {
-                        return Observable.just(Mutation.setError(presentationError))
-                    } else {
-                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
-                    }
+                    return Observable.just(Mutation.setError(error.toPresentationError()))
                 }
         case .selectPost(let post):
             return Observable.just(Mutation.setSelectedPost(post))

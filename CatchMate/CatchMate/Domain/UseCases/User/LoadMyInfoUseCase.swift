@@ -11,7 +11,7 @@ import RxSwift
 protocol LoadMyInfoUseCase {
     func execute() -> Observable<User>
 }
-// loadCount -> 받은 신청 갯수 load 분리하고 상위 유즈케이스로 분리
+
 final class UserUseCaseImpl: LoadMyInfoUseCase {
     private let userRepository: UserRepository
     
@@ -21,6 +21,9 @@ final class UserUseCaseImpl: LoadMyInfoUseCase {
     
     func execute() -> Observable<User> {
         return userRepository.loadUser()
+            .catch { error in
+                return Observable.error(DomainError(error: error, context: .tokenUnavailable).toPresentationError())
+            }
     }
 }
 

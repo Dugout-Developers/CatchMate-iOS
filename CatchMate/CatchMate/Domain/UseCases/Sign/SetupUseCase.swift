@@ -30,5 +30,8 @@ final class SetupUseCaseImpl: SetupUseCase {
             let ids = list.map{$0.id}
             return SetupResult(user: user, favoriteList: ids)
         }
+        .catch { error in
+            return Observable.error(DomainError(error: error, context: .tokenUnavailable).toPresentationError())
+        }
     }
 }

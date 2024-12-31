@@ -185,6 +185,7 @@ final class SignUpViewController: BaseViewController, View {
                 }
             })
             .disposed(by: disposeBag)
+        
     }
 }
 // MARK: - Button
