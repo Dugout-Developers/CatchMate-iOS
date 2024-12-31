@@ -66,5 +66,5 @@ final class RecivedCountDataSourceImpl: ReceivedCountDataSource {
 }
 
 struct RecivedCountResultDTO: Codable {
-    let newEnrollListCount: Int
+    let newEnrollCount: Int
 }

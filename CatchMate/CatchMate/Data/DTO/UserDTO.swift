@@ -8,14 +8,16 @@
 import UIKit
 
 struct UserDTO: Codable {
-    let userID: Int
-    let email, picture, gender: String
-    let nickName, favoriteGudan, birthDate: String
-    let description, watchStyle: String?
+    let userId: Int
+    let email, profileImageUrl, gender, nickName, birthDate: String
+    let favoriteClub: FavoriteClub
+    let watchStyle: String?
     let allAlarm, chatAlarm, enrollAlarm, eventAlarm: String
+}
 
-    enum CodingKeys: String, CodingKey {
-        case userID = "userId"
-        case email, picture, gender, nickName, favoriteGudan, description, birthDate, watchStyle, allAlarm, chatAlarm, enrollAlarm, eventAlarm
-    }
+struct FavoriteClub: Codable {
+    let id: Int
+    let name: String
+    let homeStadium: String
+    let region: String
 }

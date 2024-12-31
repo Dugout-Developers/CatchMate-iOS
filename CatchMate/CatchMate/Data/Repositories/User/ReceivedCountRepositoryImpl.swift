@@ -18,7 +18,7 @@ final class ReceivedCountRepositoryIml: ReceivedCountRepository {
     func loadCount() -> RxSwift.Observable<Int> {
         return loadCountDS.getReceivedCount()
             .map { dto -> Int in
-                return dto.newEnrollListCount
+                return dto.newEnrollCount
             }
             .catch { error in
                 return Observable.error(ErrorMapper.mapToPresentationError(error))
