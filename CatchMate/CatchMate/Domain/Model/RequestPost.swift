@@ -17,8 +17,7 @@ struct RequestPost {
     let location: String
     let maxPerson: Int
     let preferGender: Gender?
-//    let preferAge: [Int]
-    let preferAge: Int?
+    let preferAge: [Int]
     let addInfo: String
 }
 
@@ -34,7 +33,6 @@ struct RequestEditPost {
     let currentPerson: Int
     let maxPerson: Int
     let preferGender: Gender?
-//    let preferAge: [Int]
-    let preferAge: Int?
+    let preferAge: [Int]
     let addInfo: String
 }

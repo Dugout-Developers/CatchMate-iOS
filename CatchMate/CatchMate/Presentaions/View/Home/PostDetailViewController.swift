@@ -41,14 +41,7 @@ final class PostDetailViewController: BaseViewController, View {
         label.numberOfLines = 0
         return label
     }()
-    private var ageOptionLabel: DefaultsPaddingLabel = {
-        let label = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8))
-        label.textColor = .cmNonImportantTextColor
-        label.applyStyle(textStyle: FontSystem.caption01_reguler)
-        label.backgroundColor = .grayScale100
-        label.layer.cornerRadius = 10
-        return label
-    }()
+    private var ageOptionLabel: [DefaultsPaddingLabel] = []
     private var genderOptionLabel: DefaultsPaddingLabel = {
         let label = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8))
         label.textColor = .cmNonImportantTextColor
@@ -142,7 +135,7 @@ final class PostDetailViewController: BaseViewController, View {
         let label = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 4, bottom: 2, right: 4))
         label.layer.cornerRadius = 2
         label.textColor = .cmHeadLineTextColor
-        label.backgroundColor = .grayScale50
+        label.backgroundColor = .grayScale100
         return label
     }()
     private let navigatorImageView: UIImageView = {
@@ -298,14 +291,15 @@ final class PostDetailViewController: BaseViewController, View {
         awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.awayTeam == post.cheerTeam)
 
         addInfoValueLabel.text = post.addInfo
-
-        if let age = post.preferAge {
-            if age == 0 {
-                ageOptionLabel.text = "전연령"
-            } else {
-                ageOptionLabel.text = "\(String(age))대"
+        
+        if post.preferAge.isEmpty {
+            ageOptionLabel.append(makeAgeLabel(age: 0))
+        } else {
+            post.preferAge.forEach { age in
+                ageOptionLabel.append(makeAgeLabel(age: age))
             }
         }
+
         if let gender = post.preferGender {
             genderOptionLabel.text = gender.rawValue
         } else {
@@ -321,7 +315,9 @@ final class PostDetailViewController: BaseViewController, View {
         genderLabel.flex.markDirty()
         ageLabel.flex.markDirty()
         addInfoValueLabel.flex.markDirty()
-        ageOptionLabel.flex.markDirty()
+        ageOptionLabel.forEach { label in
+            label.flex.markDirty()
+        }
         nickNameLabel.flex.markDirty()
         genderOptionLabel.flex.markDirty()
         contentView.flex.layout(mode: .adjustHeight)
@@ -346,7 +342,6 @@ final class PostDetailViewController: BaseViewController, View {
     private func setTextStyle() {
         titleLabel.applyStyle(textStyle: FontSystem.headline03_medium)
         genderOptionLabel.applyStyle(textStyle: FontSystem.caption01_reguler)
-        ageOptionLabel.applyStyle(textStyle: FontSystem.caption01_reguler)
         dateValueLabel.applyStyle(textStyle: FontSystem.body02_medium)
         placeValueLabel.applyStyle(textStyle: FontSystem.body02_medium)
         partynumValueLabel.applyStyle(textStyle: FontSystem.body02_medium)
@@ -355,6 +350,21 @@ final class PostDetailViewController: BaseViewController, View {
         genderLabel.applyStyle(textStyle: FontSystem.caption01_medium)
         ageLabel.applyStyle(textStyle: FontSystem.caption01_medium)
         addInfoValueLabel.applyStyle(textStyle: FontSystem.body02_medium)
+    }
+    
+    private func makeAgeLabel(age: Int) -> DefaultsPaddingLabel {
+        let label = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8))
+        label.textColor = .cmNonImportantTextColor
+        label.applyStyle(textStyle: FontSystem.caption01_reguler)
+        label.backgroundColor = .grayScale100
+        label.layer.cornerRadius = 10
+        if age == 0 {
+            label.text = "전연령"
+        } else {
+            label.text = "\(String(age))대"
+        }
+        label.applyStyle(textStyle: FontSystem.caption01_reguler)
+        return label
     }
 }
 
@@ -484,7 +494,9 @@ extension PostDetailViewController {
             flex.addItem().backgroundColor(.white).width(100%).direction(.column).justifyContent(.start).alignItems(.start).define { flex in
                 flex.addItem(titleLabel).marginBottom(6)
                 flex.addItem().direction(.row).wrap(.wrap).justifyContent(.start).width(100%).define { flex in
-                    flex.addItem(ageOptionLabel).marginRight(4).marginBottom(4)
+                    ageOptionLabel.forEach { label in
+                        flex.addItem(label).marginRight(4).marginBottom(4)
+                    }
                     flex.addItem(genderOptionLabel).marginRight(4).marginBottom(4)
                 }.marginBottom(16) // 선호사항 뱃지
                 flex.addItem().direction(.column).justifyContent(.start).alignItems(.start).define({ flex in

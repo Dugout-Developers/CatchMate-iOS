@@ -13,8 +13,8 @@ extension Reactive where Base: AddViewController {
     var selectedDate: Observable<Gender?> {
         return base._selectedGender.asObservable()
     }
-    var selectedAge: Observable<Int?> {
-        return base._selectedAge.asObservable()
+    var selectedAge: Observable<[Int]> {
+        return base._selectedAges.asObservable()
     }
 }
 final class AddViewController: BaseViewController, View {
@@ -32,7 +32,7 @@ final class AddViewController: BaseViewController, View {
         }
     }
     fileprivate var _selectedGender = PublishSubject<Gender?>()
-    fileprivate var _selectedAge = PublishSubject<Int?>()
+    fileprivate var _selectedAges = PublishSubject<[Int]>()
     private var selectedGenderLabel: PaddingLabel? {
         didSet {
             if selectedGenderLabel == manButton {
@@ -46,9 +46,9 @@ final class AddViewController: BaseViewController, View {
             }
         }
     }
-    private var selectedAge: Int? {
+    private var selectedAges: [Int] = [] {
         didSet {
-            _selectedAge.onNext(selectedAge)
+            _selectedAges.onNext(selectedAges)
         }
     }
     private let scrollView = UIScrollView()
@@ -260,7 +260,7 @@ extension AddViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        _selectedAge
+        _selectedAges
             .map{Reactor.Action.changeAge($0)}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -394,14 +394,23 @@ extension AddViewController {
         
         reactor.state.map{$0.selectedAge}
             .distinctUntilChanged()
-            .compactMap{$0}
             .withUnretained(self)
-            .subscribe { vc, age in
+            .subscribe { vc, ages in
                 vc.ageButtons.forEach { label in
-                    label.isSelected = (age == label.tag * 10)
+                    label.isSelected = ages.contains(label.tag * 10)
                 }
             }
             .disposed(by: disposeBag)
+//        reactor.state.map{$0.selectedAge}
+//            .distinctUntilChanged()
+//            .compactMap{$0}
+//            .withUnretained(self)
+//            .subscribe { vc, age in
+//                vc.ageButtons.forEach { label in
+//                    label.isSelected = (age == label.tag * 10)
+//                }
+//            }
+//            .disposed(by: disposeBag)
         
         reactor.state.map{$0.selectedGender}
             .distinctUntilChanged()
@@ -485,42 +494,42 @@ extension AddViewController {
             ageButton.addGestureRecognizer(tapGesture)
         }
     }
-    @objc private func clickAgeButton(_ gesture: UITapGestureRecognizer) {
-        guard let tappedLabel = gesture.view as? PaddingLabel else { return }
-        let currentSelectAge = tappedLabel.tag * 10
-        if currentSelectAge == selectedAge {
-            selectedAge = nil
-        } else {
-            selectedAge = currentSelectAge
-        }
-        
-    }
 //    @objc private func clickAgeButton(_ gesture: UITapGestureRecognizer) {
 //        guard let tappedLabel = gesture.view as? PaddingLabel else { return }
-//        if tappedLabel.tag == 0 {
-//            selectedAges = []
-//            ageButtons[0].isSelected = true
-//            ageButtons[1...].forEach { label in
-//                label.isSelected = false
-//            }
-//        }else {
-//            ageButtons[0].isSelected = false
-//            if let index = selectedAges.firstIndex(of: tappedLabel.tag * 10) {
-//                tappedLabel.isSelected = false
-//                selectedAges.remove(at: index)
-//            } else {
-//                tappedLabel.isSelected = true
-//                selectedAges.append(tappedLabel.tag * 10)
-//                if selectedAges.count == 5 {
-//                    selectedAges = []
-//                    ageButtons[0].isSelected = true
-//                    ageButtons[1...].forEach { label in
-//                        label.isSelected = false
-//                    }
-//                }
-//            }
+//        let currentSelectAge = tappedLabel.tag * 10
+//        if currentSelectAge == selectedAge {
+//            selectedAge = nil
+//        } else {
+//            selectedAge = currentSelectAge
 //        }
+//        
 //    }
+    @objc private func clickAgeButton(_ gesture: UITapGestureRecognizer) {
+        guard let tappedLabel = gesture.view as? PaddingLabel else { return }
+        if tappedLabel.tag == 0 {
+            selectedAges = []
+            ageButtons[0].isSelected = true
+            ageButtons[1...].forEach { label in
+                label.isSelected = false
+            }
+        }else {
+            ageButtons[0].isSelected = false
+            if let index = selectedAges.firstIndex(of: tappedLabel.tag * 10) {
+                tappedLabel.isSelected = false
+                selectedAges.remove(at: index)
+            } else {
+                tappedLabel.isSelected = true
+                selectedAges.append(tappedLabel.tag * 10)
+                if selectedAges.count == 5 {
+                    selectedAges = []
+                    ageButtons[0].isSelected = true
+                    ageButtons[1...].forEach { label in
+                        label.isSelected = false
+                    }
+                }
+            }
+        }
+    }
 }
 // MARK: - UI
 extension AddViewController {

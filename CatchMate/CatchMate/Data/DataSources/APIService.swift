@@ -68,7 +68,7 @@ enum Endpoint {
         case .signUp:
             return "/user/additional-info"
         case .savePost:
-            return "/board/write"
+            return "/board"
         case .editPost:
             return "/board/edit"
         case .postlist:

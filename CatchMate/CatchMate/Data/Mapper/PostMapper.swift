@@ -11,14 +11,14 @@ final class PostMapper {
         let playTime = domain.playTime+":00"
         let resultString = "\(dateString) \(playTime)"
         LoggerService.shared.debugLog("PostMapper: Domain -> DTO : \(resultString)")
-        return AddPostRequsetDTO(title: domain.title, gameDate: resultString, location: domain.location, homeTeam: domain.homeTeam.rawValue, awayTeam: domain.awayTeam.rawValue, cheerTeam: domain.cheerTeam.rawValue, maxPerson: domain.maxPerson, preferGender: domain.preferGender?.serverRequest ?? "", preferAge: domain.preferAge, addInfo: domain.addInfo)
+        return AddPostRequsetDTO(title: domain.title, gameRequest: GameInfo(homeClubId: domain.homeTeam.serverId, awayClubId: domain.awayTeam.serverId, gameStartDate: resultString, location: domain.location), cheerClubId: domain.cheerTeam.serverId, maxPerson: domain.maxPerson, preferredGender: domain.preferGender?.serverRequest, preferredAgeRange: domain.preferAge.map{String($0)}, content: domain.addInfo, isCompleted: true)
     }
     func domainToDto(_ domain: RequestEditPost) -> EditPostRequsetDTO? {
         let dateString = DateHelper.shared.toString(from: domain.date, format: "yyyy-MM-dd")
         let playTime = domain.playTime+":00"
         let resultString = "\(dateString) \(playTime)"
         LoggerService.shared.debugLog("PostMapper: Domain -> DTO : \(resultString)")
-        return EditPostRequsetDTO(boardId: Int(domain.id)!, title: domain.title, gameDate: resultString, location: domain.location, homeTeam: domain.homeTeam.rawValue, awayTeam: domain.awayTeam.rawValue, cheerTeam: domain.cheerTeam.rawValue, currentPerson: domain.currentPerson, maxPerson: domain.maxPerson, preferGender: domain.preferGender?.serverRequest, preferAge: domain.preferAge, addInfo: domain.addInfo)
+        return EditPostRequsetDTO(boardId: Int(domain.id)!, title: domain.title, gameDate: resultString, location: domain.location, homeTeam: domain.homeTeam.rawValue, awayTeam: domain.awayTeam.rawValue, cheerTeam: domain.cheerTeam.rawValue, currentPerson: domain.currentPerson, maxPerson: domain.maxPerson, preferGender: domain.preferGender?.serverRequest, preferAge: domain.preferAge.map{String($0)}, addInfo: domain.addInfo)
     }
     
     func dtoToDomain(_ dto: PostDTO) -> Post? {
@@ -28,8 +28,13 @@ final class PostMapper {
                 let date = convertedDates.date   // "08.13" 형식
                 let playTime = convertedDates.playTime   // "09:21" 형식
                 LoggerService.shared.debugLog("PostMapper: DTO -> domain 변환 성공")
-                let preferAge = dto.preferAge != nil ? dto.preferAge! / 10 * 10 : nil
-                return Post(id: String(dto.boardId), title: dto.title, writer: SimpleUser(userId: String(dto.writer.userId), nickName: dto.writer.nickName, picture: dto.writer.picture, favGudan: team, gender: gender, birthDate: dto.writer.birthDate, cheerStyle: CheerStyles(rawValue: dto.writer.watchStyle ?? "")), homeTeam: homeTeam, awayTeam: awayTeam, cheerTeam: cheerTeam, date: date, playTime: playTime, location: dto.location, maxPerson: dto.maxPerson, currentPerson: 1, preferGender: Gender(serverValue: dto.preferGender ?? ""), preferAge: preferAge, addInfo: dto.addInfo)
+                var preferAges: [Int] = []
+                dto.preferAge.forEach { str in
+                    if let age = Int(str) {
+                        preferAges.append(age)
+                    }
+                }
+                return Post(id: String(dto.boardId), title: dto.title, writer: SimpleUser(userId: String(dto.writer.userId), nickName: dto.writer.nickName, picture: dto.writer.picture, favGudan: team, gender: gender, birthDate: dto.writer.birthDate, cheerStyle: CheerStyles(rawValue: dto.writer.watchStyle ?? "")), homeTeam: homeTeam, awayTeam: awayTeam, cheerTeam: cheerTeam, date: date, playTime: playTime, location: dto.location, maxPerson: dto.maxPerson, currentPerson: 1, preferGender: Gender(serverValue: dto.preferGender ?? ""), preferAge: preferAges, addInfo: dto.addInfo)
             }
         }
         LoggerService.shared.log("PostMapper: DTO -> domain 변환 실패", level: .error)

@@ -92,7 +92,6 @@ final class HomeReactor: Reactor {
             
         case .loadNextPage:
             guard !currentState.isLoadingNextPage else { return .empty() }  // 중복 로딩 방지
-            print("loadNextPage: \(currentState.page)")
             return loadPostListUsecase.loadPostList(pageNum: currentState.page, gudan: currentState.selectedTeams.map { $0.rawValue }, gameDate: currentState.dateFilterValue?.toString(format: "YYYY-MM-dd") ?? "", people: currentState.seletedNumberFilter ?? 0)
                 .flatMap { list -> Observable<Mutation> in
                     if !list.isEmpty {
@@ -158,7 +157,6 @@ final class HomeReactor: Reactor {
         let gudan = (teams ?? currentState.selectedTeams).map { $0.rawValue }
         let requestDate = date?.toString(format: "YYYY-MM-dd") ?? ""
         let requestNumber = number ?? 0
-        print(currentState.page)
         let loadList = loadPostListUsecase.loadPostList(pageNum: 1, gudan: gudan, gameDate: requestDate, people: requestNumber)
             .map { list in
                 Mutation.loadPost(list, append: false)

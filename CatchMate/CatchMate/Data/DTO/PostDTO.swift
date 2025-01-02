@@ -28,6 +28,6 @@ struct PostDTO: Codable {
     let cheerTeam: String
     let maxPerson: Int
     let preferGender: String?
-    let preferAge: Int?
+    let preferAge: [String]
     let addInfo: String
 }
