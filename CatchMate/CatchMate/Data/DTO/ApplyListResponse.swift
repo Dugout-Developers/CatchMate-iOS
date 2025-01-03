@@ -40,5 +40,5 @@ struct Content: Codable {
 }
 
 struct ApplyListResponse: Codable {
-    let content: [Content]
+    let enrollInfoList: [Content]
 }

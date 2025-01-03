@@ -42,7 +42,7 @@ final class PostMapper {
         }
 
         let writerCheerStyle: CheerStyles? = writer.watchStyle != nil ? CheerStyles(rawValue: writer.watchStyle!) : nil
-        let preferAges: [Int] = dto.preferredAgeRange.split(separator: ", ").compactMap{ Int($0) }
+        let preferAges: [Int] = dto.preferredAgeRange.split(separator: ",").compactMap{ Int($0) }
         return Post(id: String(dto.boardId), title: dto.title, writer: SimpleUser(userId: String(writer.userId), nickName: writer.nickName, picture: writer.profileImageUrl, favGudan: writerTeam, gender: writerGender, birthDate: writer.birthDate, cheerStyle: writerCheerStyle), homeTeam: homeTeam, awayTeam: awayTeam, cheerTeam: cheerTeam, date: gameDate.date, playTime: gameDate.playTime, location: gameInfo.location, maxPerson: dto.maxPerson, currentPerson: dto.currentPerson, preferGender: Gender(serverValue: dto.preferredGender), preferAge: preferAges, addInfo: dto.content)
     }
 

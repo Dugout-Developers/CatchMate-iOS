@@ -41,6 +41,7 @@ final class PostDetailViewController: BaseViewController, View {
         label.numberOfLines = 0
         return label
     }()
+    private let ageOptionView: UIView = UIView()
     private var ageOptionLabel: [DefaultsPaddingLabel] = []
     private var genderOptionLabel: DefaultsPaddingLabel = {
         let label = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8))
@@ -265,6 +266,7 @@ final class PostDetailViewController: BaseViewController, View {
     }
     
     private func setupData(post: Post) {
+        print(post)
         if let date = DateHelper.shared.toDate(from: post.date, format: "MM.dd") {
             let dateString = DateHelper.shared.toString(from: date, format: "M월 d일")
             dateValueLabel.text = "\(dateString) | \(post.playTime)"
@@ -315,11 +317,14 @@ final class PostDetailViewController: BaseViewController, View {
         genderLabel.flex.markDirty()
         ageLabel.flex.markDirty()
         addInfoValueLabel.flex.markDirty()
-        ageOptionLabel.forEach { label in
-            label.flex.markDirty()
+        ageOptionView.flex.define { flex in
+            ageOptionLabel.forEach { label in
+                flex.addItem(label).marginRight(4).marginBottom(4)
+            }
         }
         nickNameLabel.flex.markDirty()
         genderOptionLabel.flex.markDirty()
+        ageOptionView.flex.layout()
         contentView.flex.layout(mode: .adjustHeight)
         buttonContainer.flex.layout()
     }
@@ -494,9 +499,7 @@ extension PostDetailViewController {
             flex.addItem().backgroundColor(.white).width(100%).direction(.column).justifyContent(.start).alignItems(.start).define { flex in
                 flex.addItem(titleLabel).marginBottom(6)
                 flex.addItem().direction(.row).wrap(.wrap).justifyContent(.start).width(100%).define { flex in
-                    ageOptionLabel.forEach { label in
-                        flex.addItem(label).marginRight(4).marginBottom(4)
-                    }
+                    flex.addItem(ageOptionView).direction(.row).wrap(.wrap).justifyContent(.start).alignItems(.center)
                     flex.addItem(genderOptionLabel).marginRight(4).marginBottom(4)
                 }.marginBottom(16) // 선호사항 뱃지
                 flex.addItem().direction(.column).justifyContent(.start).alignItems(.start).define({ flex in

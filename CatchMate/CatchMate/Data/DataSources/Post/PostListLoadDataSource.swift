@@ -60,7 +60,7 @@ final class PostListLoadDataSourceImpl: PostListLoadDataSource {
                                 "AccessToken": token
                             ]
                             LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            return APIService.shared.requestAPI(addEndPoint: String(pageNum), type: .postlist, parameters: parameters, headers: newHeaders, encoding: URLEncoding.default, dataType: PostListDTO.self)
+                            return APIService.shared.requestAPI(type: .postlist, parameters: parameters, headers: newHeaders, encoding: URLEncoding.default, dataType: PostListDTO.self)
                                 .map { dto in
                                     LoggerService.shared.debugLog("PostList Load 성공: \(dto)")
                                     return dto.boardInfoList

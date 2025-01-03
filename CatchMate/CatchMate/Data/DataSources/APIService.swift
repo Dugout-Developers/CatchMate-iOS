@@ -76,7 +76,7 @@ enum Endpoint {
         case .postlist:
             return "/board/list"
         case .userPostlist:
-            return "/board/list/"
+            return "/board/list"
         case .loadPost:
             /// 게시글 조회 /board/{boardId}
             return "/board/"
