@@ -30,7 +30,7 @@ final class AddPostDataSourceTest: XCTestCase {
     
     func testDefaultsFilter() {
         let expectation = self.expectation(description: "Post Load API Request - DefaultsFilter")
-        let mockupPost = AddPostRequsetDTO(title: "Test2", gameDate: "2024-09-05 18:30:00", location: "대전", homeTeam: "이글스", awayTeam: "위즈", cheerTeam: "이글스", maxPerson: 2, preferGender: "F", preferAge: 20, addInfo: "제발 이겨줘")
+        let mockupPost = AddPostRequsetDTO(title: "Test", gameRequest: GameInfo(homeClubId: 8, awayClubId: 1, gameStartDate: "2025-01-31 18:30:00", location: "대전"), cheerClubId: 8, maxPerson: 2, preferredGender: "F", preferredAgeRange: ["20", "30"], content: "testContent", isCompleted: true)
         dataSource.addPost(mockupPost)
             .subscribe (onNext: { result in
                 print(result)

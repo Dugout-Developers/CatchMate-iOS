@@ -211,6 +211,7 @@
 		5375B1472D1AEECE000581B3 /* ProfileImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B28F62C75BC2800BFE9F6 /* ProfileImageHelper.swift */; };
 		5375B1492D1AEEEE000581B3 /* ImageStringDecodingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B1482D1AEED7000581B3 /* ImageStringDecodingTest.swift */; };
 		5375B1572D228F25000581B3 /* BaseReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B1562D228F1F000581B3 /* BaseReactor.swift */; };
+		5375B1A02D277C05000581B3 /* ConvertDateTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B19F2D277BFA000581B3 /* ConvertDateTest.swift */; };
 		5378EA9B2C6487A600A2422C /* ReceiveMateListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5378EA9A2C6487A600A2422C /* ReceiveMateListCell.swift */; };
 		5378EA9D2C649B6900A2422C /* ReceiveMateListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5378EA9C2C649B6900A2422C /* ReceiveMateListViewController.swift */; };
 		5378EA9F2C649BBE00A2422C /* RecevieMateReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5378EA9E2C649BBE00A2422C /* RecevieMateReactor.swift */; };
@@ -536,6 +537,7 @@
 		5375B13C2D1A85EA000581B3 /* DomainError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainError.swift; sourceTree = "<group>"; };
 		5375B1482D1AEED7000581B3 /* ImageStringDecodingTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStringDecodingTest.swift; sourceTree = "<group>"; };
 		5375B1562D228F1F000581B3 /* BaseReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseReactor.swift; sourceTree = "<group>"; };
+		5375B19F2D277BFA000581B3 /* ConvertDateTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertDateTest.swift; sourceTree = "<group>"; };
 		5378EA9A2C6487A600A2422C /* ReceiveMateListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMateListCell.swift; sourceTree = "<group>"; };
 		5378EA9C2C649B6900A2422C /* ReceiveMateListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMateListViewController.swift; sourceTree = "<group>"; };
 		5378EA9E2C649BBE00A2422C /* RecevieMateReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecevieMateReactor.swift; sourceTree = "<group>"; };
@@ -997,6 +999,7 @@
 		536BDDC32C189B240043B1DA /* CatchMateTests */ = {
 			isa = PBXGroup;
 			children = (
+				5375B19F2D277BFA000581B3 /* ConvertDateTest.swift */,
 				5375B1482D1AEED7000581B3 /* ImageStringDecodingTest.swift */,
 				53E7DBAF2CAB0E8C00DC058D /* RepositoryTest */,
 				53E7DBB02CAB0EA400DC058D /* DataSourceTest */,
@@ -1957,6 +1960,7 @@
 				5375B1492D1AEEEE000581B3 /* ImageStringDecodingTest.swift in Sources */,
 				53ACBA3E2C84AA3D004FAF00 /* SetFavoriteDataSourceTest.swift in Sources */,
 				533B294A2C771F6300BFE9F6 /* Error+Extension.swift in Sources */,
+				5375B1A02D277C05000581B3 /* ConvertDateTest.swift in Sources */,
 				533B293D2C771EEA00BFE9F6 /* DataError.swift in Sources */,
 				53C6DA062CE47A3000918718 /* UpPostDataSource.swift in Sources */,
 				53EECAED2D0B304A00775FD6 /* ProfileEditRequestDTO.swift in Sources */,
