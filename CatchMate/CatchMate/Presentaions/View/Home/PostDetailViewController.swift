@@ -12,11 +12,7 @@ import RxSwift
 import ReactorKit
 import Kingfisher
 
-extension Reactive where Base: PostDetailViewController {
-    var isFavoriteState: Observable<Bool> {
-        return base._isFavorite.asObservable()
-    }
-}
+
 final class PostDetailViewController: BaseViewController, View {
     override var useSnapKit: Bool {
         return false
@@ -25,12 +21,6 @@ final class PostDetailViewController: BaseViewController, View {
         return false
     }
     private var isFirstFavoriteState: Bool = true
-    private var isFavorite: Bool = false {
-        didSet {
-            _isFavorite.onNext(isFavorite)
-        }
-    }
-    fileprivate var _isFavorite = PublishSubject<Bool>()
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let isAddView: Bool
@@ -194,8 +184,6 @@ final class PostDetailViewController: BaseViewController, View {
         super.viewDidLoad()
         bind(reactor: reactor)
         reactor.action.onNext(.loadPostDetails)
-//        reactor.action.onNext(.loadIsApplied)
-        reactor.action.onNext(.loadIsFavorite)
         setupUI()
         setupNavigation()
         setupButton()
@@ -386,27 +374,16 @@ extension PostDetailViewController {
             .distinctUntilChanged()
             .withUnretained(self)
             .subscribe(onNext: { vc, state in
-                vc.isFavorite = state // 상태를 직접 설정
                 vc.setupFavoriteButton(state)
-                if vc.isFavorite && !vc.isFirstFavoriteState {
-                    vc.showToast(message: "게시글을 저장했어요", buttonContainerExists: true)
-                }
             })
             .disposed(by: disposeBag)
 
-        _isFavorite
-            .observe(on: MainScheduler.asyncInstance)
-            .map{Reactor.Action.changeFavorite($0)}
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
         
         favoriteButton.rx.tap
             .withUnretained(self)
             .subscribe { vc, _ in
-                if vc.isFirstFavoriteState {
-                    vc.isFirstFavoriteState = false
-                }
-                vc.isFavorite.toggle()
+                let currentState = reactor.currentState.isFavorite
+                reactor.action.onNext(.changeFavorite(!currentState))
             }
             .disposed(by: disposeBag)
         

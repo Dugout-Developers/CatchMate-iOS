@@ -23,7 +23,6 @@ enum ApplyType {
 final class PostReactor: Reactor {
     enum Action {
         case loadPostDetails
-        case loadIsFavorite
         case changeApplyButtonState(ApplyType)
         case apply(String?)
         case cancelApply
@@ -90,10 +89,6 @@ final class PostReactor: Reactor {
                 }
         case .changeApplyButtonState(let result):
             return Observable.just(Mutation.setApplyButtonState(result))
-        case .loadIsFavorite:
-            let favoriteList = SetupInfoService.shared.loadSimplePostIds()
-            let index = favoriteList.firstIndex(where: {$0 == postId})
-            return Observable.just(Mutation.setIsFavorite(index != nil ? true : false))
         case .changeFavorite(let state):
             return setFavoriteUsecase.execute(state, postId)
                 .map { result in
