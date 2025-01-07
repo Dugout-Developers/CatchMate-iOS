@@ -23,7 +23,7 @@ final class AddReactor: Reactor {
         case changeDate(Date?)
         case changeTime(PlayTime)
         case changeGender(Gender?)
-        case changeAge(Int?)
+        case changeAge([Int])
         case changeHomeTeam(Team)
         case changeAwayTeam(Team)
         case changeAddText(String)
@@ -40,7 +40,7 @@ final class AddReactor: Reactor {
         case updateDate(Date?)
         case updateTime(PlayTime)
         case updateGender(Gender?)
-        case updateAge(Int?)
+        case updateAge([Int])
         case updateDatePickerSaveButton
         case updateHomeTeam(Team)
         case updageAwayTeam(Team)
@@ -62,8 +62,8 @@ final class AddReactor: Reactor {
         var selecteTime: PlayTime?
         var dateInfoString: String = ""
         var selectedGender: Gender?
-        var selectedAge: Int?
-//        var selectedAge: [Int] = []
+//        var selectedAge: Int?
+        var selectedAge: [Int] = []
         var datePickerSaveButtonState: Bool = false
         var homeTeam: Team?
         var place: String? = ""
@@ -147,10 +147,8 @@ final class AddReactor: Reactor {
             ])
         case .updatePost:
             guard let request = validatePost(currentState) else {
-                print(currentState)
                 return Observable.just(Mutation.setError(.showToastMessage(message: "입력값 확인 후 다시 시도해주세요.")))
             }
-            print(request.0)
             return addUsecase.addPost(request.0)
                 .map{ id in
                     return Mutation.savePost(id)
@@ -195,7 +193,6 @@ final class AddReactor: Reactor {
             }
         case .updateEditPost:
             guard let request = validatePost(currentState) else {
-                print(currentState)
                 return Observable.just(Mutation.setError(.showToastMessage(message: "입력값 확인 후 다시 시도해주세요.")))
             }
             guard let requestEditPost = mappingRequestEditPost(request.0) else {

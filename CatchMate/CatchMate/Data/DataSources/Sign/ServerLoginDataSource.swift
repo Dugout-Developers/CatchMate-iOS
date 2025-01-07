@@ -36,7 +36,7 @@ final class ServerLoginDataSourceImpl: ServerLoginDataSource {
         return APIService.shared.requestAPI(type: .login, parameters: parameters, encoding: JSONEncoding.default, dataType: LoginResponse.self)
             .withUnretained(self)
             .flatMap { ds, dto -> Observable<LoginResponse> in
-                LoggerService.shared.debugLog("회원가입 성공: \(dto)")
+                LoggerService.shared.debugLog("로그인 요청 성공: \(dto)")
                 
                 if let accessToken = dto.accessToken, let refreshToken = dto.refreshToken {
                     // AccessToken 및 RefreshToken 저장

@@ -51,8 +51,15 @@ final class NotiViewTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configData(notiType: NotiType, sender: User) {
-        // MARK: - 이후 작성
+    func configData(noti: NotificationList) {
+        containerView.backgroundColor = noti.read ? .grayScale50 : .white
+        notiLabel.text = noti.title
+        subinfoLabel.text = noti.gameInfo
+        ProfileImageHelper.loadImage(profileImageView, pictureString: noti.imgUrl)
+        
+        notiLabel.applyStyle(textStyle: FontSystem.body01_medium)
+        subinfoLabel.applyStyle(textStyle: FontSystem.body02_semiBold)
+        
     }
     
     override func layoutSubviews() {

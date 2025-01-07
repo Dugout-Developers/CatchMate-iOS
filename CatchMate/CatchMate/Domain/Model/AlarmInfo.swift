@@ -5,7 +5,7 @@
 //  Created by 방유빈 on 12/19/24.
 //
 
-enum NotificationType: String, CaseIterable {
+enum AlarmnType: String, CaseIterable {
     case all = "ALL"
     case apply = "ENROLL"
     case chat = "CHAT"
@@ -24,7 +24,7 @@ enum NotificationType: String, CaseIterable {
         }
     }
 }
-struct NotificationInfo {
+struct AlarmInfo {
     let all: Bool
     let apply: Bool
     let chat: Bool

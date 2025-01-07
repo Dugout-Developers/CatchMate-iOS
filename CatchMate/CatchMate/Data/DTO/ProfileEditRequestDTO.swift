@@ -12,7 +12,7 @@ struct ProfileEditRequestDTO {
     
     struct Request: Codable {
         let nickName: String
-        let favGudan: String
+        let favoriteClubId: Int
         let watchStyle: String
     }
 }

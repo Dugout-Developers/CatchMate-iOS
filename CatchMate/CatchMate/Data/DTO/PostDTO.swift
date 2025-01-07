@@ -9,9 +9,10 @@ import Foundation
 
 struct WriterDTO: Codable {
     let userId: Int
+    let email: String
     let nickName: String
-    let picture: String
-    let favGudan: String
+    let profileImageUrl: String
+    let favoriteClub: WriterTeamInfoDTO
     let watchStyle: String?
     let gender: String
     let birthDate: String
@@ -19,15 +20,24 @@ struct WriterDTO: Codable {
 
 struct PostDTO: Codable {
     let boardId: Int
-    let writer: WriterDTO
     let title: String
-    let gameDate: String
-    let location: String
-    let homeTeam: String
-    let awayTeam: String
-    let cheerTeam: String
+    let content: String
+    let cheerClubId: Int
+    let currentPerson: Int
     let maxPerson: Int
-    let preferGender: String?
-    let preferAge: Int?
-    let addInfo: String
+    let userInfo: WriterDTO
+    let preferredGender: String
+    let preferredAgeRange: String /// , 구분
+    let gameInfo: GameInfoDTO
+}
+
+struct WriterTeamInfoDTO: Codable {
+    let id: Int
+}
+
+struct GameInfoDTO: Codable {
+    let homeClubId: Int
+    let awayClubId: Int
+    let gameStartDate: String
+    let location: String
 }

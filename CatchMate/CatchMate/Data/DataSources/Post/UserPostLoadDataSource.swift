@@ -11,7 +11,7 @@ import RxAlamofire
 import Alamofire
 
 protocol UserPostLoadDataSource {
-    func loadUserPostList(_ userId: Int, page: Int) -> Observable<[PostListDTO]>
+    func loadUserPostList(_ userId: Int, page: Int) -> Observable<[PostListInfoDTO]>
 }
 
 final class UserPostLoadDataSourceImpl: UserPostLoadDataSource {
@@ -21,7 +21,7 @@ final class UserPostLoadDataSourceImpl: UserPostLoadDataSource {
         self.tokenDataSource = tokenDataSource
     }
     
-    func loadUserPostList(_ userId: Int, page: Int) -> RxSwift.Observable<[PostListDTO]> {
+    func loadUserPostList(_ userId: Int, page: Int) -> RxSwift.Observable<[PostListInfoDTO]> {
         LoggerService.shared.debugLog("\(userId) 게시글 - page \(page) 조회")
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
@@ -32,15 +32,15 @@ final class UserPostLoadDataSourceImpl: UserPostLoadDataSource {
         
         let parameters: [String: Any] = [
             "userId": userId,
-            "page": page
+//            "page": page
         ]
         
         LoggerService.shared.debugLog("parameters: \(parameters)")
         LoggerService.shared.debugLog("PostListLoadDataSourceImpl 토큰 확인: \(headers)")
-        return APIService.shared.requestAPI(type: .userPostlist, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: [PostListDTO].self)
+        return APIService.shared.requestAPI(type: .userPostlist, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: PostListDTO.self)
             .map { postListDTO in
                 LoggerService.shared.debugLog("PostList Load 성공: \(postListDTO)")
-                return postListDTO
+                return postListDTO.boardInfoList
             }
             .catch { [weak self] error in
                 guard let self = self else { return Observable.error(OtherError.notFoundSelf) }
@@ -49,15 +49,15 @@ final class UserPostLoadDataSourceImpl: UserPostLoadDataSource {
                         return Observable.error(TokenError.notFoundRefreshToken)
                     }
                     return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
-                        .flatMap { token -> Observable<[PostListDTO]> in
+                        .flatMap { token -> Observable<[PostListInfoDTO]> in
                             let newHeaders: HTTPHeaders = [
                                 "AccessToken": token
                             ]
                             LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            return APIService.shared.requestAPI(type: .userPostlist, parameters: parameters, headers: newHeaders, encoding: URLEncoding.default, dataType: [PostListDTO].self)
+                            return APIService.shared.requestAPI(type: .userPostlist, parameters: parameters, headers: newHeaders, encoding: URLEncoding.default, dataType: PostListDTO.self)
                                 .map { postListDTO in
                                     LoggerService.shared.debugLog("PostList Load 성공: \(postListDTO)")
-                                    return postListDTO
+                                    return postListDTO.boardInfoList
                                 }
                         }
                         .catch { error in

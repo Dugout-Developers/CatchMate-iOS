@@ -33,6 +33,8 @@ enum Endpoint {
     case loadFavorite
     /// 찜 설정
     case setFavorite
+    /// 찜삭제
+    case deleteFavorite
     /// 알람 설정
     case setNotification
     
@@ -68,14 +70,13 @@ enum Endpoint {
         case .signUp:
             return "/user/additional-info"
         case .savePost:
-            return "/board/write"
+            return "/board"
         case .editPost:
-            return "/board/edit"
+            return "/board/"
         case .postlist:
-            /// 게시글 리스트 /board/page/{pageNum}
-            return "/board/page/"
+            return "/board/list"
         case .userPostlist:
-            return "/board/page"
+            return "/board/list"
         case .loadPost:
             /// 게시글 조회 /board/{boardId}
             return "/board/"
@@ -84,10 +85,10 @@ enum Endpoint {
         case .removePost:
             return "/board/remove"
         case .loadFavorite:
-            return "/board/likes"
-        case .setFavorite:
-            /// 찜 설정 /board/like/{boardID}
-            return "/board/like/"
+            return "/board/bookmark"
+        case .setFavorite, .deleteFavorite:
+            /// 찜 설정 /board/bookmark/{boardID}
+            return "/board/bookmark/"
         case .setNotification:
             return "/user/alarm"
         case .apply:
@@ -138,7 +139,9 @@ enum Endpoint {
         case .loadFavorite:
             return "찜목록 로드 API"
         case .setFavorite:
-            return "찜 상태 설정 API"
+            return "찜하기 API"
+        case .deleteFavorite:
+            return "찜 삭제 API"
         case .setNotification:
             return "알람 설정 API"
         case .apply:
@@ -175,7 +178,7 @@ enum Endpoint {
         case .savePost:
             return .post
         case .editPost:
-            return .put
+            return .patch
         case .setNotification:
             return .patch
         case .loadPost:
@@ -190,6 +193,8 @@ enum Endpoint {
             return .get
         case .setFavorite:
             return .post
+        case .deleteFavorite:
+            return .delete
         case .postlist:
             return .get
         case .apply:

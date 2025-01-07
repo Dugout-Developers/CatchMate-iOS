@@ -21,6 +21,12 @@ final class ProfileEditUseCaseImpl: ProfileEditUseCase {
     
     func editProfile(nickname: String, team: Team, style: CheerStyles?, image: UIImage?) -> Observable<Bool> {
         return repository.editProfile(nickname: nickname, team: team, style: style, image: image)
+            .flatMap({ state -> Observable<Bool> in
+                if !state {
+                    return Observable.error(PresentationError.showToastMessage(message: "요청에 실패했습니다."))
+                }
+                return Observable.just(state)
+            })
             .catch { error in
                 return Observable.error(DomainError(error: error, context: .action, message: "요청에 실패했습니다.").toPresentationError())
             }

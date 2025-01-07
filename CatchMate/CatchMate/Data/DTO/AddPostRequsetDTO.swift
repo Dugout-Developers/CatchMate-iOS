@@ -8,15 +8,13 @@ import Foundation
 
 struct AddPostRequsetDTO: Codable {
     let title: String
-    let gameDate: String
-    let location: String
-    let homeTeam: String
-    let awayTeam: String
-    let cheerTeam: String
+    let gameRequest: GameInfo
+    let cheerClubId: Int
     let maxPerson: Int
-    let preferGender: String?
-    let preferAge: Int?
-    let addInfo: String
+    let preferredGender: String?
+    let preferredAgeRange: [String]
+    let content: String
+    let isCompleted: Bool
 }
 
 struct EditPostRequsetDTO: Codable {
@@ -30,6 +28,13 @@ struct EditPostRequsetDTO: Codable {
     let currentPerson: Int
     let maxPerson: Int
     let preferGender: String?
-    let preferAge: Int?
+    let preferAge: [String]
     let addInfo: String
+}
+
+struct GameInfo: Codable {
+    let homeClubId: Int
+    let awayClubId: Int
+    let gameStartDate: String
+    let location: String
 }

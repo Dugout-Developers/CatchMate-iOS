@@ -13,11 +13,11 @@ struct SignUpRequest {
     let provider: String
     let providerId: String
     let gender: String
-    let picture: String?
+    let profileImageUrl: String?
     let fcmToken: String
     let nickName: String
     let birthDate: String
-    let favGudan: String
+    let favoriteClubId: Int
     let watchStyle: String?
 }
 

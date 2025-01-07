@@ -28,10 +28,10 @@ final class NotificationListDataSourceImpl: NotificationListDataSource {
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
-        return APIService.shared.requestAPI(type: .notificationList, parameters: nil, headers: headers, encoding: JSONEncoding.default, dataType: [NotificationDTO].self)
+        return APIService.shared.requestAPI(type: .notificationList, parameters: nil, headers: headers, encoding: JSONEncoding.default, dataType: NotificationListResponse.self)
             .map { response in
                 LoggerService.shared.debugLog("NotificationList Load 성공: \(response)")
-                return response
+                return response.notificationInfoList
             }
             .catch { [weak self] error in
                 guard let self = self else { return Observable.error(OtherError.notFoundSelf) }
@@ -47,10 +47,10 @@ final class NotificationListDataSourceImpl: NotificationListDataSource {
                             ]
                             LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
                             
-                            return APIService.shared.requestAPI(type: .notificationList, parameters: nil, headers: newHeaders, encoding: JSONEncoding.default, dataType: [NotificationDTO].self)
+                            return APIService.shared.requestAPI(type: .notificationList, parameters: nil, headers: newHeaders, encoding: JSONEncoding.default, dataType: NotificationListResponse.self)
                                 .map { response in
                                     LoggerService.shared.debugLog("NotificationList Load 성공: \(response)")
-                                    return response
+                                    return response.notificationInfoList
                                 }
                         }
                         .catch { error in

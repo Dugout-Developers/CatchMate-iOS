@@ -28,11 +28,11 @@ final class SignUpDataSourceImpl: SignUpDataSource {
             "provider": model.provider,
             "providerId": model.providerId,
             "gender": model.gender,
-            "picture": model.picture ?? "",
+            "profileImageUrl": model.profileImageUrl ?? "",
             "fcmToken": model.fcmToken,
             "nickName": model.nickName,
             "birthDate": model.birthDate,
-            "favGudan": model.favGudan,
+            "favoriteClubId": model.favoriteClubId,
             "watchStyle": model.watchStyle ?? ""
         ]
          

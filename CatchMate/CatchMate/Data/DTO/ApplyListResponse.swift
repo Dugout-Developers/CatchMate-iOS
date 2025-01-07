@@ -10,35 +10,23 @@ import Foundation
 struct UserInfo: Codable {
     let userId: Int
     let nickName: String
-    let picture: String
-    let favGudan: String
+    let profileImageUrl: String
+    let favoriteClub: FavoriteClub
     let watchStyle: String
     let gender: String
     let birthDate: String
-}
-
-struct BoardInfo: Codable {
-    let boardId: Int
-    let title: String
-    let gameDate: String
-    let location: String
-    let homeTeam: String
-    let awayTeam: String
-    let currentPerson: Int
-    let maxPerson: Int
-    let addInfo: String
 }
 
 // Content Struct
 struct Content: Codable {
     let enrollId: Int
     let acceptStatus: String
-    let description: String?
+    let description: String
     let userInfo: UserInfo
-    let boardInfo: BoardInfo
+    let boardInfo: PostListInfoDTO
     let new: Bool?
 }
 
 struct ApplyListResponse: Codable {
-    let content: [Content]
+    let enrollInfoList: [Content]
 }

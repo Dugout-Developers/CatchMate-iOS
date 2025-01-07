@@ -18,9 +18,9 @@ final class NotificationSettingViewController: BaseViewController, View {
         return false
     }
     private let tableView = UITableView()
-    var reactor: NotificationSettingReactor
+    var reactor: AlarmSettingReactor
     
-    init(reactor: NotificationSettingReactor) {
+    init(reactor: AlarmSettingReactor) {
         self.reactor = reactor
         super.init(nibName: nil, bundle: nil)
     }
@@ -52,7 +52,7 @@ final class NotificationSettingViewController: BaseViewController, View {
             make.leading.trailing.equalToSuperview().inset(MainGridSystem.getMargin())
         }
     }
-    private func getToggleState(type: NotificationType) -> Bool {
+    private func getToggleState(type: AlarmnType) -> Bool {
         switch type {
         case .all:
             return !reactor.currentState.allAlarm
@@ -64,15 +64,15 @@ final class NotificationSettingViewController: BaseViewController, View {
             return !reactor.currentState.eventAlarm
         }
     }
-    func bind(reactor: NotificationSettingReactor) {
+    func bind(reactor: AlarmSettingReactor) {
         // 상태 바인딩: 테이블뷰 데이터 소스 설정
         reactor.state
             .map { state in
             [
-                (NotificationType.all, state.allAlarm),
-                (NotificationType.apply, state.applyAlarm),
-                (NotificationType.chat, state.chatAlarm),
-                (NotificationType.event, state.eventAlarm)
+                (AlarmnType.all, state.allAlarm),
+                (AlarmnType.apply, state.applyAlarm),
+                (AlarmnType.chat, state.chatAlarm),
+                (AlarmnType.event, state.eventAlarm)
             ]
             }
             .bind(to: tableView.rx.items(cellIdentifier: "NotificationSettingCell", cellType: NotificationSettingCell.self)) { row, item, cell in
@@ -80,7 +80,7 @@ final class NotificationSettingViewController: BaseViewController, View {
                 cell.configData(type: type, state: state)
                 cell.switchView.rx_isOn()
                     .map { isOn in
-                        NotificationSettingReactor.Action.toggleSwitch((type: type, state: isOn))
+                        AlarmSettingReactor.Action.toggleSwitch((type: type, state: isOn))
                     }
                     .bind(to: reactor.action)
                     .disposed(by: cell.disposeBag)
@@ -116,7 +116,7 @@ final class NotificationSettingCell: UITableViewCell {
     }
     
     
-    func configData(type: NotificationType, state: Bool) {
+    func configData(type: AlarmnType, state: Bool) {
         // 상태가 다를 때만 업데이트
         if switchView.isOn != state {
             switchView.setOn(state, animated: false)

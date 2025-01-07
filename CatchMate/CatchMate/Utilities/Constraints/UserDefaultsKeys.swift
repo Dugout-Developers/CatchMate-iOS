@@ -9,8 +9,6 @@ import Foundation
 
 enum UserDefaultsKeys {
     enum SetupInfo {
-        static let favoriteList = "favoriteList"
-        
         enum UserInfo {
             static let id = "UserId"
             static let email = "UserEmail"

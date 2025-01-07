@@ -16,13 +16,24 @@ final class SetFavoriteRepositoryImpl: SetFavoriteRepository {
     }
     
     func setFavorite(_ state: Bool, _ boardID: String) -> RxSwift.Observable<Bool> {
-        return setFavoriteDS.setFavorite(state, boardID)
-            .flatMap { state in
-                LoggerService.shared.log("setFavorite Repository 데이터 변환 완료")
-                return Observable.just(state)
-            }
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
-            }
+        if state {
+            return setFavoriteDS.setFavorite(boardID)
+                .flatMap { state in
+                    LoggerService.shared.log("setFavorite Repository 데이터 변환 완료")
+                    return Observable.just(state)
+                }
+                .catch { error in
+                    return Observable.error(ErrorMapper.mapToPresentationError(error))
+                }
+        } else {
+            return setFavoriteDS.deleteFavorite(boardID)
+                .flatMap { state in
+                    LoggerService.shared.log("setFavorite Repository 데이터 변환 완료")
+                    return Observable.just(state)
+                }
+                .catch { error in
+                    return Observable.error(ErrorMapper.mapToPresentationError(error))
+                }
+        }
     }
 }

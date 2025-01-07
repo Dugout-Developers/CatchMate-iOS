@@ -20,7 +20,7 @@ final class LoadFavoriteListRepositoryImpl: LoadFavoriteListRepository {
             .flatMap { dtoList in
                 var list = [SimplePost]()
                 dtoList.forEach { dto in
-                    if let mapResult = PostMapper().favoritePostListDTOtoDomain(dto) {
+                    if let mapResult = PostMapper().postListDTOtoDomain(dto) {
                         print("append")
                         list.append(mapResult)
                     }

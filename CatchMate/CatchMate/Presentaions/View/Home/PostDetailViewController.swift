@@ -12,11 +12,7 @@ import RxSwift
 import ReactorKit
 import Kingfisher
 
-extension Reactive where Base: PostDetailViewController {
-    var isFavoriteState: Observable<Bool> {
-        return base._isFavorite.asObservable()
-    }
-}
+
 final class PostDetailViewController: BaseViewController, View {
     override var useSnapKit: Bool {
         return false
@@ -25,12 +21,6 @@ final class PostDetailViewController: BaseViewController, View {
         return false
     }
     private var isFirstFavoriteState: Bool = true
-    private var isFavorite: Bool = false {
-        didSet {
-            _isFavorite.onNext(isFavorite)
-        }
-    }
-    fileprivate var _isFavorite = PublishSubject<Bool>()
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let isAddView: Bool
@@ -41,14 +31,8 @@ final class PostDetailViewController: BaseViewController, View {
         label.numberOfLines = 0
         return label
     }()
-    private var ageOptionLabel: DefaultsPaddingLabel = {
-        let label = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8))
-        label.textColor = .cmNonImportantTextColor
-        label.applyStyle(textStyle: FontSystem.caption01_reguler)
-        label.backgroundColor = .grayScale100
-        label.layer.cornerRadius = 10
-        return label
-    }()
+    private let ageOptionView: UIView = UIView()
+    private var ageOptionLabel: [DefaultsPaddingLabel] = []
     private var genderOptionLabel: DefaultsPaddingLabel = {
         let label = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8))
         label.textColor = .cmNonImportantTextColor
@@ -142,7 +126,7 @@ final class PostDetailViewController: BaseViewController, View {
         let label = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 4, bottom: 2, right: 4))
         label.layer.cornerRadius = 2
         label.textColor = .cmHeadLineTextColor
-        label.backgroundColor = .grayScale50
+        label.backgroundColor = .grayScale100
         return label
     }()
     private let navigatorImageView: UIImageView = {
@@ -200,8 +184,6 @@ final class PostDetailViewController: BaseViewController, View {
         super.viewDidLoad()
         bind(reactor: reactor)
         reactor.action.onNext(.loadPostDetails)
-//        reactor.action.onNext(.loadIsApplied)
-        reactor.action.onNext(.loadIsFavorite)
         setupUI()
         setupNavigation()
         setupButton()
@@ -272,6 +254,7 @@ final class PostDetailViewController: BaseViewController, View {
     }
     
     private func setupData(post: Post) {
+        print(post)
         if let date = DateHelper.shared.toDate(from: post.date, format: "MM.dd") {
             let dateString = DateHelper.shared.toString(from: date, format: "M월 d일")
             dateValueLabel.text = "\(dateString) | \(post.playTime)"
@@ -298,14 +281,15 @@ final class PostDetailViewController: BaseViewController, View {
         awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.awayTeam == post.cheerTeam)
 
         addInfoValueLabel.text = post.addInfo
-
-        if let age = post.preferAge {
-            if age == 0 {
-                ageOptionLabel.text = "전연령"
-            } else {
-                ageOptionLabel.text = "\(String(age))대"
+        
+        if post.preferAge == [0] {
+            ageOptionLabel.append(makeAgeLabel(age: 0))
+        } else {
+            post.preferAge.forEach { age in
+                ageOptionLabel.append(makeAgeLabel(age: age))
             }
         }
+
         if let gender = post.preferGender {
             genderOptionLabel.text = gender.rawValue
         } else {
@@ -321,9 +305,14 @@ final class PostDetailViewController: BaseViewController, View {
         genderLabel.flex.markDirty()
         ageLabel.flex.markDirty()
         addInfoValueLabel.flex.markDirty()
-        ageOptionLabel.flex.markDirty()
+        ageOptionView.flex.define { flex in
+            ageOptionLabel.forEach { label in
+                flex.addItem(label).marginRight(4).marginBottom(4)
+            }
+        }
         nickNameLabel.flex.markDirty()
         genderOptionLabel.flex.markDirty()
+        ageOptionView.flex.layout()
         contentView.flex.layout(mode: .adjustHeight)
         buttonContainer.flex.layout()
     }
@@ -346,7 +335,6 @@ final class PostDetailViewController: BaseViewController, View {
     private func setTextStyle() {
         titleLabel.applyStyle(textStyle: FontSystem.headline03_medium)
         genderOptionLabel.applyStyle(textStyle: FontSystem.caption01_reguler)
-        ageOptionLabel.applyStyle(textStyle: FontSystem.caption01_reguler)
         dateValueLabel.applyStyle(textStyle: FontSystem.body02_medium)
         placeValueLabel.applyStyle(textStyle: FontSystem.body02_medium)
         partynumValueLabel.applyStyle(textStyle: FontSystem.body02_medium)
@@ -355,6 +343,21 @@ final class PostDetailViewController: BaseViewController, View {
         genderLabel.applyStyle(textStyle: FontSystem.caption01_medium)
         ageLabel.applyStyle(textStyle: FontSystem.caption01_medium)
         addInfoValueLabel.applyStyle(textStyle: FontSystem.body02_medium)
+    }
+    
+    private func makeAgeLabel(age: Int) -> DefaultsPaddingLabel {
+        let label = DefaultsPaddingLabel(padding: UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8))
+        label.textColor = .cmNonImportantTextColor
+        label.applyStyle(textStyle: FontSystem.caption01_reguler)
+        label.backgroundColor = .grayScale100
+        label.layer.cornerRadius = 10
+        if age == 0 {
+            label.text = "전연령"
+        } else {
+            label.text = "\(String(age))대"
+        }
+        label.applyStyle(textStyle: FontSystem.caption01_reguler)
+        return label
     }
 }
 
@@ -371,27 +374,16 @@ extension PostDetailViewController {
             .distinctUntilChanged()
             .withUnretained(self)
             .subscribe(onNext: { vc, state in
-                vc.isFavorite = state // 상태를 직접 설정
                 vc.setupFavoriteButton(state)
-                if vc.isFavorite && !vc.isFirstFavoriteState {
-                    vc.showToast(message: "게시글을 저장했어요", buttonContainerExists: true)
-                }
             })
             .disposed(by: disposeBag)
 
-        _isFavorite
-            .observe(on: MainScheduler.asyncInstance)
-            .map{Reactor.Action.changeFavorite($0)}
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
         
         favoriteButton.rx.tap
             .withUnretained(self)
             .subscribe { vc, _ in
-                if vc.isFirstFavoriteState {
-                    vc.isFirstFavoriteState = false
-                }
-                vc.isFavorite.toggle()
+                let currentState = reactor.currentState.isFavorite
+                reactor.action.onNext(.changeFavorite(!currentState))
             }
             .disposed(by: disposeBag)
         
@@ -484,7 +476,7 @@ extension PostDetailViewController {
             flex.addItem().backgroundColor(.white).width(100%).direction(.column).justifyContent(.start).alignItems(.start).define { flex in
                 flex.addItem(titleLabel).marginBottom(6)
                 flex.addItem().direction(.row).wrap(.wrap).justifyContent(.start).width(100%).define { flex in
-                    flex.addItem(ageOptionLabel).marginRight(4).marginBottom(4)
+                    flex.addItem(ageOptionView).direction(.row)
                     flex.addItem(genderOptionLabel).marginRight(4).marginBottom(4)
                 }.marginBottom(16) // 선호사항 뱃지
                 flex.addItem().direction(.column).justifyContent(.start).alignItems(.start).define({ flex in

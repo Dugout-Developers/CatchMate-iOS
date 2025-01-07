@@ -8,14 +8,14 @@
 import UIKit
 import RxSwift
 
-final class SetNotificationRepositoryImpl: SetNotificationRepository {
-    private let setNotificationDS: SetNotificationDataSource
+final class SetAlarmRepositoryImpl: SetAlarmRepository {
+    private let setNotificationDS: SetAlarmDataSource
     
-    init(setNotificationDS: SetNotificationDataSource) {
+    init(setNotificationDS: SetAlarmDataSource) {
         self.setNotificationDS = setNotificationDS
     }
     
-    func setNotificationRepository(type: NotificationType, state: Bool) -> RxSwift.Observable<Bool> {
+    func setNotificationRepository(type: AlarmnType, state: Bool) -> RxSwift.Observable<Bool> {
         return setNotificationDS.setNotification(type: type.rawValue, isEnabled: state ? "Y" : "N")
             .flatMap { dto -> Observable<Bool> in
                 if dto.isEnabled == "Y" {

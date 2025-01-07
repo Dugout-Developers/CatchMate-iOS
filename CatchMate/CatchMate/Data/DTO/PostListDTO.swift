@@ -8,13 +8,17 @@
 import Foundation
 
 struct PostListDTO: Codable {
+    let boardInfoList: [PostListInfoDTO]
+    let totalPages: Int
+    let totalElements: Int
+    let isFirst: Bool
+    let isLast: Bool
+}
+struct PostListInfoDTO: Codable {
     let boardId: Int
     let title: String
-    let gameDate: String
-    let location: String
-    let homeTeam: String
-    let awayTeam: String
-    let cheerTeam: String
+    let gameInfo: GameInfoDTO
+    let cheerClubId: Int
     let currentPerson: Int
     let maxPerson: Int
 }

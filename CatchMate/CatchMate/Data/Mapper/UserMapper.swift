@@ -9,13 +9,12 @@ import UIKit
 
 final class UserMapper {
     func userToDomain(_ dto: UserDTO) -> User {
-        let team = Team(rawValue: dto.favoriteGudan) ?? .allTeamLove
+        let team = Team(serverId: dto.favoriteClub.id) ?? .allTeamLove
         let gender = Gender(serverValue: dto.gender) ?? .man
-        return User(id: String(dto.userID), email: dto.email, nickName: dto.nickName, birth: dto.birthDate, team: team, gener: gender, cheerStyle: CheerStyles(rawValue: dto.watchStyle ?? ""), profilePicture: dto.picture, allAlarm: dto.allAlarm == "Y" ? true : false, chatAlarm: dto.chatAlarm == "Y" ? true : false, enrollAlarm: dto.enrollAlarm == "Y" ? true : false, eventAlarm: dto.eventAlarm == "Y" ? true : false, description: dto.description)
+        return User(id: String(dto.userId), email: dto.email, nickName: dto.nickName, birth: dto.birthDate, team: team, gener: gender, cheerStyle: CheerStyles(rawValue: dto.watchStyle ?? ""), profilePicture: dto.profileImageUrl, allAlarm: dto.allAlarm == "Y" ? true : false, chatAlarm: dto.chatAlarm == "Y" ? true : false, enrollAlarm: dto.enrollAlarm == "Y" ? true : false, eventAlarm: dto.eventAlarm == "Y" ? true : false)
     }
     
     func profileEditRequestDomainToDTO(domain: ProfileEdit) -> ProfileEditRequestDTO {
-        print("------------Mapping: \(domain.image)")
-        return ProfileEditRequestDTO(request: ProfileEditRequestDTO.Request(nickName: domain.nickName, favGudan: domain.team.rawValue, watchStyle: domain.style != nil ? domain.style!.rawValue : ""), profileImage: domain.image ?? UIImage(named: "tempProfile")!)
+        return ProfileEditRequestDTO(request: ProfileEditRequestDTO.Request(nickName: domain.nickName, favoriteClubId: domain.team.serverId, watchStyle: domain.style != nil ? domain.style!.rawValue : ""), profileImage: domain.image ?? UIImage(named: "tempProfile")!)
     }
 }

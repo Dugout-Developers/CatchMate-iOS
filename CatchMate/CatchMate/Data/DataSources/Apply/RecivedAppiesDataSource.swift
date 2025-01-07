@@ -37,7 +37,7 @@ final class RecivedAppiesDataSourceImpl: RecivedAppiesDataSource {
         
         return APIService.shared.requestAPI(type: .receivedApply, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: ApplyListResponse.self)
             .map { response -> [Content] in
-                return response.content
+                return response.enrollInfoList
             }
             .catch { [weak self] error in
                 guard let self = self else { return Observable.error(OtherError.notFoundSelf) }
@@ -53,7 +53,7 @@ final class RecivedAppiesDataSourceImpl: RecivedAppiesDataSource {
                             LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
                             return APIService.shared.requestAPI(type: .receivedApply, parameters: parameters, headers: newHeaders, encoding: URLEncoding.default, dataType: ApplyListResponse.self)
                                 .map { response -> [Content] in
-                                    return response.content
+                                    return response.enrollInfoList
                                 }
                         }
                 }
@@ -72,7 +72,7 @@ final class RecivedAppiesDataSourceImpl: RecivedAppiesDataSource {
         
         return APIService.shared.requestAPI(type: .receivedApplyAll, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: ApplyListResponse.self)
             .map { response -> [Content] in
-                return response.content
+                return response.enrollInfoList
             }
             .catch { [weak self] error in
                 guard let self = self else { return Observable.error(OtherError.notFoundSelf) }
@@ -88,7 +88,7 @@ final class RecivedAppiesDataSourceImpl: RecivedAppiesDataSource {
                             LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
                             return APIService.shared.requestAPI(type: .receivedApplyAll, parameters: nil, headers: newHeaders, encoding: URLEncoding.default, dataType: ApplyListResponse.self)
                                 .map { response -> [Content] in
-                                    return response.content
+                                    return response.enrollInfoList
                                 }
                         }
                 }
