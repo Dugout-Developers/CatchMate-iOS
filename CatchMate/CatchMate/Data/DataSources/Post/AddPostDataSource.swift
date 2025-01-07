@@ -11,7 +11,7 @@ import RxAlamofire
 import Alamofire
 
 protocol AddPostDataSource {
-    func addPost(_ post: AddPostRequsetDTO) -> Observable<Int>
+    func addPost(_ post: PostRequsetDTO) -> Observable<Int>
 }
 final class AddPostDataSourceImpl: AddPostDataSource {
     private let tokenDataSource: TokenDataSource
@@ -19,7 +19,7 @@ final class AddPostDataSourceImpl: AddPostDataSource {
     init(tokenDataSource: TokenDataSource) {
         self.tokenDataSource = tokenDataSource
     }
-    func addPost(_ post: AddPostRequsetDTO) -> Observable<Int> {
+    func addPost(_ post: PostRequsetDTO) -> Observable<Int> {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
@@ -63,7 +63,7 @@ final class AddPostDataSourceImpl: AddPostDataSource {
             }
     }
     
-    func encodingData(_ post: AddPostRequsetDTO) -> [String: Any] {
+    func encodingData(_ post: PostRequsetDTO) -> [String: Any] {
         let parameters: [String: Any] = [
             "title": post.title,
             "content": post.content,

@@ -11,7 +11,7 @@ import RxAlamofire
 import Alamofire
 
 protocol EditPostDataSource {
-    func editPost(_ post: EditPostRequsetDTO) -> Observable<Int>
+    func editPost(_ post: PostRequsetDTO, boardId: Int) -> Observable<Int>
 }
 final class EditPostDataSourceImpl: EditPostDataSource {
     private let tokenDataSource: TokenDataSource
@@ -19,7 +19,7 @@ final class EditPostDataSourceImpl: EditPostDataSource {
     init(tokenDataSource: TokenDataSource) {
         self.tokenDataSource = tokenDataSource
     }
-    func editPost(_ post: EditPostRequsetDTO) -> Observable<Int> {
+    func editPost(_ post: PostRequsetDTO, boardId: Int) -> Observable<Int> {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
@@ -37,7 +37,7 @@ final class EditPostDataSourceImpl: EditPostDataSource {
             print(jsonObject)
             if let jsonDictionary = jsonObject as? [String: Any] {
                 LoggerService.shared.debugLog("parameters Encoding:\(jsonDictionary)")
-                return APIService.shared.requestAPI(type: .editPost, parameters: jsonDictionary, headers: headers, encoding: JSONEncoding.default, dataType: AddPostResponseDTO.self)
+                return APIService.shared.requestAPI(addEndPoint: "\(boardId)", type: .editPost, parameters: jsonDictionary, headers: headers, encoding: JSONEncoding.default, dataType: AddPostResponseDTO.self)
                     .map({ response in
                         LoggerService.shared.debugLog("Post 수정 성공 - result: \(response)")
                         return response.boardId

@@ -28,12 +28,12 @@ final class AddPostRepositoryImpl: AddPostRepository {
             }
     }
     
-    func editPost(_ post: RequestEditPost) -> Observable<Int> {
+    func editPost(_ post: RequestEditPost, boardId: Int) -> Observable<Int> {
         guard let post = PostMapper().domainToDto(post) else {
             print("Repository - editPost: \(post)")
             return Observable.error(ErrorMapper.mapToPresentationError(MappingError.mappingFailed))
         }
-        return editPostDS.editPost(post)
+        return editPostDS.editPost(post, boardId: boardId)
             .catch { error in
                 return Observable.error(ErrorMapper.mapToPresentationError(error))
             }
