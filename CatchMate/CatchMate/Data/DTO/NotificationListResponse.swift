@@ -9,7 +9,7 @@ import Foundation
 
 struct NotificationDTO: Codable {
     let notificationId: Int
-    let boardInfo: BoardInfo
+    let boardInfo: PostListInfoDTO
     let title: String
     let body: String
     let createdAt: String
