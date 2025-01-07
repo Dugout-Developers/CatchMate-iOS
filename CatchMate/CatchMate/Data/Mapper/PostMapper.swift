@@ -6,19 +6,20 @@
 //
 
 final class PostMapper {
-    func domainToDto(_ domain: RequestPost) -> AddPostRequsetDTO? {
+    func domainToDto(_ domain: RequestPost) -> PostRequsetDTO? {
         let dateString = DateHelper.shared.toString(from: domain.date, format: "yyyy-MM-dd")
         let playTime = domain.playTime+":00"
         let resultString = "\(dateString) \(playTime)"
         LoggerService.shared.debugLog("PostMapper: Domain -> DTO : \(resultString)")
-        return AddPostRequsetDTO(title: domain.title, gameRequest: GameInfo(homeClubId: domain.homeTeam.serverId, awayClubId: domain.awayTeam.serverId, gameStartDate: resultString, location: domain.location), cheerClubId: domain.cheerTeam.serverId, maxPerson: domain.maxPerson, preferredGender: domain.preferGender?.serverRequest, preferredAgeRange: domain.preferAge.map{String($0)}, content: domain.addInfo, isCompleted: true)
+        return PostRequsetDTO(title: domain.title, gameRequest: GameInfo(homeClubId: domain.homeTeam.serverId, awayClubId: domain.awayTeam.serverId, gameStartDate: resultString, location: domain.location), cheerClubId: domain.cheerTeam.serverId, maxPerson: domain.maxPerson, preferredGender: domain.preferGender?.serverRequest, preferredAgeRange: domain.preferAge.map{String($0)}, content: domain.addInfo, isCompleted: true)
     }
-    func domainToDto(_ domain: RequestEditPost) -> EditPostRequsetDTO? {
+    func domainToDto(_ domain: RequestEditPost) -> PostRequsetDTO? {
         let dateString = DateHelper.shared.toString(from: domain.date, format: "yyyy-MM-dd")
         let playTime = domain.playTime+":00"
         let resultString = "\(dateString) \(playTime)"
         LoggerService.shared.debugLog("PostMapper: Domain -> DTO : \(resultString)")
-        return EditPostRequsetDTO(boardId: Int(domain.id)!, title: domain.title, gameDate: resultString, location: domain.location, homeTeam: domain.homeTeam.rawValue, awayTeam: domain.awayTeam.rawValue, cheerTeam: domain.cheerTeam.rawValue, currentPerson: domain.currentPerson, maxPerson: domain.maxPerson, preferGender: domain.preferGender?.serverRequest, preferAge: domain.preferAge.map{String($0)}, addInfo: domain.addInfo)
+        let preferAge = domain.preferAge.compactMap{String($0)}
+        return PostRequsetDTO(title: domain.title, gameRequest: GameInfo(homeClubId: domain.homeTeam.serverId, awayClubId: domain.awayTeam.serverId, gameStartDate: resultString, location: domain.location), cheerClubId: domain.cheerTeam.serverId, maxPerson: domain.maxPerson, preferredGender: domain.preferGender?.rawValue, preferredAgeRange: preferAge, content: domain.addInfo, isCompleted: true)
     }
     
     func dtoToDomain(_ dto: PostDTO) -> Post? {

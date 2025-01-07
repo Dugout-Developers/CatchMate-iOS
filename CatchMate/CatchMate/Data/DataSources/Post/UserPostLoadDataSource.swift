@@ -37,7 +37,7 @@ final class UserPostLoadDataSourceImpl: UserPostLoadDataSource {
         
         LoggerService.shared.debugLog("parameters: \(parameters)")
         LoggerService.shared.debugLog("PostListLoadDataSourceImpl 토큰 확인: \(headers)")
-        return APIService.shared.requestAPI(type: .userPostlist, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: PostListDTO.self)
+        return APIService.shared.requestAPI(addEndPoint: "\(userId)", type: .userPostlist, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: PostListDTO.self)
             .map { postListDTO in
                 LoggerService.shared.debugLog("PostList Load 성공: \(postListDTO)")
                 return postListDTO.boardInfoList

@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct AddPostRequsetDTO: Codable {
+struct PostRequsetDTO: Codable {
     let title: String
     let gameRequest: GameInfo
     let cheerClubId: Int
@@ -15,21 +15,6 @@ struct AddPostRequsetDTO: Codable {
     let preferredAgeRange: [String]
     let content: String
     let isCompleted: Bool
-}
-
-struct EditPostRequsetDTO: Codable {
-    let boardId: Int
-    let title: String
-    let gameDate: String
-    let location: String
-    let homeTeam: String
-    let awayTeam: String
-    let cheerTeam: String
-    let currentPerson: Int
-    let maxPerson: Int
-    let preferGender: String?
-    let preferAge: [String]
-    let addInfo: String
 }
 
 struct GameInfo: Codable {

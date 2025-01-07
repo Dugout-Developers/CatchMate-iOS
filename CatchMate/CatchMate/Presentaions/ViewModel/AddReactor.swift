@@ -192,13 +192,16 @@ final class AddReactor: Reactor {
                 return Observable.just(Mutation.setError(PresentationError.showErrorPage))
             }
         case .updateEditPost:
+            guard let idStr = currentState.editPost?.id, let id = Int(idStr) else {
+                return Observable.just(Mutation.setError(PresentationError.showToastMessage(message: "게시물 수정에 실패했습니다.")))
+            }
             guard let request = validatePost(currentState) else {
                 return Observable.just(Mutation.setError(.showToastMessage(message: "입력값 확인 후 다시 시도해주세요.")))
             }
             guard let requestEditPost = mappingRequestEditPost(request.0) else {
                 return Observable.just(Mutation.setError(.showToastMessage(message: "다시 시도해주세요.")))
             }
-            return addUsecase.editPost(requestEditPost)
+            return addUsecase.editPost(requestEditPost, boardId: id)
                 .map{ id in
                     return Mutation.editPost(id)
                 }
