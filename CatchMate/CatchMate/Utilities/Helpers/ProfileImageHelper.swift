@@ -27,6 +27,22 @@ final class ProfileImageHelper {
             profileImageView.image = UIImage(named: "tempProfile")
         }
     }
+    
+    static func urlToUIImage(_ imageString: String, completion: @escaping (UIImage?) -> Void) {
+        guard let url = URL(string: imageString) else {
+            print("잘못된 URL")
+            completion(nil)
+            return
+        }
+        KingfisherManager.shared.retrieveImage(with: url) { result in
+            switch result {
+            case .success(let value):
+                completion(value.image)
+            case .failure:
+                completion(nil)
+            }
+        }
+    }
 
     static func processString(_ string: String) -> String? {
         if isBase64Encoded(string) {
