@@ -8,18 +8,18 @@
 import UIKit
 import RxSwift
 
-protocol SetNotificationUseCase {
-    func execute(type: NotificationType, state: Bool) -> Observable<Bool>
+protocol SetAlarmUseCase {
+    func execute(type: AlarmnType, state: Bool) -> Observable<Bool>
 }
 
-final class SetNotificationUseCaseImpl: SetNotificationUseCase {
-    private let setNotificationRepository: SetNotificationRepository
+final class SetAlarmUseCaseImpl: SetAlarmUseCase {
+    private let setNotificationRepository: SetAlarmRepository
     
-    init(setNotificationRepository: SetNotificationRepository) {
+    init(setNotificationRepository: SetAlarmRepository) {
         self.setNotificationRepository = setNotificationRepository
     }
     
-    func execute(type: NotificationType, state: Bool) -> Observable<Bool> {
+    func execute(type: AlarmnType, state: Bool) -> Observable<Bool> {
         return setNotificationRepository.setNotificationRepository(type: type, state: state)
             .catch { error in
                 return Observable.error(DomainError(error: error, context: .action, message: "요청에 실패했습니다.").toPresentationError())

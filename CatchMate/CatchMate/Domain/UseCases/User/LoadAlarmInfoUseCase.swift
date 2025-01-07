@@ -8,21 +8,21 @@
 import UIKit
 import RxSwift
 
-protocol LoadNotificationInfoUseCase {
-    func loadNotificationInfo() -> Observable<NotificationInfo>
+protocol LoadAlarmInfoUseCase {
+    func loadNotificationInfo() -> Observable<AlarmInfo>
 }
 
-final class LoadNotificationUseCaseImpl: LoadNotificationInfoUseCase {
+final class LoadAlarmUseCaseImpl: LoadAlarmInfoUseCase {
     private let userRepository: UserRepository
    
     init(userRepository: UserRepository) {
         self.userRepository = userRepository
     }
     
-    func loadNotificationInfo() -> Observable<NotificationInfo> {
+    func loadNotificationInfo() -> Observable<AlarmInfo> {
         return userRepository.loadUser()
             .map { user in
-                return NotificationInfo(user: user)
+                return AlarmInfo(user: user)
             }
             .catch { error in
                 return Observable.error(DomainError(error: error, context: .pageLoad).toPresentationError())

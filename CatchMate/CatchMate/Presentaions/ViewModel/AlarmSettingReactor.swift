@@ -10,10 +10,10 @@ import ReactorKit
 
 
 
-final class NotificationSettingReactor: Reactor {
+final class AlarmSettingReactor: Reactor {
     enum Action {
         case loadNotificationInfo
-        case toggleSwitch((type: NotificationType, state: Bool))
+        case toggleSwitch((type: AlarmnType, state: Bool))
         case setError(PresentationError?)
     }
     enum Mutation {
@@ -21,7 +21,7 @@ final class NotificationSettingReactor: Reactor {
         case setApplyAlarm(Bool)
         case setChatAlarm(Bool)
         case setEventAlarm(Bool)
-        case setNotificationInfo(NotificationInfo)
+        case setNotificationInfo(AlarmInfo)
         case setError(PresentationError?)
     }
     struct State {
@@ -33,10 +33,10 @@ final class NotificationSettingReactor: Reactor {
     }
     
     var initialState: State
-    private let notificationInfoUsecase: LoadNotificationInfoUseCase
-    private let setNotificationUsecase: SetNotificationUseCase
+    private let notificationInfoUsecase: LoadAlarmInfoUseCase
+    private let setNotificationUsecase: SetAlarmUseCase
     
-    init(notificationInfoUsecase: LoadNotificationInfoUseCase, setNotificationUsecase: SetNotificationUseCase) {
+    init(notificationInfoUsecase: LoadAlarmInfoUseCase, setNotificationUsecase: SetAlarmUseCase) {
         self.initialState = State()
         self.notificationInfoUsecase = notificationInfoUsecase
         self.setNotificationUsecase = setNotificationUsecase

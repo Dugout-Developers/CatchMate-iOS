@@ -158,15 +158,23 @@ class DIContainerService {
         return RecevieMateReactor(receivedAppliesUsecase: loadReceivedAppliesUseCase, receivedAllAppliesUsecase: loadAllReceiveAppliesUseCase, applyManageUsecase: applyManageUsecase)
     }
     
-    func makeNotifiacationSettingReactor() -> NotificationSettingReactor {
+    func makeNotifiacationSettingReactor() -> AlarmSettingReactor {
         let userDataSource = UserDataSourceImpl(tokenDataSource: tokenDS)
         let userRepository = UserRepositoryImpl(userDS: userDataSource)
-        let loadNotificationInfoUsecase = LoadNotificationUseCaseImpl(userRepository: userRepository)
-        let setNotificationDataSource = SetNotificationDataSourceImpl(tokenDataSource: tokenDS)
-        let setNotificationRepository = SetNotificationRepositoryImpl(setNotificationDS: setNotificationDataSource)
-        let setNotificationUsecase = SetNotificationUseCaseImpl(setNotificationRepository: setNotificationRepository)
+        let loadAlarmInfoUsecase = LoadAlarmUseCaseImpl(userRepository: userRepository)
+        let setAlarmDataSource = SetAlarmDataSourceImpl(tokenDataSource: tokenDS)
+        let setAlarmRepository = SetAlarmRepositoryImpl(setNotificationDS: setAlarmDataSource)
+        let setAlarmUsecase = SetAlarmUseCaseImpl(setNotificationRepository: setAlarmRepository)
         
-        return NotificationSettingReactor(notificationInfoUsecase: loadNotificationInfoUsecase, setNotificationUsecase: setNotificationUsecase)
+        return AlarmSettingReactor(notificationInfoUsecase: loadAlarmInfoUsecase, setNotificationUsecase: setAlarmUsecase)
+    }
+    
+    func makeNotiListReactor() -> NotificationListReactor {
+        let loadListDS = NotificationListDataSourceImpl(tokenDataSource: tokenDS)
+        let loadListRepository = LoadNotificationListRepositoryImpl(loadNotificationDS: loadListDS)
+        let loadListUsecase = LoadNotificationListUseCaseImpl(loadNotificationRepository: loadListRepository)
+        
+        return NotificationListReactor(loadlistUsecase: loadListUsecase)
     }
     
     

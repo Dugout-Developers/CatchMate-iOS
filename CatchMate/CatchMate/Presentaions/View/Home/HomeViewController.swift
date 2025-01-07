@@ -219,7 +219,7 @@ extension HomeViewController {
     }
     
     @objc private func clickNotiButton(_ sender: UIButton) {
-        let notiViewController = NotiViewController()
+        let notiViewController = NotiViewController(reactor: DIContainerService.shared.makeNotiListReactor())
         notiViewController.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(notiViewController, animated: true)
     }

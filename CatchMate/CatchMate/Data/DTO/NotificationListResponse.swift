@@ -9,9 +9,15 @@ import Foundation
 
 struct NotificationDTO: Codable {
     let notificationId: Int
-    let boardInfo: PostListInfoDTO
+    let boardInfo: PostDTO
+    let senderProfileImageUrl: String
     let title: String
     let body: String
     let createdAt: String
     let read: Bool
 }
+
+struct NotificationListResponse: Codable {
+    let notificationInfoList: [NotificationDTO]
+}
+

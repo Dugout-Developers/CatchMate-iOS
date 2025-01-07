@@ -9,11 +9,11 @@ import RxSwift
 import RxAlamofire
 import Alamofire
 
-protocol SetNotificationDataSource {
+protocol SetAlarmDataSource {
     func setNotification(type: String, isEnabled: String) -> Observable<SetNotificationResponseDTO>
 }
 
-final class SetNotificationDataSourceImpl: SetNotificationDataSource {
+final class SetAlarmDataSourceImpl: SetAlarmDataSource {
     private let tokenDataSource: TokenDataSource
     
     init(tokenDataSource: TokenDataSource) {

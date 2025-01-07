@@ -7,7 +7,7 @@
 import UIKit
 import RxSwift
 
-protocol SetNotificationRepository {
-    func setNotificationRepository(type: NotificationType, state: Bool) -> Observable<Bool>
+protocol SetAlarmRepository {
+    func setNotificationRepository(type: AlarmnType, state: Bool) -> Observable<Bool>
 }
 
