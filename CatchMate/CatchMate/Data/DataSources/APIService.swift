@@ -81,7 +81,8 @@ enum Endpoint {
             /// 게시글 조회 /board/{boardId}
             return "/board/"
         case .upPost:
-            return "/board/up"
+            /// 끌어올리기 /board/{boardId}/lift-up
+            return "/board/"
         case .removePost:
             return "/board/remove"
         case .loadFavorite:

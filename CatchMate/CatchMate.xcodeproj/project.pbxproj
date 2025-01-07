@@ -219,6 +219,9 @@
 		5375B1A62D2CD43C000581B3 /* NotificationMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B1A42D2CD432000581B3 /* NotificationMapper.swift */; };
 		5375B1AE2D2CD697000581B3 /* LoadNotificationListRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B1AD2D2CD68C000581B3 /* LoadNotificationListRepository.swift */; };
 		5375B1B82D2CDEAA000581B3 /* NotificationListReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B1B72D2CDEA3000581B3 /* NotificationListReactor.swift */; };
+		5375B1CC2D2D8D7A000581B3 /* UpPostRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B1CB2D2D8D73000581B3 /* UpPostRepository.swift */; };
+		5375B1CE2D2D8D94000581B3 /* UpPostRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B1CD2D2D8D8D000581B3 /* UpPostRepositoryImpl.swift */; };
+		5375B1D02D2D8DE4000581B3 /* UpPostUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B1CF2D2D8DDF000581B3 /* UpPostUseCase.swift */; };
 		5378EA9B2C6487A600A2422C /* ReceiveMateListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5378EA9A2C6487A600A2422C /* ReceiveMateListCell.swift */; };
 		5378EA9D2C649B6900A2422C /* ReceiveMateListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5378EA9C2C649B6900A2422C /* ReceiveMateListViewController.swift */; };
 		5378EA9F2C649BBE00A2422C /* RecevieMateReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5378EA9E2C649BBE00A2422C /* RecevieMateReactor.swift */; };
@@ -549,6 +552,9 @@
 		5375B1A42D2CD432000581B3 /* NotificationMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationMapper.swift; sourceTree = "<group>"; };
 		5375B1AD2D2CD68C000581B3 /* LoadNotificationListRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadNotificationListRepository.swift; sourceTree = "<group>"; };
 		5375B1B72D2CDEA3000581B3 /* NotificationListReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListReactor.swift; sourceTree = "<group>"; };
+		5375B1CB2D2D8D73000581B3 /* UpPostRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpPostRepository.swift; sourceTree = "<group>"; };
+		5375B1CD2D2D8D8D000581B3 /* UpPostRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpPostRepositoryImpl.swift; sourceTree = "<group>"; };
+		5375B1CF2D2D8DDF000581B3 /* UpPostUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpPostUseCase.swift; sourceTree = "<group>"; };
 		5378EA9A2C6487A600A2422C /* ReceiveMateListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMateListCell.swift; sourceTree = "<group>"; };
 		5378EA9C2C649B6900A2422C /* ReceiveMateListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMateListViewController.swift; sourceTree = "<group>"; };
 		5378EA9E2C649BBE00A2422C /* RecevieMateReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecevieMateReactor.swift; sourceTree = "<group>"; };
@@ -870,6 +876,7 @@
 		531E4C292C6B5BF40052E754 /* Post */ = {
 			isa = PBXGroup;
 			children = (
+				5375B1CD2D2D8D8D000581B3 /* UpPostRepositoryImpl.swift */,
 				53B8E2602C61229A001D0ADF /* AddPostRepositoryImpl.swift */,
 				531E4C2A2C6B5C2E0052E754 /* PostListLoadRepositoryImpl.swift */,
 				53E5925F2C6D0A870042E1D7 /* LoadPostRepositoryImpl.swift */,
@@ -884,6 +891,7 @@
 		531E4C302C6B61F90052E754 /* Post */ = {
 			isa = PBXGroup;
 			children = (
+				5375B1CB2D2D8D73000581B3 /* UpPostRepository.swift */,
 				53B8E25C2C612245001D0ADF /* AddPostRepository.swift */,
 				531E4C2C2C6B5C4A0052E754 /* PostListLoadRepository.swift */,
 				53E592582C6D05C70042E1D7 /* LoadPostRepository.swift */,
@@ -1502,6 +1510,7 @@
 		53E5925A2C6D05D20042E1D7 /* Post */ = {
 			isa = PBXGroup;
 			children = (
+				5375B1CF2D2D8DDF000581B3 /* UpPostUseCase.swift */,
 				53B8E25A2C612171001D0ADF /* AddPostUseCase.swift */,
 				531E4C312C6B62070052E754 /* PostListLoadUseCase.swift */,
 				53E5925B2C6D05DD0042E1D7 /* PostDetailUseCase.swift */,
@@ -1924,6 +1933,7 @@
 				53B8E2652C61280D001D0ADF /* RequestPost.swift in Sources */,
 				53E5925C2C6D05DD0042E1D7 /* PostDetailUseCase.swift in Sources */,
 				53EECAE62D0B2E8300775FD6 /* ProfileEditUseCase.swift in Sources */,
+				5375B1CC2D2D8D7A000581B3 /* UpPostRepository.swift in Sources */,
 				531E4C252C6B549B0052E754 /* PostListLoadDataSource.swift in Sources */,
 				5375B1572D228F25000581B3 /* BaseReactor.swift in Sources */,
 				5375B13E2D1A85F6000581B3 /* DomainError.swift in Sources */,
@@ -1945,9 +1955,11 @@
 				531DCA252C67C5450015AC53 /* ReceiveMateListDetailViewController.swift in Sources */,
 				5375B1AE2D2CD697000581B3 /* LoadNotificationListRepository.swift in Sources */,
 				5317867F2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift in Sources */,
+				5375B1CE2D2D8D94000581B3 /* UpPostRepositoryImpl.swift in Sources */,
 				53B8E23B2C5C7BCF001D0ADF /* UserRepository.swift in Sources */,
 				53E7DBC12CAECC2C00DC058D /* ReportReactor.swift in Sources */,
 				533B29252C770A9600BFE9F6 /* LoadFavoriteListUseCase.swift in Sources */,
+				5375B1D02D2D8DE4000581B3 /* UpPostUseCase.swift in Sources */,
 				5317867B2C2077EC00ACEF6A /* NotiViewTableViewCell.swift in Sources */,
 				531786662C1F014E00ACEF6A /* CMTextField.swift in Sources */,
 				53E4A9BE2C50046E00D21B49 /* SignUpModel.swift in Sources */,
