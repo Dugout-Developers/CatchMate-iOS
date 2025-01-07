@@ -282,7 +282,7 @@ final class PostDetailViewController: BaseViewController, View {
 
         addInfoValueLabel.text = post.addInfo
         
-        if post.preferAge.isEmpty {
+        if post.preferAge == [0] {
             ageOptionLabel.append(makeAgeLabel(age: 0))
         } else {
             post.preferAge.forEach { age in
@@ -476,7 +476,7 @@ extension PostDetailViewController {
             flex.addItem().backgroundColor(.white).width(100%).direction(.column).justifyContent(.start).alignItems(.start).define { flex in
                 flex.addItem(titleLabel).marginBottom(6)
                 flex.addItem().direction(.row).wrap(.wrap).justifyContent(.start).width(100%).define { flex in
-                    flex.addItem(ageOptionView).direction(.row).wrap(.wrap).justifyContent(.start).alignItems(.center)
+                    flex.addItem(ageOptionView).direction(.row)
                     flex.addItem(genderOptionLabel).marginRight(4).marginBottom(4)
                 }.marginBottom(16) // 선호사항 뱃지
                 flex.addItem().direction(.column).justifyContent(.start).alignItems(.start).define({ flex in

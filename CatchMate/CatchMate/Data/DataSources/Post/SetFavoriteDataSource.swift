@@ -31,7 +31,7 @@ final class SetFavoriteDataSourceImpl: SetFavoriteDataSource {
         
         LoggerService.shared.log("토큰 확인: \(headers)")
         
-        return APIService.shared.requestAPI(addEndPoint: boardID, type: .setFavorite, parameters: nil, headers: headers, encoding: URLEncoding.queryString, dataType: SetFavoriteResponse.self)
+        return APIService.shared.requestAPI(addEndPoint: boardID, type: .setFavorite, parameters: nil, headers: headers, encoding: URLEncoding.queryString, dataType: FavoriteResponse.self)
             .map { _ in
                 return true
             }
@@ -47,7 +47,7 @@ final class SetFavoriteDataSourceImpl: SetFavoriteDataSource {
                                 "AccessToken": token
                             ]
                             LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            return APIService.shared.requestAPI(addEndPoint: boardID, type: .setFavorite, parameters: nil, headers: headers, encoding: URLEncoding.queryString, dataType: SetFavoriteResponse.self)
+                            return APIService.shared.requestAPI(addEndPoint: boardID, type: .setFavorite, parameters: nil, headers: headers, encoding: URLEncoding.queryString, dataType: FavoriteResponse.self)
                                 .map { _ in
                                     LoggerService.shared.debugLog("찜하기 성공")
                                     return true
@@ -71,7 +71,7 @@ final class SetFavoriteDataSourceImpl: SetFavoriteDataSource {
         
         LoggerService.shared.log("토큰 확인: \(headers)")
         
-        return APIService.shared.requestAPI(addEndPoint: boardID, type: .deleteFavorite, parameters: nil, headers: headers, encoding: URLEncoding.queryString, dataType: DeleteFavoriteResponse.self)
+        return APIService.shared.requestAPI(addEndPoint: boardID, type: .deleteFavorite, parameters: nil, headers: headers, encoding: URLEncoding.queryString, dataType: FavoriteResponse.self)
             .map { _ in
                 return true
             }
@@ -87,7 +87,7 @@ final class SetFavoriteDataSourceImpl: SetFavoriteDataSource {
                                 "AccessToken": token
                             ]
                             LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            return APIService.shared.requestAPI(addEndPoint: boardID, type: .setFavorite, parameters: nil, headers: headers, encoding: URLEncoding.queryString, dataType: SetFavoriteResponse.self)
+                            return APIService.shared.requestAPI(addEndPoint: boardID, type: .setFavorite, parameters: nil, headers: headers, encoding: URLEncoding.queryString, dataType: FavoriteResponse.self)
                                 .map { _ in
                                     LoggerService.shared.debugLog("찜삭제 성공")
                                     return true
@@ -102,10 +102,6 @@ final class SetFavoriteDataSourceImpl: SetFavoriteDataSource {
     }
 }
 
-struct DeleteFavoriteResponse: Codable {
-    let boardId: Int
-}
-
-struct SetFavoriteResponse: Codable {
+struct FavoriteResponse: Codable {
     let state: Bool
 }
