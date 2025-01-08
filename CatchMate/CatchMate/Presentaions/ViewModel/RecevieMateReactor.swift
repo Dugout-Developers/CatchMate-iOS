@@ -54,6 +54,9 @@ final class RecevieMateReactor: Reactor {
                     }
                 }
         case .selectPost(let postId):
+            if postId == nil {
+                return Observable.just(Mutation.setSelectedPostApplies(nil))
+            }
             if let postId = postId, let intId = Int(postId) {
                 let list = resetNew(postId)
                 let loadAppiles = receivedAppliesUsecase.execute(boardId: intId)
