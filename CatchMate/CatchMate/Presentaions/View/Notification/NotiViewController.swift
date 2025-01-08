@@ -61,8 +61,8 @@ extension NotiViewController {
         tableView.rx.itemDeleted
           .observe(on: MainScheduler.asyncInstance)
           .withUnretained(self)
-          .bind { _, indexPath in
-              print("remove \(indexPath.row+1) item")
+          .bind { vc, indexPath in
+              vc.reactor.action.onNext(.deleteNoti(indexPath.row))
           }
           .disposed(by: disposeBag)
     }

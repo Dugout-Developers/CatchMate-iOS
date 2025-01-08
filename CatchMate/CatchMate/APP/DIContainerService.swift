@@ -178,7 +178,11 @@ class DIContainerService {
         let loadListRepository = LoadNotificationListRepositoryImpl(loadNotificationDS: loadListDS)
         let loadListUsecase = LoadNotificationListUseCaseImpl(loadNotificationRepository: loadListRepository)
         
-        return NotificationListReactor(loadlistUsecase: loadListUsecase)
+        let deleteDS = DeleteNotificationDataSourceImpl(tokenDataSource: tokenDS)
+        let deleteRepository = DeleteNotificationRepositoryImpl(deleteNotiDS: deleteDS)
+        let deleteUsecase = DeleteNotificationUseCaseImpl(deleteNotiRepository: deleteRepository)
+        
+        return NotificationListReactor(loadlistUsecase: loadListUsecase, deleteNotiUsecase: deleteUsecase)
     }
     
     

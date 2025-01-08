@@ -62,6 +62,8 @@ enum Endpoint {
     
     /// 알림 리스트 조회
     case notificationList
+    /// 알림 삭제
+    case deleteNoti
     
     var endPoint: String {
         switch self {
@@ -115,6 +117,8 @@ enum Endpoint {
             return "/user/profile"
         case .notificationList:
             return "/notification/receive"
+        case .deleteNoti:
+            return "/notification/receive/"
         }
     }
     var apiName: String {
@@ -167,6 +171,8 @@ enum Endpoint {
             return "내 정보 수정 API"
         case .notificationList:
             return "알림 리스트 조회 API"
+        case .deleteNoti:
+            return "받은 알림 삭제 API"
         }
     }
     
@@ -220,6 +226,8 @@ enum Endpoint {
             return .patch
         case .notificationList:
             return .get
+        case .deleteNoti:
+            return .delete
         }
     }
 }
