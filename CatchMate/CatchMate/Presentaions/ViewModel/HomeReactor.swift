@@ -125,7 +125,8 @@ final class HomeReactor: Reactor {
             
         case .loadPost(let posts, let append):
             if append {
-                newState.posts.append(contentsOf: posts)
+//                newState.posts.append(contentsOf: posts)
+                newState.posts = posts
             } else {
                 newState.page = 1
                 newState.posts = posts
