@@ -242,7 +242,7 @@ final class AddViewController: BaseViewController, View {
     }
     
     private func setupNavigationBar() {
-        if editPost != nil {
+        if editPost == nil {
             let saveButton = UIButton()
             saveButton.setTitle("임시저장", for: .normal)
             saveButton.applyStyle(textStyle: FontSystem.body02_medium)
@@ -423,7 +423,19 @@ extension AddViewController {
                 }
             }
             .disposed(by: disposeBag)
-
+        
+        reactor.state.map{$0.tempPostResult}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                vc.dismiss(animated: true) { [weak self] in
+                    guard let self = self else { return }
+                    showToast(message: "임시저장이 완료되었어요", buttonContainerExists: true) { [weak self] in
+                        self?.navigationController?.popViewController(animated: true)
+                    }
+                }
+            }
+            .disposed(by: disposeBag)
         reactor.state.map{$0.error}
             .compactMap{$0}
             .withUnretained(self)
@@ -446,13 +458,7 @@ extension AddViewController {
 extension AddViewController {
     @objc private func clickSaveButton(_ sender: UIButton) {
         showCMAlert(titleText: "작성 중인 글을 임시저장할까요?", importantButtonText: "임시저장", commonButtonText: "나가기") { [weak self] in
-            print("임시저장")
-            self?.dismiss(animated: true) { [weak self] in
-                guard let self = self else { return }
-                showToast(message: "임시저장이 완료되었어요", buttonContainerExists: true) { [weak self] in
-                    self?.navigationController?.popViewController(animated: true)
-                }
-            }
+            self?.reactor.action.onNext(.tempPost)
         } commonAction: { [weak self] in
             self?.dismiss(animated: true, completion: {
                 self?.navigationController?.popViewController(animated: true)

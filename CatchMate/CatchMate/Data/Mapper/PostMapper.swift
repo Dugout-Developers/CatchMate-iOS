@@ -22,6 +22,16 @@ final class PostMapper {
         return PostRequsetDTO(title: domain.title, gameRequest: GameInfo(homeClubId: domain.homeTeam.serverId, awayClubId: domain.awayTeam.serverId, gameStartDate: resultString, location: domain.location), cheerClubId: domain.cheerTeam.serverId, maxPerson: domain.maxPerson, preferredGender: domain.preferGender?.rawValue, preferredAgeRange: preferAge, content: domain.addInfo, isCompleted: true)
     }
     
+    func domainToDto(_ domain: TempPostRequest) -> PostRequsetDTO? {
+        var dateResult = ""
+        if let date = domain.date, let playTime = domain.playTime {
+            let dateString = DateHelper.shared.toString(from: date, format: "yyyy-MM-dd")
+            let playTimeString = playTime+":00"
+            dateResult = "\(dateString) \(playTimeString)"
+        }
+        return PostRequsetDTO(title: domain.title ?? "", gameRequest: GameInfo(homeClubId: domain.homeTeam?.serverId ?? 0, awayClubId: domain.awayTeam?.serverId ?? 0, gameStartDate: dateResult, location: domain.location ?? ""), cheerClubId: domain.cheerTeam?.serverId ?? 0, maxPerson: domain.maxPerson ?? 0, preferredGender: domain.preferGender?.serverRequest ?? "", preferredAgeRange: domain.preferAge.map{String($0)}, content: domain.addInfo ?? "", isCompleted: false)
+    }
+    
     func dtoToDomain(_ dto: PostDTO) -> Post? {
         let writer = dto.userInfo
         let gameInfo = dto.gameInfo

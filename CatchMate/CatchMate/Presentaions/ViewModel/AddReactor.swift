@@ -32,6 +32,7 @@ final class AddReactor: Reactor {
         case changeCheerTeam(Team)
         case updatePost
         case updateEditPost
+        case tempPost
     }
     enum Mutation {
         case setUser(SimpleUser)
@@ -53,6 +54,7 @@ final class AddReactor: Reactor {
         case savePost(Int)
         case editPost(Int)
         case setError(PresentationError)
+        case setTempPostResult(Void)
     }
     struct State {
         // View의 state를 관리한다.
@@ -73,6 +75,7 @@ final class AddReactor: Reactor {
         var addText: String = ""
         var partyNumber: Int?
         var savePostResult: Int? = nil
+        var tempPostResult: Void?
         var error: PresentationError?
     }
     
@@ -81,12 +84,15 @@ final class AddReactor: Reactor {
     private let addUsecase: AddPostUseCase
     private let loadPostDetailUsecase: PostDetailUseCase
     private let loadUserUsecase: LoadMyInfoUseCase
-    init(addUsecase: AddPostUseCase, loadPostDetailUsecase: PostDetailUseCase, loadUserUsecase: LoadMyInfoUseCase) {
+    private let tempPostUsecase: TempPostUseCase
+    
+    init(addUsecase: AddPostUseCase, loadPostDetailUsecase: PostDetailUseCase, loadUserUsecase: LoadMyInfoUseCase, tempPostUsecase: TempPostUseCase) {
         self.initialState = State()
         self.addUsecase = addUsecase
         self.writer = nil
         self.loadPostDetailUsecase = loadPostDetailUsecase
         self.loadUserUsecase = loadUserUsecase
+        self.tempPostUsecase = tempPostUsecase
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
@@ -208,6 +214,16 @@ final class AddReactor: Reactor {
                 .catch { error in
                     return Observable.just(Mutation.setError(error.toPresentationError()))
                 }
+        case .tempPost:
+            let tempPost = TempPostRequest(title: currentState.title, homeTeam: currentState.homeTeam, awayTeam: currentState.awayTeam, cheerTeam: currentState.cheerTeam, date: currentState.selecteDate, playTime: currentState.selecteTime?.rawValue, location: currentState.place, maxPerson: currentState.partyNumber, preferGender: currentState.selectedGender, preferAge: currentState.selectedAge, addInfo: currentState.addText)
+            return tempPostUsecase.execute(tempPost)
+                .map { _ in
+                    return Mutation.setTempPostResult(())
+                }
+                .catch { error in
+                    return Observable.just(Mutation.setError(error.toPresentationError()))
+                }
+            
         }
     }
     
@@ -271,6 +287,8 @@ final class AddReactor: Reactor {
             newState.savePostResult = postId
         case .setEditPost(let post):
             newState.editPost = post
+        case .setTempPostResult:
+            newState.tempPostResult = ()
         }
         return newState
     }

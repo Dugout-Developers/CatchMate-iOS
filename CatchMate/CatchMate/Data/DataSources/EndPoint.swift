@@ -19,6 +19,8 @@ enum Endpoint {
     case signUp
     /// 게시글 저장
     case savePost
+    /// 게시글 임시 저장
+    case tempPost
     /// 게시글 수정
     case editPost
     /// 게시글 리스트
@@ -75,7 +77,7 @@ enum Endpoint {
             return "/auth/logout"
         case .signUp:
             return "/user/additional-info"
-        case .savePost:
+        case .savePost, .tempPost:
             return "/board"
         case .editPost:
             return "/board/"
@@ -133,6 +135,8 @@ enum Endpoint {
             return "회원가입 API"
         case .savePost:
             return "게시글 저장 API"
+        case .tempPost:
+            return "게시글 임시 저장 API"
         case .editPost:
             return "게시글 수정 API"
         case .postlist:
@@ -188,7 +192,7 @@ enum Endpoint {
             return .delete
         case .signUp:
             return .post
-        case .savePost:
+        case .savePost, .tempPost:
             return .post
         case .editPost:
             return .patch

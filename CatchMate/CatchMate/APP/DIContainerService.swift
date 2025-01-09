@@ -75,7 +75,11 @@ class DIContainerService {
         let loadUserDataSource = UserDataSourceImpl(tokenDataSource: tokenDS)
         let loadUserRepository = UserRepositoryImpl(userDS: loadUserDataSource)
         let loadUserUsecase = UserUseCaseImpl(userRepository: loadUserRepository)
-        return AddReactor(addUsecase: addUsecase, loadPostDetailUsecase: loadPostUsecase, loadUserUsecase: loadUserUsecase)
+        
+        let tempPostDS = TempPostDataSourceImpl(tokenDataSource: tokenDS)
+        let tempPostRepository = TempPostRepositoryImpl(tempPostDS: tempPostDS)
+        let tempPostUsecase = TempPostUseCaseImpl(tempPostRepository: tempPostRepository)
+        return AddReactor(addUsecase: addUsecase, loadPostDetailUsecase: loadPostUsecase, loadUserUsecase: loadUserUsecase, tempPostUsecase: tempPostUsecase)
     }
     
     func makePostReactor(_ postID: String) -> PostReactor {
