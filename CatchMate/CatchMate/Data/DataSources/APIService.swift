@@ -79,14 +79,12 @@ enum Endpoint {
             return "/board/list"
         case .userPostlist:
             return "/board/list/"
-        case .loadPost:
-            /// 게시글 조회 /board/{boardId}
+        case .loadPost, .removePost:
+            /// 게시글 조회, 삭제 /board/{boardId}
             return "/board/"
         case .upPost:
             /// 끌어올리기 /board/{boardId}/lift-up
             return "/board/"
-        case .removePost:
-            return "/board/remove"
         case .loadFavorite:
             return "/board/bookmark"
         case .setFavorite, .deleteFavorite:
