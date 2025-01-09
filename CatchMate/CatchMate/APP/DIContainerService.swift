@@ -12,6 +12,9 @@ class DIContainerService {
     private let tokenDS = TokenDataSourceImpl()
     private init() {}
     
+    func returnTokenDS() -> TokenDataSource{
+        return tokenDS
+    }
     func makeAuthReactor() -> AuthReactor{
         let naverDS = NaverLoginDataSourceImpl()
         let kakaoDS = KakaoDataSourceImpl()
@@ -24,7 +27,7 @@ class DIContainerService {
         let kakaoUC = KakaoLoginUseCaseImpl(snsRepository: loginRep, fcmRepository: fcmRep, serverRepository: serverRep)
         let naverUC = NaverLoginUseCaseImpl(snsRepository: loginRep, fcmRepository: fcmRep, serverRepository: serverRep)
         let appleUC = AppleLoginUseCaseImpl(snsRepository: loginRep, fcmRepository: fcmRep, serverRepository: serverRep)
-        let reactor = AuthReactor(kakaoUsecase: kakaoUC, appleUsecase: appleUC, naverUsecase: naverUC)
+        let reactor = AuthReactor(kakaoUsecase: kakaoUC, appleUsecase: appleUC, naverUsecase: naverUC, tokenDS: tokenDS)
         
         return reactor
     }

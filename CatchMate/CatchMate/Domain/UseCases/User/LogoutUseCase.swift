@@ -10,7 +10,6 @@ import RxSwift
 
 protocol LogoutUseCase {
     func logout() -> Observable<Bool>
-    func deleteToken()
 }
 
 final class LogoutUseCaseImpl: LogoutUseCase {
@@ -21,9 +20,6 @@ final class LogoutUseCaseImpl: LogoutUseCase {
     }
     func logout() -> RxSwift.Observable<Bool> {
         return repository.logout()
-    }
-    func deleteToken() {
-        
     }
 }
 

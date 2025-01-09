@@ -20,8 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         if let logPath = Bundle.main.logPath {
             LoggerService.shared.configure(logDirectoryPath: logPath)
         }
-        // Auth Error 핸들러 의존성 주입
-        UnauthorizedErrorHandler.shared.configure(logoutUseCase: DIContainerService.shared.makeLogoutUseCase())
         FirebaseApp.configure()
         // APNS 등록
         if #available(iOS 10.0, *) {

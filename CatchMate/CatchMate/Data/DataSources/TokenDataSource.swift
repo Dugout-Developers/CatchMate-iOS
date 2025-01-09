@@ -79,4 +79,13 @@ final class TokenDataSourceImpl: TokenDataSource {
         
         return status == errSecSuccess
     }
+    
+    func deleteTokenAll() -> Bool {
+        let accessResult = deleteToken(for: .accessToken)
+        let refreshResult = deleteToken(for: .refreshToken)
+        
+        LoggerService.shared.debugLog("AccessToken 삭제 결과 : \(accessResult), RefreshToken 삭제 결과 : \(refreshResult)")
+        
+        return accessResult && refreshResult
+    }
 }

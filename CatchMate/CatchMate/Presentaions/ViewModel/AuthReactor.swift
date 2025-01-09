@@ -32,12 +32,13 @@ final class AuthReactor: Reactor {
     private let kakaoLoginUseCase: KakaoLoginUseCase
     private let appleLoginUseCase: AppleLoginUseCase
     private let naverLoginUseCase: NaverLoginUseCase
-    
-    init(kakaoUsecase: KakaoLoginUseCase, appleUsecase: AppleLoginUseCase, naverUsecase: NaverLoginUseCase) {
+    private let tokenDS: TokenDataSource
+    init(kakaoUsecase: KakaoLoginUseCase, appleUsecase: AppleLoginUseCase, naverUsecase: NaverLoginUseCase, tokenDS: TokenDataSource) {
         self.initialState = State()
         self.kakaoLoginUseCase = kakaoUsecase
         self.appleLoginUseCase = appleUsecase
         self.naverLoginUseCase = naverUsecase
+        self.tokenDS = tokenDS
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
@@ -96,7 +97,12 @@ final class AuthReactor: Reactor {
     private func saveToken(loginModel: LoginModel) -> Bool {
         if let accessToken = loginModel.accessToken, let refreshToken = loginModel.refreshToken {
             LoggerService.shared.debugLog("saveKeychain : \(accessToken), \(refreshToken)")
-            UnauthorizedErrorHandler.shared.handleError()
+            if !tokenDS.saveToken(token: accessToken, for: .accessToken) {
+                LoggerService.shared.debugLog("accessToken KeyChain저장 실패")
+            }
+            if !tokenDS.saveToken(token: refreshToken, for: .refreshToken) {
+                LoggerService.shared.debugLog("refreshToken KeyChain저장 실패")
+            }
             return true
         } else {
             return false
