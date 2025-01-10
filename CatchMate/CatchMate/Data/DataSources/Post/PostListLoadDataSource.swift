@@ -11,7 +11,7 @@ import RxAlamofire
 import Alamofire
 
 protocol PostListLoadDataSource {
-    func loadPostList(pageNum: Int, gudan: [String], gameDate: String, people: Int) ->  Observable<[PostListInfoDTO]>
+    func loadPostList(pageNum: Int, gudan: [Int], gameDate: String, people: Int) ->  Observable<[PostListInfoDTO]>
 }
 final class PostListLoadDataSourceImpl: PostListLoadDataSource {
     private let tokenDataSource: TokenDataSource
@@ -20,26 +20,28 @@ final class PostListLoadDataSourceImpl: PostListLoadDataSource {
         self.tokenDataSource = tokenDataSource
     }
     
-    func loadPostList(pageNum: Int, gudan: [String], gameDate: String, people: Int) -> RxSwift.Observable<[PostListInfoDTO]> {
+    func loadPostList(pageNum: Int, gudan: [Int], gameDate: String, people: Int) -> RxSwift.Observable<[PostListInfoDTO]> {
         LoggerService.shared.debugLog("<필터값> 구단: \(gudan), 날짜: \(gameDate), 페이지: \(pageNum)")
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
+        var parameters: [String: Any] = [:]
+        if !gameDate.isEmpty {
+            parameters["gameStartDate"] = gameDate
+        }
+        // MARK: - list로 API 변경 시 수정
+        if !gudan.isEmpty {
+            parameters["preferredTeamId"] = gudan.first
+        }
         
-        var gameDate = gameDate
-        if gameDate.isEmpty {
-            gameDate = "9999-99-99"
+        if people > 0 && people < 9 {
+            parameters["maxPerson"] = people
         }
         
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
-        
-        let parameters: [String: Any] = [
-            "gudans": gudan.isEmpty ? "" : gudan,
-            "gameDate": gameDate,
-            "people": people
-        ]
+    
         
         LoggerService.shared.debugLog("parameters: \(parameters)")
         LoggerService.shared.debugLog("PostListLoadDataSourceImpl 토큰 확인: \(headers)")

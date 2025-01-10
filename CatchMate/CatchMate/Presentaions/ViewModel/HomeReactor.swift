@@ -91,7 +91,7 @@ final class HomeReactor: Reactor {
             
         case .loadNextPage:
             guard !currentState.isLoadingNextPage else { return .empty() }  // 중복 로딩 방지
-            return loadPostListUsecase.loadPostList(pageNum: currentState.page, gudan: currentState.selectedTeams.map { $0.rawValue }, gameDate: currentState.dateFilterValue?.toString(format: "YYYY-MM-dd") ?? "", people: currentState.seletedNumberFilter ?? 0)
+            return loadPostListUsecase.loadPostList(pageNum: currentState.page, gudan: currentState.selectedTeams.map { $0.serverId }, gameDate: currentState.dateFilterValue?.toString(format: "YYYY-MM-dd") ?? "", people: currentState.seletedNumberFilter ?? 0)
                 .flatMap { list -> Observable<Mutation> in
                     if !list.isEmpty {
                         return Observable.concat([
@@ -154,7 +154,7 @@ final class HomeReactor: Reactor {
     
     // Helper Method: 필터 업데이트 및 포스트 로딩 처리
     private func updateFiltersAndLoadPosts(date: Date?, teams: [Team]?, number: Int?) -> Observable<Mutation> {
-        let gudan = (teams ?? currentState.selectedTeams).map { $0.rawValue }
+        let gudan = (teams ?? currentState.selectedTeams).map { $0.serverId }
         let requestDate = date?.toString(format: "YYYY-MM-dd") ?? ""
         let requestNumber = number ?? 0
         let loadList = loadPostListUsecase.loadPostList(pageNum: 1, gudan: gudan, gameDate: requestDate, people: requestNumber)
