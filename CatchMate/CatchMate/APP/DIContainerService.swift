@@ -77,7 +77,8 @@ class DIContainerService {
         let loadUserUsecase = UserUseCaseImpl(userRepository: loadUserRepository)
         
         let tempPostDS = TempPostDataSourceImpl(tokenDataSource: tokenDS)
-        let tempPostRepository = TempPostRepositoryImpl(tempPostDS: tempPostDS)
+        let loadTempPostDS = LoadTempPostDataSourceImpl(tokenDataSource: tokenDS)
+        let tempPostRepository = TempPostRepositoryImpl(tempPostDS: tempPostDS, loadTempPostDS: loadTempPostDS)
         let tempPostUsecase = TempPostUseCaseImpl(tempPostRepository: tempPostRepository)
         return AddReactor(addUsecase: addUsecase, loadPostDetailUsecase: loadPostUsecase, loadUserUsecase: loadUserUsecase, tempPostUsecase: tempPostUsecase)
     }

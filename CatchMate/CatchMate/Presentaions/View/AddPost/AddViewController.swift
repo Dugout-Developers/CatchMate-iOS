@@ -175,6 +175,7 @@ final class AddViewController: BaseViewController, View {
         if let editPost = editPost {
             reactor.action.onNext(.setupEditPost(post: editPost))
         }
+        reactor.action.onNext(.loadTempPost)
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -441,6 +442,14 @@ extension AddViewController {
             .withUnretained(self)
             .subscribe { vc, error in
                 vc.handleError(error)
+            }
+            .disposed(by: disposeBag)
+        reactor.state.map{$0.isLoadTempPost}
+            .filter{$0}
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                vc.showToast(message: "임시 저장한 게시물을 불러왔습니다.", buttonContainerExists: true, completion: nil)
             }
             .disposed(by: disposeBag)
     }

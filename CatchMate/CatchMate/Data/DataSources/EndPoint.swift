@@ -21,6 +21,8 @@ enum Endpoint {
     case savePost
     /// 게시글 임시 저장
     case tempPost
+    /// 임시저장 게시글 불러오기
+    case loadTempPost
     /// 게시글 수정
     case editPost
     /// 게시글 리스트
@@ -79,6 +81,8 @@ enum Endpoint {
             return "/user/additional-info"
         case .savePost, .tempPost:
             return "/board"
+        case .loadTempPost:
+            return "/board/temp"
         case .editPost:
             return "/board/"
         case .postlist:
@@ -137,6 +141,8 @@ enum Endpoint {
             return "게시글 저장 API"
         case .tempPost:
             return "게시글 임시 저장 API"
+        case .loadTempPost:
+            return "임시 저장한 게시글 불러오기 API"
         case .editPost:
             return "게시글 수정 API"
         case .postlist:
@@ -194,6 +200,8 @@ enum Endpoint {
             return .post
         case .savePost, .tempPost:
             return .post
+        case .loadTempPost:
+            return .get
         case .editPost:
             return .patch
         case .setNotification:

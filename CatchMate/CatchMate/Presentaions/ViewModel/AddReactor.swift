@@ -33,28 +33,30 @@ final class AddReactor: Reactor {
         case updatePost
         case updateEditPost
         case tempPost
+        case loadTempPost
     }
     enum Mutation {
         case setUser(SimpleUser)
         case setEditPost(Post?)
         case updateTitle(String)
         case updateDate(Date?)
-        case updateTime(PlayTime)
+        case updateTime(PlayTime?)
         case updateGender(Gender?)
         case updateAge([Int])
         case updateDatePickerSaveButton
-        case updateHomeTeam(Team)
-        case updageAwayTeam(Team)
-        case updateCheerTeam(Team)
+        case updateHomeTeam(Team?)
+        case updageAwayTeam(Team?)
+        case updateCheerTeam(Team?)
         case updateCheerTeamPickerState
         case updateAddText(String)
-        case updatePartyNumber(Int)
+        case updatePartyNumber(Int?)
         case updateSaveButton
         case updatePlcase(String)
         case savePost(Int)
         case editPost(Int)
         case setError(PresentationError)
         case setTempPostResult(Void)
+        case setIsLoadTempPost
     }
     struct State {
         // View의 state를 관리한다.
@@ -76,6 +78,7 @@ final class AddReactor: Reactor {
         var partyNumber: Int?
         var savePostResult: Int? = nil
         var tempPostResult: Void?
+        var isLoadTempPost: Bool = false
         var error: PresentationError?
     }
     
@@ -224,6 +227,30 @@ final class AddReactor: Reactor {
                     return Observable.just(Mutation.setError(error.toPresentationError()))
                 }
             
+        case .loadTempPost:
+            return tempPostUsecase.loadTempPost()
+                .flatMap { post -> Observable<Mutation>in
+                    if let post {
+                        return Observable.concat([
+                            Observable.just(Mutation.updateTitle(post.title)),
+                            Observable.just(Mutation.updatePartyNumber(post.maxPerson)),
+                            Observable.just(Mutation.updateDate(post.date)),
+                            Observable.just(Mutation.updateTime(post.playTime)),
+                            Observable.just(Mutation.updateHomeTeam(post.homeTeam)),
+                            Observable.just(Mutation.updageAwayTeam(post.awayTeam)),
+                            Observable.just(Mutation.updateCheerTeam(post.cheerTeam)),
+                            Observable.just(Mutation.updatePlcase(post.location)),
+                            Observable.just(Mutation.updateAddText(post.addInfo)),
+                            Observable.just(Mutation.updateAge(post.preferAge)),
+                            Observable.just(Mutation.updateGender(post.preferGender)),
+                            Observable.just(Mutation.updateSaveButton),
+                            Observable.just(Mutation.setIsLoadTempPost),
+                            Observable.just(Mutation.updateDatePickerSaveButton)
+                        ])
+                    } else {
+                        return Observable.empty()
+                    }
+                }
         }
     }
     
@@ -247,7 +274,7 @@ final class AddReactor: Reactor {
             }
         case .updateHomeTeam(let team):
             newState.homeTeam = team
-            newState.place = team.place?[0] ?? ""
+            newState.place = team?.place?[0] ?? ""
         case .updageAwayTeam(let team):
             newState.awayTeam = team
         case .updateAddText(let text):
@@ -289,6 +316,8 @@ final class AddReactor: Reactor {
             newState.editPost = post
         case .setTempPostResult:
             newState.tempPostResult = ()
+        case .setIsLoadTempPost:
+            newState.isLoadTempPost = true
         }
         return newState
     }

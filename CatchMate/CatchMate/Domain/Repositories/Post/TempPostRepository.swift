@@ -9,4 +9,5 @@ import RxSwift
 
 protocol TempPostRepository {
     func tempPost(_ post: TempPostRequest) -> Observable<Void>
+    func loadTempPost() -> Observable<TempPost?>
 }
