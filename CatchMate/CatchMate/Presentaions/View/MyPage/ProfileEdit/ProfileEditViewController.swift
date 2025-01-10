@@ -96,6 +96,14 @@ final class ProfileEditViewController: BaseViewController, View {
         bind(reactor: reactor)
         view.backgroundColor = .grayScale50
         imgPicker.delegate = self
+        setupImage()
+    }
+    private func setupImage() {
+        if let imgStr = initImageStr {
+            ProfileImageHelper.urlToUIImage(imgStr) { [weak self] image in
+                self?.reactor.action.onNext(.changeImage(image))
+            }
+        }
         ProfileImageHelper.loadImage(profileImageView, pictureString: initImageStr)
     }
     private func setupPicker() {

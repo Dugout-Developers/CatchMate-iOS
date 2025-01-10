@@ -27,16 +27,13 @@ final class NotiViewTableViewCell: UITableViewCell {
     private let labelContainerView: UIView = UIView()
     private let notiLabel: UILabel = {
         let label = UILabel()
-        label.text = "망글곰님의 직관 신청이 도착했어요"
-        label.font = .systemFont(ofSize: 16)
+        label.numberOfLines = 1
         label.textColor = .cmTextGray
         return label
     }()
     private let subinfoLabel: UILabel = {
         let label = UILabel()
-        label.text = "06.09 | 17:00 | 잠실"
-        label.font = .systemFont(ofSize: 14)
-        label.textColor = UIColor(hex: "#9f9f9f")
+        label.textColor = .grayScale500
         return label
     }()
     
@@ -60,6 +57,7 @@ final class NotiViewTableViewCell: UITableViewCell {
         notiLabel.applyStyle(textStyle: FontSystem.body01_medium)
         subinfoLabel.applyStyle(textStyle: FontSystem.body02_semiBold)
         
+        notiLabel.lineBreakMode = .byTruncatingTail
     }
     
     override func layoutSubviews() {
@@ -82,11 +80,17 @@ extension NotiViewTableViewCell {
         
         containerView.flex.direction(.row).justifyContent(.start).alignContent(.center).paddingHorizontal(18).paddingVertical(16).define { flex in
             flex.addItem(profileImageView).size(48).cornerRadius(24).marginRight(12)
-            flex.addItem(labelContainerView).direction(.column).justifyContent(.start).alignContent(.start).define { flex in
-                flex.addItem(notiLabel).marginBottom(4)
+            flex.addItem(labelContainerView).direction(.column).justifyContent(.start).alignContent(.start).grow(1).shrink(1).define { flex in
+                flex.addItem(notiLabel)
+                    .grow(1)
+                    .shrink(1)
+                    .marginBottom(4)
+                    
                 flex.addItem(subinfoLabel)
             }
         }
+        
+        containerView.flex.layout(mode: .adjustHeight)
     }
 }
 

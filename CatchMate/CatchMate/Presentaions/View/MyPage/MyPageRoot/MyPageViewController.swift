@@ -201,7 +201,7 @@ extension MyPageViewController {
             .distinctUntilChanged()
             .subscribe { result in
                 if result {
-                    UnauthorizedErrorHandler.shared.handleError()
+//                    UnauthorizedErrorHandler.shared.handleError()
                     LoginUserDefaultsService.shared.deleteLoginData()
                     let reactor = DIContainerService.shared.makeAuthReactor()
                     (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(UINavigationController(rootViewController: SignInViewController(reactor: reactor)), animated: true)

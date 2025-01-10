@@ -28,13 +28,13 @@ final class DeletePostDataSourceImpl: DeletePostDataSource {
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
-        let parameters: [String: Any] = [
-            "boardId": postId
-        ]
-        
         LoggerService.shared.debugLog("DeletePostDataSourceImpl 토큰 확인: \(headers)")
         
-        return APIService.shared.requestVoidAPI(type: .removePost, parameters: parameters, headers: headers, encoding: JSONEncoding.default)
+        return APIService.shared.requestAPI(addEndPoint: "\(postId)", type: .removePost, parameters: nil, headers: headers, encoding: JSONEncoding.default, dataType: DeletePostResponseDTO.self)
+            .map({ dto in
+                LoggerService.shared.debugLog("게시물 삭제 - 요청Id: \(postId) / 처리Id: \(dto.boardId)")
+                return ()
+            })
             .catch { [weak self] error in
                 guard let self = self else { return Observable.error(OtherError.notFoundSelf) }
                 if let error = error as? NetworkError, error.statusCode == 401 {
@@ -47,7 +47,11 @@ final class DeletePostDataSourceImpl: DeletePostDataSource {
                                 "AccessToken": token
                             ]
                             LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            return APIService.shared.requestVoidAPI(type: .removePost, parameters: parameters, headers: headers, encoding: JSONEncoding.default)
+                            return APIService.shared.requestAPI(addEndPoint: "\(postId)", type: .removePost, parameters: nil, headers: headers, encoding: JSONEncoding.default, dataType: DeletePostResponseDTO.self)
+                                .map { dto in
+                                    LoggerService.shared.debugLog("게시물 삭제 - 요청Id: \(postId) / 처리Id: \(dto.boardId)")
+                                    return ()
+                                }
                         }
                         .catch { error in
                             return Observable.error(error)
@@ -56,4 +60,9 @@ final class DeletePostDataSourceImpl: DeletePostDataSource {
                 return Observable.error(error)
             }
     }
+}
+
+struct DeletePostResponseDTO: Codable {
+    let boardId: Int
+    let deletedAt: String
 }

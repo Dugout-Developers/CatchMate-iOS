@@ -4,6 +4,7 @@
 //
 //  Created by 방유빈 on 8/6/24.
 //
+import UIKit
 
 final class PostMapper {
     func domainToDto(_ domain: RequestPost) -> PostRequsetDTO? {
@@ -20,6 +21,33 @@ final class PostMapper {
         LoggerService.shared.debugLog("PostMapper: Domain -> DTO : \(resultString)")
         let preferAge = domain.preferAge.compactMap{String($0)}
         return PostRequsetDTO(title: domain.title, gameRequest: GameInfo(homeClubId: domain.homeTeam.serverId, awayClubId: domain.awayTeam.serverId, gameStartDate: resultString, location: domain.location), cheerClubId: domain.cheerTeam.serverId, maxPerson: domain.maxPerson, preferredGender: domain.preferGender?.rawValue, preferredAgeRange: preferAge, content: domain.addInfo, isCompleted: true)
+    }
+    
+    func domainToDto(_ domain: TempPostRequest) -> PostRequsetDTO? {
+        var dateResult = ""
+        if let date = domain.date, let playTime = domain.playTime {
+            let dateString = DateHelper.shared.toString(from: date, format: "yyyy-MM-dd")
+            let playTimeString = playTime+":00"
+            dateResult = "\(dateString) \(playTimeString)"
+        }
+        return PostRequsetDTO(title: domain.title ?? "", gameRequest: GameInfo(homeClubId: domain.homeTeam?.serverId ?? 0, awayClubId: domain.awayTeam?.serverId ?? 0, gameStartDate: dateResult, location: domain.location ?? ""), cheerClubId: domain.cheerTeam?.serverId ?? 0, maxPerson: domain.maxPerson ?? 0, preferredGender: domain.preferGender?.serverRequest ?? "", preferredAgeRange: domain.preferAge.map{String($0)}, content: domain.addInfo ?? "", isCompleted: false)
+    }
+    
+    func dtoToDomainTemp(_ dto: PostDTO) -> TempPost {
+        let gameInfo = dto.gameInfo
+        let convertDate = DateHelper.shared.convertISODateToCustomStrings(isoDateString: gameInfo.gameStartDate)
+        var date: Date?
+        var playTime: PlayTime?
+        if let dateStr = convertDate?.date {
+            date = DateHelper.shared.toDate(from: dateStr, format: "MM.dd")
+        }
+        if let playTimeStr = convertDate?.playTime {
+            playTime = PlayTime(rawValue: playTimeStr)
+        }
+        let location = gameInfo.location == "임시 저장" ? "" : gameInfo.location
+        let maxPerson = dto.maxPerson == 0 ? nil : dto.maxPerson
+        let preferAge = dto.preferredAgeRange.split(separator: ",").compactMap{Int($0)}
+        return TempPost(id: String(dto.boardId), title: dto.title, homeTeam: Team(serverId: gameInfo.homeClubId), awayTeam: Team(serverId: gameInfo.awayClubId), cheerTeam: Team(serverId: dto.cheerClubId), date: date, playTime: playTime, location: location, maxPerson: maxPerson, preferGender: Gender(serverValue: dto.preferredGender), preferAge: preferAge, addInfo: dto.content)
     }
     
     func dtoToDomain(_ dto: PostDTO) -> Post? {

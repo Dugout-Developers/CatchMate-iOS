@@ -12,6 +12,7 @@ import ReactorKit
 final class NotificationListReactor: Reactor {
     enum Action {
         case loadList
+        case deleteNoti(Int) // indexPath 전달
     }
     enum Mutation {
         case setList([NotificationList])
@@ -24,9 +25,12 @@ final class NotificationListReactor: Reactor {
     
     var initialState: State
     private let loadNotiUsecase: LoadNotificationListUseCase
-    init(loadlistUsecase: LoadNotificationListUseCase) {
+    private let deleteNotiUsecase: DeleteNotificationUseCase
+    
+    init(loadlistUsecase: LoadNotificationListUseCase, deleteNotiUsecase: DeleteNotificationUseCase) {
         self.initialState = State()
         self.loadNotiUsecase = loadlistUsecase
+        self.deleteNotiUsecase = deleteNotiUsecase
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
@@ -36,7 +40,20 @@ final class NotificationListReactor: Reactor {
                 .map {
                     Mutation.setList($0)
                 }
-                .catch { return Observable.just(Mutation.setError($0.toPresentationError()))
+                .catch {
+                    return Observable.just(Mutation.setError($0.toPresentationError()))
+                }
+        case .deleteNoti(let indexPath):
+            let noti = currentState.notifications[indexPath]
+            return deleteNotiUsecase.deleteNotification(noti.id)
+                .withUnretained(self)
+                .map { vc, _ in
+                    var list = vc.currentState.notifications
+                    list.remove(at: indexPath)
+                    return Mutation.setList(list)
+                }
+                .catch {
+                    return Observable.just(Mutation.setError($0.toPresentationError()))
                 }
         }
     }

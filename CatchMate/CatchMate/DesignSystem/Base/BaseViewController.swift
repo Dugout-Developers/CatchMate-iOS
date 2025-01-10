@@ -142,7 +142,8 @@ class BaseViewController: UIViewController, LayoutConfigurable {
     
     func logout() {
         showCMAlert(titleText: "유저 정보가 만료되었습니다.\n다시 로그인해주세요.", importantButtonText: "확인", commonButtonText: nil, importantAction:  {
-            UnauthorizedErrorHandler.shared.handleError()
+            let _ = TokenDataSourceImpl().deleteTokenAll()
+    
             let reactor = DIContainerService.shared.makeAuthReactor()
             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(UINavigationController(rootViewController: SignInViewController(reactor: reactor)), animated: true)
         })

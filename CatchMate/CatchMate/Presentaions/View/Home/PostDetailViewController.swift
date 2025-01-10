@@ -214,7 +214,7 @@ final class PostDetailViewController: BaseViewController, View {
             // 메뉴 항목 설정
             menuVC.menuItems = [
                 MenuItem(title: "끌어올리기", action: { [weak self] in
-                    self?.showToast(message: "게시글을 끌어올렸어요", buttonContainerExists: true)
+                    self?.reactor.action.onNext(.upPost)
                 }),
                 MenuItem(title: "게시글 수정", action: { [weak self] in
                     if let post = self?.reactor.currentState.post {
@@ -425,6 +425,22 @@ extension PostDetailViewController {
             .subscribe { vc, flag in
                 if flag {
                     vc.navigationController?.popViewController(animated: true)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.upPostResult}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, result in
+                if result {
+                    vc.showToast(message: "게시글을 끌어올렸어요", buttonContainerExists: true) {
+                        vc.reactor.action.onNext(.resetUpPostResult)
+                    }
+                } else {
+                    vc.showToast(message: "게시글은 3일에 한 번씩 끌어올릴 수 있습니다.", buttonContainerExists: true) {
+                        vc.reactor.action.onNext(.resetUpPostResult)
+                    }
                 }
             }
             .disposed(by: disposeBag)

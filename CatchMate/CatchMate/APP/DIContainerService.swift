@@ -12,6 +12,9 @@ class DIContainerService {
     private let tokenDS = TokenDataSourceImpl()
     private init() {}
     
+    func returnTokenDS() -> TokenDataSource{
+        return tokenDS
+    }
     func makeAuthReactor() -> AuthReactor{
         let naverDS = NaverLoginDataSourceImpl()
         let kakaoDS = KakaoDataSourceImpl()
@@ -24,7 +27,7 @@ class DIContainerService {
         let kakaoUC = KakaoLoginUseCaseImpl(snsRepository: loginRep, fcmRepository: fcmRep, serverRepository: serverRep)
         let naverUC = NaverLoginUseCaseImpl(snsRepository: loginRep, fcmRepository: fcmRep, serverRepository: serverRep)
         let appleUC = AppleLoginUseCaseImpl(snsRepository: loginRep, fcmRepository: fcmRep, serverRepository: serverRep)
-        let reactor = AuthReactor(kakaoUsecase: kakaoUC, appleUsecase: appleUC, naverUsecase: naverUC)
+        let reactor = AuthReactor(kakaoUsecase: kakaoUC, appleUsecase: appleUC, naverUsecase: naverUC, tokenDS: tokenDS)
         
         return reactor
     }
@@ -72,7 +75,12 @@ class DIContainerService {
         let loadUserDataSource = UserDataSourceImpl(tokenDataSource: tokenDS)
         let loadUserRepository = UserRepositoryImpl(userDS: loadUserDataSource)
         let loadUserUsecase = UserUseCaseImpl(userRepository: loadUserRepository)
-        return AddReactor(addUsecase: addUsecase, loadPostDetailUsecase: loadPostUsecase, loadUserUsecase: loadUserUsecase)
+        
+        let tempPostDS = TempPostDataSourceImpl(tokenDataSource: tokenDS)
+        let loadTempPostDS = LoadTempPostDataSourceImpl(tokenDataSource: tokenDS)
+        let tempPostRepository = TempPostRepositoryImpl(tempPostDS: tempPostDS, loadTempPostDS: loadTempPostDS)
+        let tempPostUsecase = TempPostUseCaseImpl(tempPostRepository: tempPostRepository)
+        return AddReactor(addUsecase: addUsecase, loadPostDetailUsecase: loadPostUsecase, loadUserUsecase: loadUserUsecase, tempPostUsecase: tempPostUsecase)
     }
     
     func makePostReactor(_ postID: String) -> PostReactor {
@@ -97,7 +105,11 @@ class DIContainerService {
         let deletePostRepository = DeletePostRepositoryImpl(deletePostDS: deletePostDS)
         let postHandleUsecase = DeletePostUseCaseImpl(deleteRepository: deletePostRepository)
         
-        return PostReactor(postId: postID, postloadUsecase: loadPostUsecase, setfavoriteUsecase: setFavoriteUsecase, applyUsecase: applyUsecase, cancelApplyUsecase: cancelApplyUsecase, postHandleUsecase: postHandleUsecase)
+        let upPostDS = UpPostDataSourceImpl(tokenDataSource: tokenDS)
+        let upPostRepository = UpPostRepositoryImpl(upPostDS: upPostDS)
+        let upPostUsecase = UpPostUseCaseImpl(upPostRepository: upPostRepository)
+        
+        return PostReactor(postId: postID, postloadUsecase: loadPostUsecase, setfavoriteUsecase: setFavoriteUsecase, applyUsecase: applyUsecase, cancelApplyUsecase: cancelApplyUsecase, postHandleUsecase: postHandleUsecase, upPostUsecase: upPostUsecase)
     }
     
     
@@ -174,7 +186,11 @@ class DIContainerService {
         let loadListRepository = LoadNotificationListRepositoryImpl(loadNotificationDS: loadListDS)
         let loadListUsecase = LoadNotificationListUseCaseImpl(loadNotificationRepository: loadListRepository)
         
-        return NotificationListReactor(loadlistUsecase: loadListUsecase)
+        let deleteDS = DeleteNotificationDataSourceImpl(tokenDataSource: tokenDS)
+        let deleteRepository = DeleteNotificationRepositoryImpl(deleteNotiDS: deleteDS)
+        let deleteUsecase = DeleteNotificationUseCaseImpl(deleteNotiRepository: deleteRepository)
+        
+        return NotificationListReactor(loadlistUsecase: loadListUsecase, deleteNotiUsecase: deleteUsecase)
     }
     
     

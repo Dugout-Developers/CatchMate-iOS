@@ -29,6 +29,8 @@ final class PostReactor: Reactor {
         case changeFavorite(Bool)
         case deletePost
         case setError(PresentationError?)
+        case upPost
+        case resetUpPostResult
     }
     enum Mutation {
         case setPost(Post?)
@@ -37,6 +39,7 @@ final class PostReactor: Reactor {
         case setApplyInfo(MyApplyInfo?)
         case deletePost
         case setError(PresentationError?)
+        case setUpPostResult(Bool?)
     }
     struct State {
         // View의 state를 관리한다.
@@ -45,6 +48,7 @@ final class PostReactor: Reactor {
         var isFavorite: Bool = false
         var applyInfo: MyApplyInfo?
         var isDelete: Bool = false
+        var upPostResult: Bool?
         var error: PresentationError?
     }
     var postId: String
@@ -54,8 +58,9 @@ final class PostReactor: Reactor {
     private let applyUsecase: ApplyUseCase
     private let cancelApplyUsecase: CancelApplyUseCase
     private let deletePostUsecase: DeletePostUseCase
+    private let upPostUsecase: UpPostUseCase
     
-    init(postId: String, postloadUsecase: PostDetailUseCase, setfavoriteUsecase: SetFavoriteUseCase, applyUsecase: ApplyUseCase, cancelApplyUsecase: CancelApplyUseCase, postHandleUsecase: DeletePostUseCase) {
+    init(postId: String, postloadUsecase: PostDetailUseCase, setfavoriteUsecase: SetFavoriteUseCase, applyUsecase: ApplyUseCase, cancelApplyUsecase: CancelApplyUseCase, postHandleUsecase: DeletePostUseCase, upPostUsecase: UpPostUseCase) {
         self.initialState = State()
         self.postId = postId
         LoggerService.shared.debugLog("-----------\(postId) detail Load------------")
@@ -64,6 +69,7 @@ final class PostReactor: Reactor {
         self.applyUsecase = applyUsecase
         self.cancelApplyUsecase = cancelApplyUsecase
         self.deletePostUsecase = postHandleUsecase
+        self.upPostUsecase = upPostUsecase
     }
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -141,6 +147,16 @@ final class PostReactor: Reactor {
             } else {
                 return Observable.just(Mutation.setError(PresentationError.showToastMessage(message: "삭제 실패. 다시 시도해주세요.")))
             }
+        case .upPost:
+            return upPostUsecase.execute(postId)
+                .map { result in
+                    return Mutation.setUpPostResult(result)
+                }
+                .catch { error in
+                    return Observable.just(Mutation.setError(error.toPresentationError()))
+                }
+        case .resetUpPostResult:
+            return Observable.just(Mutation.setUpPostResult(nil))
         }
     }
     
@@ -167,6 +183,8 @@ final class PostReactor: Reactor {
             newState.applyInfo = info
         case .deletePost:
             newState.isDelete = true
+        case .setUpPostResult(let result):
+            newState.upPostResult = result
         }
         return newState
     }

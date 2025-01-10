@@ -22,86 +22,51 @@ final class UpPostDataSourceImpl: UpPostDataSource {
     }
     
     func upPost(_ postId: Int) -> Observable<Bool> {
-        guard let base = Bundle.main.baseURL else {
-            return Observable.error(NetworkError.notFoundBaseURL)
+        guard let token = tokenDataSource.getToken(for: .accessToken) else {
+            return Observable.error(TokenError.notFoundAccessToken)
         }
-        guard let url = URL(string: (base + Endpoint.upPost.endPoint)) else {
-            return Observable.error(OtherError.invalidURL)
-        }
+        let headers: HTTPHeaders = [
+            "AccessToken": token
+        ]
+        let addEndPoint = "\(postId)/lift-up"
         
-        return Observable.deferred { [weak self] () -> Observable<Bool> in
-                var retryCount = 0 
-                return self?.makeRequest(postId: postId, url: url)
-                    .catch { error in
-                        if let afError = error as? AFError, afError.responseCode == 401, retryCount < 1 {
-                            retryCount += 1
-                            return self?.refreshToken()
-                                .flatMap { _ in
-                                    self?.makeRequest(postId: postId, url: url) ?? Observable.error(OtherError.notFoundSelf)
-                                } ?? Observable.error(OtherError.notFoundSelf)
+        return APIService.shared.requestAPI(addEndPoint: addEndPoint, type: .upPost, parameters: nil, headers: headers, encoding: JSONEncoding.default, dataType: upPostResponseDTO.self)
+            .map { dto in
+                LoggerService.shared.debugLog("liftUp 성공: \(dto)")
+                return true
+            }
+            .catch { [weak self] error in
+                guard let self = self else { return Observable.error(OtherError.notFoundSelf) }
+                if let error = error as? NetworkError {
+                    if error.statusCode == 401 {
+                        guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
+                            return Observable.error(TokenError.notFoundRefreshToken)
                         }
-                        return Observable.error(error)
-                    } ?? Observable.error(OtherError.notFoundSelf)
-            }
-    }
-    
-    private func makeRequest(postId: Int, url: URL) -> Observable<Bool> {
-        return Observable<Bool>.create { [weak self] observer in
-            guard let self = self else {
-                observer.onError(OtherError.invalidURL)
-                return Disposables.create()
-            }
-
-            guard let token = self.tokenDataSource.getToken(for: .accessToken) else {
-                observer.onError(TokenError.notFoundAccessToken)
-                return Disposables.create()
-            }
-            
-            let headers: HTTPHeaders = [
-                "AccessToken": token
-            ]
-            LoggerService.shared.log("토큰 확인: \(headers)")
-
-            var request = URLRequest(url: url)
-            request.httpMethod = Endpoint.upPost.requstType.rawValue
-            request.headers = headers
-            request.httpBody = "\(postId)".data(using: .utf8)
-
-            let task = AF.request(request)
-                .validate(statusCode: 200..<300)
-                .response { response in
-                    switch response.result {
-                    case .success:
-                        observer.onNext(true)
-                        observer.onCompleted()
-                    case .failure(let error):
-                        observer.onError(error)
+                        return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
+                            .flatMap { token in
+                                let newHeaders: HTTPHeaders = [
+                                    "AccessToken": token
+                                ]
+                                LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
+                                return APIService.shared.requestAPI(addEndPoint: addEndPoint, type: .upPost, parameters: nil, headers: newHeaders, encoding: JSONEncoding.default, dataType: upPostResponseDTO.self)
+                                    .map { dto in
+                                        LoggerService.shared.debugLog("liftUp 성공: \(dto)")
+                                        return true
+                                    }
+                            }
+                            .catch { error in
+                                return Observable.error(error)
+                            }
+                    } else if error.statusCode == 400 {
+                        return Observable.just(false)
                     }
                 }
-
-            return Disposables.create {
-                task.cancel()
+                return Observable.error(error)
             }
-        }
     }
+}
     
-    private func refreshToken() -> Observable<Void> {
-        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
-            return Observable.error(TokenError.notFoundRefreshToken)
-        }
-        
-        // APIService를 사용해 토큰 재발급
-        return APIService.shared.refreshAccessToken(refreshToken: refreshToken)
-            .flatMap { newAccessToken -> Observable<Void> in
-                LoggerService.shared.log("새로운 토큰 발급: \(newAccessToken)")
-                // 새로운 토큰 저장
-                if self.tokenDataSource.saveToken(token: newAccessToken, for: .accessToken) {
-                    return Observable.just(())
-                } else {
-                    // 실패 시
-                    return Observable.error(TokenError.failureSaveToken)
-                }
-            }
-
-    }
+struct upPostResponseDTO: Codable {
+    let boardId: Int
+    let liftUpDate: String
 }

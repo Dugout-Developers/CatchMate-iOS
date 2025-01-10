@@ -10,6 +10,58 @@ import RxSwift
 import RxAlamofire
 import Alamofire
 
-final class TempPostDataSource {
-
+protocol TempPostDataSource {
+    func tempPost(_ post: PostRequsetDTO) -> Observable<Int>
+}
+final class TempPostDataSourceImpl: TempPostDataSource {
+    private let tokenDataSource: TokenDataSource
+    
+    init(tokenDataSource: TokenDataSource) {
+        self.tokenDataSource = tokenDataSource
+    }
+    
+    func tempPost(_ post: PostRequsetDTO) -> Observable<Int> {
+        guard let token = tokenDataSource.getToken(for: .accessToken) else {
+            return Observable.error(TokenError.notFoundAccessToken)
+        }
+        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+            return Observable.error(TokenError.notFoundRefreshToken)
+        }
+        
+        let headers: HTTPHeaders = [
+            "AccessToken": token
+        ]
+        
+        let jsonDictionary = encodingData(post)
+        LoggerService.shared.debugLog("parameters Encoding:\(jsonDictionary)")
+        
+        return APIService.shared.performRequest(type: .tempPost, parameters: jsonDictionary, headers: headers, encoding: JSONEncoding.default, dataType: AddPostResponseDTO.self, refreshToken: refreshToken)
+            .map { response in
+                LoggerService.shared.debugLog("Post 저장 성공 - result: \(response)")
+                return response.boardId
+            }
+            .catch { error in
+                LoggerService.shared.debugLog("임시저장 실패 - \(error)")
+                return Observable.error(error)
+            }
+    }
+    func encodingData(_ post: PostRequsetDTO) -> [String: Any] {
+        let parameters: [String: Any] = [
+            "title": post.title,
+            "content": post.content,
+            "maxPerson": post.maxPerson,
+            "cheerClubId": post.cheerClubId,
+            "preferredGender": post.preferredGender ?? "N",
+            "preferredAgeRange": post.preferredAgeRange,
+            "gameRequest": [
+                "homeClubId": post.gameRequest.homeClubId,
+                "awayClubId": post.gameRequest.awayClubId,
+                "gameStartDate": post.gameRequest.gameStartDate,
+                "location": post.gameRequest.location
+            ],
+            "isCompleted": post.isCompleted
+        ]
+        
+        return parameters
+    }
 }

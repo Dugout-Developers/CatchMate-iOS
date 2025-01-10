@@ -97,13 +97,13 @@ final class DateFilterViewController: BasePickerViewController, View {
     }
     
     private func setupButton() {
-        saveButton.isEnabled = !isAddViewFilter
         if isAddViewFilter {
             timeButton.forEach { button in
                 let tapGesture = UITapGestureRecognizer(target: self, action: #selector(clickTimeButton))
                 button.addGestureRecognizer(tapGesture)
             }
         } else {
+            saveButton.isEnabled = true
             saveButton.addTarget(self, action: #selector(clickSaveButton), for: .touchUpInside)
         }
     }
