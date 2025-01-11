@@ -38,6 +38,6 @@ struct WriterTeamInfoDTO: Codable {
 struct GameInfoDTO: Codable {
     let homeClubId: Int
     let awayClubId: Int
-    let gameStartDate: String
+    let gameStartDate: String?
     let location: String
 }
