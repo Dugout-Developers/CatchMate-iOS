@@ -11,6 +11,12 @@ import FlexLayout
 import RxSwift
 
 final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate , UITableViewDataSource {
+    override var useSnapKit: Bool {
+        return false
+    }
+    override var buttonContainerExists: Bool {
+        return false
+    }
     private let user = SimpleUser(user: User(id: "1", email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4MTkSLvHP365kTge2U5CHc-smH-Z2Xq5p-A&s", allAlarm: true, chatAlarm: true, enrollAlarm: true, eventAlarm: true))
     private let chat: Chat
     private let dimView: UIView = {
@@ -96,8 +102,6 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         super.viewDidLoad()
         setupStyle()
         setupUI()
-        self.modalPresentationStyle = .custom
-        self.transitioningDelegate = self
         setupGesture()
     }
     
@@ -210,21 +214,6 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
     }
 }
 
-extension ChatSideSheetViewController: UIViewControllerTransitioningDelegate {
-    
-    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        return SideSheetPresentationController(presentedViewController: presented, presenting: presenting)
-    }
-    
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return SideSheetAnimator(isPresenting: true)
-    }
-    
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return SideSheetAnimator(isPresenting: false)
-    }
-}
-
 
 final class ChatRoomPeopleListCell: UITableViewCell {
     private let containerView = UIView()
@@ -311,91 +300,6 @@ final class ChatRoomPeopleListCell: UITableViewCell {
                 flex.addItem(managerImageBedge).size(20).marginRight(4)
                 flex.addItem(nicknameLabel)
             }
-        }
-    }
-}
-
-// MARK: - SideSheetPresentationController
-class SideSheetPresentationController: UIPresentationController {
-    
-    private let dimmingView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
-        return view
-    }()
-    
-    override var shouldRemovePresentersView: Bool {
-        return false
-    }
-    
-    override func presentationTransitionWillBegin() {
-        guard let containerView = containerView else { return }
-        dimmingView.frame = containerView.bounds
-        containerView.addSubview(dimmingView)
-        
-        dimmingView.alpha = 0.0
-        presentedViewController.transitionCoordinator?.animate(alongsideTransition: { _ in
-            self.dimmingView.alpha = 1.0
-        })
-    }
-    
-    override func dismissalTransitionWillBegin() {
-        presentedViewController.transitionCoordinator?.animate(alongsideTransition: { _ in
-            self.dimmingView.alpha = 0.0
-        })
-    }
-    
-    override func containerViewWillLayoutSubviews() {
-        super.containerViewWillLayoutSubviews()
-        guard let containerView = containerView else { return }
-        presentedView?.frame = CGRect(x: containerView.bounds.width * 0.2,
-                                      y: 0,
-                                      width: containerView.bounds.width * 0.8,
-                                      height: containerView.bounds.height)
-    }
-}
-
-// MARK: - SideSheetAnimator
-class SideSheetAnimator: NSObject, UIViewControllerAnimatedTransitioning {
-    
-    private let isPresenting: Bool
-    
-    init(isPresenting: Bool) {
-        self.isPresenting = isPresenting
-    }
-    
-    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.3
-    }
-    
-    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        guard let fromView = transitionContext.view(forKey: .from),
-              let toView = transitionContext.view(forKey: .to) else { return }
-        
-        let containerView = transitionContext.containerView
-        let finalWidth = containerView.bounds.width * 0.8
-        let initialFrame = isPresenting ? CGRect(x: containerView.bounds.width,
-                                                 y: 0,
-                                                 width: finalWidth,
-                                                 height: containerView.bounds.height) : toView.frame
-        
-        let finalFrame = isPresenting ? CGRect(x: containerView.bounds.width * 0.2,
-                                               y: 0,
-                                               width: finalWidth,
-                                               height: containerView.bounds.height) : initialFrame.offsetBy(dx: containerView.bounds.width, dy: 0)
-        
-        let animateView = isPresenting ? toView : fromView
-        
-        if isPresenting {
-            containerView.addSubview(animateView)
-        }
-        
-        animateView.frame = initialFrame
-        
-        UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
-            animateView.frame = finalFrame
-        }) { _ in
-            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
     }
 }

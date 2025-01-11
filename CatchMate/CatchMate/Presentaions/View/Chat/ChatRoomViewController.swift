@@ -109,8 +109,11 @@ final class ChatRoomViewController: BaseViewController, View {
     }
     
     @objc private func clickedMenuButton(_ sender: UIButton) {
-//        let sideSheetVC = ChatSideSheetViewController(chat: chat)
-//        present(sideSheetVC, animated: true, completion: nil)
+        let sideSheetVC = ChatSideSheetViewController(chat: chat)
+        let transitioningDelegate = SideSheetTransitioningDelegate()
+        sideSheetVC.transitioningDelegate = transitioningDelegate
+        sideSheetVC.modalPresentationStyle = .custom
+        present(sideSheetVC, animated: true, completion: nil)
     }
     
     private func setupUI() {
