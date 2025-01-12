@@ -77,6 +77,7 @@ final class APIService {
                     LoggerService.shared.log("DTO: \(dtoResponse)")
                     return Observable.just(dtoResponse)
                 } catch {
+                    print(error.localizedDescription)
                     LoggerService.shared.log("Decoding Error", level: .error)
                     if let jsonString = String(data: data, encoding: .utf8) {
                         LoggerService.shared.debugLog("Decoding Error - JSON 데이터 : \(jsonString)")

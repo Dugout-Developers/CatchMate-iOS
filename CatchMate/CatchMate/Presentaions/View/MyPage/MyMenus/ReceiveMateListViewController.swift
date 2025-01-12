@@ -19,9 +19,10 @@ final class ReceiveMateListViewController: BaseViewController, View {
     }
     private let tableView = UITableView()
     var reactor: RecevieMateReactor
-    
-    init(reactor: RecevieMateReactor) {
+    private var isPushId: String?
+    init(reactor: RecevieMateReactor, id: String? = nil) {
         self.reactor = reactor
+        self.isPushId = id
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -34,6 +35,11 @@ final class ReceiveMateListViewController: BaseViewController, View {
         super.viewWillAppear(animated)
         reactor.action.onNext(.loadReceiveAppliesAll)
         reactor.action.onNext(.selectPost(nil))
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        reactor.action.onNext(.selectPost(isPushId))
     }
     
     override func viewDidLoad() {

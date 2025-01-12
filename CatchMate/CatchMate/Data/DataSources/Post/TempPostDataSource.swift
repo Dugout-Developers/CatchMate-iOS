@@ -37,7 +37,7 @@ final class TempPostDataSourceImpl: TempPostDataSource {
         
         return APIService.shared.performRequest(type: .tempPost, parameters: jsonDictionary, headers: headers, encoding: JSONEncoding.default, dataType: AddPostResponseDTO.self, refreshToken: refreshToken)
             .map { response in
-                LoggerService.shared.debugLog("Post 저장 성공 - result: \(response)")
+                LoggerService.shared.debugLog("임시저장 저장 성공 - result: \(response)")
                 return response.boardId
             }
             .catch { error in
@@ -46,22 +46,29 @@ final class TempPostDataSourceImpl: TempPostDataSource {
             }
     }
     func encodingData(_ post: PostRequsetDTO) -> [String: Any] {
-        let parameters: [String: Any] = [
+        var parameters: [String: Any] = [
             "title": post.title,
             "content": post.content,
             "maxPerson": post.maxPerson,
             "cheerClubId": post.cheerClubId,
             "preferredGender": post.preferredGender ?? "N",
             "preferredAgeRange": post.preferredAgeRange,
-            "gameRequest": [
-                "homeClubId": post.gameRequest.homeClubId,
-                "awayClubId": post.gameRequest.awayClubId,
-                "gameStartDate": post.gameRequest.gameStartDate,
-                "location": post.gameRequest.location
-            ],
             "isCompleted": post.isCompleted
         ]
-        
+        if let gameDate = post.gameRequest.gameStartDate {
+            parameters["gameRequest"] = [
+                "homeClubId": post.gameRequest.homeClubId,
+                "awayClubId": post.gameRequest.awayClubId,
+                "gameStartDate": gameDate,
+                "location": post.gameRequest.location
+            ]
+        } else {
+            parameters["gameRequest"] = [
+                "homeClubId": post.gameRequest.homeClubId,
+                "awayClubId": post.gameRequest.awayClubId,
+                "location": post.gameRequest.location
+            ]
+        }
         return parameters
     }
 }

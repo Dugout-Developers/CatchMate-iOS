@@ -20,6 +20,6 @@ struct PostRequsetDTO: Codable {
 struct GameInfo: Codable {
     let homeClubId: Int
     let awayClubId: Int
-    let gameStartDate: String
+    let gameStartDate: String?
     let location: String
 }

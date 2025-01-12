@@ -15,6 +15,7 @@ struct NotificationDTO: Codable {
     let body: String
     let createdAt: String
     let read: Bool
+    let acceptStatus: String
 }
 
 struct NotificationListResponse: Codable {

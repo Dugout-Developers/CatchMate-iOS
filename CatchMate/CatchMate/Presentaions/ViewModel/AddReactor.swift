@@ -34,6 +34,8 @@ final class AddReactor: Reactor {
         case updateEditPost
         case tempPost
         case loadTempPost
+        case setTempPost
+        case setIsLoadTempPost
     }
     enum Mutation {
         case setUser(SimpleUser)
@@ -56,17 +58,19 @@ final class AddReactor: Reactor {
         case editPost(Int)
         case setError(PresentationError)
         case setTempPostResult(Void)
+        case setTempPostId(String)
         case setIsLoadTempPost
+        case setTempPost(TempPost)
     }
     struct State {
         // View의 state를 관리한다.
         var editPost: Post?
+        var tempPostId: String?
         var title: String = ""
         var selecteDate: Date?
         var selecteTime: PlayTime?
         var dateInfoString: String = ""
         var selectedGender: Gender?
-//        var selectedAge: Int?
         var selectedAge: [Int] = []
         var datePickerSaveButtonState: Bool = false
         var homeTeam: Team?
@@ -78,7 +82,9 @@ final class AddReactor: Reactor {
         var partyNumber: Int?
         var savePostResult: Int? = nil
         var tempPostResult: Void?
+        var loadTempPost: Void?
         var isLoadTempPost: Bool = false
+        var tempPost: TempPost?
         var error: PresentationError?
     }
     
@@ -158,13 +164,26 @@ final class AddReactor: Reactor {
             guard let request = validatePost(currentState) else {
                 return Observable.just(Mutation.setError(.showToastMessage(message: "입력값 확인 후 다시 시도해주세요.")))
             }
-            return addUsecase.addPost(request.0)
-                .map{ id in
-                    return Mutation.savePost(id)
+            if currentState.isLoadTempPost {
+                guard let id = currentState.tempPostId else {
+                    return Observable.just(.setError(.showToastMessage(message: "게시물을 등록하는데 문제가 발생했습니다.")))
                 }
-                .catch { error in
-                    return Observable.just(Mutation.setError(error.toPresentationError()))
-                }
+                return addUsecase.addTempPost(post: request.0, boardId: id)
+                    .map{ id in
+                        return Mutation.savePost(id)
+                    }
+                    .catch { error in
+                        return Observable.just(Mutation.setError(error.toPresentationError()))
+                    }
+            } else {
+                return addUsecase.addPost(request.0)
+                    .map{ id in
+                        return Mutation.savePost(id)
+                    }
+                    .catch { error in
+                        return Observable.just(Mutation.setError(error.toPresentationError()))
+                    }
+            }
         case .changeTitle(let title):
             return Observable.concat([
                 Observable.just(Mutation.updateTitle(title)),
@@ -227,30 +246,39 @@ final class AddReactor: Reactor {
                     return Observable.just(Mutation.setError(error.toPresentationError()))
                 }
             
+        case .setTempPost:
+            if let post = currentState.tempPost {
+                return Observable.concat([
+                    Observable.just(Mutation.updateTitle(post.title)),
+                    Observable.just(Mutation.updatePartyNumber(post.maxPerson)),
+                    Observable.just(Mutation.updateDate(post.date)),
+                    Observable.just(Mutation.updateTime(post.playTime)),
+                    Observable.just(Mutation.updateHomeTeam(post.homeTeam)),
+                    Observable.just(Mutation.updageAwayTeam(post.awayTeam)),
+                    Observable.just(Mutation.updateCheerTeam(post.cheerTeam)),
+                    Observable.just(Mutation.updatePlcase(post.location)),
+                    Observable.just(Mutation.updateAddText(post.addInfo)),
+                    Observable.just(Mutation.updateAge(post.preferAge)),
+                    Observable.just(Mutation.updateGender(post.preferGender)),
+                    Observable.just(Mutation.updateSaveButton),
+                    Observable.just(Mutation.updateDatePickerSaveButton),
+                    Observable.just(Mutation.setTempPostId(post.id)),
+                    Observable.just(Mutation.setIsLoadTempPost)
+                ])
+            } else {
+                return Observable.empty()
+            }
         case .loadTempPost:
             return tempPostUsecase.loadTempPost()
-                .flatMap { post -> Observable<Mutation>in
+                .flatMap { post -> Observable<Mutation> in
                     if let post {
-                        return Observable.concat([
-                            Observable.just(Mutation.updateTitle(post.title)),
-                            Observable.just(Mutation.updatePartyNumber(post.maxPerson)),
-                            Observable.just(Mutation.updateDate(post.date)),
-                            Observable.just(Mutation.updateTime(post.playTime)),
-                            Observable.just(Mutation.updateHomeTeam(post.homeTeam)),
-                            Observable.just(Mutation.updageAwayTeam(post.awayTeam)),
-                            Observable.just(Mutation.updateCheerTeam(post.cheerTeam)),
-                            Observable.just(Mutation.updatePlcase(post.location)),
-                            Observable.just(Mutation.updateAddText(post.addInfo)),
-                            Observable.just(Mutation.updateAge(post.preferAge)),
-                            Observable.just(Mutation.updateGender(post.preferGender)),
-                            Observable.just(Mutation.updateSaveButton),
-                            Observable.just(Mutation.setIsLoadTempPost),
-                            Observable.just(Mutation.updateDatePickerSaveButton)
-                        ])
+                        return Observable.just(Mutation.setTempPost(post))
                     } else {
                         return Observable.empty()
                     }
                 }
+        case .setIsLoadTempPost:
+            return Observable.just(Mutation.setIsLoadTempPost)
         }
     }
     
@@ -318,6 +346,11 @@ final class AddReactor: Reactor {
             newState.tempPostResult = ()
         case .setIsLoadTempPost:
             newState.isLoadTempPost = true
+        case .setTempPostId(let id):
+            newState.tempPostId = id
+        case .setTempPost(let post):
+            newState.tempPost = post
+            newState.loadTempPost = ()
         }
         return newState
     }

@@ -14,7 +14,10 @@ final class UpPostRepositoryImpl: UpPostRepository {
         self.upPostDS = upPostDS
     }
     
-    func upPost(_ postId: Int) -> RxSwift.Observable<Bool> {
+    func upPost(_ postId: Int) -> RxSwift.Observable<(result: Bool, message: String?)> {
         return upPostDS.upPost(postId)
+            .map { dto in
+                return (dto.state, dto.remainTime)
+            }
     }
 }

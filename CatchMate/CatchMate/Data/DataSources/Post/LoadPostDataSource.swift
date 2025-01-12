@@ -24,39 +24,21 @@ final class LoadPostDataSourceImpl: LoadPostDataSource {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
-        
+        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+            return Observable.error(TokenError.notFoundRefreshToken)
+        }
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
-        
-        return APIService.shared.requestAPI(addEndPoint: String(postId),type: .loadPost, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: PostDTO.self)
+        return APIService.shared.performRequest(addEndPoint: String(postId), type: .loadPost, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: PostDTO.self, refreshToken: refreshToken)
             .map { dto in
-                LoggerService.shared.debugLog("Post Load 성공: \(dto)")
+                LoggerService.shared.debugLog("Post 로드 성공: \(dto)")
                 return dto
             }
-            .catch {[weak self] error in
-                guard let self = self else { return Observable.error(OtherError.notFoundSelf) }
-                if let error = error as? NetworkError, error.statusCode == 401 {
-                    guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
-                        return Observable.error(TokenError.notFoundRefreshToken)
-                    }
-                    return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
-                        .flatMap { token -> Observable<PostDTO> in
-                            let newHeaders: HTTPHeaders = [
-                                "AccessToken": token
-                            ]
-                            LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            return APIService.shared.requestAPI(addEndPoint: String(postId),type: .loadPost, parameters: nil, headers: newHeaders, encoding: URLEncoding.default, dataType: PostDTO.self)
-                                .map { dto in
-                                    LoggerService.shared.debugLog("Post Load 성공: \(dto)")
-                                    return dto
-                                }
-                                .catch { error in
-                                    return Observable.error(error)
-                                }
-                        }
-                }
+            .catch { error in
+                LoggerService.shared.debugLog("Post 로드 실패: \(error.localizedDescription)")
                 return Observable.error(error)
             }
+       
     }
 }

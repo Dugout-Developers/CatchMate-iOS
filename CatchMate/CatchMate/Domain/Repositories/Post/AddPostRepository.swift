@@ -11,4 +11,5 @@ import RxSwift
 protocol AddPostRepository {
     func addPost(_ post: RequestPost) -> Observable<Int>
     func editPost(_ post: RequestEditPost, boardId: Int) -> Observable<Int>
+    func addTempPost(_ post: RequestPost, boardId: String) -> Observable<Int>
 }

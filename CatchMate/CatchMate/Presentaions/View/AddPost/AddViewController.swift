@@ -444,12 +444,14 @@ extension AddViewController {
                 vc.handleError(error)
             }
             .disposed(by: disposeBag)
-        reactor.state.map{$0.isLoadTempPost}
-            .filter{$0}
+        reactor.state.map{ $0.loadTempPost != nil }
             .distinctUntilChanged()
+            .filter { $0 }
             .withUnretained(self)
             .subscribe { vc, _ in
-                vc.showToast(message: "임시 저장한 게시물을 불러왔습니다.", buttonContainerExists: true, completion: nil)
+                vc.showCMAlert(titleText: "임시저장된 글을 불러올까요?", importantButtonText: "불러오기", commonButtonText: "새로작성", importantAction:  { [weak self] in
+                    self?.reactor.action.onNext(.setTempPost)
+                })
             }
             .disposed(by: disposeBag)
     }

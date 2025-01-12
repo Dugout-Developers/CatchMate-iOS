@@ -39,7 +39,7 @@ final class PostReactor: Reactor {
         case setApplyInfo(MyApplyInfo?)
         case deletePost
         case setError(PresentationError?)
-        case setUpPostResult(Bool?)
+        case setUpPostResult((result: Bool, message: String?)?)
     }
     struct State {
         // View의 state를 관리한다.
@@ -48,7 +48,7 @@ final class PostReactor: Reactor {
         var isFavorite: Bool = false
         var applyInfo: MyApplyInfo?
         var isDelete: Bool = false
-        var upPostResult: Bool?
+        var upPostResult: (result: Bool, message: String?)?
         var error: PresentationError?
     }
     var postId: String

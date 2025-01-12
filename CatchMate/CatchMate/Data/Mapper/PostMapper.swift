@@ -24,7 +24,7 @@ final class PostMapper {
     }
     
     func domainToDto(_ domain: TempPostRequest) -> PostRequsetDTO? {
-        var dateResult = ""
+        var dateResult: String?
         if let date = domain.date, let playTime = domain.playTime {
             let dateString = DateHelper.shared.toString(from: date, format: "yyyy-MM-dd")
             let playTimeString = playTime+":00"
@@ -35,7 +35,7 @@ final class PostMapper {
     
     func dtoToDomainTemp(_ dto: PostDTO) -> TempPost {
         let gameInfo = dto.gameInfo
-        let convertDate = DateHelper.shared.convertISODateToCustomStrings(isoDateString: gameInfo.gameStartDate)
+        let convertDate = DateHelper.shared.convertISODateToCustomStrings(isoDateString: gameInfo.gameStartDate ?? "")
         var date: Date?
         var playTime: PlayTime?
         if let dateStr = convertDate?.date {
@@ -44,7 +44,7 @@ final class PostMapper {
         if let playTimeStr = convertDate?.playTime {
             playTime = PlayTime(rawValue: playTimeStr)
         }
-        let location = gameInfo.location == "임시 저장" ? "" : gameInfo.location
+        let location = gameInfo.location
         let maxPerson = dto.maxPerson == 0 ? nil : dto.maxPerson
         let preferAge = dto.preferredAgeRange.split(separator: ",").compactMap{Int($0)}
         return TempPost(id: String(dto.boardId), title: dto.title, homeTeam: Team(serverId: gameInfo.homeClubId), awayTeam: Team(serverId: gameInfo.awayClubId), cheerTeam: Team(serverId: dto.cheerClubId), date: date, playTime: playTime, location: location, maxPerson: maxPerson, preferGender: Gender(serverValue: dto.preferredGender), preferAge: preferAge, addInfo: dto.content)
@@ -65,7 +65,7 @@ final class PostMapper {
             return nil
         }
         
-        guard let gameDate = DateHelper.shared.convertISODateToCustomStrings(isoDateString: gameInfo.gameStartDate) else {
+        guard let gameDate = DateHelper.shared.convertISODateToCustomStrings(isoDateString: gameInfo.gameStartDate ?? "") else {
             LoggerService.shared.debugLog("Post DTO -> Post Mapping Error: Game Date 변환 실패")
             return nil
         }
@@ -84,7 +84,7 @@ final class PostMapper {
             LoggerService.shared.log("favoriteListDTO -> PostList 변환 실패 : 팀정보 매칭 실패", level: .error)
             return nil
         }
-        guard let convertedDates = DateHelper.shared.convertISODateToCustomStrings(isoDateString: gameInfo.gameStartDate) else {
+        guard let convertedDates = DateHelper.shared.convertISODateToCustomStrings(isoDateString: gameInfo.gameStartDate ?? "") else {
             print("날짜 변환 실패")
             LoggerService.shared.log("PostListDTO -> PostList 변환 실패 : 날짜 변환 실패", level: .error)
             return nil

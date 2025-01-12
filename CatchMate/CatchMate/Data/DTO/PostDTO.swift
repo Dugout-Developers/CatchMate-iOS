@@ -29,6 +29,7 @@ struct PostDTO: Codable {
     let preferredGender: String
     let preferredAgeRange: String /// , 구분
     let gameInfo: GameInfoDTO
+    let bookMarked: Bool
 }
 
 struct WriterTeamInfoDTO: Codable {
@@ -38,6 +39,6 @@ struct WriterTeamInfoDTO: Codable {
 struct GameInfoDTO: Codable {
     let homeClubId: Int
     let awayClubId: Int
-    let gameStartDate: String
+    let gameStartDate: String?
     let location: String
 }

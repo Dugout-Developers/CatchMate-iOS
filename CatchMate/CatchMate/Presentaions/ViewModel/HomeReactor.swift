@@ -29,6 +29,8 @@ final class HomeReactor: Reactor {
         case incrementPage
         case resetPage
         case setRefreshing(Bool)
+        case setIsLoadingNextPage(Bool)
+        case setIsLast(Bool)
     }
     struct State {
         var posts: [SimplePost] = []
@@ -36,9 +38,10 @@ final class HomeReactor: Reactor {
         var selectedTeams: [Team] = []
         var selectedPost: String?
         var seletedNumberFilter: Int?
-        var page: Int = 1
+        var page: Int = 0
         var isLoadingNextPage: Bool = false
         var isRefreshing: Bool = false
+        var isLast: Bool = false
         var error: PresentationError?
     }
     
@@ -91,13 +94,32 @@ final class HomeReactor: Reactor {
             
         case .loadNextPage:
             guard !currentState.isLoadingNextPage else { return .empty() }  // 중복 로딩 방지
-            return loadPostListUsecase.loadPostList(pageNum: currentState.page, gudan: currentState.selectedTeams.map { $0.rawValue }, gameDate: currentState.dateFilterValue?.toString(format: "YYYY-MM-dd") ?? "", people: currentState.seletedNumberFilter ?? 0)
-                .flatMap { list -> Observable<Mutation> in
+            guard !currentState.isLast else {
+                // 마지막 페이지면 로딩X
+                return .empty()
+            }
+            return loadPostListUsecase.loadPostList(pageNum: currentState.page, gudan: currentState.selectedTeams.map { $0.serverId }, gameDate: currentState.dateFilterValue?.toString(format: "YYYY-MM-dd") ?? "", people: currentState.seletedNumberFilter ?? 0)
+                .flatMap { data -> Observable<Mutation> in
+                    let list = data.post
                     if !list.isEmpty {
-                        return Observable.concat([
-                            Observable.just(Mutation.loadPost(list, append: true)),
-                            Observable.just(Mutation.incrementPage)  // 결과가 있는 경우에만 페이지 증가
-                        ])
+                        if data.isLast {
+                            // 페이지 증가 없음
+                            return Observable.concat([
+                                Observable.just(Mutation.setIsLoadingNextPage(true)),
+                                Observable.just(Mutation.loadPost(list, append: true)),
+                                Observable.just(Mutation.setIsLast(true)),
+                                Observable.just(Mutation.setIsLoadingNextPage(false))
+                            ])
+                        } else {
+                            // Last가 아니라면 페이지 증가
+                            return Observable.concat([
+                                Observable.just(Mutation.setIsLoadingNextPage(true)),
+                                Observable.just(Mutation.loadPost(list, append: true)),
+                                Observable.just(Mutation.incrementPage),
+                                Observable.just(Mutation.setIsLast(false)),
+                                Observable.just(Mutation.setIsLoadingNextPage(false))
+                            ])
+                        }
                     }
                     return .empty()
                 }
@@ -109,6 +131,7 @@ final class HomeReactor: Reactor {
                 Observable.just(Mutation.setRefreshing(true)),
                 Observable.just(Mutation.resetPage),
                 updateFiltersAndLoadPosts(date: currentState.dateFilterValue, teams: currentState.selectedTeams, number: currentState.seletedNumberFilter),
+                Observable.just(Mutation.setIsLast(false)),
                 Observable.just(Mutation.setRefreshing(false))
             ])
         }
@@ -124,14 +147,11 @@ final class HomeReactor: Reactor {
             newState.selectedTeams = selectedTeams
             
         case .loadPost(let posts, let append):
-            if append {
-//                newState.posts.append(contentsOf: posts)
-                newState.posts = posts
+            if append {                newState.posts.append(contentsOf: posts)
             } else {
-                newState.page = 1
+                newState.page = 0
                 newState.posts = posts
             }
-            newState.isLoadingNextPage = false
             
         case .setSelectedPost(let post):
             newState.selectedPost = post
@@ -145,21 +165,26 @@ final class HomeReactor: Reactor {
         case .incrementPage:
             newState.page += 1
         case .resetPage:
-            newState.page = 1
+            newState.page = 0
         case .setRefreshing(let refreshing):
             newState.isRefreshing = refreshing
+        case .setIsLast(let state):
+            newState.isLast = state
+        case .setIsLoadingNextPage(let state):
+            newState.isLoadingNextPage = state
         }
         return newState
     }
     
     // Helper Method: 필터 업데이트 및 포스트 로딩 처리
     private func updateFiltersAndLoadPosts(date: Date?, teams: [Team]?, number: Int?) -> Observable<Mutation> {
-        let gudan = (teams ?? currentState.selectedTeams).map { $0.rawValue }
+        let gudan = (teams ?? currentState.selectedTeams).map { $0.serverId }
         let requestDate = date?.toString(format: "YYYY-MM-dd") ?? ""
         let requestNumber = number ?? 0
-        let loadList = loadPostListUsecase.loadPostList(pageNum: 1, gudan: gudan, gameDate: requestDate, people: requestNumber)
-            .map { list in
-                Mutation.loadPost(list, append: false)
+        let loadList = loadPostListUsecase.loadPostList(pageNum: 0, gudan: gudan, gameDate: requestDate, people: requestNumber)
+            .map { data in
+                let list = data.post
+                return Mutation.loadPost(list, append: false)
             }
             .catch { error in
                 return Observable.just(Mutation.setError(error.toPresentationError()))

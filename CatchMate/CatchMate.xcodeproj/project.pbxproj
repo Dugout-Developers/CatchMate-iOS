@@ -92,6 +92,7 @@
 		53368C972D3028F200D129EE /* LoadTempPostDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53368C952D3028E900D129EE /* LoadTempPostDataSource.swift */; };
 		53368C992D302B6C00D129EE /* TempPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53368C982D302B6900D129EE /* TempPost.swift */; };
 		53368C9A2D302B6C00D129EE /* TempPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53368C982D302B6900D129EE /* TempPost.swift */; };
+		53368CB12D30FA4600D129EE /* SideSheetPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53368CB02D30FA3B00D129EE /* SideSheetPresentationController.swift */; };
 		5337AB232C897847003A39AE /* ApplyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5337AB222C897847003A39AE /* ApplyUseCase.swift */; };
 		533A2B232C27FF6A00A59340 /* CMTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B222C27FF6A00A59340 /* CMTextView.swift */; };
 		533A2B252C280E0500A59340 /* CMDefaultFilledButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B242C280E0500A59340 /* CMDefaultFilledButton.swift */; };
@@ -172,6 +173,10 @@
 		534E39E72C63E022006D180E /* CustomerServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39E62C63E021006D180E /* CustomerServiceViewController.swift */; };
 		534E39E92C63E509006D180E /* SendMateListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39E82C63E509006D180E /* SendMateListViewController.swift */; };
 		534E39EC2C63E771006D180E /* SendMateListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39EB2C63E771006D180E /* SendMateListCell.swift */; };
+		535B3A8F2D32AC03003FBBBF /* PostList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B3A8E2D32ABFE003FBBBF /* PostList.swift */; };
+		535B3A902D32AC03003FBBBF /* PostList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B3A8E2D32ABFE003FBBBF /* PostList.swift */; };
+		535B3A922D339367003FBBBF /* UpPostResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B3A912D33935F003FBBBF /* UpPostResponseDTO.swift */; };
+		535B3A932D339367003FBBBF /* UpPostResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B3A912D33935F003FBBBF /* UpPostResponseDTO.swift */; };
 		536548A32C3EF3B700C2309A /* FavoriteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536548A22C3EF3B700C2309A /* FavoriteListViewController.swift */; };
 		536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAD2C189B230043B1DA /* AppDelegate.swift */; };
 		536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAF2C189B230043B1DA /* SceneDelegate.swift */; };
@@ -479,6 +484,7 @@
 		53368C932D30215E00D129EE /* TempPostUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempPostUseCase.swift; sourceTree = "<group>"; };
 		53368C952D3028E900D129EE /* LoadTempPostDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadTempPostDataSource.swift; sourceTree = "<group>"; };
 		53368C982D302B6900D129EE /* TempPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempPost.swift; sourceTree = "<group>"; };
+		53368CB02D30FA3B00D129EE /* SideSheetPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideSheetPresentationController.swift; sourceTree = "<group>"; };
 		5337AB222C897847003A39AE /* ApplyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyUseCase.swift; sourceTree = "<group>"; };
 		533A2B222C27FF6A00A59340 /* CMTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMTextView.swift; sourceTree = "<group>"; };
 		533A2B242C280E0500A59340 /* CMDefaultFilledButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMDefaultFilledButton.swift; sourceTree = "<group>"; };
@@ -523,6 +529,8 @@
 		534E39E62C63E021006D180E /* CustomerServiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerServiceViewController.swift; sourceTree = "<group>"; };
 		534E39E82C63E509006D180E /* SendMateListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMateListViewController.swift; sourceTree = "<group>"; };
 		534E39EB2C63E771006D180E /* SendMateListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMateListCell.swift; sourceTree = "<group>"; };
+		535B3A8E2D32ABFE003FBBBF /* PostList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostList.swift; sourceTree = "<group>"; };
+		535B3A912D33935F003FBBBF /* UpPostResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpPostResponseDTO.swift; sourceTree = "<group>"; };
 		536548A22C3EF3B700C2309A /* FavoriteListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteListViewController.swift; sourceTree = "<group>"; };
 		536BDDAA2C189B230043B1DA /* CatchMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CatchMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		536BDDAD2C189B230043B1DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -863,6 +871,7 @@
 				533183D82C5160220097F3F1 /* ChatData.swift */,
 				533183DC2C51F5370097F3F1 /* ChatingInputField.swift */,
 				531E4C222C6A75320052E754 /* ChatSideSheetViewController.swift */,
+				53368CB02D30FA3B00D129EE /* SideSheetPresentationController.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -1178,6 +1187,7 @@
 		536BDDED2C1972120043B1DA /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				535B3A8E2D32ABFE003FBBBF /* PostList.swift */,
 				53368C982D302B6900D129EE /* TempPost.swift */,
 				53368C8C2D301CD300D129EE /* TempPostRequest.swift */,
 				5375B1A12D2CD36E000581B3 /* NotificationList.swift */,
@@ -1244,6 +1254,7 @@
 		536BDDF72C1972780043B1DA /* DTO */ = {
 			isa = PBXGroup;
 			children = (
+				535B3A912D33935F003FBBBF /* UpPostResponseDTO.swift */,
 				5375B1D42D2E15D2000581B3 /* StateResponseDTO.swift */,
 				53EECAEC2D0B304000775FD6 /* ProfileEditRequestDTO.swift */,
 				53EECB102D14F04B00775FD6 /* SetNotificationResponseDTO.swift */,
@@ -1772,6 +1783,8 @@
 				53B895C12C9F3A4200029130 /* TempPostDataSource.swift in Sources */,
 				5301E2A92C5B81D10078E910 /* MypageHeader.swift in Sources */,
 				53EECB0F2D14F00D00775FD6 /* SetAlarmDataSource.swift in Sources */,
+				535B3A902D32AC03003FBBBF /* PostList.swift in Sources */,
+				53368CB12D30FA4600D129EE /* SideSheetPresentationController.swift in Sources */,
 				53B8E2632C612341001D0ADF /* PostMapper.swift in Sources */,
 				53E4A9C02C5009EB00D21B49 /* SignUpRepository.swift in Sources */,
 				53E4A9C62C500E9B00D21B49 /* SignUpMapper.swift in Sources */,
@@ -2020,6 +2033,7 @@
 				533B29232C7709C100BFE9F6 /* LoadFavoriteListRepository.swift in Sources */,
 				53EECB092D13E4B000775FD6 /* LoadAlarmInfoUseCase.swift in Sources */,
 				53ACBA272C7EB493004FAF00 /* UserInfoDTO.swift in Sources */,
+				535B3A932D339367003FBBBF /* UpPostResponseDTO.swift in Sources */,
 				53EECAF32D0BD17300775FD6 /* ProfileEditRepositoryImpl.swift in Sources */,
 				53ACBA5A2C85B7E6004FAF00 /* ApplyRepository.swift in Sources */,
 				5383BE8F2C34DF27008940F1 /* Font.swift in Sources */,
@@ -2050,6 +2064,7 @@
 				5375B1492D1AEEEE000581B3 /* ImageStringDecodingTest.swift in Sources */,
 				53ACBA3E2C84AA3D004FAF00 /* SetFavoriteDataSourceTest.swift in Sources */,
 				533B294A2C771F6300BFE9F6 /* Error+Extension.swift in Sources */,
+				535B3A8F2D32AC03003FBBBF /* PostList.swift in Sources */,
 				5375B1A02D277C05000581B3 /* ConvertDateTest.swift in Sources */,
 				533B293D2C771EEA00BFE9F6 /* DataError.swift in Sources */,
 				53C6DA062CE47A3000918718 /* UpPostDataSource.swift in Sources */,
@@ -2061,6 +2076,7 @@
 				533B293C2C771ED500BFE9F6 /* PresentationError.swift in Sources */,
 				5375B1472D1AEECE000581B3 /* ProfileImageHelper.swift in Sources */,
 				533B292F2C771C8600BFE9F6 /* SetFavoriteRepository.swift in Sources */,
+				535B3A922D339367003FBBBF /* UpPostResponseDTO.swift in Sources */,
 				533B87402C86ED190058B94B /* ServerLoginDataSource.swift in Sources */,
 				533B29412C771F0A00BFE9F6 /* RequestPost.swift in Sources */,
 				53B3CE3F2C88577500116BF7 /* SNSLoginResponse.swift in Sources */,

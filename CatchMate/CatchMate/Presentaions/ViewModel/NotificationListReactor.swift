@@ -13,13 +13,16 @@ final class NotificationListReactor: Reactor {
     enum Action {
         case loadList
         case deleteNoti(Int) // indexPath 전달
+        case selectNoti(NotificationList?)
     }
     enum Mutation {
         case setList([NotificationList])
+        case setSelectedNoti(NotificationList?)
         case setError(PresentationError?)
     }
     struct State {
         var notifications: [NotificationList] = []
+        var selectedNoti: NotificationList?
         var error: PresentationError?
     }
     
@@ -55,6 +58,8 @@ final class NotificationListReactor: Reactor {
                 .catch {
                     return Observable.just(Mutation.setError($0.toPresentationError()))
                 }
+        case .selectNoti(let noti):
+            return Observable.just(Mutation.setSelectedNoti(noti))
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
@@ -65,6 +70,8 @@ final class NotificationListReactor: Reactor {
             newState.notifications = list
         case .setError(let error):
             newState.error = error
+        case .setSelectedNoti(let noti):
+            newState.selectedNoti = noti
         }
         return newState
     }

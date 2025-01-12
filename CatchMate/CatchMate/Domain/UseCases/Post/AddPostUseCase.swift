@@ -11,6 +11,7 @@ import RxSwift
 protocol AddPostUseCase {
     func addPost(_ post: RequestPost) -> Observable<Int>
     func editPost(_ post: RequestEditPost, boardId: Int) -> Observable<Int>
+    func addTempPost(post: RequestPost, boardId: String) -> Observable<Int>
 }
 
 final class AddPostUseCaseImpl: AddPostUseCase {
@@ -33,5 +34,12 @@ final class AddPostUseCaseImpl: AddPostUseCase {
                 return Observable.error(DomainError(error: error, context: .action, message: "요청에 실패했습니다.").toPresentationError())
             }
     }
+    func addTempPost(post: RequestPost, boardId: String) -> RxSwift.Observable<Int> {
+        return addPostRepository.addTempPost(post, boardId: boardId)
+            .catch { error in
+                return Observable.error(DomainError(error: error, context: .action, message: "요청에 실패했습니다.").toPresentationError())
+            }
+    }
+    
 }
 

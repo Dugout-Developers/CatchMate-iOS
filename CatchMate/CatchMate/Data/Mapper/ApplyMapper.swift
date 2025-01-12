@@ -36,7 +36,7 @@ final class ApplyMapper {
             LoggerService.shared.debugLog("Apply BoardInfo - 팀정보 매칭 실패")
             return nil
         }
-        guard let convertedDates = DateHelper.shared.convertISODateToCustomStrings(isoDateString: gameInfo.gameStartDate) else {
+        guard let convertedDates = DateHelper.shared.convertISODateToCustomStrings(isoDateString: gameInfo.gameStartDate ?? "") else {
             LoggerService.shared.debugLog("Apply BoardInfo - 날짜 정보 매칭 실패")
             return nil
         }

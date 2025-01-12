@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 
 protocol UpPostUseCase {
-    func execute(_ postId: String) -> Observable<Bool>
+    func execute(_ postId: String) -> Observable<(result: Bool, message: String?)>
 }
 
 final class UpPostUseCaseImpl: UpPostUseCase {
@@ -18,7 +18,7 @@ final class UpPostUseCaseImpl: UpPostUseCase {
         self.upPostRepository = upPostRepository
     }
     
-    func execute(_ postId: String) -> Observable<Bool> {
+    func execute(_ postId: String) -> Observable<(result: Bool, message: String?)> {
         guard let id = Int(postId) else {
             return Observable.error(PresentationError.showToastMessage(message: "게시글 끌어올리기를 실패했습니다."))
         }
