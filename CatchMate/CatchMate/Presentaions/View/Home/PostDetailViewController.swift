@@ -433,15 +433,15 @@ extension PostDetailViewController {
             .compactMap{$0}
             .withUnretained(self)
             .subscribe { vc, result in
-                if result {
-                    vc.showToast(message: "게시글을 끌어올렸어요", buttonContainerExists: true) {
-                        vc.reactor.action.onNext(.resetUpPostResult)
-                    }
+                if result.result {
+                    vc.showToast(message: "게시글을 끌어올렸어요", buttonContainerExists: true)
                 } else {
-                    vc.showToast(message: "게시글은 3일에 한 번씩 끌어올릴 수 있습니다.", buttonContainerExists: true) {
-                        vc.reactor.action.onNext(.resetUpPostResult)
+                    if let message = result.message {
+                        let toastMsg = "게시글은 3일에 한 번씩 끌어올릴 수 있습니다.\n\(message) 남았습니다."
+                        vc.showToast(message: toastMsg, buttonContainerExists: true)
                     }
                 }
+                vc.reactor.action.onNext(.resetUpPostResult)
             }
             .disposed(by: disposeBag)
         

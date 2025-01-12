@@ -175,6 +175,8 @@
 		534E39EC2C63E771006D180E /* SendMateListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39EB2C63E771006D180E /* SendMateListCell.swift */; };
 		535B3A8F2D32AC03003FBBBF /* PostList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B3A8E2D32ABFE003FBBBF /* PostList.swift */; };
 		535B3A902D32AC03003FBBBF /* PostList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B3A8E2D32ABFE003FBBBF /* PostList.swift */; };
+		535B3A922D339367003FBBBF /* UpPostResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B3A912D33935F003FBBBF /* UpPostResponseDTO.swift */; };
+		535B3A932D339367003FBBBF /* UpPostResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B3A912D33935F003FBBBF /* UpPostResponseDTO.swift */; };
 		536548A32C3EF3B700C2309A /* FavoriteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536548A22C3EF3B700C2309A /* FavoriteListViewController.swift */; };
 		536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAD2C189B230043B1DA /* AppDelegate.swift */; };
 		536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAF2C189B230043B1DA /* SceneDelegate.swift */; };
@@ -528,6 +530,7 @@
 		534E39E82C63E509006D180E /* SendMateListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMateListViewController.swift; sourceTree = "<group>"; };
 		534E39EB2C63E771006D180E /* SendMateListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMateListCell.swift; sourceTree = "<group>"; };
 		535B3A8E2D32ABFE003FBBBF /* PostList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostList.swift; sourceTree = "<group>"; };
+		535B3A912D33935F003FBBBF /* UpPostResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpPostResponseDTO.swift; sourceTree = "<group>"; };
 		536548A22C3EF3B700C2309A /* FavoriteListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteListViewController.swift; sourceTree = "<group>"; };
 		536BDDAA2C189B230043B1DA /* CatchMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CatchMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		536BDDAD2C189B230043B1DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -1251,6 +1254,7 @@
 		536BDDF72C1972780043B1DA /* DTO */ = {
 			isa = PBXGroup;
 			children = (
+				535B3A912D33935F003FBBBF /* UpPostResponseDTO.swift */,
 				5375B1D42D2E15D2000581B3 /* StateResponseDTO.swift */,
 				53EECAEC2D0B304000775FD6 /* ProfileEditRequestDTO.swift */,
 				53EECB102D14F04B00775FD6 /* SetNotificationResponseDTO.swift */,
@@ -2029,6 +2033,7 @@
 				533B29232C7709C100BFE9F6 /* LoadFavoriteListRepository.swift in Sources */,
 				53EECB092D13E4B000775FD6 /* LoadAlarmInfoUseCase.swift in Sources */,
 				53ACBA272C7EB493004FAF00 /* UserInfoDTO.swift in Sources */,
+				535B3A932D339367003FBBBF /* UpPostResponseDTO.swift in Sources */,
 				53EECAF32D0BD17300775FD6 /* ProfileEditRepositoryImpl.swift in Sources */,
 				53ACBA5A2C85B7E6004FAF00 /* ApplyRepository.swift in Sources */,
 				5383BE8F2C34DF27008940F1 /* Font.swift in Sources */,
@@ -2071,6 +2076,7 @@
 				533B293C2C771ED500BFE9F6 /* PresentationError.swift in Sources */,
 				5375B1472D1AEECE000581B3 /* ProfileImageHelper.swift in Sources */,
 				533B292F2C771C8600BFE9F6 /* SetFavoriteRepository.swift in Sources */,
+				535B3A922D339367003FBBBF /* UpPostResponseDTO.swift in Sources */,
 				533B87402C86ED190058B94B /* ServerLoginDataSource.swift in Sources */,
 				533B29412C771F0A00BFE9F6 /* RequestPost.swift in Sources */,
 				53B3CE3F2C88577500116BF7 /* SNSLoginResponse.swift in Sources */,
