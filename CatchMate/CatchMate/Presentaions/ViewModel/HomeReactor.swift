@@ -38,7 +38,7 @@ final class HomeReactor: Reactor {
         var selectedTeams: [Team] = []
         var selectedPost: String?
         var seletedNumberFilter: Int?
-        var page: Int = 1
+        var page: Int = 0
         var isLoadingNextPage: Bool = false
         var isRefreshing: Bool = false
         var isLast: Bool = false
@@ -149,7 +149,7 @@ final class HomeReactor: Reactor {
         case .loadPost(let posts, let append):
             if append {                newState.posts.append(contentsOf: posts)
             } else {
-                newState.page = 1
+                newState.page = 0
                 newState.posts = posts
             }
             
@@ -165,7 +165,7 @@ final class HomeReactor: Reactor {
         case .incrementPage:
             newState.page += 1
         case .resetPage:
-            newState.page = 1
+            newState.page = 0
         case .setRefreshing(let refreshing):
             newState.isRefreshing = refreshing
         case .setIsLast(let state):
@@ -181,7 +181,7 @@ final class HomeReactor: Reactor {
         let gudan = (teams ?? currentState.selectedTeams).map { $0.serverId }
         let requestDate = date?.toString(format: "YYYY-MM-dd") ?? ""
         let requestNumber = number ?? 0
-        let loadList = loadPostListUsecase.loadPostList(pageNum: 1, gudan: gudan, gameDate: requestDate, people: requestNumber)
+        let loadList = loadPostListUsecase.loadPostList(pageNum: 0, gudan: gudan, gameDate: requestDate, people: requestNumber)
             .map { data in
                 let list = data.post
                 return Mutation.loadPost(list, append: false)
