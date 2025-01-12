@@ -15,15 +15,15 @@ final class LoadPostRepositoryImpl: LoadPostRepository {
         self.loadPostDS = loadPostDS
     }
     
-    func loadPost(postId: String) -> Observable<Post> {
+    func loadPost(postId: String) -> Observable<(post: Post, isFavorite: Bool)> {
         guard let id = Int(postId) else {
             LoggerService.shared.log("postId Int 변환 실패 형식 오류", level: .error)
             return Observable.error(PresentationError.showErrorPage)
         }
         return loadPostDS.loadPost(postId: id)
-            .flatMap { dto -> Observable<Post> in
+            .flatMap { dto -> Observable<(post: Post, isFavorite: Bool)> in
                 if let mapResult = PostMapper().dtoToDomain(dto) {
-                    return Observable.just(mapResult)
+                    return Observable.just((mapResult, dto.bookMarked))
                 } else {
                     return Observable.error(ErrorMapper.mapToPresentationError(MappingError.invalidData))
                 }

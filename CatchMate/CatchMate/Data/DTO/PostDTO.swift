@@ -29,6 +29,7 @@ struct PostDTO: Codable {
     let preferredGender: String
     let preferredAgeRange: String /// , 구분
     let gameInfo: GameInfoDTO
+    let bookMarked: Bool
 }
 
 struct WriterTeamInfoDTO: Codable {

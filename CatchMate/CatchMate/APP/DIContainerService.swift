@@ -68,9 +68,8 @@ class DIContainerService {
         let loadPostRepository = LoadPostRepositoryImpl(loadPostDS: loadPostDataSource)
         let sendAppliesDataSource = SendAppiesDataSourceImpl(tokenDataSource: tokenDS)
         let sendAppliesRepository = SendAppiesRepositoryImpl(sendAppliesDS: sendAppliesDataSource)
-        let loadFavoriteListDS = LoadFavoriteListDataSourceImpl(tokenDataSource: tokenDS)
-        let loadFavoriteListRepository = LoadFavoriteListRepositoryImpl(loadFavorioteListDS: loadFavoriteListDS)
-        let loadPostUsecase = PostDetailUseCaseImpl(loadPostRepository: loadPostRepository, applylistRepository: sendAppliesRepository, loadFavoriteListRepository: loadFavoriteListRepository)
+
+        let loadPostUsecase = PostDetailUseCaseImpl(loadPostRepository: loadPostRepository, applylistRepository: sendAppliesRepository)
         
         let loadUserDataSource = UserDataSourceImpl(tokenDataSource: tokenDS)
         let loadUserRepository = UserRepositoryImpl(userDS: loadUserDataSource)
@@ -88,9 +87,8 @@ class DIContainerService {
         let loadPostRepository = LoadPostRepositoryImpl(loadPostDS: loadPostDataSource)
         let sendAppliesDataSource = SendAppiesDataSourceImpl(tokenDataSource: tokenDS)
         let sendAppliesRepository = SendAppiesRepositoryImpl(sendAppliesDS: sendAppliesDataSource)
-        let loadFavoriteListDS = LoadFavoriteListDataSourceImpl(tokenDataSource: tokenDS)
-        let loadFavoriteListRepository = LoadFavoriteListRepositoryImpl(loadFavorioteListDS: loadFavoriteListDS)
-        let loadPostUsecase = PostDetailUseCaseImpl(loadPostRepository: loadPostRepository, applylistRepository: sendAppliesRepository, loadFavoriteListRepository: loadFavoriteListRepository)
+
+        let loadPostUsecase = PostDetailUseCaseImpl(loadPostRepository: loadPostRepository, applylistRepository: sendAppliesRepository)
         
         let applyDataSource = ApplyDataSourceImpl(tokenDataSource: tokenDS)
         let applyRepository = ApplyPostRepositoryImpl(applyDS: applyDataSource)
