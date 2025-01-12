@@ -24,7 +24,7 @@ final class PostMapper {
     }
     
     func domainToDto(_ domain: TempPostRequest) -> PostRequsetDTO? {
-        var dateResult = ""
+        var dateResult: String?
         if let date = domain.date, let playTime = domain.playTime {
             let dateString = DateHelper.shared.toString(from: date, format: "yyyy-MM-dd")
             let playTimeString = playTime+":00"
@@ -44,7 +44,7 @@ final class PostMapper {
         if let playTimeStr = convertDate?.playTime {
             playTime = PlayTime(rawValue: playTimeStr)
         }
-        let location = gameInfo.location == "임시 저장" ? "" : gameInfo.location
+        let location = gameInfo.location
         let maxPerson = dto.maxPerson == 0 ? nil : dto.maxPerson
         let preferAge = dto.preferredAgeRange.split(separator: ",").compactMap{Int($0)}
         return TempPost(id: String(dto.boardId), title: dto.title, homeTeam: Team(serverId: gameInfo.homeClubId), awayTeam: Team(serverId: gameInfo.awayClubId), cheerTeam: Team(serverId: dto.cheerClubId), date: date, playTime: playTime, location: location, maxPerson: maxPerson, preferGender: Gender(serverValue: dto.preferredGender), preferAge: preferAge, addInfo: dto.content)
