@@ -32,7 +32,9 @@ final class NotiViewController: BaseViewController, View {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reactor.action.onNext(.loadList)
+        reactor.action.onNext(.selectNoti(nil))
     }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .cmBackgroundColor
@@ -58,6 +60,25 @@ extension NotiViewController {
             }
             .disposed(by: disposeBag)
         
+        reactor.state.map{$0.selectedNoti}
+            .compactMap{$0}
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .subscribe { vc, noti in
+                switch noti.type {
+                case .receivedView:
+                    let receivedVC = ReceiveMateListViewController(reactor: DIContainerService.shared.makeReciveMateReactor(), id: String(noti.boardId))
+                    
+                    vc.navigationController?.pushViewController(receivedVC, animated: true)
+                case .chatRoom:
+                    vc.navigateToRootAndSwitchTab()
+                case .none:
+                    break
+                }
+            }
+            .disposed(by: disposeBag)
+        
         tableView.rx.itemDeleted
           .observe(on: MainScheduler.asyncInstance)
           .withUnretained(self)
@@ -65,6 +86,29 @@ extension NotiViewController {
               vc.reactor.action.onNext(.deleteNoti(indexPath.row))
           }
           .disposed(by: disposeBag)
+        
+        tableView.rx.itemSelected
+            .subscribe { indexPath in
+                let noti = reactor.currentState.notifications[indexPath.row]
+                reactor.action.onNext(.selectNoti(noti))
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func navigateToRootAndSwitchTab() {
+        guard let tabBarController = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .flatMap({ $0.windows })
+            .first(where: { $0.isKeyWindow })?.rootViewController as? UITabBarController else {
+            print("탭바 컨트롤러를 찾을 수 없습니다.")
+            return
+        }
+
+        tabBarController.selectedIndex = 3
+
+        if let navigationController = tabBarController.viewControllers?[3] as? UINavigationController {
+            navigationController.popToRootViewController(animated: false)
+        }
     }
 }
 // MARK: - UI

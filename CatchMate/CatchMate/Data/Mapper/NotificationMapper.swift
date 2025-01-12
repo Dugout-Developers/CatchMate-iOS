@@ -17,6 +17,7 @@ final class NotificationMapper {
         let date = convertedDates.date
         let playTime = convertedDates.playTime
         let gameInfoString = "\(date) | \(playTime) | \(gameInfo.location)"
-        return NotificationList(id: String(dto.notificationId), title: dto.body, gameInfo: gameInfoString, read: dto.read, imgUrl: dto.senderProfileImageUrl)
+
+        return NotificationList(id: String(dto.notificationId), title: dto.body, gameInfo: gameInfoString, read: dto.read, imgUrl: dto.senderProfileImageUrl, type: NotificationNavigationType(serverValue: dto.acceptStatus), boardId: dto.boardInfo.boardId)
     }
 }
