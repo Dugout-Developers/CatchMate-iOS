@@ -6,31 +6,44 @@
 //
 
 import UIKit
-import PinLayout
-import FlexLayout
 import RxSwift
+import SnapKit
 
 final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate , UITableViewDataSource {
     override var useSnapKit: Bool {
-        return false
+        return true
     }
     override var buttonContainerExists: Bool {
         return false
     }
     private let user = SimpleUser(user: User(id: "1", email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4MTkSLvHP365kTge2U5CHc-smH-Z2Xq5p-A&s", allAlarm: true, chatAlarm: true, enrollAlarm: true, eventAlarm: true))
     private let chat: Chat
-    private let dimView: UIView = {
+
+    private var isManager: Bool {
+        return chat.roomManager.userId == user.userId
+    }
+    private let infoView = UIView()
+    private let teamInfoView = UIView()
+    private let topDivider: UIView = {
         let view = UIView()
-        view.backgroundColor = .opacity400
+        view.backgroundColor = .grayScale100
         return view
     }()
-    private let containerView = UIView()
-    private let infoView = UIView()
-    private let topDivider = UIView()
     private let tableView = UITableView()
-    private let bottomDivider = UIView()
+    private let bottomDivider: UIView = {
+        let view = UIView()
+        view.backgroundColor = .grayScale100
+        return view
+    }()
     private let buttonView = UIView()
-    private let titleLabel = UILabel()    
+    
+    
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 1
+        label.lineBreakMode = .byTruncatingTail
+        return label
+    }()
     private let indicatorImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "cm20right")?.withTintColor(.grayScale500, renderingMode: .alwaysOriginal)
@@ -48,6 +61,14 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         label.applyStyle(textStyle: FontSystem.body03_medium)
         return label
     }()
+    private let partyInfoLabel: UILabel = {
+        let label = UILabel()
+        label.text = "참여자 정보"
+        label.textColor = .cmNonImportantTextColor
+        label.numberOfLines = 1
+        label.applyStyle(textStyle: FontSystem.body02_medium)
+        return label
+    }()
     private let exitButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "cm20leave")?.withTintColor(.grayScale500, renderingMode: .alwaysOriginal), for: .normal)
@@ -63,6 +84,13 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         button.setImage(UIImage(named: "setting")?.withTintColor(.grayScale500, renderingMode: .alwaysOriginal), for: .normal)
         return button
     }()
+    private let rightBtnStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fill
+        stackView.spacing = 24
+        return stackView
+    }()
     private func setupStyle() {
         if let date = DateHelper.shared.toDate(from: chat.post.date, format: "MM.dd") {
             let string = DateHelper.shared.toString(from: date, format: "M월 d일 EEEE")
@@ -72,7 +100,10 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         }
         infoLabel.applyStyle(textStyle: FontSystem.body03_medium)
         infoLabel.textColor = .cmPrimaryColor
-        partyNumLabel.text = "\(chat.post.currentPerson/chat.post.maxPerson)"
+        partyNumLabel.text = "\(chat.post.currentPerson)/\(chat.post.maxPerson)"
+        partyNumLabel.applyStyle(textStyle: FontSystem.caption01_medium)
+        partyNumLabel.layer.cornerRadius = 10
+        partyNumLabel.textAlignment = .center
         partyNumLabel.textColor = .cmPrimaryColor
         partyNumLabel.backgroundColor = .brandColor50
         titleLabel.text = chat.post.title
@@ -83,16 +114,11 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         awayTeamImageView.setupTeam(team: chat.post.awayTeam, isMyTeam: chat.post.writer.favGudan == chat.post.awayTeam)
     }
     
-    private func setupTableView() {
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.separatorStyle = .none
-        tableView.register(ChatRoomPeopleListCell.self, forCellReuseIdentifier: "ChatRoomPeopleListCell")
-        tableView.register(MypageHeader.self, forHeaderFooterViewReuseIdentifier: "MypageHeader")
-    }
     init(chat: Chat) {
         self.chat = chat
         super.init(nibName: nil, bundle: nil)
+        modalPresentationStyle = .custom
+        modalTransitionStyle = .crossDissolve
     }
     @available(*, unavailable)
     required init?(coder: NSCoder) {
@@ -102,87 +128,118 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         super.viewDidLoad()
         setupStyle()
         setupUI()
-        setupGesture()
+        setupTableView()
+        navigationBarHidden()
+        settingButton.isHidden = !isManager
     }
-    
-    override func viewDidLayoutSubviews() {
-        dimView.pin.all()
-        containerView.pin.top(view.pin.safeArea).bottom().right().width(80%)
-        infoView.pin.top().horizontally().height(135)
-            .marginTop(24).marginHorizontal(20)
-        tableView.pin.below(of: infoView).horizontally().above(of: buttonView)
-        buttonView.pin
-            .bottom(view.pin.safeArea)
-            .horizontally()
-            .height(52)
-    }
-    private func setupGesture() {
-        let backGesture = UITapGestureRecognizer(target: self, action: #selector(clickedBack))
-        dimView.addGestureRecognizer(backGesture)
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture))
-        containerView.addGestureRecognizer(panGesture)
-    }
-    
-    @objc private func clickedBack(_ sender: UITapGestureRecognizer) {
-        dismiss(animated: true)
-    }
-    @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
-        let translation = gesture.translation(in: view)
-        
-        switch gesture.state {
-        case .changed:
-            if translation.x > 0 { // 오른쪽으로 슬라이드할 때만 이동
-                containerView.frame.origin.x = translation.x
-            }
-        case .ended:
-            if translation.x > containerView.frame.width / 2 { // 슬라이드가 반 이상이면 닫기
-                dismiss(animated: true, completion: nil)
-            } else {
-                // 반 이하로 움직였으면 다시 원래 위치로 애니메이션
-                UIView.animate(withDuration: 0.3) {
-                    self.containerView.frame.origin.x = 0
-                }
-            }
-        default:
-            break
-        }
+    private func setupTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.separatorStyle = .none
+        tableView.register(ChatRoomPeopleListCell.self, forCellReuseIdentifier: "ChatRoomPeopleListCell")
     }
     private func setupUI() {
-        view.addSubview(dimView)
-        view.addSubview(containerView)
-        containerView.addSubviews(views: [infoView, tableView, buttonView])
-        infoView.flex.direction(.column).justifyContent(.start).alignItems(.start).width(100%).define { flex in
-            flex.addItem().direction(.row).justifyContent(.spaceBetween).alignItems(.center).define { flex in
-                flex.addItem().direction(.column).define { flex in
-                    flex.addItem(infoLabel).marginBottom(4)
-                    flex.addItem().direction(.row).define { flex in
-                        flex.addItem(partyNumLabel).marginRight(6)
-                        flex.addItem(titleLabel).shrink(1)
-                    }
-                }.shrink(1)
-                flex.addItem(indicatorImageView).size(20)
-            }.marginBottom(12)
-            flex.addItem().direction(.row).justifyContent(.center).alignItems(.center).define { flex in
-                flex.addItem(homeTeamImageView)
-                flex.addItem(vsLabel).marginHorizontal(24)
-                flex.addItem(awayTeamImageView)
-            }.backgroundColor(.grayScale50).cornerRadius(8).paddingVertical(16)
-            flex.addItem(topDivider).height(1).backgroundColor(.cmStrokeColor).marginVertical(16)
+        view.addSubviews(views: [infoView, teamInfoView, topDivider, partyInfoLabel, tableView, bottomDivider ,buttonView])
+        infoView.addSubviews(views: [infoLabel, partyNumLabel, titleLabel, indicatorImageView])
+        teamInfoView.addSubviews(views: [homeTeamImageView, vsLabel, awayTeamImageView])
+        buttonView.addSubviews(views: [exitButton, rightBtnStackView])
+        rightBtnStackView.addArrangedSubview(notiButton)
+        rightBtnStackView.addArrangedSubview(settingButton)
+        
+        let safeArea = view.safeAreaLayoutGuide
+        infoView.snp.makeConstraints { make in
+            make.top.equalTo(safeArea).offset(24)
+            make.leading.trailing.equalTo(safeArea).inset(20)
         }
-        buttonView.flex.width(100%).direction(.row).justifyContent(.spaceBetween).alignItems(.center).define { flex in
-            flex.addItem(exitButton).size(20)
-            flex.addItem().direction(.row).justifyContent(.start).alignItems(.center).define { flex in
-                flex.addItem(notiButton).size(20)
-                if chat.roomManager == user {
-                    flex.addItem(settingButton).marginLeft(24).size(20)
-                }
-            }
+        teamInfoView.snp.makeConstraints { make in
+            make.top.equalTo(infoView.snp.bottom).offset(12)
+            make.leading.trailing.equalTo(safeArea).inset(20)
+        }
+        topDivider.snp.makeConstraints { make in
+            make.top.equalTo(teamInfoView.snp.bottom).offset(16)
+            make.leading.trailing.equalTo(safeArea).inset(20)
+            make.height.equalTo(1)
+        }
+        partyInfoLabel.snp.makeConstraints { make in
+            make.top.equalTo(topDivider.snp.bottom).offset(16)
+            make.leading.equalTo(safeArea).offset(20)
+        }
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(partyInfoLabel.snp.bottom).offset(12)
+            make.leading.trailing.equalTo(safeArea).inset(20)
+        }
+        bottomDivider.snp.makeConstraints { make in
+            make.top.equalTo(tableView.snp.bottom).offset(16)
+            make.leading.trailing.equalTo(safeArea).inset(20)
+            make.height.equalTo(1)
+        }
+        buttonView.snp.makeConstraints { make in
+            make.top.equalTo(bottomDivider.snp.bottom).offset(16)
+            make.leading.trailing.equalTo(safeArea).inset(20)
+            make.bottom.equalTo(safeArea).inset(16)
+        }
+        
+        //infoView
+        infoLabel.snp.makeConstraints { make in
+            make.top.leading.equalToSuperview()
+        }
+        partyNumLabel.snp.makeConstraints { make in
+            make.top.equalTo(infoLabel.snp.bottom).offset(5)
+            make.leading.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        partyNumLabel.setContentHuggingPriority(.required, for: .horizontal)
+        titleLabel.snp.makeConstraints { make in
+            make.leading.equalTo(partyNumLabel.snp.trailing).offset(6)
+            make.centerY.equalTo(partyNumLabel)
+        }
+        indicatorImageView.snp.makeConstraints { make in
+            make.size.equalTo(20)
+            make.centerY.equalToSuperview()
+            make.leading.equalTo(titleLabel.snp.trailing).offset(10)
+            make.trailing.equalToSuperview()
+        }
+        
+        //teamInfoView
+        teamInfoView.backgroundColor = .grayScale50
+        teamInfoView.layer.cornerRadius = 8
+        
+        vsLabel.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
+        homeTeamImageView.snp.makeConstraints { make in
+            make.trailing.equalTo(vsLabel.snp.leading).inset(-24)
+            make.size.equalTo(50)
+            make.top.bottom.equalToSuperview().inset(16)
+        }
+        awayTeamImageView.snp.makeConstraints { make in
+            make.leading.equalTo(vsLabel.snp.trailing).offset(24)
+            make.size.equalTo(50)
+            make.top.bottom.equalToSuperview().inset(16)
+        }
+        
+        //buttonView
+        exitButton.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.size.equalTo(20)
+        }
+        rightBtnStackView.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
+        notiButton.snp.makeConstraints { make in
+            make.size.equalTo(20)
+        }
+        settingButton.snp.makeConstraints { make in
+            make.size.equalTo(20)
         }
     }
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print(chat.people.count)
         return chat.people.count
     }
     
@@ -192,7 +249,7 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         }
         cell.selectionStyle = .none
         let person = chat.people[indexPath.row]
-        cell.configData(person, isMy: person == user, isManager: person == chat.roomManager)
+        cell.configData(person, isMy: person.userId == user.userId, isManager: person.userId == chat.roomManager.userId)
         return cell
         
     }
@@ -200,39 +257,33 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 56
     }
-
-    // UITableViewDelegate: 섹션 헤더 높이 지정
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 48
-    }
-
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "MypageHeader") as? MypageHeader else { return UIView() }
-        headerView.configData(title: "참여자 정보")
-
-        return headerView
-    }
 }
 
 
 final class ChatRoomPeopleListCell: UITableViewCell {
-    private let containerView = UIView()
+    private let imageSize = 40.0
     private let profileImage: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
     }()
+    private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 4
+        stackView.alignment = .center
+        stackView.distribution = .fill
+        return stackView
+    }()
     private let myImageBedge: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(named: "myBedge")
         return imageView
     }()
     private let managerImageBedge: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(named: "king")
         return imageView
     }()
     private let nicknameLabel: UILabel = {
@@ -255,51 +306,44 @@ final class ChatRoomPeopleListCell: UITableViewCell {
         super.prepareForReuse()
         profileImage.image = nil
         nicknameLabel.text = ""
-        profileImage.flex.display(.none)
-        myImageBedge.flex.display(.none)
-        
+        profileImage.isHidden = false
+        managerImageBedge.isHidden = false
+        nicknameLabel.text = nil
+        profileImage.image = nil
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        containerView.pin.all()
-        containerView.flex.layout()
-    }
-    
     func configData(_ person: SimpleUser, isMy: Bool, isManager: Bool) {
+        print("\(person.nickName) - isMy: \(isMy) / isManager: \(isManager)")
         ProfileImageHelper.loadImage(profileImage, pictureString: person.picture)
+        profileImage.layer.cornerRadius = imageSize / 2
         nicknameLabel.text = person.nickName
         nicknameLabel.applyStyle(textStyle: FontSystem.body02_medium)
-        // 데이터에 따라 UI 요소 배치 결정
-        if isMy {
-            myImageBedge.flex.display(.flex)
-        } else {
-            myImageBedge.flex.display(.none)
-        }
-        
-        if isManager {
-            managerImageBedge.flex.display(.flex)
-        } else {
-            managerImageBedge.flex.display(.none)
-        }
+        myImageBedge.image = UIImage(named: "myBedge")
+        managerImageBedge.image = UIImage(named: "king")
+        myImageBedge.isHidden = !isMy
+        managerImageBedge.isHidden = !isManager
 
-        // 레이아웃 업데이트
-        managerImageBedge.flex.markDirty()
-        myImageBedge.flex.markDirty()
-        nicknameLabel.flex.markDirty()
-        containerView.flex.layout()
-        
+        layoutIfNeeded()
     }
     
     private func setupUI() {
-        contentView.addSubview(containerView)
-        containerView.flex.width(100%).direction(.row).justifyContent(.start).alignItems(.center).define { flex in
-            flex.addItem(profileImage).size(40).cornerRadius(20).marginRight(8)
-            flex.addItem().direction(.row).justifyContent(.start).alignItems(.center).define { flex in
-                flex.addItem(myImageBedge).size(20).marginRight(4)
-                flex.addItem(managerImageBedge).size(20).marginRight(4)
-                flex.addItem(nicknameLabel)
-            }
+        contentView.addSubviews(views: [profileImage, stackView])
+        stackView.addArrangedSubview(myImageBedge)
+        stackView.addArrangedSubview(managerImageBedge)
+        stackView.addArrangedSubview(nicknameLabel)
+        
+        profileImage.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview().inset(8)
+            make.leading.equalToSuperview()
+            make.size.equalTo(imageSize)
         }
+        stackView.snp.makeConstraints { make in
+            make.leading.equalTo(profileImage.snp.trailing).offset(8)
+            make.trailing.equalToSuperview().inset(8)
+            make.centerY.equalTo(profileImage)
+        }
+        
+        myImageBedge.setContentHuggingPriority(.required, for: .horizontal)
+        managerImageBedge.setContentHuggingPriority(.required, for: .horizontal)
     }
 }

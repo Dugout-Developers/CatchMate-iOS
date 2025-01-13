@@ -28,6 +28,7 @@ class BaseViewController: UIViewController, LayoutConfigurable {
     let customNavigationBar = CMNavigationBar()
     private let navigationBarHeight: CGFloat = 44.0
     var errorView: ErrorPageView?
+    private var isNavigationBarHidden: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,8 +43,14 @@ class BaseViewController: UIViewController, LayoutConfigurable {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if additionalSafeAreaInsets.top != navigationBarHeight {
-            additionalSafeAreaInsets.top = navigationBarHeight
+        if !isNavigationBarHidden { // 숨김 상태가 아닐 때만 업데이트
+            if additionalSafeAreaInsets.top != navigationBarHeight {
+                additionalSafeAreaInsets.top = navigationBarHeight
+            }
+        } else {
+            if additionalSafeAreaInsets.top != 0 {
+                additionalSafeAreaInsets.top = 0 // Safe Area 복원
+            }
         }
     }
     private func setupErrorView() {
@@ -70,7 +77,7 @@ class BaseViewController: UIViewController, LayoutConfigurable {
             errorView.flex.layout()
         }
     }
-    
+
     private func setupViewController() {
         navigationController?.isNavigationBarHidden = true
         view.tappedDismissKeyboard()
@@ -94,7 +101,12 @@ class BaseViewController: UIViewController, LayoutConfigurable {
     @objc private func cmBackButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
-    
+    func navigationBarHidden() {
+        isNavigationBarHidden = true // 네비게이션 바 숨김 상태로 설정
+        customNavigationBar.removeFromSuperview()
+        view.setNeedsLayout() // 레이아웃 강제 업데이트
+        view.layoutIfNeeded()
+    }
     func setupLeftTitle(_ title: String, font: TextStyle = FontSystem.headline03_medium) {
         let titlLabel = UILabel()
         titlLabel.text = title

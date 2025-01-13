@@ -15,7 +15,7 @@ class SideSheetPresentationController: UIPresentationController {
     }
 
     private func setupDimmingView() {
-        dimmingView.backgroundColor = .grayScale50
+        dimmingView.backgroundColor = .opacity400
         dimmingView.alpha = 1
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissController))
         dimmingView.addGestureRecognizer(tapGesture)
