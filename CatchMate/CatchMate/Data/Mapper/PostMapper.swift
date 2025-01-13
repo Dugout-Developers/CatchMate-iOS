@@ -12,7 +12,8 @@ final class PostMapper {
         let playTime = domain.playTime+":00"
         let resultString = "\(dateString) \(playTime)"
         LoggerService.shared.debugLog("PostMapper: Domain -> DTO : \(resultString)")
-        return PostRequsetDTO(title: domain.title, gameRequest: GameInfo(homeClubId: domain.homeTeam.serverId, awayClubId: domain.awayTeam.serverId, gameStartDate: resultString, location: domain.location), cheerClubId: domain.cheerTeam.serverId, maxPerson: domain.maxPerson, preferredGender: domain.preferGender?.serverRequest, preferredAgeRange: domain.preferAge.map{String($0)}, content: domain.addInfo, isCompleted: true)
+        let genderStr = domain.preferGender == nil ? "" : domain.preferGender!.serverRequest
+        return PostRequsetDTO(title: domain.title, gameRequest: GameInfo(homeClubId: domain.homeTeam.serverId, awayClubId: domain.awayTeam.serverId, gameStartDate: resultString, location: domain.location), cheerClubId: domain.cheerTeam.serverId, maxPerson: domain.maxPerson, preferredGender: genderStr, preferredAgeRange: domain.preferAge.map{String($0)}, content: domain.addInfo, isCompleted: true)
     }
     func domainToDto(_ domain: RequestEditPost) -> PostRequsetDTO? {
         let dateString = DateHelper.shared.toString(from: domain.date, format: "yyyy-MM-dd")
@@ -20,7 +21,8 @@ final class PostMapper {
         let resultString = "\(dateString) \(playTime)"
         LoggerService.shared.debugLog("PostMapper: Domain -> DTO : \(resultString)")
         let preferAge = domain.preferAge.compactMap{String($0)}
-        return PostRequsetDTO(title: domain.title, gameRequest: GameInfo(homeClubId: domain.homeTeam.serverId, awayClubId: domain.awayTeam.serverId, gameStartDate: resultString, location: domain.location), cheerClubId: domain.cheerTeam.serverId, maxPerson: domain.maxPerson, preferredGender: domain.preferGender?.rawValue, preferredAgeRange: preferAge, content: domain.addInfo, isCompleted: true)
+        let genderStr = domain.preferGender == nil ? "" : domain.preferGender!.serverRequest
+        return PostRequsetDTO(title: domain.title, gameRequest: GameInfo(homeClubId: domain.homeTeam.serverId, awayClubId: domain.awayTeam.serverId, gameStartDate: resultString, location: domain.location), cheerClubId: domain.cheerTeam.serverId, maxPerson: domain.maxPerson, preferredGender: genderStr, preferredAgeRange: preferAge, content: domain.addInfo, isCompleted: true)
     }
     
     func domainToDto(_ domain: TempPostRequest) -> PostRequsetDTO? {
@@ -72,7 +74,8 @@ final class PostMapper {
 
         let writerCheerStyle: CheerStyles? = writer.watchStyle != nil ? CheerStyles(rawValue: writer.watchStyle!) : nil
         let preferAges: [Int] = dto.preferredAgeRange.split(separator: ",").compactMap{ Int($0) }
-        return Post(id: String(dto.boardId), title: dto.title, writer: SimpleUser(userId: String(writer.userId), nickName: writer.nickName, picture: writer.profileImageUrl, favGudan: writerTeam, gender: writerGender, birthDate: writer.birthDate, cheerStyle: writerCheerStyle), homeTeam: homeTeam, awayTeam: awayTeam, cheerTeam: cheerTeam, date: gameDate.date, playTime: gameDate.playTime, location: gameInfo.location, maxPerson: dto.maxPerson, currentPerson: dto.currentPerson, preferGender: Gender(serverValue: dto.preferredGender), preferAge: preferAges, addInfo: dto.content)
+        let gender = dto.preferredGender != "" ? Gender(serverValue: dto.preferredGender) : nil
+        return Post(id: String(dto.boardId), title: dto.title, writer: SimpleUser(userId: String(writer.userId), nickName: writer.nickName, picture: writer.profileImageUrl, favGudan: writerTeam, gender: writerGender, birthDate: writer.birthDate, cheerStyle: writerCheerStyle), homeTeam: homeTeam, awayTeam: awayTeam, cheerTeam: cheerTeam, date: gameDate.date, playTime: gameDate.playTime, location: gameInfo.location, maxPerson: dto.maxPerson, currentPerson: dto.currentPerson, preferGender: gender, preferAge: preferAges, addInfo: dto.content)
     }
 
     func postListDTOtoDomain(_ dto: PostListInfoDTO) -> SimplePost? {

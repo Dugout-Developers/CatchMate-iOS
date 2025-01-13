@@ -293,7 +293,7 @@ final class PostDetailViewController: BaseViewController, View {
         if let gender = post.preferGender {
             genderOptionLabel.text = gender.rawValue
         } else {
-            genderOptionLabel.text = "성별 무관"
+            genderOptionLabel.isHidden = true
         }
         setTextStyle()
         titleLabel.flex.markDirty()
