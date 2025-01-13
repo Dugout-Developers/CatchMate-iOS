@@ -32,7 +32,7 @@ final class PostListLoadDataSourceImpl: PostListLoadDataSource {
         }
 
         if !gudan.isEmpty {
-            parameters["preferredTeamId"] = gudan
+            parameters["preferredTeamIdList"] = gudan
         }
         
         if people > 0 && people < 9 {
