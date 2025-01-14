@@ -11,8 +11,9 @@ import PinLayout
 import FlexLayout
 
 final class TeamFilterTableViewCell: UITableViewCell{
+    private let tapGesture = UITapGestureRecognizer()
     var disposeBag = DisposeBag()
-
+    let tapSubject = PublishSubject<Void>()
     var team: Team?
     var isClicked: Bool = false {
         didSet {
@@ -48,7 +49,8 @@ final class TeamFilterTableViewCell: UITableViewCell{
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setUI()
-        bind()
+        setupTapGesture()
+//        bind()
     }
     
     @available(*, unavailable)
@@ -95,11 +97,16 @@ final class TeamFilterTableViewCell: UITableViewCell{
         teamNameLabel.applyStyle(textStyle: FontSystem.bodyTitle)
     }
 
-    private func bind() {
+    private func setupTapGesture() {
+        contentView.addGestureRecognizer(tapGesture)
+
+        tapGesture.rx.event
+            .map { _ in }
+            .bind(to: tapSubject)
+            .disposed(by: disposeBag)
+
         checkButton.rx.tap
-            .subscribe(onNext: { [weak self] in
-                self?.isClicked.toggle()
-            })
+            .bind(to: tapSubject) 
             .disposed(by: disposeBag)
     }
 }

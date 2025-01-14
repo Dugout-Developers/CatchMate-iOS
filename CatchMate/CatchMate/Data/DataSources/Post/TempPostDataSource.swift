@@ -66,6 +66,7 @@ final class TempPostDataSourceImpl: TempPostDataSource {
             parameters["gameRequest"] = [
                 "homeClubId": post.gameRequest.homeClubId,
                 "awayClubId": post.gameRequest.awayClubId,
+                "gameStartDate": NSNull(),
                 "location": post.gameRequest.location
             ]
         }

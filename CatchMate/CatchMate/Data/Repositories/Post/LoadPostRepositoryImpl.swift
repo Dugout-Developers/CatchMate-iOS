@@ -23,7 +23,7 @@ final class LoadPostRepositoryImpl: LoadPostRepository {
         return loadPostDS.loadPost(postId: id)
             .flatMap { dto -> Observable<(post: Post, isFavorite: Bool)> in
                 if let mapResult = PostMapper().dtoToDomain(dto) {
-                    return Observable.just((mapResult, dto.bookMarked))
+                    return Observable.just((mapResult, dto.bookMarked ?? false))
                 } else {
                     return Observable.error(ErrorMapper.mapToPresentationError(MappingError.invalidData))
                 }

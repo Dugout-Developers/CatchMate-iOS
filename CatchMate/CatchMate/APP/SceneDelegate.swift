@@ -38,7 +38,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 self.authManager = nil
             }
             .disposed(by: disposeBag)
-
     }
     
     private func moveMainTab() {

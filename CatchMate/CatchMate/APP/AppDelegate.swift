@@ -90,15 +90,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         completionHandler()
     }
     private func moveApplyDetailView(boardId: Int) {
-        if UIApplication.shared.connectedScenes.first?.delegate is SceneDelegate {
-            guard let rootViewController = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.window?.rootViewController else { return }
-            // 상세 페이지로 이동
-            let reactor = DIContainerService.shared.makeReciveMateReactor()
-            reactor.action.onNext(.selectPost(String(boardId)))
-            let applyDetailVC = ReceiveMateListDetailViewController(reactor: reactor)
-            applyDetailVC.modalPresentationStyle = .overFullScreen
-            rootViewController.present(applyDetailVC, animated: false)
+        // SceneDelegate의 rootViewController 가져오기
+        guard let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate,
+              let tabBarController = sceneDelegate.window?.rootViewController as? UITabBarController,
+              let navigationController = tabBarController.selectedViewController as? UINavigationController else {
+            return
         }
+        // 이동
+        let reactor = DIContainerService.shared.makeReciveMateReactor()
+        let applyVC = ReceiveMateListViewController(reactor: reactor, id: String(boardId))
+        navigationController.pushViewController(applyVC, animated: true)
+    }
+    
+    private func moveChatRoom() {
+        // SceneDelegate의 rootViewController 가져오기
+        guard let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate,
+              let tabBarController = sceneDelegate.window?.rootViewController as? UITabBarController else {
+            return
+        }
+        
+        let targetTabIndex = 3
+        guard targetTabIndex < (tabBarController.viewControllers?.count ?? 0) else {
+            print("Invalid tab index.")
+            return
+        }
+        
+        tabBarController.selectedIndex = targetTabIndex
     }
 
     // FCM 토큰 갱신 시 호출되는 메서드

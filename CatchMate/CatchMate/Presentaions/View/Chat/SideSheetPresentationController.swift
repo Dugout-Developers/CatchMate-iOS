@@ -12,19 +12,49 @@ class SideSheetPresentationController: UIPresentationController {
     override init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?) {
         super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
         setupDimmingView()
+        setupPanGesture()
     }
 
     private func setupDimmingView() {
-        dimmingView.backgroundColor = .grayScale50
+        dimmingView.backgroundColor = .opacity400
         dimmingView.alpha = 1
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissController))
         dimmingView.addGestureRecognizer(tapGesture)
     }
-    
+    private func setupPanGesture() {
+        // dimmingView에 PanGesture 추가
+           let dimmingViewPanGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+           dimmingView.addGestureRecognizer(dimmingViewPanGesture)
+
+           // presentedViewController.view에 PanGesture 추가
+           let presentedViewPanGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+           presentedViewController.view.addGestureRecognizer(presentedViewPanGesture)
+    }
     @objc private func dismissController() {
         presentedViewController.dismiss(animated: true)
     }
-
+    
+    @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
+        guard let containerView = containerView, let presentedView = presentedView else { return }
+        let translation = gesture.translation(in: containerView)
+        
+        switch gesture.state {
+        case .changed:
+            if translation.x > 0 {
+                presentedView.frame.origin.x = containerView.bounds.width - presentedView.frame.width + translation.x
+            }
+        case .ended:
+            if translation.x > presentedView.frame.width / 2 {
+                dismissController()
+            } else {
+                UIView.animate(withDuration: 0.3) {
+                    presentedView.frame.origin.x = containerView.bounds.width - presentedView.frame.width
+                }
+            }
+        default:
+            break
+        }
+    }
     override func presentationTransitionWillBegin() {
         guard let containerView = containerView else { return }
         

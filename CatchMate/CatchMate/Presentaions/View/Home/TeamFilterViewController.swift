@@ -106,7 +106,7 @@ extension TeamFilterViewController {
                 cell.configure(with: team, isClicked: selectedTeam == team)
 
                 cell.selectionStyle = .none
-                cell.checkButton.rx.tap
+                cell.tapSubject
                     .withUnretained(self)
                     .subscribe { vc, _ in
                         vc.selectedTeam = team
@@ -176,7 +176,7 @@ extension TeamFilterViewController {
                     cell.configure(with: team, isClicked: false, isUnable: reactor.currentState.homeTeam==team)
                 }
                 cell.selectionStyle = .none
-                cell.checkButton.rx.tap
+                cell.tapSubject
                     .withUnretained(self)
                     .subscribe { vc, _ in
                         vc.selectedTeam = team
@@ -250,7 +250,7 @@ extension TeamFilterViewController {
                 let isSelected = reactor.currentState.selectedTeams.contains(team)
                 cell.configure(with: team, isClicked: isSelected)
                 cell.selectionStyle = .none
-                cell.checkButton.rx.tap
+                cell.tapSubject
                     .subscribe(onNext: { [weak self] _ in
                         guard let self = self else { return }
                         if let index = selectedTeams.firstIndex(of: team) {
