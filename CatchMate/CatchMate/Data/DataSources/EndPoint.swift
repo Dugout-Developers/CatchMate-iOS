@@ -78,55 +78,55 @@ enum Endpoint {
         case .logout:
             return "/auth/logout"
         case .signUp:
-            return "/user/additional-info"
+            return "/users/additional-info"
         case .savePost, .tempPost:
-            return "/board"
+            return "/boards"
         case .loadTempPost:
-            return "/board/temp"
+            return "/boards/temp"
         case .editPost:
-            return "/board/"
+            return "/boards/"
         case .postlist:
-            return "/board/list"
+            return "/boards/list"
         case .userPostlist:
-            return "/board/list/"
+            return "/boards/list/"
         case .loadPost, .removePost:
             /// 게시글 조회, 삭제 /board/{boardId}
-            return "/board/"
+            return "/boards/"
         case .upPost:
             /// 끌어올리기 /board/{boardId}/lift-up
-            return "/board/"
+            return "/boards/"
         case .loadFavorite:
-            return "/board/bookmark"
+            return "/boards/bookmark"
         case .setFavorite, .deleteFavorite:
             /// 찜 설정 /board/bookmark/{boardID}
-            return "/board/bookmark/"
+            return "/boards/bookmark/"
         case .setNotification:
-            return "/user/alarm"
+            return "/users/alarm"
         case .apply:
             /// 직관 신청 /enroll/{boardId}
-            return "/enroll/"
+            return "/enrolls/"
         case .cancelApply:
-            return "/enroll/cancel/"
+            return "/enrolls/cancel/"
         case .sendApply:
-            return "/enroll/request"
+            return "/enrolls/request"
         case .receivedApply:
-            return "/enroll/receive"
+            return "/enrolls/receive"
         case .receivedApplyAll:
-            return "/enroll/receive/all"
+            return "/enrolls/receive/all"
         case .receivedCount:
-            return "/enroll/new-count"
+            return "/enrolls/new-count"
         case .acceptApply, .rejectApply:
             /// acceptApply = /enroll/{enrollId}/accept
             /// rejectApply = /enroll/{enrollId}/reject
-            return "/enroll/"
+            return "/enrolls/"
         case .loadMyInfo:
-            return "/user/profile"
+            return "/users/profile"
         case .editProfile:
-            return "/user/profile"
+            return "/users/profile"
         case .notificationList:
-            return "/notification/receive"
+            return "/notifications/receive"
         case .deleteNoti:
-            return "/notification/receive/"
+            return "/notifications/receive/"
         }
     }
     var apiName: String {
