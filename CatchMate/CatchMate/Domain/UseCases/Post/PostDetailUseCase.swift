@@ -21,30 +21,10 @@ final class PostDetailUseCaseImpl: PostDetailUseCase {
         self.applylistRepository = applylistRepository
     }
     func loadPost(postId: String) -> Observable<(post: Post, type: ApplyType, favorite: Bool)> {
-        return loadPostRepository.loadPost(postId: postId)  // 첫 번째 Observable 실행
-            .concatMap { result -> Observable<(post: Post, type: ApplyType, favorite: Bool)>  in
-                // 첫 번째 로직 완료 후 두 번째 Observable 실행
-                guard let myUserId = SetupInfoService.shared.getUserInfo(type: .id) else {
-                    return Observable.error(PresentationError.unauthorized)
-                }
-
-                // 두 번째 Observable 실행
-                return self.applylistRepository.isApply(boardId: Int(postId)!)
-                    .map { isApplied -> (post: Post, type: ApplyType, favorite: Bool) in
-                        var state: ApplyType = .none
-                        let post = result.post
-                    
-                        if post.writer.userId == myUserId {
-                            state = .chat
-                        } else if post.maxPerson == post.currentPerson {
-                            state = .finished
-                        } else if isApplied {
-                            state = .applied
-                        }
-                        return (post, state, result.isFavorite)
-                    }
-          
-            }
+        return loadPostRepository.loadPost(postId: postId)
+            .map({ post, favorite, type in
+                return (post, type, favorite)
+            })
             .catch { error in
                 return Observable.error(DomainError(error: error, context: .pageLoad).toPresentationError())
             }

@@ -18,6 +18,21 @@ enum ApplyType {
     case applied
     case finished
     case chat
+    
+    init(serverValue: String) {
+        switch serverValue {
+        case "APPLY":
+            self = .none
+        case "APPLIED":
+            self = .applied
+        case "VIEW CHAT":
+            self = .chat
+        case "FINISHED":
+            self = .finished
+        default:
+            self = .finished
+        }
+    }
 }
 
 final class PostReactor: Reactor {
