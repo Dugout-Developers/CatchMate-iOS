@@ -39,7 +39,7 @@ final class LoadFavoriteListDataSourceImpl: LoadFavoriteListDataSource {
             }
             .catch { error in
                 LoggerService.shared.debugLog("Favorite List Load 실패 - \(error)")
-                Observable.error(error)
+                return Observable.error(error)
             }
     }
     
