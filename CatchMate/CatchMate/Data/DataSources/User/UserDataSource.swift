@@ -36,25 +36,13 @@ final class UserDataSourceImpl: UserDataSource {
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
-        return APIService.shared.requestAPI(type: .loadMyInfo, parameters: nil, headers: headers, dataType: UserDTO.self)
+        return APIService.shared.performRequest(type: .loadMyInfo, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: UserDTO.self, refreshToken: refeshToken)
             .map { user in
-                LoggerService.shared.log("UserDTO: \(user)")
+                LoggerService.shared.debugLog("UserDTO: \(user)")
                 return user
             }
             .catch { error in
-                if let error = error as? NetworkError, error.statusCode == 401 {
-                    return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
-                        .flatMap { newToken -> Observable<UserDTO> in
-                            let newheaders: HTTPHeaders = [
-                                "AccessToken": newToken
-                            ]
-                            LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            return APIService.shared.requestAPI(type: .loadMyInfo, parameters: nil, headers: newheaders, dataType: UserDTO.self)
-                        }
-                        .catch { error in
-                            return Observable.error(error)
-                        }
-                }
+                LoggerService.shared.debugLog("내정보 load 실패 - \(error)")
                 return Observable.error(error)
             }
     }

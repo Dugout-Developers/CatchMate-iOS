@@ -25,35 +25,20 @@ final class DeleteNotificationDataSourceImpl: DeleteNotificationDataSource {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
-        
+        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+            return Observable.error(TokenError.notFoundRefreshToken)
+        }
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
-        return APIService.shared.requestAPI(addEndPoint: "\(notificationId)", type: .deleteNoti, parameters: nil, headers: headers, encoding: JSONEncoding.default, dataType: StateResponseDTO.self)
+        
+        return APIService.shared.performRequest(addEndPoint: "\(notificationId)", type: .deleteNoti, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: StateResponseDTO.self, refreshToken: refreshToken)
             .map { dto in
                 LoggerService.shared.debugLog("id: \(notificationId) - 알림 삭제 \(dto.state)")
                 return dto.state
             }
-            .catch { [weak self] error in
-                guard let self = self else { return Observable.error(OtherError.notFoundSelf) }
-                if let error = error as? NetworkError, error.statusCode == 401 {
-                    guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
-                        return Observable.error(TokenError.notFoundRefreshToken)
-                    }
-                    return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
-                        .flatMap { newToken -> Observable<Bool> in
-                            return APIService.shared.requestAPI(addEndPoint: "\(notificationId)", type: .deleteNoti, parameters: nil, headers: headers, encoding: JSONEncoding.default, dataType: StateResponseDTO.self)
-                                .map { dto in
-                                    LoggerService.shared.debugLog("id: \(notificationId) - 알림 삭제 \(dto.state)")
-                                    return dto.state
-                                }
-                        }
-                        .catch { error in
-                            LoggerService.shared.debugLog("토큰 재발급 실패")
-                            return Observable.error(error)
-                        }
-                }
-                LoggerService.shared.log("\(error.localizedDescription)", level: .error)
+            .catch { error in
+                LoggerService.shared.debugLog("id: \(notificationId)번 알림 삭제 실패 - \(error)")
                 return Observable.error(error)
             }
     }

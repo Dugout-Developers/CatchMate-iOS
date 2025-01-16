@@ -25,38 +25,22 @@ final class SetFavoriteDataSourceImpl: SetFavoriteDataSource {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
+        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+            return Observable.error(TokenError.notFoundRefreshToken)
+        }
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
         
         LoggerService.shared.log("토큰 확인: \(headers)")
         
-        return APIService.shared.requestAPI(addEndPoint: boardID, type: .setFavorite, parameters: nil, headers: headers, encoding: URLEncoding.queryString, dataType: FavoriteResponse.self)
+        return APIService.shared.performRequest(addEndPoint: boardID, type: .setFavorite, parameters: nil, headers: headers, encoding: URLEncoding.queryString, dataType: FavoriteResponse.self, refreshToken: refreshToken)
             .map { _ in
+                LoggerService.shared.debugLog("찜하기 성공")
                 return true
             }
-            .catch { [weak self] error in
-                guard let self = self else { return Observable.error(OtherError.notFoundSelf) }
-                if let error = error as? NetworkError, error.statusCode == 401 {
-                    guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
-                        return Observable.error(TokenError.notFoundRefreshToken)
-                    }
-                    return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
-                        .flatMap { token -> Observable<Bool> in
-                            let headers: HTTPHeaders = [
-                                "AccessToken": token
-                            ]
-                            LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            return APIService.shared.requestAPI(addEndPoint: boardID, type: .setFavorite, parameters: nil, headers: headers, encoding: URLEncoding.queryString, dataType: FavoriteResponse.self)
-                                .map { _ in
-                                    LoggerService.shared.debugLog("찜하기 성공")
-                                    return true
-                                }
-                        }
-                        .catch { error in
-                            return Observable.error(error)
-                        }
-                }
+            .catch { error in
+                LoggerService.shared.debugLog("찜하기 실패 - \(error)")
                 return Observable.error(error)
             }
     }
@@ -65,40 +49,25 @@ final class SetFavoriteDataSourceImpl: SetFavoriteDataSource {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
+        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+            return Observable.error(TokenError.notFoundRefreshToken)
+        }
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
         
         LoggerService.shared.log("토큰 확인: \(headers)")
         
-        return APIService.shared.requestAPI(addEndPoint: boardID, type: .deleteFavorite, parameters: nil, headers: headers, encoding: URLEncoding.queryString, dataType: FavoriteResponse.self)
+        return APIService.shared.performRequest(addEndPoint: boardID, type: .deleteFavorite, parameters: nil, headers: headers, encoding: URLEncoding.queryString, dataType: FavoriteResponse.self, refreshToken: refreshToken)
             .map { _ in
+                LoggerService.shared.debugLog("찜삭제 성공")
                 return true
             }
-            .catch { [weak self] error in
-                guard let self = self else { return Observable.error(OtherError.notFoundSelf) }
-                if let error = error as? NetworkError, error.statusCode == 401 {
-                    guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
-                        return Observable.error(TokenError.notFoundRefreshToken)
-                    }
-                    return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
-                        .flatMap { token -> Observable<Bool> in
-                            let headers: HTTPHeaders = [
-                                "AccessToken": token
-                            ]
-                            LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            return APIService.shared.requestAPI(addEndPoint: boardID, type: .setFavorite, parameters: nil, headers: headers, encoding: URLEncoding.queryString, dataType: FavoriteResponse.self)
-                                .map { _ in
-                                    LoggerService.shared.debugLog("찜삭제 성공")
-                                    return true
-                                }
-                        }
-                        .catch { error in
-                            return Observable.error(error)
-                        }
-                }
+            .catch { error in
+                LoggerService.shared.debugLog("찜삭제 실패 - \(error)")
                 return Observable.error(error)
             }
+            
     }
 }
 

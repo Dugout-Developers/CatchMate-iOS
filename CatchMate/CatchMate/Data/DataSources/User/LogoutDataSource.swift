@@ -31,7 +31,7 @@ final class LogoutDataSourceImpl: LogoutDataSource {
             "RefreshToken": refeshToken
         ]
         
-        return APIService.shared.performRequest(type: .logout, parameters: nil, headers: headers, dataType: StateResponseDTO.self)
+        return APIService.shared.performRequest(type: .logout, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: StateResponseDTO.self, refreshToken: nil)
             .withUnretained(self)
             .map { ds, dto in
                 if dto.state {

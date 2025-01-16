@@ -27,39 +27,20 @@ final class RecivedCountDataSourceImpl: ReceivedCountDataSource {
             return Observable.error(TokenError.notFoundAccessToken)
         }
         
+        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+            return Observable.error(TokenError.notFoundRefreshToken)
+        }
+        
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
-        
-        return APIService.shared.requestAPI(type: .receivedCount, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: RecivedCountResultDTO.self)
+        return APIService.shared.performRequest(type: .receivedCount, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: RecivedCountResultDTO.self, refreshToken: refreshToken)
             .map { dto in
                 LoggerService.shared.debugLog("Count Load 성공: \(dto)")
                 return dto
             }
-            .catch { [weak self] error in
-                guard let self else {
-                    return Observable.error(OtherError.notFoundSelf)
-                }
-                if let error = error as? NetworkError, error.statusCode == 401 {
-                    guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
-                        return Observable.error(TokenError.notFoundRefreshToken)
-                    }
-                    return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
-                        .flatMap { token -> Observable<RecivedCountResultDTO> in
-                            let newHeaders: HTTPHeaders = [
-                                "AccessToken": token
-                            ]
-                            LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            return APIService.shared.requestAPI(type: .receivedCount, parameters: nil, headers: newHeaders, encoding: URLEncoding.default, dataType: RecivedCountResultDTO.self)
-                                .map { dto in
-                                    LoggerService.shared.debugLog("Count Load 성공: \(dto)")
-                                    return dto
-                                }
-                        }
-                        .catch { error in
-                            return Observable.error(error)
-                        }
-                }
+            .catch { error in
+                LoggerService.shared.debugLog("받은 신청 카운트 load 실패 - \(error)")
                 return Observable.error(error)
             }
     }

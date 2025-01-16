@@ -27,7 +27,7 @@ final class APIService {
         }
     }
     
-    func performRequest<T: Codable>(retry: Int = 0, addEndPoint: String? = nil, type: Endpoint, parameters: [String: Any]?, headers: HTTPHeaders? = nil, encoding: any ParameterEncoding = URLEncoding.default, dataType: T.Type, refreshToken: String? = nil) -> Observable<T> {
+    func performRequest<T: Codable>(retry: Int = 0, addEndPoint: String? = nil, type: Endpoint, parameters: [String: Any]?, headers: HTTPHeaders?, encoding: any ParameterEncoding, dataType: T.Type, refreshToken: String?) -> Observable<T> {
         if retry > maxRetryCount {
             LoggerService.shared.log("토큰 재발급 횟수 초과", level: .error)
             return Observable.error(NetworkError.tokenRefreshFailed)
