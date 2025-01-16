@@ -48,7 +48,7 @@ final class ProfileEditDataSourceImpl: ProfileEditDataSource {
                     print("image: \(jpegData)")
                     multipartFormData.append(jpegData, withName: "profileImage", fileName: "profile.jpg", mimeType: "image/jpeg")
                 } else {
-                    print("Invalid Base64 profileImage string or failed to convert to JPEG data")
+                    LoggerService.shared.debugLog("이미지 리사이징 실패")
                 }
             }, to: url, method: .patch, headers: headers)
             .responseDecodable(of: ProfileEditResponseDTO.self) { response in
