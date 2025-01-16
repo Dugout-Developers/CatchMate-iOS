@@ -75,18 +75,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let userInfo = notification.request.content.userInfo
         print("푸시 알림 수신 (foreground): \(userInfo)")
+        let acceptStatus = userInfo["acceptStatus"] as? String
+        
+        switch acceptStatus {
+        case "PENDING":
+            if let boardIdStr = userInfo["boardId"] as? String, let boardId = Int(boardIdStr) {
+                moveApplyDetailView(boardId: boardId)
+            } else {
+                LoggerService.shared.debugLog("boardId 구할 수 없음")
+            }
+        case "ACCEPTED":
+            moveChatRoom()
+        default:
+            LoggerService.shared.debugLog("acceptStatus 구할 수 없음")
+        }
         completionHandler([.list, .banner, .sound])
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
         print("푸시 알림 수신 (background/terminated): \(userInfo)")
+        let acceptStatus = userInfo["acceptStatus"] as? String
         
-        if let boardIdStr = userInfo["boardId"] as? String, let boardId = Int(boardIdStr) {
-            moveApplyDetailView(boardId: boardId)
-        } else {
-            print("boardId 구할 수 없음")
+        switch acceptStatus {
+        case "PENDING":
+            if let boardIdStr = userInfo["boardId"] as? String, let boardId = Int(boardIdStr) {
+                moveApplyDetailView(boardId: boardId)
+            } else {
+                LoggerService.shared.debugLog("boardId 구할 수 없음")
+            }
+        case "ACCEPTED":
+            moveChatRoom()
+        default:
+            LoggerService.shared.debugLog("acceptStatus 구할 수 없음")
         }
+//        if let boardIdStr = userInfo["boardId"] as? String, let boardId = Int(boardIdStr) {
+//            moveApplyDetailView(boardId: boardId)
+//        } else {
+//            print("boardId 구할 수 없음")
+//        }
         completionHandler()
     }
     private func moveApplyDetailView(boardId: Int) {

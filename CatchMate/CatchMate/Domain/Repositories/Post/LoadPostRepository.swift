@@ -8,5 +8,5 @@
 import RxSwift
 
 protocol LoadPostRepository {
-    func loadPost(postId: String) -> Observable<(post: Post, isFavorite: Bool)>
+    func loadPost(postId: String) -> Observable<(post: Post, isFavorite: Bool, applyType: ApplyType)>
 }
