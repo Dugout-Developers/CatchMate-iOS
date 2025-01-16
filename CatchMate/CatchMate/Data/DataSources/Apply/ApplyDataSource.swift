@@ -26,46 +26,20 @@ final class ApplyDataSourceImpl: ApplyDataSource {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
+        guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
+            return Observable.error(TokenError.notFoundRefreshToken)
+        }
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
         let parameters: [String: Any] = ["description": addInfo]
         LoggerService.shared.log("토큰 확인: \(headers)")
-        
-        return APIService.shared.requestAPI(addEndPoint: boardID, type: .apply, parameters: parameters, headers: headers, encoding: JSONEncoding.default, dataType: ApplyPostResponse.self)
+        return APIService.shared.performRequest(addEndPoint: boardID, type: .apply, parameters: parameters, headers: headers, encoding: JSONEncoding.default, dataType: ApplyPostResponse.self, refreshToken: refeshToken)
             .map { response in
                 return response.enrollId
             }
-            .catch {[weak self] error in
-                guard let self = self else { return Observable.error(OtherError.notFoundSelf) }
-                if let error = error as? NetworkError, error.statusCode == 401 {
-                    guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
-                        return Observable.error(TokenError.notFoundRefreshToken)
-                    }
-                    return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
-                        .flatMap { token -> Observable<Int> in
-                            let headers: HTTPHeaders = [
-                                "AccessToken": token
-                            ]
-                            LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            return APIService.shared.requestAPI(addEndPoint: boardID, type: .apply, parameters: parameters, headers: headers, encoding: JSONEncoding.default, dataType: ApplyPostResponse.self)
-                                .map { response in
-                                    LoggerService.shared.debugLog("신청 성공")
-                                    return response.enrollId
-                                }
-                        }
-                        .catch { error in
-                            LoggerService.shared.debugLog(error.localizedDescription)
-                            if error.statusCode == 400 {
-                                return Observable.just(-1)
-                            }
-                            return Observable.error(error)
-                        }
-                }
-                LoggerService.shared.debugLog(error.localizedDescription)
-                if error.statusCode == 400 {
-                    return Observable.just(-1)
-                }
+            .catch { error in
+                LoggerService.shared.debugLog("직관 신청 실패 - \(error)")
                 return Observable.error(error)
             }
 
@@ -83,30 +57,13 @@ final class ApplyDataSourceImpl: ApplyDataSource {
         ]
         LoggerService.shared.log("토큰 확인: \(headers)")
         
-        return APIService.shared.requestAPI(addEndPoint: enrollId, type: .cancelApply, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: CancelApplyPostResponse.self)
+        return APIService.shared.performRequest(addEndPoint: enrollId, type: .cancelApply, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: CancelApplyPostResponse.self, refreshToken: refeshToken)
             .map { _ -> Void in
                 LoggerService.shared.debugLog("신청 취소 성공")
                 return ()
             }
             .catch { error in
-                if error.statusCode == 401 {
-                    return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
-                        .flatMap { token -> Observable<Void> in
-                            let headers: HTTPHeaders = [
-                                "AccessToken": token
-                            ]
-                            LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            return APIService.shared.requestAPI(addEndPoint: enrollId, type: .cancelApply, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: CancelApplyPostResponse.self)
-                                .map { _ -> Void in
-                                    LoggerService.shared.debugLog("신청 취소 성공")
-                                    return ()
-                                }
-                        }
-                        .catch { error in
-                            LoggerService.shared.debugLog(error.localizedDescription)
-                            return Observable.error(error)
-                        }
-                }
+                LoggerService.shared.debugLog("신청 취소 실패 - \(error)")
                 return Observable.error(error)
             }
     }

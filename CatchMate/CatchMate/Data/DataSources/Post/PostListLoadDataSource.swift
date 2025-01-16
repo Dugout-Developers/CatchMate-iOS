@@ -25,6 +25,9 @@ final class PostListLoadDataSourceImpl: PostListLoadDataSource {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
+        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+            return Observable.error(TokenError.notFoundRefreshToken)
+        }
         var parameters: [String: Any] = [:]
         parameters["page"] = pageNum
         if !gameDate.isEmpty {
@@ -47,33 +50,13 @@ final class PostListLoadDataSourceImpl: PostListLoadDataSource {
         
         LoggerService.shared.debugLog("parameters: \(parameters)")
         LoggerService.shared.debugLog("PostListLoadDataSourceImpl 토큰 확인: \(headers)")
-        return APIService.shared.requestAPI(type: .postlist, parameters: parameters, headers: headers, encoding: CustomURLEncoding.default, dataType: PostListDTO.self)
+        return APIService.shared.performRequest(type: .postlist, parameters: parameters, headers: headers, encoding: CustomURLEncoding.default, dataType: PostListDTO.self, refreshToken: refreshToken)
             .map { dto in
                 LoggerService.shared.debugLog("PostList Load 성공: \(dto)")
                 return dto
             }
-            .catch { [weak self] error in
-                guard let self = self else { return Observable.error(OtherError.notFoundSelf) }
-                if let error = error as? NetworkError, error.statusCode == 401 {
-                    guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
-                        return Observable.error(TokenError.notFoundRefreshToken)
-                    }
-                    return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
-                        .flatMap { token -> Observable<PostListDTO> in
-                            let newHeaders: HTTPHeaders = [
-                                "AccessToken": token
-                            ]
-                            LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            return APIService.shared.requestAPI(type: .postlist, parameters: parameters, headers: newHeaders, encoding: URLEncoding.default, dataType: PostListDTO.self)
-                                .map { dto in
-                                    LoggerService.shared.debugLog("PostList Load 성공: \(dto)")
-                                    return dto
-                                }
-                        }
-                        .catch { error in
-                            return Observable.error(error)
-                        }
-                }
+            .catch { error in
+                LoggerService.shared.debugLog("PostList Load 실패 - \(error)")
                 return Observable.error(error)
             }
     }

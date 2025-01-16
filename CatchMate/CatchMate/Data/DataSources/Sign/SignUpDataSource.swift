@@ -37,11 +37,10 @@ final class SignUpDataSourceImpl: SignUpDataSource {
         ]
          
         LoggerService.shared.debugLog("SignUp Parameters : \(parameters)")
-        return APIService.shared.requestAPI(type: .signUp, parameters: parameters, encoding: JSONEncoding.default, dataType: SignUpResponseDTO.self)
+        return APIService.shared.performRequest(type: .signUp, parameters: parameters, headers: nil, encoding: JSONEncoding.default, dataType: SignUpResponseDTO.self, refreshToken: nil)
             .withUnretained(self)
             .flatMap { ds, dto -> Observable<SignUpResponseDTO> in
                 LoggerService.shared.debugLog("회원가입 성공: \(dto)")
-                
                 // AccessToken 및 RefreshToken 저장
                 let accessTokenSaved = ds.tokenDataSource.saveToken(token: dto.accessToken, for: .accessToken)
                 let refreshTokenSaved = ds.tokenDataSource.saveToken(token: dto.refreshToken, for: .refreshToken)
@@ -51,13 +50,12 @@ final class SignUpDataSourceImpl: SignUpDataSource {
                     LoggerService.shared.debugLog("토큰 저장 실패")
                     return Observable.error(TokenError.failureTokenService)
                 }
-                
                 return Observable.just(dto)
             }
             .catch { error in
+                LoggerService.shared.debugLog("SignUp API 호출 실패 - \(error)")
                 return Observable.error(error)
             }
-        
     }
 }
 

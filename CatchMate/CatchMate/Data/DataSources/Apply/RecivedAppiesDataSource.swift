@@ -26,6 +26,9 @@ final class RecivedAppiesDataSourceImpl: RecivedAppiesDataSource {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
+        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+            return Observable.error(TokenError.notFoundRefreshToken)
+        }
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
@@ -35,28 +38,12 @@ final class RecivedAppiesDataSourceImpl: RecivedAppiesDataSource {
         ]
         LoggerService.shared.log("토큰 확인: \(headers)")
         
-        return APIService.shared.requestAPI(type: .receivedApply, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: ApplyListResponse.self)
+        return APIService.shared.performRequest(type: .receivedApply, parameters: parameters, headers: headers, encoding: JSONEncoding.default, dataType: ApplyListResponse.self, refreshToken: refreshToken)
             .map { response -> [Content] in
                 return response.enrollInfoList
             }
-            .catch { [weak self] error in
-                guard let self = self else { return Observable.error(OtherError.notFoundSelf) }
-                if let error = error as? NetworkError, error.statusCode == 401 {
-                    guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
-                        return Observable.error(TokenError.notFoundRefreshToken)
-                    }
-                    return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
-                        .flatMap { token -> Observable<[Content]> in
-                            let newHeaders: HTTPHeaders = [
-                                "AccessToken": token
-                            ]
-                            LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            return APIService.shared.requestAPI(type: .receivedApply, parameters: parameters, headers: newHeaders, encoding: URLEncoding.default, dataType: ApplyListResponse.self)
-                                .map { response -> [Content] in
-                                    return response.enrollInfoList
-                                }
-                        }
-                }
+            .catch { error in
+                LoggerService.shared.debugLog("\(boardId)번 게시물 받은 신청 load 실패 - \(error)")
                 return Observable.error(error)
             }
     }
@@ -65,33 +52,20 @@ final class RecivedAppiesDataSourceImpl: RecivedAppiesDataSource {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
+        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+            return Observable.error(TokenError.notFoundRefreshToken)
+        }
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
         LoggerService.shared.log("토큰 확인: \(headers)")
         
-        return APIService.shared.requestAPI(type: .receivedApplyAll, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: ApplyListResponse.self)
+        return APIService.shared.performRequest(type: .receivedApplyAll, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: ApplyListResponse.self, refreshToken: refreshToken)
             .map { response -> [Content] in
                 return response.enrollInfoList
             }
-            .catch { [weak self] error in
-                guard let self = self else { return Observable.error(OtherError.notFoundSelf) }
-                if let error = error as? NetworkError, error.statusCode == 401 {
-                    guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
-                        return Observable.error(TokenError.notFoundRefreshToken)
-                    }
-                    return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
-                        .flatMap { token -> Observable<[Content]> in
-                            let newHeaders: HTTPHeaders = [
-                                "AccessToken": token
-                            ]
-                            LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            return APIService.shared.requestAPI(type: .receivedApplyAll, parameters: nil, headers: newHeaders, encoding: URLEncoding.default, dataType: ApplyListResponse.self)
-                                .map { response -> [Content] in
-                                    return response.enrollInfoList
-                                }
-                        }
-                }
+            .catch { error in
+                LoggerService.shared.debugLog("받은 신청 전체 목록 load 실패 - \(error)")
                 return Observable.error(error)
             }
     }

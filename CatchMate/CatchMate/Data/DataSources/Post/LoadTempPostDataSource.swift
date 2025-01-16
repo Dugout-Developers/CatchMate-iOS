@@ -23,11 +23,14 @@ final class LoadTempPostDataSourceImpl: LoadTempPostDataSource {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
+        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+            return Observable.error(TokenError.notFoundRefreshToken)
+        }
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
         
-        return APIService.shared.performRequest(type: .loadTempPost, parameters: nil, headers: headers, dataType: PostDTO.self)
+        return APIService.shared.performRequest(type: .loadTempPost, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: PostDTO.self, refreshToken: refreshToken)
             .map({ dto in
                 return dto
             })

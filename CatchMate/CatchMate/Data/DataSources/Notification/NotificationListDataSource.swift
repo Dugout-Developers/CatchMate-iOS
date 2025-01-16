@@ -25,38 +25,19 @@ final class NotificationListDataSourceImpl: NotificationListDataSource {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
+        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+            return Observable.error(TokenError.notFoundRefreshToken)
+        }
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
-        return APIService.shared.requestAPI(type: .notificationList, parameters: nil, headers: headers, encoding: JSONEncoding.default, dataType: NotificationListResponse.self)
+        return APIService.shared.performRequest(type: .notificationList, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: NotificationListResponse.self, refreshToken: refreshToken)
             .map { response in
                 LoggerService.shared.debugLog("NotificationList Load 성공: \(response)")
                 return response.notificationInfoList
             }
-            .catch { [weak self] error in
-                guard let self = self else { return Observable.error(OtherError.notFoundSelf) }
-                if let error = error as? NetworkError, error.statusCode == 401 {
-                    guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
-                        return Observable.error(TokenError.notFoundRefreshToken)
-                    }
-                    
-                    return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
-                        .flatMap { token -> Observable<[NotificationDTO]> in
-                            let newHeaders: HTTPHeaders = [
-                                "AccessToken": token
-                            ]
-                            LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            
-                            return APIService.shared.requestAPI(type: .notificationList, parameters: nil, headers: newHeaders, encoding: JSONEncoding.default, dataType: NotificationListResponse.self)
-                                .map { response in
-                                    LoggerService.shared.debugLog("NotificationList Load 성공: \(response)")
-                                    return response.notificationInfoList
-                                }
-                        }
-                        .catch { error in
-                            return Observable.error(error)
-                        }
-                }
+            .catch { error in
+                LoggerService.shared.debugLog("NotificationList Load 실패 - \(error)")
                 return Observable.error(error)
             }
     }

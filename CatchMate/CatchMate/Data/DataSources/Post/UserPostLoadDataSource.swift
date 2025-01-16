@@ -26,44 +26,22 @@ final class UserPostLoadDataSourceImpl: UserPostLoadDataSource {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
+        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+            return Observable.error(TokenError.notFoundRefreshToken)
+        }
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
         
-        let parameters: [String: Any] = [
-            "userId": userId,
-//            "page": page
-        ]
-        
-        LoggerService.shared.debugLog("parameters: \(parameters)")
         LoggerService.shared.debugLog("PostListLoadDataSourceImpl 토큰 확인: \(headers)")
-        return APIService.shared.requestAPI(addEndPoint: "\(userId)", type: .userPostlist, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: PostListDTO.self)
+        
+        return APIService.shared.performRequest(addEndPoint: "\(userId)", type: .userPostlist, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: PostListDTO.self, refreshToken: refreshToken)
             .map { postListDTO in
                 LoggerService.shared.debugLog("PostList Load 성공: \(postListDTO)")
                 return postListDTO.boardInfoList
             }
-            .catch { [weak self] error in
-                guard let self = self else { return Observable.error(OtherError.notFoundSelf) }
-                if let error = error as? NetworkError, error.statusCode == 401 {
-                    guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
-                        return Observable.error(TokenError.notFoundRefreshToken)
-                    }
-                    return APIService.shared.refreshAccessToken(refreshToken: refeshToken)
-                        .flatMap { token -> Observable<[PostListInfoDTO]> in
-                            let newHeaders: HTTPHeaders = [
-                                "AccessToken": token
-                            ]
-                            LoggerService.shared.debugLog("토큰 재발급 후 재시도 \(token)")
-                            return APIService.shared.requestAPI(type: .userPostlist, parameters: parameters, headers: newHeaders, encoding: URLEncoding.default, dataType: PostListDTO.self)
-                                .map { postListDTO in
-                                    LoggerService.shared.debugLog("PostList Load 성공: \(postListDTO)")
-                                    return postListDTO.boardInfoList
-                                }
-                        }
-                        .catch { error in
-                            return Observable.error(error)
-                        }
-                }
+            .catch { error in
+                LoggerService.shared.debugLog("PostList Load 실패: \(error)")
                 return Observable.error(error)
             }
     }
