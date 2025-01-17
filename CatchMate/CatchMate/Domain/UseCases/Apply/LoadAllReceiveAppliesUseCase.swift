@@ -23,7 +23,7 @@ final class LoadAllReceiveAppliesUseCaseImpl: LoadAllReceiveAppliesUseCase {
     func execute() -> Observable<[RecivedApplies]> {
         return receivedAppliesRepository.loadReceivedAppliesAll()
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .pageLoad).toPresentationError())
+                return Observable.error(DomainError(error: error, context: .pageLoad))
             }
     }
 }

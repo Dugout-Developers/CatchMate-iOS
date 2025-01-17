@@ -35,11 +35,8 @@ final class LoadPostRepositoryImpl: LoadPostRepository {
                 if let mapResult = PostMapper().dtoToDomain(dto) {
                     return Observable.just((mapResult, dto.bookMarked ?? false, type))
                 } else {
-                    return Observable.error(ErrorMapper.mapToPresentationError(MappingError.invalidData))
+                    return Observable.error(MappingError.invalidData)
                 }
-            }
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
             }
     }
 }

@@ -25,18 +25,12 @@ final class SendAppiesRepositoryImpl: SendAppiesRepository {
                 }
                 return Observable.just(mappingList)
             }
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
-            }
     }
     
     func isApply(boardId: Int) -> RxSwift.Observable<Bool> {
         return sendAppliesDS.loadSendApplyBoardIds()
             .flatMap { list -> Observable<Bool> in
                 return Observable.just(list.contains(boardId))
-            }
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
             }
     }
     

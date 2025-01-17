@@ -24,8 +24,5 @@ final class PostListLoadRepositoryImpl: PostListLoadRepository {
                 }
                 return Observable.just(PostList(post: list, isLast: dto.isLast))
             }
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
-            }
     }
 }

@@ -39,7 +39,7 @@ final class OtherUserpageReactor: Reactor {
                         return Mutation.setPost(list)
                     }
                     .catch { error in
-                        return Observable.just(Mutation.setError(error.toPresentationError()))
+                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                     }
             } else {
                 return Observable.just(Mutation.setError(PresentationError.showErrorPage))

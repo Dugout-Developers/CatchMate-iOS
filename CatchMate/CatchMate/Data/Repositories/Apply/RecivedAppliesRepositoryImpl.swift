@@ -26,9 +26,6 @@ final class RecivedAppliesRepositoryImpl: RecivedAppiesRepository {
                 }
                 return Observable.just(mappingList)
             }
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
-            }
     }
     
     func loadReceivedAppliesAll() -> RxSwift.Observable<[RecivedApplies]> {
@@ -50,9 +47,6 @@ final class RecivedAppliesRepositoryImpl: RecivedAppiesRepository {
                     }
                 }
                 return Observable.just(mappingList.sorted(by: <))
-            }
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
             }
     }
 

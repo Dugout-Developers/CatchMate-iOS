@@ -9,5 +9,5 @@ import UIKit
 import RxSwift
 
 protocol UpPostRepository {
-    func upPost(_ postId: Int) -> Observable<(result: Bool, message: String?)>
+    func upPost(_ postId: String) -> Observable<(result: Bool, message: String?)>
 }

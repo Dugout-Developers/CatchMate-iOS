@@ -42,7 +42,7 @@ final class SignUpReactor: Reactor {
                     return Mutation.setSignUpResponse(response)
                 }
                 .catch { error in
-                    return Observable.just(Mutation.setError(error.toPresentationError()))
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
         }
     }

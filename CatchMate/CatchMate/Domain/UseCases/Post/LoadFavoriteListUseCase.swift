@@ -23,7 +23,7 @@ final class LoadFavoriteListUseCaseImpl: LoadFavoriteListUseCase {
     func execute() -> RxSwift.Observable<[SimplePost]> {
         return loadFavoriteListRepository.loadFavoriteList()
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .pageLoad).toPresentationError())
+                return Observable.error(DomainError(error: error, context: .pageLoad))
             }
     }
     

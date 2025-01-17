@@ -49,7 +49,7 @@ final class AuthReactor: Reactor {
                     return Mutation.setLoginInfo(loginModel)
                 }
                 .catch { error in
-                    return Observable.just(Mutation.setError(error.toPresentationError()))
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
         case .appleLogin:
             return appleLoginUseCase.execute()
@@ -57,7 +57,7 @@ final class AuthReactor: Reactor {
                     return Mutation.setLoginInfo(loginModel)
                 }
                 .catch { error in
-                    return Observable.just(Mutation.setError(error.toPresentationError()))
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
         case .naverLogin:
             return naverLoginUseCase.execute()
@@ -65,7 +65,7 @@ final class AuthReactor: Reactor {
                     return Mutation.setLoginInfo(loginModel)
                 }
                 .catch { error in
-                    return Observable.just(Mutation.setError(error.toPresentationError()))
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
             
         case .setError(let error):

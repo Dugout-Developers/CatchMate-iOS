@@ -44,19 +44,19 @@ final class FavoriteReactor: Reactor {
                     return Mutation.setFavoritePost(list)
                 }
                 .catch { error in
-                    return Observable.just(Mutation.setError(error.toPresentationError()))
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
         case .removeFavoritePost(let postId):
             return setFavoriteUsecase.execute(false, postId)
                 .map { [weak self] _ in
                     guard let self = self else {
-                        return Mutation.setError(ErrorMapper.mapToPresentationError(OtherError.notFoundSelf))
+                        return Mutation.setError(PresentationError.showToastMessage(message: "찜삭제에 실패했습니다."))
                     }
                     let currentList = currentState.favoritePost.filter { $0.id != postId }
                     return Mutation.setFavoritePost(currentList)
                 }
                 .catch { error in
-                    return Observable.just(Mutation.setError(error.toPresentationError()))
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
         case .selectPost(let post):
             return Observable.just(Mutation.setSelectedPost(post))

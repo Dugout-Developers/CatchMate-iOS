@@ -16,8 +16,5 @@ final class DeletePostRepositoryImpl: DeletePostRepository {
     
     func deletePost(postId: Int) -> RxSwift.Observable<Void> {
         return deletePostDS.deletePost(postId: postId)
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
-            }
     }
 }

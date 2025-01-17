@@ -24,8 +24,5 @@ final class UserPostLoadRepositoryImpl: UserPostLoadRepository {
                 }
                 return Observable.just(list)
             }
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
-            }
     }
 }

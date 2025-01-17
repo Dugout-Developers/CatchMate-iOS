@@ -44,7 +44,7 @@ final class NotificationListReactor: Reactor {
                     Mutation.setList($0)
                 }
                 .catch {
-                    return Observable.just(Mutation.setError($0.toPresentationError()))
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError($0)))
                 }
         case .deleteNoti(let indexPath):
             let noti = currentState.notifications[indexPath]
@@ -56,7 +56,7 @@ final class NotificationListReactor: Reactor {
                     return Mutation.setList(list)
                 }
                 .catch {
-                    return Observable.just(Mutation.setError($0.toPresentationError()))
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError($0)))
                 }
         case .selectNoti(let noti):
             return Observable.just(Mutation.setSelectedNoti(noti))

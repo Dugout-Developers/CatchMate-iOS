@@ -20,34 +20,25 @@ final class AddPostRepositoryImpl: AddPostRepository {
     func addPost(_ post: RequestPost) -> Observable<Int> {
         guard let post = PostMapper().domainToDto(post) else {
             print("Repositiory: \(post)")
-            return Observable.error(ErrorMapper.mapToPresentationError(MappingError.mappingFailed))
+            return Observable.error(MappingError.mappingFailed)
         }
         return addPostDS.addPost(post)
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
-            }
     }
     
     func editPost(_ post: RequestEditPost, boardId: Int) -> Observable<Int> {
         guard let post = PostMapper().domainToDto(post) else {
             print("Repository - editPost: \(post)")
-            return Observable.error(ErrorMapper.mapToPresentationError(MappingError.mappingFailed))
+            return Observable.error(MappingError.mappingFailed)
         }
         return editPostDS.editPost(post, boardId: boardId)
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
-            }
     }
     
     func addTempPost(_ post: RequestPost, boardId: String) -> Observable<Int> {
         guard let id = Int(boardId), let post = PostMapper().domainToDto(post) else {
             print("Repository - editPost: \(post)")
-            return Observable.error(ErrorMapper.mapToPresentationError(MappingError.mappingFailed))
+            return Observable.error(MappingError.mappingFailed)
         }
         return editPostDS.editPost(post, boardId: id)
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
-            }
     }
 }
 

@@ -27,9 +27,6 @@ final class LoadFavoriteListRepositoryImpl: LoadFavoriteListRepository {
                 }
                 return Observable.just(list)
             }
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
-            }
     }
     
 

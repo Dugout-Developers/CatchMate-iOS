@@ -89,7 +89,7 @@ final class HomeReactor: Reactor {
                     return reactor.updateFiltersAndLoadPosts(date: nil, teams: nil, number: nil)
                 })
                 .catch { error in
-                    return Observable.just(Mutation.setError(error.toPresentationError()))
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
             
         case .loadNextPage:
@@ -124,7 +124,7 @@ final class HomeReactor: Reactor {
                     return .empty()
                 }
                 .catch { error in
-                    return Observable.just(Mutation.setError(error.toPresentationError()))
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
         case .refreshPage:
             return Observable.concat([
@@ -187,7 +187,7 @@ final class HomeReactor: Reactor {
                 return Mutation.loadPost(list, append: false)
             }
             .catch { error in
-                return Observable.just(Mutation.setError(error.toPresentationError()))
+                return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
             }
         
         return Observable.concat([

@@ -13,6 +13,7 @@ enum TokenError: LocalizedError {
     case notFoundRefreshToken
     case failureSaveToken
     case failureTokenService
+    case invalidToken
     
     var statusCode: Int {
         switch self {
@@ -24,6 +25,8 @@ enum TokenError: LocalizedError {
             return -1003
         case .failureTokenService:
             return -1004
+        case .invalidToken:
+            return -1005
         }
     }
     
@@ -37,6 +40,8 @@ enum TokenError: LocalizedError {
             return "토큰 저장 실패"
         case .failureTokenService:
             return "토큰 서비스 실행 실패"
+        case .invalidToken:
+            return "유효하지 않은 토큰"
         }
     }
 }
@@ -48,7 +53,6 @@ enum NetworkError: LocalizedError {
     case slowConnection
     case responseTimeout
     case serverUnavailable
-    case tokenRefreshFailed
     case clientError(statusCode: Int) // 4xx 에러
     case serverError(statusCode: Int) // 5xx 에러
     case unownedError(statusCode: Int)
@@ -65,8 +69,6 @@ enum NetworkError: LocalizedError {
             return -2003
         case .serverUnavailable:
             return -2004
-        case .tokenRefreshFailed:
-            return -2005
         case .unownedError(let statusCode):
             return statusCode
         case .clientError(let statusCode):
@@ -87,8 +89,6 @@ enum NetworkError: LocalizedError {
             return "사용자 타임 아웃"       
         case .serverUnavailable:
             return "서버 이용 불가능"
-        case .tokenRefreshFailed:
-            return "토큰 재발급 실패"
         case .clientError(let statusCode):
             return "클라이언트 요청 에러: \(statusCode)"
         case .serverError(let statusCode):

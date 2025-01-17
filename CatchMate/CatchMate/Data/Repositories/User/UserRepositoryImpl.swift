@@ -20,8 +20,5 @@ final class UserRepositoryImpl: UserRepository {
             .map { dto -> User in
                 return UserMapper().userToDomain(dto)
             }
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
-            }
     }
 }

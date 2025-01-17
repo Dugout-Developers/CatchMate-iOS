@@ -25,7 +25,7 @@ final class LoadAlarmUseCaseImpl: LoadAlarmInfoUseCase {
                 return AlarmInfo(user: user)
             }
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .pageLoad).toPresentationError())
+                return Observable.error(DomainError(error: error, context: .pageLoad))
             }
     }
 }

@@ -24,7 +24,7 @@ final class DeleteNotificationUseCaseImpl: DeleteNotificationUseCase {
         }
         return deleteNotiRepository.deleteNotification(notificationId: id)
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .action, message: "알림을 삭제하는데 문제가 발생했습니다.").toPresentationError())
+                return Observable.error(DomainError(error: error, context: .action, message: "알림을 삭제하는데 문제가 발생했습니다."))
             }
     }
 }

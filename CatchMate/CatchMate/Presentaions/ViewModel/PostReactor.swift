@@ -106,7 +106,7 @@ final class PostReactor: Reactor {
                     return Observable.concat(mutations)
                 }
                 .catch { error in
-                    return Observable.just(Mutation.setError(error.toPresentationError()))
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
         case .changeApplyButtonState(let result):
             return Observable.just(Mutation.setApplyButtonState(result))
@@ -119,7 +119,7 @@ final class PostReactor: Reactor {
                     return Mutation.setError(PresentationError.showToastMessage(message: "찜하기 요청 실패. 다시 시도해주세요."))
                 }
                 .catch { error in
-                    return Observable.just(Mutation.setError(error.toPresentationError()))
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
         case .setError(let error):
             return Observable.just(Mutation.setError(error))
@@ -136,7 +136,7 @@ final class PostReactor: Reactor {
                     }
                 }
                 .catch { error in
-                    return Observable.just(Mutation.setError(error.toPresentationError()))
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
         case .cancelApply:
             if let enrollId = currentState.applyInfo?.enrollId {
@@ -145,7 +145,7 @@ final class PostReactor: Reactor {
                         return Observable.just(Mutation.setApplyButtonState(.none))
                     }
                     .catch { error in
-                        return Observable.just(Mutation.setError(error.toPresentationError()))
+                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                     }
             } else {
                 return Observable.just(Mutation.setError(PresentationError.showToastMessage(message: "요청을 실패했습니다. 다시 시도해주세요.")))
@@ -157,7 +157,7 @@ final class PostReactor: Reactor {
                         return Observable.just(Mutation.deletePost)
                     }
                     .catch { error in
-                        return Observable.just(Mutation.setError(error.toPresentationError()))
+                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                     }
             } else {
                 return Observable.just(Mutation.setError(PresentationError.showToastMessage(message: "삭제 실패. 다시 시도해주세요.")))
@@ -168,7 +168,7 @@ final class PostReactor: Reactor {
                     return Mutation.setUpPostResult(result)
                 }
                 .catch { error in
-                    return Observable.just(Mutation.setError(error.toPresentationError()))
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
         case .resetUpPostResult:
             return Observable.just(Mutation.setUpPostResult(nil))

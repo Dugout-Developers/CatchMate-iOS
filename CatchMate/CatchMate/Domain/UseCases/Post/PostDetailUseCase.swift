@@ -26,7 +26,7 @@ final class PostDetailUseCaseImpl: PostDetailUseCase {
                 return (post, type, favorite)
             })
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .pageLoad).toPresentationError())
+                return Observable.error(DomainError(error: error, context: .pageLoad))
             }
     }
 
@@ -43,7 +43,7 @@ final class PostDetailUseCaseImpl: PostDetailUseCase {
                 }
             }
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .pageLoad).toPresentationError())
+                return Observable.error(DomainError(error: error, context: .pageLoad))
             }
     }
 }

@@ -23,8 +23,5 @@ final class ProfileEditRepositoryImpl: ProfileEditRepository {
             .map { dto -> Bool in
                 return dto.state
             }
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
-            }
     }
 }
