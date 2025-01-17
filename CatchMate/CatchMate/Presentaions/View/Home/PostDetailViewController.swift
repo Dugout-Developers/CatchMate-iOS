@@ -285,7 +285,8 @@ final class PostDetailViewController: BaseViewController, View {
         if post.preferAge == [0] {
             ageOptionLabel.append(makeAgeLabel(age: 0))
         } else {
-            post.preferAge.forEach { age in
+            let ageArr = post.preferAge.sorted(by: <)
+            ageArr.forEach { age in
                 ageOptionLabel.append(makeAgeLabel(age: age))
             }
         }
