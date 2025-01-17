@@ -8,7 +8,7 @@
 import Foundation
 
 // Token KeyChain 관련 Error
-enum TokenError: LocalizedError {
+enum TokenError: LocalizedErrorWithCode {
     case notFoundAccessToken
     case notFoundRefreshToken
     case failureSaveToken
@@ -47,7 +47,7 @@ enum TokenError: LocalizedError {
 }
 
 // 네트워크 에러
-enum NetworkError: LocalizedError {
+enum NetworkError: LocalizedErrorWithCode {
     case notFoundBaseURL
     case disconnected
     case slowConnection
@@ -100,7 +100,7 @@ enum NetworkError: LocalizedError {
 }
 
 // 매핑 에러
-enum MappingError: LocalizedError {
+enum MappingError: LocalizedErrorWithCode {
     ///DomainModel -> DTO
     case mappingFailed
     ///DTO -> DomainModel
@@ -125,7 +125,7 @@ enum MappingError: LocalizedError {
 }
 
 // 디코딩 에러
-enum CodableError: LocalizedError {
+enum CodableError: LocalizedErrorWithCode {
     case decodingFailed
     case encodingFailed
     case missingFields
@@ -153,7 +153,7 @@ enum CodableError: LocalizedError {
 }
 
 // SNS Login 관련 Error
-enum SNSLoginError: LocalizedError {
+enum SNSLoginError: LocalizedErrorWithCode {
     case authorizationFailed
     case EmptyValue
     case loginServerError(description: String)
@@ -182,7 +182,7 @@ enum SNSLoginError: LocalizedError {
     }
 }
 
-enum OtherError: LocalizedError {
+enum OtherError: LocalizedErrorWithCode {
     case invalidURL
     case notFoundSelf
     

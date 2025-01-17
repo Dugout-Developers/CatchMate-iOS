@@ -6,16 +6,19 @@
 //
 import Foundation
 
+protocol LocalizedErrorWithCode: LocalizedError {
+    var statusCode: Int { get }
+}
 extension Error {
     static var errorType: String {
         return String(describing: self)
     }
     
     var statusCode: Int {
-        if let localizedError = self as? LocalizedError {
-            return localizedError.statusCode
+        if let errorWithCode = self as? LocalizedErrorWithCode {
+            return errorWithCode.statusCode
         }
-        return -9999 // 기본값으로 -9999를 반환
+        return -9999 // 기본값
     }
     
     var errorDescription: String? {

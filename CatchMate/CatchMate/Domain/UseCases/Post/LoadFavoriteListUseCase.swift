@@ -23,7 +23,11 @@ final class LoadFavoriteListUseCaseImpl: LoadFavoriteListUseCase {
     func execute() -> RxSwift.Observable<[SimplePost]> {
         return loadFavoriteListRepository.loadFavoriteList()
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .pageLoad))
+                if let localizedError = error as? LocalizedError, -1999...(-1000) ~= localizedError.statusCode {
+                    // TokenError
+                    return Observable.error(DomainError(error: error, context: .tokenUnavailable))
+                }
+                return Observable.just([])
             }
     }
     

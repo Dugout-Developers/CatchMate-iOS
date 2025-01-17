@@ -21,7 +21,11 @@ final class PostListLoadUseCaseImpl: PostListLoadUseCase {
     func loadPostList(pageNum: Int, gudan: [Int], gameDate: String, people: Int = 0) -> Observable<PostList> {
         return postListRepository.loadPostList(pageNum: pageNum, gudan: gudan, gameDate: gameDate, people: people)
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .pageLoad, message: "요청에 실패했습니다."))
+                if let localizedError = error as? LocalizedError, -1999...(-1000) ~= localizedError.statusCode {
+                    // TokenError
+                    return Observable.error(DomainError(error: error, context: .tokenUnavailable))
+                }
+                return Observable.just(PostList(post: [], isLast: true))
             }
     }
     
