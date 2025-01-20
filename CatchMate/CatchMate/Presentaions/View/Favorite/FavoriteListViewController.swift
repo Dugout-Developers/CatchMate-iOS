@@ -85,6 +85,20 @@ final class FavoriteListViewController: BaseViewController ,View {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
+        tableView.rx.contentOffset
+            .map { [weak self] _ in
+                guard let self = self else { return false }
+                let offsetY = self.tableView.contentOffset.y
+                let contentHeight = self.tableView.contentSize.height
+                let threshold = contentHeight - self.tableView.frame.size.height - (self.tableView.rowHeight * 4)
+                return offsetY > threshold
+            }
+            .distinctUntilChanged()
+            .filter { $0 }
+            .map { _ in FavoriteReactor.Action.loadNextPage }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
         reactor.state.map{$0.selectedPost}
             .distinctUntilChanged()
             .compactMap{$0}

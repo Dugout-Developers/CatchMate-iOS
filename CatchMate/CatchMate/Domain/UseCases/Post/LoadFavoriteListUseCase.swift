@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 
 protocol LoadFavoriteListUseCase {
-    func execute() -> Observable<[SimplePost]>
+    func execute(page: Int) -> Observable<PostList>
     
 }
 
@@ -20,14 +20,14 @@ final class LoadFavoriteListUseCaseImpl: LoadFavoriteListUseCase {
         self.loadFavoriteListRepository = loadFavoriteListRepository
     }
     
-    func execute() -> RxSwift.Observable<[SimplePost]> {
-        return loadFavoriteListRepository.loadFavoriteList()
+    func execute(page: Int) -> RxSwift.Observable<PostList> {
+        return loadFavoriteListRepository.loadFavoriteList(page: page)
             .catch { error in
                 if let localizedError = error as? LocalizedError, -1999...(-1000) ~= localizedError.statusCode {
                     // TokenError
                     return Observable.error(DomainError(error: error, context: .tokenUnavailable))
                 }
-                return Observable.just([])
+                return Observable.just(PostList(post: [], isLast: true))
             }
     }
     

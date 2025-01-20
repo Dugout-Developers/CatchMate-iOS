@@ -15,17 +15,16 @@ final class LoadFavoriteListRepositoryImpl: LoadFavoriteListRepository {
         self.loadFavorioteListDS = loadFavorioteListDS
     }
     
-    func loadFavoriteList() -> RxSwift.Observable<[SimplePost]> {
-        return loadFavorioteListDS.loadFavoriteList()
-            .flatMap { dtoList in
+    func loadFavoriteList(page: Int) -> RxSwift.Observable<PostList> {
+        return loadFavorioteListDS.loadFavoriteList(page: page)
+            .flatMap { dto in
                 var list = [SimplePost]()
-                dtoList.forEach { dto in
+                dto.boardInfoList.forEach { dto in
                     if let mapResult = PostMapper().postListDTOtoDomain( dto) {
-                        print("append")
                         list.append(mapResult)
                     }
                 }
-                return Observable.just(list)
+                return Observable.just(PostList(post: list, isLast: dto.isLast))
             }
     }
     

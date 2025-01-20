@@ -9,5 +9,4 @@ import Foundation
 
 struct SetupResult {
     let user: User
-    let favoriteList: [String]
 }

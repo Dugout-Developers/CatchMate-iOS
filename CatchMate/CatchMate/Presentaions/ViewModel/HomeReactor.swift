@@ -147,7 +147,8 @@ final class HomeReactor: Reactor {
             newState.selectedTeams = selectedTeams
             
         case .loadPost(let posts, let append):
-            if append {                newState.posts.append(contentsOf: posts)
+            if append {
+                newState.posts.append(contentsOf: posts)
             } else {
                 newState.page = 0
                 newState.posts = posts

@@ -11,7 +11,7 @@ import RxAlamofire
 import Alamofire
 
 protocol LoadFavoriteListDataSource {
-    func loadFavoriteList() ->  Observable<[PostListInfoDTO]>
+    func loadFavoriteList(page: Int) ->  Observable<PostListDTO>
 }
 
 final class LoadFavoriteListDataSourceImpl: LoadFavoriteListDataSource {
@@ -21,7 +21,7 @@ final class LoadFavoriteListDataSourceImpl: LoadFavoriteListDataSource {
         self.tokenDataSource = tokenDataSource
     }
     
-    func loadFavoriteList() -> RxSwift.Observable<[PostListInfoDTO]>{
+    func loadFavoriteList(page: Int) -> RxSwift.Observable<PostListDTO>{
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
@@ -31,11 +31,13 @@ final class LoadFavoriteListDataSourceImpl: LoadFavoriteListDataSource {
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
+        var parameters: [String: Any] = [:]
+        parameters["page"] = page
         LoggerService.shared.log("토큰 확인: \(headers)")
-        return APIService.shared.performRequest(type: .loadFavorite, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: PostListDTO.self, refreshToken: refreshToken)
+        return APIService.shared.performRequest(type: .loadFavorite, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: PostListDTO.self, refreshToken: refreshToken)
             .map { favoriteListDTO in
                 LoggerService.shared.debugLog("Favorite List Load 성공: \(favoriteListDTO)")
-                return favoriteListDTO.boardInfoList
+                return favoriteListDTO
             }
             .catch { error in
                 LoggerService.shared.debugLog("Favorite List Load 실패 - \(error)")
