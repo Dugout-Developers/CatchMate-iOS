@@ -461,6 +461,14 @@ extension AddViewController {
         let postDetailVC = PostDetailViewController(postID: postId, isAddView: true)
         if let navigationController = self.navigationController {
             isSaved = true
+            if reactor.currentState.editPost != nil {
+                var viewControllers = navigationController.viewControllers
+                if let index = viewControllers.firstIndex(where: { $0 is AddViewController }), let detail = viewControllers.firstIndex(where: { $0 is PostDetailViewController }) {
+                    viewControllers.remove(at: index)
+                    viewControllers.remove(at: detail)
+                }
+                navigationController.viewControllers = viewControllers
+            }
             navigationController.pushViewController(postDetailVC, animated: true)
         }
     }
