@@ -7,6 +7,10 @@
 
 import UIKit
 
+struct Applys {
+    let applys: [ApplyList]
+    let isLast: Bool
+}
 struct ApplyList: Equatable {
     let enrollId: String
     let acceptStatus: ApplyStatus

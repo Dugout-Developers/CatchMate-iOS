@@ -73,9 +73,6 @@ final class ListCardViewTableViewCell: UITableViewCell {
         homeTeamImageView.imageView.image = nil
         awayTeamImageView.imageView.image = nil
         componentsMarkDirty()
-//        partyNumLabel.flex.markDirty()
-//        setNeedsLayout()
-//        layoutIfNeeded()
     }
     
     @available(*, unavailable)
@@ -106,7 +103,6 @@ final class ListCardViewTableViewCell: UITableViewCell {
         self.post = post
         favoriteButton.isHidden = !isFavoriteCell
         favoriteButton.isEnabled = isFavoriteCell
-        // MARK: - API 변경 시 isMyTeam 반영
         homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.homeTeam == post.cheerTeam, background: .grayScale50)
         awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.awayTeam == post.cheerTeam, background: .grayScale50)
         

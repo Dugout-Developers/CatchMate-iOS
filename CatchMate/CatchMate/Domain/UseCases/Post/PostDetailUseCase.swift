@@ -32,9 +32,10 @@ final class PostDetailUseCaseImpl: PostDetailUseCase {
 
     
     func loadApplyInfo(postId: String) -> Observable<MyApplyInfo?> {
-        return applylistRepository.loadSendApplies()
+        // TODO: - 임시값 페이지 0 -> API 요청 필요
+        return applylistRepository.loadSendApplies(page: 0)
             .flatMap { list -> Observable<MyApplyInfo?> in
-                if let info = list.first(where: { content in
+                if let info = list.applys.first(where: { content in
                     content.post.id == postId
                 }) {
                     return Observable.just(MyApplyInfo(enrollId: info.enrollId, addInfo: info.addText))
@@ -46,4 +47,5 @@ final class PostDetailUseCaseImpl: PostDetailUseCase {
                 return Observable.error(DomainError(error: error, context: .pageLoad))
             }
     }
+
 }

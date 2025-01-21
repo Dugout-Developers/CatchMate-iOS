@@ -29,4 +29,5 @@ struct Content: Codable {
 
 struct ApplyListResponse: Codable {
     let enrollInfoList: [Content]
+    let isLast: Bool
 }

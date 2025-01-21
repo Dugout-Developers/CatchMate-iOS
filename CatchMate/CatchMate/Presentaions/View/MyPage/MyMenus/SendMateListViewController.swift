@@ -69,7 +69,11 @@ extension SendMateListViewController {
                 cell.updateConstraints()
             }
             .disposed(by: disposeBag)
-        
+        reactor.state.map { $0.currentPage }
+            .subscribe { page in
+                print("currentPage: \(page)")
+            }
+            .disposed(by: disposeBag)
         tableView.rx.itemSelected
             .observe(on: MainScheduler.instance)
             .withUnretained(self)
@@ -77,6 +81,26 @@ extension SendMateListViewController {
                 let post = reactor.currentState.sendMates[indexPath.row]
                 let postDetailVC = PostDetailViewController(postID: post.id)
                 vc.navigationController?.pushViewController(postDetailVC, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        tableView.rx.contentOffset
+            .skip(1)
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .map { vc, offset in
+                let offsetY = offset.y
+                let contentHeight = vc.tableView.contentSize.height
+                let threshold = contentHeight - vc.tableView.frame.size.height - (vc.tableView.rowHeight * 4)
+                return (vc, offsetY, threshold)
+            }
+            .filter { vc, offsetY, threshold in
+                offsetY > threshold &&
+                !reactor.currentState.isLoading &&
+                !reactor.currentState.isLast
+            }
+            .subscribe(onNext: { vc, _, _ in
+                reactor.action.onNext(.loadNextPage)
             })
             .disposed(by: disposeBag)
         

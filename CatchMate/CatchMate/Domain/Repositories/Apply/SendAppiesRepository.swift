@@ -9,6 +9,5 @@ import UIKit
 import RxSwift
 
 protocol SendAppiesRepository {
-    func loadSendApplies() -> Observable<[ApplyList]>
-    func isApply(boardId: Int) -> Observable<Bool>
+    func loadSendApplies(page: Int) -> Observable<Applys>
 }

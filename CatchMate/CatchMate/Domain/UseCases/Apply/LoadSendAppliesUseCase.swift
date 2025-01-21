@@ -10,7 +10,7 @@ import RxSwift
 
 /// 내가 보낸 신청 리스트 Load
 protocol LoadSendAppliesUseCase {
-    func execute() -> Observable<[ApplyList]>
+    func execute(page: Int) -> Observable<Applys>
 }
 
 final class LoadSendAppliesUseCaseImpl: LoadSendAppliesUseCase {
@@ -18,8 +18,8 @@ final class LoadSendAppliesUseCaseImpl: LoadSendAppliesUseCase {
     init(sendAppliesRepository: SendAppiesRepository) {
         self.sendAppliesRepository = sendAppliesRepository
     }
-    func execute() -> RxSwift.Observable<[ApplyList]> {
-        return sendAppliesRepository.loadSendApplies()
+    func execute(page: Int) -> RxSwift.Observable<Applys> {
+        return sendAppliesRepository.loadSendApplies(page: page)
             .catch { error in
                 return Observable.error(DomainError(error: error, context: .pageLoad))
             }
