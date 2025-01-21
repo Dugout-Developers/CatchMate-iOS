@@ -22,7 +22,7 @@ final class UserUseCaseImpl: LoadMyInfoUseCase {
     func execute() -> Observable<User> {
         return userRepository.loadUser()
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .tokenUnavailable).toPresentationError())
+                return Observable.error(DomainError(error: error, context: .tokenUnavailable))
             }
     }
 }

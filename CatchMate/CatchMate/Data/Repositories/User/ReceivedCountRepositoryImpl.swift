@@ -20,8 +20,5 @@ final class ReceivedCountRepositoryIml: ReceivedCountRepository {
             .map { dto -> Int in
                 return dto.newEnrollCount
             }
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
-            }
     }
 }

@@ -26,7 +26,8 @@ struct GameInfo: Codable {
 
 
 extension PostRequsetDTO {
-    func encodingData() -> [String: Any] {
+    func encodingData() -> [String: Any]? {
+        guard let gameDate = self.gameRequest.gameStartDate else { return nil }
         let parameters: [String: Any] = [
             "title": self.title,
             "content": self.content,
@@ -37,7 +38,7 @@ extension PostRequsetDTO {
             "gameRequest": [
                 "homeClubId": self.gameRequest.homeClubId,
                 "awayClubId": self.gameRequest.awayClubId,
-                "gameStartDate": self.gameRequest.gameStartDate,
+                "gameStartDate": gameDate,
                 "location": self.gameRequest.location
             ],
             "isCompleted": self.isCompleted

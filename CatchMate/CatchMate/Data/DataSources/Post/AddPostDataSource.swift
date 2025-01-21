@@ -36,7 +36,9 @@ final class AddPostDataSourceImpl: AddPostDataSource {
         LoggerService.shared.log("토큰 확인: \(headers)")
         
         
-        let jsonDictionary = post.encodingData()
+        guard let jsonDictionary = post.encodingData() else {
+            return Observable.error(MappingError.mappingFailed)
+        }
         LoggerService.shared.debugLog("parameters Encoding:\(jsonDictionary)")
         return APIService.shared.performRequest(type: .savePost, parameters: jsonDictionary, headers: headers, encoding: JSONEncoding.default, dataType: AddPostResponseDTO.self, refreshToken: refreshToken)
             .map({ response in

@@ -19,12 +19,9 @@ final class UpPostUseCaseImpl: UpPostUseCase {
     }
     
     func execute(_ postId: String) -> Observable<(result: Bool, message: String?)> {
-        guard let id = Int(postId) else {
-            return Observable.error(PresentationError.showToastMessage(message: "게시글 끌어올리기를 실패했습니다."))
-        }
-        return upPostRepository.upPost(id)
+        return upPostRepository.upPost(postId)
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .action, message: "게시글 끌어올리기를 실패했습니다."))
+                return Observable.error(DomainError(error: error, context: .action, message: "게시글 끌어올리는데 문제가 발생했습니다."))
             }
     }
 }

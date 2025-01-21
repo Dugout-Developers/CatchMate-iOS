@@ -9,5 +9,5 @@ import UIKit
 import RxSwift
 
 protocol LoadFavoriteListRepository {
-    func loadFavoriteList() -> Observable<[SimplePost]>
+    func loadFavoriteList(page: Int) -> Observable<PostList>
 }

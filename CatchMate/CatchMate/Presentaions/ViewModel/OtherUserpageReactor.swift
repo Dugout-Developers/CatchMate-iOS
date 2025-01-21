@@ -11,13 +11,21 @@ import ReactorKit
 final class OtherUserpageReactor: Reactor {
     enum Action {
         case loadPost
+        case loadNextPage
     }
     enum Mutation {
-        case setPost([SimplePost])
+        case setPost(list: [SimplePost], isAppend: Bool)
+        case incrementPage
+        case resetPage
+        case setIsLast(Bool)
+        case setLoading(Bool)
         case setError(PresentationError?)
     }
     struct State {
         var posts: [SimplePost] = []
+        var currentPage: Int = 0
+        var isLast: Bool = false
+        var isLoading: Bool = false
         var error: PresentationError?
     }
     
@@ -33,25 +41,58 @@ final class OtherUserpageReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadPost:
-            if let userId = Int(user.userId) {
-                return userPostUsecase.loadPostList(userId: userId, page: 1)
-                    .map { list in
-                        return Mutation.setPost(list)
-                    }
-                    .catch { error in
-                        return Observable.just(Mutation.setError(error.toPresentationError()))
-                    }
-            } else {
-                return Observable.just(Mutation.setError(PresentationError.showErrorPage))
+            return userPostUsecase.loadPostList(userId: user.userId, page: 0)
+                .flatMap { data -> Observable<Mutation> in
+                    return Observable.concat([
+                        Observable.just(Mutation.setLoading(true)),
+                        Observable.just(.setPost(list: data.post, isAppend: false)),
+                        Observable.just(.resetPage),
+                        Observable.just(.setIsLast(data.isLast)),
+                        Observable.just(Mutation.setLoading(false))
+                    ])
+                }
+                .catch { error in
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                }
+        case .loadNextPage:
+            print("loadNextPage")
+            let nextPage = currentState.currentPage + 1
+            if !currentState.isLoading, currentState.isLast {
+                return Observable.empty()
             }
+            return userPostUsecase.loadPostList(userId: user.userId, page: nextPage)
+                .flatMap { data -> Observable<Mutation> in
+                    return Observable.concat([
+                        Observable.just(Mutation.setLoading(true)),
+                        Observable.just(.setPost(list: data.post, isAppend: true)),
+                        Observable.just(.incrementPage),
+                        Observable.just(.setIsLast(data.isLast)),
+                        Observable.just(Mutation.setLoading(false))
+                    ])
+                }
+                .catch { error in
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                }
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
+        newState.error = nil
         switch mutation {
-        case .setPost(let posts):
-            newState.posts = posts
-            newState.error = nil
+        case .setPost(let posts, let isAppend):
+            if isAppend {
+                newState.posts.append(contentsOf: posts)
+            } else {
+                newState.posts = posts
+            }
+        case .incrementPage:
+            newState.currentPage += 1
+        case .resetPage:
+            newState.currentPage = 0
+        case .setIsLast(let state):
+            newState.isLast = state
+        case .setLoading(let isLoading):
+            newState.isLoading = isLoading
         case .setError(let error):
             newState.error = error
         }

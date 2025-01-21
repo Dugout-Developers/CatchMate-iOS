@@ -19,7 +19,7 @@ final class TempPostRepositoryImpl: TempPostRepository {
     func tempPost(_ post: TempPostRequest) -> RxSwift.Observable<Void> {
         guard let dto = PostMapper().domainToDto(post) else {
             print("TempPostRepositiory: \(post)")
-            return Observable.error(ErrorMapper.mapToPresentationError(MappingError.mappingFailed))
+            return Observable.error(MappingError.mappingFailed)
         }
         print(dto)
         return tempPostDS.tempPost(dto)

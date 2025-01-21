@@ -17,15 +17,9 @@ final class ApplyPostRepositoryImpl: ApplyRepository {
     
     func applyPost(_ boardId: String, addInfo: String) -> Observable<Int> {
         return applyDS.applyPost(boardID: boardId, addInfo: addInfo)
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
-            }
     }
     
     func cancelApplyPost(enrollId: String) -> Observable<Void> {
         return applyDS.cancelApplyPost(enrollId: enrollId)
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
-            }
     }
 }

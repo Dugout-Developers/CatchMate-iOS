@@ -19,7 +19,7 @@ final class LoadNotificationListUseCaseImpl: LoadNotificationListUseCase {
     func execute() -> RxSwift.Observable<[NotificationList]> {
         return loadNotificationRepository.loadNotificationList()
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .pageLoad, message: "알림 리스트 요청에 실패했습니다.").toPresentationError())
+                return Observable.error(DomainError(error: error, context: .pageLoad, message: "알림 리스트를 불러오는데 문제가 발생했습니다."))
             }
     }
 }

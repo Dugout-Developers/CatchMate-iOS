@@ -11,7 +11,7 @@ import ReactorKit
 final class ReportReactor: Reactor {
     enum Action {
         // TODO: - 차단 상태인지 확인하기
-        case reportUser(String)
+        case reportUser(Int)
     }
     enum Mutation {
         case setFinishedReport(Bool)

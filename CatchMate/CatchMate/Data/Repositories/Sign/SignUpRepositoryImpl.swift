@@ -16,9 +16,6 @@ final class SignUpRepositoryImpl: SignUpRepository {
             .map { dto -> SignUpResponse in
                 return SignUpResponse(userId: String(dto.userId), createdAt: dto.createdAt, accessToken: dto.accessToken, refreshToken: dto.refreshToken)
             }
-            .catch { error in
-                Observable.error(ErrorMapper.mapToPresentationError(error))
-            }
     }
     
     private let signupDatasource: SignUpDataSourceImpl

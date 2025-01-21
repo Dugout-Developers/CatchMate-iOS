@@ -25,9 +25,6 @@ final class ServerLoginRepositoryImpl: ServerLoginRepository {
                     throw CodableError.decodingFailed 
                 }
             })
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
-            }
     }
 
 }

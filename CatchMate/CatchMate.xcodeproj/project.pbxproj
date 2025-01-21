@@ -843,7 +843,6 @@
 			children = (
 				5382490F2C3139C80074B583 /* AppleLoginUserDefaultsService.swift */,
 				5301E2952C5B2BAE0078E910 /* LoggerService.swift */,
-				53B8E26C2C61CBD5001D0ADF /* ErrorMapper.swift */,
 				534E39D22C634E26006D180E /* LoginUserDefaultsService.swift */,
 				53ACBA222C7EACB1004FAF00 /* SetupInfoService.swift */,
 			);
@@ -1013,6 +1012,15 @@
 			path = MyMenus;
 			sourceTree = "<group>";
 		};
+		535AA01D2D39FB79007C7690 /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				53B8E26C2C61CBD5001D0ADF /* ErrorMapper.swift */,
+				53B8E2682C613127001D0ADF /* PresentationError.swift */,
+			);
+			path = Error;
+			sourceTree = "<group>";
+		};
 		536BDDA12C189B230043B1DA = {
 			isa = PBXGroup;
 			children = (
@@ -1126,6 +1134,7 @@
 		536BDDE52C1971830043B1DA /* Presentaions */ = {
 			isa = PBXGroup;
 			children = (
+				535AA01D2D39FB79007C7690 /* Error */,
 				536BDDE72C1971AF0043B1DA /* ViewModel */,
 				536BDDE62C1971950043B1DA /* View */,
 			);
@@ -1135,6 +1144,7 @@
 		536BDDE62C1971950043B1DA /* View */ = {
 			isa = PBXGroup;
 			children = (
+				53B895CE2CA2985000029130 /* ErrorPageView.swift */,
 				533A2B282C28558D00A59340 /* Sign */,
 				536BDE102C1B51DE0043B1DA /* TabBar */,
 				536BDE322C1B578C0043B1DA /* Home */,
@@ -1143,7 +1153,6 @@
 				531786802C21D3E400ACEF6A /* Chat */,
 				531786792C20777000ACEF6A /* Notification */,
 				531173202C36AD1300FF787D /* MyPage */,
-				53B895CE2CA2985000029130 /* ErrorPageView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1194,7 +1203,6 @@
 				5375B13C2D1A85EA000581B3 /* DomainError.swift */,
 				53EECB0A2D13E4CB00775FD6 /* AlarmInfo.swift */,
 				53EECAEF2D0B30A900775FD6 /* ProfileEdit.swift */,
-				53B8E2682C613127001D0ADF /* PresentationError.swift */,
 				536BDDEB2C19720E0043B1DA /* User.swift */,
 				531786632C1EF30F00ACEF6A /* Team.swift */,
 				531786772C20498800ACEF6A /* Post.swift */,
@@ -1254,12 +1262,12 @@
 		536BDDF72C1972780043B1DA /* DTO */ = {
 			isa = PBXGroup;
 			children = (
+				53B8E26A2C613613001D0ADF /* DataError.swift */,
 				535B3A912D33935F003FBBBF /* UpPostResponseDTO.swift */,
 				5375B1D42D2E15D2000581B3 /* StateResponseDTO.swift */,
 				53EECAEC2D0B304000775FD6 /* ProfileEditRequestDTO.swift */,
 				53EECB102D14F04B00775FD6 /* SetNotificationResponseDTO.swift */,
 				53EECAE72D0B2F6F00775FD6 /* ProfileEditResponseDTO.swift */,
-				53B8E26A2C613613001D0ADF /* DataError.swift */,
 				536BDDF52C1972740043B1DA /* UserDTO.swift */,
 				533A2B3E2C2C5DBC00A59340 /* SNSLoginResponse.swift */,
 				530994552C4F6D9900ABE103 /* LoginRequset.swift */,

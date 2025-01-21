@@ -113,7 +113,7 @@ final class AddReactor: Reactor {
                     return Mutation.setUser(simpleUser)
                 }
                 .catch { error in
-                    return Observable.just(Mutation.setError(error.toPresentationError()))
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
 
         case .changeGender(let gender):
@@ -173,7 +173,7 @@ final class AddReactor: Reactor {
                         return Mutation.savePost(id)
                     }
                     .catch { error in
-                        return Observable.just(Mutation.setError(error.toPresentationError()))
+                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                     }
             } else {
                 return addUsecase.addPost(request.0)
@@ -181,7 +181,7 @@ final class AddReactor: Reactor {
                         return Mutation.savePost(id)
                     }
                     .catch { error in
-                        return Observable.just(Mutation.setError(error.toPresentationError()))
+                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                     }
             }
         case .changeTitle(let title):
@@ -234,7 +234,7 @@ final class AddReactor: Reactor {
                     return Mutation.editPost(id)
                 }
                 .catch { error in
-                    return Observable.just(Mutation.setError(error.toPresentationError()))
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
         case .tempPost:
             let tempPost = TempPostRequest(title: currentState.title, homeTeam: currentState.homeTeam, awayTeam: currentState.awayTeam, cheerTeam: currentState.cheerTeam, date: currentState.selecteDate, playTime: currentState.selecteTime?.rawValue, location: currentState.place, maxPerson: currentState.partyNumber, preferGender: currentState.selectedGender, preferAge: currentState.selectedAge, addInfo: currentState.addText)
@@ -243,7 +243,7 @@ final class AddReactor: Reactor {
                     return Mutation.setTempPostResult(())
                 }
                 .catch { error in
-                    return Observable.just(Mutation.setError(error.toPresentationError()))
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
             
         case .setTempPost:

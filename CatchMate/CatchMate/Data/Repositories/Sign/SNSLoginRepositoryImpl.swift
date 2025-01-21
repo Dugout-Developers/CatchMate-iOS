@@ -25,7 +25,7 @@ class SNSLoginRepositoryImpl: SNSLoginRepository {
         return kakaoLoginDS.getKakaoLoginToken()
             .catch { error in
                 LoginUserDefaultsService.shared.deleteLoginData()
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
+                return Observable.error(error)
             }
     }
     
@@ -33,7 +33,7 @@ class SNSLoginRepositoryImpl: SNSLoginRepository {
         return appleLoginDS.getAppleLoginToken()
             .catch { error in
                 LoginUserDefaultsService.shared.deleteLoginData()
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
+                return Observable.error(error)
             }
     }
     
@@ -41,7 +41,7 @@ class SNSLoginRepositoryImpl: SNSLoginRepository {
         return naverLoginDS.getNaverLoginToken()
             .catch { error in
                 LoginUserDefaultsService.shared.deleteLoginData()
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
+                return Observable.error(error)
             }
     }
     

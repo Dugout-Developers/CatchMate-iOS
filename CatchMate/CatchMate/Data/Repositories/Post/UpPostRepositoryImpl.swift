@@ -14,7 +14,10 @@ final class UpPostRepositoryImpl: UpPostRepository {
         self.upPostDS = upPostDS
     }
     
-    func upPost(_ postId: Int) -> RxSwift.Observable<(result: Bool, message: String?)> {
+    func upPost(_ postId: String) -> RxSwift.Observable<(result: Bool, message: String?)> {
+        guard let postId = Int(postId) else {
+            return Observable.error(MappingError.mappingFailed)
+        }
         return upPostDS.upPost(postId)
             .map { dto in
                 return (dto.state, dto.remainTime)

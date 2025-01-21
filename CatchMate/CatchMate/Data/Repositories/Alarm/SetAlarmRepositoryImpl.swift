@@ -23,11 +23,8 @@ final class SetAlarmRepositoryImpl: SetAlarmRepository {
                 } else if dto.isEnabled == "N" {
                     return Observable.just(false)
                 } else {
-                    return Observable.error(PresentationError.showToastMessage(message: "알람 설정에 실패했습니다.\n다시 시도해주세요."))
+                    return Observable.error(MappingError.invalidData)
                 }
-            }
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
             }
     }
     

@@ -22,7 +22,7 @@ final class SignUpUseCaseImpl: SignUpUseCase {
     func execute(_ model: LoginModel, signupInfo: SignUpModel) -> RxSwift.Observable<SignUpResponse> {
         return repository.requestSignup(model, signupInfo: signupInfo)
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .action, message: "회원가입에 실패했습니다.").toPresentationError())
+                return Observable.error(DomainError(error: error, context: .action, message: "회원가입하는데 문제가 발생했습니다."))
             }
     }
 }

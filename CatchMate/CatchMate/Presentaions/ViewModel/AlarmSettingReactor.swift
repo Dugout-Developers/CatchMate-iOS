@@ -50,7 +50,7 @@ final class AlarmSettingReactor: Reactor {
                     return Mutation.setNotificationInfo(info)
                 }
                 .catch { error in
-                    return Observable.just(Mutation.setError(error.toPresentationError()))
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
         case .toggleSwitch((let type, let state)):
             print("\(type.rawValue) state changed to \(state)")

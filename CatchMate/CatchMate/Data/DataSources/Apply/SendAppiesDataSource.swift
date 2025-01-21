@@ -11,8 +11,7 @@ import RxAlamofire
 import Alamofire
 
 protocol SendAppiesDataSource {
-    func loadSendApplies() -> Observable<[Content]>
-    func loadSendApplyBoardIds() -> Observable<[Int]>
+    func loadSendApplies(page: Int) -> Observable<ApplyListResponse>
 }
 
 
@@ -22,7 +21,7 @@ final class SendAppiesDataSourceImpl: SendAppiesDataSource {
     init(tokenDataSource: TokenDataSource) {
         self.tokenDataSource = tokenDataSource
     }
-    func loadSendApplies() -> RxSwift.Observable<[Content]> {
+    func loadSendApplies(page: Int) -> RxSwift.Observable<ApplyListResponse> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
@@ -34,21 +33,16 @@ final class SendAppiesDataSourceImpl: SendAppiesDataSource {
         ]
         LoggerService.shared.log("토큰 확인: \(headers)")
         
-        return APIService.shared.performRequest(type: .sendApply, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: ApplyListResponse.self, refreshToken: refreshToken)
-            .map { response -> [Content] in
-                return response.enrollInfoList
+        let parameters: [String: Any] = [
+            "page": page
+        ]
+        return APIService.shared.performRequest(type: .sendApply, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: ApplyListResponse.self, refreshToken: refreshToken)
+            .map { response -> ApplyListResponse in
+                return response
             }
             .catch { error in
                 LoggerService.shared.debugLog("보낸 신청 목록 load 실패 - \(error)")
                 return Observable.error(error)
             }
     }
-    
-    func loadSendApplyBoardIds() -> RxSwift.Observable<[Int]> {
-        return loadSendApplies()
-            .map { contents -> [Int] in
-                return contents.map { $0.boardInfo.boardId }
-            }
-    }
-    
 }

@@ -210,7 +210,7 @@ final class PostDetailViewController: BaseViewController, View {
     @objc private func setupMenuButton() {
         let localDataUserId = SetupInfoService.shared.getUserInfo(type: .id)
         let menuVC = CMActionMenu()
-        if let currentlocalId = localDataUserId, currentlocalId == reactor.currentState.post?.writer.userId {
+        if let currentlocalId = localDataUserId, Int(currentlocalId) != nil, Int(currentlocalId)! == reactor.currentState.post?.writer.userId {
             // 메뉴 항목 설정
             menuVC.menuItems = [
                 MenuItem(title: "끌어올리기", action: { [weak self] in
@@ -285,7 +285,8 @@ final class PostDetailViewController: BaseViewController, View {
         if post.preferAge == [0] {
             ageOptionLabel.append(makeAgeLabel(age: 0))
         } else {
-            post.preferAge.forEach { age in
+            let ageArr = post.preferAge.sorted(by: <)
+            ageArr.forEach { age in
                 ageOptionLabel.append(makeAgeLabel(age: age))
             }
         }

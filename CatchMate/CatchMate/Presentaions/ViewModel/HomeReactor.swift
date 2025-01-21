@@ -82,14 +82,14 @@ final class HomeReactor: Reactor {
         case .viewDidLoad:
             return setupUseCase.setupInfo()
                 .do(onNext: { result in
-                    SetupInfoService.shared.saveUserInfo(UserInfoDTO(id: result.user.id, email: result.user.email, team: result.user.team.rawValue))
+                    SetupInfoService.shared.saveUserInfo(UserInfoDTO(id: String(result.user.id), email: result.user.email, team: result.user.team.rawValue))
                 })
                 .withUnretained(self)
                 .flatMap({ reactor, _ in
                     return reactor.updateFiltersAndLoadPosts(date: nil, teams: nil, number: nil)
                 })
                 .catch { error in
-                    return Observable.just(Mutation.setError(error.toPresentationError()))
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
             
         case .loadNextPage:
@@ -124,7 +124,7 @@ final class HomeReactor: Reactor {
                     return .empty()
                 }
                 .catch { error in
-                    return Observable.just(Mutation.setError(error.toPresentationError()))
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
         case .refreshPage:
             return Observable.concat([
@@ -147,7 +147,8 @@ final class HomeReactor: Reactor {
             newState.selectedTeams = selectedTeams
             
         case .loadPost(let posts, let append):
-            if append {                newState.posts.append(contentsOf: posts)
+            if append {
+                newState.posts.append(contentsOf: posts)
             } else {
                 newState.page = 0
                 newState.posts = posts
@@ -187,7 +188,7 @@ final class HomeReactor: Reactor {
                 return Mutation.loadPost(list, append: false)
             }
             .catch { error in
-                return Observable.just(Mutation.setError(error.toPresentationError()))
+                return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
             }
         
         return Observable.concat([

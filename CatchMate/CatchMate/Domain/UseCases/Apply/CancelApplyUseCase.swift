@@ -21,7 +21,7 @@ final class CancelApplyUseCaseImpl: CancelApplyUseCase {
     func execute(enrollId: String) -> Observable<Void> {
         return applyRepository.cancelApplyPost(enrollId: enrollId)
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .action, message: "요청에 실패했습니다.").toPresentationError())
+                return Observable.error(DomainError(error: error, context: .action, message: "취소하는데 문제가 발생했습니다."))
             }
     }
 }

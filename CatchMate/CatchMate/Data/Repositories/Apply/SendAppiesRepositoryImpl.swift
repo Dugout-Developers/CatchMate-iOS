@@ -13,32 +13,17 @@ final class SendAppiesRepositoryImpl: SendAppiesRepository {
     init(sendAppliesDS: SendAppiesDataSource) {
         self.sendAppliesDS = sendAppliesDS
     }
-    func loadSendApplies() -> RxSwift.Observable<[ApplyList]> {
-        return sendAppliesDS.loadSendApplies()
-            .flatMap { contents -> Observable<[ApplyList]> in
+    func loadSendApplies(page: Int) -> RxSwift.Observable<Applys> {
+        return sendAppliesDS.loadSendApplies(page: page)
+            .flatMap { applyInfo -> Observable<Applys> in
                 let mapper = ApplyMapper()
                 var mappingList = [ApplyList]()
-                contents.forEach { content in
+                applyInfo.enrollInfoList.forEach { content in
                     if let result = mapper.dtoToDomain(content) {
                         mappingList.append(result)
                     }
                 }
-                return Observable.just(mappingList)
-            }
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
+                return Observable.just(Applys(applys: mappingList, isLast: applyInfo.isLast))
             }
     }
-    
-    func isApply(boardId: Int) -> RxSwift.Observable<Bool> {
-        return sendAppliesDS.loadSendApplyBoardIds()
-            .flatMap { list -> Observable<Bool> in
-                return Observable.just(list.contains(boardId))
-            }
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
-            }
-    }
-    
-    
 }

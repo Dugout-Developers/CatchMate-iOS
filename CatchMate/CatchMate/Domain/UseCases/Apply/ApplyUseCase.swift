@@ -21,7 +21,7 @@ final class ApplyUseCaseImpl: ApplyUseCase {
     func execute(postId: String, addText: String?) -> Observable<Int> {
         return applyRepository.applyPost(postId, addInfo: addText ?? "")
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .action, message: "요청에 실패했습니다.").toPresentationError())
+                return Observable.error(DomainError(error: error, context: .action, message: "직관 신청하는데 문제가 발생했습니다."))
             }
     }
 }

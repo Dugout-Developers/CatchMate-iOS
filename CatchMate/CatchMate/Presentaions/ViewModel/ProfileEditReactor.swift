@@ -69,11 +69,11 @@ final class ProfileEditReactor: Reactor {
                     if state {
                         return Mutation.setEditProfileSuccess(state)
                     } else {
-                        return Mutation.setError(.showToastMessage(message: "변경 실패. 다시 시도해주세요."))
+                        return Mutation.setError(.showToastMessage(message: "변경하는데 문제가 생겼습니다.\n다시 시도해주세요."))
                     }
                 })
                 .catch { error in
-                    return Observable.just(Mutation.setError(error.toPresentationError()))
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
         case .setError(let error):
             return Observable.just(Mutation.setError(error))

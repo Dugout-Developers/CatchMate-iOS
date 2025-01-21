@@ -11,7 +11,7 @@ final class UserMapper {
     func userToDomain(_ dto: UserDTO) -> User {
         let team = Team(serverId: dto.favoriteClub.id) ?? .allTeamLove
         let gender = Gender(serverValue: dto.gender) ?? .man
-        return User(id: String(dto.userId), email: dto.email, nickName: dto.nickName, birth: dto.birthDate, team: team, gener: gender, cheerStyle: CheerStyles(rawValue: dto.watchStyle ?? ""), profilePicture: dto.profileImageUrl, allAlarm: dto.allAlarm == "Y" ? true : false, chatAlarm: dto.chatAlarm == "Y" ? true : false, enrollAlarm: dto.enrollAlarm == "Y" ? true : false, eventAlarm: dto.eventAlarm == "Y" ? true : false)
+        return User(id: dto.userId, email: dto.email, nickName: dto.nickName, birth: dto.birthDate, team: team, gener: gender, cheerStyle: CheerStyles(rawValue: dto.watchStyle ?? ""), profilePicture: dto.profileImageUrl, allAlarm: dto.allAlarm == "Y" ? true : false, chatAlarm: dto.chatAlarm == "Y" ? true : false, enrollAlarm: dto.enrollAlarm == "Y" ? true : false, eventAlarm: dto.eventAlarm == "Y" ? true : false)
     }
     
     func profileEditRequestDomainToDTO(domain: ProfileEdit) -> ProfileEditRequestDTO {

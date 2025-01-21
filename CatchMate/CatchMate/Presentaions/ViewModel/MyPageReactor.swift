@@ -51,16 +51,22 @@ final class MyPageReactor: Reactor {
                 Observable.just(Mutation.setLoading(true)),
                 userUseCase.execute()
                     .map { Mutation.setUser($0) }
-                    .catch { return Observable.just(Mutation.setError($0.toPresentationError())) },
+                    .catch { error in
+                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                    },
                 loadReceivedCountUsecase.execute()
                     .map{ Mutation.setCount($0) }
-                    .catch { return Observable.just(Mutation.setError($0.toPresentationError())) },
+                    .catch { error in
+                        return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                    },
                 Observable.just(Mutation.setLoading(false))
             ])
         case .logout:
             return logoutUseCase.logout()
                 .map { Mutation.logout($0) }
-                .catch { return Observable.just(Mutation.setError($0.toPresentationError())) }
+                .catch { error in
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                }
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {

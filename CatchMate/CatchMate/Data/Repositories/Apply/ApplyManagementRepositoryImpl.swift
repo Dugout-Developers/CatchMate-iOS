@@ -16,15 +16,9 @@ final class ApplyManagementRepositoryImpl: ApplyManagementRepository {
     
     func acceptApply(enrollId: String) -> RxSwift.Observable<Bool> {
         return applyManagementDS.acceptApply(enrollId: enrollId)
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
-            }
     }
     
     func rejectApply(enrollId: String) -> RxSwift.Observable<Bool> {
         return applyManagementDS.rejectApply(enrollId: enrollId)
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
-            }
     }
 }

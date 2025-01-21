@@ -6,27 +6,22 @@
 //
 import Foundation
 
+protocol LocalizedErrorWithCode: LocalizedError {
+    var statusCode: Int { get }
+}
 extension Error {
     static var errorType: String {
         return String(describing: self)
     }
-
+    
     var statusCode: Int {
-        if let localizedError = self as? LocalizedError {
-            return localizedError.statusCode
+        if let errorWithCode = self as? LocalizedErrorWithCode {
+            return errorWithCode.statusCode
         }
-        return -9999 // 기본값으로 -9999를 반환
-    }
-
-    var errorDescription: String? {
-        return (self as? LocalizedError)?.errorDescription ?? "An unexpected error occurred.: \(self.localizedDescription)"
+        return -9999 // 기본값
     }
     
-    func toPresentationError() -> PresentationError {
-        if let presentationError = self as? PresentationError {
-            return presentationError
-        } else {
-            return PresentationError.showErrorPage
-        }
+    var errorDescription: String? {
+        return (self as? LocalizedError)?.errorDescription ?? "An unexpected error occurred.: \(self.localizedDescription)"
     }
 }

@@ -8,7 +8,7 @@
 import UIKit
 
 struct User: Codable, Equatable {
-    var id: String
+    var id: Int
     let email: String
     let nickName: String
     let birth: String

@@ -16,7 +16,7 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
     override var buttonContainerExists: Bool {
         return false
     }
-    private let user = SimpleUser(user: User(id: "1", email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4MTkSLvHP365kTge2U5CHc-smH-Z2Xq5p-A&s", allAlarm: true, chatAlarm: true, enrollAlarm: true, eventAlarm: true))
+    private let user = SimpleUser(user: User(id: 1, email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4MTkSLvHP365kTge2U5CHc-smH-Z2Xq5p-A&s", allAlarm: true, chatAlarm: true, enrollAlarm: true, eventAlarm: true))
     private let chat: Chat
 
     private var isManager: Bool {

@@ -17,9 +17,6 @@ final class LogoutRepositoryImpl: LogoutRepository {
     
     func logout() -> RxSwift.Observable<Bool> {
         return logoutDS.logout()
-            .catch { error in
-                return Observable.error(ErrorMapper.mapToPresentationError(error))
-            }
     }
     
     func deleteToken() {

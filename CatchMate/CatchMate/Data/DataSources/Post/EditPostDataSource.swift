@@ -32,7 +32,9 @@ final class EditPostDataSourceImpl: EditPostDataSource {
             "AccessToken": token
         ]
         LoggerService.shared.log("토큰 확인: \(headers)")
-        let parameters = post.encodingData()
+        guard let parameters = post.encodingData() else {
+            return Observable.error(MappingError.mappingFailed)
+        }
         return APIService.shared.performRequest(addEndPoint: "\(boardId)", type: .editPost, parameters: parameters, headers: headers, encoding: JSONEncoding.default, dataType: AddPostResponseDTO.self, refreshToken: refreshToken)
             .map({ response in
                 LoggerService.shared.debugLog("Post 수정 성공 - result: \(response)")
