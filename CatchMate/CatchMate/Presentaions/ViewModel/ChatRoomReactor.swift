@@ -46,7 +46,7 @@ final class ChatRoomReactor: Reactor {
         switch mutation {
         case .addMyMessage(let message):
             let newMessage = ChatMessage(text: message, user: user, date: Date(), messageType: 0)
-            let otherMessage = ChatMessage(text: "제밟제발ㅇ바제방벶바아벶바아에제방베방베젱바베제ㅐㅂㅈ압제베앙젲배어ㅏㅂ재ㅔ방바ㅔㅈ아에자배ㅏㅔ", user: User(id: "2", email: "ㄴㄴㄴ", nickName: "부산예수님", birth: "2000-01-01", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: "profile", allAlarm: true, chatAlarm: true, enrollAlarm: true, eventAlarm: true), date: Date(), messageType: 0)
+            let otherMessage = ChatMessage(text: "제밟제발ㅇ바제방벶바아벶바아에제방베방베젱바베제ㅐㅂㅈ압제베앙젲배어ㅏㅂ재ㅔ방바ㅔㅈ아에자배ㅏㅔ", user: User(id: 2, email: "ㄴㄴㄴ", nickName: "부산예수님", birth: "2000-01-01", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: "profile", allAlarm: true, chatAlarm: true, enrollAlarm: true, eventAlarm: true), date: Date(), messageType: 0)
             newState.messages = currentState.messages + [newMessage, otherMessage]
         case .loadMessages(let messages):
             newState.messages = messages

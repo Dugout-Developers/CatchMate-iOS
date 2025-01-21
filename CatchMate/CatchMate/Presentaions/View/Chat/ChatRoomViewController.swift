@@ -48,7 +48,7 @@ final class ChatRoomViewController: BaseViewController, View {
         view.backgroundColor = .white
     }
     // 임시
-    private let user = User(id: "1", email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: nil, allAlarm: true, chatAlarm: true, enrollAlarm: true, eventAlarm: true)
+    private let user = User(id: 1, email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: nil, allAlarm: true, chatAlarm: true, enrollAlarm: true, eventAlarm: true)
     init(chat: Chat) {
         self.reactor = ChatRoomReactor(chat: chat, user: user)
         self.chat = chat

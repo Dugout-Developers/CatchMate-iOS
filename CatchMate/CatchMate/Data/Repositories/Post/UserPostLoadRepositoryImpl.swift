@@ -13,16 +13,16 @@ final class UserPostLoadRepositoryImpl: UserPostLoadRepository {
     init(userPostDataSource: UserPostLoadDataSource) {
         self.userPostDataSource = userPostDataSource
     }
-    func loadPostList(userId: Int, page: Int) -> RxSwift.Observable<[SimplePost]> {
+    func loadPostList(userId: Int, page: Int) -> RxSwift.Observable<PostList> {
         return userPostDataSource.loadUserPostList(userId, page: page)
-            .flatMap { dtoList -> Observable<[SimplePost]> in
+            .flatMap { dto -> Observable<PostList> in
                 var list = [SimplePost]()
-                dtoList.forEach { dto in
+                dto.boardInfoList.forEach { dto in
                     if let mapResult = PostMapper().postListDTOtoDomain(dto) {
                         list.append(mapResult)
                     }
                 }
-                return Observable.just(list)
+                return Observable.just(PostList(post: list, isLast: dto.isLast))
             }
     }
 }

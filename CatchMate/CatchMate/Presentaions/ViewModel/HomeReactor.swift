@@ -82,7 +82,7 @@ final class HomeReactor: Reactor {
         case .viewDidLoad:
             return setupUseCase.setupInfo()
                 .do(onNext: { result in
-                    SetupInfoService.shared.saveUserInfo(UserInfoDTO(id: result.user.id, email: result.user.email, team: result.user.team.rawValue))
+                    SetupInfoService.shared.saveUserInfo(UserInfoDTO(id: String(result.user.id), email: result.user.email, team: result.user.team.rawValue))
                 })
                 .withUnretained(self)
                 .flatMap({ reactor, _ in

@@ -12,7 +12,7 @@ import ReactorKit
 final class BlockUserReactor: Reactor {
     enum Action {
         case loadBlockUser
-        case unblockUser(String)
+        case unblockUser(Int)
     }
     enum Mutation {
         case setBlockUser([SimpleUser])

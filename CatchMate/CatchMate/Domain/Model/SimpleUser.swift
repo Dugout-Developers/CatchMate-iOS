@@ -7,7 +7,7 @@
 
 import Foundation
 struct SimpleUser: Equatable {
-    let userId: String
+    let userId: Int
     let nickName: String
     let picture: String?
     let favGudan: Team
@@ -38,7 +38,7 @@ struct SimpleUser: Equatable {
         return lhs.userId == rhs.userId
     }
     
-    init(userId: String, nickName: String, picture: String?, favGudan: Team, gender: Gender, birthDate: String, cheerStyle: CheerStyles?) {
+    init(userId: Int, nickName: String, picture: String?, favGudan: Team, gender: Gender, birthDate: String, cheerStyle: CheerStyles?) {
         self.userId = userId
         self.nickName = nickName
         self.picture = picture
@@ -59,7 +59,7 @@ struct SimpleUser: Equatable {
     }
     
     static var blockUsers: [SimpleUser] = [
-        SimpleUser(userId: "1", nickName: "blockUser1", picture: "https://i.pinimg.com/236x/f1/ec/c8/f1ecc86b47a6e5789119afbbac06a4d4.jpg", favGudan: .hanhwa, gender: .man, birthDate: "1999-01-01", cheerStyle: nil),
-        SimpleUser(userId: "2", nickName: "blockUser2", picture: "https://api.linkareer.com/community/attachments/77085", favGudan: .hanhwa, gender: .man, birthDate: "1999-01-01", cheerStyle: nil),
+        SimpleUser(userId: 1, nickName: "blockUser1", picture: "https://i.pinimg.com/236x/f1/ec/c8/f1ecc86b47a6e5789119afbbac06a4d4.jpg", favGudan: .hanhwa, gender: .man, birthDate: "1999-01-01", cheerStyle: nil),
+        SimpleUser(userId: 2, nickName: "blockUser2", picture: "https://api.linkareer.com/community/attachments/77085", favGudan: .hanhwa, gender: .man, birthDate: "1999-01-01", cheerStyle: nil),
     ]
 }

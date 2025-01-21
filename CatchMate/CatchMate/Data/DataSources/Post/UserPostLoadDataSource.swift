@@ -11,7 +11,7 @@ import RxAlamofire
 import Alamofire
 
 protocol UserPostLoadDataSource {
-    func loadUserPostList(_ userId: Int, page: Int) -> Observable<[PostListInfoDTO]>
+    func loadUserPostList(_ userId: Int, page: Int) -> Observable<PostListDTO>
 }
 
 final class UserPostLoadDataSourceImpl: UserPostLoadDataSource {
@@ -21,8 +21,8 @@ final class UserPostLoadDataSourceImpl: UserPostLoadDataSource {
         self.tokenDataSource = tokenDataSource
     }
     
-    func loadUserPostList(_ userId: Int, page: Int) -> RxSwift.Observable<[PostListInfoDTO]> {
-        LoggerService.shared.debugLog("\(userId) 게시글 - page \(page) 조회")
+    func loadUserPostList(_ userId: Int, page: Int) -> RxSwift.Observable<PostListDTO> {
+        LoggerService.shared.debugLog("\(userId)번 유저 게시글 - page \(page) 조회")
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             return Observable.error(TokenError.notFoundAccessToken)
         }
@@ -33,12 +33,15 @@ final class UserPostLoadDataSourceImpl: UserPostLoadDataSource {
             "AccessToken": token
         ]
         
-        LoggerService.shared.debugLog("PostListLoadDataSourceImpl 토큰 확인: \(headers)")
+        let paramters: [String: Any] = [
+            "page": page
+        ]
+        LoggerService.shared.debugLog("UserPostLoadDataSourceImpl 토큰 확인: \(headers)")
         
-        return APIService.shared.performRequest(addEndPoint: "\(userId)", type: .userPostlist, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: PostListDTO.self, refreshToken: refreshToken)
+        return APIService.shared.performRequest(addEndPoint: "\(userId)", type: .userPostlist, parameters: paramters, headers: headers, encoding: URLEncoding.default, dataType: PostListDTO.self, refreshToken: refreshToken)
             .map { postListDTO in
                 LoggerService.shared.debugLog("PostList Load 성공: \(postListDTO)")
-                return postListDTO.boardInfoList
+                return postListDTO
             }
             .catch { error in
                 LoggerService.shared.debugLog("PostList Load 실패: \(error)")

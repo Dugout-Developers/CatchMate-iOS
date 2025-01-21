@@ -26,7 +26,7 @@ final class ApplyMapper {
             return nil
         }
         
-        return SimpleUser(userId: String(dto.userId), nickName: dto.nickName, picture: dto.profileImageUrl, favGudan: favoriteClub, gender: gender, birthDate: dto.birthDate, cheerStyle: CheerStyles(rawValue: dto.watchStyle))
+        return SimpleUser(userId: dto.userId, nickName: dto.nickName, picture: dto.profileImageUrl, favGudan: favoriteClub, gender: gender, birthDate: dto.birthDate, cheerStyle: CheerStyles(rawValue: dto.watchStyle))
     }
     
     func postInfoMapping(_ dto: PostListInfoDTO) -> SimplePost? {

@@ -48,7 +48,7 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
     }
     
     private func setupNavigation() {
-        if user.userId != SetupInfoService.shared.getUserInfo(type: .id) {
+        if String(user.userId) != SetupInfoService.shared.getUserInfo(type: .id) {
             let menuButton = UIButton()
             menuButton.setImage(UIImage(named: "cm20kebab")?.withTintColor(.grayScale700, renderingMode: .alwaysOriginal), for: .normal)
             menuButton.addTarget(self, action: #selector(clickMenuButton), for: .touchUpInside)
@@ -172,13 +172,35 @@ extension OtherUserMyPageViewController {
             }
             .disposed(by: disposeBag)
         
+        // Pagenation
+        tableview.rx.contentOffset
+            .skip(1)
+            .withUnretained(self)
+            .map { vc, offset in
+                let offsetY = offset.y
+                let contentHeight = vc.tableview.contentSize.height
+                let threshold = contentHeight - vc.tableview.frame.size.height - (vc.tableview.rowHeight * 4)
+                return (vc, offsetY, threshold)
+            }
+            .filter { vc, offsetY, threshold in
+                offsetY > threshold &&
+                !reactor.currentState.isLoading &&
+                !reactor.currentState.isLast
+            }
+            .subscribe(onNext: { vc, _, _ in
+                reactor.action.onNext(.loadNextPage)
+            })
+            .disposed(by: disposeBag)
+
+        // 스크롤에 따른 네비게이션 설정
         tableview.rx.contentOffset
             .skip(1)
             .map { $0.y }
             .withUnretained(self)
-            .bind { vc, offsetY in
+            .subscribe(onNext: { vc, offsetY in
                 vc.scrollSetupNavigation(offsetY)
-            }.disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
         
         reactor.state.map{$0.error}
             .compactMap{$0}
