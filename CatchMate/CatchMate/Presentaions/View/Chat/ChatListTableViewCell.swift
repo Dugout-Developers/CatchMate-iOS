@@ -95,15 +95,15 @@ final class ChatListTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
   
-    func configData(chat: Chat) {
-        chatImageView.image = chat.post.writer.favGudan.getFillImage
-        postTitleLabel.text = chat.post.title
-        newChat = chat.enterTime.isSameDay(as: Date())
-        lastChatLabel.text = newChat ? "채팅을 시작해보세요." : (chat.message.last?.text ?? "채팅을 시작해보세요.")
-        newMessageCount = chat.notRead
+    func configData(chat: ChatListInfo) {
+        chatImageView.image = chat.cheerTeam.getFillImage
+        postTitleLabel.text = chat.boardTitle
+        newChat = chat.newChat
+        lastChatLabel.text = newChat ? "채팅을 시작해보세요." : (chat.lastMessage.isEmpty ? "채팅을 시작해보세요." : chat.lastMessage)
+        newMessageCount = chat.notReadCount
         notiBadge.text = String(newMessageCount)
         notiBadgeView.isHidden = newMessageCount == 0 ? true : false
-        lastChatDateLabel.text = chat.message.last?.date.timeAgoDisplay() ?? chat.enterTime.timeAgoDisplay()
+        lastChatDateLabel.text = chat.lastTimeAgo
         
         // Style
         postTitleLabel.applyStyle(textStyle: FontSystem.body01_medium)
@@ -113,7 +113,7 @@ final class ChatListTableViewCell: UITableViewCell {
         notiBadge.applyStyle(textStyle: FontSystem.bedgeText)
         lastChatDateLabel.applyStyle(textStyle: FontSystem.caption01_medium)
         if newChat {
-            peopleNumLabel.text = String(chat.post.currentPerson)
+            peopleNumLabel.text = String(chat.participantCount)
             peopleNumLabel.textColor = .cmNonImportantTextColor
         } else {
             peopleNumLabel.text = "New"
