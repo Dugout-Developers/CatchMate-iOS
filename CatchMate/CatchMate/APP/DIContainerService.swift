@@ -212,4 +212,11 @@ class DIContainerService {
         let profileEditUsecase = ProfileEditUseCaseImpl(repository: profileEditRepository)
         return profileEditUsecase
     }
+    
+    func makeNickNameCheckUseCase() -> NicknameCheckUseCase {
+        let nicknameCheckDataSource = NicknameCheckDataSourceImpl()
+        let nicknameCheckRepository = NicknameCheckRepositoryImpl(nicknameDS: nicknameCheckDataSource)
+        let nicknameCheckUsecase = NicknameCheckUseCaseImpl(nicknameRepository: nicknameCheckRepository)
+        return nicknameCheckUsecase
+    }
 }

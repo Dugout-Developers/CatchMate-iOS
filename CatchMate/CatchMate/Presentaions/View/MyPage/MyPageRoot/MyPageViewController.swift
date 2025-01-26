@@ -133,7 +133,8 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
         case 0:
             guard let user = user else { return }
             let profileEditUseCase = DIContainerService.shared.makeProfileEditUseCase()
-            let profileEditVC = ProfileEditViewController(reactor: ProfileEditReactor(user: user, usecase: profileEditUseCase), imageString: user.profilePicture)
+            let nicknameUseCase = DIContainerService.shared.makeNickNameCheckUseCase()
+            let profileEditVC = ProfileEditViewController(reactor: ProfileEditReactor(user: user, usecase: profileEditUseCase, nicknameUsecase: nicknameUseCase), imageString: user.profilePicture)
             profileEditVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(profileEditVC, animated: true)
         case 1:

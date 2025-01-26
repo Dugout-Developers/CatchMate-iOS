@@ -38,6 +38,12 @@ final class ProfileEditViewController: BaseViewController, View {
         label.textColor = .cmNonImportantTextColor
         return label
     }()
+    private let nicknameVaildateLabel: UILabel = {
+        let label = UILabel()
+        label.text = ""
+        label.applyStyle(textStyle: FontSystem.caption01_semiBold)
+        return label
+    }()
     
     private let nicknameCountLabel: UILabel = {
         let label = UILabel()
@@ -163,8 +169,13 @@ extension ProfileEditViewController {
             .disposed(by: disposeBag)
         
         saveButton.rx.tap
-            .subscribe { _ in
-                reactor.action.onNext(.editProfile)
+            .withUnretained(self)
+            .subscribe {vc,  _ in
+                if reactor.currentState.nickNameValidate == .failed {
+                    vc.showToast(message: "중복된 닉네임입니다.", buttonContainerExists: true)
+                } else {
+                    reactor.action.onNext(.editProfile)
+                }
             }
             .disposed(by: disposeBag)
         
@@ -227,18 +238,36 @@ extension ProfileEditViewController {
             }
             .disposed(by: disposeBag)
 
-// 닉네임 중복 검사 -> 나중에 연결
-//        nicknameTextField.rx.text.orEmpty
-//            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
-//            .distinctUntilChanged()
-//            .map { _ in Reactor.Action.endEditNickname }
-//            .bind(to: reactor.action)
-//            .disposed(by: disposeBag)
-//        
-//        nicknameTextField.rx.controlEvent(.editingDidEnd)
-//            .map { Reactor.Action.endEditNickname }
-//            .bind(to: reactor.action)
-//            .disposed(by: disposeBag)
+        nicknameTextField.rx.text.orEmpty
+            .skip(1)
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
+            .distinctUntilChanged()
+            .map { _ in Reactor.Action.endEditNickname }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        nicknameTextField.rx.controlEvent(.editingDidEnd)
+            .map { Reactor.Action.endEditNickname }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        reactor.state.map { $0.nickNameValidate}
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .subscribe(onNext: { vc, state in
+                print(state)
+                vc.nicknameVaildateLabel.text = state.rawValue
+                switch state {
+                case .none:
+                    vc.nicknameVaildateLabel.textColor = .white
+                case .success:
+                    vc.nicknameVaildateLabel.textColor = .cmSystemBule
+                case .failed:
+                    vc.nicknameVaildateLabel.textColor = .cmSystemRed
+                }
+                vc.nicknameVaildateLabel.applyStyle(textStyle: FontSystem.caption01_semiBold)
+            })
+            .disposed(by: disposeBag)
     }
 }
 
@@ -257,7 +286,8 @@ extension ProfileEditViewController {
                     flex.addItem(nicknameLabel)
                     flex.addItem(nicknameCountLabel)
                 }.marginBottom(12)
-                flex.addItem(nicknameTextField).marginBottom(20).width(100%)
+                flex.addItem(nicknameTextField).marginBottom(4).width(100%)
+                flex.addItem(nicknameVaildateLabel).marginBottom(20).width(100%).height(UIFont.caption01_semiBold.pointSize)
             }.marginBottom(8)
             flex.addItem(teamSection).direction(.column).backgroundColor(.white).justifyContent(.start).alignItems(.start).paddingHorizontal(MainGridSystem.getMargin()).define { flex in
                 flex.addItem().direction(.row).width(100%).justifyContent(.start).alignItems(.center).define { flex in
