@@ -1114,6 +1114,15 @@
 			path = Chat;
 			sourceTree = "<group>";
 		};
+		535AA0392D461875007C7690 /* StateView */ = {
+			isa = PBXGroup;
+			children = (
+				535AA0372D4612D0007C7690 /* EmptyView.swift */,
+				53B895CE2CA2985000029130 /* ErrorPageView.swift */,
+			);
+			path = StateView;
+			sourceTree = "<group>";
+		};
 		536BDDA12C189B230043B1DA = {
 			isa = PBXGroup;
 			children = (
@@ -1237,8 +1246,7 @@
 		536BDDE62C1971950043B1DA /* View */ = {
 			isa = PBXGroup;
 			children = (
-				535AA0372D4612D0007C7690 /* EmptyView.swift */,
-				53B895CE2CA2985000029130 /* ErrorPageView.swift */,
+				535AA0392D461875007C7690 /* StateView */,
 				533A2B282C28558D00A59340 /* Sign */,
 				536BDE102C1B51DE0043B1DA /* TabBar */,
 				536BDE322C1B578C0043B1DA /* Home */,

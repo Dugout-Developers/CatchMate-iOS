@@ -25,6 +25,7 @@ final class HomeViewController: BaseViewController, View {
     override var buttonContainerExists: Bool {
         return false
     }
+    private let emptyView = EmptyView(type: .home)
     private let filterScrollView = UIScrollView()
     private let filterContainerView = UIView()
     private let dateFilterButton = OptionButtonView(title: "경기 날짜", filter: .date)
@@ -202,6 +203,14 @@ extension HomeViewController {
                 vc.handleError(error)
             }
             .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.posts.isEmpty}
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .subscribe { vc, isEmpty in
+                vc.changeView(isEmpty)
+            }
+            .disposed(by: disposeBag)
     
     }
     private func updateFilterContainerLayout() {
@@ -271,6 +280,8 @@ extension HomeViewController {
         // 필터 컨테이너 뷰 추가
         view.addSubview(filterScrollView)
         view.addSubview(tableView)
+        view.addSubview(emptyView)
+        emptyView.isHidden = true
         filterScrollView.addSubview(filterContainerView)
         filterContainerView.flex.direction(.row).paddingHorizontal(18).paddingVertical(11).justifyContent(.start).alignItems(.center).define { flex in
             flex.addItem(dateFilterButton).marginRight(8)
@@ -279,8 +290,8 @@ extension HomeViewController {
         }
     }
     
-
-override func viewDidLayoutSubviews() {
+    
+    override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         filterScrollView.pin.top(view.pin.safeArea.top).left(view.pin.safeArea.left).right(view.pin.safeArea.right).height(50)
         filterContainerView.pin.all()
@@ -288,7 +299,22 @@ override func viewDidLayoutSubviews() {
         filterContainerView.flex.layout(mode: .adjustWidth)
         filterScrollView.contentSize = filterContainerView.frame.size
         tableView.pin.below(of: filterContainerView).marginTop(12).bottom(view.pin.safeArea.bottom).left().right()
+        // SnapKit 기반 EmptyView를 FlexLayout에 맞게 크기 계산
+        emptyView.layoutIfNeeded() // SnapKit 제약 조건에 따라 레이아웃 적용
+        let emptyViewSize = emptyView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize) // 콘텐츠 크기 계산
+        emptyView.pin.size(emptyViewSize).center()
+        emptyView.flex.layout()
         filterContainerView.flex.layout()
+    }
+    
+    private func changeView(_ isEmpty: Bool) {
+        if isEmpty {
+            tableView.isHidden = true
+            emptyView.isHidden = false
+        } else {
+            tableView.isHidden = false
+            emptyView.isHidden = true
+        }
     }
 }
 

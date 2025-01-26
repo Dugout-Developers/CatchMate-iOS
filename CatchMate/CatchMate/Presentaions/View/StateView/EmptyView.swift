@@ -10,6 +10,7 @@ import SnapKit
 enum EmptyViewType {
     case favorite
     case chat
+    case home
     
     var title: String {
         switch self {
@@ -17,6 +18,8 @@ enum EmptyViewType {
             return "찜한 게시물이 없어요"
         case .chat:
             return "참여한 채팅이 없어요"
+        case .home:
+            return "조건에 맞는 게시물이 없어요"
         }
     }
     
@@ -26,6 +29,8 @@ enum EmptyViewType {
             return "야구 팬들이 올린 다양한 글을 둘러보고\n마음에 드는 직관 글을 저장해보세요!"
         case .chat:
             return "마음에 드는 직관 글에 참여하여\n채팅을 시작해보세요!"
+        case .home:
+            return ""
         }
     }
 }
