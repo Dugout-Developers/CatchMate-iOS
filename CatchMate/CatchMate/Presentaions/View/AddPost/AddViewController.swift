@@ -255,6 +255,12 @@ final class AddViewController: BaseViewController, View {
 }
 // MARK: - Bind
 extension AddViewController {
+    private func updateAddTextCount(_ count: Int) {
+        addTextCount.text = "\(count)/300"
+        addTextCount.applyStyle(textStyle: FontSystem.body02_medium)
+        addTextCount.flex.markDirty()
+        contentView.flex.layout(mode: .adjustHeight)
+    }
     func bind(reactor: AddReactor) {
         _selectedGender
             .map{Reactor.Action.changeGender($0)}
@@ -283,6 +289,11 @@ extension AddViewController {
             .disposed(by: disposeBag)
         
         textview.rx.text.orEmpty
+            .distinctUntilChanged()
+            .map { text in
+                let string = String(text.prefix(300))
+                return string
+            }
             .map { Reactor.Action.changeAddText($0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -384,12 +395,15 @@ extension AddViewController {
             .disposed(by: disposeBag)
         
         reactor.state.map{$0.addText}
-            .distinctUntilChanged()
             .compactMap{$0}
             .withUnretained(self)
             .subscribe { vc, text in
+                print(text)
                 vc.textview.text = text
                 vc.textview.updateTextStyle()
+                print(text.count)
+                vc.updateAddTextCount(text.count)
+                
             }
             .disposed(by: disposeBag)
         

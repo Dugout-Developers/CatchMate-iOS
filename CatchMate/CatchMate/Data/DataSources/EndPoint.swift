@@ -61,6 +61,9 @@ enum Endpoint {
     /// 직관 신청 거절
     case rejectApply
     
+    /// 채팅 리스트 조회
+    case chatList
+    
     /// 내정보 조회
     case loadMyInfo
     /// 내정보 수정
@@ -119,6 +122,8 @@ enum Endpoint {
             /// acceptApply = /enroll/{enrollId}/accept
             /// rejectApply = /enroll/{enrollId}/reject
             return "/enrolls/"
+        case .chatList:
+            return "/chats/list"
         case .loadMyInfo:
             return "/users/profile"
         case .editProfile:
@@ -179,6 +184,8 @@ enum Endpoint {
             return "직관 신청 수락 API"
         case .rejectApply:
             return "직관 신청 거절 API"
+        case .chatList:
+            return "채팅방 리스트 조회 API"
         case .loadMyInfo:
             return "내 정보 조회 API"
         case .editProfile:
@@ -238,6 +245,8 @@ enum Endpoint {
             return .patch
         case .rejectApply:
             return .patch
+        case .chatList:
+            return .get
         case .loadMyInfo:
             return .get
         case .editProfile:

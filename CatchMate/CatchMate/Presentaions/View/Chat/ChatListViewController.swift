@@ -21,6 +21,7 @@ final class ChatListViewController: BaseViewController, View {
         return false
     }
     private let chatListTableView = UITableView()
+    private let emptyView = EmptyView(type: .chat)
     var reactor: ChatListReactor
     
     override func viewWillAppear(_ animated: Bool) {
@@ -28,11 +29,6 @@ final class ChatListViewController: BaseViewController, View {
         tabBarController?.tabBar.isHidden = false
         reactor.action.onNext(.selectChat(nil))
         reactor.action.onNext(.loadChatList)
-        NotificationListDataSourceImpl(tokenDataSource: TokenDataSourceImpl()).loadNotificationList()
-            .subscribe { dtoList in
-                print(dtoList)
-            }
-            .disposed(by: disposeBag)
     }
 
     
@@ -49,8 +45,8 @@ final class ChatListViewController: BaseViewController, View {
         view.backgroundColor = .cmBackgroundColor
     }
     
-    init() {
-        self.reactor = ChatListReactor()
+    init(reactor: ChatListReactor) {
+        self.reactor = reactor
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -60,7 +56,7 @@ final class ChatListViewController: BaseViewController, View {
     }
     
     private func setupNavigationBar() {
-        setupLeftTitle("채팅목록")
+        setupLeftTitle("채팅")
     }
     
     private func setupTableView() {
@@ -77,7 +73,7 @@ final class ChatListViewController: BaseViewController, View {
 extension ChatListViewController {
     func bind(reactor: ChatListReactor) {
         reactor.state.map{$0.chatList}
-            .bind(to: chatListTableView.rx.items(cellIdentifier: "ChatListTableViewCell", cellType: ChatListTableViewCell.self)) {  (row, item, cell) in
+            .bind(to: chatListTableView.rx.items(cellIdentifier: "ChatListTableViewCell", cellType: ChatListTableViewCell.self)) { (row, item, cell) in
                 cell.selectionStyle = .none
                 cell.configData(chat: item)
                 cell.updateConstraints()
@@ -95,21 +91,44 @@ extension ChatListViewController {
         reactor.state.map{$0.selectedChat}
             .compactMap{$0}
             .withUnretained(self)
-            .subscribe(onNext: { vc, chat in
+            .subscribe(onNext: { vc, _ in
+                let chat = Chat.mockupData[0]
                 let roomVC = ChatRoomViewController(chat: chat)
                 roomVC.hidesBottomBarWhenPushed = true
                 vc.navigationController?.pushViewController(roomVC, animated: true)
             })
             .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.chatList.isEmpty}
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .subscribe { vc, isEmpty in
+                vc.changeView(isEmpty)
+            }
+            .disposed(by: disposeBag)
     }
 }
 // MARK: - UI
 extension ChatListViewController {
+    
+    private func changeView(_ isEmpty: Bool) {
+        if isEmpty {
+            chatListTableView.isHidden = true
+            emptyView.isHidden = false
+        } else {
+            chatListTableView.isHidden = false
+            emptyView.isHidden = true
+        }
+    }
+    
     private func setupUI() {
-        view.addSubview(chatListTableView)
+        view.addSubviews(views: [chatListTableView, emptyView])
         chatListTableView.snp.makeConstraints { make in
             make.top.bottom.equalTo(view.safeAreaLayoutGuide)
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(18)
+        }
+        emptyView.snp.makeConstraints { make in
+            make.center.equalTo(view.safeAreaLayoutGuide)
         }
     }
 }

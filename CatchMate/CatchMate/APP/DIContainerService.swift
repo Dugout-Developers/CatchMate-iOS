@@ -189,6 +189,14 @@ class DIContainerService {
         return NotificationListReactor(loadlistUsecase: loadListUsecase, deleteNotiUsecase: deleteUsecase)
     }
     
+    func MakeChatListReactor() -> ChatListReactor {
+        let loadChatListDS = LoadChatListDataSourceImpl(tokenDataSource: tokenDS)
+        let loadChatListRepo = LoadChatListRepositoryImpl(chatListDataSource: loadChatListDS)
+        let loadChatListUC = LoadChatListUseCaseImpl(loadChatListRepository: loadChatListRepo)
+        
+        return ChatListReactor(loadchatListUsecase: loadChatListUC)
+    }
+    
     
     // MARK: - 특정 Usecase만 필요할 때
     func makeLogoutUseCase() -> LogoutUseCase {
@@ -203,5 +211,12 @@ class DIContainerService {
         let profileEditRepository = ProfileEditRepositoryImpl(profileEditDS: profileEditDataSource)
         let profileEditUsecase = ProfileEditUseCaseImpl(repository: profileEditRepository)
         return profileEditUsecase
+    }
+    
+    func makeNickNameCheckUseCase() -> NicknameCheckUseCase {
+        let nicknameCheckDataSource = NicknameCheckDataSourceImpl()
+        let nicknameCheckRepository = NicknameCheckRepositoryImpl(nicknameDS: nicknameCheckDataSource)
+        let nicknameCheckUsecase = NicknameCheckUseCaseImpl(nicknameRepository: nicknameCheckRepository)
+        return nicknameCheckUsecase
     }
 }
