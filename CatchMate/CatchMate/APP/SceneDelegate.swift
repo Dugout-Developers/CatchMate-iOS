@@ -27,6 +27,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             .withUnretained(self)
             .subscribe { scene, result in
                 if result {
+                    do {
+                        SocketService.shared = try SocketService()
+                        print("✅ SocketService 인스턴스 생성 성공")
+                        SocketService.shared?.connect()  // WebSocket 연결
+                    } catch {
+                        print("❌ SocketService 초기화 실패: \(error)")
+                    }
                     scene.moveMainTab()
                 } else {
                     scene.moveSignIn()

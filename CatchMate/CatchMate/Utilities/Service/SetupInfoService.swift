@@ -15,6 +15,7 @@ final class SetupInfoService {
         case id
         case email
         case team
+        case nickName
     }
     /// UserInfo 저장 -> 개별 저장
     func saveUserInfo(_ user: UserInfoDTO) {
@@ -23,6 +24,7 @@ final class SetupInfoService {
         UserDefaults.standard.set(user.id, forKey: UserDefaultsKeys.SetupInfo.UserInfo.id)
         UserDefaults.standard.set(user.email, forKey: UserDefaultsKeys.SetupInfo.UserInfo.email)
         UserDefaults.standard.set(user.team, forKey: UserDefaultsKeys.SetupInfo.UserInfo.team)
+        UserDefaults.standard.set(user.nickname, forKey: UserDefaultsKeys.SetupInfo.UserInfo.nickName)
     }
     
     /// 필요한 정보 get
@@ -34,7 +36,8 @@ final class SetupInfoService {
             return UserDefaults.standard.string(forKey: UserDefaultsKeys.SetupInfo.UserInfo.email)
         case .team:
             return UserDefaults.standard.string(forKey: UserDefaultsKeys.SetupInfo.UserInfo.team)
-
+        case .nickName:
+            return UserDefaults.standard.string(forKey: UserDefaultsKeys.SetupInfo.UserInfo.nickName)
         }
     }
     
@@ -43,6 +46,7 @@ final class SetupInfoService {
         UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.SetupInfo.UserInfo.id)
         UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.SetupInfo.UserInfo.email)
         UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.SetupInfo.UserInfo.team)
+        UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.SetupInfo.UserInfo.nickName)
     }
 }
 

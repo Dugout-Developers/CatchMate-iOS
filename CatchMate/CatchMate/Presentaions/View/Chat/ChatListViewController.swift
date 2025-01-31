@@ -91,7 +91,8 @@ extension ChatListViewController {
         reactor.state.map{$0.selectedChat}
             .compactMap{$0}
             .withUnretained(self)
-            .subscribe(onNext: { vc, _ in
+            .subscribe(onNext: { vc, chatInfo in
+                SocketService.shared?.subscribe(roomID: String(chatInfo.chatRoomId))
                 let chat = Chat.mockupData[0]
                 let roomVC = ChatRoomViewController(chat: chat)
                 roomVC.hidesBottomBarWhenPushed = true

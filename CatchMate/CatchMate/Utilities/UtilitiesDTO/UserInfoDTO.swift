@@ -11,4 +11,5 @@ struct UserInfoDTO {
     let id: String
     let email: String
     let team: String
+    let nickname: String
 }

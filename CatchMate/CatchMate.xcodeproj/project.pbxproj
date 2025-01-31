@@ -191,6 +191,10 @@
 		535AA0322D460330007C7690 /* LoadChatListRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535AA0312D46032E007C7690 /* LoadChatListRepository.swift */; };
 		535AA0352D460480007C7690 /* LoadChatListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535AA0342D46047B007C7690 /* LoadChatListUseCase.swift */; };
 		535AA0382D4612D6007C7690 /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535AA0372D4612D0007C7690 /* EmptyView.swift */; };
+		535AA03C2D4667E3007C7690 /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = 535AA03B2D4667E3007C7690 /* Starscream */; };
+		535AA03E2D473129007C7690 /* SocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535AA03D2D473123007C7690 /* SocketService.swift */; };
+		535AA0402D4CA346007C7690 /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535AA03F2D4CA341007C7690 /* ChatMessage.swift */; };
+		535AA0412D4CA346007C7690 /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535AA03F2D4CA341007C7690 /* ChatMessage.swift */; };
 		535B3A8F2D32AC03003FBBBF /* PostList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B3A8E2D32ABFE003FBBBF /* PostList.swift */; };
 		535B3A902D32AC03003FBBBF /* PostList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B3A8E2D32ABFE003FBBBF /* PostList.swift */; };
 		535B3A922D339367003FBBBF /* UpPostResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B3A912D33935F003FBBBF /* UpPostResponseDTO.swift */; };
@@ -562,6 +566,8 @@
 		535AA0312D46032E007C7690 /* LoadChatListRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadChatListRepository.swift; sourceTree = "<group>"; };
 		535AA0342D46047B007C7690 /* LoadChatListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadChatListUseCase.swift; sourceTree = "<group>"; };
 		535AA0372D4612D0007C7690 /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
+		535AA03D2D473123007C7690 /* SocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketService.swift; sourceTree = "<group>"; };
+		535AA03F2D4CA341007C7690 /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
 		535B3A8E2D32ABFE003FBBBF /* PostList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostList.swift; sourceTree = "<group>"; };
 		535B3A912D33935F003FBBBF /* UpPostResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpPostResponseDTO.swift; sourceTree = "<group>"; };
 		536548A22C3EF3B700C2309A /* FavoriteListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteListViewController.swift; sourceTree = "<group>"; };
@@ -759,6 +765,7 @@
 				536BDE1B2C1B52510043B1DA /* RxCocoa in Frameworks */,
 				536BDE172C1B52510043B1DA /* FlexLayout in Frameworks */,
 				530DD6192C4F88C600A7D6CE /* FirebaseMessaging in Frameworks */,
+				535AA03C2D4667E3007C7690 /* Starscream in Frameworks */,
 				533A2B3B2C2C590400A59340 /* RxKakaoSDK in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -867,6 +874,7 @@
 		531786722C202F0300ACEF6A /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				535AA03D2D473123007C7690 /* SocketService.swift */,
 				5382490F2C3139C80074B583 /* AppleLoginUserDefaultsService.swift */,
 				5301E2952C5B2BAE0078E910 /* LoggerService.swift */,
 				534E39D22C634E26006D180E /* LoginUserDefaultsService.swift */,
@@ -1298,6 +1306,7 @@
 		536BDDED2C1972120043B1DA /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				535AA03F2D4CA341007C7690 /* ChatMessage.swift */,
 				535AA0282D45FD5F007C7690 /* ChatListInfo.swift */,
 				535B3A8E2D32ABFE003FBBBF /* PostList.swift */,
 				53368C982D302B6900D129EE /* TempPost.swift */,
@@ -1750,6 +1759,7 @@
 				530DD6182C4F88C600A7D6CE /* FirebaseMessaging */,
 				5301E2AD2C5BC45E0078E910 /* Kingfisher */,
 				53368C872D2F9EED00D129EE /* NaverThirdPartyLogin */,
+				535AA03B2D4667E3007C7690 /* Starscream */,
 			);
 			productName = CatchMate;
 			productReference = 536BDDAA2C189B230043B1DA /* CatchMate.app */;
@@ -1834,6 +1844,7 @@
 				530DD6172C4F88B000A7D6CE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				5301E2AC2C5BC44D0078E910 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				53368C862D2F9EED00D129EE /* XCRemoteSwiftPackageReference "naveridlogin-sdk-ios" */,
+				535AA03A2D4667E3007C7690 /* XCRemoteSwiftPackageReference "Starscream" */,
 			);
 			productRefGroup = 536BDDAB2C189B230043B1DA /* Products */;
 			projectDirPath = "";
@@ -2025,6 +2036,7 @@
 				53EECB032D1151EE00775FD6 /* LoadAllReceiveAppliesUseCase.swift in Sources */,
 				5378EA9B2C6487A600A2422C /* ReceiveMateListCell.swift in Sources */,
 				536BDE272C1B53150043B1DA /* UIColor+Extension.swift in Sources */,
+				535AA03E2D473129007C7690 /* SocketService.swift in Sources */,
 				533B291F2C77079100BFE9F6 /* LoadFavoriteListDataSource.swift in Sources */,
 				531E4C232C6A75320052E754 /* ChatSideSheetViewController.swift in Sources */,
 				53B8E2612C61229A001D0ADF /* AddPostRepositoryImpl.swift in Sources */,
@@ -2058,6 +2070,7 @@
 				531786682C20048B00ACEF6A /* CMPickerTextField.swift in Sources */,
 				531786532C1C8BFB00ACEF6A /* BaseViewController.swift in Sources */,
 				53E7DBAA2CA5E52800DC058D /* DeletePostUseCase.swift in Sources */,
+				535AA0412D4CA346007C7690 /* ChatMessage.swift in Sources */,
 				53E7DBA12CA52BD900DC058D /* DeletePostDataSource.swift in Sources */,
 				5383BE852C327FF9008940F1 /* NonMembersAccessViewController.swift in Sources */,
 				53ACBA542C85AF07004FAF00 /* ApplyDataSource.swift in Sources */,
@@ -2247,6 +2260,7 @@
 				533B29342C771E5200BFE9F6 /* Team.swift in Sources */,
 				533B293F2C771F0400BFE9F6 /* CheerStyles.swift in Sources */,
 				5306F7BF2C9081C000292C6E /* ReceivedAppliesTest.swift in Sources */,
+				535AA0402D4CA346007C7690 /* ChatMessage.swift in Sources */,
 				53EECB0B2D13E4CF00775FD6 /* AlarmInfo.swift in Sources */,
 				53E7DBB62CAB3CB200DC058D /* ApplyList.swift in Sources */,
 				533B29422C771F1000BFE9F6 /* Announcements.swift in Sources */,
@@ -2651,6 +2665,14 @@
 				kind = branch;
 			};
 		};
+		535AA03A2D4667E3007C7690 /* XCRemoteSwiftPackageReference "Starscream" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/daltoniam/Starscream.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.8;
+			};
+		};
 		536BDE092C1B4F1F0043B1DA /* XCRemoteSwiftPackageReference "PinLayout" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/layoutBox/PinLayout.git";
@@ -2721,6 +2743,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 533A2B392C2C581300A59340 /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */;
 			productName = RxKakaoSDK;
+		};
+		535AA03B2D4667E3007C7690 /* Starscream */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 535AA03A2D4667E3007C7690 /* XCRemoteSwiftPackageReference "Starscream" */;
+			productName = Starscream;
 		};
 		536BDE142C1B52510043B1DA /* PinLayout */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -123,7 +123,7 @@ enum Endpoint {
             /// rejectApply = /enroll/{enrollId}/reject
             return "/enrolls/"
         case .chatList:
-            return "/chats/list"
+            return "/chat-rooms/list"
         case .loadMyInfo:
             return "/users/profile"
         case .editProfile:

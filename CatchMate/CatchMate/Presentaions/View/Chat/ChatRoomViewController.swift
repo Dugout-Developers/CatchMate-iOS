@@ -46,6 +46,29 @@ final class ChatRoomViewController: BaseViewController, View {
             self?.scrollToBottom(animated: true)
         })
         view.backgroundColor = .white
+        testSocketSend()
+    }
+    
+    //Test Code
+    func testSocketSend() {
+        let message = ChatSocketMessage(messageType: .talk, sender: "네이벙", content: "채팅방 소켓 Send 테스트222")
+        guard let jsonString = message.encodeMessage() else {
+            print("❌ 메시지 인코딩 실패")
+            return
+        }
+        
+        SocketService.shared?.sendMessage(to: String(2), message: jsonString)
+        print("📤 테스트 메시지 전송됨: \(jsonString)")
+        
+        SocketService.shared?.onMessageReceived = { receivedRoomID, receivedMessage in
+            print("📩 수신된 메시지 (채팅방 \(receivedRoomID)): \(receivedMessage)")
+
+            if let receivedChatMessage = ChatSocketMessage.decode(from: receivedMessage) {
+                print("✅ 메시지 파싱 성공: \(receivedChatMessage)")
+            } else {
+                print("❌ 메시지 파싱 실패")
+            }
+        }
     }
     // 임시
     private let user = User(id: 1, email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: nil, allAlarm: true, chatAlarm: true, enrollAlarm: true, eventAlarm: true)

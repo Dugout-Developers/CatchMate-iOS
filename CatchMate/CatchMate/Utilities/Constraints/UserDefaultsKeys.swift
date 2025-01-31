@@ -13,6 +13,7 @@ enum UserDefaultsKeys {
             static let id = "UserId"
             static let email = "UserEmail"
             static let team = "UserFavoriteTeam"
+            static let nickName = "UserNickName"
         }
     }
     
