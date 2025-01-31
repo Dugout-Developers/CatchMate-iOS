@@ -16,5 +16,4 @@ enum UserDefaultsKeys {
             static let nickName = "UserNickName"
         }
     }
-    
 }

@@ -11,7 +11,7 @@ import ReactorKit
 
 final class HomeReactor: Reactor {
     enum Action {
-        case viewDidLoad
+        case setupUserInfo
         case updateDateFilter(Date?)
         case updateTeamFilter([Team])
         case updateNumberFilter(Int?)
@@ -79,7 +79,7 @@ final class HomeReactor: Reactor {
         case .selectPost(let post):
             return Observable.just(Mutation.setSelectedPost(post))
             
-        case .viewDidLoad:
+        case .setupUserInfo:
             return setupUseCase.setupInfo()
                 .do(onNext: { result in
                     SetupInfoService.shared.saveUserInfo(UserInfoDTO(id: String(result.user.id), email: result.user.email, team: result.user.team.rawValue, nickname: result.user.nickName))

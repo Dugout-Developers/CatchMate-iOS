@@ -10,21 +10,19 @@ import UIKit
 
 final class SetupInfoService {
     static let shared = SetupInfoService()
-    // MARK: - UserInfo 관련
-    enum UserInfoType {
-        case id
-        case email
-        case team
-        case nickName
-    }
-    /// UserInfo 저장 -> 개별 저장
+    /// UserInfo 저장 - 한번에
     func saveUserInfo(_ user: UserInfoDTO) {
-        LoggerService.shared.debugLog("UserInfo 로컬 저장")
-        LoggerService.shared.debugLog("\(user.id) - \(user.email) - team: \(user.team)")
+        LoggerService.shared.debugLog("UserInfo 로컬 전체 저장")
+        LoggerService.shared.debugLog("\(user.id) - \(user.email) - team: \(user.team) - nickName: \(user.nickname)")
         UserDefaults.standard.set(user.id, forKey: UserDefaultsKeys.SetupInfo.UserInfo.id)
         UserDefaults.standard.set(user.email, forKey: UserDefaultsKeys.SetupInfo.UserInfo.email)
         UserDefaults.standard.set(user.team, forKey: UserDefaultsKeys.SetupInfo.UserInfo.team)
         UserDefaults.standard.set(user.nickname, forKey: UserDefaultsKeys.SetupInfo.UserInfo.nickName)
+    }
+    
+    /// UserInfo 저장 - 개별 저장
+    func saveUserInfo(type: UserInfoType, _ value: String) {
+        UserDefaults.standard.set(value, forKey: type.key)
     }
     
     /// 필요한 정보 get
