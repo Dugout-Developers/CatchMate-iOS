@@ -12,199 +12,292 @@ import RxSwift
 enum SocketError: LocalizedErrorWithCode {
     case invalidURL
     case notConnected
+    case disconnected(reason: String, code: Int)
+    case invalidMessage
+    case subscriptionFailed(roomID: String)
+    case unsubscriptionFailed(roomID: String)
+    case sendFailed(reason: String)
+    
     var statusCode: Int {
         switch self {
         case .invalidURL:
             return -10001
         case .notConnected:
             return -10002
+        case .disconnected:
+            return -10003
+        case .invalidMessage:
+            return -10004
+        case .subscriptionFailed:
+            return -10005
+        case .unsubscriptionFailed:
+            return -10006
+        case .sendFailed:
+            return -10007
         }
     }
+    
     var errorDescription: String? {
         switch self {
         case .invalidURL:
             return "URL 형식이 잘못되었습니다."
         case .notConnected:
-            return "소켓이 연결되어 있지않아 요청을 처리할 수 없습니다."
+            return "소켓이 연결되어 있지 않아 요청을 처리할 수 없습니다."
+        case .disconnected(let reason, let code):
+            return "소켓 연결이 끊어졌습니다. (사유: \(reason), 코드: \(code))"
+        case .invalidMessage:
+            return "수신한 메시지의 형식이 올바르지 않습니다."
+        case .subscriptionFailed(let roomID):
+            return "채팅방 \(roomID) 구독에 실패했습니다."
+        case .unsubscriptionFailed(let roomID):
+            return "채팅방 \(roomID) 구독 해제에 실패했습니다."
+        case .sendFailed(let reason):
+            return "메시지를 전송할 수 없습니다. (사유: \(reason))"
         }
     }
 }
-final class SocketService: WebSocketDelegate {
+final class SocketService {
     static var shared: SocketService?
     
-    private var socket: WebSocket!
-    private var isConnected = false
     private let serverURL: URL
-    private var subscriptions: [String: String] = [:]
-    private let delegateQueue = DispatchQueue(label: "socketService.queue")
+    private var socket: WebSocket?
+    private let disposeBag = DisposeBag()
     
-    // Callbacks
-    var onMessageReceived: ((String, String) -> Void)? // (RoomID, Message)
-    var onConnectionChange: ((Bool) -> Void)? // IsConnected
+    private var subscriptions: [String: String] = [:]
+    
+    private let messageSubject = PublishSubject<(String, String)>() // (roomID, message)
+    private let errorSubject = PublishSubject<Error>()
+    private let connectionStatusSubject = BehaviorSubject<Bool>(value: false)
+    
+    var messageObservable: Observable<(String, String)> {
+        return messageSubject.asObservable()
+    }
+    
+    var errorObservable: Observable<Error> {
+        return errorSubject.asObservable()
+    }
+    
+    var connectionStatus: Observable<Bool> {
+        return connectionStatusSubject.asObservable()
+    }
     
     init() throws {
         guard let urlString = Bundle.main.socketURL, let url = URL(string: urlString) else {
             throw SocketError.invalidURL
         }
         self.serverURL = url
+        let request = URLRequest(url: serverURL)
+        self.socket = WebSocket(request: request)
+        self.socket?.delegate = self
     }
     
     func connect() {
-        var request = URLRequest(url: serverURL)
-        request.timeoutInterval = 5
-        socket = WebSocket(request: request)
-        socket.delegate = self
-        socket.connect()
+        print("🔄 WebSocket 연결 시도")
+        socket?.connect()
     }
     
     func disconnect() {
-        sendFrame("DISCONNECT\n\n\0")
-        socket.disconnect()
-        isConnected = false
-    }
-    
-    private func sendFrame(_ frame: String) {
-        delegateQueue.async {
-            self.socket.write(string: frame)
-        }
+        socket?.disconnect()
+        connectionStatusSubject.onNext(false)
+        print("🔴 WebSocket 연결 종료")
     }
     
     // MARK: - STOMP Protocol Methods
     func subscribe(roomID: String) {
-        guard isConnected else {
-            LoggerService.shared.debugLog("❌ WebSocket error: 소켓이 연결되어 있지 않습니다.")
-            return
+        do {
+            let isConnected = try connectionStatusSubject.value()
+            guard isConnected else {
+                print("🔄 WebSocket이 연결되지 않음. 연결 후 구독 요청")
+                connect()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    do {
+                        let reconnected = try self.connectionStatusSubject.value()
+                        if !reconnected {
+                            print("❌ 재연결 실패. 에러 방출")
+                            self.errorSubject.onNext(SocketError.notConnected)
+                        } else {
+                            print("✅ 재연결 성공. 구독 진행")
+                            self.subscribe(roomID: roomID)
+                        }
+                    } catch {
+                        self.errorSubject.onNext(error)
+                    }
+                }
+                return
+            }
+            
+            let subscriptionID = UUID().uuidString
+            subscriptions[roomID] = subscriptionID
+            
+            let frame = """
+                SUBSCRIBE
+                id:\(subscriptionID)
+                destination:/topic/chat.\(roomID)
+                
+                \0
+                """
+            socket?.write(string: frame)
+            print("✅ 채팅방 \(roomID) 구독 요청 보냄")
+            
+        } catch {
+            print("⚠️ WebSocket 상태 확인 실패: \(error)")
         }
-        let subscriptionID = UUID().uuidString
-        subscriptions[roomID] = subscriptionID
-        let frame = """
-           SUBSCRIBE
-           id:\(subscriptionID)
-           destination:/topic/chat.\(roomID)
-           
-           \0
-           """
-        sendFrame(frame)
-        LoggerService.shared.debugLog("✅ 채팅방 \(roomID) 구독 요청 보냄")
     }
     
     func unsubscribe(roomID: String) {
-        guard let subscriptionID = subscriptions[roomID] else {
-            print("Room \(roomID) is not subscribed")
-            return
+        do {
+            let isConnected = try connectionStatusSubject.value()
+            guard isConnected else {
+                print("⚠️ WebSocket이 연결되지 않음. 구독 해제 불가")
+                errorSubject.onNext(SocketError.notConnected)
+                return
+            }
+
+            guard let subscriptionID = subscriptions[roomID] else {
+                print("⚠️ 채팅방 \(roomID) 구독 정보가 없음.")
+                return
+            }
+
+            let frame = """
+            UNSUBSCRIBE
+            id:\(subscriptionID)
+
+            \0
+            """
+            socket?.write(string: frame)
+            subscriptions.removeValue(forKey: roomID)
+            print("🚫 채팅방 \(roomID) 구독 해제 요청 전송")
+
+        } catch {
+            print("⚠️ WebSocket 상태 확인 실패: \(error)")
+            errorSubject.onNext(error)
         }
-        let frame = """
-           UNSUBSCRIBE
-           id:\(subscriptionID)
-           
-           \0
-           """
-        sendFrame(frame)
-        subscriptions.removeValue(forKey: roomID)
     }
     
     func sendMessage(to roomID: String, message: String) {
-        guard isConnected else {
-            print("Socket is not connected")
-            return
+        do {
+            let isConnected = try connectionStatusSubject.value()
+            guard isConnected else {
+                print("⚠️ WebSocket이 연결되지 않음. 메시지 전송 불가")
+                errorSubject.onNext(SocketError.notConnected)
+                return
+            }
+
+            let frame = """
+            SEND
+            destination:/app/chat.\(roomID)
+            content-type:application/json
+
+            \(message)\0
+            """
+            socket?.write(string: frame)
+            print("📤 WebSocket 메시지 전송: \(frame)")
+
+        } catch {
+            print("⚠️ WebSocket 상태 확인 실패: \(error)")
         }
-        let frame = """
-           SEND
-           destination:/app/chat.\(roomID)
-           content-type: application/json
-           
-           \(message)\0
-           """
-        sendFrame(frame)
     }
-    // MARK: - WebSocketDelegate Methods
+    
+    // 기존 구독 복원 (재연결 시 실행)
+    private func restoreSubscriptions() {
+        for (roomID, _) in subscriptions {
+            subscribe(roomID: roomID)
+        }
+    }
+}
+
+// MARK: - WebSocket 이벤트 처리
+extension SocketService: WebSocketDelegate {
     func didReceive(event: Starscream.WebSocketEvent, client: any Starscream.WebSocketClient) {
         switch event {
         case .connected:
-            isConnected = true
-            print("✅ WebSocket connected")
-            onConnectionChange?(true)
-            sendConnectFrame()
-        case .disconnected(let reason, let code):
-            isConnected = false
-            print("⚠️ WebSocket disconnected: \(reason) with code: \(code)")
-            onConnectionChange?(false)
+            connectionStatusSubject.onNext(true)
+            print("✅ WebSocket 연결 성공")
+            restoreSubscriptions()
             
-            // 🔹 자동 재연결 로직 추가 (5초 후 재연결 시도)
+        case .disconnected(let reason, let code):
+            connectionStatusSubject.onNext(false)
+            print("🔴 WebSocket 연결 해제됨: \(reason) (code: \(code))")
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                if !self.isConnected {
-                    print("🔄 WebSocket 재연결 시도...")
-                    self.connect()
+                do {
+                    let isConnected = try self.connectionStatusSubject.value()
+                    if !isConnected {
+                        self.errorSubject.onNext(SocketError.disconnected(reason: reason, code: Int(code)))
+                    }
+                } catch {
+                    self.errorSubject.onNext(error)
                 }
             }
+            
+            retryConnection()
+            
         case .text(let text):
-            print("📩 WebSocket에서 수신한 원본 메시지: \(text)")
             handleIncomingMessage(text)
+            
         case .error(let error):
-            print("❌ WebSocket error: \(String(describing: error))")
-            onConnectionChange?(false)
+            connectionStatusSubject.onNext(false)
+            if let error = error {
+                errorSubject.onNext(error)
+            }
+            retryConnection()
+            
         default:
             break
         }
     }
     
-    // MARK: - STOMP CONNECT Frame
-    private func sendConnectFrame() {
-        let frame = """
-           CONNECT
-           accept-version:1.2
-           host:\(serverURL.host ?? "localhost")
-           
-           \0
-           """
-        sendFrame(frame)
+    private func retryConnection() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            self.connect()
+        }
     }
     
-    // MARK: - Incoming Message Handling
     private func handleIncomingMessage(_ text: String) {
-
-        // 🔹 STOMP 프레임의 첫 번째 라인에서 메시지 타입 추출
+        print("📩 WebSocket 메시지 수신: \(text)")
+        
         let messageType = text.components(separatedBy: "\n").first?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        print("ℹ️ messageType: \(messageType)")
-        // 🔹 STOMP `CONNECTED` 프레임은 무시
-        if messageType == "CONNECTED" {
-            print("✅ STOMP 연결 완료 (CONNECTED 프레임 수신)")
+        
+        switch messageType {
+        case "CONNECTED":
+            print("📩 CONNECTED 수신")
             return
-        }
-
-        // 🔹 STOMP `MESSAGE` 프레임만 처리
-        guard messageType == "MESSAGE" || messageType == "SEND",
-              let destination = extractHeader(from: text, key: "destination"),
-              let messageBody = extractBody(from: text),
-              let roomID = destination.split(separator: ".").last.map(String.init) else {
-            print("❌ 메시지 형식이 올바르지 않습니다.")
-            return
-        }
-
-        // 🔹 내가 구독한 채팅방인지 확인
-        if subscriptions.keys.contains(roomID) {
-            print("✅ 채팅방 \(roomID)에서 메시지 수신: \(messageBody)")
-            onMessageReceived?(roomID, messageBody)
-        } else {
-            print("🚫 구독하지 않은 채팅방(\(roomID))의 메시지를 무시합니다.")
-        }
-    }
-    
-    private func extractHeader(from frame: String, key: String) -> String? {
-        let lines = frame.split(separator: "\n")
-        for line in lines {
-            if line.starts(with: key) {
-                return line.replacingOccurrences(of: "\(key):", with: "")
+            
+        case "MESSAGE":
+            print("📩 MESSAGE 수신")
+            if let destination = extractValue(from: text, key: "destination"),
+               let messageBody = extractBody(from: text),
+               let roomID = destination.split(separator: ".").last.map(String.init) {
+                messageSubject.onNext((roomID, messageBody))
+            } else {
+                errorSubject.onNext(SocketError.invalidMessage)
             }
+            
+        case "ERROR":
+            print("📩 ERROR 수신")
+            let errorMessage = extractValue(from: text, key: "message") ?? "알 수 없는 오류 발생"
+            errorSubject.onNext(SocketError.sendFailed(reason: errorMessage))
+            
+        case "RECEIPT":
+            print("📩 RECEIPT 수신")
+            let receiptID = extractValue(from: text, key: "receipt-id") ?? "Unknown"
+            print("요청 성공 확인 (Receipt ID: \(receiptID))")
+            
+        default:
+            errorSubject.onNext(SocketError.invalidMessage)
         }
-        return nil
     }
     
-    private func extractBody(from frame: String) -> String? {
-        guard let blankLineIndex = frame.range(of: "\n\n") else {
-            return nil
-        }
-        let bodyStartIndex = frame.index(blankLineIndex.upperBound, offsetBy: 0)
-        return String(frame[bodyStartIndex...]).trimmingCharacters(in: .newlines)
+    private func extractValue(from text: String, key: String) -> String? {
+        return text
+            .components(separatedBy: "\n")
+            .first(where: { $0.starts(with: key) })?
+            .replacingOccurrences(of: "\(key):", with: "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
+    private func extractBody(from text: String) -> String? {
+        return text.components(separatedBy: "\n\n").last?
+            .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }
