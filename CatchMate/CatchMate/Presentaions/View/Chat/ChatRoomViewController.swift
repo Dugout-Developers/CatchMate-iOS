@@ -19,7 +19,8 @@ final class ChatRoomViewController: BaseViewController, View {
     }
     private let tableView: UITableView = UITableView()
     private let inputview: ChatingInputField = ChatingInputField()
-    private var chat: Chat
+    private var chat: ChatListInfo
+    private var userId: Int
     var reactor: ChatRoomReactor
     private var keyboardManager: KeyboardManager?
     private var bottomConstraint: Constraint?
@@ -27,6 +28,7 @@ final class ChatRoomViewController: BaseViewController, View {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        reactor.action.onNext(.subscribeRoom)
         reactor.action.onNext(.loadMessages)
     }
     
@@ -46,35 +48,12 @@ final class ChatRoomViewController: BaseViewController, View {
             self?.scrollToBottom(animated: true)
         })
         view.backgroundColor = .white
-        testSocketSend()
     }
-    
-    //Test Code
-    func testSocketSend() {
-        let message = ChatSocketMessage(messageType: .talk, sender: "네이벙", content: "채팅방 소켓 Send 테스트222")
-        guard let jsonString = message.encodeMessage() else {
-            print("❌ 메시지 인코딩 실패")
-            return
-        }
-        
-        SocketService.shared?.sendMessage(to: String(2), message: jsonString)
-        print("📤 테스트 메시지 전송됨: \(jsonString)")
-        
-        SocketService.shared?.onMessageReceived = { receivedRoomID, receivedMessage in
-            print("📩 수신된 메시지 (채팅방 \(receivedRoomID)): \(receivedMessage)")
 
-            if let receivedChatMessage = ChatSocketMessage.decode(from: receivedMessage) {
-                print("✅ 메시지 파싱 성공: \(receivedChatMessage)")
-            } else {
-                print("❌ 메시지 파싱 실패")
-            }
-        }
-    }
-    // 임시
-    private let user = User(id: 1, email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: nil, allAlarm: true, chatAlarm: true, enrollAlarm: true, eventAlarm: true)
-    init(chat: Chat) {
-        self.reactor = ChatRoomReactor(chat: chat, user: user)
+    init(chat: ChatListInfo, userId: Int) {
+        self.reactor = ChatRoomReactor(roomId: chat.chatRoomId)
         self.chat = chat
+        self.userId = userId
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -113,7 +92,7 @@ final class ChatRoomViewController: BaseViewController, View {
         menuButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         let titleLabel: UILabel = {
             let label = UILabel()
-            label.text = chat.post.title
+            label.text = chat.postInfo.title
             label.textColor = .cmHeadLineTextColor
             label.applyStyle(textStyle: FontSystem.body01_medium)
             label.lineBreakMode = .byTruncatingTail
@@ -122,7 +101,7 @@ final class ChatRoomViewController: BaseViewController, View {
         }()
         let numberLabel: UILabel = {
             let label = UILabel()
-            label.text = "\(chat.post.currentPerson)"
+            label.text = "\(chat.postInfo.currentPerson)"
             label.textColor = .cmNonImportantTextColor
             label.applyStyle(textStyle: FontSystem.caption01_medium)
             return label
@@ -132,7 +111,7 @@ final class ChatRoomViewController: BaseViewController, View {
     }
     
     @objc private func clickedMenuButton(_ sender: UIButton) {
-        let sideSheetVC = ChatSideSheetViewController(chat: chat)
+        let sideSheetVC = ChatSideSheetViewController(chat: chat, userId: userId, people: reactor.senderProfiles)
         let transitioningDelegate = SideSheetTransitioningDelegate()
         sideSheetVC.transitioningDelegate = transitioningDelegate
         sideSheetVC.modalPresentationStyle = .custom
@@ -184,6 +163,7 @@ extension ChatRoomViewController {
     }
     func bind(reactor: ChatRoomReactor) {
         reactor.state.map{$0.messages}
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] messages in
                 guard let self = self else { return }
                 DispatchQueue.main.async {
@@ -201,45 +181,51 @@ extension ChatRoomViewController {
                 guard let self = self else { return UITableViewCell() }
                 let indexPath = IndexPath(row: index, section: 0)
                 switch item.messageType {
-                case 0:
-                    if item.user?.id == user.id {
-                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyMessageTableViewCell", for: indexPath) as? MyMessageTableViewCell else { return UITableViewCell() }
+                case .talk:
+                    if item.userId == self.userId {
+                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyMessageTableViewCell", for: indexPath) as? MyMessageTableViewCell else {
+                            return UITableViewCell()
+                        }
                         cell.configData(item)
                         cell.selectionStyle = .none
                         cell.backgroundColor = .clear
                         return cell
                     } else {
-                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "OtherMessageTableViewCell", for: indexPath) as? OtherMessageTableViewCell else { return UITableViewCell() }
-                        let isHiddenTime = index == 0 ? false : (reactor.currentState.messages[index-1].messageType == 0 && reactor.currentState.messages[index-1].user?.id == item.user?.id && reactor.currentState.messages[index-1].date == item.date)
-                        let isHiddenProfile = index == 0 ? false : (reactor.currentState.messages[index-1].messageType == 0 && reactor.currentState.messages[index-1].user?.id == item.user?.id)
+                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "OtherMessageTableViewCell", for: indexPath) as? OtherMessageTableViewCell else {
+                            return UITableViewCell()
+                        }
+                        let isHiddenTime = index == 0 ? false : (reactor.currentState.messages[index-1].messageType == .talk && reactor.currentState.messages[index-1].userId == item.userId && reactor.currentState.messages[index-1].time == item.time)
+                        let isHiddenProfile = index == 0 ? false : (reactor.currentState.messages[index-1].messageType == .talk && reactor.currentState.messages[index-1].userId == item.userId)
                         cell.configData(item, isHiddenTime: isHiddenTime, isHiddenProfile: isHiddenProfile)
                         cell.selectionStyle = .none
                         cell.backgroundColor = .clear
+                        
                         return cell
                     }
-                case 1:
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "EnterUserCell", for: indexPath) as? EnterUserCell, let user = item.user else { return UITableViewCell() }
-                    cell.configData(user)
-                    cell.selectionStyle = .none
-                    cell.backgroundColor = .clear
-                    return cell
-                case 2:
+                case .date:
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: "DateChatInfoCell", for: indexPath) as? DateChatInfoCell else { return UITableViewCell() }
-                    cell.configData(item.date)
+                    cell.configData(item.time)
                     cell.selectionStyle = .none
                     cell.backgroundColor = .clear
                     return cell
-                case 3:
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "StartChatInfoCell", for: indexPath) as? StartChatInfoCell else { return UITableViewCell() }
-                    cell.configData(chat.post)
+                case .enterUser:
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "EnterUserCell", for: indexPath) as? EnterUserCell else {
+                        return UITableViewCell()
+                    }
+                    cell.configData(item.nickName)
                     cell.selectionStyle = .none
                     cell.backgroundColor = .clear
                     return cell
-                default:
-                    return UITableViewCell()
+                case .startChat:
+                   guard let cell = tableView.dequeueReusableCell(withIdentifier: "StartChatInfoCell", for: indexPath) as? StartChatInfoCell else { return UITableViewCell() }
+                    cell.configData(chat.postInfo)
+                    cell.selectionStyle = .none
+                    cell.backgroundColor = .clear
+                    return cell
                 }
             }
             .disposed(by: disposeBag)
+        
         inputview.rx.sendTap
             .compactMap { $0 }
             .distinctUntilChanged()
@@ -321,11 +307,11 @@ final class StartChatInfoCell: UITableViewCell {
         infoLabel.text = nil
     }
     
-    func configData(_ post: Post) {
+    func configData(_ post: SimplePost) {
         infoLabel.text = "\(post.date) | \(post.playTime) | \(post.location)"
         infoLabel.applyStyle(textStyle: FontSystem.body02_medium)
-        homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.writer.favGudan == post.homeTeam)
-        awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.writer.favGudan == post.awayTeam)
+        homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.cheerTeam == post.homeTeam)
+        awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.cheerTeam == post.awayTeam)
     }
     
     private func setupUI() {
@@ -451,8 +437,8 @@ final class EnterUserCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configData(_ user: User) {
-        infoLabel.text = "\(user.nickName) 님이 채팅에 참여했어요"
+    func configData(_ nickName: String) {
+        infoLabel.text = "\(nickName) 님이 채팅에 참여했어요"
         infoLabel.applyStyle(textStyle: FontSystem.body03_medium)
     }
     override func prepareForReuse() {

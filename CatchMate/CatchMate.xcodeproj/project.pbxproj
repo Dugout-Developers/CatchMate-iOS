@@ -79,7 +79,6 @@
 		533183D32C51429B0097F3F1 /* MessageBoxLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533183D22C51429B0097F3F1 /* MessageBoxLabel.swift */; };
 		533183D52C5150B60097F3F1 /* OtherMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533183D42C5150B60097F3F1 /* OtherMessageTableViewCell.swift */; };
 		533183D72C515C480097F3F1 /* TeamImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533183D62C515C480097F3F1 /* TeamImageView.swift */; };
-		533183D92C5160220097F3F1 /* ChatData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533183D82C5160220097F3F1 /* ChatData.swift */; };
 		533183DB2C51E87E0097F3F1 /* ChatRoomReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533183DA2C51E87E0097F3F1 /* ChatRoomReactor.swift */; };
 		533183DD2C51F5370097F3F1 /* ChatingInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533183DC2C51F5370097F3F1 /* ChatingInputField.swift */; };
 		53368C882D2F9EED00D129EE /* NaverThirdPartyLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 53368C872D2F9EED00D129EE /* NaverThirdPartyLogin */; };
@@ -497,7 +496,6 @@
 		533183D22C51429B0097F3F1 /* MessageBoxLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBoxLabel.swift; sourceTree = "<group>"; };
 		533183D42C5150B60097F3F1 /* OtherMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherMessageTableViewCell.swift; sourceTree = "<group>"; };
 		533183D62C515C480097F3F1 /* TeamImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamImageView.swift; sourceTree = "<group>"; };
-		533183D82C5160220097F3F1 /* ChatData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatData.swift; sourceTree = "<group>"; };
 		533183DA2C51E87E0097F3F1 /* ChatRoomReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomReactor.swift; sourceTree = "<group>"; };
 		533183DC2C51F5370097F3F1 /* ChatingInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatingInputField.swift; sourceTree = "<group>"; };
 		53368C892D2FF81400D129EE /* TempPostRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempPostRepositoryImpl.swift; sourceTree = "<group>"; };
@@ -901,7 +899,6 @@
 				533183D22C51429B0097F3F1 /* MessageBoxLabel.swift */,
 				533183CE2C5141BC0097F3F1 /* MyMessageTableViewCell.swift */,
 				533183D42C5150B60097F3F1 /* OtherMessageTableViewCell.swift */,
-				533183D82C5160220097F3F1 /* ChatData.swift */,
 				533183DC2C51F5370097F3F1 /* ChatingInputField.swift */,
 				531E4C222C6A75320052E754 /* ChatSideSheetViewController.swift */,
 				53368CB02D30FA3B00D129EE /* SideSheetPresentationController.swift */,
@@ -1131,6 +1128,59 @@
 			path = StateView;
 			sourceTree = "<group>";
 		};
+		535AA0422D4F4EDF007C7690 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				535AA03F2D4CA341007C7690 /* ChatMessage.swift */,
+				535AA0282D45FD5F007C7690 /* ChatListInfo.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		535AA0432D4F4EFD007C7690 /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				535B3A8E2D32ABFE003FBBBF /* PostList.swift */,
+				53368C982D302B6900D129EE /* TempPost.swift */,
+				53368C8C2D301CD300D129EE /* TempPostRequest.swift */,
+				531786772C20498800ACEF6A /* Post.swift */,
+				53B8E2642C61280D001D0ADF /* RequestPost.swift */,
+				531E4C2E2C6B5D5C0052E754 /* SimplePost.swift */,
+			);
+			path = Post;
+			sourceTree = "<group>";
+		};
+		535AA0442D4F4F1B007C7690 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				53EECAEF2D0B30A900775FD6 /* ProfileEdit.swift */,
+				536BDDEB2C19720E0043B1DA /* User.swift */,
+				531786632C1EF30F00ACEF6A /* Team.swift */,
+				533A2B312C2BE7E600A59340 /* CheerStyles.swift */,
+				53E592562C6D05690042E1D7 /* SimpleUser.swift */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
+		535AA0452D4F4F38007C7690 /* Sign */ = {
+			isa = PBXGroup;
+			children = (
+				530994532C4F6CEB00ABE103 /* LoginResult.swift */,
+				53E4A9BD2C50046E00D21B49 /* SignUpModel.swift */,
+				531288CC2C5408FF000C2FB1 /* LoginModel.swift */,
+			);
+			path = Sign;
+			sourceTree = "<group>";
+		};
+		535AA0462D4F4F52007C7690 /* Apply */ = {
+			isa = PBXGroup;
+			children = (
+				53F1E8C52C47A46400A962F3 /* Apply.swift */,
+				53B3CE442C88AE1C00116BF7 /* ApplyList.swift */,
+			);
+			path = Apply;
+			sourceTree = "<group>";
+		};
 		536BDDA12C189B230043B1DA = {
 			isa = PBXGroup;
 			children = (
@@ -1270,8 +1320,8 @@
 		536BDDE72C1971AF0043B1DA /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				53E4A9B72C4FF00F00D21B49 /* AuthReactor.swift */,
 				536BDDE82C1971C70043B1DA /* SignReactor.swift */,
+				53E4A9B72C4FF00F00D21B49 /* AuthReactor.swift */,
 				53FC69FB2C5A2DD700B97AEA /* SignUpReactor.swift */,
 				536BDE392C1C1F210043B1DA /* HomeReactor.swift */,
 				53716BBF2C400B3E0044AD2A /* FavoriteReactor.swift */,
@@ -1306,29 +1356,16 @@
 		536BDDED2C1972120043B1DA /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				535AA03F2D4CA341007C7690 /* ChatMessage.swift */,
-				535AA0282D45FD5F007C7690 /* ChatListInfo.swift */,
-				535B3A8E2D32ABFE003FBBBF /* PostList.swift */,
-				53368C982D302B6900D129EE /* TempPost.swift */,
-				53368C8C2D301CD300D129EE /* TempPostRequest.swift */,
+				535AA0452D4F4F38007C7690 /* Sign */,
+				535AA0442D4F4F1B007C7690 /* User */,
+				535AA0432D4F4EFD007C7690 /* Post */,
+				535AA0422D4F4EDF007C7690 /* Chat */,
+				535AA0462D4F4F52007C7690 /* Apply */,
 				5375B1A12D2CD36E000581B3 /* NotificationList.swift */,
 				5375B13C2D1A85EA000581B3 /* DomainError.swift */,
 				53EECB0A2D13E4CB00775FD6 /* AlarmInfo.swift */,
-				53EECAEF2D0B30A900775FD6 /* ProfileEdit.swift */,
-				536BDDEB2C19720E0043B1DA /* User.swift */,
-				531786632C1EF30F00ACEF6A /* Team.swift */,
-				531786772C20498800ACEF6A /* Post.swift */,
-				533A2B312C2BE7E600A59340 /* CheerStyles.swift */,
-				53F1E8C52C47A46400A962F3 /* Apply.swift */,
-				53B8E2642C61280D001D0ADF /* RequestPost.swift */,
-				530994532C4F6CEB00ABE103 /* LoginResult.swift */,
-				53E4A9BD2C50046E00D21B49 /* SignUpModel.swift */,
-				531288CC2C5408FF000C2FB1 /* LoginModel.swift */,
 				534E39DE2C63CF65006D180E /* Announcements.swift */,
-				531E4C2E2C6B5D5C0052E754 /* SimplePost.swift */,
-				53E592562C6D05690042E1D7 /* SimpleUser.swift */,
 				53ACBA1E2C7DDD36004FAF00 /* SetupResult.swift */,
-				53B3CE442C88AE1C00116BF7 /* ApplyList.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1989,7 +2026,6 @@
 				53241F3C2C3C517600F468E1 /* GridSystem.swift in Sources */,
 				53B8E25F2C61228A001D0ADF /* PostRequsetDTO.swift in Sources */,
 				53B895C92CA256E100029130 /* UserPostLoadRepositoryImpl.swift in Sources */,
-				533183D92C5160220097F3F1 /* ChatData.swift in Sources */,
 				533A2B422C2C624D00A59340 /* SNSLoginRepository.swift in Sources */,
 				53E592572C6D05690042E1D7 /* SimpleUser.swift in Sources */,
 				5375980C2C46DC45003BD8AE /* ChatRoomViewController.swift in Sources */,

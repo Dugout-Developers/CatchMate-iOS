@@ -18,6 +18,7 @@ final class SetupInfoService {
         UserDefaults.standard.set(user.email, forKey: UserDefaultsKeys.SetupInfo.UserInfo.email)
         UserDefaults.standard.set(user.team, forKey: UserDefaultsKeys.SetupInfo.UserInfo.team)
         UserDefaults.standard.set(user.nickname, forKey: UserDefaultsKeys.SetupInfo.UserInfo.nickName)
+        UserDefaults.standard.set(user.imageUrl, forKey: UserDefaultsKeys.SetupInfo.UserInfo.imageUrl)
     }
     
     /// UserInfo 저장 - 개별 저장
@@ -36,7 +37,19 @@ final class SetupInfoService {
             return UserDefaults.standard.string(forKey: UserDefaultsKeys.SetupInfo.UserInfo.team)
         case .nickName:
             return UserDefaults.standard.string(forKey: UserDefaultsKeys.SetupInfo.UserInfo.nickName)
+        case .imageUrl:
+            return UserDefaults.standard.string(forKey: UserDefaultsKeys.SetupInfo.UserInfo.imageUrl)
         }
+    }
+    
+    func getUsertInfo() -> UserInfoDTO? {
+        guard let id = getUserInfo(type: .id),
+              let email = getUserInfo(type: .email),
+              let team = getUserInfo(type: .team),
+              let nickName = getUserInfo(type: .nickName),
+              let imageUrl = getUserInfo(type: .imageUrl)
+        else { return nil }
+        return UserInfoDTO(id: id, email: email, team: team, nickname: nickName, imageUrl: imageUrl)
     }
     
     /// remove UserInfo -> 로그아웃 시

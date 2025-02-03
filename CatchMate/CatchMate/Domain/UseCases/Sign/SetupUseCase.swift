@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 
 protocol SetupUseCase {
-    func setupInfo() -> Observable<SetupResult>
+    func setupInfo() -> Observable<SetupUserInfo>
 }
 
 final class SetupUseCaseImpl: SetupUseCase {
@@ -19,10 +19,10 @@ final class SetupUseCaseImpl: SetupUseCase {
         self.userRepository = userRepository
     }
     
-    func setupInfo() -> RxSwift.Observable<SetupResult> {
+    func setupInfo() -> RxSwift.Observable<SetupUserInfo> {
         return userRepository.loadUser()
-        .map { user -> SetupResult in
-            return SetupResult(user: user)
+        .map { user -> SetupUserInfo in
+            return SetupUserInfo(id: user.id, email: user.email, nickName: user.nickName, imageUrl: user.profilePicture ?? "", team: user.team)
         }
         .catch { error in
             return Observable.error(DomainError(error: error, context: .tokenUnavailable))

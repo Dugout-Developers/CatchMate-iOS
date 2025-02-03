@@ -88,15 +88,17 @@ extension ChatListViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        reactor.state.map{$0.selectedChat}
-            .compactMap{$0}
-            .withUnretained(self)
-            .subscribe(onNext: { vc, chatInfo in
-                SocketService.shared?.subscribe(roomID: String(chatInfo.chatRoomId))
-                let chat = Chat.mockupData[0]
-                let roomVC = ChatRoomViewController(chat: chat)
-                roomVC.hidesBottomBarWhenPushed = true
-                vc.navigationController?.pushViewController(roomVC, animated: true)
+        reactor.state.compactMap{$0.selectedChat}
+            .subscribe(onNext: { [weak self] chatInfo in
+                let chatId = String(chatInfo.chatRoomId)
+                if let userId = SetupInfoService.shared.getUserInfo(type: .id), let id = Int(userId) {
+//                    SocketService.shared?.subscribe(roomID: chatId)
+                    let roomVC = ChatRoomViewController(chat: chatInfo, userId: id)
+                    roomVC.hidesBottomBarWhenPushed = true
+                    self?.navigationController?.pushViewController(roomVC, animated: true)
+                } else {
+                    reactor.action.onNext(.setError(.unauthorized))
+                }
             })
             .disposed(by: disposeBag)
         

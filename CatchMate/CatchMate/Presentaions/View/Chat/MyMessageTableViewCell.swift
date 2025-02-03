@@ -47,10 +47,10 @@ final class MyMessageTableViewCell: UITableViewCell {
     }
     
     func configData(_ chat: ChatMessage) {
-        let dateString = chat.date.toString(format: "a h:mm")
+        let dateString = chat.time.toString(format: "a h:mm")
         timeLabel.text = dateString
         timeLabel.applyStyle(textStyle: FontSystem.caption01_medium)
-        messageLabel.text = chat.text
+        messageLabel.text = chat.message
         messageLabel.applyStyle(textStyle: FontSystem.body02_medium)
         timeLabel.textAlignment = .right
     }

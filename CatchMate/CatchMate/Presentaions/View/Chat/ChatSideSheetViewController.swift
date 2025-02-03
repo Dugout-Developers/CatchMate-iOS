@@ -16,11 +16,11 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
     override var buttonContainerExists: Bool {
         return false
     }
-    private let user = SimpleUser(user: User(id: 1, email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4MTkSLvHP365kTge2U5CHc-smH-Z2Xq5p-A&s", allAlarm: true, chatAlarm: true, enrollAlarm: true, eventAlarm: true))
-    private let chat: Chat
-
+    private let userId: Int
+    private let chat: ChatListInfo
+    private let people: [SenderInfo]
     private var isManager: Bool {
-        return chat.roomManager.userId == user.userId
+        return chat.managerId == userId
     }
     private let infoView = UIView()
     private let teamInfoView = UIView()
@@ -92,30 +92,32 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         return stackView
     }()
     private func setupStyle() {
-        if let date = DateHelper.shared.toDate(from: chat.post.date, format: "MM.dd") {
+        if let date = DateHelper.shared.toDate(from: chat.postInfo.date, format: "MM.dd") {
             let string = DateHelper.shared.toString(from: date, format: "M월 d일 EEEE")
-            infoLabel.text = "\(string) | \(chat.post.playTime) | \(chat.post.location)"
+            infoLabel.text = "\(string) | \(chat.postInfo.playTime) | \(chat.postInfo.location)"
         } else {
-            infoLabel.text = "0월 0일 요일 | \(chat.post.playTime) | \(chat.post.location)"
+            infoLabel.text = "0월 0일 요일 | \(chat.postInfo.playTime) | \(chat.postInfo.location)"
         }
         infoLabel.applyStyle(textStyle: FontSystem.body03_medium)
         infoLabel.textColor = .cmPrimaryColor
-        partyNumLabel.text = "\(chat.post.currentPerson)/\(chat.post.maxPerson)"
+        partyNumLabel.text = "\(chat.postInfo.currentPerson)/\(chat.postInfo.maxPerson)"
         partyNumLabel.applyStyle(textStyle: FontSystem.caption01_medium)
         partyNumLabel.layer.cornerRadius = 10
         partyNumLabel.textAlignment = .center
         partyNumLabel.textColor = .cmPrimaryColor
         partyNumLabel.backgroundColor = .brandColor50
-        titleLabel.text = chat.post.title
+        titleLabel.text = chat.postInfo.title
         titleLabel.lineBreakMode = .byTruncatingTail
         titleLabel.textColor = .cmHeadLineTextColor
         titleLabel.applyStyle(textStyle: FontSystem.body01_medium)
-        homeTeamImageView.setupTeam(team: chat.post.homeTeam, isMyTeam: chat.post.writer.favGudan == chat.post.homeTeam)
-        awayTeamImageView.setupTeam(team: chat.post.awayTeam, isMyTeam: chat.post.writer.favGudan == chat.post.awayTeam)
+        homeTeamImageView.setupTeam(team: chat.postInfo.homeTeam, isMyTeam: chat.postInfo.cheerTeam == chat.postInfo.homeTeam)
+        awayTeamImageView.setupTeam(team: chat.postInfo.awayTeam, isMyTeam: chat.postInfo.cheerTeam == chat.postInfo.awayTeam)
     }
     
-    init(chat: Chat) {
+    init(chat: ChatListInfo, userId: Int, people: [SenderInfo]) {
         self.chat = chat
+        self.userId = userId
+        self.people = people
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .custom
         modalTransitionStyle = .crossDissolve
@@ -239,8 +241,7 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(chat.people.count)
-        return chat.people.count
+        return chat.postInfo.currentPerson
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -248,8 +249,8 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
             return UITableViewCell()
         }
         cell.selectionStyle = .none
-        let person = chat.people[indexPath.row]
-        cell.configData(person, isMy: person.userId == user.userId, isManager: person.userId == chat.roomManager.userId)
+        let person = people[indexPath.row]
+        cell.configData(person, isMy: person.senderId == userId, isManager: person.senderId == chat.managerId)
         return cell
         
     }
@@ -312,9 +313,9 @@ final class ChatRoomPeopleListCell: UITableViewCell {
         profileImage.image = nil
     }
 
-    func configData(_ person: SimpleUser, isMy: Bool, isManager: Bool) {
+    func configData(_ person: SenderInfo, isMy: Bool, isManager: Bool) {
         print("\(person.nickName) - isMy: \(isMy) / isManager: \(isManager)")
-        ProfileImageHelper.loadImage(profileImage, pictureString: person.picture)
+        ProfileImageHelper.loadImage(profileImage, pictureString: person.imageUrl)
         profileImage.layer.cornerRadius = imageSize / 2
         nicknameLabel.text = person.nickName
         nicknameLabel.applyStyle(textStyle: FontSystem.body02_medium)

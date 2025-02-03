@@ -89,6 +89,20 @@ final class SocketService {
         let request = URLRequest(url: serverURL)
         self.socket = WebSocket(request: request)
         self.socket?.delegate = self
+        
+        messageObservable
+            .subscribe(onNext: { (roomId, message) in
+                print("📩 [DEBUG] Reactor에서 수신한 메시지: \(message)")
+            }, onError: { error in
+                print("❌ [DEBUG] WebSocket 수신 중 오류 발생: \(error)")
+            }, onCompleted: {
+                print("✅ [DEBUG] WebSocket 스트림 완료됨")
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    deinit {
+        print("💥 [DEBUG] SocketService deinit 호출됨")
     }
     
     func connect() {
@@ -190,7 +204,13 @@ final class SocketService {
 
             \(message)\0
             """
-            socket?.write(string: frame)
+            guard let socket else {
+                print("Send Socket X")
+                return
+            }
+            socket.write(string: frame, completion: {
+                print("✅ [DEBUG] WebSocket write 완료됨")
+            })
             print("📤 WebSocket 메시지 전송: \(frame)")
 
         } catch {
@@ -209,11 +229,13 @@ final class SocketService {
 // MARK: - WebSocket 이벤트 처리
 extension SocketService: WebSocketDelegate {
     func didReceive(event: Starscream.WebSocketEvent, client: any Starscream.WebSocketClient) {
+        print("⚡️ WebSocket 이벤트 수신: \(event)")
         switch event {
         case .connected:
             connectionStatusSubject.onNext(true)
             print("✅ WebSocket 연결 성공")
             restoreSubscriptions()
+            sendConnectFrame()
             
         case .disconnected(let reason, let code):
             connectionStatusSubject.onNext(false)
@@ -233,6 +255,7 @@ extension SocketService: WebSocketDelegate {
             retryConnection()
             
         case .text(let text):
+            print("\(text)")
             handleIncomingMessage(text)
             
         case .error(let error):
@@ -253,10 +276,22 @@ extension SocketService: WebSocketDelegate {
         }
     }
     
+    private func sendConnectFrame() {
+        let frame = """
+           CONNECT
+           accept-version:1.2
+           host:\(serverURL.host ?? "localhost")
+           
+           \0
+           """
+        socket?.write(string: frame)
+    }
+    
     private func handleIncomingMessage(_ text: String) {
-        print("📩 WebSocket 메시지 수신: \(text)")
-        
+        print("📩 [DEBUG] 수신된 원본 메시지: \(text)")
+
         let messageType = text.components(separatedBy: "\n").first?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        print("ℹ️ [DEBUG] messageType: \(messageType)")
         
         switch messageType {
         case "CONNECTED":
@@ -268,8 +303,10 @@ extension SocketService: WebSocketDelegate {
             if let destination = extractValue(from: text, key: "destination"),
                let messageBody = extractBody(from: text),
                let roomID = destination.split(separator: ".").last.map(String.init) {
+                print("✅ [DEBUG] WebSocket 메시지 정상 파싱 완료! roomID: \(roomID), messageBody: \(messageBody)")
                 messageSubject.onNext((roomID, messageBody))
             } else {
+                print("❌ [DEBUG] 메시지 파싱 실패")
                 errorSubject.onNext(SocketError.invalidMessage)
             }
             

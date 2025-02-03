@@ -13,6 +13,7 @@ struct UserInfoDTO {
     let email: String
     let team: String
     let nickname: String
+    let imageUrl: String
 }
 
 enum UserInfoType {
@@ -20,6 +21,7 @@ enum UserInfoType {
     case email
     case team
     case nickName
+    case imageUrl
     
     var key: String {
         switch self {
@@ -31,6 +33,8 @@ enum UserInfoType {
             return UserDefaultsKeys.SetupInfo.UserInfo.team
         case .nickName:
             return UserDefaultsKeys.SetupInfo.UserInfo.nickName
+        case .imageUrl:
+            return UserDefaultsKeys.SetupInfo.UserInfo.imageUrl
         }
     }
 }
