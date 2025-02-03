@@ -36,7 +36,10 @@ final class ChatRoomViewController: BaseViewController, View {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
     }
-    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        reactor.action.onNext(.unsubscribeRoom)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()

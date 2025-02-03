@@ -38,7 +38,7 @@ final class RecivedAppiesDataSourceImpl: RecivedAppiesDataSource {
         ]
         LoggerService.shared.log("토큰 확인: \(headers)")
         
-        return APIService.shared.performRequest(type: .receivedApply, parameters: parameters, headers: headers, encoding: JSONEncoding.default, dataType: ApplyListResponse.self, refreshToken: refreshToken)
+        return APIService.shared.performRequest(type: .receivedApply, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: ApplyListResponse.self, refreshToken: refreshToken)
             .map { response -> [Content] in
                 return response.enrollInfoList
             }

@@ -59,6 +59,7 @@ final class ChatRoomReactor: Reactor {
     enum Action {
         // 사용자의 입력과 상호작용하는 역할을 한다
         case subscribeRoom
+        case unsubscribeRoom
         case loadMessages
         case loadPeople
         case sendMessage(String)
@@ -94,7 +95,11 @@ final class ChatRoomReactor: Reactor {
             action.onNext(.setError(ChatError.failedLoadMyData.convertToPresentationError()))
         }
         observeIncomingMessage()
-        setupSenderProfile()
+//        setupSenderProfile()
+        // 임시
+        senderProfiles = [SenderInfo(senderId: 4, nickName: "네이벙", imageUrl: "https://catch-mate.s3.ap-northeast-2.amazonaws.com/d9214541-abb9-445e-96c2-194f992f4f0a_profile.jpg"),
+                          SenderInfo(senderId: 7, nickName: "히희채팅테스트", imageUrl: "https://k.kakaocdn.net/dn/ieEGZ/btsK8rkUtPZ/koch7rFi1Bv9wEzQcknKY0/img_640x640.jpg")
+        ]
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
@@ -102,6 +107,10 @@ final class ChatRoomReactor: Reactor {
         case .subscribeRoom:
             print("✅ 채팅방 \(roomId) 구독 요청")
             SocketService.shared?.subscribe(roomID: String(roomId))
+            return .empty()
+        case .unsubscribeRoom:
+            print("🚫 채팅방 \(roomId) 구독 해제 요청")
+            SocketService.shared?.unsubscribe(roomID: String(roomId))
             return .empty()
         case .sendMessage(let message):
             return convertToSendMessage(content: message)
@@ -111,7 +120,7 @@ final class ChatRoomReactor: Reactor {
                         // TODO: - 메시지 보내는중으로 바꾸기
                         return Observable.just(Mutation.setError(.showToastMessage(message: "메시지 전송 실패")))
                     }
-                    SocketService.shared?.sendMessage(to: String(2), message: jsonString)
+                    SocketService.shared?.sendMessage(to: String(self.roomId), message: jsonString)
                     print("📤 테스트 메시지 전송됨: \(jsonString)")
                     return Observable.empty()
                 }
