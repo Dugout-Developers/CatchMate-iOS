@@ -34,6 +34,7 @@ enum ChatMessageType {
         }
     }
 }
+
 struct ChatSocketMessage: Codable {
     let messageType: String
     let senderId: Int
@@ -45,10 +46,18 @@ struct ChatSocketMessage: Codable {
         self.senderId = senderId
         self.content = content
         // ✅ Z(UTC) 제거한 ISO8601 시간 포맷 적용
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss" // Z 제거
-            formatter.timeZone = TimeZone.current // 현재 로컬 시간 적용
-            self.sendTime = formatter.string(from: Date())
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss" // Z 제거
+        formatter.timeZone = TimeZone.current // 현재 로컬 시간 적용
+        self.sendTime = formatter.string(from: Date())
+    }
+    
+    init(messageType: ChatMessageType, senderId: Int, content: String, date: String) {
+        self.messageType = messageType.serverRequest
+        self.senderId = senderId
+        self.content = content
+        let newDate = date.replacingOccurrences(of: "\\.\\d+", with: "", options: .regularExpression)
+        self.sendTime = newDate
     }
 }
 

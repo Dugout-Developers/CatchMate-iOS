@@ -25,7 +25,13 @@ final class ChatRoomViewController: BaseViewController, View {
     private var keyboardManager: KeyboardManager?
     private var bottomConstraint: Constraint?
     private var inputViewHeightConstraint: Constraint?
-    
+   
+    private let refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        control.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+        control.tintColor = .cmPrimaryColor
+        return control
+    }()
     private let numberLabel: UILabel = {
         let label = UILabel()
         label.textColor = .cmNonImportantTextColor
@@ -35,8 +41,6 @@ final class ChatRoomViewController: BaseViewController, View {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reactor.action.onNext(.subscribeRoom)
-        reactor.action.onNext(.loadPeople)
-        reactor.action.onNext(.loadMessages)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -58,6 +62,8 @@ final class ChatRoomViewController: BaseViewController, View {
             self?.scrollToBottom(animated: true)
         })
         view.backgroundColor = .white
+        reactor.action.onNext(.loadPeople)
+        reactor.action.onNext(.loadMessages)
     }
 
     init(chat: ChatListInfo, userId: Int) {
@@ -86,6 +92,7 @@ final class ChatRoomViewController: BaseViewController, View {
         tableView.register(DateChatInfoCell.self, forCellReuseIdentifier: "DateChatInfoCell")
         tableView.register(EnterUserCell.self, forCellReuseIdentifier: "EnterUserCell")
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
+        tableView.refreshControl = refreshControl
         view.backgroundColor = .white
         tableView.separatorStyle = .none
         tableView.keyboardDismissMode = .onDrag
@@ -170,20 +177,58 @@ extension ChatRoomViewController {
         inputViewHeightConstraint?.update(offset: newHeight)
         view.layoutIfNeeded()
     }
+    
+    
     func bind(reactor: ChatRoomReactor) {
-        reactor.state.map{$0.messages}
+
+        refreshControl.rx.controlEvent(.valueChanged)
+            .withLatestFrom(reactor.state.map { $0.isLast })
+            .subscribe(onNext: { [weak self] isLast in
+                guard let self = self else { return }
+                if isLast {
+                    self.refreshControl.endRefreshing()
+                } else {
+                    reactor.action.onNext(.loadMessages)
+                }
+            })
+            .disposed(by: disposeBag)
+
+ 
+        reactor.state.map { !$0.isLoading }
+            .distinctUntilChanged()
+            .filter { $0 }
+            .subscribe(onNext: { [weak self] _ in
+                self?.refreshControl.endRefreshing()
+            })
+            .disposed(by: disposeBag)
+        
+        
+        
+        reactor.state.map { $0.messages }
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] messages in
                 guard let self = self else { return }
+                
+                let isFirstLoad = self.tableView.contentSize.height == 0 // 처음 로드 확인
+                let previousContentHeight = self.tableView.contentSize.height // 기존 높이 저장
+                let previousOffsetY = self.tableView.contentOffset.y // 기존 오프셋 저장
+                
                 DispatchQueue.main.async {
-                    if messages.count > 0 {         
-                        self.tableView.reloadData()
-                        let indexPath = IndexPath(row: messages.count - 1, section: 0)
-                        self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+                    self.tableView.reloadData()
+                    let newContentHeight = self.tableView.contentSize.height // 새로운 높이 가져오기
+                    
+                    if isFirstLoad {
+                        // 처음 채팅방을 열었을 때는 가장 아래로 스크롤
+                        self.scrollToBottom(animated: false)
+                    } else if messages.count > 0, previousContentHeight > 0 {
+                        // 위로 스크롤하여 메시지를 불러온 경우 스크롤 위치 유지
+                        let offsetYDifference = newContentHeight - previousContentHeight
+                        self.tableView.contentOffset.y += offsetYDifference
                     }
                 }
             })
             .disposed(by: disposeBag)
+        
         reactor.state.map{$0.messages}
             .observe(on: MainScheduler.instance)
             .bind(to: tableView.rx.items) { [weak self] tableView, index, item in

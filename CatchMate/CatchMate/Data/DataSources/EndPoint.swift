@@ -65,6 +65,8 @@ enum Endpoint {
     case chatList
     /// 채팅방 유저 조회
     case chatUsers
+    /// 채팅방 이전 메시지 조회
+    case chatMessage
     
     /// 내정보 조회
     case loadMyInfo
@@ -129,6 +131,9 @@ enum Endpoint {
         case .chatUsers:
             /// chat-rooms/{chatRoomId}/user-list
             return "/chat-rooms/"
+        case .chatMessage:
+            /// chats/{chatRoomId}
+            return "/chats/"
         case .loadMyInfo:
             return "/users/profile"
         case .editProfile:
@@ -193,6 +198,8 @@ enum Endpoint {
             return "채팅방 리스트 조회 API"
         case .chatUsers:
             return "채팅방 참여 유저 조회 API"
+        case .chatMessage:
+            return "채팅방 이전 메시지 조회 API"
         case .loadMyInfo:
             return "내 정보 조회 API"
         case .editProfile:
@@ -255,6 +262,8 @@ enum Endpoint {
         case .chatList:
             return .get
         case .chatUsers:
+            return .get
+        case .chatMessage:
             return .get
         case .loadMyInfo:
             return .get

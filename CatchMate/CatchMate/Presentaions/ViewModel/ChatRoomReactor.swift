@@ -64,6 +64,8 @@ final class ChatRoomReactor: Reactor {
         case setMessages([ChatMessage])
         case setSenderInfo([SenderInfo])
         case addMyMessage(ChatMessage)
+        case setIsLoading(Bool)
+        case setIsLast(Bool)
         case setError(PresentationError?)
     }
     struct State {
@@ -71,6 +73,9 @@ final class ChatRoomReactor: Reactor {
         var messages: [ChatMessage] = []
 //        var sendMessage: [ChatMessage] = [] // 보내는 중 메시지 -> 다시 전송 등 기능 필요
         var senderProfiles: [SenderInfo] = []
+        var currentPage: Int = 0
+        var isLast: Bool = false
+        var isLoading: Bool = false
         var error: PresentationError?
     }
     
@@ -126,7 +131,26 @@ final class ChatRoomReactor: Reactor {
         case .receiveMessage(let message):
             return Observable.just(Mutation.addMyMessage(message))
         case .loadMessages:
-            return Observable.empty()
+            if currentState.isLast || currentState.isLoading {
+                return Observable.empty()
+            } else {
+                return loadInfoUS.loadChatMessages(chatId: roomId, page: currentState.currentPage)
+                    .flatMap { messages, isLast in
+                        return Observable.concat([
+                            Observable.just(.setIsLoading(true)),
+                            Observable.just(.setMessages(messages)),
+                            Observable.just(.setIsLast(isLast)),
+                            Observable.just(.setIsLoading(false))
+                        ])
+                    }
+                    .catch { error in
+                        if let chatError = error as? ChatError {
+                            return Observable.just(.setError(chatError.convertToPresentationError()))
+                        } else {
+                            return Observable.just(.setError(ErrorMapper.mapToPresentationError(error)))
+                        }
+                    }
+            }
         case .loadPeople:
             return loadInfoUS.loadChatRoomUsers(chatId: roomId)
                 .map { infos in
@@ -151,11 +175,16 @@ final class ChatRoomReactor: Reactor {
             newState.messages.append(message)
             print(newState.messages)
         case .setMessages(let messages):
-            newState.messages = messages
+            newState.messages.insert(contentsOf: messages, at: 0)
+            newState.currentPage += 1
         case .setSenderInfo(let infos):
             newState.senderProfiles = infos
         case .setError(let error):
             newState.error = error
+        case .setIsLoading(let state):
+            newState.isLoading = state
+        case .setIsLast(let state):
+            newState.isLast = state
         }
         return newState
     }

@@ -200,7 +200,9 @@ class DIContainerService {
     func makeChatRoomReactor(roomId: Int) -> ChatRoomReactor {
         let loadChatUsersDS = LoadChatUsersDataSourceImpl(tokenDataSource: tokenDS)
         let loadChatUserRepo = LoadChatUsersRepositoryImpl(loadChatUserDS: loadChatUsersDS)
-        let loadChatInfoUS = LoadChatInfoUseCaseImpl(loadChatUsersRP: loadChatUserRepo)
+        let loadChatMessageDS = LoadChatMessageDataSourceImpl(tokenDataSource: tokenDS)
+        let loadChatMessageRepo = LoadChatMessageRepositoryImpl(loadMessageDS: loadChatMessageDS)
+        let loadChatInfoUS = LoadChatInfoUseCaseImpl(loadChatUsersRP: loadChatUserRepo, loadChatMessageRepo: loadChatMessageRepo)
         
         return ChatRoomReactor(roomId: roomId, loadInfoUS: loadChatInfoUS)
     }
