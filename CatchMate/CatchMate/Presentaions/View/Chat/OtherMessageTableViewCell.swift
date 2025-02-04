@@ -14,7 +14,7 @@ final class OtherMessageTableViewCell: UITableViewCell {
     private let containerView = UIView()
     private let profileImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 20
         return imageView
