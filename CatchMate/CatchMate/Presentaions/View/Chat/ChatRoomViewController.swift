@@ -29,6 +29,7 @@ final class ChatRoomViewController: BaseViewController, View {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reactor.action.onNext(.subscribeRoom)
+        reactor.action.onNext(.loadPeople)
         reactor.action.onNext(.loadMessages)
     }
     
@@ -54,7 +55,7 @@ final class ChatRoomViewController: BaseViewController, View {
     }
 
     init(chat: ChatListInfo, userId: Int) {
-        self.reactor = ChatRoomReactor(roomId: chat.chatRoomId)
+        self.reactor = DIContainerService.shared.makeChatRoomReactor(roomId: chat.chatRoomId)
         self.chat = chat
         self.userId = userId
         super.init(nibName: nil, bundle: nil)
@@ -114,7 +115,8 @@ final class ChatRoomViewController: BaseViewController, View {
     }
     
     @objc private func clickedMenuButton(_ sender: UIButton) {
-        let sideSheetVC = ChatSideSheetViewController(chat: chat, userId: userId, people: reactor.senderProfiles)
+        print(reactor.currentState.senderProfiles)
+        let sideSheetVC = ChatSideSheetViewController(chat: chat, userId: userId, people: reactor.currentState.senderProfiles)
         let transitioningDelegate = SideSheetTransitioningDelegate()
         sideSheetVC.transitioningDelegate = transitioningDelegate
         sideSheetVC.modalPresentationStyle = .custom

@@ -197,6 +197,13 @@ class DIContainerService {
         return ChatListReactor(loadchatListUsecase: loadChatListUC)
     }
     
+    func makeChatRoomReactor(roomId: Int) -> ChatRoomReactor {
+        let loadChatUsersDS = LoadChatUsersDataSourceImpl(tokenDataSource: tokenDS)
+        let loadChatUserRepo = LoadChatUsersRepositoryImpl(loadChatUserDS: loadChatUsersDS)
+        let loadChatInfoUS = LoadChatInfoUseCaseImpl(loadChatUsersRP: loadChatUserRepo)
+        
+        return ChatRoomReactor(roomId: roomId, loadInfoUS: loadChatInfoUS)
+    }
     
     // MARK: - 특정 Usecase만 필요할 때
     func makeLogoutUseCase() -> LogoutUseCase {

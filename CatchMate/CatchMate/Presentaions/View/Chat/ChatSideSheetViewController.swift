@@ -132,6 +132,7 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         setupUI()
         setupTableView()
         navigationBarHidden()
+        print(people)
         settingButton.isHidden = !isManager
     }
     private func setupTableView() {
@@ -241,7 +242,7 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return chat.postInfo.currentPerson
+        return people.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

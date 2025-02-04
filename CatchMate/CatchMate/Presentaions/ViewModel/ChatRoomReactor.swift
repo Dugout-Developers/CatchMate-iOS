@@ -9,12 +9,6 @@ import UIKit
 import RxSwift
 import ReactorKit
 
-struct SenderInfo {
-    let senderId: Int
-    let nickName: String
-    let imageUrl: String
-}
-
 enum ChatError: LocalizedErrorWithCode {
     case failedLoadMyData
     case failedLoadUsersData
@@ -76,6 +70,7 @@ final class ChatRoomReactor: Reactor {
         // View의 state를 관리한다.
         var messages: [ChatMessage] = []
 //        var sendMessage: [ChatMessage] = [] // 보내는 중 메시지 -> 다시 전송 등 기능 필요
+        var senderProfiles: [SenderInfo] = []
         var error: PresentationError?
     }
     
@@ -83,23 +78,20 @@ final class ChatRoomReactor: Reactor {
     private var myData: SenderInfo?
     private let roomId: Int
     private let disposeBag = DisposeBag()
+
+    // MARK: - UseCase
+    private let loadInfoUS: LoadChatInfoUseCase
     
-    // TODO: - UseCase 연결 후 State로 변경하기
-    var senderProfiles: [SenderInfo] = []
-    init(roomId: Int) {
+    init(roomId: Int, loadInfoUS: LoadChatInfoUseCase) {
         self.initialState = State()
         self.roomId = roomId
+        self.loadInfoUS = loadInfoUS
         do {
             try setupMyData()
         } catch {
             action.onNext(.setError(ChatError.failedLoadMyData.convertToPresentationError()))
         }
         observeIncomingMessage()
-//        setupSenderProfile()
-        // 임시
-        senderProfiles = [SenderInfo(senderId: 4, nickName: "네이벙", imageUrl: "https://catch-mate.s3.ap-northeast-2.amazonaws.com/d9214541-abb9-445e-96c2-194f992f4f0a_profile.jpg"),
-                          SenderInfo(senderId: 7, nickName: "히희채팅테스트", imageUrl: "https://k.kakaocdn.net/dn/ieEGZ/btsK8rkUtPZ/koch7rFi1Bv9wEzQcknKY0/img_640x640.jpg")
-        ]
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
@@ -136,7 +128,17 @@ final class ChatRoomReactor: Reactor {
         case .loadMessages:
             return Observable.empty()
         case .loadPeople:
-            return Observable.empty()
+            return loadInfoUS.loadChatRoomUsers(chatId: roomId)
+                .map { infos in
+                    Mutation.setSenderInfo(infos)
+                }
+                .catch { error in
+                    if let chatError = error as? ChatError {
+                        return Observable.just(.setError(chatError.convertToPresentationError()))
+                    } else {
+                        return Observable.just(.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
         case .setError(let error):
             return Observable.just(.setError(error))
         }
@@ -151,7 +153,7 @@ final class ChatRoomReactor: Reactor {
         case .setMessages(let messages):
             newState.messages = messages
         case .setSenderInfo(let infos):
-            self.senderProfiles = infos
+            newState.senderProfiles = infos
         case .setError(let error):
             newState.error = error
         }
@@ -165,11 +167,6 @@ final class ChatRoomReactor: Reactor {
             throw ChatError.failedStringToIntId
         }
         myData = SenderInfo(senderId: userIntId, nickName: userInfo.nickname, imageUrl: userInfo.imageUrl)
-    }
-    private func setupSenderProfile() {
-        if let myData = myData {
-            senderProfiles.append(myData)
-        }
     }
     
     private func observeIncomingMessage() {
@@ -191,7 +188,7 @@ final class ChatRoomReactor: Reactor {
                     self?.action.onNext(.setError(ChatError.failedListenToMessages.convertToPresentationError()))
                     return
                 }
-                guard let senderInfo = self?.senderProfiles.first(where: { $0.senderId == chatMessage.senderId }) else {
+                guard let senderInfo = self?.currentState.senderProfiles.first(where: { $0.senderId == chatMessage.senderId }) else {
                     print("❌ [DEBUG] 보낸이 찾기 실패")
                     self?.action.onNext(.setError(ChatError.failedListenToMessages.convertToPresentationError()))
                     return
