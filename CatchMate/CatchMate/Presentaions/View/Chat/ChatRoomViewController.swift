@@ -26,6 +26,12 @@ final class ChatRoomViewController: BaseViewController, View {
     private var bottomConstraint: Constraint?
     private var inputViewHeightConstraint: Constraint?
     
+    private let numberLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .cmNonImportantTextColor
+        label.applyStyle(textStyle: FontSystem.caption01_medium)
+        return label
+    }()
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reactor.action.onNext(.subscribeRoom)
@@ -103,15 +109,13 @@ final class ChatRoomViewController: BaseViewController, View {
             label.numberOfLines = 1
             return label
         }()
-        let numberLabel: UILabel = {
-            let label = UILabel()
-            label.text = "\(chat.postInfo.currentPerson)"
-            label.textColor = .cmNonImportantTextColor
-            label.applyStyle(textStyle: FontSystem.caption01_medium)
-            return label
-        }()
         numberLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         customNavigationBar.addLeftItems(items: [titleLabel, numberLabel])
+    }
+    
+    private func updateCurrentPeople(_ count: Int) {
+        numberLabel.text = "\(count)"
+        numberLabel.applyStyle(textStyle: FontSystem.caption01_medium)
     }
     
     @objc private func clickedMenuButton(_ sender: UIButton) {
@@ -241,6 +245,13 @@ extension ChatRoomViewController {
             }
             .map{Reactor.Action.sendMessage($0)}
             .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.senderProfiles.count}
+            .withUnretained(self)
+            .subscribe { vc, count in
+                vc.updateCurrentPeople(count)
+            }
             .disposed(by: disposeBag)
     }
 }
