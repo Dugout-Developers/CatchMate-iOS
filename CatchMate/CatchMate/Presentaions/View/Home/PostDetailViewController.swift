@@ -241,6 +241,8 @@ final class PostDetailViewController: BaseViewController, View {
                     }
                 }),
                 MenuItem(title: "공유하기", action: {
+//                    let numbers = [0]
+//                    let _ = numbers[1]
                     print("공유하기 선택됨")
                 }),
                 MenuItem(title: "신고하기", textColor: UIColor.cmSystemRed, action: {

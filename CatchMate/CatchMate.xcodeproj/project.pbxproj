@@ -172,6 +172,8 @@
 		534E39E72C63E022006D180E /* CustomerServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39E62C63E021006D180E /* CustomerServiceViewController.swift */; };
 		534E39E92C63E509006D180E /* SendMateListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39E82C63E509006D180E /* SendMateListViewController.swift */; };
 		534E39EC2C63E771006D180E /* SendMateListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39EB2C63E771006D180E /* SendMateListCell.swift */; };
+		53577B362D5303D300769533 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 53577B352D5303D300769533 /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		53577B382D5303D300769533 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 53577B372D5303D300769533 /* FirebaseCrashlytics */; };
 		535AA00E2D368097007C7690 /* SetAlarmnUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535AA00D2D368097007C7690 /* SetAlarmnUseCase.swift */; };
 		535AA0112D368097007C7690 /* DeleteNotificationUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535AA00F2D368097007C7690 /* DeleteNotificationUseCase.swift */; };
 		535AA0122D368097007C7690 /* LoadNotificationListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535AA0102D368097007C7690 /* LoadNotificationListUseCase.swift */; };
@@ -783,6 +785,8 @@
 				536BDE1B2C1B52510043B1DA /* RxCocoa in Frameworks */,
 				536BDE172C1B52510043B1DA /* FlexLayout in Frameworks */,
 				530DD6192C4F88C600A7D6CE /* FirebaseMessaging in Frameworks */,
+				53577B362D5303D300769533 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				53577B382D5303D300769533 /* FirebaseCrashlytics in Frameworks */,
 				535AA03C2D4667E3007C7690 /* Starscream in Frameworks */,
 				533A2B3B2C2C590400A59340 /* RxKakaoSDK in Frameworks */,
 			);
@@ -1806,6 +1810,7 @@
 				536BDDA62C189B230043B1DA /* Sources */,
 				536BDDA72C189B230043B1DA /* Frameworks */,
 				536BDDA82C189B230043B1DA /* Resources */,
+				53577B392D53041700769533 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1826,6 +1831,8 @@
 				5301E2AD2C5BC45E0078E910 /* Kingfisher */,
 				53368C872D2F9EED00D129EE /* NaverThirdPartyLogin */,
 				535AA03B2D4667E3007C7690 /* Starscream */,
+				53577B352D5303D300769533 /* FirebaseAnalyticsWithoutAdIdSupport */,
+				53577B372D5303D300769533 /* FirebaseCrashlytics */,
 			);
 			productName = CatchMate;
 			productReference = 536BDDAA2C189B230043B1DA /* CatchMate.app */;
@@ -1953,6 +1960,32 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		53577B392D53041700769533 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}.debug.dylib",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		536BDDA62C189B230043B1DA /* Sources */ = {
@@ -2523,6 +2556,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 977J65FA28;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CatchMate/APP/Info.plist;
@@ -2537,6 +2571,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tori.CatchMate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2574,6 +2609,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tori.CatchMate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2819,6 +2855,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 533A2B392C2C581300A59340 /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */;
 			productName = RxKakaoSDK;
+		};
+		53577B352D5303D300769533 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 530DD6172C4F88B000A7D6CE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		53577B372D5303D300769533 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 530DD6172C4F88B000A7D6CE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
 		};
 		535AA03B2D4667E3007C7690 /* Starscream */ = {
 			isa = XCSwiftPackageProductDependency;
