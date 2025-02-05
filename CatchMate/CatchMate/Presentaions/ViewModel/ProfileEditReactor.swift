@@ -117,6 +117,12 @@ final class ProfileEditReactor: Reactor {
         case .setCheerStyle(let style):
             newState.cheerStyle = style
         case .setEditProfileSuccess(let state):
+            if state {
+                let nickName = currentState.nickname
+                let cheerTeam = currentState.team.rawValue
+                SetupInfoService.shared.saveUserInfo(type: .nickName, nickName)
+                SetupInfoService.shared.saveUserInfo(type: .team, cheerTeam)
+            }
             newState.editProfileSucess = state
         case .setError(let error):
             newState.error = error

@@ -144,7 +144,14 @@ extension SignInViewController {
         if !state {
             // 회원가입 이미한 유저일 경우
             let tabViewController = TabBarController()
-            DispatchQueue.main.async { 
+            do {
+                SocketService.shared = try SocketService()
+                print("✅ SocketService 인스턴스 생성 성공")
+                SocketService.shared?.connect()  // WebSocket 연결
+            } catch {
+                print("❌ SocketService 초기화 실패: \(error)")
+            }
+            DispatchQueue.main.async {
                 (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(tabViewController, animated: true)
             }
 

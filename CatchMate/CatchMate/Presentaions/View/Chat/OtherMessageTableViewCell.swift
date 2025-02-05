@@ -14,7 +14,7 @@ final class OtherMessageTableViewCell: UITableViewCell {
     private let containerView = UIView()
     private let profileImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 20
         return imageView
@@ -66,13 +66,13 @@ final class OtherMessageTableViewCell: UITableViewCell {
     }
     
     func configData(_ chat: ChatMessage, isHiddenTime: Bool, isHiddenProfile: Bool) {
-        profileImageView.image = UIImage(named: chat.user?.profilePicture ?? "")
-        nickNameLabel.text = chat.user?.nickName
+        ProfileImageHelper.loadImage(profileImageView, pictureString: chat.imageUrl)
+        nickNameLabel.text = chat.nickName
         nickNameLabel.applyStyle(textStyle: FontSystem.body03_semiBold)
-        let dateString = chat.date.toString(format: "a h:mm")
+        let dateString = chat.time.toString(format: "a h:mm")
         timeLabel.text = dateString
         timeLabel.applyStyle(textStyle: FontSystem.caption01_medium)
-        messageLabel.text = chat.text
+        messageLabel.text = chat.message
         messageLabel.applyStyle(textStyle: FontSystem.body02_medium)
         self.isHiddenTime = isHiddenTime
         self.isHiddenProfile = isHiddenProfile

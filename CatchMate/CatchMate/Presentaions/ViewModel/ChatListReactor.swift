@@ -14,6 +14,7 @@ final class ChatListReactor: Reactor {
         case loadChatList
         case selectChat(ChatListInfo?)
         case loadNextPage
+        case setError(PresentationError?)
     }
     enum Mutation {
         case setChatList(list: [ChatListInfo], isAppend: Bool)
@@ -79,6 +80,8 @@ final class ChatListReactor: Reactor {
                 .catch { error in
                     return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
+        case .setError(let error):
+            return Observable.just(.setError(error))
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {

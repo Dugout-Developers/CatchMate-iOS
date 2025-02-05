@@ -9,9 +9,8 @@ import Foundation
 
 struct ChatListInfo {
     let chatRoomId: Int
-    let boardTitle: String
-    let participantCount: Int
-    let cheerTeam: Team
+    let postInfo: SimplePost
+    let managerId: Int
     let lastMessage: String
     let lastMessageAt: Date
     let newChat: Bool

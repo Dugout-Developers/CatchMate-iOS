@@ -26,6 +26,15 @@ extension Bundle {
            }
            return key
        }
+    var socketURL: String? {
+        guard let file = self.path(forResource: "APIKeys", ofType: "plist"),
+              let resource = NSDictionary(contentsOfFile: file),
+              let key = resource["SOCKET_URL"] as? String else {
+            print("Socket URL 얻기 실패")
+            return nil
+        }
+        return key
+    }
     var kakaoLoginAPPKey: String? {
            guard let file = self.path(forResource: "APIKeys", ofType: "plist"),
                  let resource = NSDictionary(contentsOfFile: file),

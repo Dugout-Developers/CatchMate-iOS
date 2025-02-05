@@ -12,7 +12,21 @@ struct ChatListDTO: Codable {
 
 struct ChatRoomInfoDTO: Codable {
     let chatRoomId: Int
-    let boardInfo: PostListInfoDTO
+    let boardInfo: ChatPostInfo
     let participantCount: Int
     let lastMessageAt: String
+}
+
+struct ChatPostInfo: Codable {
+    let boardId: Int
+    let title: String
+    let cheerClubId: Int
+    let currentPerson: Int
+    let maxPerson: Int
+    let gameInfo: GameInfoDTO
+    let userInfo: ChatManangerInfo
+}
+
+struct ChatManangerInfo: Codable {
+    let userId: Int
 }

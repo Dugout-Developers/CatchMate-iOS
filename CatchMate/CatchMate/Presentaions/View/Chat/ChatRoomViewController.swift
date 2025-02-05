@@ -19,22 +19,38 @@ final class ChatRoomViewController: BaseViewController, View {
     }
     private let tableView: UITableView = UITableView()
     private let inputview: ChatingInputField = ChatingInputField()
-    private var chat: Chat
+    private var chat: ChatListInfo
+    private var userId: Int
     var reactor: ChatRoomReactor
     private var keyboardManager: KeyboardManager?
     private var bottomConstraint: Constraint?
     private var inputViewHeightConstraint: Constraint?
-    
+   
+    private let refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        control.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+        control.tintColor = .cmPrimaryColor
+        return control
+    }()
+    private let numberLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .cmNonImportantTextColor
+        label.applyStyle(textStyle: FontSystem.caption01_medium)
+        return label
+    }()
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        reactor.action.onNext(.loadMessages)
+        reactor.action.onNext(.subscribeRoom)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
     }
-    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        reactor.action.onNext(.unsubscribeRoom)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -46,12 +62,14 @@ final class ChatRoomViewController: BaseViewController, View {
             self?.scrollToBottom(animated: true)
         })
         view.backgroundColor = .white
+        reactor.action.onNext(.loadPeople)
+        reactor.action.onNext(.loadMessages)
     }
-    // 임시
-    private let user = User(id: 1, email: "ㄴㄴㄴ", nickName: "나요", birth: "2000-01-22", team: .dosun, gener: .man, cheerStyle: .director, profilePicture: nil, allAlarm: true, chatAlarm: true, enrollAlarm: true, eventAlarm: true)
-    init(chat: Chat) {
-        self.reactor = ChatRoomReactor(chat: chat, user: user)
+
+    init(chat: ChatListInfo, userId: Int) {
+        self.reactor = DIContainerService.shared.makeChatRoomReactor(roomId: chat.chatRoomId)
         self.chat = chat
+        self.userId = userId
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -74,6 +92,7 @@ final class ChatRoomViewController: BaseViewController, View {
         tableView.register(DateChatInfoCell.self, forCellReuseIdentifier: "DateChatInfoCell")
         tableView.register(EnterUserCell.self, forCellReuseIdentifier: "EnterUserCell")
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
+        tableView.refreshControl = refreshControl
         view.backgroundColor = .white
         tableView.separatorStyle = .none
         tableView.keyboardDismissMode = .onDrag
@@ -90,26 +109,25 @@ final class ChatRoomViewController: BaseViewController, View {
         menuButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         let titleLabel: UILabel = {
             let label = UILabel()
-            label.text = chat.post.title
+            label.text = chat.postInfo.title
             label.textColor = .cmHeadLineTextColor
             label.applyStyle(textStyle: FontSystem.body01_medium)
             label.lineBreakMode = .byTruncatingTail
             label.numberOfLines = 1
             return label
         }()
-        let numberLabel: UILabel = {
-            let label = UILabel()
-            label.text = "\(chat.post.currentPerson)"
-            label.textColor = .cmNonImportantTextColor
-            label.applyStyle(textStyle: FontSystem.caption01_medium)
-            return label
-        }()
         numberLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         customNavigationBar.addLeftItems(items: [titleLabel, numberLabel])
     }
     
+    private func updateCurrentPeople(_ count: Int) {
+        numberLabel.text = "\(count)"
+        numberLabel.applyStyle(textStyle: FontSystem.caption01_medium)
+    }
+    
     @objc private func clickedMenuButton(_ sender: UIButton) {
-        let sideSheetVC = ChatSideSheetViewController(chat: chat)
+        print(reactor.currentState.senderProfiles)
+        let sideSheetVC = ChatSideSheetViewController(chat: chat, userId: userId, people: reactor.currentState.senderProfiles)
         let transitioningDelegate = SideSheetTransitioningDelegate()
         sideSheetVC.transitioningDelegate = transitioningDelegate
         sideSheetVC.modalPresentationStyle = .custom
@@ -159,64 +177,109 @@ extension ChatRoomViewController {
         inputViewHeightConstraint?.update(offset: newHeight)
         view.layoutIfNeeded()
     }
+    
+    
     func bind(reactor: ChatRoomReactor) {
-        reactor.state.map{$0.messages}
+
+        refreshControl.rx.controlEvent(.valueChanged)
+            .withLatestFrom(reactor.state.map { $0.isLast })
+            .subscribe(onNext: { [weak self] isLast in
+                guard let self = self else { return }
+                if isLast {
+                    self.refreshControl.endRefreshing()
+                } else {
+                    reactor.action.onNext(.loadMessages)
+                }
+            })
+            .disposed(by: disposeBag)
+
+ 
+        reactor.state.map { !$0.isLoading }
+            .distinctUntilChanged()
+            .filter { $0 }
+            .subscribe(onNext: { [weak self] _ in
+                self?.refreshControl.endRefreshing()
+            })
+            .disposed(by: disposeBag)
+        
+        
+        
+        reactor.state.map { $0.messages }
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] messages in
                 guard let self = self else { return }
+                
+                let isFirstLoad = self.tableView.contentSize.height == 0 // 처음 로드 확인
+                let previousContentHeight = self.tableView.contentSize.height // 기존 높이 저장
+                let previousOffsetY = self.tableView.contentOffset.y // 기존 오프셋 저장
+                
                 DispatchQueue.main.async {
-                    if messages.count > 0 {         
-                        self.tableView.reloadData()
-                        let indexPath = IndexPath(row: messages.count - 1, section: 0)
-                        self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+                    self.tableView.reloadData()
+                    let newContentHeight = self.tableView.contentSize.height // 새로운 높이 가져오기
+                    
+                    if isFirstLoad {
+                        // 처음 채팅방을 열었을 때는 가장 아래로 스크롤
+                        self.scrollToBottom(animated: false)
+                    } else if messages.count > 0, previousContentHeight > 0 {
+                        // 위로 스크롤하여 메시지를 불러온 경우 스크롤 위치 유지
+                        let offsetYDifference = newContentHeight - previousContentHeight
+                        self.tableView.contentOffset.y += offsetYDifference
                     }
                 }
             })
             .disposed(by: disposeBag)
+        
         reactor.state.map{$0.messages}
             .observe(on: MainScheduler.instance)
             .bind(to: tableView.rx.items) { [weak self] tableView, index, item in
                 guard let self = self else { return UITableViewCell() }
                 let indexPath = IndexPath(row: index, section: 0)
                 switch item.messageType {
-                case 0:
-                    if item.user?.id == user.id {
-                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyMessageTableViewCell", for: indexPath) as? MyMessageTableViewCell else { return UITableViewCell() }
+                case .talk:
+                    if item.userId == self.userId {
+                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyMessageTableViewCell", for: indexPath) as? MyMessageTableViewCell else {
+                            return UITableViewCell()
+                        }
                         cell.configData(item)
                         cell.selectionStyle = .none
                         cell.backgroundColor = .clear
                         return cell
                     } else {
-                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "OtherMessageTableViewCell", for: indexPath) as? OtherMessageTableViewCell else { return UITableViewCell() }
-                        let isHiddenTime = index == 0 ? false : (reactor.currentState.messages[index-1].messageType == 0 && reactor.currentState.messages[index-1].user?.id == item.user?.id && reactor.currentState.messages[index-1].date == item.date)
-                        let isHiddenProfile = index == 0 ? false : (reactor.currentState.messages[index-1].messageType == 0 && reactor.currentState.messages[index-1].user?.id == item.user?.id)
+                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "OtherMessageTableViewCell", for: indexPath) as? OtherMessageTableViewCell else {
+                            return UITableViewCell()
+                        }
+                        let isHiddenTime = index == 0 ? false : (reactor.currentState.messages[index-1].messageType == .talk && reactor.currentState.messages[index-1].userId == item.userId && reactor.currentState.messages[index-1].time == item.time)
+                        let isHiddenProfile = index == 0 ? false : (reactor.currentState.messages[index-1].messageType == .talk && reactor.currentState.messages[index-1].userId == item.userId)
                         cell.configData(item, isHiddenTime: isHiddenTime, isHiddenProfile: isHiddenProfile)
                         cell.selectionStyle = .none
                         cell.backgroundColor = .clear
+                        
                         return cell
                     }
-                case 1:
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "EnterUserCell", for: indexPath) as? EnterUserCell, let user = item.user else { return UITableViewCell() }
-                    cell.configData(user)
-                    cell.selectionStyle = .none
-                    cell.backgroundColor = .clear
-                    return cell
-                case 2:
+                case .date:
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: "DateChatInfoCell", for: indexPath) as? DateChatInfoCell else { return UITableViewCell() }
-                    cell.configData(item.date)
+                    cell.configData(item.time)
                     cell.selectionStyle = .none
                     cell.backgroundColor = .clear
                     return cell
-                case 3:
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "StartChatInfoCell", for: indexPath) as? StartChatInfoCell else { return UITableViewCell() }
-                    cell.configData(chat.post)
+                case .enterUser:
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "EnterUserCell", for: indexPath) as? EnterUserCell else {
+                        return UITableViewCell()
+                    }
+                    cell.configData(item.nickName)
                     cell.selectionStyle = .none
                     cell.backgroundColor = .clear
                     return cell
-                default:
-                    return UITableViewCell()
+                case .startChat:
+                   guard let cell = tableView.dequeueReusableCell(withIdentifier: "StartChatInfoCell", for: indexPath) as? StartChatInfoCell else { return UITableViewCell() }
+                    cell.configData(chat.postInfo)
+                    cell.selectionStyle = .none
+                    cell.backgroundColor = .clear
+                    return cell
                 }
             }
             .disposed(by: disposeBag)
+        
         inputview.rx.sendTap
             .compactMap { $0 }
             .distinctUntilChanged()
@@ -227,6 +290,13 @@ extension ChatRoomViewController {
             }
             .map{Reactor.Action.sendMessage($0)}
             .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.senderProfiles.count}
+            .withUnretained(self)
+            .subscribe { vc, count in
+                vc.updateCurrentPeople(count)
+            }
             .disposed(by: disposeBag)
     }
 }
@@ -298,11 +368,11 @@ final class StartChatInfoCell: UITableViewCell {
         infoLabel.text = nil
     }
     
-    func configData(_ post: Post) {
+    func configData(_ post: SimplePost) {
         infoLabel.text = "\(post.date) | \(post.playTime) | \(post.location)"
         infoLabel.applyStyle(textStyle: FontSystem.body02_medium)
-        homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.writer.favGudan == post.homeTeam)
-        awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.writer.favGudan == post.awayTeam)
+        homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.cheerTeam == post.homeTeam)
+        awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.cheerTeam == post.awayTeam)
     }
     
     private func setupUI() {
@@ -428,8 +498,8 @@ final class EnterUserCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configData(_ user: User) {
-        infoLabel.text = "\(user.nickName) 님이 채팅에 참여했어요"
+    func configData(_ nickName: String) {
+        infoLabel.text = "\(nickName) 님이 채팅에 참여했어요"
         infoLabel.applyStyle(textStyle: FontSystem.body03_medium)
     }
     override func prepareForReuse() {

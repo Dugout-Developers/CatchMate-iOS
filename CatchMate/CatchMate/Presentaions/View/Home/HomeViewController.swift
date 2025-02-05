@@ -65,7 +65,7 @@ final class HomeViewController: BaseViewController, View {
         setupButton()
         setupLogo()
         bind(reactor: self.reactor)
-        reactor.action.onNext(.viewDidLoad)
+        reactor.action.onNext(.setupUserInfo)
         filterScrollView.showsHorizontalScrollIndicator = false
     }
     private func setupNavigation() {
