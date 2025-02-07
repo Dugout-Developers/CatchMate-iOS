@@ -20,7 +20,7 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
     private let chat: ChatListInfo
     private let people: [SenderInfo]
     private var isManager: Bool {
-        return chat.managerId == userId
+        return chat.managerInfo.id == userId
     }
     private let infoView = UIView()
     private let teamInfoView = UIView()
@@ -251,7 +251,7 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         }
         cell.selectionStyle = .none
         let person = people[indexPath.row]
-        cell.configData(person, isMy: person.senderId == userId, isManager: person.senderId == chat.managerId)
+        cell.configData(person, isMy: person.senderId == userId, isManager: person.senderId == chat.managerInfo.id)
         return cell
         
     }

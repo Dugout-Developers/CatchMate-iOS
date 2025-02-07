@@ -174,6 +174,7 @@
 		534E39EC2C63E771006D180E /* SendMateListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E39EB2C63E771006D180E /* SendMateListCell.swift */; };
 		53577B362D5303D300769533 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 53577B352D5303D300769533 /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		53577B382D5303D300769533 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 53577B372D5303D300769533 /* FirebaseCrashlytics */; };
+		53577B492D55AEAA00769533 /* ChatSystemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53577B482D55AEA500769533 /* ChatSystemCell.swift */; };
 		535AA00E2D368097007C7690 /* SetAlarmnUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535AA00D2D368097007C7690 /* SetAlarmnUseCase.swift */; };
 		535AA0112D368097007C7690 /* DeleteNotificationUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535AA00F2D368097007C7690 /* DeleteNotificationUseCase.swift */; };
 		535AA0122D368097007C7690 /* LoadNotificationListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535AA0102D368097007C7690 /* LoadNotificationListUseCase.swift */; };
@@ -560,6 +561,7 @@
 		534E39E62C63E021006D180E /* CustomerServiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerServiceViewController.swift; sourceTree = "<group>"; };
 		534E39E82C63E509006D180E /* SendMateListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMateListViewController.swift; sourceTree = "<group>"; };
 		534E39EB2C63E771006D180E /* SendMateListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMateListCell.swift; sourceTree = "<group>"; };
+		53577B482D55AEA500769533 /* ChatSystemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSystemCell.swift; sourceTree = "<group>"; };
 		535AA00D2D368097007C7690 /* SetAlarmnUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetAlarmnUseCase.swift; sourceTree = "<group>"; };
 		535AA00F2D368097007C7690 /* DeleteNotificationUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteNotificationUseCase.swift; sourceTree = "<group>"; };
 		535AA0102D368097007C7690 /* LoadNotificationListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadNotificationListUseCase.swift; sourceTree = "<group>"; };
@@ -912,6 +914,7 @@
 		531786802C21D3E400ACEF6A /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				53577B482D55AEA500769533 /* ChatSystemCell.swift */,
 				536BDE2A2C1B54C80043B1DA /* ChatListViewController.swift */,
 				531786812C21D3F700ACEF6A /* ChatListTableViewCell.swift */,
 				5375980B2C46DC45003BD8AE /* ChatRoomViewController.swift */,
@@ -1992,6 +1995,7 @@
 				53EECB012D1150C100775FD6 /* ApplyManageUseCase.swift in Sources */,
 				53EECAEB2D0B2FFE00775FD6 /* ProfileEditRepository.swift in Sources */,
 				531288CD2C5408FF000C2FB1 /* LoginModel.swift in Sources */,
+				53577B492D55AEAA00769533 /* ChatSystemCell.swift in Sources */,
 				534E39EC2C63E771006D180E /* SendMateListCell.swift in Sources */,
 				535AA0382D4612D6007C7690 /* EmptyView.swift in Sources */,
 				533A2B362C2BEA3900A59340 /* InputCheerStyleViewController.swift in Sources */,

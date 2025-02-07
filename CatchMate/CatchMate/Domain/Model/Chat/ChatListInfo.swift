@@ -10,7 +10,7 @@ import Foundation
 struct ChatListInfo {
     let chatRoomId: Int
     let postInfo: SimplePost
-    let managerId: Int
+    let managerInfo: ManagerInfo
     let lastMessage: String
     let lastMessageAt: Date
     let newChat: Bool
@@ -45,4 +45,9 @@ struct ChatListInfo {
         let days = Int(timeInterval / oneDay)
         return "\(days)일 전"
     }
+}
+
+struct ManagerInfo {
+    let id: Int
+    let nickName: String
 }

@@ -197,16 +197,6 @@ class DIContainerService {
         return ChatListReactor(loadchatListUsecase: loadChatListUC)
     }
     
-    func makeChatRoomReactor(roomId: Int) -> ChatRoomReactor {
-        let loadChatUsersDS = LoadChatUsersDataSourceImpl(tokenDataSource: tokenDS)
-        let loadChatUserRepo = LoadChatUsersRepositoryImpl(loadChatUserDS: loadChatUsersDS)
-        let loadChatMessageDS = LoadChatMessageDataSourceImpl(tokenDataSource: tokenDS)
-        let loadChatMessageRepo = LoadChatMessageRepositoryImpl(loadMessageDS: loadChatMessageDS)
-        let loadChatInfoUS = LoadChatInfoUseCaseImpl(loadChatUsersRP: loadChatUserRepo, loadChatMessageRepo: loadChatMessageRepo)
-        
-        return ChatRoomReactor(roomId: roomId, loadInfoUS: loadChatInfoUS)
-    }
-    
     // MARK: - 특정 Usecase만 필요할 때
     func makeLogoutUseCase() -> LogoutUseCase {
         let logoutDataSource = LogoutDataSourceImpl(tokenDataSource: tokenDS)
@@ -227,5 +217,15 @@ class DIContainerService {
         let nicknameCheckRepository = NicknameCheckRepositoryImpl(nicknameDS: nicknameCheckDataSource)
         let nicknameCheckUsecase = NicknameCheckUseCaseImpl(nicknameRepository: nicknameCheckRepository)
         return nicknameCheckUsecase
+    }
+    
+    func makeChatRoomUseCase() -> LoadChatInfoUseCase {
+        let loadChatUsersDS = LoadChatUsersDataSourceImpl(tokenDataSource: tokenDS)
+        let loadChatUserRepo = LoadChatUsersRepositoryImpl(loadChatUserDS: loadChatUsersDS)
+        let loadChatMessageDS = LoadChatMessageDataSourceImpl(tokenDataSource: tokenDS)
+        let loadChatMessageRepo = LoadChatMessageRepositoryImpl(loadMessageDS: loadChatMessageDS)
+        let loadChatInfoUS = LoadChatInfoUseCaseImpl(loadChatUsersRP: loadChatUserRepo, loadChatMessageRepo: loadChatMessageRepo)
+        
+        return loadChatInfoUS
     }
 }
