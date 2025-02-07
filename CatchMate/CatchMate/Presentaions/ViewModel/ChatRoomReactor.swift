@@ -169,11 +169,9 @@ final class ChatRoomReactor: Reactor {
     }
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
-        newState.error = nil
         switch mutation {
         case .addMyMessage(let message):
             newState.messages.append(message)
-            print(newState.messages)
         case .setMessages(let messages):
             newState.messages.insert(contentsOf: messages, at: 0)
             newState.currentPage += 1

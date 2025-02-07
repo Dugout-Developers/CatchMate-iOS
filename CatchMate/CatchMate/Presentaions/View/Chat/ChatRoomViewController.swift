@@ -17,6 +17,18 @@ final class ChatRoomViewController: BaseViewController, View {
     override var buttonContainerExists: Bool {
         return true
     }
+    private let errorMessageView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .opacity600
+        return view
+    }()
+    private let errorMessage: UILabel = {
+        let label = UILabel()
+        label.text = "채팅방 연결이 불안정합니다."
+        label.textColor = .white
+        label.applyStyle(textStyle: FontSystem.body02_medium)
+        return label
+    }()
     private let tableView: UITableView = UITableView()
     private let inputview: ChatingInputField = ChatingInputField()
     private var chat: ChatListInfo
@@ -135,7 +147,15 @@ final class ChatRoomViewController: BaseViewController, View {
     }
     
     private func setupUI() {
-        view.addSubviews(views: [tableView, inputview])
+        view.addSubviews(views: [tableView, inputview, errorMessageView])
+        errorMessageView.addSubview(errorMessage)
+        errorMessageView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+        }
+        errorMessage.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.bottom.equalToSuperview().inset(9)
+        }
         tableView.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
         }
@@ -296,6 +316,15 @@ extension ChatRoomViewController {
             .withUnretained(self)
             .subscribe { vc, count in
                 vc.updateCurrentPeople(count)
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map {$0.error}
+            .map{ $0 == nil }
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .subscribe { vc, state in
+                vc.errorMessageView.isHidden = state
             }
             .disposed(by: disposeBag)
     }
