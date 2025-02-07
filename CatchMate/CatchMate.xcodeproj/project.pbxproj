@@ -318,7 +318,6 @@
 		53B3CE4D2C88B5B000116BF7 /* SendAppiesRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B3CE4C2C88B5B000116BF7 /* SendAppiesRepositoryImpl.swift */; };
 		53B3CE502C88B68200116BF7 /* LoadSendAppliesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B3CE4F2C88B68200116BF7 /* LoadSendAppliesUseCase.swift */; };
 		53B895C12C9F3A4200029130 /* TempPostDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B895C02C9F3A4200029130 /* TempPostDataSource.swift */; };
-		53B895C32C9F3AEA00029130 /* TempPostRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B895C22C9F3AEA00029130 /* TempPostRequestDTO.swift */; };
 		53B895C72CA254DE00029130 /* UserPostLoadDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B895C62CA254DE00029130 /* UserPostLoadDataSource.swift */; };
 		53B895C92CA256E100029130 /* UserPostLoadRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B895C82CA256E100029130 /* UserPostLoadRepositoryImpl.swift */; };
 		53B895CB2CA2576700029130 /* UserPostLoadRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B895CA2CA2576700029130 /* UserPostLoadRepository.swift */; };
@@ -677,7 +676,6 @@
 		53B3CE4C2C88B5B000116BF7 /* SendAppiesRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendAppiesRepositoryImpl.swift; sourceTree = "<group>"; };
 		53B3CE4F2C88B68200116BF7 /* LoadSendAppliesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadSendAppliesUseCase.swift; sourceTree = "<group>"; };
 		53B895C02C9F3A4200029130 /* TempPostDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempPostDataSource.swift; sourceTree = "<group>"; };
-		53B895C22C9F3AEA00029130 /* TempPostRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempPostRequestDTO.swift; sourceTree = "<group>"; };
 		53B895C62CA254DE00029130 /* UserPostLoadDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostLoadDataSource.swift; sourceTree = "<group>"; };
 		53B895C82CA256E100029130 /* UserPostLoadRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostLoadRepositoryImpl.swift; sourceTree = "<group>"; };
 		53B895CA2CA2576700029130 /* UserPostLoadRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostLoadRepository.swift; sourceTree = "<group>"; };
@@ -1459,7 +1457,6 @@
 				531E4C272C6B55510052E754 /* PostListDTO.swift */,
 				53E592542C6D051D0042E1D7 /* PostDTO.swift */,
 				533B87342C86DF2A0058B94B /* ApplyListResponse.swift */,
-				53B895C22C9F3AEA00029130 /* TempPostRequestDTO.swift */,
 				53E7DBC82CB5357900DC058D /* NotificationListResponse.swift */,
 			);
 			path = DTO;
@@ -2108,7 +2105,6 @@
 				53E7DBC92CB5357900DC058D /* NotificationListResponse.swift in Sources */,
 				5337AB232C897847003A39AE /* ApplyUseCase.swift in Sources */,
 				531786572C1C8F1900ACEF6A /* UIView+Extension.swift in Sources */,
-				53B895C32C9F3AEA00029130 /* TempPostRequestDTO.swift in Sources */,
 				535AA02D2D4600B5007C7690 /* ChatMapper.swift in Sources */,
 				53EECAF72D0BD30E00775FD6 /* ProfileEditDataSource.swift in Sources */,
 				538EB92F2C3FA27600ABA40E /* CMDatePicker.swift in Sources */,

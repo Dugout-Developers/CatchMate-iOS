@@ -12,7 +12,7 @@ struct UserInfo: Codable {
     let nickName: String
     let profileImageUrl: String
     let favoriteClub: FavoriteClub
-    let watchStyle: String
+    let watchStyle: String?
     let gender: String
     let birthDate: String
 }
