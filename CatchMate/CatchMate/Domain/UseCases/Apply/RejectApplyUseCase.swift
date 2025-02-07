@@ -21,9 +21,12 @@ final class RejectApplyUseCaseImpl: RejectApplyUseCase {
     }
     
     func execute(enrollId: String) -> Observable<Bool> {
+        LoggerService.shared.log(level: .info, "신청 거절: \(enrollId)")
         return applyManagementRepository.rejectApply(enrollId: enrollId)
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .action, message: "거절하는데 문제가 발생했습니다."))
+                let domainError = DomainError(error: error, context: .action, message: "신청 처리 중 문제가 발생했습니다.")
+                LoggerService.shared.errorLog(domainError, domain: "reject_apply", message: error.errorDescription)
+                return Observable.error(domainError)
             }
     }
 }

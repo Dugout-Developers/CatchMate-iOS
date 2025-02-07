@@ -21,6 +21,7 @@ final class AppleLoginUseCaseImpl: AppleLoginUseCase {
         self.serverRepository = serverRepository
     }
     func execute() -> RxSwift.Observable<LoginModel> {
+        LoggerService.shared.log(level: .info, "애플 로그인 시도")
         return Observable.zip(
             snsRepository.appleLogin(),
             fcmRepository.getFCMToken()
@@ -31,7 +32,9 @@ final class AppleLoginUseCaseImpl: AppleLoginUseCase {
             return usecase.serverRepository.login(snsModel: snsModel, token: token)
         }
         .catch { error in
-            return Observable.error(DomainError(error: error, context: .action, message: "로그인에 문제가 발생했습니다."))
+            let domainError = DomainError(error: error, context: .action, message: "로그인에 문제가 발생했습니다.")
+            LoggerService.shared.errorLog(domainError, domain: "applelogin", message: error.errorDescription)
+            return Observable.error(domainError)
         }
     }
 }

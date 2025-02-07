@@ -20,12 +20,15 @@ final class LoadAlarmUseCaseImpl: LoadAlarmInfoUseCase {
     }
     
     func loadNotificationInfo() -> Observable<AlarmInfo> {
+        LoggerService.shared.log(level: .info, "알림 정보 불러오기")
         return userRepository.loadUser()
             .map { user in
                 return AlarmInfo(user: user)
             }
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .pageLoad))
+                let domainError = DomainError(error: error, context: .pageLoad)
+                LoggerService.shared.errorLog(domainError, domain: "load_alarminfo", message: error.errorDescription)
+                return Observable.error(domainError)
             }
     }
 }

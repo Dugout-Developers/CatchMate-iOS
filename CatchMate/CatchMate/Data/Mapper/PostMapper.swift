@@ -11,7 +11,8 @@ final class PostMapper {
         let dateString = DateHelper.shared.toString(from: domain.date, format: "yyyy-MM-dd")
         let playTime = domain.playTime+":00"
         let resultString = "\(dateString) \(playTime)"
-        LoggerService.shared.debugLog("PostMapper: Domain -> DTO : \(resultString)")
+        LoggerService.shared.log("PostMapper: Domain -> DTO : \(resultString)")
+        
         let genderStr = domain.preferGender == nil ? "" : domain.preferGender!.serverRequest
         return PostRequsetDTO(title: domain.title, gameRequest: GameInfo(homeClubId: domain.homeTeam.serverId, awayClubId: domain.awayTeam.serverId, gameStartDate: resultString, location: domain.location), cheerClubId: domain.cheerTeam.serverId, maxPerson: domain.maxPerson, preferredGender: genderStr, preferredAgeRange: domain.preferAge.map{String($0)}, content: domain.addInfo, isCompleted: true)
     }
@@ -19,7 +20,7 @@ final class PostMapper {
         let dateString = DateHelper.shared.toString(from: domain.date, format: "yyyy-MM-dd")
         let playTime = domain.playTime+":00"
         let resultString = "\(dateString) \(playTime)"
-        LoggerService.shared.debugLog("PostMapper: Domain -> DTO : \(resultString)")
+        LoggerService.shared.log("PostMapper: Domain -> DTO : \(resultString)")
         let preferAge = domain.preferAge.compactMap{String($0)}
         let genderStr = domain.preferGender == nil ? "" : domain.preferGender!.serverRequest
         return PostRequsetDTO(title: domain.title, gameRequest: GameInfo(homeClubId: domain.homeTeam.serverId, awayClubId: domain.awayTeam.serverId, gameStartDate: resultString, location: domain.location), cheerClubId: domain.cheerTeam.serverId, maxPerson: domain.maxPerson, preferredGender: genderStr, preferredAgeRange: preferAge, content: domain.addInfo, isCompleted: true)
@@ -57,18 +58,18 @@ final class PostMapper {
         let gameInfo = dto.gameInfo
         guard let writerTeam = Team(serverId: writer.favoriteClub.id),
         let writerGender = Gender(serverValue: writer.gender) else {
-            LoggerService.shared.debugLog("Post DTO -> Post Mapping Error: Writer Info 매칭 실패")
+            LoggerService.shared.log("Post DTO -> Post Mapping Error: Writer Info 매칭 실패")
             return nil
         }
         guard let homeTeam = Team(serverId: gameInfo.homeClubId),
               let awayTeam = Team(serverId: gameInfo.awayClubId),
               let cheerTeam = Team(serverId: dto.cheerClubId) else {
-            LoggerService.shared.debugLog("Post DTO -> Post Mapping Error: Game Info 매칭 실패")
+            LoggerService.shared.log("Post DTO -> Post Mapping Error: Game Info 매칭 실패")
             return nil
         }
         
         guard let gameDate = DateHelper.shared.convertISODateToCustomStrings(isoDateString: gameInfo.gameStartDate ?? "") else {
-            LoggerService.shared.debugLog("Post DTO -> Post Mapping Error: Game Date 변환 실패")
+            LoggerService.shared.log("Post DTO -> Post Mapping Error: Game Date 변환 실패")
             return nil
         }
 
@@ -84,12 +85,12 @@ final class PostMapper {
               let awayTeam = Team.init(serverId: gameInfo.awayClubId),
               let cheerTeam = Team.init(serverId: dto.cheerClubId) else {
             print("팀정보 매칭 실패")
-            LoggerService.shared.log("favoriteListDTO -> PostList 변환 실패 : 팀정보 매칭 실패", level: .error)
+            LoggerService.shared.log("favoriteListDTO -> PostList 변환 실패 : 팀정보 매칭 실패")
             return nil
         }
         guard let convertedDates = DateHelper.shared.convertISODateToCustomStrings(isoDateString: gameInfo.gameStartDate ?? "") else {
             print("날짜 변환 실패")
-            LoggerService.shared.log("PostListDTO -> PostList 변환 실패 : 날짜 변환 실패", level: .error)
+            LoggerService.shared.log("PostListDTO -> PostList 변환 실패 : 날짜 변환 실패")
             return nil
         }
         let date = convertedDates.date

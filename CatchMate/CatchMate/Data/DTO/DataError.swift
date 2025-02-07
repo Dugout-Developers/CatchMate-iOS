@@ -57,6 +57,16 @@ enum NetworkError: LocalizedErrorWithCode {
     case serverError(statusCode: Int) // 5xx 에러
     case unownedError(statusCode: Int)
     
+    init(serverStatusCode: Int) {
+        switch serverStatusCode {
+        case 400..<500:
+            self = .clientError(statusCode: serverStatusCode)
+        case 500..<600:
+            self = .serverError(statusCode: serverStatusCode)
+        default:
+            self = .unownedError(statusCode: serverStatusCode)
+        }
+    }
     var statusCode: Int {
         switch self {
         case .notFoundBaseURL:
@@ -124,11 +134,12 @@ enum MappingError: LocalizedErrorWithCode {
     }
 }
 
-// 디코딩 에러
+// 데이터 변환 에러
 enum CodableError: LocalizedErrorWithCode {
     case decodingFailed
     case encodingFailed
     case missingFields
+    case emptyValue(String)
     
     var statusCode: Int {
         switch self {
@@ -138,6 +149,8 @@ enum CodableError: LocalizedErrorWithCode {
             return -4002
         case .missingFields:
             return -4003
+        case .emptyValue:
+            return -4004
         }
     }
     var errorDescription: String? {
@@ -148,6 +161,8 @@ enum CodableError: LocalizedErrorWithCode {
             return "요청 데이터 인코딩 실패"
         case .missingFields:
             return "요청 필드 누락"
+        case .emptyValue(let description):
+            return "응답 필드 찾기 실패: \(description)"
         }
     }
 }
@@ -155,15 +170,15 @@ enum CodableError: LocalizedErrorWithCode {
 // SNS Login 관련 Error
 enum SNSLoginError: LocalizedErrorWithCode {
     case authorizationFailed
-    case EmptyValue
-    case loginServerError(description: String)
+    case emptyValue(description: String)
+    case loginServerError(message: String)
 
 
     var statusCode: Int {
         switch self {
         case .authorizationFailed:
             return -5001
-        case .EmptyValue:
+        case .emptyValue:
             return -5002
         case .loginServerError:
             return -5000
@@ -174,8 +189,8 @@ enum SNSLoginError: LocalizedErrorWithCode {
         switch self {
         case .authorizationFailed:
             return "권한 부여 실패 - 토큰 없음"
-        case .EmptyValue:
-            return "빈 응답값 전달"
+        case .emptyValue(let description):
+            return "빈 응답값 전달: \(description)"
         case .loginServerError(let message):
             return "서버 에러: \(message)"
         }
@@ -183,8 +198,9 @@ enum SNSLoginError: LocalizedErrorWithCode {
 }
 
 enum OtherError: LocalizedErrorWithCode {
-    case invalidURL
-    case notFoundSelf
+    case invalidURL(location: String)
+    case notFoundSelf(location: String)
+    case failureTypeCase
     
     var statusCode: Int {
         switch self {
@@ -192,15 +208,19 @@ enum OtherError: LocalizedErrorWithCode {
             return -6001
         case .notFoundSelf:
             return -6002
+        case .failureTypeCase:
+            return -6003
         }
     }
     
     var errorDescription: String? {
         switch self {
-        case .invalidURL:
-            return "URL 형식이 잘못되었습니다."
-        case .notFoundSelf:
-            return "self 참조 실패"
+        case .invalidURL(let location):
+            return "\(location) - URL 형식이 잘못되었습니다."
+        case .notFoundSelf(let location):
+            return "\(location) - self 참조 실패"
+        case .failureTypeCase:
+            return "타입 캐스팅 실패"
         }
     }
 }

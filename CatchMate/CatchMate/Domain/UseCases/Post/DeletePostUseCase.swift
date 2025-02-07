@@ -19,9 +19,12 @@ final class DeletePostUseCaseImpl: DeletePostUseCase {
     }
     
     func deletePost(postId: Int) -> RxSwift.Observable<Void> {
+        LoggerService.shared.log(level: .info, "\(postId)번 게시물 삭제")
         return deleteRepository.deletePost(postId: postId)
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .action, message: "게시물 삭제에 실패했습니다."))
+                let domainError = DomainError(error: error, context: .action, message: "게시물 삭제에 실패했습니다.")
+                LoggerService.shared.errorLog(domainError, domain: "delete_post", message: error.errorDescription)
+                return Observable.error(domainError)
             }
     }
 }

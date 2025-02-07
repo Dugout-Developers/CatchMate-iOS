@@ -22,6 +22,8 @@ final class LoadNotificationListRepositoryImpl: LoadNotificationListRepository {
                 for dto in dtoList {
                     if let notification = NotificationMapper.dtoToDomain(dto) {
                         result.append(notification)
+                    }  else {
+                        LoggerService.shared.log("\(dto.notificationId) 매핑 실패")
                     }
                 }
                 return result

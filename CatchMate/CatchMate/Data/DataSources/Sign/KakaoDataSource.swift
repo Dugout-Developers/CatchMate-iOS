@@ -25,17 +25,17 @@ final class KakaoDataSourceImpl: NSObject, KakaoDataSource {
     }
     
     func getKakaoLoginToken() -> Observable<SNSLoginResponse> {
-        LoggerService.shared.debugLog("-------------KAKAO LOGIN------------------")
+        LoggerService.shared.log(level: .info, "카카오 로그인 요청")
         return Observable.create { observer -> Disposable in
             // Check if KakaoTalk is available
             if UserApi.isKakaoTalkLoginAvailable() {
                 UserApi.shared.loginWithKakaoTalk { [weak self] (oauthToken, error) in
                     if let error = error {
-                        LoggerService.shared.log("Kakao Login Error: \(error.localizedDescription)", level: .error)
-                        observer.onError(SNSLoginError.loginServerError(description: error.localizedDescription))
+                        LoggerService.shared.log(level: .debug, "Kakao Login Error: \(error.localizedDescription)")
+                        observer.onError(SNSLoginError.loginServerError(message: error.localizedDescription))
                     } else {
                         guard let oauthToken = oauthToken else {
-                            LoggerService.shared.log("KakaoLogin - oauthToken 없음", level: .error)
+                            LoggerService.shared.log(level: .debug, "KakaoLogin - oauthToken 없음")
                             observer.onError(SNSLoginError.authorizationFailed)
                             return
                         }
@@ -46,11 +46,11 @@ final class KakaoDataSourceImpl: NSObject, KakaoDataSource {
                 // 웹뷰
                 UserApi.shared.loginWithKakaoAccount { [weak self] (oauthToken, error) in
                     if let error = error {
-                        LoggerService.shared.log("Kakao Login Error: \(error.localizedDescription)", level: .error)
-                        observer.onError(SNSLoginError.loginServerError(description: error.localizedDescription))
+                        LoggerService.shared.log(level: .debug, "Kakao Login Error: \(error.localizedDescription)")
+                        observer.onError(SNSLoginError.loginServerError(message: error.localizedDescription))
                     } else {
                         guard let oauthToken = oauthToken else {
-                            LoggerService.shared.log("KakaoLogin - oauthToken 없음", level: .error)
+                            LoggerService.shared.log(level: .debug, "KakaoLogin - oauthToken 없음")
                             observer.onError(SNSLoginError.authorizationFailed)
                             return
                         }
@@ -63,24 +63,24 @@ final class KakaoDataSourceImpl: NSObject, KakaoDataSource {
     }
     
     private func fetchUserInfo(oauthToken: String, observer: AnyObserver<SNSLoginResponse>) {
-        LoggerService.shared.debugLog("KAKAO Login - fetchUserInfo")
+        LoggerService.shared.log(level: .debug, "KAKAO Login - fetchUserInfo")
         UserApi.shared.me(propertyKeys: ["properties.nickname", "properties.profile_image", "kakao_account.email"]) { user, error in
             if let error = error {
-                LoggerService.shared.log("KakaoLogin - \(error.localizedDescription)", level: .error)
-                observer.onError(SNSLoginError.loginServerError(description: error.localizedDescription))
+                LoggerService.shared.log(level: .debug, "KakaoLogin - \(error.localizedDescription)")
+                observer.onError(SNSLoginError.loginServerError(message: error.localizedDescription))
             } else {
                 guard let user = user, let id = user.id else {
-                    LoggerService.shared.log("KakaoLogin Error - id를 찾을 수 없음", level: .error)
-                    observer.onError(SNSLoginError.EmptyValue)
+                    LoggerService.shared.log(level: .debug, "KakaoLogin Error - id를 찾을 수 없음")
+                    observer.onError(SNSLoginError.emptyValue(description: "Kakao Login - id"))
                     return
                 }
-                LoggerService.shared.log("\(user)")
+                LoggerService.shared.log(level: .debug, "\(user)")
                 let email = user.kakaoAccount?.email ?? ""
                 let nickName = user.properties?["nickname"] ?? ""
                 let imageUrl = user.properties?["profile_image"] ?? ""
                 
                 let response = SNSLoginResponse(id: "\(id)", email: email, loginType: .kakao, birth: nil, nickName: nickName, gender: nil, image: imageUrl)
-                LoggerService.shared.log("KakaoLogin Response : \(response)")
+                LoggerService.shared.log(level: .info, "KakaoLogin 요청 성공 - Response : \(response)")
                 LoginUserDefaultsService.shared.saveLoginData(email: response.email, loginType: .kakao)
                 observer.onNext(response)
             }

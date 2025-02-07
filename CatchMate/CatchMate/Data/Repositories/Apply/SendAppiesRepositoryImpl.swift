@@ -21,6 +21,8 @@ final class SendAppiesRepositoryImpl: SendAppiesRepository {
                 applyInfo.enrollInfoList.forEach { content in
                     if let result = mapper.dtoToDomain(content) {
                         mappingList.append(result)
+                    } else {
+                        LoggerService.shared.log("\(content.enrollId) 매핑 실패")
                     }
                 }
                 return Observable.just(Applys(applys: mappingList, isLast: applyInfo.isLast))

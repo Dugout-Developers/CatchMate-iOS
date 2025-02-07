@@ -11,7 +11,7 @@ final class NotificationMapper {
     static func dtoToDomain(_ dto: NotificationDTO) -> NotificationList? {
         let gameInfo = dto.boardInfo.gameInfo
         guard let convertedDates = DateHelper.shared.convertISODateToCustomStrings(isoDateString: gameInfo.gameStartDate ?? "") else {
-            LoggerService.shared.debugLog("Notification BoardInfo - 날짜 정보 매칭 실패")
+            LoggerService.shared.log("Notification BoardInfo - 날짜 정보 매칭 실패")
             return nil
         }
         let date = convertedDates.date

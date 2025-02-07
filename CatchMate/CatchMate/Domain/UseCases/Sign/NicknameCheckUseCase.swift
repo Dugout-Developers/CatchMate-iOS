@@ -21,6 +21,7 @@ final class NicknameCheckUseCaseImpl: NicknameCheckUseCase {
     func execute(_ nickname: String) -> Observable<Bool> {
         return nicknameRepository.checkNickName(nickname)
             .catch { error in
+                LoggerService.shared.errorLog(error, domain: "checknickname", message: error.errorDescription)
                 return Observable.just(false)
             }
     }

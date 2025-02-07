@@ -11,18 +11,18 @@ final class ApplyMapper {
         if let status = ApplyStatus(rawValue: dto.acceptStatus), let user = userInfoMapping(dto.userInfo), let post = postInfoMapping(dto.boardInfo) {
             return ApplyList(enrollId: String(dto.enrollId), acceptStatus: status, addText: dto.description, user: user, post: post, new: dto.new ?? false)
         } else {
-            LoggerService.shared.log("ApplyMapper: DTO -> Domain 변환 실패", level: .error)
+            LoggerService.shared.log("ApplyMapper: DTO -> Domain 변환 실패")
             return nil
         }
     }
     
     func userInfoMapping(_ dto: UserInfo) -> SimpleUser? {
         guard let favoriteClub = Team(serverId: dto.favoriteClub.id) else {
-            LoggerService.shared.debugLog("Apply UserInfo - 응원 구단 매칭 실패")
+            LoggerService.shared.log("Apply UserInfo - 응원 구단 매칭 실패")
             return nil
         }
         guard let gender = Gender(serverValue: dto.gender) else {
-            LoggerService.shared.debugLog("Apply UserInfo - 성별 매칭 실패")
+            LoggerService.shared.log("Apply UserInfo - 성별 매칭 실패")
             return nil
         }
         
@@ -33,11 +33,11 @@ final class ApplyMapper {
         
         let gameInfo = dto.gameInfo
         guard let homeTeam = Team(serverId: gameInfo.homeClubId), let awayTeam = Team(serverId: gameInfo.awayClubId), let cheerTeam = Team(serverId: dto.cheerClubId) else {
-            LoggerService.shared.debugLog("Apply BoardInfo - 팀정보 매칭 실패")
+            LoggerService.shared.log("Apply BoardInfo - 팀정보 매칭 실패")
             return nil
         }
         guard let convertedDates = DateHelper.shared.convertISODateToCustomStrings(isoDateString: gameInfo.gameStartDate ?? "") else {
-            LoggerService.shared.debugLog("Apply BoardInfo - 날짜 정보 매칭 실패")
+            LoggerService.shared.log("Apply BoardInfo - 날짜 정보 매칭 실패")
             return nil
         }
         let date = convertedDates.date   // "08.13" 형식

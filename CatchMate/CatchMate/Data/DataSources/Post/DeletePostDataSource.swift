@@ -23,23 +23,24 @@ final class DeletePostDataSourceImpl: DeletePostDataSource {
     
     func deletePost(postId: Int) -> RxSwift.Observable<Void> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
+            LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
         }
-        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+        guard let refreshToken = self.tokenDataSource.getToken(for: .refreshToken) else {
+            LoggerService.shared.log(level: .debug, "리프레시 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
-        LoggerService.shared.debugLog("DeletePostDataSourceImpl 토큰 확인: \(headers)")
         
         return APIService.shared.performRequest(addEndPoint: "\(postId)", type: .removePost, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: DeletePostResponseDTO.self, refreshToken: refreshToken)
             .map({ dto in
-                LoggerService.shared.debugLog("게시물 삭제 - 요청Id: \(postId) / 처리Id: \(dto.boardId)")
+                LoggerService.shared.log(level: .info, "게시물 삭제 - 요청Id: \(postId) / 처리Id: \(dto.boardId)")
                 return ()
             })
             .catch { error in
-                LoggerService.shared.debugLog("\(postId)번 게시물 삭제 실패 - \(error)")
+                LoggerService.shared.log(level: .debug, "\(postId)번 게시물 삭제 실패 - \(error)")
                 return Observable.error(error)
             }
     }

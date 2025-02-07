@@ -24,22 +24,24 @@ final class ApplyDataSourceImpl: ApplyDataSource {
     
     func applyPost(boardID: String, addInfo: String) -> RxSwift.Observable<Int> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
+            LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
         }
-        guard let refeshToken = tokenDataSource.getToken(for: .refreshToken) else {
+        guard let refreshToken = self.tokenDataSource.getToken(for: .refreshToken) else {
+            LoggerService.shared.log(level: .debug, "리프레시 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
         let parameters: [String: Any] = ["description": addInfo]
-        LoggerService.shared.log("토큰 확인: \(headers)")
-        return APIService.shared.performRequest(addEndPoint: boardID, type: .apply, parameters: parameters, headers: headers, encoding: JSONEncoding.default, dataType: ApplyPostResponse.self, refreshToken: refeshToken)
+
+        return APIService.shared.performRequest(addEndPoint: boardID, type: .apply, parameters: parameters, headers: headers, encoding: JSONEncoding.default, dataType: ApplyPostResponse.self, refreshToken: refreshToken)
             .map { response in
                 return response.enrollId
             }
             .catch { error in
-                LoggerService.shared.debugLog("직관 신청 실패 - \(error)")
+                LoggerService.shared.log(level: .debug, "직관 신청 실패 - \(error)")
                 return Observable.error(error)
             }
 
@@ -59,11 +61,10 @@ final class ApplyDataSourceImpl: ApplyDataSource {
         
         return APIService.shared.performRequest(addEndPoint: enrollId, type: .cancelApply, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: CancelApplyPostResponse.self, refreshToken: refeshToken)
             .map { _ -> Void in
-                LoggerService.shared.debugLog("신청 취소 성공")
                 return ()
             }
             .catch { error in
-                LoggerService.shared.debugLog("신청 취소 실패 - \(error)")
+                LoggerService.shared.log(level: .debug, "신청 취소 실패 - \(error)")
                 return Observable.error(error)
             }
     }

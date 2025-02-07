@@ -23,24 +23,23 @@ final class LoadFavoriteListDataSourceImpl: LoadFavoriteListDataSource {
     
     func loadFavoriteList(page: Int) -> RxSwift.Observable<PostListDTO>{
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
+            LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
         }
-        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+        guard let refreshToken = self.tokenDataSource.getToken(for: .refreshToken) else {
+            LoggerService.shared.log(level: .debug, "리프레시 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
+        
         var parameters: [String: Any] = [:]
         parameters["page"] = page
-        LoggerService.shared.log("토큰 확인: \(headers)")
+
         return APIService.shared.performRequest(type: .loadFavorite, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: PostListDTO.self, refreshToken: refreshToken)
-            .map { favoriteListDTO in
-                LoggerService.shared.debugLog("Favorite List Load 성공: \(favoriteListDTO)")
-                return favoriteListDTO
-            }
             .catch { error in
-                LoggerService.shared.debugLog("Favorite List Load 실패 - \(error)")
+                LoggerService.shared.log(level: .debug, "Favorite List Load 실패 - \(error)")
                 return Observable.error(error)
             }
     }

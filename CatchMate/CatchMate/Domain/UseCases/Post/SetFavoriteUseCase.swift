@@ -23,9 +23,15 @@ final class SetFavoriteUseCaseImpl: SetFavoriteUseCase {
         return setFavoriteRepository.setFavorite(state, boardId)
             .catch { error in
                 if state {
-                    return Observable.error(DomainError(error: error, context: .action, message: "찜하기 과정에서 문제가 발생했습니다."))
+                    LoggerService.shared.log(level: .info, "\(boardId)번 찜하기")
+                    let domainError = DomainError(error: error, context: .action, message: "찜하기 과정에서 문제가 발생했습니다.")
+                    LoggerService.shared.errorLog(domainError, domain: "set_favorite", message: error.errorDescription)
+                    return Observable.error(domainError)
                 } else {
-                    return Observable.error(DomainError(error: error, context: .action, message: "찜삭제 과정에서 문제가 발생했습니다."))
+                    LoggerService.shared.log(level: .info, "\(boardId)번 찜삭제")
+                    let domainError = DomainError(error: error, context: .action, message: "찜하기 과정에서 문제가 발생했습니다.")
+                    LoggerService.shared.errorLog(domainError, domain: "cancel_favorite", message: error.errorDescription)
+                    return Observable.error(domainError)
                 }
             }
     }

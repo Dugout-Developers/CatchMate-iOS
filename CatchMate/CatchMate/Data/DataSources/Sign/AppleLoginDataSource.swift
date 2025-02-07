@@ -24,7 +24,7 @@ final class AppleLoginDataSourceImpl: NSObject, AppleLoginDataSource,  ASAuthori
     private var loginSubject = PublishSubject<SNSLoginResponse>()
     
     func getAppleLoginToken() -> Observable<SNSLoginResponse> {
-        LoggerService.shared.debugLog("-------------APPLE LOGIN------------------")
+        LoggerService.shared.log(level: .debug, "애플로그인 요청")
         let provider = ASAuthorizationAppleIDProvider()
         let request = provider.createRequest()
         request.requestedScopes = [.fullName, .email]
@@ -42,7 +42,7 @@ final class AppleLoginDataSourceImpl: NSObject, AppleLoginDataSource,  ASAuthori
            let email = appleIDCredential.email {
             let userId = appleIDCredential.user
             let response = SNSLoginResponse(id: userId, email: email, loginType: .apple)
-            LoggerService.shared.log("APPLE Login Response : \(response)")
+            LoggerService.shared.log(level: .info, "APPLE Login Response : \(response)")
             saveEmail(email: email, userIdentifier: userId)
             loginSubject.onNext(response)
         } else {
@@ -50,14 +50,14 @@ final class AppleLoginDataSourceImpl: NSObject, AppleLoginDataSource,  ASAuthori
                 let userId = appleIDCredential.user
                 if let email = getEmail(userIdentifier: userId) {
                     if email.isEmpty {
-                        LoggerService.shared.log("\(SNSLoginError.errorType) : \(SNSLoginError.EmptyValue.statusCode) - 이메일 없음", level: .error)
-                        loginSubject.onError(SNSLoginError.EmptyValue)
+                        LoggerService.shared.log(level: .debug, "이메일 값 찾기 실패")
+                        loginSubject.onError(SNSLoginError.emptyValue(description: "Apple Login - email값"))
                     }
                     let response = SNSLoginResponse(id: userId, email: email, loginType: .apple)
-                    LoggerService.shared.log("APPLE Login Response(User Defaults) : \(response)")
+                    LoggerService.shared.log(level: .debug, "APPLE Login Response(User Defaults) : \(response)")
                     loginSubject.onNext(response)
                 } else {
-                    LoggerService.shared.log("\(SNSLoginError.errorType) : \(SNSLoginError.authorizationFailed.statusCode) - \(SNSLoginError.authorizationFailed.errorDescription ?? "인증 실패")", level: .error)
+                    LoggerService.shared.log(level: .debug, "인증 실패")
                     loginSubject.onError(SNSLoginError.authorizationFailed)
                 }
             }
@@ -65,7 +65,7 @@ final class AppleLoginDataSourceImpl: NSObject, AppleLoginDataSource,  ASAuthori
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        LoggerService.shared.log("애플로그인 실패 : \(error)", level: .error)
+        LoggerService.shared.log(level: .debug, "애플로그인 실패 : \(error)")
         loginSubject.onError(error)
     }
     

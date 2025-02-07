@@ -22,9 +22,10 @@ final class ServerLoginDataSourceImpl: ServerLoginDataSource {
     }
     
     func postLoginRequest(_ loginResponse: SNSLoginResponse, _ token: String) -> Observable<LoginResponse> {
-        LoggerService.shared.debugLog("-----------------Servser Request Login-------------------")
+        LoggerService.shared.log(level: .info, "로그인 서버 요청")
         let request = LoginMapper.snsToLoginRequest(loginResponse, token)
-        LoggerService.shared.debugLog("RequestModel : \(request)")
+        LoggerService.shared.log(level: .debug, "RequestModel : \(request)")
+        
         let parameters: [String: Any] = [
             "providerId": request.providerId,
             "provider": request.provider,
@@ -36,7 +37,7 @@ final class ServerLoginDataSourceImpl: ServerLoginDataSource {
         return APIService.shared.requestAPI(type: .login, parameters: parameters, encoding: JSONEncoding.default, dataType: LoginResponse.self)
             .withUnretained(self)
             .flatMap { ds, dto -> Observable<LoginResponse> in
-                LoggerService.shared.debugLog("로그인 요청 성공: \(dto)")
+                LoggerService.shared.log(level: .info, "로그인 요청 성공: \(dto)")
                 
                 if let accessToken = dto.accessToken, let refreshToken = dto.refreshToken {
                     // AccessToken 및 RefreshToken 저장
@@ -45,7 +46,7 @@ final class ServerLoginDataSourceImpl: ServerLoginDataSource {
                     
                     // 토큰 저장 실패 시 에러 발생
                     if !accessTokenSaved || !refreshTokenSaved {
-                        LoggerService.shared.debugLog("토큰 저장 실패")
+                        LoggerService.shared.log(level: .debug, "로그인 요청 이후 - 토큰 저장 실패")
                         return Observable.error(TokenError.failureTokenService)
                     }
                 }

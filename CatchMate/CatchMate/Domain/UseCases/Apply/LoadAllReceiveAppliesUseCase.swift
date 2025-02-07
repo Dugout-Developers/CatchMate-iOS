@@ -21,9 +21,12 @@ final class LoadAllReceiveAppliesUseCaseImpl: LoadAllReceiveAppliesUseCase {
     }
     
     func execute() -> Observable<[RecivedApplies]> {
+        LoggerService.shared.log(level: .info, "모든 게시물 받은 신청 정보")
         return receivedAppliesRepository.loadReceivedAppliesAll()
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .pageLoad))
+                let domainError = DomainError(error: error, context: .pageLoad)
+                LoggerService.shared.errorLog(domainError, domain: "load_receivedapply_all", message: error.errorDescription)
+                return Observable.error(domainError)
             }
     }
 }

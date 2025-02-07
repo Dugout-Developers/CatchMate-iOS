@@ -35,12 +35,8 @@ final class RecivedCountDataSourceImpl: ReceivedCountDataSource {
             "AccessToken": token
         ]
         return APIService.shared.performRequest(type: .receivedCount, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: RecivedCountResultDTO.self, refreshToken: refreshToken)
-            .map { dto in
-                LoggerService.shared.debugLog("Count Load 성공: \(dto)")
-                return dto
-            }
             .catch { error in
-                LoggerService.shared.debugLog("받은 신청 카운트 load 실패 - \(error)")
+                LoggerService.shared.log(level: .debug, "받은 신청 카운트 load 실패 - \(error)")
                 return Observable.error(error)
             }
     }

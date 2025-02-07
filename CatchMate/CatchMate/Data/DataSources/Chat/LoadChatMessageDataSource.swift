@@ -23,9 +23,11 @@ final class LoadChatMessageDataSourceImpl: LoadChatMessageDataSource {
     
     func loadMessage(_ chatId: Int, page: Int) -> Observable<ChatMessageDTO> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
+            LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
         }
-        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+        guard let refreshToken = self.tokenDataSource.getToken(for: .refreshToken) else {
+            LoggerService.shared.log(level: .debug, "리프레시 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
@@ -39,12 +41,8 @@ final class LoadChatMessageDataSourceImpl: LoadChatMessageDataSource {
         ]
         
         return APIService.shared.performRequest(addEndPoint: addEndPoint, type: .chatMessage, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: ChatMessageDTO.self, refreshToken: refreshToken)
-            .map { dto in
-                print("이전 메시지 불러오기 성공 - \(dto)")
-                return dto
-            }
             .catch { error in
-                LoggerService.shared.debugLog("이전 메시지 불러오기 실패 - \(error)")
+                LoggerService.shared.log("이전 메시지 불러오기 실패 - \(error)")
                 return Observable.error(error)
             }
     }

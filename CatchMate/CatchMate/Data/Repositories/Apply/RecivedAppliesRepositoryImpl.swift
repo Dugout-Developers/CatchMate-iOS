@@ -22,6 +22,8 @@ final class RecivedAppliesRepositoryImpl: RecivedAppiesRepository {
                 contents.forEach { content in
                     if let result = mapper.dtoToDomain(content) {
                         mappingList.append(RecivedApplyData(enrollId: result.enrollId, user: result.user, addText: result.addText, new: result.new))
+                    } else {
+                        LoggerService.shared.log("\(content.enrollId) 매핑 실패")
                     }
                 }
                 return Observable.just(mappingList)
@@ -43,7 +45,7 @@ final class RecivedAppliesRepositoryImpl: RecivedAppiesRepository {
                             mappingList.append(RecivedApplies(post: result.post, applies: [apply]))
                         }
                     } else {
-                        LoggerService.shared.debugLog("Repository 매핑 에러 - postId:\(content.boardInfo.boardId) / enrollId: \(content.enrollId)")
+                        LoggerService.shared.log("Repository 매핑 에러 - postId:\(content.boardInfo.boardId) / enrollId: \(content.enrollId)")
                     }
                 }
                 return Observable.just(mappingList.sorted(by: <))

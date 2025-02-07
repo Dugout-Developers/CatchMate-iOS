@@ -19,9 +19,12 @@ final class CancelApplyUseCaseImpl: CancelApplyUseCase {
     }
     
     func execute(enrollId: String) -> Observable<Void> {
+        LoggerService.shared.log(level: .info, "보낸 신청 취소")
         return applyRepository.cancelApplyPost(enrollId: enrollId)
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .action, message: "취소하는데 문제가 발생했습니다."))
+                let domainError = DomainError(error: error, context: .action, message: "취소 중 문제가 발생했습니다.")
+                LoggerService.shared.errorLog(domainError, domain: "cancel_apply", message: error.errorDescription)
+                return Observable.error(domainError)
             }
     }
 }

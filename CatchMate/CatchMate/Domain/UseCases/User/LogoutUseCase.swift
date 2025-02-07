@@ -19,6 +19,7 @@ final class LogoutUseCaseImpl: LogoutUseCase {
         self.repository = repository
     }
     func logout() -> RxSwift.Observable<Bool> {
+        LoggerService.shared.log(level: .info, "로그아웃")
         return repository.logout()
     }
 }

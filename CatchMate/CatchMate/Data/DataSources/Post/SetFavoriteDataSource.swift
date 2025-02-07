@@ -23,48 +23,49 @@ final class SetFavoriteDataSourceImpl: SetFavoriteDataSource {
     }
     func setFavorite(_ boardID: String) -> RxSwift.Observable<Bool> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
+            LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
         }
-        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+        guard let refreshToken = self.tokenDataSource.getToken(for: .refreshToken) else {
+            LoggerService.shared.log(level: .debug, "리프레시 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundRefreshToken)
         }
+        
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
         
-        LoggerService.shared.log("토큰 확인: \(headers)")
         
         return APIService.shared.performRequest(addEndPoint: boardID, type: .setFavorite, parameters: nil, headers: headers, encoding: URLEncoding.queryString, dataType: FavoriteResponse.self, refreshToken: refreshToken)
-            .map { _ in
-                LoggerService.shared.debugLog("찜하기 성공")
-                return true
+            .map { result in
+                return result.state
             }
             .catch { error in
-                LoggerService.shared.debugLog("찜하기 실패 - \(error)")
+                LoggerService.shared.log(level: .debug, "찜하기 실패 - \(error)")
                 return Observable.error(error)
             }
     }
     
     func deleteFavorite(_ boardID: String) -> RxSwift.Observable<Bool> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
+            LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
         }
-        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+        guard let refreshToken = self.tokenDataSource.getToken(for: .refreshToken) else {
+            LoggerService.shared.log(level: .debug, "리프레시 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundRefreshToken)
         }
+        
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
-        
-        LoggerService.shared.log("토큰 확인: \(headers)")
-        
+
         return APIService.shared.performRequest(addEndPoint: boardID, type: .deleteFavorite, parameters: nil, headers: headers, encoding: URLEncoding.queryString, dataType: FavoriteResponse.self, refreshToken: refreshToken)
-            .map { _ in
-                LoggerService.shared.debugLog("찜삭제 성공")
-                return true
+            .map { result in
+                return result.state
             }
             .catch { error in
-                LoggerService.shared.debugLog("찜삭제 실패 - \(error)")
+                LoggerService.shared.log(level: .debug, "찜삭제 실패 - \(error)")
                 return Observable.error(error)
             }
             

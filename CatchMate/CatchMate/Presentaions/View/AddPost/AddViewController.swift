@@ -303,7 +303,6 @@ extension AddViewController {
             .compactMap{$0}
             .withUnretained(self)
             .subscribe { vc, postId in
-                LoggerService.shared.debugLog("게시글 저장 완료")
                 vc.postSavedSuccessfully(postId: "\(postId)")
             }
             .disposed(by: disposeBag)

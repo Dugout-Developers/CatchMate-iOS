@@ -20,16 +20,22 @@ final class TempPostUseCaseImpl: TempPostUseCase {
     }
     
     func execute(_ tempPost: TempPostRequest) -> RxSwift.Observable<Void> {
+        LoggerService.shared.log(level: .info, "게시물 임시 저장")
         return tempPostRepository.tempPost(tempPost)
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .action, message: "게시글을 임시저장하는데 문제가 발생했습니다."))
+                let domainError = DomainError(error: error, context: .action, message: "임시저장에 실패했습니다.")
+                LoggerService.shared.errorLog(domainError, domain: "temp_post", message: error.errorDescription)
+                return Observable.error(domainError)
             }
     }
     
     func loadTempPost() -> Observable<TempPost?> {
+        LoggerService.shared.log(level: .info, "임시 저장 게시물 불러오기")
         return tempPostRepository.loadTempPost()
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .action, message: "임시저장한 게시글을 불러오지 못했습니다."))
+                let domainError = DomainError(error: error, context: .action, message: "임시저장 게시물을 불러오는데 실패했습니다.")
+                LoggerService.shared.errorLog(domainError, domain: "load_temp_post", message: error.errorDescription)
+                return Observable.error(domainError)
             }
     }
 }

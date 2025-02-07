@@ -19,9 +19,12 @@ final class ApplyUseCaseImpl: ApplyUseCase {
     }
     
     func execute(postId: String, addText: String?) -> Observable<Int> {
+        LoggerService.shared.log(level: .info, "\(postId)게시물 직관 신청")
         return applyRepository.applyPost(postId, addInfo: addText ?? "")
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .action, message: "직관 신청하는데 문제가 발생했습니다."))
+                let domainError = DomainError(error: error, context: .action, message: "직관 신청하는 중 문제가 발생했습니다.")
+                LoggerService.shared.errorLog(domainError, domain: "apply", message: error.errorDescription)
+                return Observable.error(domainError)
             }
     }
 }

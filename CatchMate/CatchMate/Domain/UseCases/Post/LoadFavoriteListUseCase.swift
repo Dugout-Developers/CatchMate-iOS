@@ -21,12 +21,16 @@ final class LoadFavoriteListUseCaseImpl: LoadFavoriteListUseCase {
     }
     
     func execute(page: Int) -> RxSwift.Observable<PostList> {
+        LoggerService.shared.log(level: .info, "찜한 게시물 불러오기")
         return loadFavoriteListRepository.loadFavoriteList(page: page)
             .catch { error in
                 if let localizedError = error as? LocalizedError, -1999...(-1000) ~= localizedError.statusCode {
                     // TokenError
-                    return Observable.error(DomainError(error: error, context: .tokenUnavailable))
+                    let domainError = DomainError(error: error, context: .tokenUnavailable)
+                    LoggerService.shared.errorLog(domainError, domain: "load_favorite", message: error.errorDescription)
+                    return Observable.error(domainError)
                 }
+                LoggerService.shared.errorLog(error, domain: "load_favorite", message: error.errorDescription)
                 return Observable.just(PostList(post: [], isLast: true))
             }
     }

@@ -160,11 +160,11 @@ extension SignInViewController {
             let signUpViewController = SignUpViewController(reactor: signReactor)
             DispatchQueue.main.async { [weak self] in
                 guard let self else {
-                    LoggerService.shared.debugLog("회원가입 화면 전환 self 없음")
+                    LoggerService.shared.log(level: .error, "회원가입 화면 전환 self 없음")
                     return
                 }
                 guard let navigationController = navigationController else {
-                    LoggerService.shared.debugLog("회원가입 화면 전환 navigation 없음")
+                    LoggerService.shared.log(level: .error, "회원가입 화면 전환 navigation 없음")
                     return
                 }
                 navigationController.pushViewController(signUpViewController, animated: true)
