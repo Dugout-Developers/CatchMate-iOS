@@ -22,6 +22,8 @@ final class LoadFavoriteListRepositoryImpl: LoadFavoriteListRepository {
                 dto.boardInfoList.forEach { dto in
                     if let mapResult = PostMapper().postListDTOtoDomain( dto) {
                         list.append(mapResult)
+                    } else {
+                        LoggerService.shared.log("\(dto.boardId) 매핑 실패")
                     }
                 }
                 return Observable.just(PostList(post: list, isLast: dto.isLast))

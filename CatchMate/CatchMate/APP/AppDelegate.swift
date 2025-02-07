@@ -17,10 +17,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     let gcmMessageIDKey = "gcm.message_id"
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        if let logPath = Bundle.main.logPath {
-            LoggerService.shared.configure(logDirectoryPath: logPath)
-        }
+
         FirebaseApp.configure()
+#if DEBUG
+        Analytics.setAnalyticsCollectionEnabled(false) // 디버그 모드에서 비활성화
+#endif
         // APNS 등록
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().delegate = self
@@ -82,12 +83,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             if let boardIdStr = userInfo["boardId"] as? String, let boardId = Int(boardIdStr) {
                 moveApplyDetailView(boardId: boardId)
             } else {
-                LoggerService.shared.debugLog("boardId 구할 수 없음")
+                LoggerService.shared.log(level: .error, "boardId 구할 수 없음")
             }
         case "ACCEPTED":
             moveChatRoom()
         default:
-            LoggerService.shared.debugLog("acceptStatus 구할 수 없음")
+            LoggerService.shared.log(level: .error, "acceptStatus 구할 수 없음")
         }
         completionHandler([.list, .banner, .sound])
     }
@@ -102,12 +103,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             if let boardIdStr = userInfo["boardId"] as? String, let boardId = Int(boardIdStr) {
                 moveApplyDetailView(boardId: boardId)
             } else {
-                LoggerService.shared.debugLog("boardId 구할 수 없음")
+                LoggerService.shared.log(level: .error, "boardId 구할 수 없음")
             }
         case "ACCEPTED":
             moveChatRoom()
         default:
-            LoggerService.shared.debugLog("acceptStatus 구할 수 없음")
+            LoggerService.shared.log(level: .error, "acceptStatus 구할 수 없음")
         }
 //        if let boardIdStr = userInfo["boardId"] as? String, let boardId = Int(boardIdStr) {
 //            moveApplyDetailView(boardId: boardId)

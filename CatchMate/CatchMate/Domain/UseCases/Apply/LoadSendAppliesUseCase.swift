@@ -19,9 +19,12 @@ final class LoadSendAppliesUseCaseImpl: LoadSendAppliesUseCase {
         self.sendAppliesRepository = sendAppliesRepository
     }
     func execute(page: Int) -> RxSwift.Observable<Applys> {
+        LoggerService.shared.log(level: .info, "내가 보낸 신청 리스트")
         return sendAppliesRepository.loadSendApplies(page: page)
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .pageLoad))
+                let domainError = DomainError(error: error, context: .pageLoad)
+                LoggerService.shared.errorLog(domainError, domain: "load_sendapply", message: error.errorDescription)
+                return Observable.error(domainError)
             }
     }
 }

@@ -24,6 +24,8 @@ final class LoadChatListRepositoryImpl: LoadChatListRepository {
                     let mapper = ChatMapper()
                     if let chatInfo = mapper.dtoToDomain(listDto) {
                         list.append(chatInfo)
+                    }  else {
+                        LoggerService.shared.log("\(listDto.chatRoomId) 매핑 실패")
                     }
                 }
                 

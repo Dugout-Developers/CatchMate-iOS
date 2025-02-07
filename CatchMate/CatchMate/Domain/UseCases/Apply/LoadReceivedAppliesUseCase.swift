@@ -21,9 +21,12 @@ final class LoadReceivedAppliesUseCaseImpl: LoadReceivedAppliesUseCase {
     }
     
     func execute(boardId: Int) -> RxSwift.Observable<[RecivedApplyData]> {
+        LoggerService.shared.log(level: .info, "\(boardId)번 게시물 받은 신청 정보")
         return receivedAppliesRepository.loadRecivedApplies(boardId: boardId)
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .action, message: "신청 정보를 불러오는데 문제가 발생했습니다."))
+                let domainError = DomainError(error: error, context: .action, message: "신청 정보를 불러오는데 문제가 발생했습니다.")
+                LoggerService.shared.errorLog(domainError, domain: "load_receivedapply_post", message: error.errorDescription)
+                return Observable.error(domainError)
             }
     }
 }

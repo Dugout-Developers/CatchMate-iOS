@@ -22,11 +22,12 @@ final class UserPostLoadDataSourceImpl: UserPostLoadDataSource {
     }
     
     func loadUserPostList(_ userId: Int, page: Int) -> RxSwift.Observable<PostListDTO> {
-        LoggerService.shared.debugLog("\(userId)번 유저 게시글 - page \(page) 조회")
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
+            LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
         }
-        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+        guard let refreshToken = self.tokenDataSource.getToken(for: .refreshToken) else {
+            LoggerService.shared.log(level: .debug, "리프레시 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
@@ -36,15 +37,10 @@ final class UserPostLoadDataSourceImpl: UserPostLoadDataSource {
         let paramters: [String: Any] = [
             "page": page
         ]
-        LoggerService.shared.debugLog("UserPostLoadDataSourceImpl 토큰 확인: \(headers)")
         
         return APIService.shared.performRequest(addEndPoint: "\(userId)", type: .userPostlist, parameters: paramters, headers: headers, encoding: URLEncoding.default, dataType: PostListDTO.self, refreshToken: refreshToken)
-            .map { postListDTO in
-                LoggerService.shared.debugLog("PostList Load 성공: \(postListDTO)")
-                return postListDTO
-            }
             .catch { error in
-                LoggerService.shared.debugLog("PostList Load 실패: \(error)")
+                LoggerService.shared.log(level: .debug, "PostList Load 실패: \(error)")
                 return Observable.error(error)
             }
     }

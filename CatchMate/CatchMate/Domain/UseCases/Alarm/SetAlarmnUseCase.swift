@@ -20,9 +20,12 @@ final class SetAlarmUseCaseImpl: SetAlarmUseCase {
     }
     
     func execute(type: AlarmnType, state: Bool) -> Observable<Bool> {
+        LoggerService.shared.log(level: .info, "\(type.rawValue) 설정 \(state ? "On" : "off")")
         return setNotificationRepository.setNotificationRepository(type: type, state: state)
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .action, message: "알람 설정하는데 문제가 발생했습니다."))
+                let domainError = DomainError(error: error, context: .action, message: "알람 설정하는데 문제가 발생했습니다.")
+                LoggerService.shared.errorLog(domainError, domain: "set_alarm", message: error.errorDescription)
+                return Observable.error(domainError)
             }
     }
 }

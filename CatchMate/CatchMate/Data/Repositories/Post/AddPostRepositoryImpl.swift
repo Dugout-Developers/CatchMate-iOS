@@ -19,7 +19,6 @@ final class AddPostRepositoryImpl: AddPostRepository {
     
     func addPost(_ post: RequestPost) -> Observable<Int> {
         guard let post = PostMapper().domainToDto(post) else {
-            print("Repositiory: \(post)")
             return Observable.error(MappingError.mappingFailed)
         }
         return addPostDS.addPost(post)
@@ -27,7 +26,6 @@ final class AddPostRepositoryImpl: AddPostRepository {
     
     func editPost(_ post: RequestEditPost, boardId: Int) -> Observable<Int> {
         guard let post = PostMapper().domainToDto(post) else {
-            print("Repository - editPost: \(post)")
             return Observable.error(MappingError.mappingFailed)
         }
         return editPostDS.editPost(post, boardId: boardId)
@@ -35,7 +33,6 @@ final class AddPostRepositoryImpl: AddPostRepository {
     
     func addTempPost(_ post: RequestPost, boardId: String) -> Observable<Int> {
         guard let id = Int(boardId), let post = PostMapper().domainToDto(post) else {
-            print("Repository - editPost: \(post)")
             return Observable.error(MappingError.mappingFailed)
         }
         return editPostDS.editPost(post, boardId: id)

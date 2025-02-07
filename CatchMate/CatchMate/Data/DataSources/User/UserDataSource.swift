@@ -16,33 +16,29 @@ protocol UserDataSource {
 
 final class UserDataSourceImpl: UserDataSource {
     private let tokenDataSource: TokenDataSource
-    private var hasTriedRefreshing = false
+
     init(tokenDataSource: TokenDataSource) {
         self.tokenDataSource = tokenDataSource
     }
-    deinit{
-        print("deinit")
-    }
+
     
     func loadMyInfo() -> RxSwift.Observable<UserDTO> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
+            LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
         }
-        guard let refeshToken = self.tokenDataSource.getToken(for: .refreshToken) else {
+        guard let refreshToken = self.tokenDataSource.getToken(for: .refreshToken) else {
+            LoggerService.shared.log(level: .debug, "리프레시 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundRefreshToken)
         }
-        print("AccessToken: \(token)")
-        print("RefreshToken: \(refeshToken)")
+
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
-        return APIService.shared.performRequest(type: .loadMyInfo, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: UserDTO.self, refreshToken: refeshToken)
-            .map { user in
-                LoggerService.shared.debugLog("UserDTO: \(user)")
-                return user
-            }
+        
+        return APIService.shared.performRequest(type: .loadMyInfo, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: UserDTO.self, refreshToken: refreshToken)
             .catch { error in
-                LoggerService.shared.debugLog("내정보 load 실패 - \(error)")
+                LoggerService.shared.log(level: .debug, "내정보 load 실패 - \(error)")
                 return Observable.error(error)
             }
     }

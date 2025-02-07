@@ -23,9 +23,11 @@ final class DeleteNotificationDataSourceImpl: DeleteNotificationDataSource {
     
     func deleteNotification(_ notificationId: Int) -> Observable<Bool> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
+            LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
         }
-        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+        guard let refreshToken = self.tokenDataSource.getToken(for: .refreshToken) else {
+            LoggerService.shared.log(level: .debug, "리프레시 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
@@ -34,11 +36,10 @@ final class DeleteNotificationDataSourceImpl: DeleteNotificationDataSource {
         
         return APIService.shared.performRequest(addEndPoint: "\(notificationId)", type: .deleteNoti, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: StateResponseDTO.self, refreshToken: refreshToken)
             .map { dto in
-                LoggerService.shared.debugLog("id: \(notificationId) - 알림 삭제 \(dto.state)")
                 return dto.state
             }
             .catch { error in
-                LoggerService.shared.debugLog("id: \(notificationId)번 알림 삭제 실패 - \(error)")
+                LoggerService.shared.log("id: \(notificationId)번 알림 삭제 실패 - \(error)")
                 return Observable.error(error)
             }
     }

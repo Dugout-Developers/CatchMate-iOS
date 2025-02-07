@@ -23,7 +23,7 @@ final class ProfileEditDataSourceImpl: ProfileEditDataSource {
 
     func editProfile(editModel: ProfileEditRequestDTO) -> Observable<ProfileEditResponseDTO> {
         guard let base = Bundle.main.baseURL else {
-            LoggerService.shared.log("base 찾기 실패", level: .error)
+            LoggerService.shared.log(level: .debug, "base 찾기 실패")
             return Observable.error(NetworkError.notFoundBaseURL)
         }
         let url = base + Endpoint.editProfile.endPoint
@@ -48,7 +48,7 @@ final class ProfileEditDataSourceImpl: ProfileEditDataSource {
                     print("image: \(jpegData)")
                     multipartFormData.append(jpegData, withName: "profileImage", fileName: "profile.jpg", mimeType: "image/jpeg")
                 } else {
-                    LoggerService.shared.debugLog("이미지 리사이징 실패")
+                    LoggerService.shared.log(level: .debug, "이미지 리사이징 실패")
                 }
             }, to: url, method: .patch, headers: headers)
             .responseDecodable(of: ProfileEditResponseDTO.self) { response in
@@ -57,8 +57,9 @@ final class ProfileEditDataSourceImpl: ProfileEditDataSource {
                     observer.onNext(responseDTO) // 성공 시 데이터 반환
                     observer.onCompleted()
                 case .failure(let error):
-                    print("\(error)")
-                    observer.onError(error) // 실패 시 에러 반환
+                    LoggerService.shared.log(level: .debug, "프로필 수정 요청 실패 - \(error.localizedDescription)")
+                    let statusCode = response.response?.statusCode ?? 0
+                    observer.onError(NetworkError(serverStatusCode: statusCode))
                 }
             }
 

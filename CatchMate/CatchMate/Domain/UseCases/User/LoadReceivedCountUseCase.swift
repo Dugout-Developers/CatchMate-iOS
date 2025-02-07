@@ -22,6 +22,7 @@ final class LoadReceivedCountUseCaseImpl: LoadReceivedCountUseCase {
     func execute() -> Observable<Int> {
         return loadCountRepository.loadCount()
             .catch { _ in
+                LoggerService.shared.log(level: .error, "받은 신청 갯수 불러오기 실패")
                 return Observable.just(0)
             }
     }

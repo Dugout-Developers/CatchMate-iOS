@@ -17,7 +17,7 @@ final class LoadPostRepositoryImpl: LoadPostRepository {
     
     func loadPost(postId: String) -> Observable<(post: Post, isFavorite: Bool, applyType: ApplyType)> {
         guard let id = Int(postId) else {
-            LoggerService.shared.log("postId Int 변환 실패 형식 오류", level: .error)
+            LoggerService.shared.log("postId Int 변환 실패 형식 오류")
             return Observable.error(PresentationError.showErrorPage)
         }
         return loadPostDS.loadPost(postId: id)

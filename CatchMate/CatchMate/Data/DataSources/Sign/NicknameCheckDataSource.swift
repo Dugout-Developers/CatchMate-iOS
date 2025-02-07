@@ -13,78 +13,29 @@ import Alamofire
 protocol NicknameCheckDataSource {
     func checkNickname(_ nickname: String) -> Observable<Bool>
 }
-enum NicknameAPIError: LocalizedError {
-    case notFoundURL
-    case serverError(code: Int, description: String)
-    case decodingError
-    case requestFailed
-    
-    
-    var statusCode: Int {
-        switch self {
-        case .notFoundURL:
-            return -1001
-        case .serverError(let code, _):
-            return code
-        case .decodingError:
-            return -1002
-        case .requestFailed:
-            return -1003
-        }
-    }
-    var errorDescription: String? {
-        switch self {
-        case .notFoundURL:
-            return "서버 URL을 찾을 수 없습니다."
-        case .serverError(_, let message):
-            return "서버 에러: \(message)"
-        case .decodingError:
-            return "데이터 디코딩 에러"
-        case .requestFailed:
-            return "요청 실패"
-        }
-    }
-}
-
 
 final class NicknameCheckDataSourceImpl: NicknameCheckDataSource {
     func checkNickname(_ nickname: String) -> RxSwift.Observable<Bool> {
         guard let base = Bundle.main.baseURL else {
-            return Observable.error(NicknameAPIError.notFoundURL)
+            return Observable.error(NetworkError.notFoundBaseURL)
         }
         let url = base + "/auth/check-nickname"
         let urlString = url + "?" + "nickName=\(nickname)"
 
         return RxAlamofire.requestJSON(.get, urlString)
-            .do(onNext: { (response, json) in
-                // 응답 상태 코드 및 데이터 출력
-                print("Response Status Code: \(response.statusCode)")
-                print(json)
-            }, onError: { error in
-                // 에러 발생 시 로그 출력
-                print("Network Request Error: \(error)")
-            })
             .flatMap { (response, json) -> Observable<Bool> in
                 guard 200...300 ~= response.statusCode else {
-                    print(response.statusCode)
-                    print(response.debugDescription)
-                    return Observable.error(NicknameAPIError.serverError(code: response.statusCode, description: "서버에러 발생"))
+                    LoggerService.shared.log(level: .debug, "닉네임 검사 실패(\(response.statusCode) - \(response.description)")
+                    return Observable.error(NetworkError(serverStatusCode: response.statusCode))
                 }
                 
                 if let jsonDict = json as? [String: Any], let result = jsonDict["available"] as? Bool {
                     return Observable.just(result)
                 } else {
-                    return Observable.error(NicknameAPIError.decodingError)
+                    LoggerService.shared.log(level: .debug, "닉네임 체크 응답값 찾을 수 없음")
+                    return Observable.error(CodableError.emptyValue("nicknameCheck - available"))
                 }
             }
-    }
-    
-    func encodeParameters(parameters: [String: Any]) -> String {
-        var components = URLComponents()
-        components.queryItems = parameters.map { (key, value) in
-            URLQueryItem(name: key, value: "\(value)")
-        }
-        return components.percentEncodedQuery ?? ""
     }
 }
 

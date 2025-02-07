@@ -22,9 +22,11 @@ final class LoadChatListDataSourceImpl: LoadChatListDataSource {
     
     func loadChatList(page: Int) -> RxSwift.Observable<ChatListDTO> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
+            LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
         }
-        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+        guard let refreshToken = self.tokenDataSource.getToken(for: .refreshToken) else {
+            LoggerService.shared.log(level: .debug, "리프레시 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
@@ -36,12 +38,8 @@ final class LoadChatListDataSourceImpl: LoadChatListDataSource {
         ]
         
         return APIService.shared.performRequest(type: .chatList, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: ChatListDTO.self, refreshToken: refreshToken)
-            .map { dto in
-                LoggerService.shared.debugLog("ChatList Load 성공: \(dto)")
-                return dto
-            }
             .catch { error in
-                LoggerService.shared.debugLog("ChatList Load 실패 - \(error)")
+                LoggerService.shared.log("ChatList Load 실패 - \(error)")
                 return Observable.error(error)
             }
     }

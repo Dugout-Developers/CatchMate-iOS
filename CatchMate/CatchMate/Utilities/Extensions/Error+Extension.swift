@@ -21,7 +21,7 @@ extension Error {
         return -9999 // 기본값
     }
     
-    var errorDescription: String? {
+    var errorDescription: String {
         return (self as? LocalizedError)?.errorDescription ?? "An unexpected error occurred.: \(self.localizedDescription)"
     }
 }

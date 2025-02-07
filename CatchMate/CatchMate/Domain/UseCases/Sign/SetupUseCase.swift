@@ -25,7 +25,9 @@ final class SetupUseCaseImpl: SetupUseCase {
             return SetupUserInfo(id: user.id, email: user.email, nickName: user.nickName, imageUrl: user.profilePicture ?? "", team: user.team)
         }
         .catch { error in
-            return Observable.error(DomainError(error: error, context: .tokenUnavailable))
+            let domainError = DomainError(error: error, context: .tokenUnavailable)
+            LoggerService.shared.errorLog(domainError, domain: "유저정보 불러오기", message: error.errorDescription)
+            return Observable.error(domainError)
         }
     }
 }

@@ -22,22 +22,31 @@ final class AddPostUseCaseImpl: AddPostUseCase {
     }
     
     func addPost(_ post: RequestPost) -> Observable<Int> {
+        LoggerService.shared.log(level: .info, "게시물 작성")
         return addPostRepository.addPost(post)
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .action))
+                let domainError = DomainError(error: error, context: .action, message: "게시물 저장에 실패했습니다.")
+                LoggerService.shared.errorLog(domainError, domain: "add_post", message: error.errorDescription)
+                return Observable.error(domainError)
             }
     }
     
     func editPost(_ post: RequestEditPost, boardId: Int) -> Observable<Int> {
+        LoggerService.shared.log(level: .info, "게시물 수정")
         return addPostRepository.editPost(post, boardId: boardId)
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .action, message: "요청에 실패했습니다."))
+                let domainError = DomainError(error: error, context: .action, message: "게시물 수정에 실패했습니다.")
+                LoggerService.shared.errorLog(domainError, domain: "edit_post", message: error.errorDescription)
+                return Observable.error(domainError)
             }
     }
     func addTempPost(post: RequestPost, boardId: String) -> RxSwift.Observable<Int> {
+        LoggerService.shared.log(level: .info, "게시물 임시 저장")
         return addPostRepository.addTempPost(post, boardId: boardId)
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .action, message: "요청에 실패했습니다."))
+                let domainError = DomainError(error: error, context: .action, message: "임시저장에 실패했습니다.")
+                LoggerService.shared.errorLog(domainError, domain: "temp_post", message: error.errorDescription)
+                return Observable.error(domainError)
             }
     }
     

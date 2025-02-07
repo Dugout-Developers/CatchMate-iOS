@@ -6,84 +6,118 @@
 //
 
 import Foundation
+import FirebaseAnalytics
+import FirebaseCrashlytics
 
-enum LogLevel: String {
-    case debug = "DEBUG"
-    case info = "INFO"
-    case warning = "WARNING"
-    case error = "ERROR"
+enum LogLevel {
+    case debug
+    case info
+    case warning
+    case error
+
+    var emoji: String {
+        switch self {
+        case .debug: return "[🐛 DEBUG]"
+        case .info: return "[ℹ️ INFO]"
+        case .warning: return "[⚠️ WARNING]"
+        case .error: return "[❌ ERROR]"
+        }
+    }
 }
 
 class LoggerService {
     static let shared = LoggerService()
-    private var logFileHandle: FileHandle?
-    private let logQueue = DispatchQueue(label: "logger.queue", qos: .background)
-    private var logFilePath: String?
 
-    private init() {}
+    func log(level: LogLevel = .debug, _ message: String, file: String = #file, function: String = #function, line: Int = #line) {
+        let userId = SetupInfoService.shared.getUserInfo(type: .id)
+        let userNickname = SetupInfoService.shared.getUserInfo(type: .nickName)
+        let userEmail = SetupInfoService.shared.getUserInfo(type: .email)
+        let info: [String: Any] = ["file": (file as NSString).lastPathComponent, "function": function, "line": line]
+        // 로그 메시지 생성
+        let logMessage = "\(level.emoji)\(function):\(line) - \(message)"
 
-    func configure(logDirectoryPath: String) {
-           let fileManager = FileManager.default
-           let expandedLogDirectoryPath = (logDirectoryPath as NSString).expandingTildeInPath
-           print("Expanded log directory path: \(expandedLogDirectoryPath)") // 경로 출력
-
-           var isDir: ObjCBool = true
-           if !fileManager.fileExists(atPath: expandedLogDirectoryPath, isDirectory: &isDir) {
-               do {
-                   try fileManager.createDirectory(atPath: expandedLogDirectoryPath, withIntermediateDirectories: true, attributes: nil)
-                   print("Log directory created at: \(expandedLogDirectoryPath)") // 성공 메시지
-               } catch {
-                   print("Failed to create log directory: \(error.localizedDescription)")
-                   return
-               }
-           } else {
-               print("Log directory already exists at: \(expandedLogDirectoryPath)") // 디렉토리 존재 메시지
-           }
-           
-           let dateFormatter = DateFormatter()
-           dateFormatter.dateFormat = "yyyy-MM-dd_HH-mm-ss"
-           let dateString = dateFormatter.string(from: Date())
-           let logFileName = "debug_\(dateString).log"
-           let logFilePath = (expandedLogDirectoryPath as NSString).appendingPathComponent(logFileName)
-           let logFileURL = URL(fileURLWithPath: logFilePath)
-           
-           if !fileManager.fileExists(atPath: logFileURL.path) {
-   
-                   fileManager.createFile(atPath: logFileURL.path, contents: nil, attributes: nil)
-                   print("Log file created at: \(logFilePath)") // 파일 생성 메시지
-     
-           } else {
-               print("Log file already exists at: \(logFilePath)") // 파일 존재 메시지
-           }
-           logFileHandle = try? FileHandle(forWritingTo: logFileURL)
-       }
-
-    func log(_ message: String, level: LogLevel = .debug) {
         #if DEBUG
-        guard let logFileHandle = logFileHandle else { return }
+        print(logMessage)
+        #else
+        if let userId = userId {
+            Crashlytics.crashlytics().setUserID(userId)
+            Analytics.setUserID(userId)
+        }
+        if let userNickname = userNickname {
+            Crashlytics.crashlytics().setCustomValue(userNickname, forKey: "userNickname")
+            Analytics.setUserProperty(userNickname, forName: "userNickname")
+        }
+        if let userEmail = userEmail {
+            Crashlytics.crashlytics().setCustomValue(userEmail, forKey: "userEmail")
+            Analytics.setUserProperty(userEmail, forName: "userEmail")
+        }
         
-        logQueue.async {
-            // 메시지에 타임스탬프 추가
-            let timestamp = Date().description(with: .current)
-            let logMessage = "\(timestamp) [\(level.rawValue)]: \(message)\n"
+        switch level {
+        case .debug:
+            break
+        case .info:
+            var parameters: [String: Any] = ["message": logMessage,
+                                             "file": (file as NSString).lastPathComponent,
+                                             "function": function,
+                                             "line": line]
+            if let userId = userId { parameters["userId"] = userId }
+            if let userNickname = userNickname { parameters["userNickname"] = userNickname }
+            if let userEmail = userEmail { parameters["userEmail"] = userEmail }
             
-            // 로그 파일에 기록
-            if let data = logMessage.data(using: .utf8) {
-                logFileHandle.seekToEndOfFile()
-                logFileHandle.write(data)
-            }
+            Analytics.logEvent("info_log", parameters: parameters)
+        case .warning:
+            Crashlytics.crashlytics().log(logMessage)
+        case .error:
+            let error = NSError(domain: "com.catchmate.error", code: 1004, userInfo: [
+                NSLocalizedDescriptionKey: message,
+                "file": (file as NSString).lastPathComponent,
+                "function": function,
+                "line": line,
+                "userId": userId ?? "unknown",
+                "userNickname": userNickname ?? "unknown",
+                "userEmail": userEmail ?? "unknown"
+            ])
+            Crashlytics.crashlytics().record(error: error)
         }
         #endif
     }
-
-    func debugLog(_ message: String) {
+    
+    func errorLog(_ error: Error, domain: String, message: String, file: String = #file, function: String = #function, line: Int = #line) {
         #if DEBUG
-        log(message)
+        let errorTitle = "\(LogLevel.error.emoji) \(domain) Error 발생 - \(message)"
+        let errorMessage = "message: \(message)"
+        let info: [String: Any] = ["file": (file as NSString).lastPathComponent, "function": function, "line": line]
+        print(errorTitle)
+        print(errorMessage)
+        print(error.localizedDescription)
+        print("오류 코드 정보 :\n\(info)")
+        #else
+        let userId = SetupInfoService.shared.getUserInfo(type: .id) ?? "unknown"
+        let userNickname = SetupInfoService.shared.getUserInfo(type: .nickName) ?? "unknown"
+        let userEmail = SetupInfoService.shared.getUserInfo(type: .email) ?? "unknown"
+        
+        Crashlytics.crashlytics().setUserID(userId)
+        Crashlytics.crashlytics().setCustomValue(userNickname, forKey: "userNickname")
+        Crashlytics.crashlytics().setCustomValue(userEmail, forKey: "userEmail")
+        
+        var errorInfo: [String: Any] = [
+            "userId": userId,
+            "userNickname": userNickname,
+            "userEmail": userEmail,
+            "errorDescription": error.localizedDescription,
+            "file": (file as NSString).lastPathComponent,  // 파일명만 저장
+            "function": function,
+            "line": line
+        ]
+        if let message {
+            errorInfo["message"] = message
+        }
+        if let customError = error as? DomainError {
+            errorInfo["context"] = customError.context
+        }
+        
+        let recodeError = NSError(domain: "com.catchmate.\(domain)", code: error.statusCode, userInfo: errorInfo)
+        Crashlytics.crashlytics().record(error: recodeError)
         #endif
-        print(message)
-    }
-
-    deinit {
-        logFileHandle?.closeFile()
     }
 }

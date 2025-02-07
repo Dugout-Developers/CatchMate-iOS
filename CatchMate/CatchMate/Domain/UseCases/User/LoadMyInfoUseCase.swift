@@ -20,9 +20,12 @@ final class UserUseCaseImpl: LoadMyInfoUseCase {
     }
     
     func execute() -> Observable<User> {
+        LoggerService.shared.log(level: .info, "내 정보 불러오기")
         return userRepository.loadUser()
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .tokenUnavailable))
+                let domainError = DomainError(error: error, context: .tokenUnavailable)
+                LoggerService.shared.errorLog(domainError, domain: "load_user", message: error.errorDescription)
+                return Observable.error(domainError)
             }
     }
 }

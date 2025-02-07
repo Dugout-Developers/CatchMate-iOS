@@ -20,7 +20,7 @@ final class FCMTokenDataSourceImpl: FCMTokenDataSource {
                 if let error = error {
                     observer.onError(error)
                 } else if let token = token {
-                    LoggerService.shared.debugLog("FCM Token : \(token)")
+                    LoggerService.shared.log(level: .debug, "FCM Token : \(token)")
                     observer.onNext(token)
                     observer.onCompleted()
                 }

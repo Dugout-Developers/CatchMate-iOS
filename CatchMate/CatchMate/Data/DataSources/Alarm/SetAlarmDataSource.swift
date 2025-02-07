@@ -22,9 +22,11 @@ final class SetAlarmDataSourceImpl: SetAlarmDataSource {
     
     func setNotification(type: String, isEnabled: String) -> Observable<SetNotificationResponseDTO> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
+            LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
         }
-        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+        guard let refreshToken = self.tokenDataSource.getToken(for: .refreshToken) else {
+            LoggerService.shared.log(level: .debug, "리프레시 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
@@ -35,9 +37,6 @@ final class SetAlarmDataSourceImpl: SetAlarmDataSource {
             "isEnabled": isEnabled
         ]
         return APIService.shared.performRequest(type: .setNotification, parameters: parameters, headers: headers, encoding: JSONEncoding.default, dataType: SetNotificationResponseDTO.self, refreshToken: refreshToken)
-            .do(onNext: { dto in
-                LoggerService.shared.debugLog("\(Endpoint.setNotification.apiName) Success - \(dto)")
-            })
             .catch { error in
                 return Observable.error(error)
             }

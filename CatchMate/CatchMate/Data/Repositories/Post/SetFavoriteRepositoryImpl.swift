@@ -19,13 +19,11 @@ final class SetFavoriteRepositoryImpl: SetFavoriteRepository {
         if state {
             return setFavoriteDS.setFavorite(boardID)
                 .flatMap { state in
-                    LoggerService.shared.log("setFavorite Repository 데이터 변환 완료")
                     return Observable.just(state)
                 }
         } else {
             return setFavoriteDS.deleteFavorite(boardID)
                 .flatMap { state in
-                    LoggerService.shared.log("setFavorite Repository 데이터 변환 완료")
                     return Observable.just(state)
                 }
         }

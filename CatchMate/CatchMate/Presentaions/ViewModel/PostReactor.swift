@@ -78,7 +78,6 @@ final class PostReactor: Reactor {
     init(postId: String, postloadUsecase: PostDetailUseCase, setfavoriteUsecase: SetFavoriteUseCase, applyUsecase: ApplyUseCase, cancelApplyUsecase: CancelApplyUseCase, postHandleUsecase: DeletePostUseCase, upPostUsecase: UpPostUseCase) {
         self.initialState = State()
         self.postId = postId
-        LoggerService.shared.debugLog("-----------\(postId) detail Load------------")
         self.postDetailUsecase = postloadUsecase
         self.setFavoriteUsecase = setfavoriteUsecase
         self.applyUsecase = applyUsecase

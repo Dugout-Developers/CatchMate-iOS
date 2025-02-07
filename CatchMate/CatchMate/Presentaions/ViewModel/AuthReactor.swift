@@ -96,12 +96,12 @@ final class AuthReactor: Reactor {
     
     private func saveToken(loginModel: LoginModel) -> Bool {
         if let accessToken = loginModel.accessToken, let refreshToken = loginModel.refreshToken {
-            LoggerService.shared.debugLog("saveKeychain : \(accessToken), \(refreshToken)")
+            LoggerService.shared.log(level: .error, "saveKeychain : \(accessToken), \(refreshToken)")
             if !tokenDS.saveToken(token: accessToken, for: .accessToken) {
-                LoggerService.shared.debugLog("accessToken KeyChain저장 실패")
+                LoggerService.shared.log(level: .error, "accessToken KeyChain저장 실패")
             }
             if !tokenDS.saveToken(token: refreshToken, for: .refreshToken) {
-                LoggerService.shared.debugLog("refreshToken KeyChain저장 실패")
+                LoggerService.shared.log(level: .error, "refreshToken KeyChain저장 실패")
             }
             return true
         } else {

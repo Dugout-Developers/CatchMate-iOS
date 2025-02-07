@@ -22,9 +22,11 @@ final class TempPostDataSourceImpl: TempPostDataSource {
     
     func tempPost(_ post: PostRequsetDTO) -> Observable<Int> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
+            LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
         }
-        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+        guard let refreshToken = self.tokenDataSource.getToken(for: .refreshToken) else {
+            LoggerService.shared.log(level: .debug, "리프레시 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         
@@ -33,18 +35,18 @@ final class TempPostDataSourceImpl: TempPostDataSource {
         ]
         
         let jsonDictionary = encodingData(post)
-        LoggerService.shared.debugLog("parameters Encoding:\(jsonDictionary)")
+        LoggerService.shared.log(level: .info, "임시 저장 파라미터: \(jsonDictionary)")
         
         return APIService.shared.performRequest(type: .tempPost, parameters: jsonDictionary, headers: headers, encoding: JSONEncoding.default, dataType: AddPostResponseDTO.self, refreshToken: refreshToken)
             .map { response in
-                LoggerService.shared.debugLog("임시저장 저장 성공 - result: \(response)")
                 return response.boardId
             }
             .catch { error in
-                LoggerService.shared.debugLog("임시저장 실패 - \(error)")
+                LoggerService.shared.log(level: .debug, "임시저장 실패 - \(error)")
                 return Observable.error(error)
             }
     }
+    
     func encodingData(_ post: PostRequsetDTO) -> [String: Any] {
         var parameters: [String: Any] = [
             "title": post.title,

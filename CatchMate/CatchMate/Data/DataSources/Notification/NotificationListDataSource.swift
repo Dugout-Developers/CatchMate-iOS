@@ -23,9 +23,11 @@ final class NotificationListDataSourceImpl: NotificationListDataSource {
     
     func loadNotificationList() -> RxSwift.Observable<[NotificationDTO]> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
+            LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
         }
-        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+        guard let refreshToken = self.tokenDataSource.getToken(for: .refreshToken) else {
+            LoggerService.shared.log(level: .debug, "리프레시 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
@@ -33,11 +35,10 @@ final class NotificationListDataSourceImpl: NotificationListDataSource {
         ]
         return APIService.shared.performRequest(type: .notificationList, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: NotificationListResponse.self, refreshToken: refreshToken)
             .map { response in
-                LoggerService.shared.debugLog("NotificationList Load 성공: \(response)")
                 return response.notificationInfoList
             }
             .catch { error in
-                LoggerService.shared.debugLog("NotificationList Load 실패 - \(error)")
+                LoggerService.shared.log("NotificationList Load 실패 - \(error)")
                 return Observable.error(error)
             }
     }

@@ -259,7 +259,6 @@
 		5375B13E2D1A85F6000581B3 /* DomainError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B13C2D1A85EA000581B3 /* DomainError.swift */; };
 		5375B1472D1AEECE000581B3 /* ProfileImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B28F62C75BC2800BFE9F6 /* ProfileImageHelper.swift */; };
 		5375B1492D1AEEEE000581B3 /* ImageStringDecodingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B1482D1AEED7000581B3 /* ImageStringDecodingTest.swift */; };
-		5375B1572D228F25000581B3 /* BaseReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B1562D228F1F000581B3 /* BaseReactor.swift */; };
 		5375B15B2D239627000581B3 /* SetAlarmRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B15A2D239627000581B3 /* SetAlarmRepositoryImpl.swift */; };
 		5375B1A02D277C05000581B3 /* ConvertDateTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B19F2D277BFA000581B3 /* ConvertDateTest.swift */; };
 		5375B1A22D2CD381000581B3 /* NotificationList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B1A12D2CD36E000581B3 /* NotificationList.swift */; };
@@ -631,7 +630,6 @@
 		5375980B2C46DC45003BD8AE /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
 		5375B13C2D1A85EA000581B3 /* DomainError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainError.swift; sourceTree = "<group>"; };
 		5375B1482D1AEED7000581B3 /* ImageStringDecodingTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStringDecodingTest.swift; sourceTree = "<group>"; };
-		5375B1562D228F1F000581B3 /* BaseReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseReactor.swift; sourceTree = "<group>"; };
 		5375B15A2D239627000581B3 /* SetAlarmRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetAlarmRepositoryImpl.swift; sourceTree = "<group>"; };
 		5375B19F2D277BFA000581B3 /* ConvertDateTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertDateTest.swift; sourceTree = "<group>"; };
 		5375B1A12D2CD36E000581B3 /* NotificationList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationList.swift; sourceTree = "<group>"; };
@@ -885,7 +883,6 @@
 		531786692C200D4700ACEF6A /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				5375B1562D228F1F000581B3 /* BaseReactor.swift */,
 				53241F3B2C3C517600F468E1 /* GridSystem.swift */,
 				531786522C1C8BFB00ACEF6A /* BaseViewController.swift */,
 				5317866A2C200D6000ACEF6A /* BasePickerViewController.swift */,
@@ -2224,7 +2221,6 @@
 				53EECAE62D0B2E8300775FD6 /* ProfileEditUseCase.swift in Sources */,
 				5375B1CC2D2D8D7A000581B3 /* UpPostRepository.swift in Sources */,
 				531E4C252C6B549B0052E754 /* PostListLoadDataSource.swift in Sources */,
-				5375B1572D228F25000581B3 /* BaseReactor.swift in Sources */,
 				5375B13E2D1A85F6000581B3 /* DomainError.swift in Sources */,
 				538249132C3196AD0074B583 /* NaverLoginUseCase.swift in Sources */,
 				530DD6122C4F839600A7D6CE /* ServerLoginDataSource.swift in Sources */,

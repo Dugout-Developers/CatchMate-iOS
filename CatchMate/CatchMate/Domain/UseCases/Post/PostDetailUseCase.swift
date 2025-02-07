@@ -21,12 +21,15 @@ final class PostDetailUseCaseImpl: PostDetailUseCase {
         self.applylistRepository = applylistRepository
     }
     func loadPost(postId: String) -> Observable<(post: Post, type: ApplyType, favorite: Bool)> {
+        LoggerService.shared.log(level: .info, "\(postId)번 게시물 디테일 불러오기")
         return loadPostRepository.loadPost(postId: postId)
             .map({ post, favorite, type in
                 return (post, type, favorite)
             })
             .catch { error in
-                return Observable.error(DomainError(error: error, context: .pageLoad))
+                let domainError = DomainError(error: error, context: .pageLoad)
+                LoggerService.shared.errorLog(domainError, domain: "load_post_detail", message: error.errorDescription)
+                return Observable.error(domainError)
             }
     }
 

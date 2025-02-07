@@ -21,11 +21,13 @@ final class PostListLoadDataSourceImpl: PostListLoadDataSource {
     }
     
     func loadPostList(pageNum: Int, gudan: [Int], gameDate: String, people: Int) -> RxSwift.Observable<PostListDTO> {
-        LoggerService.shared.debugLog("<필터값> 구단: \(gudan), 날짜: \(gameDate), 페이지: \(pageNum)")
+        LoggerService.shared.log(level: .debug, "<필터값> 구단: \(gudan), 날짜: \(gameDate), 페이지: \(pageNum)")
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
+            LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
         }
-        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+        guard let refreshToken = self.tokenDataSource.getToken(for: .refreshToken) else {
+            LoggerService.shared.log(level: .debug, "리프레시 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         var parameters: [String: Any] = [:]
@@ -47,16 +49,9 @@ final class PostListLoadDataSourceImpl: PostListLoadDataSource {
             "AccessToken": token
         ]
     
-        
-        LoggerService.shared.debugLog("parameters: \(parameters)")
-        LoggerService.shared.debugLog("PostListLoadDataSourceImpl 토큰 확인: \(headers)")
         return APIService.shared.performRequest(type: .postlist, parameters: parameters, headers: headers, encoding: CustomURLEncoding.default, dataType: PostListDTO.self, refreshToken: refreshToken)
-            .map { dto in
-                LoggerService.shared.debugLog("PostList Load 성공: \(dto)")
-                return dto
-            }
             .catch { error in
-                LoggerService.shared.debugLog("PostList Load 실패 - \(error)")
+                LoggerService.shared.log(level: .debug, "PostList Load 실패 - \(error)")
                 return Observable.error(error)
             }
     }

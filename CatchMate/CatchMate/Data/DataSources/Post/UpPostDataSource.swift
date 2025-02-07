@@ -23,24 +23,22 @@ final class UpPostDataSourceImpl: UpPostDataSource {
     
     func upPost(_ postId: Int) -> Observable<UpPostResponseDTO> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
+            LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
         }
-        
-        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+        guard let refreshToken = self.tokenDataSource.getToken(for: .refreshToken) else {
+            LoggerService.shared.log(level: .debug, "리프레시 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundRefreshToken)
         }
+        
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
         let addEndPoint = "\(postId)/lift-up"
         
         return APIService.shared.performRequest(addEndPoint: addEndPoint, type: .upPost, parameters: nil, headers: headers, encoding: JSONEncoding.default, dataType: UpPostResponseDTO.self, refreshToken: refreshToken)
-            .map { dto in
-                LoggerService.shared.debugLog("liftUp API 호출 성공: \(dto)")
-                return dto
-            }
             .catch { error in
-                LoggerService.shared.debugLog("liftUp API 호출 실패 - \(error)")
+                LoggerService.shared.log("liftUp API 호출 실패 - \(error)")
                 return Observable.error(error)
             }
     }

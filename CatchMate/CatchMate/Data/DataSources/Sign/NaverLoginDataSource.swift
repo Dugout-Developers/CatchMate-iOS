@@ -27,7 +27,7 @@ final class NaverLoginDataSourceImpl: NSObject, NaverLoginDataSource, NaverThird
     private var naverLoginSubject: AnyObserver<SNSLoginResponse>?
     
     func getNaverLoginToken() -> Observable<SNSLoginResponse> {
-        LoggerService.shared.debugLog("-----------------NaverLogin-------------------")
+        LoggerService.shared.log(level: .info, "네이버 로그인 요청")
         loginInstance.resetToken() // 로그아웃하여 토큰을 초기화
         loginInstance.requestThirdPartyLogin()
         return Observable.create { observer in
@@ -51,17 +51,17 @@ final class NaverLoginDataSourceImpl: NSObject, NaverLoginDataSource, NaverThird
         return RxAlamofire.requestJSON(.get, url, headers: headers)
             .flatMap { (response, json) -> Observable<SNSLoginResponse> in
                 guard let json = json as? [String: Any], let response = json["response"] as? [String: Any] else {
-                    LoggerService.shared.log("NaverLoginError: 네이버 로그인 response - 디코딩 에러", level: .error)
+                    LoggerService.shared.log(level: .debug, "NaverLoginError: 네이버 로그인 response - 디코딩 에러")
                     return Observable.error(CodableError.decodingFailed)
                 }
-                LoggerService.shared.log("\(json)\n response: \(response)")
+                LoggerService.shared.log(level: .debug, "\(json)\n response: \(response)")
                 guard let id = response["id"] as? String else {
-                    LoggerService.shared.log("NaverLoginError: \(SNSLoginError.EmptyValue.statusCode) - id 값 없음", level: .error)
-                    return Observable.error(SNSLoginError.EmptyValue)
+                    LoggerService.shared.log(level: .debug, "NaverLoginError: id 응답값 찾을 수 없음")
+                    return Observable.error(SNSLoginError.emptyValue(description: "NaverLogin - response[id]"))
                 }
                 guard let email = response["email"] as? String else {
-                    LoggerService.shared.log("NaverLoginError: \(SNSLoginError.EmptyValue.statusCode) - email 값 없음", level: .error)
-                    return Observable.error(SNSLoginError.EmptyValue)
+                    LoggerService.shared.log(level: .debug, "NaverLoginError: email 값 없음")
+                    return Observable.error(SNSLoginError.emptyValue(description: "NaverLogin - response[email]"))
                 }
                 var birthResult: String? = nil
                 if let birthday = response["birthday"] as? String,
@@ -73,12 +73,12 @@ final class NaverLoginDataSourceImpl: NSObject, NaverLoginDataSource, NaverThird
                 let gender = response["gender"] as? String
                 if let nickname = response["nickname"] as? String {
                     let model = SNSLoginResponse(id: id, email: email, loginType: .naver, birth: birthResult, nickName: nickname, gender: gender, image: response["profile_image"] as? String)
-                    LoggerService.shared.log("NAVER Response: \(model)")
+                    LoggerService.shared.log(level: .debug, "NAVER Response: \(model)")
                     LoginUserDefaultsService.shared.saveLoginData(email: model.email, loginType: .naver)
                     return Observable.just(model)
                 }
                 let model = SNSLoginResponse(id: id, email: email, loginType: .naver, birth: birthResult, gender: gender, image: response["profile_image"] as? String)
-                LoggerService.shared.log("NAVER Response: \(model)")
+                LoggerService.shared.log(level: .info, "NAVER 로그인 요청 성공 - Response: \(model)")
                 LoginUserDefaultsService.shared.saveLoginData(email: model.email, loginType: .naver)
                 return Observable.just(model)
             }
@@ -130,9 +130,9 @@ final class NaverLoginDataSourceImpl: NSObject, NaverLoginDataSource, NaverThird
     
     func oauth20Connection(_ connection: NaverThirdPartyLoginConnection!, didFailWithError error: Error!) {
         print("Error: \(error.localizedDescription)")
-        LoggerService.shared.log("NAVER API ERROR - \(error.localizedDescription)", level: .error)
+        LoggerService.shared.log(level: .debug, "NAVER API ERROR - \(error.localizedDescription)")
         if let observer = naverLoginSubject {
-            observer.onError(SNSLoginError.loginServerError(description: error.localizedDescription))
+            observer.onError(SNSLoginError.loginServerError(message: error.localizedDescription))
         }
     }
     

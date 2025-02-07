@@ -12,8 +12,7 @@ final class SetupInfoService {
     static let shared = SetupInfoService()
     /// UserInfo 저장 - 한번에
     func saveUserInfo(_ user: UserInfoDTO) {
-        LoggerService.shared.debugLog("UserInfo 로컬 전체 저장")
-        LoggerService.shared.debugLog("\(user.id) - \(user.email) - team: \(user.team) - nickName: \(user.nickname)")
+        LoggerService.shared.log(level: .info, "UserInfo 로컬 전체 저장: \(user.id) - \(user.email) - team: \(user.team) - nickName: \(user.nickname)")
         UserDefaults.standard.set(user.id, forKey: UserDefaultsKeys.SetupInfo.UserInfo.id)
         UserDefaults.standard.set(user.email, forKey: UserDefaultsKeys.SetupInfo.UserInfo.email)
         UserDefaults.standard.set(user.team, forKey: UserDefaultsKeys.SetupInfo.UserInfo.team)

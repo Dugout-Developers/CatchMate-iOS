@@ -84,7 +84,7 @@ final class TokenDataSourceImpl: TokenDataSource {
         let accessResult = deleteToken(for: .accessToken)
         let refreshResult = deleteToken(for: .refreshToken)
         
-        LoggerService.shared.debugLog("AccessToken 삭제 결과 : \(accessResult), RefreshToken 삭제 결과 : \(refreshResult)")
+        LoggerService.shared.log(level: .debug, "AccessToken 삭제 결과 : \(accessResult), RefreshToken 삭제 결과 : \(refreshResult)")
         
         return accessResult && refreshResult
     }

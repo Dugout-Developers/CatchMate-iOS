@@ -20,33 +20,32 @@ final class AddPostDataSourceImpl: AddPostDataSource {
         self.tokenDataSource = tokenDataSource
     }
     func addPost(_ post: PostRequsetDTO) -> Observable<Int> {
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .iso8601
+
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
+            LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
         }
-        
-        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+        guard let refreshToken = self.tokenDataSource.getToken(for: .refreshToken) else {
+            LoggerService.shared.log(level: .debug, "리프레시 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
-        LoggerService.shared.log("토큰 확인: \(headers)")
-        
         
         guard let jsonDictionary = post.encodingData() else {
+            LoggerService.shared.log(level: .debug, "게시물 파라미터 변환 실패")
             return Observable.error(MappingError.mappingFailed)
         }
-        LoggerService.shared.debugLog("parameters Encoding:\(jsonDictionary)")
+        LoggerService.shared.log(level: .info, "parameters Encoding:\(jsonDictionary)")
+        
         return APIService.shared.performRequest(type: .savePost, parameters: jsonDictionary, headers: headers, encoding: JSONEncoding.default, dataType: AddPostResponseDTO.self, refreshToken: refreshToken)
             .map({ response in
-                LoggerService.shared.debugLog("Post 저장 성공 - result: \(response)")
                 return response.boardId
             })
             .catch { error in
-                LoggerService.shared.debugLog("Post 저장 실패 - \(error)")
+                LoggerService.shared.log(level: .debug, "Post 저장 실패 - \(error)")
                 return Observable.error(error)
             }
     }

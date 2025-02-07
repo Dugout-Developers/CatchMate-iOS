@@ -10,12 +10,12 @@ import UIKit
 final class ChatMapper {
     func dtoToDomain(_ dto: ChatRoomInfoDTO) -> ChatListInfo? {
         guard let cheerTeam = Team(serverId: dto.boardInfo.cheerClubId) else {
-            LoggerService.shared.debugLog("ChatListMapper: \(dto.chatRoomId)번 \(dto.boardInfo.title) - 응원구단 변환 실패")
+            LoggerService.shared.log("ChatListMapper: \(dto.chatRoomId)번 \(dto.boardInfo.title) - 응원구단 변환 실패")
             return nil
         }
 
         guard let lastMessageAt = DateHelper.shared.convertISOStringToDate(dto.lastMessageAt) else {
-            LoggerService.shared.debugLog("ChatListMapper: \(dto.lastMessageAt) - 마지막 메시지 시간 Date 변환 실패")
+            LoggerService.shared.log("ChatListMapper: \(dto.lastMessageAt) - 마지막 메시지 시간 Date 변환 실패")
             return nil
         }
         
@@ -31,11 +31,11 @@ final class ChatMapper {
         guard let homeTeam = Team(serverId: dto.gameInfo.homeClubId),
               let awayTeam = Team(serverId: dto.gameInfo.awayClubId),
               let cheerTeam = Team(serverId: dto.cheerClubId) else {
-            LoggerService.shared.debugLog("ChatListMapper: 팀 정보 변환 실패")
+            LoggerService.shared.log("ChatListMapper: 팀 정보 변환 실패")
             return nil
         }
         guard let convertedDates = DateHelper.shared.convertISODateToCustomStrings(isoDateString: dto.gameInfo.gameStartDate ?? "") else {
-            LoggerService.shared.debugLog("ChatListMapper 날짜 변환 실패")
+            LoggerService.shared.log("ChatListMapper 날짜 변환 실패")
             return nil
         }
         let date = convertedDates.date

@@ -21,9 +21,10 @@ final class LogoutDataSourceImpl: LogoutDataSource {
         self.tokenDataSource = tokenDataSource
     }
     func logout() -> RxSwift.Observable<Bool> {
-        LoggerService.shared.debugLog("--------------Logout--------------")
+        LoggerService.shared.log(level: .info, "로그아웃 시도")
         
         guard let refeshToken = self.tokenDataSource.getToken(for: .refreshToken) else {
+            LoggerService.shared.log(level: .debug, "리프레시 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         
@@ -40,9 +41,8 @@ final class LogoutDataSourceImpl: LogoutDataSource {
                 return dto.state
             }
             .catch { error in
-                LoggerService.shared.debugLog("logout 실패 - \(error)")
+                LoggerService.shared.errorLog(error, domain: "Logout", message: error.errorDescription)
                 return Observable.just(true)
-//                return Observable.error(error)
             }
     }
     
@@ -50,7 +50,7 @@ final class LogoutDataSourceImpl: LogoutDataSource {
         let accessTokenDeleted = tokenDataSource.deleteToken(for: .accessToken)
         let refreshTokenDeleted = tokenDataSource.deleteToken(for: .refreshToken)
         
-        LoggerService.shared.debugLog("AccessToken 삭제 status: \(accessTokenDeleted)")
-        LoggerService.shared.debugLog("RefreshToken 삭제 status: \(refreshTokenDeleted)")
+        LoggerService.shared.log(level: .debug, "AccessToken 삭제 status: \(accessTokenDeleted)")
+        LoggerService.shared.log(level: .debug, "RefreshToken 삭제 status: \(refreshTokenDeleted)")
     }
 }

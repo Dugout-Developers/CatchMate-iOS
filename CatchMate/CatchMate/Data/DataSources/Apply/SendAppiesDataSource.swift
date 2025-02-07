@@ -23,25 +23,23 @@ final class SendAppiesDataSourceImpl: SendAppiesDataSource {
     }
     func loadSendApplies(page: Int) -> RxSwift.Observable<ApplyListResponse> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
+            LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
         }
-        guard let refreshToken = tokenDataSource.getToken(for: .refreshToken) else {
+        guard let refreshToken = self.tokenDataSource.getToken(for: .refreshToken) else {
+            LoggerService.shared.log(level: .debug, "리프레시 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
-        LoggerService.shared.log("토큰 확인: \(headers)")
-        
+
         let parameters: [String: Any] = [
             "page": page
         ]
         return APIService.shared.performRequest(type: .sendApply, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: ApplyListResponse.self, refreshToken: refreshToken)
-            .map { response -> ApplyListResponse in
-                return response
-            }
             .catch { error in
-                LoggerService.shared.debugLog("보낸 신청 목록 load 실패 - \(error)")
+                LoggerService.shared.log(level: .debug, "보낸 신청 목록 load 실패 - \(error)")
                 return Observable.error(error)
             }
     }
