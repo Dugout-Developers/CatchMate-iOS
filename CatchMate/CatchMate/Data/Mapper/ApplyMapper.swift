@@ -25,8 +25,8 @@ final class ApplyMapper {
             LoggerService.shared.log("Apply UserInfo - 성별 매칭 실패")
             return nil
         }
-        
-        return SimpleUser(userId: dto.userId, nickName: dto.nickName, picture: dto.profileImageUrl, favGudan: favoriteClub, gender: gender, birthDate: dto.birthDate, cheerStyle: CheerStyles(rawValue: dto.watchStyle))
+        let cheerStyle = dto.watchStyle == nil ? nil : CheerStyles(rawValue: dto.watchStyle!)
+        return SimpleUser(userId: dto.userId, nickName: dto.nickName, picture: dto.profileImageUrl, favGudan: favoriteClub, gender: gender, birthDate: dto.birthDate, cheerStyle: cheerStyle)
     }
     
     func postInfoMapping(_ dto: PostListInfoDTO) -> SimplePost? {
