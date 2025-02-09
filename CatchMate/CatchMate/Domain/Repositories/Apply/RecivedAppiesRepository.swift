@@ -10,6 +10,6 @@ import RxSwift
 
 protocol RecivedAppiesRepository {
     func loadRecivedApplies(boardId: Int) -> Observable<[RecivedApplyData]>
-    func loadReceivedAppliesAll() -> Observable<[RecivedApplies]> 
+    func loadReceivedAppliesAll() -> Observable<ReceivedAppliesList> 
 }
 
