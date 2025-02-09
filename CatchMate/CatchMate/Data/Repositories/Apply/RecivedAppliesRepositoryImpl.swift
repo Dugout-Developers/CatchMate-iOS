@@ -14,19 +14,17 @@ final class RecivedAppliesRepositoryImpl: RecivedAppiesRepository {
         self.recivedAppliesDS = recivedAppliesDS
     }
     
-    func loadRecivedApplies(boardId: Int) -> RxSwift.Observable<[RecivedApplyData]> {
+    func loadRecivedApplies(boardId: Int) -> RxSwift.Observable<ReceivedAppliesList> {
         return recivedAppliesDS.loadRecivedApplies(boardId: boardId)
-            .flatMap { contents -> Observable<[RecivedApplyData]> in
+            .map { dto in
                 let mapper = ApplyMapper()
-                var mappingList = [RecivedApplyData]()
-                contents.forEach { content in
-                    if let result = mapper.dtoToDomain(content) {
-                        mappingList.append(RecivedApplyData(enrollId: result.enrollId, user: result.user, addText: result.addText, new: result.new))
-                    } else {
-                        LoggerService.shared.log("\(content.enrollId) 매핑 실패")
+                var mappingList = [RecivedApplies]()
+                dto.enrollInfoList.forEach { info in
+                    if let mappingResult = mapper.receivedApplyMapping(info) {
+                        mappingList.append(mappingResult)
                     }
                 }
-                return Observable.just(mappingList)
+                return ReceivedAppliesList(applies: mappingList, isLast: dto.isLast)
             }
     }
     

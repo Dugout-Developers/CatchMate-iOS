@@ -10,7 +10,7 @@ import RxSwift
 
 /// 게시물 1개에 관해 받은신청 정보 Load
 protocol LoadReceivedAppliesUseCase {
-    func execute(boardId: Int) -> Observable<[RecivedApplyData]>
+    func execute(boardId: Int) -> Observable<ReceivedAppliesList>
 }
 
 final class LoadReceivedAppliesUseCaseImpl: LoadReceivedAppliesUseCase {
@@ -20,7 +20,7 @@ final class LoadReceivedAppliesUseCaseImpl: LoadReceivedAppliesUseCase {
         self.receivedAppliesRepository = receivedAppliesRepository
     }
     
-    func execute(boardId: Int) -> RxSwift.Observable<[RecivedApplyData]> {
+    func execute(boardId: Int) -> RxSwift.Observable<ReceivedAppliesList> {
         LoggerService.shared.log(level: .info, "\(boardId)번 게시물 받은 신청 정보")
         return receivedAppliesRepository.loadRecivedApplies(boardId: boardId)
             .catch { error in

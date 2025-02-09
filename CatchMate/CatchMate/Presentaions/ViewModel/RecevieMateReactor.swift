@@ -58,9 +58,10 @@ final class RecevieMateReactor: Reactor {
             if let postId = postId, let intId = Int(postId) {
                 let list = resetNew(postId)
                 let loadAppiles = receivedAppliesUsecase.execute(boardId: intId)
-                    .map { result in
-                        return Mutation.setSelectedPostApplies(result)
-                    }
+                    .map({ list in
+                        let applies = list.applies[0].applies
+                        return Mutation.setSelectedPostApplies(applies)
+                    })
                     .catch { error in
                         return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                     }
