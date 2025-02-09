@@ -13,18 +13,18 @@ final class ProfileImageHelper {
         if let string = pictureString,
            let processedString = processString(string),
            let url = URL(string: processedString) {
-            profileImageView.kf.setImage(with: url, placeholder: UIImage(named: "tempProfile"), options: nil, completionHandler: { result in
+            profileImageView.kf.setImage(with: url, placeholder: UIImage(named: "def"), options: nil, completionHandler: { result in
                 switch result {
                 case .success(_):
                     // 이미지 로드 성공
                     break
                 case .failure(_):
                     // 이미지 로드 실패, 기본 이미지 설정
-                    profileImageView.image = UIImage(named: "tempProfile")
+                    profileImageView.image = UIImage(named: "defaultImg")
                 }
             })
         } else {
-            profileImageView.image = UIImage(named: "tempProfile")
+            profileImageView.image = UIImage(named: "defaultImg")
         }
     }
     

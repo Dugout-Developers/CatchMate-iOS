@@ -190,7 +190,7 @@ final class DetailCardCell: UICollectionViewCell {
         if let urlString = user.picture, let url = URL(string: urlString) {
             profileImageView.kf.setImage(with: url)
         } else {
-            profileImageView.image = UIImage(named: "tempProfile")
+            profileImageView.image = UIImage(named: "defaultImg")
         }
         nicknameLabel.text = user.nickName
         nicknameLabel.applyStyle(textStyle: FontSystem.body02_medium)

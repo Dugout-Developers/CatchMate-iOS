@@ -52,9 +52,9 @@ enum Gender: String, Codable {
     // 서버에서 받은 값을 기반으로 Gender 열거형 값을 반환하는 이니셜라이저
     init?(serverValue: String) {
         switch serverValue {
-        case "F", "W":
+        case "F", "W", "f", "w":
             self = .woman
-        case "M":
+        case "M", "m":
             self = .man
         case "N":
             self = .none
