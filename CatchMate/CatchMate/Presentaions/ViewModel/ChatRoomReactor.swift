@@ -83,14 +83,15 @@ final class ChatRoomReactor: Reactor {
     private var myData: SenderInfo?
     private let roomId: Int
     private let disposeBag = DisposeBag()
-
+    private let managerInfo: ManagerInfo
     // MARK: - UseCase
     private let loadInfoUS: LoadChatInfoUseCase
     
-    init(roomId: Int, loadInfoUS: LoadChatInfoUseCase) {
+    init(roomId: Int, managerInfo: ManagerInfo, loadInfoUS: LoadChatInfoUseCase) {
         self.initialState = State()
         self.roomId = roomId
         self.loadInfoUS = loadInfoUS
+        self.managerInfo = managerInfo
         do {
             try setupMyData()
         } catch {
@@ -135,7 +136,20 @@ final class ChatRoomReactor: Reactor {
                 return Observable.empty()
             } else {
                 return loadInfoUS.loadChatMessages(chatId: roomId, page: currentState.currentPage)
-                    .flatMap { messages, isLast in
+                    .map({ [weak self] messages, isLast in
+                        if isLast {
+                            var newMessages: [ChatMessage] = []
+                            let startMessage = ChatMessage(userId: 0, nickName: "", imageUrl: "", message: "", time: Date(), messageType: .startChat)
+                            newMessages.append(startMessage)
+                            if let managerInfo = self?.managerInfo {
+                                let managerInfoMessage = ChatMessage(userId: managerInfo.id, nickName: managerInfo.nickName, imageUrl: "", message: "\(managerInfo.nickName) 님이 채팅에 참여했어요", time: Date(), messageType: .enterUser)
+                                newMessages.append(managerInfoMessage)
+                            }
+                            return (newMessages + messages, true)
+                        }
+                        return (messages, isLast)
+                    })
+                    .flatMap { (messages, isLast) in
                         return Observable.concat([
                             Observable.just(.setIsLoading(true)),
                             Observable.just(.setMessages(messages)),
@@ -169,11 +183,9 @@ final class ChatRoomReactor: Reactor {
     }
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
-        newState.error = nil
         switch mutation {
         case .addMyMessage(let message):
             newState.messages.append(message)
-            print(newState.messages)
         case .setMessages(let messages):
             newState.messages.insert(contentsOf: messages, at: 0)
             newState.currentPage += 1

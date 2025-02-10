@@ -24,6 +24,14 @@ struct SimplePost: Identifiable, Equatable {
             return false
         }
     }
+    var chatDate: String {
+        if let dateValue = DateHelper.shared.toDate(from: date, format: "MM.dd") {
+            let str = DateHelper.shared.toString(from: dateValue, format: "MM월 dd일 EEE")
+            return str == "" ? "알 수 없음" : str
+        } else {
+            return"알 수 없음"
+        }
+    }
     
     static func == (lhs: SimplePost, rhs: SimplePost) -> Bool {
         return lhs.id == rhs.id

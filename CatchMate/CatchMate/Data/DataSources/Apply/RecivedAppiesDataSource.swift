@@ -11,8 +11,8 @@ import RxAlamofire
 import Alamofire
 
 protocol RecivedAppiesDataSource {
-    func loadRecivedApplies(boardId: Int) -> Observable<[Content]>
-    func loadReceivedAppliesAll() -> Observable<[Content]>
+    func loadRecivedApplies(boardId: Int) -> Observable<ReceivedAppliesDTO>
+    func loadReceivedAppliesAll() -> Observable<ReceivedAppliesDTO>
 }
 
 final class RecivedAppiesDataSourceImpl: RecivedAppiesDataSource {
@@ -22,7 +22,7 @@ final class RecivedAppiesDataSourceImpl: RecivedAppiesDataSource {
         self.tokenDataSource = tokenDataSource
     }
     
-    func loadRecivedApplies(boardId: Int) -> RxSwift.Observable<[Content]> {
+    func loadRecivedApplies(boardId: Int) -> RxSwift.Observable<ReceivedAppliesDTO> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
@@ -39,9 +39,9 @@ final class RecivedAppiesDataSourceImpl: RecivedAppiesDataSource {
             "boardId": boardId
         ]
         
-        return APIService.shared.performRequest(type: .receivedApply, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: ApplyListResponse.self, refreshToken: refreshToken)
-            .map { response -> [Content] in
-                return response.enrollInfoList
+        return APIService.shared.performRequest(type: .receivedApply, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: ReceivedAppliesDTO.self, refreshToken: refreshToken)
+            .map { response  in
+                return response
             }
             .catch { error in
                 LoggerService.shared.log(level: .debug, "\(boardId)번 게시물 받은 신청 load 실패 - \(error)")
@@ -49,7 +49,7 @@ final class RecivedAppiesDataSourceImpl: RecivedAppiesDataSource {
             }
     }
     
-    func loadReceivedAppliesAll() -> Observable<[Content]> {
+    func loadReceivedAppliesAll() -> Observable<ReceivedAppliesDTO> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
@@ -63,9 +63,9 @@ final class RecivedAppiesDataSourceImpl: RecivedAppiesDataSource {
         ]
         LoggerService.shared.log("토큰 확인: \(headers)")
         
-        return APIService.shared.performRequest(type: .receivedApplyAll, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: ApplyListResponse.self, refreshToken: refreshToken)
-            .map { response -> [Content] in
-                return response.enrollInfoList
+        return APIService.shared.performRequest(type: .receivedApplyAll, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: ReceivedAppliesDTO.self, refreshToken: refreshToken)
+            .map { response in
+                return response
             }
             .catch { error in
                 LoggerService.shared.log("받은 신청 전체 목록 load 실패 - \(error)")

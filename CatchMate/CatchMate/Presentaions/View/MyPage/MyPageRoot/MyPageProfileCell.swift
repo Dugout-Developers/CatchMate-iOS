@@ -70,11 +70,6 @@ final class MyPageProfileCell: UITableViewCell {
         tagContainer.subviews.forEach { $0.removeFromSuperview() }
         indicatorImageButton.isHidden = indicatorIsHidden
         ProfileImageHelper.loadImage(profileImageView, pictureString: user.picture)
-//        if let image = user.picture, !image.isEmpty, let url = URL(string: image) {
-//            profileImageView.kf.setImage(with: url)
-//        } else {
-//            profileImageView.image = UIImage(named: "tempProfile")
-//        }
         nicknameLabel.text = user.nickName
         tags = []
         tags.append(makePaddingLabel(color: .white, backgroundColor: user.favGudan.getTeamColor, text: user.favGudan.rawValue))

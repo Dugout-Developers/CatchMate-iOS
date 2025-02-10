@@ -28,4 +28,11 @@ final class SendAppiesRepositoryImpl: SendAppiesRepository {
                 return Observable.just(Applys(applys: mappingList, isLast: applyInfo.isLast))
             }
     }
+    
+    func loadSendApplyDetail(_ boardId: Int) -> RxSwift.Observable<MyApplyInfo> {
+        return sendAppliesDS.loadSendApplyDetail(boardId)
+            .map { dto in
+                return MyApplyInfo(enrollId: dto.enrollId, addInfo: dto.description)
+            }
+    }
 }

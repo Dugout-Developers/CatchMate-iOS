@@ -17,6 +17,8 @@ enum ChatMessageType {
         switch serverRequest {
         case "TALK":
             self = .talk
+        case "START":
+            self = .startChat
         default:
             return nil
         }
@@ -30,7 +32,7 @@ enum ChatMessageType {
         case .enterUser:
             return ""
         case .startChat:
-            return ""
+            return "START"
         }
     }
 }

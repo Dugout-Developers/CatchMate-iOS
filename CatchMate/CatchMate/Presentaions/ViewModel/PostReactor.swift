@@ -127,7 +127,7 @@ final class PostReactor: Reactor {
                 .flatMap { id in
                     if id > 0 {
                         return Observable.concat([
-                            Observable.just(Mutation.setApplyInfo(MyApplyInfo(enrollId: String(id), addInfo: text ?? ""))),
+                            Observable.just(Mutation.setApplyInfo(MyApplyInfo(enrollId: id, addInfo: text ?? ""))),
                             Observable.just(Mutation.setApplyButtonState(.applied))
                         ])
                     } else {
@@ -139,7 +139,7 @@ final class PostReactor: Reactor {
                 }
         case .cancelApply:
             if let enrollId = currentState.applyInfo?.enrollId {
-                return cancelApplyUsecase.execute(enrollId: enrollId)
+                return cancelApplyUsecase.execute(enrollId: String(enrollId))
                     .flatMap { _ in
                         return Observable.just(Mutation.setApplyButtonState(.none))
                     }

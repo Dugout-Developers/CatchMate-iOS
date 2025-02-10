@@ -25,6 +25,8 @@ final class RecevieMateReactor: Reactor {
     struct State {
         var recivedApplies: [RecivedApplies] = []
         var selectedPostApplies: [RecivedApplyData]?
+        var currentPage: Int = 0
+        var isLast: Bool = false
         var error: PresentationError?
     }
     
@@ -44,7 +46,7 @@ final class RecevieMateReactor: Reactor {
         case .loadReceiveAppliesAll:
             return receivedAllAppliesUsecase.execute()
                 .map { result in
-                    return Mutation.setReceiveAppliesAll(result)
+                    return Mutation.setReceiveAppliesAll(result.applies)
                 }
                 .catch { error in
                     return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
@@ -56,9 +58,10 @@ final class RecevieMateReactor: Reactor {
             if let postId = postId, let intId = Int(postId) {
                 let list = resetNew(postId)
                 let loadAppiles = receivedAppliesUsecase.execute(boardId: intId)
-                    .map { result in
-                        return Mutation.setSelectedPostApplies(result)
-                    }
+                    .map({ list in
+                        let applies = list.applies[0].applies
+                        return Mutation.setSelectedPostApplies(applies)
+                    })
                     .catch { error in
                         return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                     }

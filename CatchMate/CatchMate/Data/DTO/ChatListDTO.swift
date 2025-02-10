@@ -29,4 +29,5 @@ struct ChatPostInfo: Codable {
 
 struct ChatManangerInfo: Codable {
     let userId: Int
+    let nickName: String
 }

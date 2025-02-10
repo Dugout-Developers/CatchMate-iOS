@@ -23,8 +23,9 @@ final class ChatMapper {
             return nil
         }
         
+        let managerInfo = ManagerInfo(id: dto.boardInfo.userInfo.userId, nickName: dto.boardInfo.userInfo.nickName)
         // TODO: - newChat, lastMessage, notReadCount API 추가 요청하기
-        return ChatListInfo(chatRoomId: dto.chatRoomId, postInfo: postInfo, managerId: dto.boardInfo.userInfo.userId, lastMessage: "새 메시지가 도착했습니다.", lastMessageAt: lastMessageAt, newChat: Bool.random(), notReadCount: Int.random(in: 0...10))
+        return ChatListInfo(chatRoomId: dto.chatRoomId, postInfo: postInfo, managerInfo: managerInfo, lastMessage: "새 메시지가 도착했습니다.", lastMessageAt: lastMessageAt, newChat: Bool.random(), notReadCount: Int.random(in: 0...10))
     }
     
     func postInfoToDomain(_ dto: ChatPostInfo) -> SimplePost? {

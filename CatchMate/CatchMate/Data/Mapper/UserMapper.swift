@@ -15,6 +15,6 @@ final class UserMapper {
     }
     
     func profileEditRequestDomainToDTO(domain: ProfileEdit) -> ProfileEditRequestDTO {
-        return ProfileEditRequestDTO(request: ProfileEditRequestDTO.Request(nickName: domain.nickName, favoriteClubId: domain.team.serverId, watchStyle: domain.style != nil ? domain.style!.rawValue : ""), profileImage: domain.image ?? UIImage(named: "tempProfile")!)
+        return ProfileEditRequestDTO(request: ProfileEditRequestDTO.Request(nickName: domain.nickName, favoriteClubId: domain.team.serverId, watchStyle: domain.style != nil ? domain.style!.rawValue : ""), profileImage: domain.image ?? UIImage(named: "defaultImg")!)
     }
 }

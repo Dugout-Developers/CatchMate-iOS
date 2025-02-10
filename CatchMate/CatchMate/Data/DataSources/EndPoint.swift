@@ -50,6 +50,8 @@ enum Endpoint {
     case cancelApply
     /// 보낸 직관 신청 목록
     case sendApply
+    /// 보낸 신청 디테일
+    case sendApplyDetail
     /// 받은 직관 신청 목록
     case receivedApply
     /// 받은 직관 신청 전체 목록
@@ -116,6 +118,9 @@ enum Endpoint {
             return "/enrolls/cancel/"
         case .sendApply:
             return "/enrolls/request"
+        case .sendApplyDetail:
+            /// /enrolls/{boardId}/description
+            return "/enrolls/"
         case .receivedApply:
             return "/enrolls/receive"
         case .receivedApplyAll:
@@ -184,6 +189,8 @@ enum Endpoint {
             return "직관 신청 취소 API"
         case .sendApply:
             return "보낸 신청 목록 API"
+        case .sendApplyDetail:
+            return "보낸 신청 상세 내용 조회 API"
         case .receivedApply:
             return "받은 신청 목록 API"
         case .receivedApplyAll:
@@ -247,7 +254,7 @@ enum Endpoint {
             return .post
         case .cancelApply:
             return .delete
-        case .sendApply:
+        case .sendApply, .sendApplyDetail:
             return .get
         case .receivedApply:
             return .get

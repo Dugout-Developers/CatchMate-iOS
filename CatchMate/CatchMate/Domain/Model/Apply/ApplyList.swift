@@ -28,11 +28,14 @@ enum ApplyStatus: String {
     case pending = "PENDING"
     case reject = "REJECTED"
 }
-
+struct ReceivedAppliesList {
+    let applies: [RecivedApplies]
+    let isLast: Bool
+}
 struct RecivedApplies: Equatable, Comparable {
     let post: SimplePost
     var applies: [RecivedApplyData]
-    
+
     static func == (lhs: RecivedApplies, rhs: RecivedApplies) -> Bool {
         return lhs.post.id == rhs.post.id && lhs.applies == rhs.applies
     }

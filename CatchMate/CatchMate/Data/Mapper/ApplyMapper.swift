@@ -45,5 +45,26 @@ final class ApplyMapper {
         
         return SimplePost(id: String(dto.boardId), title: dto.title, homeTeam: homeTeam, awayTeam: awayTeam, cheerTeam: cheerTeam, date: date, playTime: playTime, location: dto.gameInfo.location, maxPerson: dto.maxPerson, currentPerson: dto.currentPerson)
     }
-
+    
+    func receivedApplyMapping(_ dto: EnrollInfo) -> RecivedApplies? {
+        guard let post = postInfoMapping(dto.boardInfo) else {
+            LoggerService.shared.log("Received Apply Mapping - Post 정보 매칭 실패")
+            return nil
+        }
+        
+        let applies: [RecivedApplyData] = dto.enrollReceiveInfoList.compactMap { enrollInfo in
+            guard let user = userInfoMapping(enrollInfo.userInfo) else {
+                LoggerService.shared.log("Received Apply Mapping(\(enrollInfo.enrollId)번 신청 - User 정보 매칭 실패")
+                return nil
+            }
+            return RecivedApplyData(
+                enrollId: String(enrollInfo.enrollId),
+                user: user,
+                addText: enrollInfo.description,
+                new: enrollInfo.isNew
+            )
+        }
+        
+        return RecivedApplies(post: post, applies: applies)
+    }
 }

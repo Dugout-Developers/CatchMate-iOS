@@ -13,7 +13,7 @@ struct ApplyRequest {
 }
 
 struct MyApplyInfo {
-    let enrollId: String
+    let enrollId: Int
     let addInfo: String
 }
 
