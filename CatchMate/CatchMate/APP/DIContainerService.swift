@@ -67,7 +67,7 @@ class DIContainerService {
         let sendAppliesDataSource = SendAppiesDataSourceImpl(tokenDataSource: tokenDS)
         let sendAppliesRepository = SendAppiesRepositoryImpl(sendAppliesDS: sendAppliesDataSource)
 
-        let loadPostUsecase = PostDetailUseCaseImpl(loadPostRepository: loadPostRepository, applylistRepository: sendAppliesRepository)
+        let loadPostUsecase = PostDetailUseCaseImpl(loadPostRepository: loadPostRepository, applyRepository: sendAppliesRepository)
         
         let loadUserDataSource = UserDataSourceImpl(tokenDataSource: tokenDS)
         let loadUserRepository = UserRepositoryImpl(userDS: loadUserDataSource)
@@ -86,7 +86,7 @@ class DIContainerService {
         let sendAppliesDataSource = SendAppiesDataSourceImpl(tokenDataSource: tokenDS)
         let sendAppliesRepository = SendAppiesRepositoryImpl(sendAppliesDS: sendAppliesDataSource)
 
-        let loadPostUsecase = PostDetailUseCaseImpl(loadPostRepository: loadPostRepository, applylistRepository: sendAppliesRepository)
+        let loadPostUsecase = PostDetailUseCaseImpl(loadPostRepository: loadPostRepository, applyRepository: sendAppliesRepository)
         
         let applyDataSource = ApplyDataSourceImpl(tokenDataSource: tokenDS)
         let applyRepository = ApplyPostRepositoryImpl(applyDS: applyDataSource)
