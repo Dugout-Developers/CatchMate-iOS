@@ -40,8 +40,10 @@ enum MypageMenu: String {
             return Observable.just(AnnouncementsViewController(reactor: AnnouncementsReactor()))
         case .terms:
             return Observable.just(TermViewController())
-        case .customerService, .info:
+        case .customerService:
             return Observable.just(CustomerServiceViewController(title: self.rawValue))
+        case .info:
+            return Observable.just(ApplicationInfoViewController())
         case .write:
             guard let user = user else {
                 return Observable.error(PresentationError.showErrorPage)
