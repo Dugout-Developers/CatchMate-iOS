@@ -75,6 +75,8 @@
 		5320B04B2D5A4B5900897EB7 /* ApplicationInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320B04A2D5A4B4500897EB7 /* ApplicationInfoViewController.swift */; };
 		5320B04D2D5A4BB500897EB7 /* TermViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320B04C2D5A4BAC00897EB7 /* TermViewController.swift */; };
 		5320B04F2D5B017B00897EB7 /* DefualtTabelViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320B04E2D5B017500897EB7 /* DefualtTabelViewCell.swift */; };
+		5320B0512D5B147400897EB7 /* CustomerServiceAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320B0502D5B147200897EB7 /* CustomerServiceAddViewController.swift */; };
+		5320B0532D5B155B00897EB7 /* CustomerServiceReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320B0522D5B155300897EB7 /* CustomerServiceReactor.swift */; };
 		53241F3C2C3C517600F468E1 /* GridSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F3B2C3C517600F468E1 /* GridSystem.swift */; };
 		53241F3E2C3C589100F468E1 /* DesignAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */; };
 		53241F4E2C3EE58E00F468E1 /* CMPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */; };
@@ -508,6 +510,8 @@
 		5320B04A2D5A4B4500897EB7 /* ApplicationInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationInfoViewController.swift; sourceTree = "<group>"; };
 		5320B04C2D5A4BAC00897EB7 /* TermViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermViewController.swift; sourceTree = "<group>"; };
 		5320B04E2D5B017500897EB7 /* DefualtTabelViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefualtTabelViewCell.swift; sourceTree = "<group>"; };
+		5320B0502D5B147200897EB7 /* CustomerServiceAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerServiceAddViewController.swift; sourceTree = "<group>"; };
+		5320B0522D5B155300897EB7 /* CustomerServiceReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerServiceReactor.swift; sourceTree = "<group>"; };
 		53241F3B2C3C517600F468E1 /* GridSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSystem.swift; sourceTree = "<group>"; };
 		53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DesignAssets.xcassets; sourceTree = "<group>"; };
 		53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMPopupViewController.swift; sourceTree = "<group>"; };
@@ -1057,6 +1061,7 @@
 		534E39DD2C63CF45006D180E /* Supports */ = {
 			isa = PBXGroup;
 			children = (
+				5320B0502D5B147200897EB7 /* CustomerServiceAddViewController.swift */,
 				5320B04E2D5B017500897EB7 /* DefualtTabelViewCell.swift */,
 				5320B04C2D5A4BAC00897EB7 /* TermViewController.swift */,
 				534E39DB2C63CE78006D180E /* AnnouncementsViewController.swift */,
@@ -1365,6 +1370,7 @@
 		536BDDE72C1971AF0043B1DA /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				5320B0522D5B155300897EB7 /* CustomerServiceReactor.swift */,
 				536BDDE82C1971C70043B1DA /* SignReactor.swift */,
 				53E4A9B72C4FF00F00D21B49 /* AuthReactor.swift */,
 				53FC69FB2C5A2DD700B97AEA /* SignUpReactor.swift */,
@@ -2047,6 +2053,7 @@
 				53E4A9C22C500A4400D21B49 /* SignUpRepositoryImpl.swift in Sources */,
 				531963F12C645FDE00EE7F23 /* SendMateReactor.swift in Sources */,
 				534E39DC2C63CE78006D180E /* AnnouncementsViewController.swift in Sources */,
+				5320B0512D5B147400897EB7 /* CustomerServiceAddViewController.swift in Sources */,
 				53C4FEB42C8AA68A00337431 /* BottomMargin.swift in Sources */,
 				5301E2B62C5BE6AF0078E910 /* LogoutUseCase.swift in Sources */,
 				537598082C46C3D2003BD8AE /* DefaultsTextView.swift in Sources */,
@@ -2305,6 +2312,7 @@
 				53716BC82C43EEB50044AD2A /* CMToastMessage.swift in Sources */,
 				533183CF2C5141BC0097F3F1 /* MyMessageTableViewCell.swift in Sources */,
 				5301E2B82C5BECBB0078E910 /* MyPageReactor.swift in Sources */,
+				5320B0532D5B155B00897EB7 /* CustomerServiceReactor.swift in Sources */,
 				536548A32C3EF3B700C2309A /* FavoriteListViewController.swift in Sources */,
 				531288D32C540B08000C2FB1 /* ServerLoginRepositoryImpl.swift in Sources */,
 				531786852C23261200ACEF6A /* SheetHeight.swift in Sources */,
