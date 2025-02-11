@@ -38,8 +38,15 @@ enum MypageMenu: String {
         switch self {
         case .notices:
             return Observable.just(AnnouncementsViewController(reactor: AnnouncementsReactor()))
-        case .customerService, .terms, .info:
-            return Observable.just(CustomerServiceViewController(title: self.rawValue))
+        case .terms:
+            return Observable.just(TermViewController())
+        case .customerService:
+            guard let user = SetupInfoService.shared.getUsertInfo() else {
+                return Observable.error(PresentationError.showToastMessage(message: "페이지를 불러오는데 실패했습니다."))
+            }
+            return Observable.just(CustomerServiceViewController(user: user))
+        case .info:
+            return Observable.just(ApplicationInfoViewController())
         case .write:
             guard let user = user else {
                 return Observable.error(PresentationError.showErrorPage)
