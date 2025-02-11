@@ -38,7 +38,9 @@ enum MypageMenu: String {
         switch self {
         case .notices:
             return Observable.just(AnnouncementsViewController(reactor: AnnouncementsReactor()))
-        case .customerService, .terms, .info:
+        case .terms:
+            return Observable.just(TermViewController())
+        case .customerService, .info:
             return Observable.just(CustomerServiceViewController(title: self.rawValue))
         case .write:
             guard let user = user else {

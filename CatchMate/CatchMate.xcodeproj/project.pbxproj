@@ -72,6 +72,9 @@
 		5320B0442D58E63A00897EB7 /* ReceivedAppliesDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320B0422D58E62900897EB7 /* ReceivedAppliesDTO.swift */; };
 		5320B0482D5A39B200897EB7 /* SendApplyDetailDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320B0472D5A39AA00897EB7 /* SendApplyDetailDTO.swift */; };
 		5320B0492D5A39B200897EB7 /* SendApplyDetailDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320B0472D5A39AA00897EB7 /* SendApplyDetailDTO.swift */; };
+		5320B04B2D5A4B5900897EB7 /* ApplicationInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320B04A2D5A4B4500897EB7 /* ApplicationInfoViewController.swift */; };
+		5320B04D2D5A4BB500897EB7 /* TermViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320B04C2D5A4BAC00897EB7 /* TermViewController.swift */; };
+		5320B04F2D5B017B00897EB7 /* DefualtTabelViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320B04E2D5B017500897EB7 /* DefualtTabelViewCell.swift */; };
 		53241F3C2C3C517600F468E1 /* GridSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F3B2C3C517600F468E1 /* GridSystem.swift */; };
 		53241F3E2C3C589100F468E1 /* DesignAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */; };
 		53241F4E2C3EE58E00F468E1 /* CMPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */; };
@@ -502,6 +505,9 @@
 		531E4C312C6B62070052E754 /* PostListLoadUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListLoadUseCase.swift; sourceTree = "<group>"; };
 		5320B0422D58E62900897EB7 /* ReceivedAppliesDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceivedAppliesDTO.swift; sourceTree = "<group>"; };
 		5320B0472D5A39AA00897EB7 /* SendApplyDetailDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendApplyDetailDTO.swift; sourceTree = "<group>"; };
+		5320B04A2D5A4B4500897EB7 /* ApplicationInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationInfoViewController.swift; sourceTree = "<group>"; };
+		5320B04C2D5A4BAC00897EB7 /* TermViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermViewController.swift; sourceTree = "<group>"; };
+		5320B04E2D5B017500897EB7 /* DefualtTabelViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefualtTabelViewCell.swift; sourceTree = "<group>"; };
 		53241F3B2C3C517600F468E1 /* GridSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSystem.swift; sourceTree = "<group>"; };
 		53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DesignAssets.xcassets; sourceTree = "<group>"; };
 		53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMPopupViewController.swift; sourceTree = "<group>"; };
@@ -1051,10 +1057,13 @@
 		534E39DD2C63CF45006D180E /* Supports */ = {
 			isa = PBXGroup;
 			children = (
+				5320B04E2D5B017500897EB7 /* DefualtTabelViewCell.swift */,
+				5320B04C2D5A4BAC00897EB7 /* TermViewController.swift */,
 				534E39DB2C63CE78006D180E /* AnnouncementsViewController.swift */,
 				534E39E02C63D10B006D180E /* AnnouncementsListCell.swift */,
 				534E39E42C63D5AE006D180E /* AnnouncementDetailViewController.swift */,
 				534E39E62C63E021006D180E /* CustomerServiceViewController.swift */,
+				5320B04A2D5A4B4500897EB7 /* ApplicationInfoViewController.swift */,
 			);
 			path = Supports;
 			sourceTree = "<group>";
@@ -2027,6 +2036,7 @@
 				534E39E52C63D5AE006D180E /* AnnouncementDetailViewController.swift in Sources */,
 				535AA0662D51BC81007C7690 /* LoadChatMessageRepository.swift in Sources */,
 				531786782C20498800ACEF6A /* Post.swift in Sources */,
+				5320B04D2D5A4BB500897EB7 /* TermViewController.swift in Sources */,
 				534E39E92C63E509006D180E /* SendMateListViewController.swift in Sources */,
 				533A2B2C2C29485E00A59340 /* SignUpViewController.swift in Sources */,
 				53368C8E2D301CD900D129EE /* TempPostRequest.swift in Sources */,
@@ -2057,6 +2067,7 @@
 				533B29272C770B0700BFE9F6 /* SetFavoriteDataSource.swift in Sources */,
 				53C6DA002CE39DE000918718 /* ReceivedCountDataSource.swift in Sources */,
 				5378EA9F2C649BBE00A2422C /* RecevieMateReactor.swift in Sources */,
+				5320B04F2D5B017B00897EB7 /* DefualtTabelViewCell.swift in Sources */,
 				531786592C1C934A00ACEF6A /* UIViewController+Extension.swift in Sources */,
 				531288CB2C540764000C2FB1 /* FCMRepository.swift in Sources */,
 				5317865D2C1EAC4700ACEF6A /* Screen.swift in Sources */,
@@ -2169,6 +2180,7 @@
 				533183D12C5141EB0097F3F1 /* UILabel+Extension.swift in Sources */,
 				533B29292C770F0700BFE9F6 /* SetFavoriteRepository.swift in Sources */,
 				533A2B302C2AC5C400A59340 /* InputFavoriteTeamViewContoller.swift in Sources */,
+				5320B04B2D5A4B5900897EB7 /* ApplicationInfoViewController.swift in Sources */,
 				533183DD2C51F5370097F3F1 /* ChatingInputField.swift in Sources */,
 				53E5925E2C6D0A550042E1D7 /* LoadPostDataSource.swift in Sources */,
 				533B291D2C7648DC00BFE9F6 /* CMSwitch.swift in Sources */,
