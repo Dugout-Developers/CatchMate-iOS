@@ -51,3 +51,9 @@ struct ManagerInfo {
     let id: Int
     let nickName: String
 }
+
+struct ChatRoomInfo {
+    let chatRoomId: Int
+    let postInfo: SimplePost
+    let managerInfo: ManagerInfo
+}

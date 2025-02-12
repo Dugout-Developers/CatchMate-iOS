@@ -31,7 +31,7 @@ final class ChatRoomViewController: BaseViewController, View {
     }()
     private let tableView: UITableView = UITableView()
     private let inputview: ChatingInputField = ChatingInputField()
-    private var chat: ChatListInfo
+    private var chat: ChatRoomInfo
     private var userId: Int
     var reactor: ChatRoomReactor
     private var keyboardManager: KeyboardManager?
@@ -78,7 +78,7 @@ final class ChatRoomViewController: BaseViewController, View {
         reactor.action.onNext(.loadMessages)
     }
 
-    init(chat: ChatListInfo, userId: Int) {
+    init(chat: ChatRoomInfo, userId: Int) {
         self.reactor = ChatRoomReactor(roomId: chat.chatRoomId, managerInfo: chat.managerInfo, loadInfoUS: DIContainerService.shared.makeChatRoomUseCase())
         self.chat = chat
         self.userId = userId

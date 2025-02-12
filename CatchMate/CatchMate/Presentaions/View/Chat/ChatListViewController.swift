@@ -91,7 +91,8 @@ extension ChatListViewController {
         reactor.state.compactMap{$0.selectedChat}
             .subscribe(onNext: { [weak self] chatInfo in
                 if let userId = SetupInfoService.shared.getUserInfo(type: .id), let id = Int(userId) {
-                    let roomVC = ChatRoomViewController(chat: chatInfo, userId: id)
+                    let chatRoomInfo = ChatRoomInfo(chatRoomId: chatInfo.chatRoomId, postInfo: chatInfo.postInfo, managerInfo: chatInfo.managerInfo)
+                    let roomVC = ChatRoomViewController(chat: chatRoomInfo, userId: id)
                     roomVC.hidesBottomBarWhenPushed = true
                     self?.navigationController?.pushViewController(roomVC, animated: true)
                 } else {

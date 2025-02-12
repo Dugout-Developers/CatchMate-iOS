@@ -397,7 +397,6 @@ extension AddViewController {
             .compactMap{$0}
             .withUnretained(self)
             .subscribe { vc, text in
-                print(text)
                 vc.textview.text = text
                 vc.textview.updateTextStyle()
                 print(text.count)

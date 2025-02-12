@@ -17,7 +17,7 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         return false
     }
     private let userId: Int
-    private let chat: ChatListInfo
+    private let chat: ChatRoomInfo
     private let people: [SenderInfo]
     private var isManager: Bool {
         return chat.managerInfo.id == userId
@@ -114,7 +114,7 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         awayTeamImageView.setupTeam(team: chat.postInfo.awayTeam, isMyTeam: chat.postInfo.cheerTeam == chat.postInfo.awayTeam)
     }
     
-    init(chat: ChatListInfo, userId: Int, people: [SenderInfo]) {
+    init(chat: ChatRoomInfo, userId: Int, people: [SenderInfo]) {
         self.chat = chat
         self.userId = userId
         self.people = people
