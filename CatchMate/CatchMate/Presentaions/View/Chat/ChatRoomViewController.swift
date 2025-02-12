@@ -282,11 +282,11 @@ extension ChatRoomViewController {
                     cell.selectionStyle = .none
                     cell.backgroundColor = .clear
                     return cell
-                case .enterUser:
+                case .enterUser, .leaveUser:
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: "EnterUserCell", for: indexPath) as? EnterUserCell else {
                         return UITableViewCell()
                     }
-                    cell.configData(item.nickName)
+                    cell.configData(item.nickName, type: item.messageType.serverRequest)
                     cell.selectionStyle = .none
                     cell.backgroundColor = .clear
                     return cell

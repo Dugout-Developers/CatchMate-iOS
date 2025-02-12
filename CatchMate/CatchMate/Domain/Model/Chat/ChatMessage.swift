@@ -11,6 +11,7 @@ enum ChatMessageType {
     case talk
     case date
     case enterUser
+    case leaveUser
     case startChat
     
     init?(serverRequest: String) {
@@ -19,6 +20,12 @@ enum ChatMessageType {
             self = .talk
         case "START":
             self = .startChat
+        case "ENTER":
+            self = .enterUser
+        case "LEAVE":
+            self = .leaveUser
+        case "DATE":
+            self = .date
         default:
             return nil
         }
@@ -28,9 +35,11 @@ enum ChatMessageType {
         case .talk:
             return "TALK"
         case .date:
-            return ""
+            return "DATE"
         case .enterUser:
-            return ""
+            return "ENTER"
+        case .leaveUser:
+            return "LEAVE"
         case .startChat:
             return "START"
         }

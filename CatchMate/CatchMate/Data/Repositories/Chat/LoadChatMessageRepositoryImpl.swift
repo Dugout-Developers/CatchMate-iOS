@@ -20,7 +20,8 @@ final class LoadChatMessageRepositoryImpl: LoadChatMessageRepository {
                 let dtoMessages = dto.chatMessageInfoList
                 var messages = [ChatSocketMessage]()
                 for message in dtoMessages {
-                    let chatMessage = ChatSocketMessage(messageType: .talk, senderId: message.senderId, content: message.content, date: message.timeInfo.date)
+                    let mesageType = message.senderId == -1 ? ChatMessageType.date : .talk
+                    let chatMessage = ChatSocketMessage(messageType: mesageType, senderId: message.senderId, content: message.content, date: message.timeInfo.date)
                     messages.append(chatMessage)
                 }
                 return (messages, dto.isLast)
