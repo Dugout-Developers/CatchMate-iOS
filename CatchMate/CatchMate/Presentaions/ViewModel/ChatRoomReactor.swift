@@ -246,11 +246,11 @@ final class ChatRoomReactor: Reactor {
             .disposed(by: disposeBag)
     }
     
-    private func convertToSendMessage(content: String) -> Observable<ChatSocketMessage> {
+    private func convertToSendMessage(content: String) -> Observable<SendMessage> {
         guard let senderId = myData?.senderId else {
             return .error(ChatError.failedLoadMyData)
         }
-        let message = ChatSocketMessage(messageType: .talk, senderId: senderId, content: content)
+        let message = SendMessage(messageType: .talk, senderId: senderId, content: content)
         return .just(message)
     }
 }

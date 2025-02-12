@@ -37,6 +37,23 @@ enum ChatMessageType {
     }
 }
 
+struct SendMessage: Codable {
+    let messageType: String
+    let senderId: Int
+    let content: String
+    
+    init(messageType: ChatMessageType, senderId: Int, content: String) {
+        self.messageType = messageType.serverRequest
+        self.senderId = senderId
+        self.content = content
+    }
+}
+extension SendMessage {
+    func encodeMessage() -> String? {
+        guard let jsonData = try? JSONEncoder().encode(self) else { return nil }
+        return String(data: jsonData, encoding: .utf8)
+    }
+}
 struct ChatSocketMessage: Codable {
     let messageType: String
     let senderId: Int
@@ -47,11 +64,7 @@ struct ChatSocketMessage: Codable {
         self.messageType = messageType.serverRequest
         self.senderId = senderId
         self.content = content
-        // ✅ Z(UTC) 제거한 ISO8601 시간 포맷 적용
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss" // Z 제거
-        formatter.timeZone = TimeZone.current // 현재 로컬 시간 적용
-        self.sendTime = formatter.string(from: Date())
+        self.sendTime = ChatSocketMessage.currentISO8601Time()
     }
     
     init(messageType: ChatMessageType, senderId: Int, content: String, date: String) {
@@ -61,14 +74,28 @@ struct ChatSocketMessage: Codable {
         let newDate = date.replacingOccurrences(of: "\\.\\d+", with: "", options: .regularExpression)
         self.sendTime = newDate
     }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        self.messageType = try container.decode(String.self, forKey: .messageType)
+        self.senderId = try container.decode(Int.self, forKey: .senderId)
+        self.content = try container.decode(String.self, forKey: .content)
+        
+        // ✅ sendTime이 없으면 현재 시간으로 대체
+        self.sendTime = (try? container.decode(String.self, forKey: .sendTime)) ?? ChatSocketMessage.currentISO8601Time()
+    }
+    
+    
+    static func currentISO8601Time() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        formatter.timeZone = TimeZone.current // 로컬 시간
+        return formatter.string(from: Date())
+    }
 }
 
 extension ChatSocketMessage {
-    func encodeMessage() -> String? {
-        guard let jsonData = try? JSONEncoder().encode(self) else { return nil }
-        return String(data: jsonData, encoding: .utf8)
-    }
-    
     static func decode(from jsonString: String) -> ChatSocketMessage? {
         let cleanedString = jsonString.trimmingCharacters(in: .controlCharacters)
         
