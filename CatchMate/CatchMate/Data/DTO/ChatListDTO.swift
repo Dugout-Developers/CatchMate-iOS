@@ -14,7 +14,9 @@ struct ChatRoomInfoDTO: Codable {
     let chatRoomId: Int
     let boardInfo: ChatPostInfo
     let participantCount: Int
-    let lastMessageAt: String
+    let lastMessageAt: String?
+    let lastMessageContent: String?
+    let chatRoomImage: String
 }
 
 struct ChatPostInfo: Codable {

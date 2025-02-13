@@ -12,12 +12,17 @@ struct ChatListInfo {
     let postInfo: SimplePost
     let managerInfo: ManagerInfo
     let lastMessage: String
-    let lastMessageAt: Date
+    let lastMessageAt: Date?
+    let currentPerson: Int
     let newChat: Bool
     let notReadCount: Int
+    let chatImage: String
    
     var lastTimeAgo: String {
         let now = Date()
+        guard let lastMessageAt else {
+            return "방금"
+        }
         let timeInterval = now.timeIntervalSince(lastMessageAt)
         
         let oneMinute: TimeInterval = 60
