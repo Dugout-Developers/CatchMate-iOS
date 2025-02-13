@@ -88,7 +88,7 @@ final class RecevieMateReactor: Reactor {
             return applyManageUsecase.execute(type: .reject, enrollId: enrollId)
                 .map { result in
                     if result {
-                        return Mutation.acceptApply(enrollId)
+                        return Mutation.rejectApply(enrollId)
                     } else {
                         return Mutation.setError(PresentationError.showToastMessage(message: "요청에 실패했습니다. 다시 시도해주세요."))
                     }
