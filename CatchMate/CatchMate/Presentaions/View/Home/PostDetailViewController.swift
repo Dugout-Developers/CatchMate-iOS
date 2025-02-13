@@ -488,7 +488,7 @@ extension PostDetailViewController {
             return
         }
         let managerInfo = ManagerInfo(id: post.writer.userId, nickName: post.writer.nickName)
-        let chatRoomInfo = ChatRoomInfo(chatRoomId: chatId, postInfo: SimplePost(post: post), managerInfo: managerInfo)
+        let chatRoomInfo = ChatRoomInfo(chatRoomId: chatId, postInfo: SimplePost(post: post), managerInfo: managerInfo, cheerTeam: post.cheerTeam)
         let chatRoomVC = ChatRoomViewController(chat: chatRoomInfo, userId: userId)
         
         navigationController?.pushViewController(chatRoomVC, animated: true)

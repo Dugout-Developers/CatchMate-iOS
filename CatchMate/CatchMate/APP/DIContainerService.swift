@@ -219,7 +219,7 @@ class DIContainerService {
         return nicknameCheckUsecase
     }
     
-    func makeChatRoomUseCase() -> LoadChatInfoUseCase {
+    func makeChatInfoUseCase() -> LoadChatInfoUseCase {
         let loadChatUsersDS = LoadChatUsersDataSourceImpl(tokenDataSource: tokenDS)
         let loadChatUserRepo = LoadChatUsersRepositoryImpl(loadChatUserDS: loadChatUsersDS)
         let loadChatMessageDS = LoadChatMessageDataSourceImpl(tokenDataSource: tokenDS)
@@ -227,5 +227,12 @@ class DIContainerService {
         let loadChatInfoUS = LoadChatInfoUseCaseImpl(loadChatUsersRP: loadChatUserRepo, loadChatMessageRepo: loadChatMessageRepo)
         
         return loadChatInfoUS
+    }
+    
+    func makeuUpdateChatImageUseCase() -> UpdateChatImageUseCase {
+        let dataSource = UpdateChatImageDataSourceImpl(tokenDataSource: tokenDS)
+        let repository = UpdateChatImageRepositoryImpl(updateImageDS: dataSource)
+        let usecase = UpdateChatImageUseCaseImpl(updateImageRepo: repository)
+        return usecase
     }
 }

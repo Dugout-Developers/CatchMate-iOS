@@ -79,7 +79,7 @@ final class ChatRoomViewController: BaseViewController, View {
     }
 
     init(chat: ChatRoomInfo, userId: Int) {
-        self.reactor = ChatRoomReactor(roomId: chat.chatRoomId, managerInfo: chat.managerInfo, loadInfoUS: DIContainerService.shared.makeChatRoomUseCase())
+        self.reactor = ChatRoomReactor(chat: chat, loadInfoUS: DIContainerService.shared.makeChatInfoUseCase(), updateImageUS: DIContainerService.shared.makeuUpdateChatImageUseCase())
         self.chat = chat
         self.userId = userId
         super.init(nibName: nil, bundle: nil)
@@ -139,7 +139,7 @@ final class ChatRoomViewController: BaseViewController, View {
     
     @objc private func clickedMenuButton(_ sender: UIButton) {
         print(reactor.currentState.senderProfiles)
-        let sideSheetVC = ChatSideSheetViewController(chat: chat, userId: userId, people: reactor.currentState.senderProfiles)
+        let sideSheetVC = ChatSideSheetViewController(chat: chat, userId: userId, people: reactor.currentState.senderProfiles, reactor: reactor)
         let transitioningDelegate = SideSheetTransitioningDelegate()
         sideSheetVC.transitioningDelegate = transitioningDelegate
         sideSheetVC.modalPresentationStyle = .custom

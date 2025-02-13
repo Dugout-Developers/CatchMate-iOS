@@ -19,6 +19,8 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
     private let userId: Int
     private let chat: ChatRoomInfo
     private let people: [SenderInfo]
+    private let chatRoomImage: String
+    private let reactor: ChatRoomReactor
     private var isManager: Bool {
         return chat.managerInfo.id == userId
     }
@@ -114,10 +116,13 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         awayTeamImageView.setupTeam(team: chat.postInfo.awayTeam, isMyTeam: chat.postInfo.cheerTeam == chat.postInfo.awayTeam)
     }
     
-    init(chat: ChatRoomInfo, userId: Int, people: [SenderInfo]) {
+    init(chat: ChatRoomInfo, userId: Int, people: [SenderInfo], image: String = "", reactor: ChatRoomReactor) {
+        // TODO: - image 임시 기본값
         self.chat = chat
         self.userId = userId
         self.people = people
+        self.chatRoomImage = image
+        self.reactor = reactor
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .custom
         modalTransitionStyle = .crossDissolve
@@ -132,7 +137,7 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         setupUI()
         setupTableView()
         navigationBarHidden()
-        print(people)
+        bind()
         settingButton.isHidden = !isManager
     }
     private func setupTableView() {
@@ -140,6 +145,16 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         tableView.dataSource = self
         tableView.separatorStyle = .none
         tableView.register(ChatRoomPeopleListCell.self, forCellReuseIdentifier: "ChatRoomPeopleListCell")
+    }
+    private func bind() {
+        settingButton.rx.tap
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                let settingVC = ChatSettingViewController(reactor: vc.reactor)
+                settingVC.modalPresentationStyle = .fullScreen
+                vc.present(settingVC, animated: false)
+            }
+            .disposed(by: disposeBag)
     }
     private func setupUI() {
         view.addSubviews(views: [infoView, teamInfoView, topDivider, partyInfoLabel, tableView, bottomDivider ,buttonView])

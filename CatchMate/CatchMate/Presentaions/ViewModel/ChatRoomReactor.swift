@@ -59,6 +59,9 @@ final class ChatRoomReactor: Reactor {
         case sendMessage(String)
         case receiveMessage(ChatMessage)
         case setError(PresentationError?)
+        
+        case loadImage(String)
+        case changeImage(UIImage)
     }
     enum Mutation {
         case setMessages([ChatMessage])
@@ -67,6 +70,8 @@ final class ChatRoomReactor: Reactor {
         case setIsLoading(Bool)
         case setIsLast(Bool)
         case setError(PresentationError?)
+        
+        case setImage(UIImage?)
     }
     struct State {
         // View의 state를 관리한다.
@@ -77,21 +82,24 @@ final class ChatRoomReactor: Reactor {
         var isLast: Bool = false
         var isLoading: Bool = false
         var error: PresentationError?
+        
+        var image: UIImage?
     }
     
     var initialState: State
     private var myData: SenderInfo?
-    private let roomId: Int
+    private let chat: ChatRoomInfo
     private let disposeBag = DisposeBag()
-    private let managerInfo: ManagerInfo
+
     // MARK: - UseCase
     private let loadInfoUS: LoadChatInfoUseCase
+    private let updateImageUS: UpdateChatImageUseCase
     
-    init(roomId: Int, managerInfo: ManagerInfo, loadInfoUS: LoadChatInfoUseCase) {
+    init(chat: ChatRoomInfo, loadInfoUS: LoadChatInfoUseCase, updateImageUS: UpdateChatImageUseCase) {
         self.initialState = State()
-        self.roomId = roomId
         self.loadInfoUS = loadInfoUS
-        self.managerInfo = managerInfo
+        self.updateImageUS = updateImageUS
+        self.chat = chat
         do {
             try setupMyData()
         } catch {
@@ -103,12 +111,12 @@ final class ChatRoomReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .subscribeRoom:
-            print("✅ 채팅방 \(roomId) 구독 요청")
-            SocketService.shared?.subscribe(roomID: String(roomId))
+            print("✅ 채팅방 \(chat.chatRoomId) 구독 요청")
+            SocketService.shared?.subscribe(roomID: String(chat.chatRoomId))
             return .empty()
         case .unsubscribeRoom:
-            print("🚫 채팅방 \(roomId) 구독 해제 요청")
-            SocketService.shared?.unsubscribe(roomID: String(roomId))
+            print("🚫 채팅방 \(chat.chatRoomId) 구독 해제 요청")
+            SocketService.shared?.unsubscribe(roomID: String(chat.chatRoomId))
             return .empty()
         case .sendMessage(let message):
             return convertToSendMessage(content: message)
@@ -118,7 +126,7 @@ final class ChatRoomReactor: Reactor {
                         // TODO: - 메시지 보내는중으로 바꾸기
                         return Observable.just(Mutation.setError(.showToastMessage(message: "메시지 전송 실패")))
                     }
-                    SocketService.shared?.sendMessage(to: String(self.roomId), message: jsonString)
+                    SocketService.shared?.sendMessage(to: String(self.chat.chatRoomId), message: jsonString)
                     print("📤 테스트 메시지 전송됨: \(jsonString)")
                     return Observable.empty()
                 }
@@ -135,13 +143,13 @@ final class ChatRoomReactor: Reactor {
             if currentState.isLast || currentState.isLoading {
                 return Observable.empty()
             } else {
-                return loadInfoUS.loadChatMessages(chatId: roomId, page: currentState.currentPage)
+                return loadInfoUS.loadChatMessages(chatId: chat.chatRoomId, page: currentState.currentPage)
                     .map({ [weak self] messages, isLast in
                         if isLast {
                             var newMessages: [ChatMessage] = []
                             let startMessage = ChatMessage(userId: 0, nickName: "", imageUrl: "", message: "", time: Date(), messageType: .startChat)
                             newMessages.append(startMessage)
-                            if let managerInfo = self?.managerInfo {
+                            if let managerInfo = self?.chat.managerInfo {
                                 let managerInfoMessage = ChatMessage(userId: managerInfo.id, nickName: managerInfo.nickName, imageUrl: "", message: "\(managerInfo.nickName) 님이 채팅에 참여했어요", time: Date(), messageType: .enterUser)
                                 newMessages.append(managerInfoMessage)
                             }
@@ -166,7 +174,7 @@ final class ChatRoomReactor: Reactor {
                     }
             }
         case .loadPeople:
-            return loadInfoUS.loadChatRoomUsers(chatId: roomId)
+            return loadInfoUS.loadChatRoomUsers(chatId: chat.chatRoomId)
                 .map { infos in
                     Mutation.setSenderInfo(infos)
                 }
@@ -179,6 +187,31 @@ final class ChatRoomReactor: Reactor {
                 }
         case .setError(let error):
             return Observable.just(.setError(error))
+            
+        case .changeImage(let image):
+            return updateImageUS.execute(chatId: chat.chatRoomId, image)
+                .map { state in
+                    if state {
+                        return Mutation.setImage(image)
+                    } else {
+                        return Mutation.setError(PresentationError.showToastMessage(message: "이미지 업로드 실패"))
+                    }
+                }
+                .catch { error in
+                    if let chatError = error as? ChatError {
+                        return Observable.just(.setError(chatError.convertToPresentationError()))
+                    } else {
+                        return Observable.just(.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
+        case .loadImage(let urlString):
+            return Observable.create { observer in
+                ImageLoadHelper.urlToUIImage(urlString) { image in
+                    observer.onNext(.setImage(image))
+                    observer.onCompleted()
+                }
+                return Disposables.create()
+            }
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
@@ -197,6 +230,13 @@ final class ChatRoomReactor: Reactor {
             newState.isLoading = state
         case .setIsLast(let state):
             newState.isLast = state
+            
+        case .setImage(let image):
+            if image != nil {
+                newState.image = image
+            } else {
+                newState.image = chat.postInfo.cheerTeam.getFillImage
+            }
         }
         return newState
     }
@@ -214,7 +254,7 @@ final class ChatRoomReactor: Reactor {
         // TODO: - Log 추가하기
         SocketService.shared?.messageObservable
             .filter({ [weak self] (roomId, _) in
-                return Int(roomId) == self?.roomId
+                return Int(roomId) == self?.chat.chatRoomId
             })
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] (_, message) in

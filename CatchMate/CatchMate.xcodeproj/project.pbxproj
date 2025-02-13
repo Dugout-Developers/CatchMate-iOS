@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		530149D52D5C690A004C2EE0 /* ChatSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530149D42D5C6905004C2EE0 /* ChatSettingViewController.swift */; };
+		530149DB2D5E288C004C2EE0 /* UpdateChatImageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530149DA2D5E2878004C2EE0 /* UpdateChatImageDataSource.swift */; };
+		530149DD2D5E2DB1004C2EE0 /* UpdateChatImageRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530149DC2D5E2DA4004C2EE0 /* UpdateChatImageRepositoryImpl.swift */; };
+		530149DF2D5E2DBF004C2EE0 /* UpdateChatImageRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530149DE2D5E2DBD004C2EE0 /* UpdateChatImageRepository.swift */; };
+		530149E12D5E2E3B004C2EE0 /* UpdateChatImageUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530149E02D5E2E2F004C2EE0 /* UpdateChatImageUseCase.swift */; };
 		5301E2962C5B2BAE0078E910 /* LoggerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2952C5B2BAE0078E910 /* LoggerService.swift */; };
 		5301E29D2C5B38B10078E910 /* Error+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E29C2C5B38B10078E910 /* Error+Extension.swift */; };
 		5301E2A12C5B5C280078E910 /* MyPageProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2A02C5B5C280078E910 /* MyPageProfileCell.swift */; };
@@ -448,6 +452,10 @@
 
 /* Begin PBXFileReference section */
 		530149D42D5C6905004C2EE0 /* ChatSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSettingViewController.swift; sourceTree = "<group>"; };
+		530149DA2D5E2878004C2EE0 /* UpdateChatImageDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateChatImageDataSource.swift; sourceTree = "<group>"; };
+		530149DC2D5E2DA4004C2EE0 /* UpdateChatImageRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateChatImageRepositoryImpl.swift; sourceTree = "<group>"; };
+		530149DE2D5E2DBD004C2EE0 /* UpdateChatImageRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateChatImageRepository.swift; sourceTree = "<group>"; };
+		530149E02D5E2E2F004C2EE0 /* UpdateChatImageUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateChatImageUseCase.swift; sourceTree = "<group>"; };
 		5301E2952C5B2BAE0078E910 /* LoggerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerService.swift; sourceTree = "<group>"; };
 		5301E29C2C5B38B10078E910 /* Error+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extension.swift"; sourceTree = "<group>"; };
 		5301E2A02C5B5C280078E910 /* MyPageProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageProfileCell.swift; sourceTree = "<group>"; };
@@ -1064,13 +1072,13 @@
 		534E39DD2C63CF45006D180E /* Supports */ = {
 			isa = PBXGroup;
 			children = (
-				5320B0502D5B147200897EB7 /* CustomerServiceAddViewController.swift */,
 				5320B04E2D5B017500897EB7 /* DefualtTabelViewCell.swift */,
 				5320B04C2D5A4BAC00897EB7 /* TermViewController.swift */,
 				534E39DB2C63CE78006D180E /* AnnouncementsViewController.swift */,
 				534E39E02C63D10B006D180E /* AnnouncementsListCell.swift */,
 				534E39E42C63D5AE006D180E /* AnnouncementDetailViewController.swift */,
 				534E39E62C63E021006D180E /* CustomerServiceViewController.swift */,
+				5320B0502D5B147200897EB7 /* CustomerServiceAddViewController.swift */,
 				5320B04A2D5A4B4500897EB7 /* ApplicationInfoViewController.swift */,
 			);
 			path = Supports;
@@ -1100,6 +1108,7 @@
 		535AA01E2D45FA7F007C7690 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				530149DA2D5E2878004C2EE0 /* UpdateChatImageDataSource.swift */,
 				535AA0632D51BB6E007C7690 /* LoadChatMessageDataSource.swift */,
 				535AA04F2D519E8F007C7690 /* LoadChatUsersDataSource.swift */,
 				535AA0232D45FB03007C7690 /* LoadChatListDataSource.swift */,
@@ -1145,6 +1154,7 @@
 		535AA02E2D4602F4007C7690 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				530149DC2D5E2DA4004C2EE0 /* UpdateChatImageRepositoryImpl.swift */,
 				535AA0672D51BCE2007C7690 /* LoadChatMessageRepositoryImpl.swift */,
 				535AA0512D51A5E1007C7690 /* LoadChatUsersRepositoryImpl.swift */,
 				535AA02F2D4602F9007C7690 /* LoadChatListRepositoryImpl.swift */,
@@ -1155,6 +1165,7 @@
 		535AA0332D460333007C7690 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				530149DE2D5E2DBD004C2EE0 /* UpdateChatImageRepository.swift */,
 				535AA0652D51BC64007C7690 /* LoadChatMessageRepository.swift */,
 				535AA0532D51A5FC007C7690 /* LoadChatUsersRepository.swift */,
 				535AA0312D46032E007C7690 /* LoadChatListRepository.swift */,
@@ -1165,6 +1176,7 @@
 		535AA0362D460484007C7690 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				530149E02D5E2E2F004C2EE0 /* UpdateChatImageUseCase.swift */,
 				535AA0552D51A731007C7690 /* LoadChatInfoUseCase.swift */,
 				535AA0342D46047B007C7690 /* LoadChatListUseCase.swift */,
 			);
@@ -2149,6 +2161,7 @@
 				5301E29D2C5B38B10078E910 /* Error+Extension.swift in Sources */,
 				5375B1E02D2F7CDA000581B3 /* EndPoint.swift in Sources */,
 				53716BC02C400B3E0044AD2A /* FavoriteReactor.swift in Sources */,
+				530149DF2D5E2DBF004C2EE0 /* UpdateChatImageRepository.swift in Sources */,
 				535AA0302D460302007C7690 /* LoadChatListRepositoryImpl.swift in Sources */,
 				536BDDE92C1971C70043B1DA /* SignReactor.swift in Sources */,
 				534E39D12C634255006D180E /* SettingViewController.swift in Sources */,
@@ -2281,6 +2294,7 @@
 				533B29252C770A9600BFE9F6 /* LoadFavoriteListUseCase.swift in Sources */,
 				5375B1D02D2D8DE4000581B3 /* UpPostUseCase.swift in Sources */,
 				5317867B2C2077EC00ACEF6A /* NotiViewTableViewCell.swift in Sources */,
+				530149E12D5E2E3B004C2EE0 /* UpdateChatImageUseCase.swift in Sources */,
 				531786662C1F014E00ACEF6A /* CMTextField.swift in Sources */,
 				53E4A9BE2C50046E00D21B49 /* SignUpModel.swift in Sources */,
 				534E39D62C6352EE006D180E /* AuthInfoSettingViewController.swift in Sources */,
@@ -2296,6 +2310,7 @@
 				536BDDE22C196F510043B1DA /* Bundle+Extension.swift in Sources */,
 				533A2B272C28558600A59340 /* SignInViewController.swift in Sources */,
 				530994562C4F6D9900ABE103 /* LoginRequset.swift in Sources */,
+				530149DB2D5E288C004C2EE0 /* UpdateChatImageDataSource.swift in Sources */,
 				5317865B2C1C956400ACEF6A /* DateFilterViewController.swift in Sources */,
 				53BE7ACF2C367008002FC64F /* DateHelper.swift in Sources */,
 				535AA0642D51BB76007C7690 /* LoadChatMessageDataSource.swift in Sources */,
@@ -2320,6 +2335,7 @@
 				536548A32C3EF3B700C2309A /* FavoriteListViewController.swift in Sources */,
 				531288D32C540B08000C2FB1 /* ServerLoginRepositoryImpl.swift in Sources */,
 				531786852C23261200ACEF6A /* SheetHeight.swift in Sources */,
+				530149DD2D5E2DB1004C2EE0 /* UpdateChatImageRepositoryImpl.swift in Sources */,
 				533A2B442C2C62C700A59340 /* SNSLoginRepositoryImpl.swift in Sources */,
 				533A2B342C2BE98D00A59340 /* SignSelectedButton.swift in Sources */,
 			);

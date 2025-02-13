@@ -61,4 +61,5 @@ struct ChatRoomInfo {
     let chatRoomId: Int
     let postInfo: SimplePost
     let managerInfo: ManagerInfo
+    let cheerTeam: Team
 }
