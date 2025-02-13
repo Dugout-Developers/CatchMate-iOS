@@ -20,7 +20,10 @@ final class LoadChatMessageRepositoryImpl: LoadChatMessageRepository {
                 let dtoMessages = dto.chatMessageInfoList
                 var messages = [ChatSocketMessage]()
                 for message in dtoMessages {
-                    let mesageType = message.senderId == -1 ? ChatMessageType.date : .talk
+                    guard let mesageType = ChatMessageType(serverRequest: message.messageType) else {
+                        LoggerService.shared.errorLog(MappingError.invalidData, domain: "chatmessage", message: "메시지 타입 변환 실패")
+                        continue
+                    }
                     let chatMessage = ChatSocketMessage(messageType: mesageType, senderId: message.senderId, content: message.content, date: message.timeInfo.date)
                     messages.append(chatMessage)
                 }

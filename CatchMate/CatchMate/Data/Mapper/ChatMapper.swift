@@ -9,11 +9,6 @@ import UIKit
 
 final class ChatMapper {
     func dtoToDomain(_ dto: ChatRoomInfoDTO) -> ChatListInfo? {
-        guard let cheerTeam = Team(serverId: dto.boardInfo.cheerClubId) else {
-            LoggerService.shared.log("ChatListMapper: \(dto.chatRoomId)번 \(dto.boardInfo.title) - 응원구단 변환 실패")
-            return nil
-        }
-
         guard let lastMessageAt = DateHelper.shared.convertISOStringToDate(dto.lastMessageAt) else {
             LoggerService.shared.log("ChatListMapper: \(dto.lastMessageAt) - 마지막 메시지 시간 Date 변환 실패")
             return nil

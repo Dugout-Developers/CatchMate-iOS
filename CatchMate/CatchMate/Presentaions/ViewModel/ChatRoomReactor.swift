@@ -229,17 +229,14 @@ final class ChatRoomReactor: Reactor {
                     self?.action.onNext(.setError(ChatError.failedListenToMessages.convertToPresentationError()))
                     return
                 }
-                guard let senderInfo = self?.currentState.senderProfiles.first(where: { $0.senderId == chatMessage.senderId }) else {
-                    print("❌ [DEBUG] 보낸이 찾기 실패")
-                    self?.action.onNext(.setError(ChatError.failedListenToMessages.convertToPresentationError()))
-                    return
-                }
                 guard let type = ChatMessageType(serverRequest: chatMessage.messageType) else {
                     print("❌ [DEBUG] 메시지타입 디코딩 실패")
                     self?.action.onNext(.setError(ChatError.failedListenToMessages.convertToPresentationError()))
                     return
                 }
-                let newMessage = ChatMessage(userId: chatMessage.senderId, nickName: senderInfo.nickName, imageUrl: senderInfo.imageUrl, message: chatMessage.content, time: time, messageType: type)
+                let senderInfo: SenderInfo? = (type == .date) ? nil : self?.currentState.senderProfiles.first { $0.senderId == chatMessage.senderId }
+                   
+                let newMessage = ChatMessage(userId: chatMessage.senderId, nickName: senderInfo?.nickName ?? "", imageUrl: senderInfo?.imageUrl, message: chatMessage.content, time: time, messageType: type)
                 print("✅ [DEBUG] 메시지 파싱 성공 - \(newMessage)")
                 self?.action.onNext(.receiveMessage(newMessage))
             })
