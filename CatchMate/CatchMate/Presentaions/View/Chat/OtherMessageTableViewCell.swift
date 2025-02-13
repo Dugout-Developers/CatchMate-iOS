@@ -24,7 +24,7 @@ final class OtherMessageTableViewCell: UITableViewCell {
         label.textColor = .grayScale600
         return label
     }()
-    private let messageLabel: MessageBoxLabel = {
+    let messageLabel: MessageBoxLabel = {
         let label = MessageBoxLabel()
         label.numberOfLines = 0
         label.backgroundColor = .white
