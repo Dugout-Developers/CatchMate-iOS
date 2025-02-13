@@ -44,7 +44,7 @@ final class ProfileEditDataSourceImpl: ProfileEditDataSource {
                 }
 
                 // 2. 프로필 이미지 추가
-                if let resizeImage = ProfileImageHelper.resizeImage(editModel.profileImage, to: CGSize(width: 200, height: 200)), let jpegData = resizeImage.jpegData(compressionQuality: 0.2) {
+                if let resizeImage = ImageLoadHelper.resizeImage(editModel.profileImage, to: CGSize(width: 200, height: 200)), let jpegData = resizeImage.jpegData(compressionQuality: 0.2) {
                     print("image: \(jpegData)")
                     multipartFormData.append(jpegData, withName: "profileImage", fileName: "profile.jpg", mimeType: "image/jpeg")
                 } else {

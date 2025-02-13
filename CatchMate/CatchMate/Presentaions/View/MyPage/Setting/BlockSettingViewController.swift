@@ -189,7 +189,7 @@ final class BlockUserProfileCell: UITableViewCell {
         
     }
     func setupData(_ user: SimpleUser) {
-        ProfileImageHelper.loadImage(profileImageView, pictureString: user.picture)
+        ImageLoadHelper.loadImage(profileImageView, pictureString: user.picture)
         nickNameLabel.text = user.nickName
         nickNameLabel.applyStyle(textStyle: FontSystem.body02_medium)
     }

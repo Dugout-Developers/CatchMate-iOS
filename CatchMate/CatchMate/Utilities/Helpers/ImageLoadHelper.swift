@@ -8,8 +8,8 @@
 import UIKit
 import Kingfisher
 
-final class ProfileImageHelper {
-    static func loadImage(_ profileImageView: UIImageView, pictureString: String?, defaultImage: UIImage? = nil) {
+final class ImageLoadHelper {
+    static func loadImage(_ profileImageView: UIImageView, pictureString: String?, defaultImage: UIImage? = UIImage(named: "defaultImg")!) {
         if let string = pictureString,
            let processedString = processString(string),
            let url = URL(string: processedString) {
@@ -20,19 +20,11 @@ final class ProfileImageHelper {
                     break
                 case .failure(_):
                     // 이미지 로드 실패, 기본 이미지 설정
-                    if let defaultImage {
-                        profileImageView.image = defaultImage
-                    } else {
-                        profileImageView.image = UIImage(named: "defaultImg")
-                    }
+                    profileImageView.image = defaultImage
                 }
             })
         } else {
-            if let defaultImage {
-                profileImageView.image = defaultImage
-            } else {
-                profileImageView.image = UIImage(named: "defaultImg")
-            }
+            profileImageView.image = defaultImage
         }
     }
     

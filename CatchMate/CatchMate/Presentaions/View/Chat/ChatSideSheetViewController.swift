@@ -316,7 +316,7 @@ final class ChatRoomPeopleListCell: UITableViewCell {
 
     func configData(_ person: SenderInfo, isMy: Bool, isManager: Bool) {
         print("\(person.nickName) - isMy: \(isMy) / isManager: \(isManager)")
-        ProfileImageHelper.loadImage(profileImage, pictureString: person.imageUrl)
+        ImageLoadHelper.loadImage(profileImage, pictureString: person.imageUrl)
         profileImage.layer.cornerRadius = imageSize / 2
         nicknameLabel.text = person.nickName
         nicknameLabel.applyStyle(textStyle: FontSystem.body02_medium)

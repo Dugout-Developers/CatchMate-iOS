@@ -119,7 +119,7 @@
 		533A2B422C2C624D00A59340 /* SNSLoginRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B412C2C624D00A59340 /* SNSLoginRepository.swift */; };
 		533A2B442C2C62C700A59340 /* SNSLoginRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B432C2C62C700A59340 /* SNSLoginRepositoryImpl.swift */; };
 		533A2B462C2C638100A59340 /* KakaoLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A2B452C2C638100A59340 /* KakaoLoginUseCase.swift */; };
-		533B28F72C75BC2800BFE9F6 /* ProfileImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B28F62C75BC2800BFE9F6 /* ProfileImageHelper.swift */; };
+		533B28F72C75BC2800BFE9F6 /* ImageLoadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B28F62C75BC2800BFE9F6 /* ImageLoadHelper.swift */; };
 		533B291D2C7648DC00BFE9F6 /* CMSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B291C2C7648DC00BFE9F6 /* CMSwitch.swift */; };
 		533B291F2C77079100BFE9F6 /* LoadFavoriteListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B291E2C77079100BFE9F6 /* LoadFavoriteListDataSource.swift */; };
 		533B29212C77099800BFE9F6 /* LoadFavoriteListRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B29202C77099800BFE9F6 /* LoadFavoriteListRepositoryImpl.swift */; };
@@ -268,7 +268,7 @@
 		5375980C2C46DC45003BD8AE /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375980B2C46DC45003BD8AE /* ChatRoomViewController.swift */; };
 		5375B13D2D1A85F6000581B3 /* DomainError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B13C2D1A85EA000581B3 /* DomainError.swift */; };
 		5375B13E2D1A85F6000581B3 /* DomainError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B13C2D1A85EA000581B3 /* DomainError.swift */; };
-		5375B1472D1AEECE000581B3 /* ProfileImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B28F62C75BC2800BFE9F6 /* ProfileImageHelper.swift */; };
+		5375B1472D1AEECE000581B3 /* ImageLoadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B28F62C75BC2800BFE9F6 /* ImageLoadHelper.swift */; };
 		5375B1492D1AEEEE000581B3 /* ImageStringDecodingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B1482D1AEED7000581B3 /* ImageStringDecodingTest.swift */; };
 		5375B15B2D239627000581B3 /* SetAlarmRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B15A2D239627000581B3 /* SetAlarmRepositoryImpl.swift */; };
 		5375B1A02D277C05000581B3 /* ConvertDateTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375B19F2D277BFA000581B3 /* ConvertDateTest.swift */; };
@@ -552,7 +552,7 @@
 		533A2B432C2C62C700A59340 /* SNSLoginRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SNSLoginRepositoryImpl.swift; sourceTree = "<group>"; };
 		533A2B452C2C638100A59340 /* KakaoLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginUseCase.swift; sourceTree = "<group>"; };
 		533A2B472C2D606600A59340 /* CatchMate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CatchMate.entitlements; sourceTree = "<group>"; };
-		533B28F62C75BC2800BFE9F6 /* ProfileImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageHelper.swift; sourceTree = "<group>"; };
+		533B28F62C75BC2800BFE9F6 /* ImageLoadHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoadHelper.swift; sourceTree = "<group>"; };
 		533B291C2C7648DC00BFE9F6 /* CMSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMSwitch.swift; sourceTree = "<group>"; };
 		533B291E2C77079100BFE9F6 /* LoadFavoriteListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadFavoriteListDataSource.swift; sourceTree = "<group>"; };
 		533B29202C77099800BFE9F6 /* LoadFavoriteListRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadFavoriteListRepositoryImpl.swift; sourceTree = "<group>"; };
@@ -1760,7 +1760,7 @@
 			isa = PBXGroup;
 			children = (
 				53BE7ACE2C367008002FC64F /* DateHelper.swift */,
-				533B28F62C75BC2800BFE9F6 /* ProfileImageHelper.swift */,
+				533B28F62C75BC2800BFE9F6 /* ImageLoadHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -2260,7 +2260,7 @@
 				53716BC62C42D19A0044AD2A /* PlaceFilterViewController.swift in Sources */,
 				53ACBA5D2C85B84E004FAF00 /* ApplyPostRepositoryImpl.swift in Sources */,
 				53ACBA3C2C84A98C004FAF00 /* SetFavoriteUseCase.swift in Sources */,
-				533B28F72C75BC2800BFE9F6 /* ProfileImageHelper.swift in Sources */,
+				533B28F72C75BC2800BFE9F6 /* ImageLoadHelper.swift in Sources */,
 				53ACBA232C7EACB1004FAF00 /* SetupInfoService.swift in Sources */,
 				531E4C2D2C6B5C4A0052E754 /* PostListLoadRepository.swift in Sources */,
 				53E4A9C42C500AD500D21B49 /* SignUpUseCase.swift in Sources */,
@@ -2352,7 +2352,7 @@
 				533B292E2C771C7D00BFE9F6 /* SetFavoriteRepositoryImpl.swift in Sources */,
 				533B873D2C86E5C80058B94B /* RecivedAppiesDataSource.swift in Sources */,
 				533B293C2C771ED500BFE9F6 /* PresentationError.swift in Sources */,
-				5375B1472D1AEECE000581B3 /* ProfileImageHelper.swift in Sources */,
+				5375B1472D1AEECE000581B3 /* ImageLoadHelper.swift in Sources */,
 				533B292F2C771C8600BFE9F6 /* SetFavoriteRepository.swift in Sources */,
 				535B3A922D339367003FBBBF /* UpPostResponseDTO.swift in Sources */,
 				533B87402C86ED190058B94B /* ServerLoginDataSource.swift in Sources */,

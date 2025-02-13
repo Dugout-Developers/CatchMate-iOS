@@ -97,7 +97,7 @@ final class ChatListTableViewCell: UITableViewCell {
   
     func configData(chat: ChatListInfo) {
         let defaultImage = chat.postInfo.cheerTeam.getFillImage
-        ProfileImageHelper.loadImage(chatImageView, pictureString: chat.chatImage, defaultImage: defaultImage)
+        ImageLoadHelper.loadImage(chatImageView, pictureString: chat.chatImage, defaultImage: defaultImage)
         postTitleLabel.text = chat.postInfo.title
         newChat = chat.newChat
         lastChatLabel.text = newChat ? "채팅을 시작해보세요." : (chat.lastMessage.isEmpty ? "채팅을 시작해보세요." : chat.lastMessage)

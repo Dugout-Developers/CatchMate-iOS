@@ -264,7 +264,7 @@ final class PostDetailViewController: BaseViewController, View {
         titleLabel.text = post.title
         placeValueLabel.text = post.location
         partynumValueLabel.text = "\(post.maxPerson)명"
-        ProfileImageHelper.loadImage(profileImageView, pictureString: post.writer.picture)
+        ImageLoadHelper.loadImage(profileImageView, pictureString: post.writer.picture)
         nickNameLabel.text = post.writer.nickName
         cheerTeam.backgroundColor = post.writer.favGudan.getTeamColor
         cheerTeam.text = post.writer.favGudan.rawValue

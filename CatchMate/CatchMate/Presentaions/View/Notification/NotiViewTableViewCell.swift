@@ -52,7 +52,7 @@ final class NotiViewTableViewCell: UITableViewCell {
         containerView.backgroundColor = noti.read ? .grayScale50 : .white
         notiLabel.text = noti.title
         subinfoLabel.text = noti.gameInfo
-        ProfileImageHelper.loadImage(profileImageView, pictureString: noti.imgUrl)
+        ImageLoadHelper.loadImage(profileImageView, pictureString: noti.imgUrl)
         
         notiLabel.applyStyle(textStyle: FontSystem.body01_medium)
         subinfoLabel.applyStyle(textStyle: FontSystem.body02_semiBold)
