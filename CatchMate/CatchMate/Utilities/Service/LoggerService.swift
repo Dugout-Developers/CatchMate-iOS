@@ -109,9 +109,8 @@ class LoggerService {
             "function": function,
             "line": line
         ]
-        if let message {
-            errorInfo["message"] = message
-        }
+        errorInfo["message"] = message
+        
         if let customError = error as? DomainError {
             errorInfo["context"] = customError.context
         }
