@@ -7,8 +7,12 @@
 
 import Foundation
 
-struct SenderInfo {
+struct SenderInfo: Equatable {
     let senderId: Int
     let nickName: String
     let imageUrl: String
+    
+    static func == (lhs: SenderInfo, rhs: SenderInfo) -> Bool {
+        return lhs.senderId == rhs.senderId  // ✅ senderId만 비교
+    }
 }

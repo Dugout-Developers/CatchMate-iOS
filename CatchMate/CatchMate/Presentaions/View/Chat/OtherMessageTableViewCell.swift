@@ -24,7 +24,7 @@ final class OtherMessageTableViewCell: UITableViewCell {
         label.textColor = .grayScale600
         return label
     }()
-    private let messageLabel: MessageBoxLabel = {
+    let messageLabel: MessageBoxLabel = {
         let label = MessageBoxLabel()
         label.numberOfLines = 0
         label.backgroundColor = .white
@@ -66,7 +66,7 @@ final class OtherMessageTableViewCell: UITableViewCell {
     }
     
     func configData(_ chat: ChatMessage, isHiddenTime: Bool, isHiddenProfile: Bool) {
-        ProfileImageHelper.loadImage(profileImageView, pictureString: chat.imageUrl)
+        ImageLoadHelper.loadImage(profileImageView, pictureString: chat.imageUrl)
         nickNameLabel.text = chat.nickName
         nickNameLabel.applyStyle(textStyle: FontSystem.body03_semiBold)
         let dateString = chat.time.toString(format: "a h:mm")

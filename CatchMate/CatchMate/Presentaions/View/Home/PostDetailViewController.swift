@@ -241,8 +241,6 @@ final class PostDetailViewController: BaseViewController, View {
                     }
                 }),
                 MenuItem(title: "공유하기", action: {
-//                    let numbers = [0]
-//                    let _ = numbers[1]
                     print("공유하기 선택됨")
                 }),
                 MenuItem(title: "신고하기", textColor: UIColor.cmSystemRed, action: {
@@ -266,7 +264,7 @@ final class PostDetailViewController: BaseViewController, View {
         titleLabel.text = post.title
         placeValueLabel.text = post.location
         partynumValueLabel.text = "\(post.maxPerson)명"
-        ProfileImageHelper.loadImage(profileImageView, pictureString: post.writer.picture)
+        ImageLoadHelper.loadImage(profileImageView, pictureString: post.writer.picture)
         nickNameLabel.text = post.writer.nickName
         cheerTeam.backgroundColor = post.writer.favGudan.getTeamColor
         cheerTeam.text = post.writer.favGudan.rawValue
@@ -479,8 +477,21 @@ extension PostDetailViewController {
         present(applyVC, animated: true)
     }
     
+    
     func showChatRoom() {
-        print("채팅방 이동")
+        guard let post = reactor.currentState.post, let chatId = post.chatRoomId else {
+            showToast(message: "채팅방에 들어갈 수 없습니다. 문제 지속 시 문의해주세요.")
+            return
+        }
+        guard let id = SetupInfoService.shared.getUserInfo(type: .id), let userId = Int(id) else {
+            reactor.action.onNext(.setError(.unauthorized))
+            return
+        }
+        let managerInfo = ManagerInfo(id: post.writer.userId, nickName: post.writer.nickName)
+        let chatRoomInfo = ChatRoomInfo(chatRoomId: chatId, postInfo: SimplePost(post: post), managerInfo: managerInfo, cheerTeam: post.cheerTeam)
+        let chatRoomVC = ChatRoomViewController(chat: chatRoomInfo, userId: userId)
+        
+        navigationController?.pushViewController(chatRoomVC, animated: true)
     }
 }
 

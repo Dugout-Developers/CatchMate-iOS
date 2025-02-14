@@ -9,14 +9,15 @@ import UIKit
 
 final class ChatMapper {
     func dtoToDomain(_ dto: ChatRoomInfoDTO) -> ChatListInfo? {
-        guard let cheerTeam = Team(serverId: dto.boardInfo.cheerClubId) else {
-            LoggerService.shared.log("ChatListMapper: \(dto.chatRoomId)번 \(dto.boardInfo.title) - 응원구단 변환 실패")
-            return nil
-        }
-
-        guard let lastMessageAt = DateHelper.shared.convertISOStringToDate(dto.lastMessageAt) else {
-            LoggerService.shared.log("ChatListMapper: \(dto.lastMessageAt) - 마지막 메시지 시간 Date 변환 실패")
-            return nil
+        var lastMessageAt: Date?
+        if let dtoLastMessageAt = dto.lastMessageAt {
+            let date = DateHelper.shared.convertISOStringToDate(dtoLastMessageAt)
+            if date == nil {
+                LoggerService.shared.log("ChatListMapper: \(dtoLastMessageAt) - 마지막 메시지 시간 Date 변환 실패")
+            }
+            lastMessageAt = date
+        } else {
+            lastMessageAt = nil
         }
         
         guard let postInfo = postInfoToDomain(dto.boardInfo) else {
@@ -25,7 +26,7 @@ final class ChatMapper {
         
         let managerInfo = ManagerInfo(id: dto.boardInfo.userInfo.userId, nickName: dto.boardInfo.userInfo.nickName)
         // TODO: - newChat, lastMessage, notReadCount API 추가 요청하기
-        return ChatListInfo(chatRoomId: dto.chatRoomId, postInfo: postInfo, managerInfo: managerInfo, lastMessage: "새 메시지가 도착했습니다.", lastMessageAt: lastMessageAt, newChat: Bool.random(), notReadCount: Int.random(in: 0...10))
+        return ChatListInfo(chatRoomId: dto.chatRoomId, postInfo: postInfo, managerInfo: managerInfo, lastMessage: dto.lastMessageContent ?? "", lastMessageAt: lastMessageAt, currentPerson: dto.participantCount, newChat: Bool.random(), notReadCount: Int.random(in: 0...10), chatImage: dto.chatRoomImage)
     }
     
     func postInfoToDomain(_ dto: ChatPostInfo) -> SimplePost? {

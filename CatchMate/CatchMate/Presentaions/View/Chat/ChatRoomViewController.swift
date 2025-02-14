@@ -31,7 +31,7 @@ final class ChatRoomViewController: BaseViewController, View {
     }()
     private let tableView: UITableView = UITableView()
     private let inputview: ChatingInputField = ChatingInputField()
-    private var chat: ChatListInfo
+    private var chat: ChatRoomInfo
     private var userId: Int
     var reactor: ChatRoomReactor
     private var keyboardManager: KeyboardManager?
@@ -78,8 +78,8 @@ final class ChatRoomViewController: BaseViewController, View {
         reactor.action.onNext(.loadMessages)
     }
 
-    init(chat: ChatListInfo, userId: Int) {
-        self.reactor = ChatRoomReactor(roomId: chat.chatRoomId, managerInfo: chat.managerInfo, loadInfoUS: DIContainerService.shared.makeChatRoomUseCase())
+    init(chat: ChatRoomInfo, userId: Int) {
+        self.reactor = DIContainerService.shared.makeChatRoomReactor(chat)
         self.chat = chat
         self.userId = userId
         super.init(nibName: nil, bundle: nil)
@@ -110,7 +110,7 @@ final class ChatRoomViewController: BaseViewController, View {
         tableView.keyboardDismissMode = .onDrag
         tableView.tableHeaderView = UIView()
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 44
+//        tableView.estimatedRowHeight = 44
         tableView.backgroundColor = .grayScale50
     }
     private func setupNavigation() {
@@ -139,7 +139,7 @@ final class ChatRoomViewController: BaseViewController, View {
     
     @objc private func clickedMenuButton(_ sender: UIButton) {
         print(reactor.currentState.senderProfiles)
-        let sideSheetVC = ChatSideSheetViewController(chat: chat, userId: userId, people: reactor.currentState.senderProfiles)
+        let sideSheetVC = ChatSideSheetViewController(chat: chat, userId: userId, people: reactor.currentState.senderProfiles, reactor: reactor)
         let transitioningDelegate = SideSheetTransitioningDelegate()
         sideSheetVC.transitioningDelegate = transitioningDelegate
         sideSheetVC.modalPresentationStyle = .custom
@@ -212,7 +212,14 @@ extension ChatRoomViewController {
                 }
             })
             .disposed(by: disposeBag)
-
+        
+        reactor.state.map{$0.exitTrigger}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                vc.navigationController?.popViewController(animated: true)
+            }
+            .disposed(by: disposeBag)
  
         reactor.state.map { !$0.isLoading }
             .distinctUntilChanged()
@@ -228,27 +235,39 @@ extension ChatRoomViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] messages in
                 guard let self = self else { return }
-                
+
                 let isFirstLoad = self.tableView.contentSize.height == 0 // 처음 로드 확인
                 let previousContentHeight = self.tableView.contentSize.height // 기존 높이 저장
-//                let previousOffsetY = self.tableView.contentOffset.y // 기존 오프셋 저장
-                
+                let previousOffsetY = self.tableView.contentOffset.y // 기존 오프셋 저장
+
                 DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                    let newContentHeight = self.tableView.contentSize.height // 새로운 높이 가져오기
+                    self.tableView.beginUpdates()
+                    self.tableView.endUpdates()
                     
-                    if isFirstLoad {
-                        // 처음 채팅방을 열었을 때는 가장 아래로 스크롤
-                        self.scrollToBottom(animated: false)
-                    } else if messages.count > 0, previousContentHeight > 0 {
-                        // 위로 스크롤하여 메시지를 불러온 경우 스크롤 위치 유지
-                        let offsetYDifference = newContentHeight - previousContentHeight
-                        self.tableView.contentOffset.y += offsetYDifference
+                    self.tableView.reloadData()
+
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                        let newContentHeight = self.tableView.contentSize.height // 새로운 높이 가져오기
+
+                        if isFirstLoad {
+                            // ✅ 채팅방 처음 입장 시 가장 아래로 이동 (강제)
+                            self.scrollToBottom(animated: false)
+                        } else if messages.count > 0, previousContentHeight > 0 {
+                            // ✅ 위로 스크롤 후 메시지를 보냈을 때, 올바르게 하단 이동
+                            let offsetYDifference = newContentHeight - previousContentHeight
+                            if offsetYDifference > 0 {
+                                // 새로운 메시지가 추가될 때만 아래로 이동
+                                self.scrollToBottom(animated: true)
+                            } else {
+                                // 일반적인 경우에는 기존 위치 유지
+                                self.tableView.contentOffset.y = previousOffsetY
+                            }
+                        }
                     }
                 }
             })
             .disposed(by: disposeBag)
-        
+
         reactor.state.map{$0.messages}
             .observe(on: MainScheduler.instance)
             .bind(to: tableView.rx.items) { [weak self] tableView, index, item in
@@ -263,6 +282,8 @@ extension ChatRoomViewController {
                         cell.configData(item)
                         cell.selectionStyle = .none
                         cell.backgroundColor = .clear
+                        cell.messageLabel.setNeedsLayout()
+                        cell.messageLabel.layoutIfNeeded()
                         return cell
                     } else {
                         guard let cell = tableView.dequeueReusableCell(withIdentifier: "OtherMessageTableViewCell", for: indexPath) as? OtherMessageTableViewCell else {
@@ -271,6 +292,8 @@ extension ChatRoomViewController {
                         let isHiddenTime = index == 0 ? false : (reactor.currentState.messages[index-1].messageType == .talk && reactor.currentState.messages[index-1].userId == item.userId && reactor.currentState.messages[index-1].time == item.time)
                         let isHiddenProfile = index == 0 ? false : (reactor.currentState.messages[index-1].messageType == .talk && reactor.currentState.messages[index-1].userId == item.userId)
                         cell.configData(item, isHiddenTime: isHiddenTime, isHiddenProfile: isHiddenProfile)
+                        cell.messageLabel.setNeedsLayout()
+                        cell.messageLabel.layoutIfNeeded()
                         cell.selectionStyle = .none
                         cell.backgroundColor = .clear
                         
@@ -282,11 +305,11 @@ extension ChatRoomViewController {
                     cell.selectionStyle = .none
                     cell.backgroundColor = .clear
                     return cell
-                case .enterUser:
+                case .enterUser, .leaveUser:
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: "EnterUserCell", for: indexPath) as? EnterUserCell else {
                         return UITableViewCell()
                     }
-                    cell.configData(item.nickName)
+                    cell.configData(item.nickName, type: item.messageType.serverRequest)
                     cell.selectionStyle = .none
                     cell.backgroundColor = .clear
                     return cell

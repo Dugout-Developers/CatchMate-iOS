@@ -22,6 +22,7 @@ struct Post: Identifiable, Equatable {
     let preferGender: Gender?
     let preferAge: [Int]
     let addInfo: String
+    let chatRoomId: Int?
     var isFinished: Bool {
         if currentPerson == maxPerson {
             return true
@@ -34,7 +35,7 @@ struct Post: Identifiable, Equatable {
         return lhs.id == rhs.id
     }
     
-    init(id: String = UUID().uuidString, title: String, writer: SimpleUser, homeTeam: Team, awayTeam: Team, cheerTeam: Team, date: String, playTime: String, location: String, maxPerson: Int, currentPerson: Int, preferGender: Gender? = nil, preferAge: [Int] = [], addInfo: String) {
+    init(id: String = UUID().uuidString, title: String, writer: SimpleUser, homeTeam: Team, awayTeam: Team, cheerTeam: Team, date: String, playTime: String, location: String, maxPerson: Int, currentPerson: Int, preferGender: Gender? = nil, preferAge: [Int] = [], addInfo: String, chatRoomId: Int? = nil) {
         self.id = id
         self.title = title
         self.writer = writer
@@ -49,6 +50,7 @@ struct Post: Identifiable, Equatable {
         self.preferGender = preferGender
         self.preferAge = preferAge
         self.addInfo = addInfo
+        self.chatRoomId = chatRoomId
     }
     
     // MARK: - 임시 (API 수정 후 변경 예정)
@@ -67,6 +69,7 @@ struct Post: Identifiable, Equatable {
         self.preferGender = post.preferGender
         self.preferAge = post.preferAge
         self.addInfo = post.addInfo
+        self.chatRoomId = nil
     }
 }
 

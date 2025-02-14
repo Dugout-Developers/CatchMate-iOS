@@ -17,6 +17,7 @@ final class ChatListTableViewCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 8
         return imageView
     }()
     
@@ -96,7 +97,8 @@ final class ChatListTableViewCell: UITableViewCell {
     }
   
     func configData(chat: ChatListInfo) {
-        chatImageView.image = chat.postInfo.cheerTeam.getFillImage
+        let defaultImage = chat.postInfo.cheerTeam.getFillImage
+        ImageLoadHelper.loadImage(chatImageView, pictureString: chat.chatImage, defaultImage: defaultImage)
         postTitleLabel.text = chat.postInfo.title
         newChat = chat.newChat
         lastChatLabel.text = newChat ? "채팅을 시작해보세요." : (chat.lastMessage.isEmpty ? "채팅을 시작해보세요." : chat.lastMessage)
@@ -113,7 +115,7 @@ final class ChatListTableViewCell: UITableViewCell {
         notiBadge.applyStyle(textStyle: FontSystem.bedgeText)
         lastChatDateLabel.applyStyle(textStyle: FontSystem.caption01_medium)
         if newChat {
-            peopleNumLabel.text = String(chat.postInfo.currentPerson)
+            peopleNumLabel.text = String(chat.currentPerson)
             peopleNumLabel.textColor = .cmNonImportantTextColor
         } else {
             peopleNumLabel.text = "New"

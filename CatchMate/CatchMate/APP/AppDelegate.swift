@@ -76,20 +76,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let userInfo = notification.request.content.userInfo
         print("푸시 알림 수신 (foreground): \(userInfo)")
-        let acceptStatus = userInfo["acceptStatus"] as? String
-        
-        switch acceptStatus {
-        case "PENDING":
-            if let boardIdStr = userInfo["boardId"] as? String, let boardId = Int(boardIdStr) {
-                moveApplyDetailView(boardId: boardId)
-            } else {
-                LoggerService.shared.log(level: .error, "boardId 구할 수 없음")
-            }
-        case "ACCEPTED":
-            moveChatRoom()
-        default:
-            LoggerService.shared.log(level: .error, "acceptStatus 구할 수 없음")
-        }
+//        let acceptStatus = userInfo["acceptStatus"] as? String
+//        
+//        switch acceptStatus {
+//        case "PENDING":
+//            if let boardIdStr = userInfo["boardId"] as? String, let boardId = Int(boardIdStr) {
+//                moveApplyDetailView(boardId: boardId)
+//            } else {
+//                LoggerService.shared.log(level: .error, "boardId 구할 수 없음")
+//            }
+//        case "ACCEPTED":
+//            moveChatRoom()
+//        default:
+//            LoggerService.shared.log(level: .error, "acceptStatus 구할 수 없음")
+//        }
         completionHandler([.list, .banner, .sound])
     }
     

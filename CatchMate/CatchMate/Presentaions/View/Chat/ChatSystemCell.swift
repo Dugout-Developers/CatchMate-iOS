@@ -205,8 +205,12 @@ final class EnterUserCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configData(_ nickName: String) {
-        infoLabel.text = "\(nickName) 님이 채팅에 참여했어요"
+    func configData(_ nickName: String, type: String) {
+        if type == ChatMessageType.enterUser.serverRequest {
+            infoLabel.text = "\(nickName) 님이 채팅에 참여했어요"
+        } else {
+            infoLabel.text = "\(nickName) 님이 나갔어요"
+        }
         infoLabel.applyStyle(textStyle: FontSystem.body03_medium)
     }
     override func prepareForReuse() {

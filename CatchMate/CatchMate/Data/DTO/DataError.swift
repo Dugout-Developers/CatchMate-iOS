@@ -115,6 +115,7 @@ enum MappingError: LocalizedErrorWithCode {
     case mappingFailed
     ///DTO -> DomainModel
     case invalidData
+    case stateFalse
     
     var statusCode: Int {
         switch self {
@@ -122,6 +123,8 @@ enum MappingError: LocalizedErrorWithCode {
             return -3001
         case .invalidData:
             return -3002
+        case .stateFalse:
+            return -3003
         }
     }
     var errorDescription: String? {
@@ -130,6 +133,8 @@ enum MappingError: LocalizedErrorWithCode {
             return "DomainModel -> DTO 매핑 실패"
         case .invalidData:
             return "DTO -> DomainModel 매핑 실패"
+        case .stateFalse:
+            return "state 반환값 false"
         }
     }
 }

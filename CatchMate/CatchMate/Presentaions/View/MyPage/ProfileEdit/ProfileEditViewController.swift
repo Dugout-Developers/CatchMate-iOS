@@ -106,11 +106,11 @@ final class ProfileEditViewController: BaseViewController, View {
     }
     private func setupImage() {
         if let imgStr = initImageStr {
-            ProfileImageHelper.urlToUIImage(imgStr) { [weak self] image in
+            ImageLoadHelper.urlToUIImage(imgStr) { [weak self] image in
                 self?.reactor.action.onNext(.changeImage(image))
             }
         }
-        ProfileImageHelper.loadImage(profileImageView, pictureString: initImageStr)
+        ImageLoadHelper.loadImage(profileImageView, pictureString: initImageStr)
     }
     private func setupPicker() {
         // Team Picker

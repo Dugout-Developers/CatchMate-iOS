@@ -28,6 +28,7 @@ struct PostDTO: Codable {
     let userInfo: WriterDTO
     let preferredGender: String
     let preferredAgeRange: String /// , 구분
+    let chatRoomId: Int?
     let gameInfo: GameInfoDTO
     let bookMarked: Bool?
     let buttonStatus: String?

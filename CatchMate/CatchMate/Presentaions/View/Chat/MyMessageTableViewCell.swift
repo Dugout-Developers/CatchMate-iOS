@@ -10,7 +10,7 @@ import SnapKit
 
 final class MyMessageTableViewCell: UITableViewCell {
     private let containerView = UIView()
-    private let messageLabel: MessageBoxLabel = {
+    let messageLabel: MessageBoxLabel = {
         let label = MessageBoxLabel()
         label.numberOfLines = 0
         label.backgroundColor = .cmPrimaryColor

@@ -16,10 +16,11 @@ struct ChatMessageInfo: Codable {
     let roomId: Int
     let content: String
     let senderId: Int
+    let messageType: String
     
     enum CodingKeys: String, CodingKey {
         case timeInfo = "id"
-        case roomId, content, senderId
+        case roomId, content, senderId, messageType
     }
 }
 

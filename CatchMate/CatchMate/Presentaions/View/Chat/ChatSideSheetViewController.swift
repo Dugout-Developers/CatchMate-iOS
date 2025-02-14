@@ -8,8 +8,9 @@
 import UIKit
 import RxSwift
 import SnapKit
+import ReactorKit
 
-final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate , UITableViewDataSource {
+final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate , UITableViewDataSource, View {
     override var useSnapKit: Bool {
         return true
     }
@@ -17,8 +18,10 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         return false
     }
     private let userId: Int
-    private let chat: ChatListInfo
+    private let chat: ChatRoomInfo
     private let people: [SenderInfo]
+    private let chatRoomImage: String
+    private let reactor: ChatRoomReactor
     private var isManager: Bool {
         return chat.managerInfo.id == userId
     }
@@ -114,10 +117,13 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         awayTeamImageView.setupTeam(team: chat.postInfo.awayTeam, isMyTeam: chat.postInfo.cheerTeam == chat.postInfo.awayTeam)
     }
     
-    init(chat: ChatListInfo, userId: Int, people: [SenderInfo]) {
+    init(chat: ChatRoomInfo, userId: Int, people: [SenderInfo], image: String = "", reactor: ChatRoomReactor) {
+        // TODO: - image 임시 기본값
         self.chat = chat
         self.userId = userId
         self.people = people
+        self.chatRoomImage = image
+        self.reactor = reactor
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .custom
         modalTransitionStyle = .crossDissolve
@@ -132,7 +138,7 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         setupUI()
         setupTableView()
         navigationBarHidden()
-        print(people)
+        bind(reactor: reactor)
         settingButton.isHidden = !isManager
     }
     private func setupTableView() {
@@ -140,6 +146,41 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         tableView.dataSource = self
         tableView.separatorStyle = .none
         tableView.register(ChatRoomPeopleListCell.self, forCellReuseIdentifier: "ChatRoomPeopleListCell")
+    }
+   func bind(reactor: ChatRoomReactor) {
+       exitButton.rx.tap
+           .map { ChatRoomReactor.Action.exitRoom }
+           .bind(to: reactor.action)
+           .disposed(by: disposeBag)
+       
+       reactor.state.map{$0.exitTrigger}
+           .compactMap{$0}
+           .withUnretained(self)
+           .subscribe { vc, _ in
+               vc.dismiss(animated: false)
+           }
+           .disposed(by: disposeBag)
+        settingButton.rx.tap
+            .withUnretained(self)
+            .flatMapLatest { vc, _ -> Observable<ChatSettingViewController> in
+                return Observable.create { observer in
+                    do {
+                        let settingVC = try ChatSettingViewController(reactor: vc.reactor, chat: vc.chat, people: vc.people)
+                        settingVC.modalPresentationStyle = .fullScreen
+                        observer.onNext(settingVC)
+                        observer.onCompleted()
+                    } catch {
+                        LoggerService.shared.errorLog(error, domain: "show_chatsettingpage", message: "userId 찾기 실패로 ChatSettingViewController 생성 실패")
+                        vc.reactor.action.onNext(.setError(ErrorMapper.mapToPresentationError(error)))
+                        observer.onCompleted()
+                    }
+                    return Disposables.create()
+                }
+            }
+            .subscribe(onNext: { [weak self] settingVC in
+                self?.present(settingVC, animated: false)
+            })
+            .disposed(by: disposeBag)
     }
     private func setupUI() {
         view.addSubviews(views: [infoView, teamInfoView, topDivider, partyInfoLabel, tableView, bottomDivider ,buttonView])
@@ -165,11 +206,11 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         }
         partyInfoLabel.snp.makeConstraints { make in
             make.top.equalTo(topDivider.snp.bottom).offset(16)
-            make.leading.equalTo(safeArea).offset(20)
+            make.leading.equalTo(safeArea).offset(18)
         }
         tableView.snp.makeConstraints { make in
             make.top.equalTo(partyInfoLabel.snp.bottom).offset(12)
-            make.leading.trailing.equalTo(safeArea).inset(20)
+            make.leading.trailing.equalTo(safeArea)
         }
         bottomDivider.snp.makeConstraints { make in
             make.top.equalTo(tableView.snp.bottom).offset(16)
@@ -251,7 +292,7 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         }
         cell.selectionStyle = .none
         let person = people[indexPath.row]
-        cell.configData(person, isMy: person.senderId == userId, isManager: person.senderId == chat.managerInfo.id)
+        cell.configData(person, isMy: person.senderId == userId, isManager: person.senderId == chat.managerInfo.id, isHiddenExportButton: true)
         return cell
         
     }
@@ -263,6 +304,7 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
 
 
 final class ChatRoomPeopleListCell: UITableViewCell {
+    var disposeBag = DisposeBag()
     private let imageSize = 40.0
     private let profileImage: UIImageView = {
         let imageView = UIImageView()
@@ -294,6 +336,28 @@ final class ChatRoomPeopleListCell: UITableViewCell {
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
+    
+    private let exportButton: UIButton = {
+        let button = UIButton()
+        var config = UIButton.Configuration.plain()
+        let title = "내보내기"
+        var attributedTitle = AttributedString(title)
+        attributedTitle.font = UIFont.body02_medium
+        attributedTitle.foregroundColor = UIColor.grayScale500
+
+        config.attributedTitle = attributedTitle
+        config.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 4, bottom: 2, trailing: 4)
+        button.configuration = config
+        
+        button.backgroundColor = .grayScale100
+        button.clipsToBounds = true
+        button.layer.cornerRadius = 2
+        return button
+    }()
+    
+    var exportButtonTapped: Observable<Void> {
+        return exportButton.rx.tap.asObservable()
+    }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -312,11 +376,12 @@ final class ChatRoomPeopleListCell: UITableViewCell {
         managerImageBedge.isHidden = false
         nicknameLabel.text = nil
         profileImage.image = nil
+        exportButton.isHidden = true
+        disposeBag = DisposeBag()
     }
 
-    func configData(_ person: SenderInfo, isMy: Bool, isManager: Bool) {
-        print("\(person.nickName) - isMy: \(isMy) / isManager: \(isManager)")
-        ProfileImageHelper.loadImage(profileImage, pictureString: person.imageUrl)
+    func configData(_ person: SenderInfo, isMy: Bool, isManager: Bool, isHiddenExportButton: Bool) {
+        ImageLoadHelper.loadImage(profileImage, pictureString: person.imageUrl)
         profileImage.layer.cornerRadius = imageSize / 2
         nicknameLabel.text = person.nickName
         nicknameLabel.applyStyle(textStyle: FontSystem.body02_medium)
@@ -324,7 +389,7 @@ final class ChatRoomPeopleListCell: UITableViewCell {
         managerImageBedge.image = UIImage(named: "king")
         myImageBedge.isHidden = !isMy
         managerImageBedge.isHidden = !isManager
-
+        exportButton.isHidden = isHiddenExportButton
         layoutIfNeeded()
     }
     
@@ -333,15 +398,16 @@ final class ChatRoomPeopleListCell: UITableViewCell {
         stackView.addArrangedSubview(myImageBedge)
         stackView.addArrangedSubview(managerImageBedge)
         stackView.addArrangedSubview(nicknameLabel)
+        stackView.addArrangedSubview(exportButton)
         
         profileImage.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(8)
-            make.leading.equalToSuperview()
+            make.leading.equalToSuperview().offset(18)
             make.size.equalTo(imageSize)
         }
         stackView.snp.makeConstraints { make in
             make.leading.equalTo(profileImage.snp.trailing).offset(8)
-            make.trailing.equalToSuperview().inset(8)
+            make.trailing.equalToSuperview().inset(18)
             make.centerY.equalTo(profileImage)
         }
         
