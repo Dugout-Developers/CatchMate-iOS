@@ -228,28 +228,33 @@ extension ChatRoomViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] messages in
                 guard let self = self else { return }
-                
+
                 let isFirstLoad = self.tableView.contentSize.height == 0 // 처음 로드 확인
                 let previousContentHeight = self.tableView.contentSize.height // 기존 높이 저장
                 let previousOffsetY = self.tableView.contentOffset.y // 기존 오프셋 저장
-                
+
                 DispatchQueue.main.async {
                     self.tableView.beginUpdates()
                     self.tableView.endUpdates()
                     
                     self.tableView.reloadData()
-                    let newContentHeight = self.tableView.contentSize.height // 새로운 높이 가져오기
-                    
+
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                         let newContentHeight = self.tableView.contentSize.height // 새로운 높이 가져오기
 
                         if isFirstLoad {
-                            // ✅ 처음 채팅방을 열었을 때 아래로 스크롤
+                            // ✅ 채팅방 처음 입장 시 가장 아래로 이동 (강제)
                             self.scrollToBottom(animated: false)
                         } else if messages.count > 0, previousContentHeight > 0 {
-                            // ✅ 위로 스크롤하여 메시지를 불러온 경우 스크롤 위치 유지
+                            // ✅ 위로 스크롤 후 메시지를 보냈을 때, 올바르게 하단 이동
                             let offsetYDifference = newContentHeight - previousContentHeight
-                            self.tableView.contentOffset.y = previousOffsetY + offsetYDifference
+                            if offsetYDifference > 0 {
+                                // 새로운 메시지가 추가될 때만 아래로 이동
+                                self.scrollToBottom(animated: true)
+                            } else {
+                                // 일반적인 경우에는 기존 위치 유지
+                                self.tableView.contentOffset.y = previousOffsetY
+                            }
                         }
                     }
                 }
