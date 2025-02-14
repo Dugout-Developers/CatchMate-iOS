@@ -21,7 +21,7 @@ final class ChatSettingViewController: BaseViewController, View {
     var reactor: ChatRoomReactor
     private let userId: Int
     private let chat: ChatRoomInfo
-    private let people: [SenderInfo]
+    private var people: [SenderInfo]
     private let changeImageView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -150,6 +150,14 @@ extension ChatSettingViewController {
             }
             .disposed(by: disposeBag)
         
+        reactor.state.compactMap{$0.exportTrigger}
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                vc.people = vc.reactor.currentState.senderProfiles
+                vc.tableView.reloadData()
+            }
+            .disposed(by: disposeBag)
+        
         exitButton.rx.tap
             .withUnretained(self)
             .subscribe { vc, _ in
@@ -173,7 +181,8 @@ extension ChatSettingViewController {
                 cell.exportButtonTapped
                     .withUnretained(vc)
                     .subscribe(onNext: { vc, _ in
-                        print("\(person.senderId)번 \(person.nickName) 내보내기")
+                        LoggerService.shared.log(level: .info, "\(vc.chat.chatRoomId)번 채팅방: \(person.senderId)-\(person.nickName) 내보내기")
+                        reactor.action.onNext(.exportUser(person.senderId))
                     })
                     .disposed(by: cell.disposeBag)
             })

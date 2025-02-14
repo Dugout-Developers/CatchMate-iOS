@@ -71,6 +71,10 @@ enum Endpoint {
     case chatMessage
     /// 채팅방 이미지 수정
     case chatImage
+    /// 채팅방 나가기
+    case exitChat
+    /// 채팅방 유저 강퇴
+    case exportChatUser
     
     /// 내정보 조회
     case loadMyInfo
@@ -135,9 +139,11 @@ enum Endpoint {
             return "/enrolls/"
         case .chatList:
             return "/chat-rooms/list"
-        case .chatUsers, .chatImage:
+        case .chatUsers, .chatImage, .exitChat, .exportChatUser:
             /// chat-rooms/{chatRoomId}/user-list
             /// chat-rooms/{chatRoomId}/image
+            /// chat-rooms/{chatRoomId}
+            /// chat-rooms/{chatRoomId}/users/{userId}
             return "/chat-rooms/"
         case .chatMessage:
             /// chats/{chatRoomId}
@@ -212,6 +218,10 @@ enum Endpoint {
             return "채팅방 이전 메시지 조회 API"
         case .chatImage:
             return "채팅방 이미지 수정 API"
+        case .exitChat:
+            return "채팅방 나가기 API"
+        case .exportChatUser:
+            return "채팅방 유저 내보내기 API"
         case .loadMyInfo:
             return "내 정보 조회 API"
         case .editProfile:
@@ -279,6 +289,10 @@ enum Endpoint {
             return .get
         case .chatImage:
             return .patch
+        case .exitChat:
+            return .delete
+        case .exportChatUser:
+            return .delete
         case .loadMyInfo:
             return .get
         case .editProfile:

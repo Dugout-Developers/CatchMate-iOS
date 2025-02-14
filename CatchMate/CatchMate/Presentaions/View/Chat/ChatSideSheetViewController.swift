@@ -8,8 +8,9 @@
 import UIKit
 import RxSwift
 import SnapKit
+import ReactorKit
 
-final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate , UITableViewDataSource {
+final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate , UITableViewDataSource, View {
     override var useSnapKit: Bool {
         return true
     }
@@ -137,7 +138,7 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         setupUI()
         setupTableView()
         navigationBarHidden()
-        bind()
+        bind(reactor: reactor)
         settingButton.isHidden = !isManager
     }
     private func setupTableView() {
@@ -146,7 +147,19 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         tableView.separatorStyle = .none
         tableView.register(ChatRoomPeopleListCell.self, forCellReuseIdentifier: "ChatRoomPeopleListCell")
     }
-    private func bind() {
+   func bind(reactor: ChatRoomReactor) {
+       exitButton.rx.tap
+           .map { ChatRoomReactor.Action.exitRoom }
+           .bind(to: reactor.action)
+           .disposed(by: disposeBag)
+       
+       reactor.state.map{$0.exitTrigger}
+           .compactMap{$0}
+           .withUnretained(self)
+           .subscribe { vc, _ in
+               vc.dismiss(animated: false)
+           }
+           .disposed(by: disposeBag)
         settingButton.rx.tap
             .withUnretained(self)
             .flatMapLatest { vc, _ -> Observable<ChatSettingViewController> in

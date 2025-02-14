@@ -197,6 +197,28 @@ class DIContainerService {
         return ChatListReactor(loadchatListUsecase: loadChatListUC)
     }
     
+    func makeChatRoomReactor(_ chat: ChatRoomInfo) -> ChatRoomReactor {
+        let loadChatUsersDS = LoadChatUsersDataSourceImpl(tokenDataSource: tokenDS)
+        let loadChatUserRepo = LoadChatUsersRepositoryImpl(loadChatUserDS: loadChatUsersDS)
+        let loadChatMessageDS = LoadChatMessageDataSourceImpl(tokenDataSource: tokenDS)
+        let loadChatMessageRepo = LoadChatMessageRepositoryImpl(loadMessageDS: loadChatMessageDS)
+        let loadChatInfoUS = LoadChatInfoUseCaseImpl(loadChatUsersRP: loadChatUserRepo, loadChatMessageRepo: loadChatMessageRepo)
+        
+        let updateDataSource = UpdateChatImageDataSourceImpl(tokenDataSource: tokenDS)
+        let updateRepository = UpdateChatImageRepositoryImpl(updateImageDS: updateDataSource)
+        let updateUsecase = UpdateChatImageUseCaseImpl(updateImageRepo: updateRepository)
+        
+        let exitDataSource = ExitChatRoomDataSourceImpl(tokenDataSource: tokenDS)
+        let exitRepository = ExitChatRoomRepositoryImpl(exitDS: exitDataSource)
+        let exitUsecase = ExitChatRoomUseCaseImpl(exitRepo: exitRepository)
+        
+        let exportDataSource = ExportChatUserDataSourceImpl(tokenDataSource: tokenDS)
+        let exportRepository = ExportChatUserRepositoryImpl(exportDS: exportDataSource)
+        let exportUsecase = ExportChatUserUseCaseImpl(exportRepo: exportRepository)
+        
+        return ChatRoomReactor(chat: chat, loadInfoUS: loadChatInfoUS, updateImageUS: updateUsecase, exportUS: exportUsecase, exitUS: exitUsecase)
+    }
+    
     // MARK: - 특정 Usecase만 필요할 때
     func makeLogoutUseCase() -> LogoutUseCase {
         let logoutDataSource = LogoutDataSourceImpl(tokenDataSource: tokenDS)
@@ -217,22 +239,5 @@ class DIContainerService {
         let nicknameCheckRepository = NicknameCheckRepositoryImpl(nicknameDS: nicknameCheckDataSource)
         let nicknameCheckUsecase = NicknameCheckUseCaseImpl(nicknameRepository: nicknameCheckRepository)
         return nicknameCheckUsecase
-    }
-    
-    func makeChatInfoUseCase() -> LoadChatInfoUseCase {
-        let loadChatUsersDS = LoadChatUsersDataSourceImpl(tokenDataSource: tokenDS)
-        let loadChatUserRepo = LoadChatUsersRepositoryImpl(loadChatUserDS: loadChatUsersDS)
-        let loadChatMessageDS = LoadChatMessageDataSourceImpl(tokenDataSource: tokenDS)
-        let loadChatMessageRepo = LoadChatMessageRepositoryImpl(loadMessageDS: loadChatMessageDS)
-        let loadChatInfoUS = LoadChatInfoUseCaseImpl(loadChatUsersRP: loadChatUserRepo, loadChatMessageRepo: loadChatMessageRepo)
-        
-        return loadChatInfoUS
-    }
-    
-    func makeuUpdateChatImageUseCase() -> UpdateChatImageUseCase {
-        let dataSource = UpdateChatImageDataSourceImpl(tokenDataSource: tokenDS)
-        let repository = UpdateChatImageRepositoryImpl(updateImageDS: dataSource)
-        let usecase = UpdateChatImageUseCaseImpl(updateImageRepo: repository)
-        return usecase
     }
 }

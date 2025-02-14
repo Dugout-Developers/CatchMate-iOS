@@ -79,7 +79,7 @@ final class ChatRoomViewController: BaseViewController, View {
     }
 
     init(chat: ChatRoomInfo, userId: Int) {
-        self.reactor = ChatRoomReactor(chat: chat, loadInfoUS: DIContainerService.shared.makeChatInfoUseCase(), updateImageUS: DIContainerService.shared.makeuUpdateChatImageUseCase())
+        self.reactor = DIContainerService.shared.makeChatRoomReactor(chat)
         self.chat = chat
         self.userId = userId
         super.init(nibName: nil, bundle: nil)
@@ -212,7 +212,14 @@ extension ChatRoomViewController {
                 }
             })
             .disposed(by: disposeBag)
-
+        
+        reactor.state.map{$0.exitTrigger}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                vc.navigationController?.popViewController(animated: true)
+            }
+            .disposed(by: disposeBag)
  
         reactor.state.map { !$0.isLoading }
             .distinctUntilChanged()

@@ -58,10 +58,12 @@ final class ChatRoomReactor: Reactor {
         case loadPeople
         case sendMessage(String)
         case receiveMessage(ChatMessage)
+        case exitRoom
         case setError(PresentationError?)
         
         case loadImage(String)
         case changeImage(UIImage)
+        case exportUser(Int)
     }
     enum Mutation {
         case setMessages([ChatMessage])
@@ -69,6 +71,9 @@ final class ChatRoomReactor: Reactor {
         case addMyMessage(ChatMessage)
         case setIsLoading(Bool)
         case setIsLast(Bool)
+        case setExitTrigger(Void)
+        case setExportTrigger(Void)
+        case clearTrigger
         case setError(PresentationError?)
         
         case setImage(UIImage?)
@@ -81,6 +86,8 @@ final class ChatRoomReactor: Reactor {
         var currentPage: Int = 0
         var isLast: Bool = false
         var isLoading: Bool = false
+        var exitTrigger: Void?
+        var exportTrigger: Void?
         var error: PresentationError?
         
         var image: UIImage?
@@ -94,11 +101,15 @@ final class ChatRoomReactor: Reactor {
     // MARK: - UseCase
     private let loadInfoUS: LoadChatInfoUseCase
     private let updateImageUS: UpdateChatImageUseCase
+    private let exportUS: ExportChatUserUseCase
+    private let exitUS: ExitChatRoomUseCase
     
-    init(chat: ChatRoomInfo, loadInfoUS: LoadChatInfoUseCase, updateImageUS: UpdateChatImageUseCase) {
+    init(chat: ChatRoomInfo, loadInfoUS: LoadChatInfoUseCase, updateImageUS: UpdateChatImageUseCase, exportUS: ExportChatUserUseCase, exitUS: ExitChatRoomUseCase) {
         self.initialState = State()
         self.loadInfoUS = loadInfoUS
         self.updateImageUS = updateImageUS
+        self.exportUS = exportUS
+        self.exitUS = exitUS
         self.chat = chat
         do {
             try setupMyData()
@@ -138,7 +149,33 @@ final class ChatRoomReactor: Reactor {
                     }
                 }
         case .receiveMessage(let message):
-            return Observable.just(Mutation.addMyMessage(message))
+            let loadUser = loadInfoUS.loadChatRoomUsers(chatId: chat.chatRoomId)
+                .map { infos in
+                    Mutation.setSenderInfo(infos)
+                }
+                .catch { error in
+                    if let chatError = error as? ChatError {
+                        return Observable.just(.setError(chatError.convertToPresentationError()))
+                    } else {
+                        return Observable.just(.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
+            
+            if message.messageType == .enterUser || message.messageType == .leaveUser {
+                return Observable.concat([
+                    Observable.just(Mutation.addMyMessage(message)),
+                    loadUser
+                ])
+                .catch { error in
+                    if let chatError = error as? ChatError {
+                        return Observable.just(.setError(chatError.convertToPresentationError()))
+                    } else {
+                        return Observable.just(.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
+            } else {
+                return Observable.just(Mutation.addMyMessage(message))
+            }
         case .loadMessages:
             if currentState.isLast || currentState.isLoading {
                 return Observable.empty()
@@ -185,6 +222,17 @@ final class ChatRoomReactor: Reactor {
                         return Observable.just(.setError(ErrorMapper.mapToPresentationError(error)))
                     }
                 }
+        case .exitRoom:
+            return exitUS.exitChat(chatId: chat.chatRoomId)
+                .flatMap { _ in
+                    return Observable.concat([
+                        Observable.just(Mutation.setExitTrigger(())),
+                        Observable.just(Mutation.clearTrigger).delay(.milliseconds(50), scheduler: MainScheduler.instance)
+                    ])
+                }
+                .catch { error in
+                    return Observable.just(.setError(ErrorMapper.mapToPresentationError(error)))
+                }
         case .setError(let error):
             return Observable.just(.setError(error))
             
@@ -212,6 +260,19 @@ final class ChatRoomReactor: Reactor {
                 }
                 return Disposables.create()
             }
+        case .exportUser(let userId):
+            return exportUS.exportUser(chatId: chat.chatRoomId, userId: userId)
+                .withUnretained(self)
+                .flatMap { reactor, _ in
+                    let newUsers = reactor.currentState.senderProfiles.filter {
+                        $0.senderId != userId
+                    }
+                    return Observable.concat([
+                        Observable.just(.setSenderInfo(newUsers)),
+                        Observable.just(Mutation.setExportTrigger(())),
+                        Observable.just(Mutation.clearTrigger).delay(.milliseconds(50), scheduler: MainScheduler.instance)
+                    ])
+                }
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
@@ -237,6 +298,13 @@ final class ChatRoomReactor: Reactor {
             } else {
                 newState.image = chat.postInfo.cheerTeam.getFillImage
             }
+        case .setExitTrigger():
+            newState.exitTrigger = ()
+        case .clearTrigger:
+            newState.exitTrigger = nil
+            newState.exportTrigger = nil
+        case .setExportTrigger():
+            newState.exportTrigger = ()
         }
         return newState
     }
