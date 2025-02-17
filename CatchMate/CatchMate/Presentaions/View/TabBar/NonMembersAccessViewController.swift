@@ -11,9 +11,14 @@ import FlexLayout
 import PinLayout
 
 class NonMembersAccessViewController: BaseViewController {
+    private let navTitle: String
     private let containerView = UIView()
-    private var isAdd: Bool
-    
+    override var useSnapKit: Bool {
+        return false
+    }
+    override var buttonContainerExists: Bool {
+        return false
+    }
     private let infoLabel: UILabel = {
         let label = UILabel()
         label.text = "회원 전용 페이지 입니다.\n로그인을 진행해주세요."
@@ -31,19 +36,11 @@ class NonMembersAccessViewController: BaseViewController {
         button.tintColor = .clear
         return button
     }()
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        if isAdd {
-            if let tabBarController = tabBarController as? TabBarController {
-                tabBarController.isAddView = false
-                tabBarController.selectedIndex = tabBarController.preViewControllerIndex
-            }
-        }
-    }
-    init(title: String, isAdd: Bool = false) {
-        self.isAdd = isAdd
+
+
+    init(title: String) {
+        self.navTitle = title
         super.init(nibName: nil, bundle: nil)
-        setupView(title: title)
     }
     
     @available(*, unavailable)
@@ -53,13 +50,14 @@ class NonMembersAccessViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupView()
         setupUI()
         bind()
     }
     
-    private func setupView(title: String) {
+    private func setupView() {
         view.backgroundColor = .cmBackgroundColor
-        setupLeftTitle(title)
+        setupLeftTitle(navTitle)
     }
     
     override func viewDidLayoutSubviews() {
