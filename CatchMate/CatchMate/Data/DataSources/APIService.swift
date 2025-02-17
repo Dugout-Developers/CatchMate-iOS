@@ -65,11 +65,12 @@ final class APIService {
         if let addEndPoint = addEndPoint {
             url += addEndPoint
         }
+        LoggerService.shared.log("요청 URL: \(url)")
 
         return RxAlamofire.requestData(type.requstType, url, parameters: parameters, encoding: encoding, headers: headers)
             .flatMap { [weak self] (response, data) -> Observable<T> in
                 LoggerService.shared.log(level: .debug, "Request URL: \(String(describing: response.url))")
-                guard let self = self else { return Observable.error(OtherError.notFoundSelf(location: "APIService-requestAPI")) }
+                guard self != nil else { return Observable.error(OtherError.notFoundSelf(location: "APIService-requestAPI")) }
                 guard 200..<300 ~= response.statusCode else {
                     LoggerService.shared.log(level: .debug, "\(type.apiName) Error : \(response.statusCode) \(response.debugDescription)")
                     return Observable.error(NetworkError(serverStatusCode: response.statusCode))

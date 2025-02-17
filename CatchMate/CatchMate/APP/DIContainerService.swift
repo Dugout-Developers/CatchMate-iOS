@@ -219,6 +219,14 @@ class DIContainerService {
         return ChatRoomReactor(chat: chat, loadInfoUS: loadChatInfoUS, updateImageUS: updateUsecase, exportUS: exportUsecase, exitUS: exitUsecase)
     }
     
+    func makeReportUserReactor(_ user: SimpleUser) -> ReportReactor {
+        let reportDS = ReportUserDataSourceImpl(tokenDataSource: tokenDS)
+        let reportRepo = ReportUserRepositoryImpl(reportUserDS: reportDS)
+        let reportUC = ReportUserUseCaseImpl(reportUserRepo: reportRepo)
+        
+        return ReportReactor(user: user, reportUseCase: reportUC)
+    }
+    
     // MARK: - 특정 Usecase만 필요할 때
     func makeLogoutUseCase() -> LogoutUseCase {
         let logoutDataSource = LogoutDataSourceImpl(tokenDataSource: tokenDS)

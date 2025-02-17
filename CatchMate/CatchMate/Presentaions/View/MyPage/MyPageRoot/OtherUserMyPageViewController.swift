@@ -18,9 +18,9 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
     private var user: SimpleUser
     private let tableview = UITableView()
     private let reactor: OtherUserpageReactor
-    private let reportReactor: ReportReactor
     private var posts: [SimplePost] = []
-    
+    private let toastSubject = PublishSubject<Void>()
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reactor.action.onNext(.loadPost)
@@ -32,13 +32,11 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
         setupTableView()
         setupUI()
         bind(reactor: reactor)
-        bind(reportReactor: reportReactor)
     }
     
-    init(user: SimpleUser, reactor: OtherUserpageReactor, reportReactor: ReportReactor) {
+    init(user: SimpleUser, reactor: OtherUserpageReactor) {
         self.user = user
         self.reactor = reactor
-        self.reportReactor = reportReactor
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -72,8 +70,9 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
                 })
             }),
             MenuItem(title: "신고하기", textColor: UIColor.cmSystemRed, action: { [weak self] in
-                if let user = self?.user, let reactor = self?.reportReactor {
-                    let reportVC = UserReportViewController(reportUser: user, reactor: reactor)
+                if let user = self?.user {
+                    let reportVC = UserReportViewController(reportUser: user)
+                    reportVC.toastSubject = self?.toastSubject
                     self?.navigationController?.pushViewController(reportVC, animated: true)
                 } else {
                     self?.showToast(message: "다시 시도해주세요.")
@@ -92,7 +91,7 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
         tableview.register(MyPageProfileCell.self, forCellReuseIdentifier: "MyPageProfileCell")
         tableview.register(ListCardViewTableViewCell.self, forCellReuseIdentifier: "ListCardViewTableViewCell")
         tableview.estimatedSectionHeaderHeight = 0
-         tableview.estimatedSectionFooterHeight = 0
+        tableview.estimatedSectionFooterHeight = 0
         tableview.sectionHeaderTopPadding = 0
     }
     private func setupUI() {
@@ -209,6 +208,14 @@ extension OtherUserMyPageViewController {
                 vc.handleError(error)
             }
             .disposed(by: disposeBag)
+        
+        // 토스트 메시지
+        toastSubject
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                vc.showToast(message: "신고 완료되었어요")
+            }
+            .disposed(by: disposeBag)
     }
     
     func scrollSetupNavigation(_ offsetY: CGFloat) {
@@ -223,18 +230,6 @@ extension OtherUserMyPageViewController {
                 setupLeftTitle("")
             }
         }
-    }
-    
-    func bind(reportReactor: ReportReactor) {
-        reportReactor.state.map{$0.finishedReport}
-            .distinctUntilChanged()
-            .withUnretained(self)
-            .subscribe { vc, result in
-                if result {
-                    vc.showToast(message: "신고 완료되었어요")
-                }
-            }
-            .disposed(by: disposeBag)
     }
 }
 

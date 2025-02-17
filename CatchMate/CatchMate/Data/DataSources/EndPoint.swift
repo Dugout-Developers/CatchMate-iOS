@@ -86,6 +86,9 @@ enum Endpoint {
     /// 알림 삭제
     case deleteNoti
     
+    /// 유저 신고
+    case report
+    
     var endPoint: String {
         switch self {
         case .login:
@@ -156,6 +159,8 @@ enum Endpoint {
             return "/notifications/receive"
         case .deleteNoti:
             return "/notifications/receive/"
+        case .report:
+            return "/reports"
         }
     }
     var apiName: String {
@@ -230,6 +235,8 @@ enum Endpoint {
             return "알림 리스트 조회 API"
         case .deleteNoti:
             return "받은 알림 삭제 API"
+        case .report:
+            return "유저 신고 API"
         }
     }
     
@@ -301,6 +308,8 @@ enum Endpoint {
             return .get
         case .deleteNoti:
             return .delete
+        case .report:
+            return .post
         }
     }
 }
