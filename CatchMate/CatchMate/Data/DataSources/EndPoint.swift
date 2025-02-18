@@ -94,6 +94,10 @@ enum Endpoint {
     case blockUser
     /// 유저 차단 해제
     case unBlockUser
+    
+    /// 문의하기
+    case inquiries
+    
     var endPoint: String {
         switch self {
         case .login:
@@ -171,6 +175,8 @@ enum Endpoint {
         case .blockUser, .unBlockUser:
             /// /users/block/{blockedUserId}
             return "/users/block/"
+        case .inquiries:
+            return "/inquiries"
         }
     }
     var apiName: String {
@@ -253,6 +259,8 @@ enum Endpoint {
             return "유저 차단 API"
         case .unBlockUser:
             return "유저 차단 해제 API"
+        case .inquiries:
+            return "고객센터 문의 API"
         }
     }
     
@@ -332,6 +340,10 @@ enum Endpoint {
             return .get
         case .unBlockUser:
             return .delete
+            
+        // MARK: - 고객센터 관련
+        case .inquiries:
+            return .post
         }
     }
 }

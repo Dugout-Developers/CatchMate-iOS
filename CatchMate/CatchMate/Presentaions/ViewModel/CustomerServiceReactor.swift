@@ -19,18 +19,22 @@ final class CustomerServiceReactor: Reactor {
         case setText(String?)
         case setCount(Int)
         case setIsSubmit(Bool)
+        case setError(PresentationError?)
     }
     struct State {
         var text: String?
         var count: Int = 0
         var isSubmit: Bool = false
+        var error: PresentationError?
     }
     var initialState: State
     
     private let menu: CustomerServiceMenu
-    init(menu: CustomerServiceMenu) {
+    private let inquiriesUsecase: InquiriesUseCase
+    init(menu: CustomerServiceMenu, inquiriesUsecase: InquiriesUseCase) {
         self.initialState = State()
         self.menu = menu
+        self.inquiriesUsecase = inquiriesUsecase
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
@@ -41,11 +45,22 @@ final class CustomerServiceReactor: Reactor {
                 Observable.just(.setCount(text?.count ?? 0))
             ])
         case .submitContent:
-            return Observable.just(.setIsSubmit(true))
+            guard let text = currentState.text else {
+                return Observable.empty()
+            }
+            return inquiriesUsecase.inquiry(type: self.menu, content: text)
+                .map { _ in
+                    return Mutation.setIsSubmit(true)
+                }
+                .catch { error in
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                }
+                
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
+        newState.error = nil
         switch mutation {
         case .setText(let text):
             newState.text = text
@@ -53,6 +68,8 @@ final class CustomerServiceReactor: Reactor {
             newState.count = count
         case .setIsSubmit(let state):
             newState.isSubmit = state
+        case .setError(let error):
+            newState.error = error
         }
         return newState
     }

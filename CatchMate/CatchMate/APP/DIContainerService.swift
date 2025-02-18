@@ -243,6 +243,14 @@ class DIContainerService {
         return BlockUserReactor(loadBlockUserUseCase: loadUsersUC, unBlockUseCase: unblockUC)
     }
     
+    func makeCustomerServiceReactor(menu: CustomerServiceMenu) -> CustomerServiceReactor {
+        let inquiriesDS = InquiriesDataSourceImpl(tokenDataSource: tokenDS)
+        let inquiriesRepo = InquiriesRepositoryImpl(inquriesDS: inquiriesDS)
+        let inquiriesUC = InquiriesUseCaseImpl(inquriesRepo: inquiriesRepo)
+        
+        return CustomerServiceReactor(menu: menu, inquiriesUsecase: inquiriesUC)
+    }
+    
     // MARK: - 특정 Usecase만 필요할 때
     func makeLogoutUseCase() -> LogoutUseCase {
         let logoutDataSource = LogoutDataSourceImpl(tokenDataSource: tokenDS)
