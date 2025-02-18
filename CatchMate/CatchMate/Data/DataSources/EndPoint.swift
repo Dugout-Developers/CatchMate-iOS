@@ -86,6 +86,18 @@ enum Endpoint {
     /// 알림 삭제
     case deleteNoti
     
+    /// 유저 신고
+    case report
+    /// 차단 유저 목록 조회
+    case blockUserList
+    /// 유저 차단
+    case blockUser
+    /// 유저 차단 해제
+    case unBlockUser
+    
+    /// 문의하기
+    case inquiries
+    
     var endPoint: String {
         switch self {
         case .login:
@@ -156,6 +168,15 @@ enum Endpoint {
             return "/notifications/receive"
         case .deleteNoti:
             return "/notifications/receive/"
+        case .report:
+            return "/reports"
+        case .blockUserList:
+            return "/users/block"
+        case .blockUser, .unBlockUser:
+            /// /users/block/{blockedUserId}
+            return "/users/block/"
+        case .inquiries:
+            return "/inquiries"
         }
     }
     var apiName: String {
@@ -230,6 +251,16 @@ enum Endpoint {
             return "알림 리스트 조회 API"
         case .deleteNoti:
             return "받은 알림 삭제 API"
+        case .report:
+            return "유저 신고 API"
+        case .blockUserList:
+            return "차단 유저 리스트 조회 API"
+        case .blockUser:
+            return "유저 차단 API"
+        case .unBlockUser:
+            return "유저 차단 해제 API"
+        case .inquiries:
+            return "고객센터 문의 API"
         }
     }
     
@@ -301,6 +332,18 @@ enum Endpoint {
             return .get
         case .deleteNoti:
             return .delete
+            
+        // MARK: - 차단 및 해제
+        case .report, .blockUser:
+            return .post
+        case .blockUserList:
+            return .get
+        case .unBlockUser:
+            return .delete
+            
+        // MARK: - 고객센터 관련
+        case .inquiries:
+            return .post
         }
     }
 }

@@ -125,7 +125,11 @@ class DIContainerService {
         let userPostListRepository = UserPostLoadRepositoryImpl(userPostDataSource: userPostListDS)
         let userPostListUsecase = UserPostLoadUseCaseImpl(userPostListRepository: userPostListRepository)
         
-        return OtherUserpageReactor(user: writer, userPostUsecase: userPostListUsecase)
+        let blockDS = BlockManageDataSourceImpl(tokenDataSource: tokenDS)
+        let blockRepo = BlockManageRepositoryImpl(blockManageDS: blockDS)
+        let blockUC = BlockUserUseCaseImpl(blockManageRepo: blockRepo)
+        
+        return OtherUserpageReactor(user: writer, userPostUsecase: userPostListUsecase, blockUsecase: blockUC)
     }
     
     func makeMypageReactor() -> MyPageReactor {
@@ -217,6 +221,34 @@ class DIContainerService {
         let exportUsecase = ExportChatUserUseCaseImpl(exportRepo: exportRepository)
         
         return ChatRoomReactor(chat: chat, loadInfoUS: loadChatInfoUS, updateImageUS: updateUsecase, exportUS: exportUsecase, exitUS: exitUsecase)
+    }
+    
+    func makeReportUserReactor(_ user: SimpleUser) -> ReportReactor {
+        let reportDS = ReportUserDataSourceImpl(tokenDataSource: tokenDS)
+        let reportRepo = ReportUserRepositoryImpl(reportUserDS: reportDS)
+        let reportUC = ReportUserUseCaseImpl(reportUserRepo: reportRepo)
+        
+        return ReportReactor(user: user, reportUseCase: reportUC)
+    }
+    
+    func makeBlockUserReactor() -> BlockUserReactor {
+        let loadUsersDS = LoadBlockUsersDataSourceImpl(tokenDataSource: tokenDS)
+        let loadUsersRepo = LoadBlockUsersRepositoryImpl(loadBlockUserDS: loadUsersDS)
+        let loadUsersUC = LoadBlockUsersUseCaseImpl(loadBlockUsersRepo: loadUsersRepo)
+        
+        let unblockDS = BlockManageDataSourceImpl(tokenDataSource: tokenDS)
+        let unblockRepo = BlockManageRepositoryImpl(blockManageDS: unblockDS)
+        let unblockUC = UnBlockUserUseCaseImpl(blockManageRepo: unblockRepo)
+        
+        return BlockUserReactor(loadBlockUserUseCase: loadUsersUC, unBlockUseCase: unblockUC)
+    }
+    
+    func makeCustomerServiceReactor(menu: CustomerServiceMenu) -> CustomerServiceReactor {
+        let inquiriesDS = InquiriesDataSourceImpl(tokenDataSource: tokenDS)
+        let inquiriesRepo = InquiriesRepositoryImpl(inquriesDS: inquiriesDS)
+        let inquiriesUC = InquiriesUseCaseImpl(inquriesRepo: inquiriesRepo)
+        
+        return CustomerServiceReactor(menu: menu, inquiriesUsecase: inquiriesUC)
     }
     
     // MARK: - 특정 Usecase만 필요할 때

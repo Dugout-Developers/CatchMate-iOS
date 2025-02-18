@@ -51,7 +51,7 @@ enum MypageMenu: String {
             guard let user = user else {
                 return Observable.error(PresentationError.showErrorPage)
             }
-            return Observable.just(OtherUserMyPageViewController(user: user, reactor: DIContainerService.shared.makeOtherUserPageReactor(user), reportReactor: ReportReactor()))
+            return Observable.just(OtherUserMyPageViewController(user: user, reactor: DIContainerService.shared.makeOtherUserPageReactor(user)))
         case .send:
             return Observable.just(SendMateListViewController(reactor: DIContainerService.shared.makeSendMateReactor()))
         case .receive:
@@ -68,7 +68,7 @@ enum MypageMenu: String {
         case .noti:
             return Observable.just(NotificationSettingViewController(reactor: DIContainerService.shared.makeNotifiacationSettingReactor()))
         case .block:
-            return Observable.just(BlockSettingViewController(reactor: BlockUserReactor()))
+            return Observable.just(BlockSettingViewController())
         }
     }
 }

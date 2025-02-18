@@ -21,8 +21,34 @@ enum ReportType: String, CaseIterable {
     case others = "기타"
     
     static let allType = ReportType.allCases
+    
+    var servserRequest: String {
+        switch self {
+        case .profanity:
+            return "PROFANITY"
+        case .defaming:
+            return "DEFAMATION"
+        case .privacyInvasion:
+            return "PRIVACY_INVASION"
+        case .bumpingPosts:
+            return "SPAM"
+        case .promotedPosts:
+            return "ADVERTISEMENT"
+        case .falsehoods:
+            return "FALSE_INFORMATION"
+        case .others:
+            return "OTHER"
+        }
+    }
 }
 final class UserReportViewController: BaseViewController, View {
+    override var useSnapKit: Bool {
+        return false
+    }
+    override var buttonContainerExists: Bool {
+        return true
+    }
+    var toastSubject: PublishSubject<Void>?
     private let reactor: ReportReactor
     private let reportType = BehaviorSubject<[ReportType]>(value: ReportType.allType)
     private var selectedReportType: ReportType?
@@ -52,9 +78,9 @@ final class UserReportViewController: BaseViewController, View {
     }()
     private let reportButton = CMDefaultFilledButton(title: "신고")
     private let reportUser: SimpleUser
-    init(reportUser: SimpleUser, reactor: ReportReactor) {
+    init(reportUser: SimpleUser) {
         self.reportUser = reportUser
-        self.reactor = reactor
+        self.reactor = DIContainerService.shared.makeReportUserReactor(reportUser)
         super.init(nibName: nil, bundle: nil)
         titleNameLabel.text = "\(reportUser.nickName)님의"
         titleNameLabel.applyStyle(textStyle: FontSystem.highlight)
@@ -113,14 +139,38 @@ extension UserReportViewController{
             .withUnretained(self)
             .subscribe(onNext: { vc, selectedReportType in
                 vc.updateSelectedType(selectedReportType)
+                reactor.action.onNext(.selectReportType(selectedReportType))
             })
             .disposed(by: disposeBag)
-        
+        textView.rx.text
+            .distinctUntilChanged()
+            .subscribe { text in
+                reactor.action.onNext(.changeContent(text ?? ""))
+            }
+            .disposed(by: disposeBag)
         reportButton.rx.tap
             .withUnretained(self)
             .subscribe { vc, _ in
-                reactor.action.onNext(.reportUser(vc.reportUser.userId))
-                vc.navigationController?.popViewController(animated: true)
+                vc.showCMAlert(titleText: "\(vc.reportUser.nickName)님을 신고하시겠습니까?", importantButtonText: "신고하기", commonButtonText: "취소", importantAction:  {
+                    reactor.action.onNext(.reportUser)
+                })
+            }
+            .disposed(by: disposeBag)
+        reactor.state.map{$0.reportButtonEnable}
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .subscribe { vc, state in
+                vc.reportButton.isEnabled = state
+            }
+            .disposed(by: disposeBag)
+        reactor.state.map{$0.finishedReport}
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .subscribe { vc, state in
+                if state {
+                    vc.toastSubject?.onNext(())
+                    vc.navigationController?.popViewController(animated: true)
+                }
             }
             .disposed(by: disposeBag)
     }

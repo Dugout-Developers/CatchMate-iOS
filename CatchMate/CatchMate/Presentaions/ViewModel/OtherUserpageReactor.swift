@@ -12,6 +12,7 @@ final class OtherUserpageReactor: Reactor {
     enum Action {
         case loadPost
         case loadNextPage
+        case blockUser
     }
     enum Mutation {
         case setPost(list: [SimplePost], isAppend: Bool)
@@ -19,6 +20,7 @@ final class OtherUserpageReactor: Reactor {
         case resetPage
         case setIsLast(Bool)
         case setLoading(Bool)
+        case setIsBlock(Bool)
         case setError(PresentationError?)
     }
     struct State {
@@ -26,21 +28,27 @@ final class OtherUserpageReactor: Reactor {
         var currentPage: Int = 0
         var isLast: Bool = false
         var isLoading: Bool = false
+        var isBlock: Bool = false
         var error: PresentationError?
     }
     
     var initialState: State
     private let user: SimpleUser
     private let userPostUsecase: UserPostLoadUseCase
-    init(user: SimpleUser, userPostUsecase: UserPostLoadUseCase) {
+    private let blockUsecase: BlockUserUseCase
+    init(user: SimpleUser, userPostUsecase: UserPostLoadUseCase, blockUsecase: BlockUserUseCase) {
         self.user = user
         self.userPostUsecase = userPostUsecase
+        self.blockUsecase = blockUsecase
         self.initialState = State()
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadPost:
+            if currentState.isBlock {
+                return Observable.empty()
+            }
             return userPostUsecase.loadPostList(userId: user.userId, page: 0)
                 .flatMap { data -> Observable<Mutation> in
                     return Observable.concat([
@@ -55,8 +63,10 @@ final class OtherUserpageReactor: Reactor {
                     return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
         case .loadNextPage:
-            print("loadNextPage")
             let nextPage = currentState.currentPage + 1
+            if currentState.isBlock {
+                return Observable.empty()
+            }
             if !currentState.isLoading, currentState.isLast {
                 return Observable.empty()
             }
@@ -68,6 +78,17 @@ final class OtherUserpageReactor: Reactor {
                         Observable.just(.incrementPage),
                         Observable.just(.setIsLast(data.isLast)),
                         Observable.just(Mutation.setLoading(false))
+                    ])
+                }
+                .catch { error in
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                }
+        case .blockUser:
+            return blockUsecase.blockUser(user.userId)
+                .flatMap { _ in
+                    return Observable.concat([
+                        Observable.just(Mutation.setIsBlock(true)),
+                        Observable.just(Mutation.setPost(list: [], isAppend: false))
                     ])
                 }
                 .catch { error in
@@ -95,6 +116,8 @@ final class OtherUserpageReactor: Reactor {
             newState.isLoading = isLoading
         case .setError(let error):
             newState.error = error
+        case .setIsBlock(let state):
+            newState.isBlock = state
         }
         return newState
     }

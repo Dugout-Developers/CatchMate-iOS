@@ -14,6 +14,21 @@ enum CustomerServiceMenu: String, CaseIterable {
     case chat = "채팅 관련"
     case user = "유저 관련"
     case etc = "기타"
+    
+    var serverRequest: String {
+        switch self {
+        case .account:
+            return "ACCOUNT"
+        case .post:
+            return "POST"
+        case .chat:
+            return "CHAT"
+        case .user:
+            return "USER"
+        case .etc:
+            return "OTHER"
+        }
+    }
 }
 final class CustomerServiceViewController: BaseViewController {
     private let menus = CustomerServiceMenu.allCases

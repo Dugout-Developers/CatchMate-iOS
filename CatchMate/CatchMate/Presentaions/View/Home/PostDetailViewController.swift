@@ -161,6 +161,7 @@ final class PostDetailViewController: BaseViewController, View {
     }()
     private let applyButton = ApplyButton()
     
+    private let toastSubject = PublishSubject<Void>()
     var reactor: PostReactor
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -243,8 +244,14 @@ final class PostDetailViewController: BaseViewController, View {
                 MenuItem(title: "공유하기", action: {
                     print("공유하기 선택됨")
                 }),
-                MenuItem(title: "신고하기", textColor: UIColor.cmSystemRed, action: {
-                    print("신고하기 선택됨")
+                MenuItem(title: "신고하기", textColor: UIColor.cmSystemRed, action: { [weak self] in
+                    if let user = self?.reactor.currentState.post?.writer {
+                        let reportVC = UserReportViewController(reportUser: user)
+                        reportVC.toastSubject = self?.toastSubject
+                        self?.navigationController?.pushViewController(reportVC, animated: true)
+                    } else {
+                        self?.showToast(message: "다시 시도해주세요", buttonContainerExists: true)
+                    }
                 })
             ]
         }
@@ -326,7 +333,7 @@ final class PostDetailViewController: BaseViewController, View {
     
     @objc private func pushUserPage(_ sender: UITapGestureRecognizer) {
         if let user = reactor.currentState.post?.writer {
-            let userPageVC = OtherUserMyPageViewController(user: user, reactor: DIContainerService.shared.makeOtherUserPageReactor(user), reportReactor: ReportReactor())
+            let userPageVC = OtherUserMyPageViewController(user: user, reactor: DIContainerService.shared.makeOtherUserPageReactor(user))
             navigationController?.pushViewController(userPageVC, animated: true)
         } else {
             showToast(message: "해당 사용자 정보에 접근할 수 없습니다. 다시 시도해주세요.", buttonContainerExists: true)
@@ -365,6 +372,13 @@ final class PostDetailViewController: BaseViewController, View {
 // MARK: - bind
 extension PostDetailViewController {
     func bind(reactor: PostReactor) {
+        // 신고 토스트 메시지
+        toastSubject
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                vc.showToast(message: "신고 완료되었어요")
+            }
+            .disposed(by: disposeBag)
         reactor.state.map{ $0.post }
             .compactMap{$0}
             .distinctUntilChanged()

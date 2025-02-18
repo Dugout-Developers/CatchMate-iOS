@@ -34,7 +34,19 @@ final class ApplicationInfoViewController: BaseViewController {
         label.applyStyle(textStyle: FontSystem.body02_medium)
         return label
     }()
-    private let tableView = UITableView()
+    
+    private let openSourceLibraryButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Open Source Library", for: .normal)
+        button.setTitleColor(.grayScale400, for: .normal)
+        let underlineAttribute: [NSAttributedString.Key: Any] = [
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+        ]
+        button.applyStyle(textStyle: FontSystem.body02_medium, anyAttr: underlineAttribute)
+        button.backgroundColor = .clear
+        return button
+    }()
+
     
     override var useSnapKit: Bool {
         return true
@@ -46,23 +58,16 @@ final class ApplicationInfoViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLeftTitle("정보")
-        setupTableView()
         setupUI()
         bind()
-        view.backgroundColor = .grayScale50
-        appVersionView.backgroundColor = .clear
     }
     
-    private func setupTableView() {
-        tableView.register(DefualtTabelViewCell.self, forCellReuseIdentifier: "DefualtTabelViewCell")
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.backgroundColor = .white
-        tableView.separatorStyle = .none
-    }
+
     private func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .cmGrayBackgroundColor
+        appVersionView.backgroundColor = .cmBackgroundColor
         view.addSubview(appVersionView)
-        view.addSubview(tableView)
+        view.addSubview(openSourceLibraryButton)
         appVersionView.addSubviews(views: [logoImageView, appNameLabel, versionLabel])
         
         appVersionView.snp.makeConstraints { make in
@@ -83,24 +88,17 @@ final class ApplicationInfoViewController: BaseViewController {
             make.bottom.equalToSuperview().inset(20)
         }
         
-        tableView.snp.makeConstraints { make in
-            make.top.equalTo(appVersionView.snp.bottom).offset(20)
-            make.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+        openSourceLibraryButton.snp.makeConstraints { make in
+            make.top.equalTo(appVersionView.snp.bottom).offset(40)
+            make.centerX.equalToSuperview()
         }
     }
     private func bind() {
-        Observable.just(applicationInfos)
-            .bind(to: tableView.rx.items(cellIdentifier: "DefualtTabelViewCell", cellType: DefualtTabelViewCell.self)) {  (row, item, cell) in
-                cell.backgroundColor = .clear
-                cell.selectionStyle = .none
-                cell.configData(item.rawValue)
-            }
-            .disposed(by: disposeBag)
-        
-        tableView.rx.itemSelected
+        openSourceLibraryButton.rx.tap
             .withUnretained(self)
-            .subscribe { vc, indexPath in
-                print("오픈소스라이브러리")
+            .subscribe { vc, _ in
+                let openSourceListVC = OpenSourceListViewController()
+                vc.navigationController?.pushViewController(openSourceListVC, animated: true)
             }
             .disposed(by: disposeBag)
     }

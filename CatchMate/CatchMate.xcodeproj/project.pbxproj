@@ -20,6 +20,32 @@
 		530149EF2D5ED6D1004C2EE0 /* ExitChatRoomRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530149EE2D5ED6C6004C2EE0 /* ExitChatRoomRepositoryImpl.swift */; };
 		530149F12D5ED771004C2EE0 /* ExitChatRoomUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530149F02D5ED768004C2EE0 /* ExitChatRoomUseCase.swift */; };
 		530149F32D5ED7E9004C2EE0 /* ExportChatUserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530149F22D5ED7E2004C2EE0 /* ExportChatUserUseCase.swift */; };
+		530149F52D630577004C2EE0 /* ReportUserDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530149F42D63056F004C2EE0 /* ReportUserDataSource.swift */; };
+		530149F72D63059A004C2EE0 /* ReportUserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530149F62D630596004C2EE0 /* ReportUserDTO.swift */; };
+		530149F82D63059A004C2EE0 /* ReportUserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530149F62D630596004C2EE0 /* ReportUserDTO.swift */; };
+		530149FA2D630723004C2EE0 /* ReportUserRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530149F92D63071D004C2EE0 /* ReportUserRepositoryImpl.swift */; };
+		530149FC2D630732004C2EE0 /* ReportUserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530149FB2D630731004C2EE0 /* ReportUserRepository.swift */; };
+		530149FE2D6307C2004C2EE0 /* ReportUserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530149FD2D6307BC004C2EE0 /* ReportUserUseCase.swift */; };
+		53014A002D6314E1004C2EE0 /* LoadBlockUsersDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530149FF2D6314D6004C2EE0 /* LoadBlockUsersDataSource.swift */; };
+		53014A022D631703004C2EE0 /* BlockUserInfoDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A012D6316FD004C2EE0 /* BlockUserInfoDTO.swift */; };
+		53014A032D631703004C2EE0 /* BlockUserInfoDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A012D6316FD004C2EE0 /* BlockUserInfoDTO.swift */; };
+		53014A052D6318AE004C2EE0 /* LoadBlockUsersRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A042D6318A4004C2EE0 /* LoadBlockUsersRepositoryImpl.swift */; };
+		53014A072D6318C5004C2EE0 /* LoadBlockUsersRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A062D6318C4004C2EE0 /* LoadBlockUsersRepository.swift */; };
+		53014A092D631A93004C2EE0 /* LoadBlockUsersUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A082D631A8B004C2EE0 /* LoadBlockUsersUseCase.swift */; };
+		53014A0B2D633B2B004C2EE0 /* BlockManageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A0A2D633B12004C2EE0 /* BlockManageDataSource.swift */; };
+		53014A0D2D63746D004C2EE0 /* BlockManageRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A0C2D637461004C2EE0 /* BlockManageRepositoryImpl.swift */; };
+		53014A0F2D637478004C2EE0 /* BlockManageRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A0E2D637477004C2EE0 /* BlockManageRepository.swift */; };
+		53014A112D6374C9004C2EE0 /* BlockUserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A102D6374C4004C2EE0 /* BlockUserUseCase.swift */; };
+		53014A132D6374D3004C2EE0 /* UnBlockUserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A122D6374CC004C2EE0 /* UnBlockUserUseCase.swift */; };
+		53014A2F2D643B14004C2EE0 /* open_source_licenses.json in Resources */ = {isa = PBXBuildFile; fileRef = 53014A2E2D643AFD004C2EE0 /* open_source_licenses.json */; };
+		53014A312D6441DC004C2EE0 /* OpenSourceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A302D6441CD004C2EE0 /* OpenSourceListViewController.swift */; };
+		53014A332D64424B004C2EE0 /* OpenSourceLibraryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A322D644242004C2EE0 /* OpenSourceLibraryService.swift */; };
+		53014A352D6442F8004C2EE0 /* OpenSourceLibraryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A342D6442F6004C2EE0 /* OpenSourceLibraryDetailViewController.swift */; };
+		53014A372D644A8B004C2EE0 /* InquiriesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A362D644A7D004C2EE0 /* InquiriesDataSource.swift */; };
+		53014A382D644A8B004C2EE0 /* InquiriesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A362D644A7D004C2EE0 /* InquiriesDataSource.swift */; };
+		53014A3D2D644BBC004C2EE0 /* InquiriesRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A3C2D644BB6004C2EE0 /* InquiriesRepositoryImpl.swift */; };
+		53014A3F2D644BC9004C2EE0 /* InquiriesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A3E2D644BC5004C2EE0 /* InquiriesRepository.swift */; };
+		53014A412D644BCF004C2EE0 /* InquiriesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A402D644BCC004C2EE0 /* InquiriesUseCase.swift */; };
 		5301E2962C5B2BAE0078E910 /* LoggerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2952C5B2BAE0078E910 /* LoggerService.swift */; };
 		5301E29D2C5B38B10078E910 /* Error+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E29C2C5B38B10078E910 /* Error+Extension.swift */; };
 		5301E2A12C5B5C280078E910 /* MyPageProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2A02C5B5C280078E910 /* MyPageProfileCell.swift */; };
@@ -472,6 +498,29 @@
 		530149EE2D5ED6C6004C2EE0 /* ExitChatRoomRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExitChatRoomRepositoryImpl.swift; sourceTree = "<group>"; };
 		530149F02D5ED768004C2EE0 /* ExitChatRoomUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExitChatRoomUseCase.swift; sourceTree = "<group>"; };
 		530149F22D5ED7E2004C2EE0 /* ExportChatUserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportChatUserUseCase.swift; sourceTree = "<group>"; };
+		530149F42D63056F004C2EE0 /* ReportUserDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportUserDataSource.swift; sourceTree = "<group>"; };
+		530149F62D630596004C2EE0 /* ReportUserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportUserDTO.swift; sourceTree = "<group>"; };
+		530149F92D63071D004C2EE0 /* ReportUserRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportUserRepositoryImpl.swift; sourceTree = "<group>"; };
+		530149FB2D630731004C2EE0 /* ReportUserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportUserRepository.swift; sourceTree = "<group>"; };
+		530149FD2D6307BC004C2EE0 /* ReportUserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportUserUseCase.swift; sourceTree = "<group>"; };
+		530149FF2D6314D6004C2EE0 /* LoadBlockUsersDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadBlockUsersDataSource.swift; sourceTree = "<group>"; };
+		53014A012D6316FD004C2EE0 /* BlockUserInfoDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserInfoDTO.swift; sourceTree = "<group>"; };
+		53014A042D6318A4004C2EE0 /* LoadBlockUsersRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadBlockUsersRepositoryImpl.swift; sourceTree = "<group>"; };
+		53014A062D6318C4004C2EE0 /* LoadBlockUsersRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadBlockUsersRepository.swift; sourceTree = "<group>"; };
+		53014A082D631A8B004C2EE0 /* LoadBlockUsersUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadBlockUsersUseCase.swift; sourceTree = "<group>"; };
+		53014A0A2D633B12004C2EE0 /* BlockManageDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockManageDataSource.swift; sourceTree = "<group>"; };
+		53014A0C2D637461004C2EE0 /* BlockManageRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockManageRepositoryImpl.swift; sourceTree = "<group>"; };
+		53014A0E2D637477004C2EE0 /* BlockManageRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockManageRepository.swift; sourceTree = "<group>"; };
+		53014A102D6374C4004C2EE0 /* BlockUserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserUseCase.swift; sourceTree = "<group>"; };
+		53014A122D6374CC004C2EE0 /* UnBlockUserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnBlockUserUseCase.swift; sourceTree = "<group>"; };
+		53014A2E2D643AFD004C2EE0 /* open_source_licenses.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = open_source_licenses.json; sourceTree = "<group>"; };
+		53014A302D6441CD004C2EE0 /* OpenSourceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSourceListViewController.swift; sourceTree = "<group>"; };
+		53014A322D644242004C2EE0 /* OpenSourceLibraryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSourceLibraryService.swift; sourceTree = "<group>"; };
+		53014A342D6442F6004C2EE0 /* OpenSourceLibraryDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSourceLibraryDetailViewController.swift; sourceTree = "<group>"; };
+		53014A362D644A7D004C2EE0 /* InquiriesDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InquiriesDataSource.swift; sourceTree = "<group>"; };
+		53014A3C2D644BB6004C2EE0 /* InquiriesRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InquiriesRepositoryImpl.swift; sourceTree = "<group>"; };
+		53014A3E2D644BC5004C2EE0 /* InquiriesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InquiriesRepository.swift; sourceTree = "<group>"; };
+		53014A402D644BCC004C2EE0 /* InquiriesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InquiriesUseCase.swift; sourceTree = "<group>"; };
 		5301E2952C5B2BAE0078E910 /* LoggerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerService.swift; sourceTree = "<group>"; };
 		5301E29C2C5B38B10078E910 /* Error+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extension.swift"; sourceTree = "<group>"; };
 		5301E2A02C5B5C280078E910 /* MyPageProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageProfileCell.swift; sourceTree = "<group>"; };
@@ -849,6 +898,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		53014A392D644A90004C2EE0 /* CustomerService */ = {
+			isa = PBXGroup;
+			children = (
+				53014A362D644A7D004C2EE0 /* InquiriesDataSource.swift */,
+			);
+			path = CustomerService;
+			sourceTree = "<group>";
+		};
+		53014A422D644BD5004C2EE0 /* CustomerService */ = {
+			isa = PBXGroup;
+			children = (
+				53014A402D644BCC004C2EE0 /* InquiriesUseCase.swift */,
+			);
+			path = CustomerService;
+			sourceTree = "<group>";
+		};
+		53014A432D644BE2004C2EE0 /* CustomerService */ = {
+			isa = PBXGroup;
+			children = (
+				53014A3E2D644BC5004C2EE0 /* InquiriesRepository.swift */,
+			);
+			path = CustomerService;
+			sourceTree = "<group>";
+		};
+		53014A442D644BE7004C2EE0 /* CustomerService */ = {
+			isa = PBXGroup;
+			children = (
+				53014A3C2D644BB6004C2EE0 /* InquiriesRepositoryImpl.swift */,
+			);
+			path = CustomerService;
+			sourceTree = "<group>";
+		};
 		530994572C4F6F8C00ABE103 /* SNSLoginUseCase */ = {
 			isa = PBXGroup;
 			children = (
@@ -868,7 +949,6 @@
 				534E39D42C6352DC006D180E /* Setting */,
 				534E39DD2C63CF45006D180E /* Supports */,
 				534E39EA2C63E50E006D180E /* MyMenus */,
-				53E7DBBE2CAC68FE00DC058D /* UserReportViewController.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -935,6 +1015,7 @@
 		531786722C202F0300ACEF6A /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				53014A322D644242004C2EE0 /* OpenSourceLibraryService.swift */,
 				5382490F2C3139C80074B583 /* AppleLoginUserDefaultsService.swift */,
 				5301E2952C5B2BAE0078E910 /* LoggerService.swift */,
 				534E39D22C634E26006D180E /* LoginUserDefaultsService.swift */,
@@ -1081,6 +1162,7 @@
 				534E39D52C6352EE006D180E /* AuthInfoSettingViewController.swift */,
 				534E39D72C637FD3006D180E /* NotificationSettingViewController.swift */,
 				53E7DBC42CAFD2F600DC058D /* BlockSettingViewController.swift */,
+				53E7DBBE2CAC68FE00DC058D /* UserReportViewController.swift */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -1096,6 +1178,8 @@
 				534E39E62C63E021006D180E /* CustomerServiceViewController.swift */,
 				5320B0502D5B147200897EB7 /* CustomerServiceAddViewController.swift */,
 				5320B04A2D5A4B4500897EB7 /* ApplicationInfoViewController.swift */,
+				53014A302D6441CD004C2EE0 /* OpenSourceListViewController.swift */,
+				53014A342D6442F6004C2EE0 /* OpenSourceLibraryDetailViewController.swift */,
 			);
 			path = Supports;
 			sourceTree = "<group>";
@@ -1345,6 +1429,7 @@
 		536BDDDE2C196BEB0043B1DA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				53014A2E2D643AFD004C2EE0 /* open_source_licenses.json */,
 				536BDDB62C189B240043B1DA /* Assets.xcassets */,
 				53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */,
 				536BDDB82C189B240043B1DA /* LaunchScreen.storyboard */,
@@ -1471,6 +1556,7 @@
 				535AA0362D460484007C7690 /* Chat */,
 				535AA0222D45FAF5007C7690 /* Notification */,
 				535AA0212D45FAED007C7690 /* Alarm */,
+				53014A422D644BD5004C2EE0 /* CustomerService */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -1485,6 +1571,7 @@
 				535AA0332D460333007C7690 /* Chat */,
 				53EECB152D14F10A00775FD6 /* Alarm */,
 				5375B1AC2D2CD67E000581B3 /* Notification */,
+				53014A432D644BE2004C2EE0 /* CustomerService */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -1503,6 +1590,8 @@
 		536BDDF72C1972780043B1DA /* DTO */ = {
 			isa = PBXGroup;
 			children = (
+				53014A012D6316FD004C2EE0 /* BlockUserInfoDTO.swift */,
+				530149F62D630596004C2EE0 /* ReportUserDTO.swift */,
 				5320B0472D5A39AA00897EB7 /* SendApplyDetailDTO.swift */,
 				5320B0422D58E62900897EB7 /* ReceivedAppliesDTO.swift */,
 				535AA05A2D51B817007C7690 /* ChatMessageDTO.swift */,
@@ -1551,6 +1640,7 @@
 				535AA02E2D4602F4007C7690 /* Chat */,
 				5375B1A72D2CD59A000581B3 /* Alarm */,
 				535AA0202D45FACB007C7690 /* Notification */,
+				53014A442D644BE7004C2EE0 /* CustomerService */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -1568,6 +1658,7 @@
 				535AA01E2D45FA7F007C7690 /* Chat */,
 				535AA01F2D45FA98007C7690 /* Notification */,
 				53E7DBCC2CB5641800DC058D /* Alarm */,
+				53014A392D644A90004C2EE0 /* CustomerService */,
 			);
 			path = DataSources;
 			sourceTree = "<group>";
@@ -1740,6 +1831,9 @@
 		53B8E2362C5C7530001D0ADF /* User */ = {
 			isa = PBXGroup;
 			children = (
+				53014A0A2D633B12004C2EE0 /* BlockManageDataSource.swift */,
+				530149FF2D6314D6004C2EE0 /* LoadBlockUsersDataSource.swift */,
+				530149F42D63056F004C2EE0 /* ReportUserDataSource.swift */,
 				53EECAF62D0BD30500775FD6 /* ProfileEditDataSource.swift */,
 				53C6D9FF2CE39DCD00918718 /* ReceivedCountDataSource.swift */,
 				53FC69DE2C58E00A00B97AEA /* UserDataSource.swift */,
@@ -1751,6 +1845,9 @@
 		53B8E2392C5C7BB8001D0ADF /* User */ = {
 			isa = PBXGroup;
 			children = (
+				53014A0C2D637461004C2EE0 /* BlockManageRepositoryImpl.swift */,
+				53014A042D6318A4004C2EE0 /* LoadBlockUsersRepositoryImpl.swift */,
+				530149F92D63071D004C2EE0 /* ReportUserRepositoryImpl.swift */,
 				53EECAF22D0BD17100775FD6 /* ProfileEditRepositoryImpl.swift */,
 				53C6DA012CE3A90200918718 /* ReceivedCountRepositoryImpl.swift */,
 				5301E2B12C5BE6350078E910 /* LogoutRepositoryImpl.swift */,
@@ -1762,6 +1859,9 @@
 		53B8E23C2C5C7BD3001D0ADF /* User */ = {
 			isa = PBXGroup;
 			children = (
+				53014A0E2D637477004C2EE0 /* BlockManageRepository.swift */,
+				53014A062D6318C4004C2EE0 /* LoadBlockUsersRepository.swift */,
+				530149FB2D630731004C2EE0 /* ReportUserRepository.swift */,
 				53EECAEA2D0B2FFC00775FD6 /* ProfileEditRepository.swift */,
 				53C6DA032CE3A93900918718 /* ReceivedCountRepository.swift */,
 				5301E2B32C5BE6570078E910 /* LogoutRepository.swift */,
@@ -1773,6 +1873,10 @@
 		53B8E23F2C5C7BF3001D0ADF /* User */ = {
 			isa = PBXGroup;
 			children = (
+				53014A122D6374CC004C2EE0 /* UnBlockUserUseCase.swift */,
+				53014A102D6374C4004C2EE0 /* BlockUserUseCase.swift */,
+				53014A082D631A8B004C2EE0 /* LoadBlockUsersUseCase.swift */,
+				530149FD2D6307BC004C2EE0 /* ReportUserUseCase.swift */,
 				53EECB082D13E4A400775FD6 /* LoadAlarmInfoUseCase.swift */,
 				53EECAE52D0B2E7C00775FD6 /* ProfileEditUseCase.swift */,
 				5301E2B52C5BE6AF0078E910 /* LogoutUseCase.swift */,
@@ -1994,6 +2098,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53014A2F2D643B14004C2EE0 /* open_source_licenses.json in Resources */,
 				53241F3E2C3C589100F468E1 /* DesignAssets.xcassets in Resources */,
 				5383BE902C34ECD1008940F1 /* PretendardVariable.ttf in Resources */,
 				533183CA2C50DE8D0097F3F1 /* GoogleService-Info.plist in Resources */,
@@ -2060,6 +2165,7 @@
 				53577B492D55AEAA00769533 /* ChatSystemCell.swift in Sources */,
 				534E39EC2C63E771006D180E /* SendMateListCell.swift in Sources */,
 				535AA0382D4612D6007C7690 /* EmptyView.swift in Sources */,
+				53014A112D6374C9004C2EE0 /* BlockUserUseCase.swift in Sources */,
 				533A2B362C2BEA3900A59340 /* InputCheerStyleViewController.swift in Sources */,
 				537598062C46C0B0003BD8AE /* ApplyPopupViewController.swift in Sources */,
 				53FC69E52C58F98100B97AEA /* NicknameCheckRepositoryImpl.swift in Sources */,
@@ -2069,6 +2175,7 @@
 				535B3A902D32AC03003FBBBF /* PostList.swift in Sources */,
 				53368CB12D30FA4600D129EE /* SideSheetPresentationController.swift in Sources */,
 				53B8E2632C612341001D0ADF /* PostMapper.swift in Sources */,
+				530149FE2D6307C2004C2EE0 /* ReportUserUseCase.swift in Sources */,
 				53E4A9C02C5009EB00D21B49 /* SignUpRepository.swift in Sources */,
 				53E4A9C62C500E9B00D21B49 /* SignUpMapper.swift in Sources */,
 				53716BD82C4564700044AD2A /* DefaultsPaddingLabel.swift in Sources */,
@@ -2081,6 +2188,7 @@
 				534E39E52C63D5AE006D180E /* AnnouncementDetailViewController.swift in Sources */,
 				535AA0662D51BC81007C7690 /* LoadChatMessageRepository.swift in Sources */,
 				531786782C20498800ACEF6A /* Post.swift in Sources */,
+				53014A0B2D633B2B004C2EE0 /* BlockManageDataSource.swift in Sources */,
 				5320B04D2D5A4BB500897EB7 /* TermViewController.swift in Sources */,
 				534E39E92C63E509006D180E /* SendMateListViewController.swift in Sources */,
 				533A2B2C2C29485E00A59340 /* SignUpViewController.swift in Sources */,
@@ -2097,10 +2205,12 @@
 				53C4FEB42C8AA68A00337431 /* BottomMargin.swift in Sources */,
 				5301E2B62C5BE6AF0078E910 /* LogoutUseCase.swift in Sources */,
 				537598082C46C3D2003BD8AE /* DefaultsTextView.swift in Sources */,
+				530149F82D63059A004C2EE0 /* ReportUserDTO.swift in Sources */,
 				533A2B462C2C638100A59340 /* KakaoLoginUseCase.swift in Sources */,
 				531E4C282C6B55510052E754 /* PostListDTO.swift in Sources */,
 				534E39D32C634E26006D180E /* LoginUserDefaultsService.swift in Sources */,
 				53B8E2422C5D0A2D001D0ADF /* ProfileEditViewController.swift in Sources */,
+				53014A352D6442F8004C2EE0 /* OpenSourceLibraryDetailViewController.swift in Sources */,
 				535AA0352D460480007C7690 /* LoadChatListUseCase.swift in Sources */,
 				53E4A9BC2C4FFB8400D21B49 /* SignUp.swift in Sources */,
 				5301E2A72C5B7F740078E910 /* MypageListCell.swift in Sources */,
@@ -2162,8 +2272,10 @@
 				53E592572C6D05690042E1D7 /* SimpleUser.swift in Sources */,
 				5375980C2C46DC45003BD8AE /* ChatRoomViewController.swift in Sources */,
 				53B8E2672C612B25001D0ADF /* AddPostDataSource.swift in Sources */,
+				53014A412D644BCF004C2EE0 /* InquiriesUseCase.swift in Sources */,
 				53FC69E12C58F65B00B97AEA /* NicknameCheckDataSource.swift in Sources */,
 				531288C92C540751000C2FB1 /* FCMRepositoryImpl.swift in Sources */,
+				53014A052D6318AE004C2EE0 /* LoadBlockUsersRepositoryImpl.swift in Sources */,
 				534E39D82C637FD3006D180E /* NotificationSettingViewController.swift in Sources */,
 				5375B1DB2D2E1977000581B3 /* DeleteNotificationRepository.swift in Sources */,
 				533A2B322C2BE7E600A59340 /* CheerStyles.swift in Sources */,
@@ -2174,6 +2286,7 @@
 				53FC69FC2C5A2DD700B97AEA /* SignUpReactor.swift in Sources */,
 				531288D12C540ADF000C2FB1 /* ServerLoginRepository.swift in Sources */,
 				53E7DBC72CB503DB00DC058D /* BlockUserReactor.swift in Sources */,
+				530149F52D630577004C2EE0 /* ReportUserDataSource.swift in Sources */,
 				53E7DBC92CB5357900DC058D /* NotificationListResponse.swift in Sources */,
 				5337AB232C897847003A39AE /* ApplyUseCase.swift in Sources */,
 				531786572C1C8F1900ACEF6A /* UIView+Extension.swift in Sources */,
@@ -2207,6 +2320,7 @@
 				5378EA9B2C6487A600A2422C /* ReceiveMateListCell.swift in Sources */,
 				536BDE272C1B53150043B1DA /* UIColor+Extension.swift in Sources */,
 				533B291F2C77079100BFE9F6 /* LoadFavoriteListDataSource.swift in Sources */,
+				53014A332D64424B004C2EE0 /* OpenSourceLibraryService.swift in Sources */,
 				531E4C232C6A75320052E754 /* ChatSideSheetViewController.swift in Sources */,
 				53B8E2612C61229A001D0ADF /* AddPostRepositoryImpl.swift in Sources */,
 				536BDE382C1C07990043B1DA /* PaddingLabel.swift in Sources */,
@@ -2222,8 +2336,10 @@
 				533A2B232C27FF6A00A59340 /* CMTextView.swift in Sources */,
 				53368C902D301DDD00D129EE /* TempPostRepository.swift in Sources */,
 				53EECB0C2D13E4CF00775FD6 /* AlarmInfo.swift in Sources */,
+				53014A0D2D63746D004C2EE0 /* BlockManageRepositoryImpl.swift in Sources */,
 				53C6DA0B2CE7233100918718 /* CheerStylePickerViewController.swift in Sources */,
 				535AA0272D45FBC4007C7690 /* ChatListDTO.swift in Sources */,
+				53014A372D644A8B004C2EE0 /* InquiriesDataSource.swift in Sources */,
 				536BDE2B2C1B54C80043B1DA /* ChatListViewController.swift in Sources */,
 				53716BD22C45567C0044AD2A /* PostDetailViewController.swift in Sources */,
 				533183D52C5150B60097F3F1 /* OtherMessageTableViewCell.swift in Sources */,
@@ -2232,6 +2348,7 @@
 				533A2B302C2AC5C400A59340 /* InputFavoriteTeamViewContoller.swift in Sources */,
 				530149E52D5ED255004C2EE0 /* ExitChatRoomDataSource.swift in Sources */,
 				5320B04B2D5A4B5900897EB7 /* ApplicationInfoViewController.swift in Sources */,
+				53014A3D2D644BBC004C2EE0 /* InquiriesRepositoryImpl.swift in Sources */,
 				533183DD2C51F5370097F3F1 /* ChatingInputField.swift in Sources */,
 				53E5925E2C6D0A550042E1D7 /* LoadPostDataSource.swift in Sources */,
 				533B291D2C7648DC00BFE9F6 /* CMSwitch.swift in Sources */,
@@ -2249,6 +2366,7 @@
 				53ACBA542C85AF07004FAF00 /* ApplyDataSource.swift in Sources */,
 				534E39E12C63D10B006D180E /* AnnouncementsListCell.swift in Sources */,
 				533183D72C515C480097F3F1 /* TeamImageView.swift in Sources */,
+				53014A3F2D644BC9004C2EE0 /* InquiriesRepository.swift in Sources */,
 				530149F32D5ED7E9004C2EE0 /* ExportChatUserUseCase.swift in Sources */,
 				53E7DBA62CA5E3A700DC058D /* DeletePostRepository.swift in Sources */,
 				533B87352C86DF2A0058B94B /* ApplyListResponse.swift in Sources */,
@@ -2256,6 +2374,7 @@
 				5383BE8D2C34D595008940F1 /* FontUtility.swift in Sources */,
 				531288D52C554163000C2FB1 /* ChatListReactor.swift in Sources */,
 				531786712C202EF500ACEF6A /* DIContainerService.swift in Sources */,
+				530149FC2D630732004C2EE0 /* ReportUserRepository.swift in Sources */,
 				531288C12C53FE2D000C2FB1 /* NaverLoginDataSource.swift in Sources */,
 				535AA0542D51A603007C7690 /* LoadChatUsersRepository.swift in Sources */,
 				53368C8A2D2FF81F00D129EE /* TempPostRepositoryImpl.swift in Sources */,
@@ -2266,7 +2385,9 @@
 				53F1E8C62C47A46400A962F3 /* Apply.swift in Sources */,
 				5301E2A32C5B6B8B0078E910 /* AuthManager.swift in Sources */,
 				535AA00E2D368097007C7690 /* SetAlarmnUseCase.swift in Sources */,
+				53014A0F2D637478004C2EE0 /* BlockManageRepository.swift in Sources */,
 				533A2B3F2C2C5DBC00A59340 /* SNSLoginResponse.swift in Sources */,
+				53014A132D6374D3004C2EE0 /* UnBlockUserUseCase.swift in Sources */,
 				533A2B252C280E0500A59340 /* CMDefaultFilledButton.swift in Sources */,
 				53B3CE4B2C88B52200116BF7 /* SendAppiesRepository.swift in Sources */,
 				53E592602C6D0A870042E1D7 /* LoadPostRepositoryImpl.swift in Sources */,
@@ -2287,6 +2408,7 @@
 				53368C942D30216200D129EE /* TempPostUseCase.swift in Sources */,
 				53B8E2382C5C7BAA001D0ADF /* UserRepositoryImpl.swift in Sources */,
 				53EECAE82D0B2F8700775FD6 /* ProfileEditResponseDTO.swift in Sources */,
+				530149FA2D630723004C2EE0 /* ReportUserRepositoryImpl.swift in Sources */,
 				5301E2A52C5B7DB70078E910 /* EmptyMyPageViewController.swift in Sources */,
 				531786642C1EF30F00ACEF6A /* Team.swift in Sources */,
 				533B29212C77099800BFE9F6 /* LoadFavoriteListRepositoryImpl.swift in Sources */,
@@ -2307,8 +2429,11 @@
 				531E4C2D2C6B5C4A0052E754 /* PostListLoadRepository.swift in Sources */,
 				53E4A9C42C500AD500D21B49 /* SignUpUseCase.swift in Sources */,
 				53B8E26D2C61CBD5001D0ADF /* ErrorMapper.swift in Sources */,
+				53014A072D6318C5004C2EE0 /* LoadBlockUsersRepository.swift in Sources */,
 				5320B0432D58E63A00897EB7 /* ReceivedAppliesDTO.swift in Sources */,
+				53014A002D6314E1004C2EE0 /* LoadBlockUsersDataSource.swift in Sources */,
 				53368C9A2D302B6C00D129EE /* TempPost.swift in Sources */,
+				53014A092D631A93004C2EE0 /* LoadBlockUsersUseCase.swift in Sources */,
 				53B3CE4D2C88B5B000116BF7 /* SendAppiesRepositoryImpl.swift in Sources */,
 				53E7DBA82CA5E44000DC058D /* DeletePostRepositoryImpl.swift in Sources */,
 				533B87392C86E38B0058B94B /* ApplyManagementDataSource.swift in Sources */,
@@ -2358,6 +2483,7 @@
 				53ACBA5A2C85B7E6004FAF00 /* ApplyRepository.swift in Sources */,
 				5383BE8F2C34DF27008940F1 /* Font.swift in Sources */,
 				53EECAEE2D0B304A00775FD6 /* ProfileEditRequestDTO.swift in Sources */,
+				53014A312D6441DC004C2EE0 /* OpenSourceListViewController.swift in Sources */,
 				53716BC82C43EEB50044AD2A /* CMToastMessage.swift in Sources */,
 				533183CF2C5141BC0097F3F1 /* MyMessageTableViewCell.swift in Sources */,
 				5301E2B82C5BECBB0078E910 /* MyPageReactor.swift in Sources */,
@@ -2369,6 +2495,7 @@
 				531786852C23261200ACEF6A /* SheetHeight.swift in Sources */,
 				530149DD2D5E2DB1004C2EE0 /* UpdateChatImageRepositoryImpl.swift in Sources */,
 				533A2B442C2C62C700A59340 /* SNSLoginRepositoryImpl.swift in Sources */,
+				53014A032D631703004C2EE0 /* BlockUserInfoDTO.swift in Sources */,
 				533A2B342C2BE98D00A59340 /* SignSelectedButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2405,10 +2532,12 @@
 				535B3A922D339367003FBBBF /* UpPostResponseDTO.swift in Sources */,
 				533B87402C86ED190058B94B /* ServerLoginDataSource.swift in Sources */,
 				533B29412C771F0A00BFE9F6 /* RequestPost.swift in Sources */,
+				530149F72D63059A004C2EE0 /* ReportUserDTO.swift in Sources */,
 				535AA0582D51A7F7007C7690 /* SenderInfo.swift in Sources */,
 				53B3CE3F2C88577500116BF7 /* SNSLoginResponse.swift in Sources */,
 				5375B1A32D2CD381000581B3 /* NotificationList.swift in Sources */,
 				53E7DBA42CA5664200DC058D /* DeletePostDataSource.swift in Sources */,
+				53014A022D631703004C2EE0 /* BlockUserInfoDTO.swift in Sources */,
 				53368C8D2D301CD900D129EE /* TempPostRequest.swift in Sources */,
 				536BDDC52C189B240043B1DA /* CatchMateTests.swift in Sources */,
 				5375B13D2D1A85F6000581B3 /* DomainError.swift in Sources */,
@@ -2459,6 +2588,7 @@
 				53ACBA332C81A4C0004FAF00 /* AddPostDataSourceTest.swift in Sources */,
 				535AA0262D45FBC4007C7690 /* ChatListDTO.swift in Sources */,
 				533B29442C771F2E00BFE9F6 /* PostRequsetDTO.swift in Sources */,
+				53014A382D644A8B004C2EE0 /* InquiriesDataSource.swift in Sources */,
 				53ACBA392C8330C9004FAF00 /* LoadPostDetailDataSourceTests.swift in Sources */,
 				533B29302C771C8F00BFE9F6 /* LoadFavoriteListUseCase.swift in Sources */,
 				53EECAF02D0B30B300775FD6 /* ProfileEdit.swift in Sources */,
@@ -2597,7 +2727,7 @@
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Dev;
 		};
@@ -2799,7 +2929,7 @@
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -2837,7 +2967,7 @@
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

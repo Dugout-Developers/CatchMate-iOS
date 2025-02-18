@@ -18,9 +18,9 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
     private var user: SimpleUser
     private let tableview = UITableView()
     private let reactor: OtherUserpageReactor
-    private let reportReactor: ReportReactor
     private var posts: [SimplePost] = []
-    
+    private let toastSubject = PublishSubject<Void>()
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reactor.action.onNext(.loadPost)
@@ -32,13 +32,11 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
         setupTableView()
         setupUI()
         bind(reactor: reactor)
-        bind(reportReactor: reportReactor)
     }
     
-    init(user: SimpleUser, reactor: OtherUserpageReactor, reportReactor: ReportReactor) {
+    init(user: SimpleUser, reactor: OtherUserpageReactor) {
         self.user = user
         self.reactor = reactor
-        self.reportReactor = reportReactor
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -64,16 +62,16 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
             MenuItem(title: "차단하기", action: { [weak self] in
                 self?.showCMAlert(titleText: "\"\(userNickname)\"\n정말 차단할까요?", importantButtonText: "차단", commonButtonText: "취소", importantAction: {
                     self?.dismiss(animated: false, completion: {
-                        print("\(userNickname) 차단")
-                        self?.showToast(message: "차단 유저 목록은\n설정 - '차단 설정'에서 확인할 수 있어요")
+                        self?.reactor.action.onNext(.blockUser)
                     })
                 }, commonAction: {
                     self?.dismiss(animated: false)
                 })
             }),
             MenuItem(title: "신고하기", textColor: UIColor.cmSystemRed, action: { [weak self] in
-                if let user = self?.user, let reactor = self?.reportReactor {
-                    let reportVC = UserReportViewController(reportUser: user, reactor: reactor)
+                if let user = self?.user {
+                    let reportVC = UserReportViewController(reportUser: user)
+                    reportVC.toastSubject = self?.toastSubject
                     self?.navigationController?.pushViewController(reportVC, animated: true)
                 } else {
                     self?.showToast(message: "다시 시도해주세요.")
@@ -92,7 +90,7 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
         tableview.register(MyPageProfileCell.self, forCellReuseIdentifier: "MyPageProfileCell")
         tableview.register(ListCardViewTableViewCell.self, forCellReuseIdentifier: "ListCardViewTableViewCell")
         tableview.estimatedSectionHeaderHeight = 0
-         tableview.estimatedSectionFooterHeight = 0
+        tableview.estimatedSectionFooterHeight = 0
         tableview.sectionHeaderTopPadding = 0
     }
     private func setupUI() {
@@ -122,7 +120,7 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyPageProfileCell", for: indexPath) as? MyPageProfileCell else {
                 return UITableViewCell()
             }
-            cell.configData(user, indicatorIsHidden: true)
+            cell.configData(user, indicatorIsHidden: true, isBlock: reactor.currentState.isBlock)
             cell.selectionStyle = .none
             return cell
         case 1:
@@ -152,7 +150,7 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.section == 0 ? 88 : UITableView.automaticDimension
+        return indexPath.section == 0 ? UITableView.automaticDimension : UITableView.automaticDimension
     }
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return indexPath.section == 0 ? 88 : 174
@@ -209,6 +207,23 @@ extension OtherUserMyPageViewController {
                 vc.handleError(error)
             }
             .disposed(by: disposeBag)
+        reactor.state.map{$0.isBlock}
+            .withUnretained(self)
+            .subscribe { vc, state in
+                if state {
+                    // MARK: - View Change
+                    vc.tableview.reloadData()
+                    vc.showToast(message: "차단 유저 목록은\n설정 - '차단 설정'에서 확인할 수 있어요")
+                }
+            }
+            .disposed(by: disposeBag)
+        // 토스트 메시지
+        toastSubject
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                vc.showToast(message: "신고 완료되었어요")
+            }
+            .disposed(by: disposeBag)
     }
     
     func scrollSetupNavigation(_ offsetY: CGFloat) {
@@ -223,18 +238,6 @@ extension OtherUserMyPageViewController {
                 setupLeftTitle("")
             }
         }
-    }
-    
-    func bind(reportReactor: ReportReactor) {
-        reportReactor.state.map{$0.finishedReport}
-            .distinctUntilChanged()
-            .withUnretained(self)
-            .subscribe { vc, result in
-                if result {
-                    vc.showToast(message: "신고 완료되었어요")
-                }
-            }
-            .disposed(by: disposeBag)
     }
 }
 

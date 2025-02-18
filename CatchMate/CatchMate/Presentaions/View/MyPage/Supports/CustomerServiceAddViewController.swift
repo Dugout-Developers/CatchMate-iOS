@@ -51,7 +51,7 @@ final class CustomerServiceAddViewController: BaseViewController, View {
     }
     
     init(menu: CustomerServiceMenu) {
-        reactor = CustomerServiceReactor(menu: menu)
+        reactor = DIContainerService.shared.makeCustomerServiceReactor(menu: menu)
         super.init(nibName: nil, bundle: nil)
     }
     @available(*, unavailable)
@@ -109,6 +109,13 @@ final class CustomerServiceAddViewController: BaseViewController, View {
             .withUnretained(self)
             .subscribe { vc, count in
                 vc.updateAddTextCount(count)
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.compactMap{$0.error}
+            .withUnretained(self)
+            .subscribe { vc, error in
+                vc.handleError(error)
             }
             .disposed(by: disposeBag)
     }
