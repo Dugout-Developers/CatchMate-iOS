@@ -62,8 +62,7 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
             MenuItem(title: "차단하기", action: { [weak self] in
                 self?.showCMAlert(titleText: "\"\(userNickname)\"\n정말 차단할까요?", importantButtonText: "차단", commonButtonText: "취소", importantAction: {
                     self?.dismiss(animated: false, completion: {
-                        print("\(userNickname) 차단")
-                        self?.showToast(message: "차단 유저 목록은\n설정 - '차단 설정'에서 확인할 수 있어요")
+                        self?.reactor.action.onNext(.blockUser)
                     })
                 }, commonAction: {
                     self?.dismiss(animated: false)
@@ -121,7 +120,7 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyPageProfileCell", for: indexPath) as? MyPageProfileCell else {
                 return UITableViewCell()
             }
-            cell.configData(user, indicatorIsHidden: true)
+            cell.configData(user, indicatorIsHidden: true, isBlock: reactor.currentState.isBlock)
             cell.selectionStyle = .none
             return cell
         case 1:
@@ -151,7 +150,7 @@ final class OtherUserMyPageViewController: BaseViewController, UITableViewDelega
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.section == 0 ? 88 : UITableView.automaticDimension
+        return indexPath.section == 0 ? UITableView.automaticDimension : UITableView.automaticDimension
     }
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return indexPath.section == 0 ? 88 : 174
@@ -208,7 +207,16 @@ extension OtherUserMyPageViewController {
                 vc.handleError(error)
             }
             .disposed(by: disposeBag)
-        
+        reactor.state.map{$0.isBlock}
+            .withUnretained(self)
+            .subscribe { vc, state in
+                if state {
+                    // MARK: - View Change
+                    vc.tableview.reloadData()
+                    vc.showToast(message: "차단 유저 목록은\n설정 - '차단 설정'에서 확인할 수 있어요")
+                }
+            }
+            .disposed(by: disposeBag)
         // 토스트 메시지
         toastSubject
             .withUnretained(self)

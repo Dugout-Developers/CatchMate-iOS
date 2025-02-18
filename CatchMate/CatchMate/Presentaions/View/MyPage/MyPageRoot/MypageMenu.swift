@@ -68,7 +68,7 @@ enum MypageMenu: String {
         case .noti:
             return Observable.just(NotificationSettingViewController(reactor: DIContainerService.shared.makeNotifiacationSettingReactor()))
         case .block:
-            return Observable.just(BlockSettingViewController(reactor: BlockUserReactor()))
+            return Observable.just(BlockSettingViewController())
         }
     }
 }

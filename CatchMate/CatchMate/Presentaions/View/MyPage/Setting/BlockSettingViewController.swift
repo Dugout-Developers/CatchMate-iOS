@@ -23,7 +23,7 @@ final class BlockSettingViewController: BaseViewController, View {
     private let tableView = UITableView()
     private let emptyViewContainer = UIView()
     private let emptyImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "EmptyDisable"))
+        let imageView = UIImageView(image: UIImage(named: "favoriteNone"))
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -44,8 +44,8 @@ final class BlockSettingViewController: BaseViewController, View {
         setupUI()
         bind(reactor: reactor)
     }
-    init(reactor: BlockUserReactor) {
-        self.reactor = reactor
+    init() {
+        self.reactor = DIContainerService.shared.makeBlockUserReactor()
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -71,6 +71,20 @@ final class BlockSettingViewController: BaseViewController, View {
         }
     }
     func bind(reactor: BlockUserReactor) {
+        tableView.rx.contentOffset
+            .map { [weak self] _ in
+                guard let self = self else { return false }
+                let offsetY = self.tableView.contentOffset.y
+                let contentHeight = self.tableView.contentSize.height
+                let threshold = contentHeight - self.tableView.frame.size.height - (self.tableView.rowHeight * 4)
+                return offsetY > threshold
+            }
+            .distinctUntilChanged()
+            .filter { $0 }
+            .map { _ in BlockUserReactor.Action.loadNextPage }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
         reactor.state.map{$0.blockUsers}
             .bind(to: tableView.rx.items(cellIdentifier: "BlockUserProfileCell", cellType: BlockUserProfileCell.self)) {  row, user, cell in
                 cell.backgroundColor = .clear

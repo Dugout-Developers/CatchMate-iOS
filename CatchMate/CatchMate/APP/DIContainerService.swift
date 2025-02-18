@@ -125,7 +125,11 @@ class DIContainerService {
         let userPostListRepository = UserPostLoadRepositoryImpl(userPostDataSource: userPostListDS)
         let userPostListUsecase = UserPostLoadUseCaseImpl(userPostListRepository: userPostListRepository)
         
-        return OtherUserpageReactor(user: writer, userPostUsecase: userPostListUsecase)
+        let blockDS = BlockManageDataSourceImpl(tokenDataSource: tokenDS)
+        let blockRepo = BlockManageRepositoryImpl(blockManageDS: blockDS)
+        let blockUC = BlockUserUseCaseImpl(blockManageRepo: blockRepo)
+        
+        return OtherUserpageReactor(user: writer, userPostUsecase: userPostListUsecase, blockUsecase: blockUC)
     }
     
     func makeMypageReactor() -> MyPageReactor {
@@ -225,6 +229,18 @@ class DIContainerService {
         let reportUC = ReportUserUseCaseImpl(reportUserRepo: reportRepo)
         
         return ReportReactor(user: user, reportUseCase: reportUC)
+    }
+    
+    func makeBlockUserReactor() -> BlockUserReactor {
+        let loadUsersDS = LoadBlockUsersDataSourceImpl(tokenDataSource: tokenDS)
+        let loadUsersRepo = LoadBlockUsersRepositoryImpl(loadBlockUserDS: loadUsersDS)
+        let loadUsersUC = LoadBlockUsersUseCaseImpl(loadBlockUsersRepo: loadUsersRepo)
+        
+        let unblockDS = BlockManageDataSourceImpl(tokenDataSource: tokenDS)
+        let unblockRepo = BlockManageRepositoryImpl(blockManageDS: unblockDS)
+        let unblockUC = UnBlockUserUseCaseImpl(blockManageRepo: unblockRepo)
+        
+        return BlockUserReactor(loadBlockUserUseCase: loadUsersUC, unBlockUseCase: unblockUC)
     }
     
     // MARK: - 특정 Usecase만 필요할 때

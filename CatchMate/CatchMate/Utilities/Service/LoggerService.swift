@@ -34,7 +34,7 @@ class LoggerService {
         let userEmail = SetupInfoService.shared.getUserInfo(type: .email)
         let info: [String: Any] = ["file": (file as NSString).lastPathComponent, "function": function, "line": line]
         // 로그 메시지 생성
-        let logMessage = "\(level.emoji)\(function):\(line) - \(message)"
+        let logMessage = "\(level.emoji) \(info) - \(message)"
 
         #if DEBUG
         print(logMessage)
