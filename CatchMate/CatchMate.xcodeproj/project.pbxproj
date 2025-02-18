@@ -37,6 +37,10 @@
 		53014A0F2D637478004C2EE0 /* BlockManageRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A0E2D637477004C2EE0 /* BlockManageRepository.swift */; };
 		53014A112D6374C9004C2EE0 /* BlockUserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A102D6374C4004C2EE0 /* BlockUserUseCase.swift */; };
 		53014A132D6374D3004C2EE0 /* UnBlockUserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A122D6374CC004C2EE0 /* UnBlockUserUseCase.swift */; };
+		53014A2F2D643B14004C2EE0 /* open_source_licenses.json in Resources */ = {isa = PBXBuildFile; fileRef = 53014A2E2D643AFD004C2EE0 /* open_source_licenses.json */; };
+		53014A312D6441DC004C2EE0 /* OpenSourceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A302D6441CD004C2EE0 /* OpenSourceListViewController.swift */; };
+		53014A332D64424B004C2EE0 /* OpenSourceLibraryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A322D644242004C2EE0 /* OpenSourceLibraryService.swift */; };
+		53014A352D6442F8004C2EE0 /* OpenSourceLibraryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A342D6442F6004C2EE0 /* OpenSourceLibraryDetailViewController.swift */; };
 		5301E2962C5B2BAE0078E910 /* LoggerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2952C5B2BAE0078E910 /* LoggerService.swift */; };
 		5301E29D2C5B38B10078E910 /* Error+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E29C2C5B38B10078E910 /* Error+Extension.swift */; };
 		5301E2A12C5B5C280078E910 /* MyPageProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2A02C5B5C280078E910 /* MyPageProfileCell.swift */; };
@@ -504,6 +508,10 @@
 		53014A0E2D637477004C2EE0 /* BlockManageRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockManageRepository.swift; sourceTree = "<group>"; };
 		53014A102D6374C4004C2EE0 /* BlockUserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserUseCase.swift; sourceTree = "<group>"; };
 		53014A122D6374CC004C2EE0 /* UnBlockUserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnBlockUserUseCase.swift; sourceTree = "<group>"; };
+		53014A2E2D643AFD004C2EE0 /* open_source_licenses.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = open_source_licenses.json; sourceTree = "<group>"; };
+		53014A302D6441CD004C2EE0 /* OpenSourceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSourceListViewController.swift; sourceTree = "<group>"; };
+		53014A322D644242004C2EE0 /* OpenSourceLibraryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSourceLibraryService.swift; sourceTree = "<group>"; };
+		53014A342D6442F6004C2EE0 /* OpenSourceLibraryDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSourceLibraryDetailViewController.swift; sourceTree = "<group>"; };
 		5301E2952C5B2BAE0078E910 /* LoggerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerService.swift; sourceTree = "<group>"; };
 		5301E29C2C5B38B10078E910 /* Error+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extension.swift"; sourceTree = "<group>"; };
 		5301E2A02C5B5C280078E910 /* MyPageProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageProfileCell.swift; sourceTree = "<group>"; };
@@ -966,6 +974,7 @@
 		531786722C202F0300ACEF6A /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				53014A322D644242004C2EE0 /* OpenSourceLibraryService.swift */,
 				5382490F2C3139C80074B583 /* AppleLoginUserDefaultsService.swift */,
 				5301E2952C5B2BAE0078E910 /* LoggerService.swift */,
 				534E39D22C634E26006D180E /* LoginUserDefaultsService.swift */,
@@ -1128,6 +1137,8 @@
 				534E39E62C63E021006D180E /* CustomerServiceViewController.swift */,
 				5320B0502D5B147200897EB7 /* CustomerServiceAddViewController.swift */,
 				5320B04A2D5A4B4500897EB7 /* ApplicationInfoViewController.swift */,
+				53014A302D6441CD004C2EE0 /* OpenSourceListViewController.swift */,
+				53014A342D6442F6004C2EE0 /* OpenSourceLibraryDetailViewController.swift */,
 			);
 			path = Supports;
 			sourceTree = "<group>";
@@ -1377,6 +1388,7 @@
 		536BDDDE2C196BEB0043B1DA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				53014A2E2D643AFD004C2EE0 /* open_source_licenses.json */,
 				536BDDB62C189B240043B1DA /* Assets.xcassets */,
 				53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */,
 				536BDDB82C189B240043B1DA /* LaunchScreen.storyboard */,
@@ -2041,6 +2053,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53014A2F2D643B14004C2EE0 /* open_source_licenses.json in Resources */,
 				53241F3E2C3C589100F468E1 /* DesignAssets.xcassets in Resources */,
 				5383BE902C34ECD1008940F1 /* PretendardVariable.ttf in Resources */,
 				533183CA2C50DE8D0097F3F1 /* GoogleService-Info.plist in Resources */,
@@ -2152,6 +2165,7 @@
 				531E4C282C6B55510052E754 /* PostListDTO.swift in Sources */,
 				534E39D32C634E26006D180E /* LoginUserDefaultsService.swift in Sources */,
 				53B8E2422C5D0A2D001D0ADF /* ProfileEditViewController.swift in Sources */,
+				53014A352D6442F8004C2EE0 /* OpenSourceLibraryDetailViewController.swift in Sources */,
 				535AA0352D460480007C7690 /* LoadChatListUseCase.swift in Sources */,
 				53E4A9BC2C4FFB8400D21B49 /* SignUp.swift in Sources */,
 				5301E2A72C5B7F740078E910 /* MypageListCell.swift in Sources */,
@@ -2260,6 +2274,7 @@
 				5378EA9B2C6487A600A2422C /* ReceiveMateListCell.swift in Sources */,
 				536BDE272C1B53150043B1DA /* UIColor+Extension.swift in Sources */,
 				533B291F2C77079100BFE9F6 /* LoadFavoriteListDataSource.swift in Sources */,
+				53014A332D64424B004C2EE0 /* OpenSourceLibraryService.swift in Sources */,
 				531E4C232C6A75320052E754 /* ChatSideSheetViewController.swift in Sources */,
 				53B8E2612C61229A001D0ADF /* AddPostRepositoryImpl.swift in Sources */,
 				536BDE382C1C07990043B1DA /* PaddingLabel.swift in Sources */,
@@ -2419,6 +2434,7 @@
 				53ACBA5A2C85B7E6004FAF00 /* ApplyRepository.swift in Sources */,
 				5383BE8F2C34DF27008940F1 /* Font.swift in Sources */,
 				53EECAEE2D0B304A00775FD6 /* ProfileEditRequestDTO.swift in Sources */,
+				53014A312D6441DC004C2EE0 /* OpenSourceListViewController.swift in Sources */,
 				53716BC82C43EEB50044AD2A /* CMToastMessage.swift in Sources */,
 				533183CF2C5141BC0097F3F1 /* MyMessageTableViewCell.swift in Sources */,
 				5301E2B82C5BECBB0078E910 /* MyPageReactor.swift in Sources */,
