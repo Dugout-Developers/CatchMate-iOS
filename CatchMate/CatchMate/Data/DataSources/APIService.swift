@@ -109,7 +109,7 @@ final class APIService {
         ]
         return RxAlamofire.requestJSON(.post, url, encoding: JSONEncoding.default, headers: headers)
             .flatMap { [weak self] (response, data) -> Observable<String> in
-                guard let self = self else {
+                guard self != nil else {
                     LoggerService.shared.log(level: .debug, "토큰 재발급 성공 Not Found Self")
                     return Observable.error(OtherError.notFoundSelf(location: "APIService - refreshAccessToken"))
                 }
