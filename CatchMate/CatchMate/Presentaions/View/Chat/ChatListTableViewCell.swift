@@ -47,17 +47,8 @@ final class ChatListTableViewCell: UITableViewCell {
         label.textColor = .cmNonImportantTextColor
         return label
     }()
-    private let notiBadgeView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .cmPrimaryColor
-        view.clipsToBounds = true
-        return view
-    }()
-    private let notiBadge: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        return label
-    }()
+
+    private let notiBadge: BadgeLabel = BadgeLabel()
     private let divider = UIView()
     
     
@@ -85,7 +76,7 @@ final class ChatListTableViewCell: UITableViewCell {
         peopleNumLabel.text = ""
         lastChatDateLabel.text = ""
         lastChatLabel.text = ""
-        notiBadgeView.isHidden = false
+        notiBadge.isHidden = false
         notiBadge.text = ""
 
         containerView.flex.layout(mode: .adjustHeight)
@@ -103,8 +94,8 @@ final class ChatListTableViewCell: UITableViewCell {
         newChat = chat.newChat
         lastChatLabel.text = newChat ? "채팅을 시작해보세요." : (chat.lastMessage.isEmpty ? "채팅을 시작해보세요." : chat.lastMessage)
         newMessageCount = chat.notReadCount
-        notiBadge.text = String(newMessageCount)
-        notiBadgeView.isHidden = newMessageCount == 0 ? true : false
+        notiBadge.setBadgeCount(newMessageCount)
+        notiBadge.isHidden = newMessageCount == 0 ? true : false
         lastChatDateLabel.text = chat.lastTimeAgo
         
         // Style
@@ -126,7 +117,7 @@ final class ChatListTableViewCell: UITableViewCell {
         peopleNumLabel.flex.markDirty()
         lastChatDateLabel.flex.markDirty()
         lastChatLabel.flex.markDirty()
-        notiBadgeView.flex.markDirty()
+        notiBadge.flex.markDirty()
         containerView.flex.layout(mode: .adjustHeight)
     }
 }
@@ -148,9 +139,9 @@ extension ChatListTableViewCell {
                     }.marginBottom(5)
                     flex.addItem().direction(.row).define { (flex) in
                         flex.addItem(lastChatLabel).grow(1).shrink(1)
-                        flex.addItem(notiBadgeView).size(18).cornerRadius(9).marginLeft(35).alignItems(.center).justifyContent(.center).define { flex in
-                            flex.addItem(notiBadge).alignSelf(.center)
-                        }
+                        
+                        flex.addItem(notiBadge).alignSelf(.center).marginLeft(35)
+                        
                     }
                 }
             }.marginBottom(12)
@@ -159,5 +150,48 @@ extension ChatListTableViewCell {
     }
 }
 
+class BadgeLabel: UILabel {
+    let height: CGFloat = 20
+    override var text: String? {
+        didSet {
+            self.applyStyle(textStyle: FontSystem.bedgeText)
+            layoutIfNeeded()
+        }
+    }
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+    }
 
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupUI()
+    }
+
+    private func setupUI() {
+        self.textAlignment = .center
+        self.textColor = .white
+        self.backgroundColor = .cmPrimaryColor
+        self.layer.masksToBounds = true
+    }
+
+    /// 읽지 않은 메시지 개수 설정
+    func setBadgeCount(_ count: Int) {
+        let badgeText = count > 999 ? "999+" : "\(count)"
+        self.text = badgeText
+        if count < 10 {
+            // 1~9: 원형 유지
+            self.flex.width(height).height(height)
+            self.layer.cornerRadius = height / 2
+        } else {
+            // 10 이상: 가로로 늘어난 타원
+            self.sizeToFit()
+            let width = max(self.frame.width + 14, height) // 최소 가로 길이 유지
+            self.flex.width(width).height(height)
+            self.layer.cornerRadius = height / 2
+        }
+        
+        self.flex.markDirty()
+    }
+}
 
