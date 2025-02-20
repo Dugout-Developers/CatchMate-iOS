@@ -79,7 +79,7 @@ final class CustomerServiceAddViewController: BaseViewController, View {
             .filter{$0}
             .withUnretained(self)
             .subscribe { vc, _ in
-                vc.navigationController?.popViewController(animated: true)
+                vc.navigationController?.popToRootViewController(animated: true)
             }
             .disposed(by: disposeBag)
         
