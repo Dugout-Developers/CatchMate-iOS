@@ -159,12 +159,14 @@ extension ChatSettingViewController {
             .disposed(by: disposeBag)
         
         exitButton.rx.tap
+            .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
             .withUnretained(self)
             .subscribe { vc, _ in
                 vc.dismiss(animated: false)
             }
             .disposed(by: disposeBag)
         imageEditButton.rx.tap
+            .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
             .withUnretained(self)
             .subscribe { vc, _ in
                 vc.openLibrary()

@@ -154,6 +154,7 @@ extension InputCheerStyleViewController {
             .disposed(by: disposeBag)
         
         nextButton.rx.tap
+            .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
             .withUnretained(self)
             .subscribe { vc, _ in
                 if let model = reactor.currentState.signUpModel {

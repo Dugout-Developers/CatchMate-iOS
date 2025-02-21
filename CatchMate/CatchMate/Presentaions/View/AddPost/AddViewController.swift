@@ -273,6 +273,7 @@ extension AddViewController {
             .disposed(by: disposeBag)
         
         registerButton.rx.tap
+            .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
             .withUnretained(self)
             .subscribe(onNext: { vc, _ in
                 if vc.editPost != nil {

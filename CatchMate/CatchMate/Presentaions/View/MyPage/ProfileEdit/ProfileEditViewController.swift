@@ -169,6 +169,7 @@ extension ProfileEditViewController {
             .disposed(by: disposeBag)
         
         saveButton.rx.tap
+            .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
             .withUnretained(self)
             .subscribe {vc,  _ in
                 if reactor.currentState.nickNameValidate == .failed {

@@ -98,6 +98,7 @@ final class FavoriteListViewController: BaseViewController ,View {
 
 
                 cell.tapEvent
+                    .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
                     .withUnretained(cell)
                     .map { $0.0.post }
                     .compactMap { $0 }

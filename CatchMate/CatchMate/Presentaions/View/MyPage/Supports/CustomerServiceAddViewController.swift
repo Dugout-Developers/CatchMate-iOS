@@ -61,6 +61,7 @@ final class CustomerServiceAddViewController: BaseViewController, View {
     
     func bind(reactor: CustomerServiceReactor) {
         submitButton.rx.tap
+            .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
             .subscribe { _ in
                 reactor.action.onNext(.submitContent)
             }
