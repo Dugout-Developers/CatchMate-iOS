@@ -50,9 +50,7 @@ enum TokenError: LocalizedErrorWithCode {
 enum NetworkError: LocalizedErrorWithCode {
     case notFoundBaseURL
     case disconnected
-    case slowConnection
     case responseTimeout
-    case serverUnavailable
     case clientError(statusCode: Int) // 4xx 에러
     case serverError(statusCode: Int) // 5xx 에러
     case unownedError(statusCode: Int)
@@ -73,12 +71,8 @@ enum NetworkError: LocalizedErrorWithCode {
             return -2000
         case .disconnected:
             return -2001
-        case .slowConnection:
-            return -2002
         case .responseTimeout:
-            return -2003
-        case .serverUnavailable:
-            return -2004
+            return -2002
         case .unownedError(let statusCode):
             return statusCode
         case .clientError(let statusCode):
@@ -93,12 +87,8 @@ enum NetworkError: LocalizedErrorWithCode {
             return "베이스 URL을 찾을 수 없음"
         case .disconnected:
             return "사용자 네트워크 연결 실패"
-        case .slowConnection:
-            return "사용자 네트워크 속도 문제로 인한 응답 지연"
         case .responseTimeout:
             return "사용자 타임 아웃"       
-        case .serverUnavailable:
-            return "서버 이용 불가능"
         case .clientError(let statusCode):
             return "클라이언트 요청 에러: \(statusCode)"
         case .serverError(let statusCode):
