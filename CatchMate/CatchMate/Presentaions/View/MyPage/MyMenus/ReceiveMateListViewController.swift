@@ -34,12 +34,12 @@ final class ReceiveMateListViewController: BaseViewController, View {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reactor.action.onNext(.loadReceiveAppliesAll)
-        reactor.action.onNext(.selectPost(nil))
+        reactor.action.onNext(.selectPost(nil, nil))
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        reactor.action.onNext(.selectPost(isPushId))
+        reactor.action.onNext(.selectPost(nil, isPushId))
     }
     
     override func viewDidLoad() {
@@ -79,7 +79,7 @@ extension ReceiveMateListViewController {
         tableView.rx.itemSelected
             .subscribe { indexPath in
                 let apply = reactor.currentState.recivedApplies[indexPath.row]
-                reactor.action.onNext(.selectPost(apply.post.id))
+                reactor.action.onNext(.selectPost(indexPath.row, apply.post.id))
             }
             .disposed(by: disposeBag)
         
