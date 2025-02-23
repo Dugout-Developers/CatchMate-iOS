@@ -46,6 +46,10 @@
 		53014A3D2D644BBC004C2EE0 /* InquiriesRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A3C2D644BB6004C2EE0 /* InquiriesRepositoryImpl.swift */; };
 		53014A3F2D644BC9004C2EE0 /* InquiriesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A3E2D644BC5004C2EE0 /* InquiriesRepository.swift */; };
 		53014A412D644BCF004C2EE0 /* InquiriesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A402D644BCC004C2EE0 /* InquiriesUseCase.swift */; };
+		53014A522D6B0000004C2EE0 /* LoadChatDetailDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A512D6AFFF4004C2EE0 /* LoadChatDetailDataSource.swift */; };
+		53014A542D6B0239004C2EE0 /* LoadChatDetailRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A532D6B022F004C2EE0 /* LoadChatDetailRepositoryImpl.swift */; };
+		53014A562D6B0246004C2EE0 /* LoadChatDetailRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A552D6B0245004C2EE0 /* LoadChatDetailRepository.swift */; };
+		53014A582D6B0334004C2EE0 /* LoadChatDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A572D6B032D004C2EE0 /* LoadChatDetailUseCase.swift */; };
 		5301E2962C5B2BAE0078E910 /* LoggerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2952C5B2BAE0078E910 /* LoggerService.swift */; };
 		5301E29D2C5B38B10078E910 /* Error+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E29C2C5B38B10078E910 /* Error+Extension.swift */; };
 		5301E2A12C5B5C280078E910 /* MyPageProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2A02C5B5C280078E910 /* MyPageProfileCell.swift */; };
@@ -521,6 +525,10 @@
 		53014A3C2D644BB6004C2EE0 /* InquiriesRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InquiriesRepositoryImpl.swift; sourceTree = "<group>"; };
 		53014A3E2D644BC5004C2EE0 /* InquiriesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InquiriesRepository.swift; sourceTree = "<group>"; };
 		53014A402D644BCC004C2EE0 /* InquiriesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InquiriesUseCase.swift; sourceTree = "<group>"; };
+		53014A512D6AFFF4004C2EE0 /* LoadChatDetailDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadChatDetailDataSource.swift; sourceTree = "<group>"; };
+		53014A532D6B022F004C2EE0 /* LoadChatDetailRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadChatDetailRepositoryImpl.swift; sourceTree = "<group>"; };
+		53014A552D6B0245004C2EE0 /* LoadChatDetailRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadChatDetailRepository.swift; sourceTree = "<group>"; };
+		53014A572D6B032D004C2EE0 /* LoadChatDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadChatDetailUseCase.swift; sourceTree = "<group>"; };
 		5301E2952C5B2BAE0078E910 /* LoggerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerService.swift; sourceTree = "<group>"; };
 		5301E29C2C5B38B10078E910 /* Error+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extension.swift"; sourceTree = "<group>"; };
 		5301E2A02C5B5C280078E910 /* MyPageProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageProfileCell.swift; sourceTree = "<group>"; };
@@ -1208,6 +1216,7 @@
 		535AA01E2D45FA7F007C7690 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				53014A512D6AFFF4004C2EE0 /* LoadChatDetailDataSource.swift */,
 				530149E62D5ED416004C2EE0 /* ExportChatUserDataSource.swift */,
 				530149E42D5ED240004C2EE0 /* ExitChatRoomDataSource.swift */,
 				530149DA2D5E2878004C2EE0 /* UpdateChatImageDataSource.swift */,
@@ -1256,6 +1265,7 @@
 		535AA02E2D4602F4007C7690 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				53014A532D6B022F004C2EE0 /* LoadChatDetailRepositoryImpl.swift */,
 				530149EE2D5ED6C6004C2EE0 /* ExitChatRoomRepositoryImpl.swift */,
 				530149EC2D5ED4D8004C2EE0 /* ExportChatUserRepositoryImpl.swift */,
 				530149DC2D5E2DA4004C2EE0 /* UpdateChatImageRepositoryImpl.swift */,
@@ -1269,6 +1279,7 @@
 		535AA0332D460333007C7690 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				53014A552D6B0245004C2EE0 /* LoadChatDetailRepository.swift */,
 				530149EA2D5ED4BE004C2EE0 /* ExportChatUserRepository.swift */,
 				530149E82D5ED49A004C2EE0 /* ExitChatRoomRepository.swift */,
 				530149DE2D5E2DBD004C2EE0 /* UpdateChatImageRepository.swift */,
@@ -1282,6 +1293,7 @@
 		535AA0362D460484007C7690 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				53014A572D6B032D004C2EE0 /* LoadChatDetailUseCase.swift */,
 				530149F22D5ED7E2004C2EE0 /* ExportChatUserUseCase.swift */,
 				530149F02D5ED768004C2EE0 /* ExitChatRoomUseCase.swift */,
 				530149E02D5E2E2F004C2EE0 /* UpdateChatImageUseCase.swift */,
@@ -2163,6 +2175,7 @@
 				53EECAEB2D0B2FFE00775FD6 /* ProfileEditRepository.swift in Sources */,
 				531288CD2C5408FF000C2FB1 /* LoginModel.swift in Sources */,
 				53577B492D55AEAA00769533 /* ChatSystemCell.swift in Sources */,
+				53014A582D6B0334004C2EE0 /* LoadChatDetailUseCase.swift in Sources */,
 				534E39EC2C63E771006D180E /* SendMateListCell.swift in Sources */,
 				535AA0382D4612D6007C7690 /* EmptyView.swift in Sources */,
 				53014A112D6374C9004C2EE0 /* BlockUserUseCase.swift in Sources */,
@@ -2279,6 +2292,7 @@
 				534E39D82C637FD3006D180E /* NotificationSettingViewController.swift in Sources */,
 				5375B1DB2D2E1977000581B3 /* DeleteNotificationRepository.swift in Sources */,
 				533A2B322C2BE7E600A59340 /* CheerStyles.swift in Sources */,
+				53014A542D6B0239004C2EE0 /* LoadChatDetailRepositoryImpl.swift in Sources */,
 				535AA0682D51BCEA007C7690 /* LoadChatMessageRepositoryImpl.swift in Sources */,
 				53B895CD2CA2579A00029130 /* UserPostLoadUseCase.swift in Sources */,
 				53B8E23E2C5C7BEB001D0ADF /* LoadMyInfoUseCase.swift in Sources */,
@@ -2383,6 +2397,7 @@
 				53C6DA022CE3A90F00918718 /* ReceivedCountRepositoryImpl.swift in Sources */,
 				5375B1A22D2CD381000581B3 /* NotificationList.swift in Sources */,
 				53F1E8C62C47A46400A962F3 /* Apply.swift in Sources */,
+				53014A522D6B0000004C2EE0 /* LoadChatDetailDataSource.swift in Sources */,
 				5301E2A32C5B6B8B0078E910 /* AuthManager.swift in Sources */,
 				535AA00E2D368097007C7690 /* SetAlarmnUseCase.swift in Sources */,
 				53014A0F2D637478004C2EE0 /* BlockManageRepository.swift in Sources */,
@@ -2406,6 +2421,7 @@
 				53ACBA372C81A91E004FAF00 /* CheerTeamPickerViewController.swift in Sources */,
 				535AA05B2D51B81D007C7690 /* ChatMessageDTO.swift in Sources */,
 				53368C942D30216200D129EE /* TempPostUseCase.swift in Sources */,
+				53014A562D6B0246004C2EE0 /* LoadChatDetailRepository.swift in Sources */,
 				53B8E2382C5C7BAA001D0ADF /* UserRepositoryImpl.swift in Sources */,
 				53EECAE82D0B2F8700775FD6 /* ProfileEditResponseDTO.swift in Sources */,
 				530149FA2D630723004C2EE0 /* ReportUserRepositoryImpl.swift in Sources */,

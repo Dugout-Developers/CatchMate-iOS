@@ -272,4 +272,12 @@ class DIContainerService {
         let nicknameCheckUsecase = NicknameCheckUseCaseImpl(nicknameRepository: nicknameCheckRepository)
         return nicknameCheckUsecase
     }
+    
+    func makeChatDetailUseCase() -> LoadChatDetailUseCase {
+        let chatDetailDS = LoadChatDetailDataSourceImpl(tokenDataSource: tokenDS)
+        let chatDetailRepo = LoadChatDetailRepositoryImpl(loadChatDS: chatDetailDS)
+        let chatDetailUC = LoadChatDetailUseCaseImpl(loadChatRepo: chatDetailRepo)
+        
+        return chatDetailUC
+    }
 }

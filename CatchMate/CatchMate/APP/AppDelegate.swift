@@ -11,6 +11,7 @@ import NaverThirdPartyLogin
 import Firebase
 import FirebaseMessaging
 import UserNotifications
+import FirebaseAnalytics
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
