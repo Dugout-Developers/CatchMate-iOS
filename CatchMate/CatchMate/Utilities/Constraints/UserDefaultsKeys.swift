@@ -17,4 +17,7 @@ enum UserDefaultsKeys {
             static let imageUrl = "UserImageUrl"
         }
     }
+    enum chatInfo {
+        static let chatRoomId = "ChatRoomId"
+    }
 }

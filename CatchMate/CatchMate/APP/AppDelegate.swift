@@ -38,6 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
         UIApplication.shared.registerForRemoteNotifications()
+        UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.chatInfo.chatRoomId)
         
         if let notificationOption = launchOptions?[.remoteNotification] as? [String: AnyObject] {
             let acceptStatus = notificationOption["acceptStatus"] as? String
@@ -88,6 +89,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let userInfo = notification.request.content.userInfo
         print("푸시 알림 수신 (foreground): \(userInfo)")
+        
+        if userInfo["acceptStatus"] == nil {
+            if let chatId = userInfo["chatRoomId"] as? String {
+                if let currentChatRoomId = UserDefaults.standard.string(forKey: UserDefaultsKeys.chatInfo.chatRoomId) {
+                    print(currentChatRoomId)
+                    if currentChatRoomId == chatId {
+                        completionHandler([])
+                        return
+                    }
+                }
+            }
+        }
         completionHandler([.list, .banner, .sound])
     }
     
