@@ -19,7 +19,7 @@ final class NotificationSettingViewController: BaseViewController, View {
     }
     private let tableView = UITableView()
     var reactor: AlarmSettingReactor
-    
+    private var settingValue: Bool = false
     init(reactor: AlarmSettingReactor) {
         self.reactor = reactor
         super.init(nibName: nil, bundle: nil)
@@ -31,7 +31,13 @@ final class NotificationSettingViewController: BaseViewController, View {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        reactor.action.onNext(.loadNotificationInfo)
+        NotificationService.shared.checkNotificationPermissionStatus { [weak self] isAllowed in
+            print(isAllowed ? "✅ 알림이 허용됨" : "❌ 알림이 거부됨")
+            self?.settingValue = isAllowed
+            if isAllowed {
+                self?.reactor.action.onNext(.loadNotificationInfo)
+            }
+        }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +45,26 @@ final class NotificationSettingViewController: BaseViewController, View {
         setupTableView()
         setupUI()
         bind(reactor: reactor)
+        setupUpdateNotification()
+    }
+    private func setupUpdateNotification() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateNotificationStatus),
+            name: .notificationStatusChanged,
+            object: nil
+        )
+    }
+    @objc private func updateNotificationStatus(notification: Notification) {
+        if let isAllowed = notification.object as? Bool {
+            settingValue = isAllowed
+            print(isAllowed ? "✅ 알림이 허용됨" : "❌ 알림이 거부됨")
+            if isAllowed {
+                reactor.action.onNext(.loadNotificationInfo)
+            } else {
+                reactor.action.onNext(.rejectAlarm)
+            }
+        }
     }
     private func setupTableView() {
         tableView.rowHeight = 53
@@ -64,6 +90,7 @@ final class NotificationSettingViewController: BaseViewController, View {
             return !reactor.currentState.eventAlarm
         }
     }
+
     func bind(reactor: AlarmSettingReactor) {
         // 상태 바인딩: 테이블뷰 데이터 소스 설정
         reactor.state
@@ -78,15 +105,30 @@ final class NotificationSettingViewController: BaseViewController, View {
             .bind(to: tableView.rx.items(cellIdentifier: "NotificationSettingCell", cellType: NotificationSettingCell.self)) { row, item, cell in
                 let (type, state) = item
                 cell.configData(type: type, state: state)
-                cell.switchView.rx_isOn()
-                    .map { isOn in
-                        AlarmSettingReactor.Action.toggleSwitch((type: type, state: isOn))
-                    }
-                    .bind(to: reactor.action)
+                cell.switchView.rx.controlEvent(.valueChanged)
+                    .subscribe(onNext: { [weak self] in
+                        guard let self = self else { return }
+                        if !self.settingValue {
+                            self.showSettingsAlert()
+                        } else {
+                            reactor.action.onNext(.toggleSwitch((type: type, state: !state)))
+                        }
+                    })
                     .disposed(by: cell.disposeBag)
             }
             .disposed(by: disposeBag)
+        }
+    private func showSettingsAlert() {
+        showCMAlert(titleText: "설정에서 알림 권한을 허용해주세요.", importantButtonText: "설정", commonButtonText: "취소", importantAction:  {
+            if let url = URL(string: UIApplication.openSettingsURLString) {
+                if UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                }
+            }
+        })
+
     }
+
 }
 
 
@@ -124,6 +166,7 @@ final class NotificationSettingCell: UITableViewCell {
         notiTitleLabel.text = type.settingViewName
         notiTitleLabel.applyStyle(textStyle: FontSystem.body01_medium)
     }
+
     
     private func setupUI() {
         contentView.addSubviews(views: [notiTitleLabel, switchView])

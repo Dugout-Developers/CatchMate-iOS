@@ -56,6 +56,14 @@ final class HomeViewController: BaseViewController, View {
         tabBarController?.tabBar.isHidden = false
         reactor.action.onNext(.selectPost(nil))
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        NotificationService.shared.requestNotificationPermission { granted in
+            let message = granted ? "✅ 알림 권한이 허용되었습니다." : "❌ 알림 권한이 거부되었습니다."
+            LoggerService.shared.log(level: .info, message)
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .grayScale50

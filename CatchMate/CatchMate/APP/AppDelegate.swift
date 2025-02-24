@@ -26,19 +26,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         Analytics.setAnalyticsCollectionEnabled(false) // 디버그 모드에서 비활성화
 #endif
         // APNS 등록
-        if #available(iOS 10.0, *) {
-            UNUserNotificationCenter.current().delegate = self
-            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-            UNUserNotificationCenter.current().requestAuthorization(options: authOptions, completionHandler: { _, _ in })
-        } else {
-            let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
-            application.registerUserNotificationSettings(settings)
-        }
+//        if #available(iOS 10.0, *) {
+//            UNUserNotificationCenter.current().delegate = self
+//            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+//            UNUserNotificationCenter.current().requestAuthorization(options: authOptions, completionHandler: { _, _ in })
+//        } else {
+//            let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+//            application.registerUserNotificationSettings(settings)
+//        }
         application.registerForRemoteNotifications()
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
         UIApplication.shared.registerForRemoteNotifications()
-        UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.chatInfo.chatRoomId)
+        UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.ChatInfo.chatRoomId)
         
         if let notificationOption = launchOptions?[.remoteNotification] as? [String: AnyObject] {
             let acceptStatus = notificationOption["acceptStatus"] as? String
@@ -92,7 +92,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         if userInfo["acceptStatus"] == nil {
             if let chatId = userInfo["chatRoomId"] as? String {
-                if let currentChatRoomId = UserDefaults.standard.string(forKey: UserDefaultsKeys.chatInfo.chatRoomId) {
+                if let currentChatRoomId = UserDefaults.standard.string(forKey: UserDefaultsKeys.ChatInfo.chatRoomId) {
                     print(currentChatRoomId)
                     if currentChatRoomId == chatId {
                         completionHandler([])

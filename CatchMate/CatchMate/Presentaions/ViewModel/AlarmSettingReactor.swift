@@ -13,6 +13,7 @@ import ReactorKit
 final class AlarmSettingReactor: Reactor {
     enum Action {
         case loadNotificationInfo
+        case rejectAlarm
         case toggleSwitch((type: AlarmnType, state: Bool))
         case setError(PresentationError?)
     }
@@ -78,6 +79,10 @@ final class AlarmSettingReactor: Reactor {
             }
         case .setError(let error):
             return Observable.just(.setError(error))
+        case .rejectAlarm:
+            return Observable.concat([
+                Observable.just(.setAllAlarm(false))
+            ])
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
@@ -90,13 +95,13 @@ final class AlarmSettingReactor: Reactor {
             newState.eventAlarm = state
         case .setApplyAlarm(let state):
             newState.applyAlarm = state
-            if state == false { newState.allAlarm = false }
+            newState.allAlarm = isAllAlarmAllowed(newState)
         case .setChatAlarm(let state):
             newState.chatAlarm = state
-            if state == false { newState.allAlarm = false }
+            newState.allAlarm = isAllAlarmAllowed(newState)
         case .setEventAlarm(let state):
             newState.eventAlarm = state
-            if state == false { newState.allAlarm = false }
+            newState.allAlarm = isAllAlarmAllowed(newState)
         case .setNotificationInfo(let info):
             newState.allAlarm = info.all
             newState.applyAlarm = info.apply
@@ -106,5 +111,13 @@ final class AlarmSettingReactor: Reactor {
             newState.error = error
         }
         return newState
+    }
+    
+    private func isAllAlarmAllowed(_ newState: State) -> Bool {
+        let chatAlarm = newState.chatAlarm
+        let eventAlarm = newState.eventAlarm
+        let applyAlarm = newState.applyAlarm
+        
+        return chatAlarm && eventAlarm && applyAlarm
     }
 }

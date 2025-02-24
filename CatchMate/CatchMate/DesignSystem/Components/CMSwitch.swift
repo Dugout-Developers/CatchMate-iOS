@@ -74,9 +74,9 @@ class CMSwitch: UIControl {
     }
     
     @objc private func didTap() {
-        isOn.toggle()
+//        isOn.toggle()
         sendActions(for: .valueChanged)
-        updateUI(animated: true)
+//        updateUI(animated: true)
     }
     
     private func updateUI(animated: Bool) {
