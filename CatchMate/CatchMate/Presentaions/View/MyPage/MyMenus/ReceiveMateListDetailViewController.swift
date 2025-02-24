@@ -214,8 +214,7 @@ final class DetailCardCell: UICollectionViewCell {
         ageLabel.backgroundColor = .grayScale100
         ageLabel.textColor = .cmNonImportantTextColor
         ageLabel.applyStyle(textStyle: FontSystem.caption01_medium)
-        // MARK: - API CreateDate 추가 시 수정
-        applyDateLabel.text = DateHelper.shared.toString(from: Date(), format: "M월d일 HH:mm")
+        applyDateLabel.text = DateHelper.shared.toString(from: apply.requestDate, format: "M월d일 HH:mm")
         applyDateLabel.applyStyle(textStyle: FontSystem.body02_medium)
         textView.text = apply.addText
         textView.applyStyle(textStyle: FontSystem.body02_medium)
