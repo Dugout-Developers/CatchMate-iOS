@@ -55,6 +55,9 @@ final class HomeViewController: BaseViewController, View {
         super.viewWillAppear(true)
         tabBarController?.tabBar.isHidden = false
         reactor.action.onNext(.selectPost(nil))
+        if reactor.currentState.posts.isEmpty {
+            reactor.action.onNext(.setupUserInfo)
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
