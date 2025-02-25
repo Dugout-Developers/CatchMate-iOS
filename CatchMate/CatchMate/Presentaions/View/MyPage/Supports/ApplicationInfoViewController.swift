@@ -58,11 +58,17 @@ final class ApplicationInfoViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLeftTitle("정보")
+        setupAppVersion()
         setupUI()
         bind()
     }
     
-
+    private func setupAppVersion() {
+        if let version = AppVersionService.shared.getCurrentAppVersion() {
+            versionLabel.text = "v.\(version)"
+            versionLabel.applyStyle(textStyle: FontSystem.body02_medium)
+        }
+    }
     private func setupUI() {
         view.backgroundColor = .cmGrayBackgroundColor
         appVersionView.backgroundColor = .cmBackgroundColor
