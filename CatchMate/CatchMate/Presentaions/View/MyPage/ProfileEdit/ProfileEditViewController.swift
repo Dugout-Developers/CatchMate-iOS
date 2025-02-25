@@ -102,6 +102,7 @@ final class ProfileEditViewController: BaseViewController, View {
         bind(reactor: reactor)
         view.backgroundColor = .grayScale50
         imgPicker.delegate = self
+        imgPicker.allowsEditing = true
         setupImage()
     }
     private func setupImage() {
@@ -127,7 +128,7 @@ final class ProfileEditViewController: BaseViewController, View {
 // MARK: - ImagePicker
 extension ProfileEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let image = info[.originalImage] as? UIImage {
+        if let image = info[.editedImage] as? UIImage {
             if let validImage = UIImage(data: image.jpegData(compressionQuality: 0.5)!) {
                 reactor.action.onNext(.changeImage(validImage))
             } else {
