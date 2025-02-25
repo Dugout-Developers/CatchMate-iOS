@@ -331,6 +331,7 @@
 		5378EA9B2C6487A600A2422C /* ReceiveMateListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5378EA9A2C6487A600A2422C /* ReceiveMateListCell.swift */; };
 		5378EA9D2C649B6900A2422C /* ReceiveMateListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5378EA9C2C649B6900A2422C /* ReceiveMateListViewController.swift */; };
 		5378EA9F2C649BBE00A2422C /* RecevieMateReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5378EA9E2C649BBE00A2422C /* RecevieMateReactor.swift */; };
+		537B8A9A2D6D67BA00C0499E /* AppVersionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537B8A992D6D67B100C0499E /* AppVersionService.swift */; };
 		53820CC22C8601120059A1F8 /* SendAppiesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53820CC12C8601120059A1F8 /* SendAppiesDataSource.swift */; };
 		5382490E2C2E79A90074B583 /* AppleLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */; };
 		538249102C3139C80074B583 /* AppleLoginUserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490F2C3139C80074B583 /* AppleLoginUserDefaultsService.swift */; };
@@ -748,6 +749,7 @@
 		5378EA9A2C6487A600A2422C /* ReceiveMateListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMateListCell.swift; sourceTree = "<group>"; };
 		5378EA9C2C649B6900A2422C /* ReceiveMateListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMateListViewController.swift; sourceTree = "<group>"; };
 		5378EA9E2C649BBE00A2422C /* RecevieMateReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecevieMateReactor.swift; sourceTree = "<group>"; };
+		537B8A992D6D67B100C0499E /* AppVersionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionService.swift; sourceTree = "<group>"; };
 		53820CC12C8601120059A1F8 /* SendAppiesDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendAppiesDataSource.swift; sourceTree = "<group>"; };
 		5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginUseCase.swift; sourceTree = "<group>"; };
 		5382490F2C3139C80074B583 /* AppleLoginUserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginUserDefaultsService.swift; sourceTree = "<group>"; };
@@ -1028,6 +1030,7 @@
 		531786722C202F0300ACEF6A /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				537B8A992D6D67B100C0499E /* AppVersionService.swift */,
 				538E9AA02D6C0FF400A70A3D /* NotificationService.swift */,
 				53014A322D644242004C2EE0 /* OpenSourceLibraryService.swift */,
 				5382490F2C3139C80074B583 /* AppleLoginUserDefaultsService.swift */,
@@ -2425,6 +2428,7 @@
 				53EECB052D11B07600775FD6 /* LoadReceivedCountUseCase.swift in Sources */,
 				536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */,
 				5375B1A62D2CD43C000581B3 /* NotificationMapper.swift in Sources */,
+				537B8A9A2D6D67BA00C0499E /* AppVersionService.swift in Sources */,
 				535AA0112D368097007C7690 /* DeleteNotificationUseCase.swift in Sources */,
 				535AA0122D368097007C7690 /* LoadNotificationListUseCase.swift in Sources */,
 				53ACBA372C81A91E004FAF00 /* CheerTeamPickerViewController.swift in Sources */,
@@ -2742,7 +2746,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tori.CatchMate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2944,7 +2948,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tori.CatchMate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2982,7 +2986,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tori.CatchMate;
 				PRODUCT_NAME = "$(TARGET_NAME)";

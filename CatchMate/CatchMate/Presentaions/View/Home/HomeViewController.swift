@@ -78,6 +78,10 @@ final class HomeViewController: BaseViewController, View {
         bind(reactor: self.reactor)
         reactor.action.onNext(.setupUserInfo)
         filterScrollView.showsHorizontalScrollIndicator = false
+        AppVersionService.shared.fetchLatestVersion { version in
+            print("currentAPPStoreVersion: \(version)")
+        }
+        print("currentVersion: \(AppVersionService.shared.getCurrentAppVersion())")
     }
     private func setupNavigation() {
         let notiButton = UIButton()
