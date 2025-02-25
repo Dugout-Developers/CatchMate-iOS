@@ -92,7 +92,7 @@ final class ChatListTableViewCell: UITableViewCell {
         ImageLoadHelper.loadImage(chatImageView, pictureString: chat.chatImage, defaultImage: defaultImage)
         postTitleLabel.text = chat.postInfo.title
         newChat = chat.newChat
-        lastChatLabel.text = newChat ? "채팅을 시작해보세요." : (chat.lastMessage.isEmpty ? "채팅을 시작해보세요." : chat.lastMessage)
+        lastChatLabel.text = (chat.lastMessage.isEmpty ? "채팅을 시작해보세요." : chat.lastMessage)
         newMessageCount = chat.notReadCount
         notiBadge.setBadgeCount(newMessageCount)
         notiBadge.isHidden = newMessageCount == 0 ? true : false

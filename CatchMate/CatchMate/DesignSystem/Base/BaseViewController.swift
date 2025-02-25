@@ -149,9 +149,6 @@ class BaseViewController: UIViewController, LayoutConfigurable {
             }
         case .unauthorized:
             logout()
-        case .chatError:
-            // TODO: - 상단 메시지창으로 바꾸기
-            showToast(message: "채팅방 연결이 불안정 합니다.", buttonContainerExists: buttonContainerExists)
         }
     }
     

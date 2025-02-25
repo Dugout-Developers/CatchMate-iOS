@@ -19,8 +19,11 @@ final class ErrorMapper {
                 return .unauthorized
             }
         }
+        
+
         // TODO: - Logging 추가
         // DomainError가 아닐 경우 -> 알 수 없는 에러
+        LoggerService.shared.errorLog(error, domain: "errormapper", message: "알 수 없는 에러: \(error.errorDescription)")
         return .showErrorPage
     }
 }
