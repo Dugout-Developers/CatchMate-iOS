@@ -12,7 +12,7 @@ import ReactorKit
 final class NumberPickerViewController: BasePickerViewController , View {
     private let picker: UIPickerView = UIPickerView()
     private var selectedNum: Int = 1
-    private let numberArr: [Int] = [1,2,3,4,5,6,7,8]
+    private let numberArr: [Int] = [2,3,4,5,6,7,8]
     private let resetButton: UIButton = {
         let button = UIButton()
         button.setTitle("초기화", for: .normal)

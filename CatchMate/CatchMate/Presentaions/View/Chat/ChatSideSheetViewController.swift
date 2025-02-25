@@ -149,6 +149,7 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
     }
    func bind(reactor: ChatRoomReactor) {
        exitButton.rx.tap
+           .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
            .map { ChatRoomReactor.Action.exitRoom }
            .bind(to: reactor.action)
            .disposed(by: disposeBag)
@@ -160,21 +161,22 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
                vc.dismiss(animated: false)
            }
            .disposed(by: disposeBag)
-        settingButton.rx.tap
-            .withUnretained(self)
-            .flatMapLatest { vc, _ -> Observable<ChatSettingViewController> in
-                return Observable.create { observer in
-                    do {
-                        let settingVC = try ChatSettingViewController(reactor: vc.reactor, chat: vc.chat, people: vc.people)
-                        settingVC.modalPresentationStyle = .fullScreen
-                        observer.onNext(settingVC)
-                        observer.onCompleted()
-                    } catch {
-                        LoggerService.shared.errorLog(error, domain: "show_chatsettingpage", message: "userId 찾기 실패로 ChatSettingViewController 생성 실패")
-                        vc.reactor.action.onNext(.setError(ErrorMapper.mapToPresentationError(error)))
-                        observer.onCompleted()
-                    }
-                    return Disposables.create()
+       settingButton.rx.tap
+           .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
+           .withUnretained(self)
+           .flatMapLatest { vc, _ -> Observable<ChatSettingViewController> in
+               return Observable.create { observer in
+                   do {
+                       let settingVC = try ChatSettingViewController(reactor: vc.reactor, chat: vc.chat, people: vc.people)
+                       settingVC.modalPresentationStyle = .fullScreen
+                       observer.onNext(settingVC)
+                       observer.onCompleted()
+                   } catch {
+                       LoggerService.shared.errorLog(error, domain: "show_chatsettingpage", message: "userId 찾기 실패로 ChatSettingViewController 생성 실패")
+                       vc.reactor.action.onNext(.setError(ErrorMapper.mapToPresentationError(error)))
+                       observer.onCompleted()
+                   }
+                   return Disposables.create()
                 }
             }
             .subscribe(onNext: { [weak self] settingVC in

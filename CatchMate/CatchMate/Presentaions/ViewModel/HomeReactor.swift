@@ -86,7 +86,10 @@ final class HomeReactor: Reactor {
                 })
                 .withUnretained(self)
                 .flatMap({ reactor, _ in
-                    return reactor.updateFiltersAndLoadPosts(date: nil, teams: nil, number: nil)
+                    let date = reactor.currentState.dateFilterValue
+                    let teams = reactor.currentState.selectedTeams
+                    let number = reactor.currentState.seletedNumberFilter
+                    return reactor.updateFiltersAndLoadPosts(date: date, teams: teams, number: number)
                 })
                 .catch { error in
                     return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))

@@ -102,6 +102,7 @@ final class ProfileEditViewController: BaseViewController, View {
         bind(reactor: reactor)
         view.backgroundColor = .grayScale50
         imgPicker.delegate = self
+        imgPicker.allowsEditing = true
         setupImage()
     }
     private func setupImage() {
@@ -127,7 +128,7 @@ final class ProfileEditViewController: BaseViewController, View {
 // MARK: - ImagePicker
 extension ProfileEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let image = info[.originalImage] as? UIImage {
+        if let image = info[.editedImage] as? UIImage {
             if let validImage = UIImage(data: image.jpegData(compressionQuality: 0.5)!) {
                 reactor.action.onNext(.changeImage(validImage))
             } else {
@@ -147,7 +148,11 @@ extension ProfileEditViewController {
         imageEditButton.rx.tap
             .withUnretained(self)
             .subscribe { vc, _ in
-                vc.openLibrary()
+                PhotoPermissionService.shared.checkPermission(from: self) { result in
+                    if result {
+                        self.openLibrary()
+                    }
+                }
             }
             .disposed(by: disposeBag)
         self.nicknameTextField.text = reactor.currentState.nickname
@@ -169,6 +174,7 @@ extension ProfileEditViewController {
             .disposed(by: disposeBag)
         
         saveButton.rx.tap
+            .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
             .withUnretained(self)
             .subscribe {vc,  _ in
                 if reactor.currentState.nickNameValidate == .failed {

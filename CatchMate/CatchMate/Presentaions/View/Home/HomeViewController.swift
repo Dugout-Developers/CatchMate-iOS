@@ -55,6 +55,17 @@ final class HomeViewController: BaseViewController, View {
         super.viewWillAppear(true)
         tabBarController?.tabBar.isHidden = false
         reactor.action.onNext(.selectPost(nil))
+        if reactor.currentState.posts.isEmpty {
+            reactor.action.onNext(.setupUserInfo)
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        NotificationService.shared.requestNotificationPermission { granted in
+            let message = granted ? "✅ 알림 권한이 허용되었습니다." : "❌ 알림 권한이 거부되었습니다."
+            LoggerService.shared.log(level: .info, message)
+        }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,6 +78,10 @@ final class HomeViewController: BaseViewController, View {
         bind(reactor: self.reactor)
         reactor.action.onNext(.setupUserInfo)
         filterScrollView.showsHorizontalScrollIndicator = false
+        AppVersionService.shared.fetchRemoteConfig { version in
+            print("currentAPPStoreVersion: \(version)")
+        }
+        print("currentVersion: \(AppVersionService.shared.getCurrentAppVersion())")
     }
     private func setupNavigation() {
         let notiButton = UIButton()

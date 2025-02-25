@@ -72,11 +72,13 @@ final class ReceiveMateListDetailViewController: BaseViewController, UICollectio
             .bind(to: collectionView.rx.items(cellIdentifier: "DetailCardCell", cellType: DetailCardCell.self)) { index, apply, cell in
                 cell.configData(apply: apply)
                 cell.primaryButton.rx.tap
+                    .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
                     .map { Reactor.Action.acceptApply(apply.enrollId) }
                     .bind(to: reactor.action)
                     .disposed(by: cell.disposeBag)
                 
                 cell.commonButton.rx.tap
+                    .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
                     .map { Reactor.Action.rejectApply(apply.enrollId) }
                     .bind(to: reactor.action)
                     .disposed(by: cell.disposeBag)
@@ -212,8 +214,7 @@ final class DetailCardCell: UICollectionViewCell {
         ageLabel.backgroundColor = .grayScale100
         ageLabel.textColor = .cmNonImportantTextColor
         ageLabel.applyStyle(textStyle: FontSystem.caption01_medium)
-        // MARK: - API CreateDate 추가 시 수정
-        applyDateLabel.text = DateHelper.shared.toString(from: Date(), format: "M월d일 HH:mm")
+        applyDateLabel.text = DateHelper.shared.toString(from: apply.requestDate, format: "M월d일 HH:mm")
         applyDateLabel.applyStyle(textStyle: FontSystem.body02_medium)
         textView.text = apply.addText
         textView.applyStyle(textStyle: FontSystem.body02_medium)

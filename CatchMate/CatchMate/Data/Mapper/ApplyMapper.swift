@@ -57,10 +57,15 @@ final class ApplyMapper {
                 LoggerService.shared.log("Received Apply Mapping(\(enrollInfo.enrollId)번 신청 - User 정보 매칭 실패")
                 return nil
             }
+            guard let date = DateHelper.shared.convertISOStringToDate(enrollInfo.requestDate) else {
+                LoggerService.shared.log("Received Apply Mapping(\(enrollInfo.enrollId)번 신청 - Date parsing 실패")
+                return nil
+            }
             return RecivedApplyData(
                 enrollId: String(enrollInfo.enrollId),
                 user: user,
                 addText: enrollInfo.description,
+                requestDate: date,
                 new: enrollInfo.isNew
             )
         }

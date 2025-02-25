@@ -34,10 +34,16 @@ final class APIService {
         }
         
         return requestAPI(addEndPoint: addEndPoint, type: type, parameters: parameters, headers: headers, encoding: encoding, dataType: dataType)
+            .timeout(.seconds(10), scheduler: MainScheduler.instance)
             .catch { [weak self] error in
                 guard let self = self else {
                     return Observable.error(OtherError.notFoundSelf(location: "APIService-performRequest"))
                 }
+                if let rxError = error as? RxError, case .timeout = rxError {
+                    LoggerService.shared.log(level: .error, "APIService - 요청이 타임아웃됨. (10초 초과)")
+                    return Observable.error(NetworkError.responseTimeout)
+                }
+                
                 if let networkError = error as? NetworkError, networkError.statusCode == 401 {
                     guard let refreshToken else {
                         LoggerService.shared.log(level: .debug, "APIService - 리프레시 토큰 찾을 수 없음")
@@ -51,6 +57,7 @@ final class APIService {
                             return service.performRequest(retry: retry+1, addEndPoint: addEndPoint, type: type, parameters: parameters, headers: newHeaders, encoding: encoding, dataType: dataType, refreshToken: refreshToken)
                         }
                 }
+                
                 return Observable.error(error)
             }
     }

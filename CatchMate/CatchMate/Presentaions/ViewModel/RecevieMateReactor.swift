@@ -11,19 +11,20 @@ import ReactorKit
 final class RecevieMateReactor: Reactor {
     enum Action {
         case loadReceiveAppliesAll
-        case selectPost(String?)
+        case selectPost(Int?, String?)
         case acceptApply(String)
         case rejectApply(String)
     }
     enum Mutation {
         case setReceiveAppliesAll([RecivedApplies])
-        case setSelectedPostApplies([RecivedApplyData]?)
+        case setSelectedPostApplies(Int?, [RecivedApplyData]?)
         case setError(PresentationError?)
         case acceptApply(String)
         case rejectApply(String)
     }
     struct State {
         var recivedApplies: [RecivedApplies] = []
+        var selectedIndex: Int?
         var selectedPostApplies: [RecivedApplyData]?
         var currentPage: Int = 0
         var isLast: Bool = false
@@ -51,16 +52,24 @@ final class RecevieMateReactor: Reactor {
                 .catch { error in
                     return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
-        case .selectPost(let postId):
+        case .selectPost(let indexPath, let postId):
             if postId == nil {
-                return Observable.just(Mutation.setSelectedPostApplies(nil))
+                return Observable.just(Mutation.setSelectedPostApplies(nil, nil))
             }
             if let postId = postId, let intId = Int(postId) {
                 let list = resetNew(postId)
                 let loadAppiles = receivedAppliesUsecase.execute(boardId: intId)
-                    .map({ list in
+                    .withUnretained(self)
+                    .map({ reactor, list in
                         let applies = list.applies[0].applies
-                        return Mutation.setSelectedPostApplies(applies)
+                        var index = indexPath
+                        if indexPath == nil {
+                            // Push로 접근 시
+                            index = reactor.currentState.recivedApplies.firstIndex { applies in
+                                return applies.post.id == postId
+                            }
+                        }
+                        return Mutation.setSelectedPostApplies(index, applies)
                     })
                     .catch { error in
                         return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
@@ -104,13 +113,22 @@ final class RecevieMateReactor: Reactor {
         case .setReceiveAppliesAll(let result):
             newState.recivedApplies = result
             newState.error = nil
-        case .setSelectedPostApplies(let applies):
+        case .setSelectedPostApplies(let index, let applies):
+            newState.selectedIndex = index
             newState.selectedPostApplies = applies
             newState.error = nil
         case .setError(let error):
             newState.error = error
         case .acceptApply(let enrollId), .rejectApply(let enrollId):
-            newState.selectedPostApplies = currentState.selectedPostApplies?.filter({ $0.enrollId != enrollId })
+            let newApplies = currentState.selectedPostApplies?.filter({ $0.enrollId != enrollId })
+            newState.selectedPostApplies = newApplies
+            if let index = currentState.selectedIndex, let newApplies = newApplies {
+                if newApplies.isEmpty {
+                    newState.recivedApplies.remove(at: index)
+                } else {
+                    newState.recivedApplies[index].applies = newApplies
+                }
+            }
         }
         return newState
     }

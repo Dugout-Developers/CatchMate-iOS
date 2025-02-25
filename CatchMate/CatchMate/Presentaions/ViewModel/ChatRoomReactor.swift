@@ -10,14 +10,11 @@ import RxSwift
 import ReactorKit
 
 enum ChatError: LocalizedErrorWithCode {
-    case failedLoadMyData
     case failedLoadUsersData
     case failedStringToIntId
     case failedListenToMessages
     var statusCode: Int {
         switch self {
-        case .failedLoadMyData:
-            return -20001
         case .failedLoadUsersData:
             return -20002
         case .failedStringToIntId:
@@ -28,8 +25,6 @@ enum ChatError: LocalizedErrorWithCode {
     }
     var errorDescription: String? {
         switch self {
-        case .failedLoadMyData:
-            return "내 정보 로드 실패"
         case .failedLoadUsersData:
             return "참여자 정보 로드 실패"
         case .failedStringToIntId:
@@ -38,15 +33,7 @@ enum ChatError: LocalizedErrorWithCode {
             return "메시지 수신 실패"
         }
     }
-    
-    func convertToPresentationError() -> PresentationError {
-        switch self {
-        case .failedLoadMyData:
-            return .unauthorized
-        case .failedLoadUsersData, .failedStringToIntId, .failedListenToMessages:
-            return .chatError
-        }
-    }
+
 }
 
 final class ChatRoomReactor: Reactor {
@@ -60,7 +47,7 @@ final class ChatRoomReactor: Reactor {
         case receiveMessage(ChatMessage)
         case exitRoom
         case setError(PresentationError?)
-        
+        case setChatError(ChatError?)
         case loadImage(String)
         case changeImage(UIImage)
         case exportUser(Int)
@@ -74,6 +61,7 @@ final class ChatRoomReactor: Reactor {
         case setExitTrigger(Void)
         case setExportTrigger(Void)
         case clearTrigger
+        case setChatError(ChatError?)
         case setError(PresentationError?)
         
         case setImage(UIImage?)
@@ -89,7 +77,7 @@ final class ChatRoomReactor: Reactor {
         var exitTrigger: Void?
         var exportTrigger: Void?
         var error: PresentationError?
-        
+        var chatError: ChatError?
         var image: UIImage?
     }
     
@@ -114,7 +102,11 @@ final class ChatRoomReactor: Reactor {
         do {
             try setupMyData()
         } catch {
-            action.onNext(.setError(ChatError.failedLoadMyData.convertToPresentationError()))
+            if let chatError = error as? ChatError {
+                action.onNext(.setChatError(chatError))
+            } else {
+                action.onNext(.setError(ErrorMapper.mapToPresentationError(error)))
+            }
         }
         observeIncomingMessage()
     }
@@ -143,7 +135,7 @@ final class ChatRoomReactor: Reactor {
                 }
                 .catch { error in
                     if let chatError = error as? ChatError {
-                        return Observable.just(.setError(chatError.convertToPresentationError()))
+                        return Observable.just(.setChatError(chatError))
                     } else {
                         return Observable.just(.setError(ErrorMapper.mapToPresentationError(error)))
                     }
@@ -155,7 +147,7 @@ final class ChatRoomReactor: Reactor {
                 }
                 .catch { error in
                     if let chatError = error as? ChatError {
-                        return Observable.just(.setError(chatError.convertToPresentationError()))
+                        return Observable.just(.setChatError(chatError))
                     } else {
                         return Observable.just(.setError(ErrorMapper.mapToPresentationError(error)))
                     }
@@ -168,7 +160,7 @@ final class ChatRoomReactor: Reactor {
                 ])
                 .catch { error in
                     if let chatError = error as? ChatError {
-                        return Observable.just(.setError(chatError.convertToPresentationError()))
+                        return Observable.just(.setChatError(chatError))
                     } else {
                         return Observable.just(.setError(ErrorMapper.mapToPresentationError(error)))
                     }
@@ -204,7 +196,7 @@ final class ChatRoomReactor: Reactor {
                     }
                     .catch { error in
                         if let chatError = error as? ChatError {
-                            return Observable.just(.setError(chatError.convertToPresentationError()))
+                            return Observable.just(.setChatError(chatError))
                         } else {
                             return Observable.just(.setError(ErrorMapper.mapToPresentationError(error)))
                         }
@@ -217,7 +209,7 @@ final class ChatRoomReactor: Reactor {
                 }
                 .catch { error in
                     if let chatError = error as? ChatError {
-                        return Observable.just(.setError(chatError.convertToPresentationError()))
+                        return Observable.just(.setChatError(chatError))
                     } else {
                         return Observable.just(.setError(ErrorMapper.mapToPresentationError(error)))
                     }
@@ -231,10 +223,16 @@ final class ChatRoomReactor: Reactor {
                     ])
                 }
                 .catch { error in
-                    return Observable.just(.setError(ErrorMapper.mapToPresentationError(error)))
+                    if let chatError = error as? ChatError {
+                        return Observable.just(.setChatError(chatError))
+                    } else {
+                        return Observable.just(.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
                 }
         case .setError(let error):
             return Observable.just(.setError(error))
+        case .setChatError(let chatError):
+            return Observable.just(.setChatError(chatError))
             
         case .changeImage(let image):
             return updateImageUS.execute(chatId: chat.chatRoomId, image)
@@ -247,7 +245,7 @@ final class ChatRoomReactor: Reactor {
                 }
                 .catch { error in
                     if let chatError = error as? ChatError {
-                        return Observable.just(.setError(chatError.convertToPresentationError()))
+                        return Observable.just(.setChatError(chatError))
                     } else {
                         return Observable.just(.setError(ErrorMapper.mapToPresentationError(error)))
                     }
@@ -277,6 +275,7 @@ final class ChatRoomReactor: Reactor {
     }
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
+        newState.error = nil
         switch mutation {
         case .addMyMessage(let message):
             newState.messages.append(message)
@@ -287,6 +286,8 @@ final class ChatRoomReactor: Reactor {
             newState.senderProfiles = infos
         case .setError(let error):
             newState.error = error
+        case .setChatError(let chatError):
+            newState.chatError = chatError
         case .setIsLoading(let state):
             newState.isLoading = state
         case .setIsLast(let state):
@@ -310,7 +311,7 @@ final class ChatRoomReactor: Reactor {
     }
     private func setupMyData() throws {
         guard let userInfo = SetupInfoService.shared.getUsertInfo() else {
-            throw ChatError.failedLoadMyData
+            throw PresentationError.unauthorized
         }
         guard let userIntId = Int(userInfo.id) else {
             throw ChatError.failedStringToIntId
@@ -329,17 +330,17 @@ final class ChatRoomReactor: Reactor {
                 print("📩 메시지 수신: \(message)")
                 guard let chatMessage = ChatSocketMessage.decode(from: message) else {
                     print("❌ [DEBUG] 메시지 디코딩 실패")
-                    self?.action.onNext(.setError(ChatError.failedListenToMessages.convertToPresentationError()))
+                    self?.action.onNext(.setChatError(ChatError.failedListenToMessages))
                     return
                 }
                 guard let time = DateHelper.shared.convertISOStringToDate(chatMessage.sendTime) else {
                     print("❌ [DEBUG] 시간 디코딩 실패")
-                    self?.action.onNext(.setError(ChatError.failedListenToMessages.convertToPresentationError()))
+                    self?.action.onNext(.setChatError(ChatError.failedListenToMessages))
                     return
                 }
                 guard let type = ChatMessageType(serverRequest: chatMessage.messageType) else {
                     print("❌ [DEBUG] 메시지타입 디코딩 실패")
-                    self?.action.onNext(.setError(ChatError.failedListenToMessages.convertToPresentationError()))
+                    self?.action.onNext(.setChatError(ChatError.failedListenToMessages))
                     return
                 }
                 let senderInfo: SenderInfo? = (type == .date) ? nil : self?.currentState.senderProfiles.first { $0.senderId == chatMessage.senderId }
@@ -353,7 +354,7 @@ final class ChatRoomReactor: Reactor {
     
     private func convertToSendMessage(content: String) -> Observable<SendMessage> {
         guard let senderId = myData?.senderId else {
-            return .error(ChatError.failedLoadMyData)
+            return .error(PresentationError.unauthorized)
         }
         let message = SendMessage(messageType: .talk, senderId: senderId, content: content)
         return .just(message)

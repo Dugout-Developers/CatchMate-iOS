@@ -11,33 +11,45 @@ import NaverThirdPartyLogin
 import Firebase
 import FirebaseMessaging
 import UserNotifications
+import FirebaseAnalytics
+import RxSwift
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
     let gcmMessageIDKey = "gcm.message_id"
+    private let disposeBag = DisposeBag()
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-
+        
         FirebaseApp.configure()
 #if DEBUG
         Analytics.setAnalyticsCollectionEnabled(false) // 디버그 모드에서 비활성화
 #endif
-        // APNS 등록
-        if #available(iOS 10.0, *) {
-            UNUserNotificationCenter.current().delegate = self
-            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-            UNUserNotificationCenter.current().requestAuthorization(options: authOptions, completionHandler: { _, _ in })
-        } else {
-            let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
-            application.registerUserNotificationSettings(settings)
-        }
         application.registerForRemoteNotifications()
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
         UIApplication.shared.registerForRemoteNotifications()
+        UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.ChatInfo.chatRoomId)
         
         if let notificationOption = launchOptions?[.remoteNotification] as? [String: AnyObject] {
-            handleNotification(userInfo: notificationOption)
+            let acceptStatus = notificationOption["acceptStatus"] as? String
+            
+            switch acceptStatus {
+            case "PENDING":
+                if let boardIdStr = notificationOption["boardId"] as? String, let boardId = Int(boardIdStr) {
+                    moveApplyDetailView(boardId: boardId)
+                } else {
+                    LoggerService.shared.log(level: .error, "boardId 구할 수 없음")
+                }
+            case "ACCEPTED", nil:
+                if let chatIdStr = notificationOption["chatRoomId"] as? String, let chatId = Int(chatIdStr) {
+                    moveChatRoom(chatId: chatId)
+                } else {
+                    moveChatRoom(chatId: nil)
+                }
+            default:
+                LoggerService.shared.log(level: .error, "acceptStatus 구할 수 없음")
+            }
         }
         
         DispatchQueue.global(qos: .background).async {
@@ -60,15 +72,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         return true
     }
-    // 푸시 알림 처리 함수
-    private func handleNotification(userInfo: [String: AnyObject]) {
-        // userInfo에서 필요한 데이터를 추출
-        if let boardIdStr = userInfo["boardId"] as? String, let boardId = Int(boardIdStr) {
-            moveApplyDetailView(boardId: boardId)
-        } else {
-            print("boardId를 구할 수 없음")
-        }
-    }
+
     // 푸시 알림 등록
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         Messaging.messaging().apnsToken = deviceToken
@@ -76,20 +80,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let userInfo = notification.request.content.userInfo
         print("푸시 알림 수신 (foreground): \(userInfo)")
-//        let acceptStatus = userInfo["acceptStatus"] as? String
-//        
-//        switch acceptStatus {
-//        case "PENDING":
-//            if let boardIdStr = userInfo["boardId"] as? String, let boardId = Int(boardIdStr) {
-//                moveApplyDetailView(boardId: boardId)
-//            } else {
-//                LoggerService.shared.log(level: .error, "boardId 구할 수 없음")
-//            }
-//        case "ACCEPTED":
-//            moveChatRoom()
-//        default:
-//            LoggerService.shared.log(level: .error, "acceptStatus 구할 수 없음")
-//        }
+        
+        if userInfo["acceptStatus"] == nil {
+            if let chatId = userInfo["chatRoomId"] as? String {
+                if let currentChatRoomId = UserDefaults.standard.string(forKey: UserDefaultsKeys.ChatInfo.chatRoomId) {
+                    print(currentChatRoomId)
+                    if currentChatRoomId == chatId {
+                        completionHandler([])
+                        return
+                    }
+                }
+            }
+        }
         completionHandler([.list, .banner, .sound])
     }
     
@@ -105,16 +107,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             } else {
                 LoggerService.shared.log(level: .error, "boardId 구할 수 없음")
             }
-        case "ACCEPTED":
-            moveChatRoom()
+        case "ACCEPTED", nil:
+            if let chatIdStr = userInfo["chatRoomId"] as? String, let chatId = Int(chatIdStr) {
+                moveChatRoom(chatId: chatId)
+            } else {
+                moveChatRoom(chatId: nil)
+            }
         default:
             LoggerService.shared.log(level: .error, "acceptStatus 구할 수 없음")
         }
-//        if let boardIdStr = userInfo["boardId"] as? String, let boardId = Int(boardIdStr) {
-//            moveApplyDetailView(boardId: boardId)
-//        } else {
-//            print("boardId 구할 수 없음")
-//        }
         completionHandler()
     }
     private func moveApplyDetailView(boardId: Int) {
@@ -130,8 +131,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         navigationController.pushViewController(applyVC, animated: true)
     }
     
-    private func moveChatRoom() {
-        // SceneDelegate의 rootViewController 가져오기
+    private func moveChatRoom(chatId: Int?) {
         guard let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate,
               let tabBarController = sceneDelegate.window?.rootViewController as? UITabBarController else {
             return
@@ -144,14 +144,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         
         tabBarController.selectedIndex = targetTabIndex
+        
+        // 탭 이동 후 NavigationController를 다시 가져오기 위해 async 사용
+        DispatchQueue.main.async {
+            guard let navigationController = tabBarController.selectedViewController as? UINavigationController else {
+                print("탭 변경 후 NavigationController를 찾을 수 없음")
+                return
+            }
+            
+            guard let id = SetupInfoService.shared.getUserInfo(type: .id), let userId = Int(id) else {
+                return
+            }
+            
+            let chatInfoUC = DIContainerService.shared.makeChatDetailUseCase()
+            if let chatId = chatId {
+                chatInfoUC.loadChat(chatId)
+                    .observe(on: MainScheduler.instance)
+                    .subscribe { info in
+                        let chatRoomVC = ChatRoomViewController(chat: ChatRoomInfo(chatRoomId: chatId, postInfo: info.postInfo, managerInfo: info.managerInfo, cheerTeam: info.postInfo.cheerTeam), userId: userId)
+                        navigationController.pushViewController(chatRoomVC, animated: true)
+                    }
+                    .disposed(by: self.disposeBag) // self의 disposeBag 사용
+            }
+        }
     }
-
+    
     // FCM 토큰 갱신 시 호출되는 메서드
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         print("Firebase registration token: \(String(describing: fcmToken))")
         NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: ["token": fcmToken ?? ""])
     }
-
+    
     // Remote Notification 수신 시 호출되는 메서드
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         if let messageID = userInfo[gcmMessageIDKey] {
@@ -160,19 +183,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         print(userInfo)
         completionHandler(UIBackgroundFetchResult.newData)
     }
-
+    
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("Failed to register for remote notifications: \(error.localizedDescription)")
     }
     
     // MARK: UISceneSession Lifecycle
-
+    
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         // Called when a new scene session is being created.
         // Use this method to select a configuration to create the new scene with.
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
-
+    
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
         // Called when the user discards a scene session.
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.

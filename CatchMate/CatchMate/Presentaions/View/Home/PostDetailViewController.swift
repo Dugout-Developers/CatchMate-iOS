@@ -465,6 +465,9 @@ extension PostDetailViewController {
     private func setupFavoriteButton(_ state: Bool) {
         if state {
             favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withTintColor(.cmPrimaryColor, renderingMode: .alwaysOriginal), for: .normal)
+            if reactor.currentState.isLoadSetting {
+                showToast(message: "게시물을 저장했어요", buttonContainerExists: true)
+            }
         } else {
             favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withRenderingMode(.alwaysOriginal), for: .normal)
         }

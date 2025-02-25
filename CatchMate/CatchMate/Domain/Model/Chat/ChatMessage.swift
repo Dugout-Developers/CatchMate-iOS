@@ -69,6 +69,7 @@ struct ChatSocketMessage: Codable {
     let content: String
     let sendTime: String // "2025-01-31T15:20:00" - ISO8601 포맷
     
+    static let timeFormat = "yyyy-MM-dd'T'HH:mm:ss"
     init(messageType: ChatMessageType, senderId: Int, content: String) {
         self.messageType = messageType.serverRequest
         self.senderId = senderId
@@ -98,8 +99,8 @@ struct ChatSocketMessage: Codable {
     
     static func currentISO8601Time() -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-        formatter.timeZone = TimeZone.current // 로컬 시간
+        formatter.dateFormat = self.timeFormat
+        formatter.timeZone = TimeZone(identifier: "UTC")
         return formatter.string(from: Date())
     }
 }

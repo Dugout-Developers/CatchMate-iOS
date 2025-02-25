@@ -54,6 +54,7 @@ final class PostReactor: Reactor {
         case setApplyInfo(MyApplyInfo?)
         case deletePost
         case setError(PresentationError?)
+        case setIsLoadSetting
         case setUpPostResult((result: Bool, message: String?)?)
     }
     struct State {
@@ -64,6 +65,7 @@ final class PostReactor: Reactor {
         var applyInfo: MyApplyInfo?
         var isDelete: Bool = false
         var upPostResult: (result: Bool, message: String?)?
+        var isLoadSetting: Bool = false
         var error: PresentationError?
     }
     var postId: String
@@ -93,7 +95,8 @@ final class PostReactor: Reactor {
                     var mutations: [Observable<Mutation>] = [
                         Observable.just(Mutation.setPost(post)),
                         Observable.just(Mutation.setApplyButtonState(state)),
-                        Observable.just(Mutation.setIsFavorite(favorite))
+                        Observable.just(Mutation.setIsFavorite(favorite)),
+                        Observable.just(Mutation.setIsLoadSetting)
                     ]
                     if state == .applied {
                         let applyInfoMutation = self.postDetailUsecase.loadApplyInfo(postId: self.postId)
@@ -199,6 +202,8 @@ final class PostReactor: Reactor {
             newState.isDelete = true
         case .setUpPostResult(let result):
             newState.upPostResult = result
+        case .setIsLoadSetting:
+            newState.isLoadSetting = true
         }
         return newState
     }

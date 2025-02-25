@@ -145,6 +145,7 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
         case 1:
             if let user = user {
                 myMenus[indexPath.row].navigationVC(user: SimpleUser(user: user))
+                    .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
                     .withUnretained(self)
                     .subscribe { vc, nextVC in
                         nextVC.hidesBottomBarWhenPushed = true
@@ -154,6 +155,7 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
             }
         case 2:
             supportMenus[indexPath.row].navigationVC()
+                .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
                 .withUnretained(self)
                 .subscribe { vc, nextVC in
                     nextVC.hidesBottomBarWhenPushed = true

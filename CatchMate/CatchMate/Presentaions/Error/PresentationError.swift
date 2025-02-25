@@ -7,9 +7,8 @@
 
 import Foundation
 
-enum PresentationError: LocalizedError {
+enum PresentationError: LocalizedError, Equatable {
     case showErrorPage
     case showToastMessage(message: String)
     case unauthorized     // 인증 실패
-    case chatError
 }

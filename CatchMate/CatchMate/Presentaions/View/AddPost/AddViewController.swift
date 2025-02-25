@@ -68,7 +68,7 @@ final class AddViewController: BaseViewController, View {
         label.text = "명"
         label.textColor = UIColor.lightGray
         return label
-    }(), placeHolder: "최대 8", isFlex: true)
+    }(), placeHolder: "본인 포함 인원", isFlex: true)
     
     private let matchInfoLabel: UILabel = {
         let label = UILabel()
@@ -273,6 +273,7 @@ extension AddViewController {
             .disposed(by: disposeBag)
         
         registerButton.rx.tap
+            .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
             .withUnretained(self)
             .subscribe(onNext: { vc, _ in
                 if vc.editPost != nil {

@@ -61,6 +61,7 @@ final class CustomerServiceAddViewController: BaseViewController, View {
     
     func bind(reactor: CustomerServiceReactor) {
         submitButton.rx.tap
+            .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
             .subscribe { _ in
                 reactor.action.onNext(.submitContent)
             }
@@ -79,7 +80,7 @@ final class CustomerServiceAddViewController: BaseViewController, View {
             .filter{$0}
             .withUnretained(self)
             .subscribe { vc, _ in
-                vc.navigationController?.popViewController(animated: true)
+                vc.navigationController?.popToRootViewController(animated: true)
             }
             .disposed(by: disposeBag)
         

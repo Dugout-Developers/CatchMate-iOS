@@ -152,6 +152,7 @@ final class SocketService {
                 """
             socket?.write(string: frame)
             print("✅ 채팅방 \(roomID) 구독 요청 보냄")
+            UserDefaults.standard.set(roomID, forKey: UserDefaultsKeys.ChatInfo.chatRoomId)
             
         } catch {
             print("⚠️ WebSocket 상태 확인 실패: \(error)")
@@ -181,6 +182,7 @@ final class SocketService {
             socket?.write(string: frame)
             subscriptions.removeValue(forKey: roomID)
             print("🚫 채팅방 \(roomID) 구독 해제 요청 전송")
+            UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.ChatInfo.chatRoomId)
 
         } catch {
             print("⚠️ WebSocket 상태 확인 실패: \(error)")

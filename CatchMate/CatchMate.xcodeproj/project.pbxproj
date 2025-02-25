@@ -46,6 +46,10 @@
 		53014A3D2D644BBC004C2EE0 /* InquiriesRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A3C2D644BB6004C2EE0 /* InquiriesRepositoryImpl.swift */; };
 		53014A3F2D644BC9004C2EE0 /* InquiriesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A3E2D644BC5004C2EE0 /* InquiriesRepository.swift */; };
 		53014A412D644BCF004C2EE0 /* InquiriesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A402D644BCC004C2EE0 /* InquiriesUseCase.swift */; };
+		53014A522D6B0000004C2EE0 /* LoadChatDetailDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A512D6AFFF4004C2EE0 /* LoadChatDetailDataSource.swift */; };
+		53014A542D6B0239004C2EE0 /* LoadChatDetailRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A532D6B022F004C2EE0 /* LoadChatDetailRepositoryImpl.swift */; };
+		53014A562D6B0246004C2EE0 /* LoadChatDetailRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A552D6B0245004C2EE0 /* LoadChatDetailRepository.swift */; };
+		53014A582D6B0334004C2EE0 /* LoadChatDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53014A572D6B032D004C2EE0 /* LoadChatDetailUseCase.swift */; };
 		5301E2962C5B2BAE0078E910 /* LoggerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2952C5B2BAE0078E910 /* LoggerService.swift */; };
 		5301E29D2C5B38B10078E910 /* Error+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E29C2C5B38B10078E910 /* Error+Extension.swift */; };
 		5301E2A12C5B5C280078E910 /* MyPageProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2A02C5B5C280078E910 /* MyPageProfileCell.swift */; };
@@ -327,6 +331,10 @@
 		5378EA9B2C6487A600A2422C /* ReceiveMateListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5378EA9A2C6487A600A2422C /* ReceiveMateListCell.swift */; };
 		5378EA9D2C649B6900A2422C /* ReceiveMateListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5378EA9C2C649B6900A2422C /* ReceiveMateListViewController.swift */; };
 		5378EA9F2C649BBE00A2422C /* RecevieMateReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5378EA9E2C649BBE00A2422C /* RecevieMateReactor.swift */; };
+		537B8A9A2D6D67BA00C0499E /* AppVersionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537B8A992D6D67B100C0499E /* AppVersionService.swift */; };
+		537B8A9C2D6D75E100C0499E /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 537B8A9B2D6D75E100C0499E /* FirebaseRemoteConfig */; };
+		537B8A9E2D6D75E100C0499E /* FirebaseRemoteConfigSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 537B8A9D2D6D75E100C0499E /* FirebaseRemoteConfigSwift */; };
+		537B8AA02D6D888400C0499E /* PhotoPermissionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537B8A9F2D6D887800C0499E /* PhotoPermissionService.swift */; };
 		53820CC22C8601120059A1F8 /* SendAppiesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53820CC12C8601120059A1F8 /* SendAppiesDataSource.swift */; };
 		5382490E2C2E79A90074B583 /* AppleLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */; };
 		538249102C3139C80074B583 /* AppleLoginUserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490F2C3139C80074B583 /* AppleLoginUserDefaultsService.swift */; };
@@ -335,6 +343,9 @@
 		5383BE8D2C34D595008940F1 /* FontUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5383BE8C2C34D594008940F1 /* FontUtility.swift */; };
 		5383BE8F2C34DF27008940F1 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5383BE8E2C34DF27008940F1 /* Font.swift */; };
 		5383BE902C34ECD1008940F1 /* PretendardVariable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5383BE8A2C34D543008940F1 /* PretendardVariable.ttf */; };
+		538E9AA12D6C100300A70A3D /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538E9AA02D6C0FF400A70A3D /* NotificationService.swift */; };
+		538E9AA32D6C3C6600A70A3D /* Notification+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538E9AA22D6C3C5E00A70A3D /* Notification+Extension.swift */; };
+		538E9AA42D6C3C6600A70A3D /* Notification+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538E9AA22D6C3C5E00A70A3D /* Notification+Extension.swift */; };
 		538EB92F2C3FA27600ABA40E /* CMDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */; };
 		539BD8632C74F0A5004720B8 /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7ACE2C367008002FC64F /* DateHelper.swift */; };
 		53ACBA1D2C7D8E60004FAF00 /* CMActionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA1C2C7D8E60004FAF00 /* CMActionMenu.swift */; };
@@ -521,6 +532,10 @@
 		53014A3C2D644BB6004C2EE0 /* InquiriesRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InquiriesRepositoryImpl.swift; sourceTree = "<group>"; };
 		53014A3E2D644BC5004C2EE0 /* InquiriesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InquiriesRepository.swift; sourceTree = "<group>"; };
 		53014A402D644BCC004C2EE0 /* InquiriesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InquiriesUseCase.swift; sourceTree = "<group>"; };
+		53014A512D6AFFF4004C2EE0 /* LoadChatDetailDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadChatDetailDataSource.swift; sourceTree = "<group>"; };
+		53014A532D6B022F004C2EE0 /* LoadChatDetailRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadChatDetailRepositoryImpl.swift; sourceTree = "<group>"; };
+		53014A552D6B0245004C2EE0 /* LoadChatDetailRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadChatDetailRepository.swift; sourceTree = "<group>"; };
+		53014A572D6B032D004C2EE0 /* LoadChatDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadChatDetailUseCase.swift; sourceTree = "<group>"; };
 		5301E2952C5B2BAE0078E910 /* LoggerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerService.swift; sourceTree = "<group>"; };
 		5301E29C2C5B38B10078E910 /* Error+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extension.swift"; sourceTree = "<group>"; };
 		5301E2A02C5B5C280078E910 /* MyPageProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageProfileCell.swift; sourceTree = "<group>"; };
@@ -737,6 +752,8 @@
 		5378EA9A2C6487A600A2422C /* ReceiveMateListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMateListCell.swift; sourceTree = "<group>"; };
 		5378EA9C2C649B6900A2422C /* ReceiveMateListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMateListViewController.swift; sourceTree = "<group>"; };
 		5378EA9E2C649BBE00A2422C /* RecevieMateReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecevieMateReactor.swift; sourceTree = "<group>"; };
+		537B8A992D6D67B100C0499E /* AppVersionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionService.swift; sourceTree = "<group>"; };
+		537B8A9F2D6D887800C0499E /* PhotoPermissionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPermissionService.swift; sourceTree = "<group>"; };
 		53820CC12C8601120059A1F8 /* SendAppiesDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendAppiesDataSource.swift; sourceTree = "<group>"; };
 		5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginUseCase.swift; sourceTree = "<group>"; };
 		5382490F2C3139C80074B583 /* AppleLoginUserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginUserDefaultsService.swift; sourceTree = "<group>"; };
@@ -745,6 +762,8 @@
 		5383BE8A2C34D543008940F1 /* PretendardVariable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = PretendardVariable.ttf; sourceTree = "<group>"; };
 		5383BE8C2C34D594008940F1 /* FontUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontUtility.swift; sourceTree = "<group>"; };
 		5383BE8E2C34DF27008940F1 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
+		538E9AA02D6C0FF400A70A3D /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		538E9AA22D6C3C5E00A70A3D /* Notification+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extension.swift"; sourceTree = "<group>"; };
 		538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMDatePicker.swift; sourceTree = "<group>"; };
 		53ACBA1C2C7D8E60004FAF00 /* CMActionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMActionMenu.swift; sourceTree = "<group>"; };
 		53ACBA1E2C7DDD36004FAF00 /* SetupResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupResult.swift; sourceTree = "<group>"; };
@@ -870,7 +889,9 @@
 				53368C882D2F9EED00D129EE /* NaverThirdPartyLogin in Frameworks */,
 				536BDE192C1B52510043B1DA /* SnapKit in Frameworks */,
 				536BDE152C1B52510043B1DA /* PinLayout in Frameworks */,
+				537B8A9C2D6D75E100C0499E /* FirebaseRemoteConfig in Frameworks */,
 				536BDE232C1B52510043B1DA /* RxAlamofire in Frameworks */,
+				537B8A9E2D6D75E100C0499E /* FirebaseRemoteConfigSwift in Frameworks */,
 				536BDE1B2C1B52510043B1DA /* RxCocoa in Frameworks */,
 				536BDE172C1B52510043B1DA /* FlexLayout in Frameworks */,
 				530DD6192C4F88C600A7D6CE /* FirebaseMessaging in Frameworks */,
@@ -1015,6 +1036,9 @@
 		531786722C202F0300ACEF6A /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				537B8A9F2D6D887800C0499E /* PhotoPermissionService.swift */,
+				537B8A992D6D67B100C0499E /* AppVersionService.swift */,
+				538E9AA02D6C0FF400A70A3D /* NotificationService.swift */,
 				53014A322D644242004C2EE0 /* OpenSourceLibraryService.swift */,
 				5382490F2C3139C80074B583 /* AppleLoginUserDefaultsService.swift */,
 				5301E2952C5B2BAE0078E910 /* LoggerService.swift */,
@@ -1208,6 +1232,7 @@
 		535AA01E2D45FA7F007C7690 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				53014A512D6AFFF4004C2EE0 /* LoadChatDetailDataSource.swift */,
 				530149E62D5ED416004C2EE0 /* ExportChatUserDataSource.swift */,
 				530149E42D5ED240004C2EE0 /* ExitChatRoomDataSource.swift */,
 				530149DA2D5E2878004C2EE0 /* UpdateChatImageDataSource.swift */,
@@ -1256,6 +1281,7 @@
 		535AA02E2D4602F4007C7690 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				53014A532D6B022F004C2EE0 /* LoadChatDetailRepositoryImpl.swift */,
 				530149EE2D5ED6C6004C2EE0 /* ExitChatRoomRepositoryImpl.swift */,
 				530149EC2D5ED4D8004C2EE0 /* ExportChatUserRepositoryImpl.swift */,
 				530149DC2D5E2DA4004C2EE0 /* UpdateChatImageRepositoryImpl.swift */,
@@ -1269,6 +1295,7 @@
 		535AA0332D460333007C7690 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				53014A552D6B0245004C2EE0 /* LoadChatDetailRepository.swift */,
 				530149EA2D5ED4BE004C2EE0 /* ExportChatUserRepository.swift */,
 				530149E82D5ED49A004C2EE0 /* ExitChatRoomRepository.swift */,
 				530149DE2D5E2DBD004C2EE0 /* UpdateChatImageRepository.swift */,
@@ -1282,6 +1309,7 @@
 		535AA0362D460484007C7690 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				53014A572D6B032D004C2EE0 /* LoadChatDetailUseCase.swift */,
 				530149F22D5ED7E2004C2EE0 /* ExportChatUserUseCase.swift */,
 				530149F02D5ED768004C2EE0 /* ExitChatRoomUseCase.swift */,
 				530149E02D5E2E2F004C2EE0 /* UpdateChatImageUseCase.swift */,
@@ -1453,6 +1481,7 @@
 		536BDDE42C196FFD0043B1DA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				538E9AA22D6C3C5E00A70A3D /* Notification+Extension.swift */,
 				536BDDE12C196F510043B1DA /* Bundle+Extension.swift */,
 				536BDE262C1B53150043B1DA /* UIColor+Extension.swift */,
 				531786542C1C8E7800ACEF6A /* UIImage+Extension.swift */,
@@ -1996,6 +2025,8 @@
 				535AA03B2D4667E3007C7690 /* Starscream */,
 				53577B352D5303D300769533 /* FirebaseAnalyticsWithoutAdIdSupport */,
 				53577B372D5303D300769533 /* FirebaseCrashlytics */,
+				537B8A9B2D6D75E100C0499E /* FirebaseRemoteConfig */,
+				537B8A9D2D6D75E100C0499E /* FirebaseRemoteConfigSwift */,
 			);
 			productName = CatchMate;
 			productReference = 536BDDAA2C189B230043B1DA /* CatchMate.app */;
@@ -2163,6 +2194,7 @@
 				53EECAEB2D0B2FFE00775FD6 /* ProfileEditRepository.swift in Sources */,
 				531288CD2C5408FF000C2FB1 /* LoginModel.swift in Sources */,
 				53577B492D55AEAA00769533 /* ChatSystemCell.swift in Sources */,
+				53014A582D6B0334004C2EE0 /* LoadChatDetailUseCase.swift in Sources */,
 				534E39EC2C63E771006D180E /* SendMateListCell.swift in Sources */,
 				535AA0382D4612D6007C7690 /* EmptyView.swift in Sources */,
 				53014A112D6374C9004C2EE0 /* BlockUserUseCase.swift in Sources */,
@@ -2217,6 +2249,7 @@
 				53B8E2692C613127001D0ADF /* PresentationError.swift in Sources */,
 				53EECAF12D0B30B300775FD6 /* ProfileEdit.swift in Sources */,
 				5306F7BD2C9057D200292C6E /* LoadReceivedAppliesUseCase.swift in Sources */,
+				538E9AA42D6C3C6600A70A3D /* Notification+Extension.swift in Sources */,
 				531786602C1EB24D00ACEF6A /* TeamFilterViewController.swift in Sources */,
 				533B292B2C770F9F00BFE9F6 /* SetFavoriteRepositoryImpl.swift in Sources */,
 				531786822C21D3F700ACEF6A /* ChatListTableViewCell.swift in Sources */,
@@ -2225,6 +2258,7 @@
 				53C6DA002CE39DE000918718 /* ReceivedCountDataSource.swift in Sources */,
 				5378EA9F2C649BBE00A2422C /* RecevieMateReactor.swift in Sources */,
 				5320B04F2D5B017B00897EB7 /* DefualtTabelViewCell.swift in Sources */,
+				537B8AA02D6D888400C0499E /* PhotoPermissionService.swift in Sources */,
 				531786592C1C934A00ACEF6A /* UIViewController+Extension.swift in Sources */,
 				531288CB2C540764000C2FB1 /* FCMRepository.swift in Sources */,
 				5317865D2C1EAC4700ACEF6A /* Screen.swift in Sources */,
@@ -2279,6 +2313,7 @@
 				534E39D82C637FD3006D180E /* NotificationSettingViewController.swift in Sources */,
 				5375B1DB2D2E1977000581B3 /* DeleteNotificationRepository.swift in Sources */,
 				533A2B322C2BE7E600A59340 /* CheerStyles.swift in Sources */,
+				53014A542D6B0239004C2EE0 /* LoadChatDetailRepositoryImpl.swift in Sources */,
 				535AA0682D51BCEA007C7690 /* LoadChatMessageRepositoryImpl.swift in Sources */,
 				53B895CD2CA2579A00029130 /* UserPostLoadUseCase.swift in Sources */,
 				53B8E23E2C5C7BEB001D0ADF /* LoadMyInfoUseCase.swift in Sources */,
@@ -2356,6 +2391,7 @@
 				53EECB142D14F10200775FD6 /* SetAlarmRepository.swift in Sources */,
 				53EECB122D14F06300775FD6 /* SetNotificationResponseDTO.swift in Sources */,
 				535AA0242D45FB0D007C7690 /* LoadChatListDataSource.swift in Sources */,
+				538E9AA12D6C100300A70A3D /* NotificationService.swift in Sources */,
 				530149F12D5ED771004C2EE0 /* ExitChatRoomUseCase.swift in Sources */,
 				531786682C20048B00ACEF6A /* CMPickerTextField.swift in Sources */,
 				531786532C1C8BFB00ACEF6A /* BaseViewController.swift in Sources */,
@@ -2383,6 +2419,7 @@
 				53C6DA022CE3A90F00918718 /* ReceivedCountRepositoryImpl.swift in Sources */,
 				5375B1A22D2CD381000581B3 /* NotificationList.swift in Sources */,
 				53F1E8C62C47A46400A962F3 /* Apply.swift in Sources */,
+				53014A522D6B0000004C2EE0 /* LoadChatDetailDataSource.swift in Sources */,
 				5301E2A32C5B6B8B0078E910 /* AuthManager.swift in Sources */,
 				535AA00E2D368097007C7690 /* SetAlarmnUseCase.swift in Sources */,
 				53014A0F2D637478004C2EE0 /* BlockManageRepository.swift in Sources */,
@@ -2401,11 +2438,13 @@
 				53EECB052D11B07600775FD6 /* LoadReceivedCountUseCase.swift in Sources */,
 				536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */,
 				5375B1A62D2CD43C000581B3 /* NotificationMapper.swift in Sources */,
+				537B8A9A2D6D67BA00C0499E /* AppVersionService.swift in Sources */,
 				535AA0112D368097007C7690 /* DeleteNotificationUseCase.swift in Sources */,
 				535AA0122D368097007C7690 /* LoadNotificationListUseCase.swift in Sources */,
 				53ACBA372C81A91E004FAF00 /* CheerTeamPickerViewController.swift in Sources */,
 				535AA05B2D51B81D007C7690 /* ChatMessageDTO.swift in Sources */,
 				53368C942D30216200D129EE /* TempPostUseCase.swift in Sources */,
+				53014A562D6B0246004C2EE0 /* LoadChatDetailRepository.swift in Sources */,
 				53B8E2382C5C7BAA001D0ADF /* UserRepositoryImpl.swift in Sources */,
 				53EECAE82D0B2F8700775FD6 /* ProfileEditResponseDTO.swift in Sources */,
 				530149FA2D630723004C2EE0 /* ReportUserRepositoryImpl.swift in Sources */,
@@ -2536,6 +2575,7 @@
 				535AA0582D51A7F7007C7690 /* SenderInfo.swift in Sources */,
 				53B3CE3F2C88577500116BF7 /* SNSLoginResponse.swift in Sources */,
 				5375B1A32D2CD381000581B3 /* NotificationList.swift in Sources */,
+				538E9AA32D6C3C6600A70A3D /* Notification+Extension.swift in Sources */,
 				53E7DBA42CA5664200DC058D /* DeletePostDataSource.swift in Sources */,
 				53014A022D631703004C2EE0 /* BlockUserInfoDTO.swift in Sources */,
 				53368C8D2D301CD900D129EE /* TempPostRequest.swift in Sources */,
@@ -2716,7 +2756,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tori.CatchMate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2918,7 +2958,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tori.CatchMate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2956,7 +2996,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tori.CatchMate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3262,6 +3302,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 536BDE0F2C1B51440043B1DA /* XCRemoteSwiftPackageReference "RxAlamofire" */;
 			productName = RxAlamofire;
+		};
+		537B8A9B2D6D75E100C0499E /* FirebaseRemoteConfig */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 530DD6172C4F88B000A7D6CE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseRemoteConfig;
+		};
+		537B8A9D2D6D75E100C0499E /* FirebaseRemoteConfigSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 530DD6172C4F88B000A7D6CE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseRemoteConfigSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -10,7 +10,7 @@ import RxSwift
 import RxKakaoSDKAuth
 import KakaoSDKAuth
 import NaverThirdPartyLogin
-
+import FirebaseRemoteConfig
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
@@ -20,8 +20,64 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
+        let launchStoryboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
+        let launchVC = launchStoryboard.instantiateViewController(withIdentifier: "LaunchScreenVC")
+        
+        window?.rootViewController = launchVC
+        window?.makeKeyAndVisible()
+        checkForUpdate()
+    }
+    
+    /// 앱 실행 전에 업데이트 체크 & 로그인 진행
+    func checkForUpdate() {
+        AppVersionService.shared.fetchRemoteConfig { minimumVersion in
+            guard let minimumVersion = minimumVersion else { return }
+            
+            let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
+            
+            if AppVersionService.shared.isVersionNewer(currentVersion: currentVersion, minimumVersion: minimumVersion) {
+                DispatchQueue.main.async {
+                    self.showForceUpdateAlert()
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.attemptLogin()
+                }
+            }
+        }
+    }
+    
+    /// Alert 요청 후 앱스토어 이동
+    private func showForceUpdateAlert() {
+        DispatchQueue.main.async {
+            guard let window = self.window else { return }
+            
+            window.rootViewController?.showCMAlert(titleText: "최신 버전으로 업데이트해주세요", importantButtonText: "업데이트", commonButtonText: nil, importantAction: {
+                self.openAppStore()
+            })
+        }
+    }
+    private func openAppStore() {
+        let appID = "1234567890" // TODO: - 실제 앱 ID로 변경
+        let appStoreURL = "itms-apps://itunes.apple.com/app/id\(appID)"
+        let appStoreWebURL = "https://apps.apple.com/app/id\(appID)"
+        
+        if let url = URL(string: appStoreURL) {
+            UIApplication.shared.open(url, options: [:]) { success in
+                if !success, let webURL = URL(string: appStoreWebURL) {
+                    // 앱스토어가 안 열리면 Safari에서 앱스토어 웹페이지 열기
+                    UIApplication.shared.open(webURL, options: [:], completionHandler: nil)
+                }
+            }
+        } else if let webURL = URL(string: appStoreWebURL) {
+            // URL이 잘못되었을 경우에도 Safari에서 열기
+            UIApplication.shared.open(webURL, options: [:], completionHandler: nil)
+        }
+    }
+    private func attemptLogin() {
         let manager = AuthManager(tokenDS: TokenDataSourceImpl())
-        self.authManager = manager  // AuthManager를 강하게 참조하여 유지
+        self.authManager = manager // AuthManager를 강하게 참조하여 유지
+        
         manager.attemptAutoLogin()
             .observe(on: MainScheduler.instance)
             .withUnretained(self)
@@ -46,7 +102,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
             .disposed(by: disposeBag)
     }
-    
     private func moveMainTab() {
         let tabViewController = TabBarController()
         window?.rootViewController = tabViewController
@@ -87,6 +142,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneDidBecomeActive(_ scene: UIScene) {
         // Called when the scene has moved from an inactive state to an active state.
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
+        NotificationService.shared.checkNotificationPermissionStatus { isAllowed in
+            NotificationCenter.default.post(name: .notificationStatusChanged, object: isAllowed)
+        }
     }
     
     func sceneWillResignActive(_ scene: UIScene) {
@@ -118,7 +176,7 @@ extension SceneDelegate {
             if url.absoluteString.hasPrefix("catchmate") {
                 _ = NaverThirdPartyLoginConnection.getSharedInstance()?.application(UIApplication.shared, open: url, options: [:])
             }
-
+            
         }
         
     }

@@ -59,6 +59,7 @@ struct RecivedApplyData: Equatable {
     let enrollId: String
     let user: SimpleUser
     let addText: String
+    let requestDate: Date
     var new: Bool
     
     static func == (lhs: RecivedApplyData, rhs: RecivedApplyData) -> Bool {

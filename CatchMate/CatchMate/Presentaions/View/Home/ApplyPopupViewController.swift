@@ -171,6 +171,7 @@ final class ApplyPopupViewController: UIViewController, View {
 extension ApplyPopupViewController {
     func bind(reactor: PostReactor) {
         commonButton.rx.tap
+            .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
             .withUnretained(self)
             .subscribe { vc, _ in
                 if vc.apply != nil {
@@ -182,6 +183,7 @@ extension ApplyPopupViewController {
             .disposed(by: disposeBag)
         
         primaryButton.rx.tap
+            .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
             .withUnretained(self)
             .subscribe(onNext: { vc, _ in
                 if vc.apply != nil {
