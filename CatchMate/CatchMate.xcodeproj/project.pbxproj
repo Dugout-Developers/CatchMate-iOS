@@ -334,6 +334,7 @@
 		537B8A9A2D6D67BA00C0499E /* AppVersionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537B8A992D6D67B100C0499E /* AppVersionService.swift */; };
 		537B8A9C2D6D75E100C0499E /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 537B8A9B2D6D75E100C0499E /* FirebaseRemoteConfig */; };
 		537B8A9E2D6D75E100C0499E /* FirebaseRemoteConfigSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 537B8A9D2D6D75E100C0499E /* FirebaseRemoteConfigSwift */; };
+		537B8AA02D6D888400C0499E /* PhotoPermissionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537B8A9F2D6D887800C0499E /* PhotoPermissionService.swift */; };
 		53820CC22C8601120059A1F8 /* SendAppiesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53820CC12C8601120059A1F8 /* SendAppiesDataSource.swift */; };
 		5382490E2C2E79A90074B583 /* AppleLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */; };
 		538249102C3139C80074B583 /* AppleLoginUserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382490F2C3139C80074B583 /* AppleLoginUserDefaultsService.swift */; };
@@ -752,6 +753,7 @@
 		5378EA9C2C649B6900A2422C /* ReceiveMateListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMateListViewController.swift; sourceTree = "<group>"; };
 		5378EA9E2C649BBE00A2422C /* RecevieMateReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecevieMateReactor.swift; sourceTree = "<group>"; };
 		537B8A992D6D67B100C0499E /* AppVersionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionService.swift; sourceTree = "<group>"; };
+		537B8A9F2D6D887800C0499E /* PhotoPermissionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPermissionService.swift; sourceTree = "<group>"; };
 		53820CC12C8601120059A1F8 /* SendAppiesDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendAppiesDataSource.swift; sourceTree = "<group>"; };
 		5382490D2C2E79A90074B583 /* AppleLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginUseCase.swift; sourceTree = "<group>"; };
 		5382490F2C3139C80074B583 /* AppleLoginUserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginUserDefaultsService.swift; sourceTree = "<group>"; };
@@ -1034,6 +1036,7 @@
 		531786722C202F0300ACEF6A /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				537B8A9F2D6D887800C0499E /* PhotoPermissionService.swift */,
 				537B8A992D6D67B100C0499E /* AppVersionService.swift */,
 				538E9AA02D6C0FF400A70A3D /* NotificationService.swift */,
 				53014A322D644242004C2EE0 /* OpenSourceLibraryService.swift */,
@@ -2255,6 +2258,7 @@
 				53C6DA002CE39DE000918718 /* ReceivedCountDataSource.swift in Sources */,
 				5378EA9F2C649BBE00A2422C /* RecevieMateReactor.swift in Sources */,
 				5320B04F2D5B017B00897EB7 /* DefualtTabelViewCell.swift in Sources */,
+				537B8AA02D6D888400C0499E /* PhotoPermissionService.swift in Sources */,
 				531786592C1C934A00ACEF6A /* UIViewController+Extension.swift in Sources */,
 				531288CB2C540764000C2FB1 /* FCMRepository.swift in Sources */,
 				5317865D2C1EAC4700ACEF6A /* Screen.swift in Sources */,

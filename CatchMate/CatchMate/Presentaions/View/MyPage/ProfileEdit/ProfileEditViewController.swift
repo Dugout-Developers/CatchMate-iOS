@@ -147,7 +147,11 @@ extension ProfileEditViewController {
         imageEditButton.rx.tap
             .withUnretained(self)
             .subscribe { vc, _ in
-                vc.openLibrary()
+                PhotoPermissionService.shared.checkPermission(from: self) { result in
+                    if result {
+                        self.openLibrary()
+                    }
+                }
             }
             .disposed(by: disposeBag)
         self.nicknameTextField.text = reactor.currentState.nickname
