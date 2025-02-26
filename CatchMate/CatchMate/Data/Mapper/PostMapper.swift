@@ -84,12 +84,10 @@ final class PostMapper {
         guard let homeTeam = Team.init(serverId: gameInfo.homeClubId),
               let awayTeam = Team.init(serverId: gameInfo.awayClubId),
               let cheerTeam = Team.init(serverId: dto.cheerClubId) else {
-            print("팀정보 매칭 실패")
             LoggerService.shared.log("favoriteListDTO -> PostList 변환 실패 : 팀정보 매칭 실패")
             return nil
         }
         guard let convertedDates = DateHelper.shared.convertISODateToCustomStrings(isoDateString: gameInfo.gameStartDate ?? "") else {
-            print("날짜 변환 실패")
             LoggerService.shared.log("PostListDTO -> PostList 변환 실패 : 날짜 변환 실패")
             return nil
         }

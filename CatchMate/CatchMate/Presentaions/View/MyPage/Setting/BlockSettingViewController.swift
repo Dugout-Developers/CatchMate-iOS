@@ -97,7 +97,6 @@ final class BlockSettingViewController: BaseViewController, View {
                     .withUnretained(self)
                     .subscribe(onNext: { vc, user in
                         vc.showCMAlert(titleText: "'\(user.nickName)'\n차단을 해제할까요?", importantButtonText: "해제", commonButtonText: "취소") {
-                            print(user)
                             vc.reactor.action.onNext(.unblockUser(user.userId))
                         } commonAction: {
                             self.dismiss(animated: false)

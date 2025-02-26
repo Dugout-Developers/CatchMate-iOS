@@ -17,9 +17,7 @@ final class AuthManager {
     init(tokenDS: TokenDataSource) {
         self.tokenDS = tokenDS
     }
-    deinit {
-        print("AuthManager Deinit")
-    }
+
     func attemptAutoLogin() -> Observable<Bool> {
         guard let refreshToken = tokenDS.getToken(for: .refreshToken) else {
             return Observable.just(false)
@@ -35,7 +33,7 @@ final class AuthManager {
                 return Observable.just(false)
             }
             .catch { error in
-                print("Error occurred: \(error)")
+                LoggerService.shared.errorLog(error, domain: "authmanager", message: error.errorDescription)
                 return Observable.just(false)
             }
     }

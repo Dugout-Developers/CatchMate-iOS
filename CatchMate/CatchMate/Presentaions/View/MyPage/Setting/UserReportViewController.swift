@@ -98,7 +98,6 @@ final class UserReportViewController: BaseViewController, View {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         containerView.pin.all(view.pin.safeArea).marginBottom(BottomMargin.safeArea-view.safeAreaInsets.bottom)
-        print(BottomMargin.safeArea-view.safeAreaInsets.bottom)
         containerView.flex.layout()
     }
     

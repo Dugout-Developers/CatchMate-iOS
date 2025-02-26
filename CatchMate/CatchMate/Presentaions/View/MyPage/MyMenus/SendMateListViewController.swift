@@ -69,11 +69,7 @@ extension SendMateListViewController {
                 cell.updateConstraints()
             }
             .disposed(by: disposeBag)
-        reactor.state.map { $0.currentPage }
-            .subscribe { page in
-                print("currentPage: \(page)")
-            }
-            .disposed(by: disposeBag)
+
         tableView.rx.itemSelected
             .observe(on: MainScheduler.instance)
             .withUnretained(self)

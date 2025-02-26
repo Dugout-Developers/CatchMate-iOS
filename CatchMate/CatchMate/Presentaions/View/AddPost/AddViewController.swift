@@ -312,7 +312,6 @@ extension AddViewController {
             .observe(on: MainScheduler.asyncInstance)
             .withUnretained(self)
             .subscribe { vc, text in
-                print(text)
                 vc.datePickerTextField.updateDateText(text)
             }
             .disposed(by: disposeBag)
@@ -400,7 +399,6 @@ extension AddViewController {
             .subscribe { vc, text in
                 vc.textview.text = text
                 vc.textview.updateTextStyle()
-                print(text.count)
                 vc.updateAddTextCount(text.count)
                 
             }

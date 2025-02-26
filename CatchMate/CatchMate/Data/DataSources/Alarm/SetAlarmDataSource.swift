@@ -36,7 +36,7 @@ final class SetAlarmDataSourceImpl: SetAlarmDataSource {
             "alarmType": type,
             "isEnabled": isEnabled
         ]
-        print(parameters)
+
         return APIService.shared.performRequest(type: .setNotification, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: SetNotificationResponseDTO.self, refreshToken: refreshToken)
             .catch { error in
                 return Observable.error(error)

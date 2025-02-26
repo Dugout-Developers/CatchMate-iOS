@@ -22,7 +22,7 @@ final class APIService {
             let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
             return jsonObject as? [String: Any]
         } catch {
-            print("JSON 변환 실패: \(error)")
+            LoggerService.shared.errorLog(error, domain: "apiservice_convert_dictionary", message: error.errorDescription)
             return nil
         }
     }
@@ -87,7 +87,7 @@ final class APIService {
                     LoggerService.shared.log(level: .debug, "DTO: \(dtoResponse)")
                     return Observable.just(dtoResponse)
                 } catch {
-                    print(error.localizedDescription)
+                    LoggerService.shared.log(error.localizedDescription)
                     LoggerService.shared.log(level: .debug, "APIService - Decoding Error")
                     if let jsonString = String(data: data, encoding: .utf8) {
                         LoggerService.shared.log(level: .debug, "Decoding Error - JSON 데이터 : \(jsonString)")
