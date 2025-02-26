@@ -118,7 +118,6 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
     }
     
     init(chat: ChatRoomInfo, userId: Int, people: [SenderInfo], image: String = "", reactor: ChatRoomReactor) {
-        // TODO: - image 임시 기본값
         self.chat = chat
         self.userId = userId
         self.people = people
@@ -150,7 +149,22 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
    func bind(reactor: ChatRoomReactor) {
        exitButton.rx.tap
            .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
-           .map { ChatRoomReactor.Action.exitRoom }
+           .withUnretained(self)
+           .flatMapLatest { vc, _ -> Single<Bool> in
+               return Single.create { single in
+                   vc.showCMAlert(titleText: "채팅방을 나갈까요?", importantButtonText: "나가기", commonButtonText: "취소") {
+                       single(.success(true))  // "나가기" 선택 시 true 방출
+                   } commonAction: {
+                       single(.success(false)) // "취소" 선택 시 false 방출
+                   }
+                   return Disposables.create()
+               }
+           }
+           .filter{$0}
+           .map {
+               print("filter: \($0)")
+               return ChatRoomReactor.Action.exitRoom
+           }
            .bind(to: reactor.action)
            .disposed(by: disposeBag)
        
