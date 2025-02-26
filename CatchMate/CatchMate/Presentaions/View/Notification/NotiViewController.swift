@@ -74,7 +74,7 @@ extension NotiViewController {
                 case .chatRoom:
                     vc.navigateToRootAndSwitchTab()
                 case .none:
-                    break
+                    vc.showCMAlert(titleText: "이미 처리된 알림이에요", importantButtonText: "확인", commonButtonText: nil)
                 }
             }
             .disposed(by: disposeBag)

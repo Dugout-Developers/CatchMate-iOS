@@ -117,15 +117,6 @@ final class NotificationSettingViewController: BaseViewController, View {
                     .disposed(by: cell.disposeBag)
             }
             .disposed(by: disposeBag)
-        
-//        tableView.rx.willDisplayCell
-//            .subscribe(onNext: { cell, _ in
-//                if let notificationCell = cell as? NotificationSettingCell {
-//                    notificationCell.setNeedsLayout()
-//                    notificationCell.layoutIfNeeded()
-//                }
-//            })
-//            .disposed(by: disposeBag)
         }
     private func showSettingsAlert() {
         showCMAlert(titleText: "설정에서 알림 권한을 허용해주세요.", importantButtonText: "설정", commonButtonText: "취소", importantAction:  {
