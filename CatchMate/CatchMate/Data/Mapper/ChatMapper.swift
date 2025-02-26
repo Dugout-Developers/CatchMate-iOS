@@ -36,7 +36,7 @@ final class ChatMapper {
             LoggerService.shared.log("ChatListMapper: 팀 정보 변환 실패")
             return nil
         }
-        guard let convertedDates = DateHelper.shared.convertISODateToCustomStrings(isoDateString: dto.gameInfo.gameStartDate ?? "") else {
+        guard let convertedDates = DateHelper.shared.convertISODateToCustomStrings(isoDateString: dto.gameInfo.gameStartDate ?? "", dateFormat: "M월 d일 EEEE") else {
             LoggerService.shared.log("ChatListMapper 날짜 변환 실패")
             return nil
         }

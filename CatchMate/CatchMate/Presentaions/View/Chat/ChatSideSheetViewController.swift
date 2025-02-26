@@ -95,12 +95,7 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         return stackView
     }()
     private func setupStyle() {
-        if let date = DateHelper.shared.toDate(from: chat.postInfo.date, format: "MM.dd") {
-            let string = DateHelper.shared.toString(from: date, format: "M월 d일 EEEE")
-            infoLabel.text = "\(string) | \(chat.postInfo.playTime) | \(chat.postInfo.location)"
-        } else {
-            infoLabel.text = "0월 0일 요일 | \(chat.postInfo.playTime) | \(chat.postInfo.location)"
-        }
+        infoLabel.text = "\(chat.postInfo.date) | \(chat.postInfo.playTime) | \(chat.postInfo.location)"
         infoLabel.applyStyle(textStyle: FontSystem.body03_medium)
         infoLabel.textColor = .cmPrimaryColor
         partyNumLabel.text = "\(chat.postInfo.currentPerson)/\(chat.postInfo.maxPerson)"

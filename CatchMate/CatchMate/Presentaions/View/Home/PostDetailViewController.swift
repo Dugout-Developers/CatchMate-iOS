@@ -222,11 +222,11 @@ final class PostDetailViewController: BaseViewController, View {
                         let editVC = AddViewController(reactor: DIContainerService.shared.makeAddReactor(), editPost: post)
                         self?.navigationController?.pushViewController(editVC, animated: true)
                     } else {
-                        self?.showToast(message: "수정 페이지 불러오기 실패. 다시 시도해주세요.")
+                        self?.showToast(message: "게시글을 수정하는데 실패했어요\n다시 시도해주세요")
                     }
                 }),
                 MenuItem(title: "게시글 삭제", textColor: UIColor.cmSystemRed, action: { [weak self] in
-                    self?.showCMAlert(titleText: "삭제 시 채팅방도 같이 삭제됩니다\n게시글을 삭제하시겠습니까?", importantButtonText: "삭제", commonButtonText: "취소", importantAction: {
+                    self?.showCMAlert(titleText: "삭제 시 채팅방도 같이 삭제돼요\n정말로 삭제할까요?", importantButtonText: "삭제", commonButtonText: "취소", importantAction: {
                         self?.reactor.action.onNext(.deletePost)
                     }, commonAction: {
                         self?.dismiss(animated: false)
@@ -263,7 +263,7 @@ final class PostDetailViewController: BaseViewController, View {
     private func setupData(post: Post) {
         print(post)
         if let date = DateHelper.shared.toDate(from: post.date, format: "MM.dd") {
-            let dateString = DateHelper.shared.toString(from: date, format: "M월 d일")
+            let dateString = DateHelper.shared.toString(from: date, format: "M월 d일 EEEE")
             dateValueLabel.text = "\(dateString) | \(post.playTime)"
         } else {
             dateValueLabel.text = "\(post.date) | \(post.playTime)"
@@ -336,7 +336,7 @@ final class PostDetailViewController: BaseViewController, View {
             let userPageVC = OtherUserMyPageViewController(user: user, reactor: DIContainerService.shared.makeOtherUserPageReactor(user))
             navigationController?.pushViewController(userPageVC, animated: true)
         } else {
-            showToast(message: "해당 사용자 정보에 접근할 수 없습니다. 다시 시도해주세요.", buttonContainerExists: true)
+            showToast(message: "해당 사용자 정보에 접근할 수 없어요\n다시 시도해주세요", buttonContainerExists: true)
         }
     }
     
@@ -452,7 +452,7 @@ extension PostDetailViewController {
                     vc.showToast(message: "게시글을 끌어올렸어요", buttonContainerExists: true)
                 } else {
                     if let message = result.message {
-                        let toastMsg = "게시글은 3일에 한 번씩 끌어올릴 수 있습니다.\n\(message) 남았습니다."
+                        let toastMsg = "\(message) 뒤에 끌어올릴 수 있어요"
                         vc.showToast(message: toastMsg, buttonContainerExists: true)
                     }
                 }
@@ -484,7 +484,7 @@ extension PostDetailViewController {
     func showCancelApplyPopup() {
         guard let post = reactor.currentState.post,
               let applyInfo = reactor.currentState.applyInfo else {
-            showToast(message: "요청에 실패했습니다. 문제 지속 시 문의주세요.")
+            showToast(message: "요청에 실패했어요.\n문제 지속 시 문의주세요")
             return
         }
         print(applyInfo)
@@ -497,7 +497,7 @@ extension PostDetailViewController {
     
     func showChatRoom() {
         guard let post = reactor.currentState.post, let chatId = post.chatRoomId else {
-            showToast(message: "채팅방에 들어갈 수 없습니다. 문제 지속 시 문의해주세요.")
+            showToast(message: "채팅방에 들어갈 수 없어요\n문제 지속 시 문의해주세요")
             return
         }
         guard let id = SetupInfoService.shared.getUserInfo(type: .id), let userId = Int(id) else {

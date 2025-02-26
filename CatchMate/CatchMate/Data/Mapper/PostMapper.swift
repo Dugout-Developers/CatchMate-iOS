@@ -87,7 +87,7 @@ final class PostMapper {
             LoggerService.shared.log("favoriteListDTO -> PostList 변환 실패 : 팀정보 매칭 실패")
             return nil
         }
-        guard let convertedDates = DateHelper.shared.convertISODateToCustomStrings(isoDateString: gameInfo.gameStartDate ?? "") else {
+        guard let convertedDates = DateHelper.shared.convertISODateToCustomStrings(isoDateString: gameInfo.gameStartDate ?? "", dateFormat: "M월 d일 EEEE") else {
             LoggerService.shared.log("PostListDTO -> PostList 변환 실패 : 날짜 변환 실패")
             return nil
         }
