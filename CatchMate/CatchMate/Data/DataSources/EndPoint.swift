@@ -99,6 +99,8 @@ enum Endpoint {
     
     /// 문의하기
     case inquiries
+    /// 공지사항 리스트
+    case noticesList
     
     var endPoint: String {
         switch self {
@@ -180,6 +182,8 @@ enum Endpoint {
             return "/users/block/"
         case .inquiries:
             return "/inquiries"
+        case .noticesList:
+            return "/notices/list"
         }
     }
     var apiName: String {
@@ -266,6 +270,8 @@ enum Endpoint {
             return "유저 차단 해제 API"
         case .inquiries:
             return "고객센터 문의 API"
+        case .noticesList:
+            return "공지사항 리스트 조회 API"
         }
     }
     
@@ -343,6 +349,8 @@ enum Endpoint {
         // MARK: - 고객센터 관련
         case .inquiries:
             return .post
+        case .noticesList:
+            return .get
         }
     }
 }

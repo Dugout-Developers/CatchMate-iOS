@@ -255,6 +255,14 @@ class DIContainerService {
         return CustomerServiceReactor(menu: menu, inquiriesUsecase: inquiriesUC)
     }
     
+    func makeAnnouncementsRecator() -> AnnouncementsReactor {
+        let loadNoticeDS = LoadNoticeListDataSourceImpl(tokenDataSource: tokenDS)
+        let loadNoticeRepo = LoadNoticeListRepsitoryImpl(loadNoticeDS: loadNoticeDS)
+        let loadNoticeUS = LoadNoticeListUseCaseImpl(loadNoticeRepo: loadNoticeRepo)
+        
+        return AnnouncementsReactor(loadNoticesUseCase: loadNoticeUS)
+    }
+    
     // MARK: - 특정 Usecase만 필요할 때
     func makeLogoutUseCase() -> LogoutUseCase {
         let logoutDataSource = LogoutDataSourceImpl(tokenDataSource: tokenDS)

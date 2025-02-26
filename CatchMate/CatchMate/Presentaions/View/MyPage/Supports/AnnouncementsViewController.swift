@@ -31,7 +31,6 @@ final class AnnouncementsViewController: BaseViewController, View {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        reactor.action.onNext(.loadAnnouncements)
         reactor.action.onNext(.selectAnnouncement(nil))
     }
     override func viewDidLoad() {
@@ -40,6 +39,7 @@ final class AnnouncementsViewController: BaseViewController, View {
         setupUI()
         setupTableView()
         bind(reactor: reactor)
+        reactor.action.onNext(.loadAnnouncements)
     }
     
     private func setupTableView() {
@@ -66,6 +66,33 @@ extension AnnouncementsViewController {
                 cell.selectionStyle = .none
                 cell.configData(announcement: item)
                 cell.updateConstraints()
+            }
+            .disposed(by: disposeBag)
+        tableView.rx.contentOffset
+            .skip(1)
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .map { vc, offset in
+                let offsetY = offset.y
+                let contentHeight = vc.tableView.contentSize.height
+                let threshold = contentHeight - vc.tableView.frame.size.height - (vc.tableView.rowHeight * 4)
+                return (vc, offsetY, threshold)
+            }
+            .filter { vc, offsetY, threshold in
+                offsetY > threshold &&
+                !reactor.currentState.isLoading &&
+                !reactor.currentState.isLast
+            }
+            .subscribe(onNext: { vc, _, _ in
+                reactor.action.onNext(.loadNextPage)
+            })
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.error}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, error in
+                vc.handleError(error)
             }
             .disposed(by: disposeBag)
         tableView.rx.itemSelected
