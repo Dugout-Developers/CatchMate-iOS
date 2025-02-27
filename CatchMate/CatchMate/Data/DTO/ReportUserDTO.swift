@@ -6,7 +6,6 @@
 //
 
 struct ReportUserDTO: Codable {
-    let reportedUserId: Int
     let reportType: String
     let content: String
 }

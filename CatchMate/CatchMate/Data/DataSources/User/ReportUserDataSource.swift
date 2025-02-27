@@ -11,7 +11,7 @@ import RxAlamofire
 import Alamofire
 
 protocol ReportUserDataSource {
-    func reportUser(reportInfo: ReportUserDTO) -> Observable<Bool>
+    func reportUser(reportInfo: ReportUserDTO, userId: Int) -> Observable<Bool>
 }
 
 final class ReportUserDataSourceImpl: ReportUserDataSource {
@@ -21,7 +21,7 @@ final class ReportUserDataSourceImpl: ReportUserDataSource {
         self.tokenDataSource = tokenDataSource
     }
     
-    func reportUser(reportInfo: ReportUserDTO) -> Observable<Bool> {
+    func reportUser(reportInfo: ReportUserDTO, userId: Int) -> Observable<Bool> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
@@ -40,13 +40,13 @@ final class ReportUserDataSourceImpl: ReportUserDataSource {
         }
         
         LoggerService.shared.log("인코딩 파라미터: \(parameters)")
-        return APIService.shared.performRequest(type: .report, parameters: parameters, headers: headers, encoding: JSONEncoding.default, dataType: StateResponseDTO.self, refreshToken: refreshToken)
+        return APIService.shared.performRequest(addEndPoint: "/\(userId)" ,type: .report, parameters: parameters, headers: headers, encoding: JSONEncoding.default, dataType: StateResponseDTO.self, refreshToken: refreshToken)
             .map { dto in
-                LoggerService.shared.log(level: .debug, "\(reportInfo.reportedUserId)번 유저 신고 \(dto.state)")
+                LoggerService.shared.log(level: .debug, "\(userId)번 유저 신고 \(dto.state)")
                 return dto.state
             }
             .catch { error in
-                LoggerService.shared.log(level: .debug, "\(reportInfo.reportedUserId)번 유저 신고 실패 : \(error)")
+                LoggerService.shared.log(level: .debug, "\(userId)번 유저 신고 실패 : \(error)")
                 return Observable.error(error)
             }
     }
