@@ -106,11 +106,11 @@ final class ChatListTableViewCell: UITableViewCell {
         notiBadge.applyStyle(textStyle: FontSystem.bedgeText)
         lastChatDateLabel.applyStyle(textStyle: FontSystem.caption01_medium)
         if newChat {
-            peopleNumLabel.text = String(chat.currentPerson)
-            peopleNumLabel.textColor = .cmNonImportantTextColor
-        } else {
             peopleNumLabel.text = "New"
             peopleNumLabel.textColor = .cmPrimaryColor
+        } else {
+            peopleNumLabel.text = String(chat.currentPerson)
+            peopleNumLabel.textColor = .cmNonImportantTextColor
         }
         peopleNumLabel.applyStyle(textStyle: FontSystem.caption01_medium)
         postTitleLabel.flex.markDirty()

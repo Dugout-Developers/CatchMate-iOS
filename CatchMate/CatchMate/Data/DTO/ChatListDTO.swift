@@ -18,6 +18,7 @@ struct ChatRoomInfoDTO: Codable {
     let lastMessageContent: String?
     let chatRoomImage: String
     let unreadMessageCount: Int
+    let isNewChatRoom: Bool
 }
 
 struct ChatPostInfo: Codable {
