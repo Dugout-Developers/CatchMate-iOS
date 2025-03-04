@@ -26,18 +26,20 @@ final class SignUpReactor: Reactor {
     private let signupUseCase: SignUpUseCase
     private let signUpModel: SignUpModel
     private let loginModel: LoginModel
+    private let isEventAlarm: Bool
     private let disposeBag = DisposeBag()
-    init(signUpModel: SignUpModel, loginModel: LoginModel, signupUseCase: SignUpUseCase) {
+    init(signUpModel: SignUpModel, loginModel: LoginModel, signupUseCase: SignUpUseCase, isEventAlarm: Bool) {
         self.initialState = State()
         self.signUpModel = signUpModel
         self.loginModel = loginModel
         self.signupUseCase = signupUseCase
+        self.isEventAlarm = isEventAlarm
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .signUpUser:
-            return signupUseCase.execute(loginModel, signupInfo: signUpModel)
+            return signupUseCase.execute(loginModel, signupInfo: signUpModel, isAlarm: isEventAlarm)
                 .map { response in
                     return Mutation.setSignUpResponse(response)
                 }

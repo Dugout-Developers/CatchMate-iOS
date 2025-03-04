@@ -76,7 +76,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     private func attemptLogin() {
         let manager = AuthManager(tokenDS: TokenDataSourceImpl())
-        self.authManager = manager // AuthManager를 강하게 참조하여 유지
+        self.authManager = manager
         
         manager.attemptAutoLogin()
             .observe(on: MainScheduler.instance)

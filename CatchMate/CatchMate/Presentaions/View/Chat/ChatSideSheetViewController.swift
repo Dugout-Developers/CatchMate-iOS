@@ -95,12 +95,7 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         return stackView
     }()
     private func setupStyle() {
-        if let date = DateHelper.shared.toDate(from: chat.postInfo.date, format: "MM.dd") {
-            let string = DateHelper.shared.toString(from: date, format: "M월 d일 EEEE")
-            infoLabel.text = "\(string) | \(chat.postInfo.playTime) | \(chat.postInfo.location)"
-        } else {
-            infoLabel.text = "0월 0일 요일 | \(chat.postInfo.playTime) | \(chat.postInfo.location)"
-        }
+        infoLabel.text = "\(chat.postInfo.date) | \(chat.postInfo.playTime) | \(chat.postInfo.location)"
         infoLabel.applyStyle(textStyle: FontSystem.body03_medium)
         infoLabel.textColor = .cmPrimaryColor
         partyNumLabel.text = "\(chat.postInfo.currentPerson)/\(chat.postInfo.maxPerson)"
@@ -118,7 +113,6 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
     }
     
     init(chat: ChatRoomInfo, userId: Int, people: [SenderInfo], image: String = "", reactor: ChatRoomReactor) {
-        // TODO: - image 임시 기본값
         self.chat = chat
         self.userId = userId
         self.people = people
@@ -150,7 +144,22 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
    func bind(reactor: ChatRoomReactor) {
        exitButton.rx.tap
            .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
-           .map { ChatRoomReactor.Action.exitRoom }
+           .withUnretained(self)
+           .flatMapLatest { vc, _ -> Single<Bool> in
+               return Single.create { single in
+                   vc.showCMAlert(titleText: "채팅방을 나갈까요?", importantButtonText: "나가기", commonButtonText: "취소") {
+                       single(.success(true))  // "나가기" 선택 시 true 방출
+                   } commonAction: {
+                       single(.success(false)) // "취소" 선택 시 false 방출
+                   }
+                   return Disposables.create()
+               }
+           }
+           .filter{$0}
+           .map {
+               print("filter: \($0)")
+               return ChatRoomReactor.Action.exitRoom
+           }
            .bind(to: reactor.action)
            .disposed(by: disposeBag)
        

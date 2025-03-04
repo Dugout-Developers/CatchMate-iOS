@@ -36,11 +36,11 @@ final class DateHelper {
     }
     
     // ISO8601 형식의 문자열을 받아 date와 playTime으로 변환하는 메서드 추가
-    func convertISODateToCustomStrings(isoDateString: String) -> (date: String, playTime: String)? {
+    func convertISODateToCustomStrings(isoDateString: String, dateFormat: String = "MM.dd") -> (date: String, playTime: String)? {
         // ISO8601 문자열을 UTC 기준으로 Date 객체로 변환
         let isoDateString = (isoDateString.last != "Z") ? isoDateString + "Z" : isoDateString
         if let date = isoFormatter.date(from: isoDateString) {
-            let dateString = toString(from: date, format: "MM.dd", timeZone: TimeZone(secondsFromGMT: 0))
+            let dateString = toString(from: date, format: dateFormat, timeZone: TimeZone(secondsFromGMT: 0))
             let playTimeString = toString(from: date, format: "HH:mm", timeZone: TimeZone(secondsFromGMT: 0))
             return (dateString, playTimeString)
         }

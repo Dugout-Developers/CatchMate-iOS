@@ -39,12 +39,14 @@ class DIContainerService {
         return SignReactor(loginModel: model, nicknameUseCase: nicknameUsecase)
     }
     
-    func makeSignUpReactor(_ model: SignUpModel, loginModel: LoginModel) -> SignUpReactor {
+    func makeSignUpReactor(_ model: SignUpModel, loginModel: LoginModel, isEvent: Bool) -> SignUpReactor {
         let dataSource = SignUpDataSourceImpl(tokenDataSource: tokenDS)
         let repository = SignUpRepositoryImpl(signupDatasource: dataSource)
-        let usecase = SignUpUseCaseImpl(repository: repository)
+        let setAlarmDataSource = SetAlarmDataSourceImpl(tokenDataSource: tokenDS)
+        let setAlarmRepository = SetAlarmRepositoryImpl(setNotificationDS: setAlarmDataSource)
+        let usecase = SignUpUseCaseImpl(repository: repository, alarmRepository: setAlarmRepository)
         
-        return SignUpReactor(signUpModel: model, loginModel: loginModel, signupUseCase: usecase)
+        return SignUpReactor(signUpModel: model, loginModel: loginModel, signupUseCase: usecase, isEventAlarm: isEvent)
     }
     func makeHomeReactor() -> HomeReactor {
         let listLoadDataSource = PostListLoadDataSourceImpl(tokenDataSource: tokenDS)
@@ -198,7 +200,11 @@ class DIContainerService {
         let loadChatListRepo = LoadChatListRepositoryImpl(chatListDataSource: loadChatListDS)
         let loadChatListUC = LoadChatListUseCaseImpl(loadChatListRepository: loadChatListRepo)
         
-        return ChatListReactor(loadchatListUsecase: loadChatListUC)
+        let exitDataSource = ExitChatRoomDataSourceImpl(tokenDataSource: tokenDS)
+        let exitRepository = ExitChatRoomRepositoryImpl(exitDS: exitDataSource)
+        let exitUsecase = ExitChatRoomUseCaseImpl(exitRepo: exitRepository)
+        
+        return ChatListReactor(loadchatListUsecase: loadChatListUC, deleteChatUsecase: exitUsecase)
     }
     
     func makeChatRoomReactor(_ chat: ChatRoomInfo) -> ChatRoomReactor {
@@ -249,6 +255,14 @@ class DIContainerService {
         let inquiriesUC = InquiriesUseCaseImpl(inquriesRepo: inquiriesRepo)
         
         return CustomerServiceReactor(menu: menu, inquiriesUsecase: inquiriesUC)
+    }
+    
+    func makeAnnouncementsRecator() -> AnnouncementsReactor {
+        let loadNoticeDS = LoadNoticeListDataSourceImpl(tokenDataSource: tokenDS)
+        let loadNoticeRepo = LoadNoticeListRepsitoryImpl(loadNoticeDS: loadNoticeDS)
+        let loadNoticeUS = LoadNoticeListUseCaseImpl(loadNoticeRepo: loadNoticeRepo)
+        
+        return AnnouncementsReactor(loadNoticesUseCase: loadNoticeUS)
     }
     
     // MARK: - 특정 Usecase만 필요할 때

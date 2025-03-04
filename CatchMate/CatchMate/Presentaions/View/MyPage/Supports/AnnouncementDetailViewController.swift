@@ -62,7 +62,7 @@ final class AnnouncementDetailViewController: BaseViewController {
     
     private func setupData() {
         titleLabel.text = announcement.title
-        infoLabel.text = announcement.writeDate
+        infoLabel.text = announcement.dateString
         contentsLabel.text = announcement.contents
         
         titleLabel.applyStyle(textStyle: FontSystem.headline03_medium)

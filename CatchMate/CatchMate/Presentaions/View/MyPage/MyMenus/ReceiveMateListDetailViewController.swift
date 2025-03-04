@@ -42,7 +42,6 @@ final class ReceiveMateListDetailViewController: BaseViewController, UICollectio
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 9
-        print(view.frame.height)
         layout.itemSize = CGSize(width: view.frame.width * 0.8, height: 400)
 
         // 컬렉션 뷰 설정

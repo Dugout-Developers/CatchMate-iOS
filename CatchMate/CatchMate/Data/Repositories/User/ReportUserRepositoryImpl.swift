@@ -15,8 +15,8 @@ final class ReportUserRepositoryImpl: ReportUserRepository {
     }
     
     func reportUser(userId: Int, type: ReportType, content: String) -> RxSwift.Observable<Void> {
-        let reportInfo = ReportUserDTO(reportedUserId: userId, reportType: type.servserRequest, content: content)
-        return reportUserDS.reportUser(reportInfo: reportInfo)
+        let reportInfo = ReportUserDTO(reportType: type.servserRequest, content: content)
+        return reportUserDS.reportUser(reportInfo: reportInfo, userId: userId)
             .flatMap { state in
                 if state {
                     return Observable.just(())

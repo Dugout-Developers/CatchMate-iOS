@@ -73,7 +73,7 @@ final class AnnouncementsListCell: UITableViewCell {
     func configData(announcement: Announcement) {
         titleLabel.text = announcement.title
         titleLabel.applyStyle(textStyle: FontSystem.body01_medium)
-        infoLabel.text = "\(announcement.writer) | \(announcement.writeDate)"
+        infoLabel.text = "캐메팀 | \(announcement.dateString)"
         infoLabel.applyStyle(textStyle: FontSystem.body03_reguler)
         titleLabel.flex.markDirty()
         infoLabel.flex.markDirty()

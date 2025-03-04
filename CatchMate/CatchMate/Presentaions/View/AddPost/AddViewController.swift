@@ -61,7 +61,7 @@ final class AddViewController: BaseViewController, View {
         label.applyStyle(textStyle: FontSystem.body02_medium)
         return label
     }()
-    private let titleTextField = CMTextField(placeHolder: "제목을 입력해주세요.")
+    private let titleTextField = CMTextField(placeHolder: "제목을 입력해주세요")
     private let numberPickerTextField = CMPickerTextField(rightAccessoryView: {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16)
@@ -77,10 +77,10 @@ final class AddViewController: BaseViewController, View {
         label.applyStyle(textStyle: FontSystem.body02_medium)
         return label
     }()
-    private let datePickerTextField = CMPickerTextField(placeHolder: "날짜 선택", isFlex: true)
+    private let datePickerTextField = CMPickerTextField(placeHolder: "경기 날짜 및 시간을 입력해주세요", isFlex: true)
     private let teamSelectedContainerView = UIView()
-    private let homeTeamPicker = CMPickerTextField(placeHolder: "홈 팀",isFlex: true)
-    private let awayTeamPicker = CMPickerTextField(placeHolder: "원정 팀",isFlex: true)
+    private let homeTeamPicker = CMPickerTextField(placeHolder: "홈 구단",isFlex: true)
+    private let awayTeamPicker = CMPickerTextField(placeHolder: "원정 구단",isFlex: true)
     private let cheerTeamPicker = CMPickerTextField(placeHolder: "응원 구단 선택", isFlex: true)
     private let placePicker = CMPickerTextField(placeHolder: "구장 위치", isFlex: true)
     
@@ -101,7 +101,7 @@ final class AddViewController: BaseViewController, View {
     }()
     private let textview: CMTextView = {
         let textView = CMTextView()
-        textView.placeholder = "내용을 입력해주세요."
+        textView.placeholder = "내용을 입력해주세요"
         return textView
     }()
     
@@ -135,7 +135,7 @@ final class AddViewController: BaseViewController, View {
         return labels
     }()
     private let buttonContainer = UIView()
-    private let registerButton = CMDefaultFilledButton(title: "등록")
+    private let registerButton = CMDefaultFilledButton(title: "작성 완료")
     
     private let editPost: Post?
     init(reactor: AddReactor, editPost: Post? = nil) {
@@ -312,7 +312,6 @@ extension AddViewController {
             .observe(on: MainScheduler.asyncInstance)
             .withUnretained(self)
             .subscribe { vc, text in
-                print(text)
                 vc.datePickerTextField.updateDateText(text)
             }
             .disposed(by: disposeBag)
@@ -400,7 +399,6 @@ extension AddViewController {
             .subscribe { vc, text in
                 vc.textview.text = text
                 vc.textview.updateTextStyle()
-                print(text.count)
                 vc.updateAddTextCount(text.count)
                 
             }

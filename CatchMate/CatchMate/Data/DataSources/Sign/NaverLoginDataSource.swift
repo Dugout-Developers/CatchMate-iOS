@@ -125,11 +125,10 @@ final class NaverLoginDataSourceImpl: NSObject, NaverLoginDataSource, NaverThird
     }
     
     func oauth20ConnectionDidFinishDeleteToken() {
-        print("Token Deleted")
+        LoggerService.shared.log("네이버 로그인 토큰 삭제")
     }
     
     func oauth20Connection(_ connection: NaverThirdPartyLoginConnection!, didFailWithError error: Error!) {
-        print("Error: \(error.localizedDescription)")
         LoggerService.shared.log(level: .debug, "NAVER API ERROR - \(error.localizedDescription)")
         if let observer = naverLoginSubject {
             observer.onError(SNSLoginError.loginServerError(message: error.localizedDescription))

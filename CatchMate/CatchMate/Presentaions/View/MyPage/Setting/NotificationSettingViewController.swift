@@ -97,8 +97,8 @@ final class NotificationSettingViewController: BaseViewController, View {
             .map { state in
             [
                 (AlarmnType.all, state.allAlarm),
-                (AlarmnType.apply, state.applyAlarm),
                 (AlarmnType.chat, state.chatAlarm),
+                (AlarmnType.apply, state.applyAlarm),
                 (AlarmnType.event, state.eventAlarm)
             ]
             }
@@ -141,7 +141,6 @@ final class NotificationSettingCell: UITableViewCell {
     }()
     var disposeBag = DisposeBag()
     let switchView = CMSwitch()
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -165,15 +164,21 @@ final class NotificationSettingCell: UITableViewCell {
         }
         notiTitleLabel.text = type.settingViewName
         notiTitleLabel.applyStyle(textStyle: FontSystem.body01_medium)
+        updatePadding(type == .all ? 0 : 14)
     }
 
-    
+    private func updatePadding(_ padding: Int) {
+        notiTitleLabel.snp.updateConstraints { make in
+            make.leading.equalToSuperview().offset(padding)
+        }
+        setNeedsLayout()
+        layoutIfNeeded()
+    }
     private func setupUI() {
         contentView.addSubviews(views: [notiTitleLabel, switchView])
         notiTitleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.centerY.equalToSuperview()
-
         }
         switchView.snp.makeConstraints { make in
             make.trailing.equalToSuperview()

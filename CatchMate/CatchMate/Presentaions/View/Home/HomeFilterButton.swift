@@ -40,7 +40,7 @@ final class OptionButtonView: UIButton {
     override func layoutSubviews() {
         super.layoutSubviews()
         if let value = filterValue, !value.isEmpty {
-            filterTitleLabel.textColor = .white
+            filterTitleLabel.textColor = .cmPrimaryColor
         } else {
             filterTitleLabel.textColor = .cmBodyTextColor
         }
@@ -51,16 +51,18 @@ final class OptionButtonView: UIButton {
     private func updateView(_ value: String?) {
         if let value = value, !value.isEmpty {
             filterTitleLabel.text = value
-            filterTitleLabel.textColor = .white
+            filterTitleLabel.textColor = .cmPrimaryColor
             filterTitleLabel.applyStyle(textStyle: FontSystem.body03_medium)
-            iconImageView.image = UIImage(named: "cm20down_filled")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-            backgroundColor = .cmPrimaryColor
+            iconImageView.image = UIImage(named: "cm20down_filled")?.withTintColor(.cmPrimaryColor, renderingMode: .alwaysOriginal)
+            backgroundColor = .clear
+            layer.borderWidth = 1
         } else {
             filterTitleLabel.text = titleText
             filterTitleLabel.textColor = .cmBodyTextColor
             filterTitleLabel.applyStyle(textStyle: FontSystem.body03_medium)
             iconImageView.image = UIImage(named: "cm20down_filled")?.withTintColor(.cmBodyTextColor, renderingMode: .alwaysOriginal)
             backgroundColor = .white
+            layer.borderWidth = 0
         }
         filterTitleLabel.flex.markDirty()
         containerView.flex.layout()
@@ -70,6 +72,8 @@ final class OptionButtonView: UIButton {
         // 버튼 스타일 설정
         backgroundColor = UIColor.white
         layer.cornerRadius = 8
+        layer.borderColor = UIColor.cmPrimaryColor.cgColor
+        layer.borderWidth = 0
         self.addTarget(self, action: #selector(buttonPressed), for: [.touchDown, .touchDragInside])
         self.addTarget(self, action: #selector(buttonReleased), for: [.touchUpInside, .touchUpOutside, .touchCancel])
     }

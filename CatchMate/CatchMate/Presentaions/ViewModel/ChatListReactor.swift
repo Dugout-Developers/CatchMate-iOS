@@ -14,6 +14,7 @@ final class ChatListReactor: Reactor {
         case loadChatList
         case selectChat(ChatListInfo?)
         case loadNextPage
+        case deleteChat(Int)
         case setError(PresentationError?)
     }
     enum Mutation {
@@ -36,9 +37,11 @@ final class ChatListReactor: Reactor {
     
     var initialState: State
     private let loadchatListUsecase: LoadChatListUseCase
-    init(loadchatListUsecase: LoadChatListUseCase) {
+    private let deleteChatUsecase: ExitChatRoomUseCase
+    init(loadchatListUsecase: LoadChatListUseCase, deleteChatUsecase: ExitChatRoomUseCase) {
         self.initialState = State()
         self.loadchatListUsecase = loadchatListUsecase
+        self.deleteChatUsecase = deleteChatUsecase
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
@@ -82,6 +85,18 @@ final class ChatListReactor: Reactor {
                 }
         case .setError(let error):
             return Observable.just(.setError(error))
+        case .deleteChat(let index):
+            let chatId = currentState.chatList[index].chatRoomId
+            return deleteChatUsecase.exitChat(chatId: chatId)
+                .withUnretained(self)
+                .map { reactor, _ in
+                    var newChatList = reactor.currentState.chatList
+                    newChatList.remove(at: index)
+                    return Mutation.setChatList(list: newChatList, isAppend: false)
+                }
+                .catch { error in
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                }
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {

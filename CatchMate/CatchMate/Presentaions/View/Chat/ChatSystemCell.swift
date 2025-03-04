@@ -74,7 +74,7 @@ final class StartChatInfoCell: UITableViewCell {
     }
     
     func configData(_ post: SimplePost) {
-        infoLabel.text = "\(post.chatDate) | \(post.playTime) | \(post.location)"
+        infoLabel.text = "\(post.date) | \(post.playTime) | \(post.location)"
         infoLabel.applyStyle(textStyle: FontSystem.body02_medium)
         homeTeamImageView.setupTeam(team: post.homeTeam, isMyTeam: post.cheerTeam == post.homeTeam)
         awayTeamImageView.setupTeam(team: post.awayTeam, isMyTeam: post.cheerTeam == post.awayTeam)

@@ -108,6 +108,16 @@ extension ChatListViewController {
                 vc.changeView(isEmpty)
             }
             .disposed(by: disposeBag)
+        
+        chatListTableView.rx.itemDeleted
+          .observe(on: MainScheduler.asyncInstance)
+          .withUnretained(self)
+          .bind { vc, indexPath in
+              vc.showCMAlert(titleText: "채팅방을 나갈까요?", importantButtonText: "나가기", commonButtonText: "취소", importantAction: {
+                  vc.reactor.action.onNext(.deleteChat(indexPath.row))
+              })
+          }
+          .disposed(by: disposeBag)
     }
 }
 // MARK: - UI

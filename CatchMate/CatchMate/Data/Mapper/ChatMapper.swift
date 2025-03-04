@@ -25,8 +25,8 @@ final class ChatMapper {
         }
         
         let managerInfo = ManagerInfo(id: dto.boardInfo.userInfo.userId, nickName: dto.boardInfo.userInfo.nickName)
-        // TODO: - newChat, lastMessage, notReadCount API 추가 요청하기
-        return ChatListInfo(chatRoomId: dto.chatRoomId, postInfo: postInfo, managerInfo: managerInfo, lastMessage: dto.lastMessageContent ?? "", lastMessageAt: lastMessageAt, currentPerson: dto.participantCount, newChat: Bool.random(), notReadCount: Int.random(in: 0...10), chatImage: dto.chatRoomImage)
+    
+        return ChatListInfo(chatRoomId: dto.chatRoomId, postInfo: postInfo, managerInfo: managerInfo, lastMessage: dto.lastMessageContent ?? "", lastMessageAt: lastMessageAt, currentPerson: dto.participantCount, newChat: dto.isNewChatRoom, notReadCount: dto.unreadMessageCount, chatImage: dto.chatRoomImage)
     }
     
     func postInfoToDomain(_ dto: ChatPostInfo) -> SimplePost? {
@@ -36,7 +36,7 @@ final class ChatMapper {
             LoggerService.shared.log("ChatListMapper: 팀 정보 변환 실패")
             return nil
         }
-        guard let convertedDates = DateHelper.shared.convertISODateToCustomStrings(isoDateString: dto.gameInfo.gameStartDate ?? "") else {
+        guard let convertedDates = DateHelper.shared.convertISODateToCustomStrings(isoDateString: dto.gameInfo.gameStartDate ?? "", dateFormat: "M월 d일 EEEE") else {
             LoggerService.shared.log("ChatListMapper 날짜 변환 실패")
             return nil
         }

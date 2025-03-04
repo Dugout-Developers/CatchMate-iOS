@@ -12,7 +12,7 @@ extension Bundle {
         guard let file = self.path(forResource: "APIKeys", ofType: "plist"),
               let resource = NSDictionary(contentsOfFile: file),
               let key = resource["LOG_PATH"] as? String else {
-            print("logPath 얻기 실패")
+            LoggerService.shared.log("logPath 얻기 실패")
             return nil
         }
         return key
@@ -21,7 +21,7 @@ extension Bundle {
            guard let file = self.path(forResource: "APIKeys", ofType: "plist"),
                  let resource = NSDictionary(contentsOfFile: file),
                  let key = resource["BASE_URL"] as? String else {
-               print("baseURL 얻기 실패")
+               LoggerService.shared.log("baseURL 얻기 실패")
                return nil
            }
            return key
@@ -30,7 +30,7 @@ extension Bundle {
         guard let file = self.path(forResource: "APIKeys", ofType: "plist"),
               let resource = NSDictionary(contentsOfFile: file),
               let key = resource["SOCKET_URL"] as? String else {
-            print("Socket URL 얻기 실패")
+            LoggerService.shared.log("Socket URL 얻기 실패")
             return nil
         }
         return key
@@ -39,7 +39,7 @@ extension Bundle {
            guard let file = self.path(forResource: "APIKeys", ofType: "plist"),
                  let resource = NSDictionary(contentsOfFile: file),
                  let key = resource["KAKAO_LOGIN_API"] as? String else {
-               print("Kakao API Key 얻기 실패")
+               LoggerService.shared.log("Kakao Login App Key 얻기 실패")
                return nil
            }
            return key
@@ -48,7 +48,7 @@ extension Bundle {
            guard let file = self.path(forResource: "APIKeys", ofType: "plist"),
                  let resource = NSDictionary(contentsOfFile: file),
                  let key = resource["KAKAO_LOGIN_REST_API"] as? String else {
-               print("Kakao API Key 얻기 실패")
+               LoggerService.shared.log("Kakao Login REST Key 실패")
                return nil
            }
            return key
@@ -57,7 +57,7 @@ extension Bundle {
            guard let file = self.path(forResource: "APIKeys", ofType: "plist"),
                  let resource = NSDictionary(contentsOfFile: file),
                  let key = resource["NAVER_URL_SCHEME"] as? String else {
-               print("naver UrlScheme 얻기 실패")
+               LoggerService.shared.log("naver UrlScheme 얻기 실패")
                return nil
            }
            return key
@@ -66,7 +66,7 @@ extension Bundle {
            guard let file = self.path(forResource: "APIKeys", ofType: "plist"),
                  let resource = NSDictionary(contentsOfFile: file),
                  let key = resource["NAVER_LOGIN_API_ClientID"] as? String else {
-               print("naver Login ID 얻기 실패")
+               LoggerService.shared.log("naver Login ID 얻기 실패")
                return nil
            }
            return key
@@ -76,7 +76,7 @@ extension Bundle {
            guard let file = self.path(forResource: "APIKeys", ofType: "plist"),
                  let resource = NSDictionary(contentsOfFile: file),
                  let key = resource["NAVER_LOGIN_API_ClientSecret"] as? String else {
-               print("Naver Login Key 얻기 실패")
+               LoggerService.shared.log("Naver Login Key 얻기 실패")
                return nil
            }
            return key

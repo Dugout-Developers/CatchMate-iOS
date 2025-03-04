@@ -94,7 +94,7 @@ final class InputCheerStyleViewController: BaseViewController, View {
     }
     
     private func setupNavigation() {
-        let indicatorImage = UIImage(named: "indicator03")
+        let indicatorImage = UIImage(named: "indicator04")
         let indicatorImageView = UIImageView(image: indicatorImage)
         indicatorImageView.contentMode = .scaleAspectFit
         
@@ -158,7 +158,7 @@ extension InputCheerStyleViewController {
             .withUnretained(self)
             .subscribe { vc, _ in
                 if let model = reactor.currentState.signUpModel {
-                    vc.signUpReactor = DIContainerService.shared.makeSignUpReactor(model, loginModel: reactor.loginModel)
+                    vc.signUpReactor = DIContainerService.shared.makeSignUpReactor(model, loginModel: reactor.loginModel, isEvent: reactor.currentState.isEventAlarm)
                     vc.bindSignUp(reactor: vc.signUpReactor!)
                     vc.signUpReactor?.action.onNext(.signUpUser)
                 } else {

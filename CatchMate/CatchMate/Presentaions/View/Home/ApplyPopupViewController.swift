@@ -201,7 +201,7 @@ extension ApplyPopupViewController {
             .compactMap{$0}
             .withUnretained(self)
             .subscribe { vc, error in
-                vc.showToast(message: error.errorDescription ?? "문제가 생겼습니다. 다시 시도해주세요.")
+                vc.showToast(message: error.errorDescription ?? "문제가 생겼어요\n다시 시도해주세요.")
             }
             .disposed(by: disposeBag)
     }

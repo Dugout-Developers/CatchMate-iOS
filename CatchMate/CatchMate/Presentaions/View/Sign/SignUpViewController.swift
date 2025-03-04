@@ -132,7 +132,7 @@ final class SignUpViewController: BaseViewController, View {
     }
     
     private func setupNavigation() {
-        let indicatorImage = UIImage(named: "indicator01")
+        let indicatorImage = UIImage(named: "indicator02")
         let indicatorImageView = UIImageView(image: indicatorImage)
         indicatorImageView.contentMode = .scaleAspectFit
         

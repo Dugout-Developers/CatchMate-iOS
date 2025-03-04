@@ -261,7 +261,6 @@ extension ProfileEditViewController {
             .distinctUntilChanged()
             .withUnretained(self)
             .subscribe(onNext: { vc, state in
-                print(state)
                 vc.nicknameVaildateLabel.text = state.rawValue
                 switch state {
                 case .none:

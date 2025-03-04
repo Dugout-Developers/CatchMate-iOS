@@ -121,7 +121,6 @@ final class PlaceFilterViewController: BasePickerViewController, View {
                     .map { Reactor.Action.changePlcase(place) }
                     .bind(to: reactor.action)
                     .disposed(by: cell.disposeBag)
-                print(cell.frame.height)
             }
             .disposed(by: disposeBag)
         

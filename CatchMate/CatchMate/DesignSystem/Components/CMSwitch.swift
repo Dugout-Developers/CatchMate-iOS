@@ -98,7 +98,6 @@ class CMSwitch: UIControl {
     func setOn(_ on: Bool, animated: Bool) {
         guard isOn != on else { return }
         self.isOn = on
-        print(animated)
         updateUI(animated: animated)
     }
     
