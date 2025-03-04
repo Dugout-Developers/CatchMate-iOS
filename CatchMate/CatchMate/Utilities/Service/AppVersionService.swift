@@ -14,7 +14,7 @@ final class AppVersionService {
     
     private init() {
         let settings = RemoteConfigSettings()
-        settings.minimumFetchInterval = 0
+        settings.minimumFetchInterval = 43200
         remoteConfig.configSettings = settings
 
         // 기본값 설정
