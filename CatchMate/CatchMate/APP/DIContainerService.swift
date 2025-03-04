@@ -39,12 +39,14 @@ class DIContainerService {
         return SignReactor(loginModel: model, nicknameUseCase: nicknameUsecase)
     }
     
-    func makeSignUpReactor(_ model: SignUpModel, loginModel: LoginModel) -> SignUpReactor {
+    func makeSignUpReactor(_ model: SignUpModel, loginModel: LoginModel, isEvent: Bool) -> SignUpReactor {
         let dataSource = SignUpDataSourceImpl(tokenDataSource: tokenDS)
         let repository = SignUpRepositoryImpl(signupDatasource: dataSource)
-        let usecase = SignUpUseCaseImpl(repository: repository)
+        let setAlarmDataSource = SetAlarmDataSourceImpl(tokenDataSource: tokenDS)
+        let setAlarmRepository = SetAlarmRepositoryImpl(setNotificationDS: setAlarmDataSource)
+        let usecase = SignUpUseCaseImpl(repository: repository, alarmRepository: setAlarmRepository)
         
-        return SignUpReactor(signUpModel: model, loginModel: loginModel, signupUseCase: usecase)
+        return SignUpReactor(signUpModel: model, loginModel: loginModel, signupUseCase: usecase, isEventAlarm: isEvent)
     }
     func makeHomeReactor() -> HomeReactor {
         let listLoadDataSource = PostListLoadDataSourceImpl(tokenDataSource: tokenDS)

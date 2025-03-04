@@ -157,7 +157,7 @@ extension SignInViewController {
 
         } else {
             let signReactor = DIContainerService.shared.makeSignReactor(model)
-            let signUpViewController = SignUpViewController(reactor: signReactor)
+            let termsAgreeVC = TermsAgreementViewController(signReactor: signReactor)
             DispatchQueue.main.async { [weak self] in
                 guard let self else {
                     LoggerService.shared.log(level: .error, "회원가입 화면 전환 self 없음")
@@ -167,7 +167,7 @@ extension SignInViewController {
                     LoggerService.shared.log(level: .error, "회원가입 화면 전환 navigation 없음")
                     return
                 }
-                navigationController.pushViewController(signUpViewController, animated: true)
+                navigationController.pushViewController(termsAgreeVC, animated: true)
             }
         }
     }

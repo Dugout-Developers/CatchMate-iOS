@@ -30,6 +30,7 @@ final class SignReactor: Reactor {
         case updateGender(Gender)
         case updateTeam(Team)
         case updateCheerStyle(CheerStyles?)
+        case updateIsEventAlarm(Bool)
     }
     
     enum Mutation {
@@ -41,6 +42,7 @@ final class SignReactor: Reactor {
         case setError(Error)
         case setTeam(Team)
         case setCheerStyle(CheerStyles?)
+        case setIsEventAlarm(Bool)
         case validateSignUp
         case validateForm
         case validateTeam
@@ -56,6 +58,7 @@ final class SignReactor: Reactor {
         var isFormValid: Bool = false
         var signUpModel: SignUpModel?
         var isTeamSelected: Bool = false
+        var isEventAlarm: Bool = false
         var error: Error?
     }
     
@@ -115,6 +118,8 @@ final class SignReactor: Reactor {
                 Observable.just(Mutation.setCheerStyle(cheerStyle)),
                 Observable.just(Mutation.validateSignUp)
             ])
+        case .updateIsEventAlarm(let state):
+            return Observable.just(.setIsEventAlarm(state))
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
@@ -151,6 +156,8 @@ final class SignReactor: Reactor {
                     newState.signUpModel = model
                 } 
             }
+        case .setIsEventAlarm(let state):
+            newState.isEventAlarm = state
         }
         return newState
     }

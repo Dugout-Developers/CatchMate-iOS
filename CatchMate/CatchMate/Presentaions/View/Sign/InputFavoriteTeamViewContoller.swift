@@ -90,7 +90,7 @@ final class InputFavoriteTeamViewContoller: BaseViewController, View {
     }
     
     private func setupNavigation() {
-        let indicatorImage = UIImage(named: "indicator02")
+        let indicatorImage = UIImage(named: "indicator03")
         let indicatorImageView = UIImageView(image: indicatorImage)
         indicatorImageView.contentMode = .scaleAspectFit
         

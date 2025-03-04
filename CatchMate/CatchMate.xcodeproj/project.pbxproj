@@ -120,6 +120,8 @@
 		5320B04F2D5B017B00897EB7 /* DefualtTabelViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320B04E2D5B017500897EB7 /* DefualtTabelViewCell.swift */; };
 		5320B0512D5B147400897EB7 /* CustomerServiceAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320B0502D5B147200897EB7 /* CustomerServiceAddViewController.swift */; };
 		5320B0532D5B155B00897EB7 /* CustomerServiceReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320B0522D5B155300897EB7 /* CustomerServiceReactor.swift */; };
+		532333CA2D7596B70055ABD3 /* TermsAgreementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532333C92D7596830055ABD3 /* TermsAgreementViewController.swift */; };
+		532333CC2D759B670055ABD3 /* AgreementReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532333CB2D759B660055ABD3 /* AgreementReactor.swift */; };
 		53241F3C2C3C517600F468E1 /* GridSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F3B2C3C517600F468E1 /* GridSystem.swift */; };
 		53241F3E2C3C589100F468E1 /* DesignAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */; };
 		53241F4E2C3EE58E00F468E1 /* CMPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */; };
@@ -609,6 +611,8 @@
 		5320B04E2D5B017500897EB7 /* DefualtTabelViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefualtTabelViewCell.swift; sourceTree = "<group>"; };
 		5320B0502D5B147200897EB7 /* CustomerServiceAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerServiceAddViewController.swift; sourceTree = "<group>"; };
 		5320B0522D5B155300897EB7 /* CustomerServiceReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerServiceReactor.swift; sourceTree = "<group>"; };
+		532333C92D7596830055ABD3 /* TermsAgreementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAgreementViewController.swift; sourceTree = "<group>"; };
+		532333CB2D759B660055ABD3 /* AgreementReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementReactor.swift; sourceTree = "<group>"; };
 		53241F3B2C3C517600F468E1 /* GridSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSystem.swift; sourceTree = "<group>"; };
 		53241F3D2C3C589100F468E1 /* DesignAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DesignAssets.xcassets; sourceTree = "<group>"; };
 		53241F4D2C3EE58E00F468E1 /* CMPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMPopupViewController.swift; sourceTree = "<group>"; };
@@ -1156,6 +1160,7 @@
 			isa = PBXGroup;
 			children = (
 				533A2B262C28558600A59340 /* SignInViewController.swift */,
+				532333C92D7596830055ABD3 /* TermsAgreementViewController.swift */,
 				533A2B2B2C29485E00A59340 /* SignUpViewController.swift */,
 				533A2B2F2C2AC5C400A59340 /* InputFavoriteTeamViewContoller.swift */,
 				533A2B352C2BEA3900A59340 /* InputCheerStyleViewController.swift */,
@@ -1539,6 +1544,7 @@
 		536BDDE72C1971AF0043B1DA /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				532333CB2D759B660055ABD3 /* AgreementReactor.swift */,
 				5320B0522D5B155300897EB7 /* CustomerServiceReactor.swift */,
 				536BDDE82C1971C70043B1DA /* SignReactor.swift */,
 				53E4A9B72C4FF00F00D21B49 /* AuthReactor.swift */,
@@ -2252,6 +2258,7 @@
 				534E39DC2C63CE78006D180E /* AnnouncementsViewController.swift in Sources */,
 				5320B0512D5B147400897EB7 /* CustomerServiceAddViewController.swift in Sources */,
 				53C4FEB42C8AA68A00337431 /* BottomMargin.swift in Sources */,
+				532333CA2D7596B70055ABD3 /* TermsAgreementViewController.swift in Sources */,
 				5301E2B62C5BE6AF0078E910 /* LogoutUseCase.swift in Sources */,
 				537598082C46C3D2003BD8AE /* DefaultsTextView.swift in Sources */,
 				530149F82D63059A004C2EE0 /* ReportUserDTO.swift in Sources */,
@@ -2296,6 +2303,7 @@
 				535AA0622D51BA6B007C7690 /* SocketService.swift in Sources */,
 				53E7DBBF2CAC68FE00DC058D /* UserReportViewController.swift in Sources */,
 				536BDE2F2C1B55240043B1DA /* NotiViewController.swift in Sources */,
+				532333CC2D759B670055ABD3 /* AgreementReactor.swift in Sources */,
 				533A2B382C2BFD4B00A59340 /* SignUpFinishedViewController.swift in Sources */,
 				5301E2A12C5B5C280078E910 /* MyPageProfileCell.swift in Sources */,
 				53716BD42C4558780044AD2A /* PostReactor.swift in Sources */,
