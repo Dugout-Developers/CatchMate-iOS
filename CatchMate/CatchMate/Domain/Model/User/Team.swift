@@ -219,9 +219,9 @@ enum Team: String, CaseIterable, Codable {
         case .lotte:
             return UIImage(named: "giants")
         case .allTeamLove:
-            return UIImage(named: "EmptyDisable")
+            return UIImage(named: "allTeamLove")
         case .yarine:
-            return UIImage(named: "EmptyDisable")
+            return UIImage(named: "Baby")
         }
     }
     
@@ -248,9 +248,9 @@ enum Team: String, CaseIterable, Codable {
         case .lotte:
             return UIImage(named: "giants_fill")
         case .allTeamLove:
-            return UIImage(named: "EmptyPrimary")
+            return UIImage(named: "allTeamLove")
         case .yarine:
-            return UIImage(named: "EmptyPrimary")
+            return UIImage(named: "Baby")
         }
     }
     
@@ -277,9 +277,9 @@ enum Team: String, CaseIterable, Codable {
         case .lotte:
             return UIImage(named: "giants_logo")
         case .allTeamLove:
-            return UIImage(named: "EmptyPrimary")
+            return UIImage(named: "allTeamLove")
         case .yarine:
-            return UIImage(named: "EmptyPrimary")
+            return UIImage(named: "Baby")
         }
     }
     
