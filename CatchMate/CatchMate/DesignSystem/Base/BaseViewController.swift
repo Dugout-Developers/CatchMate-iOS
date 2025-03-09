@@ -73,7 +73,7 @@ class BaseViewController: UIViewController, LayoutConfigurable {
 
         navigationBackgroundView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(navigationBarHeight)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.top)
         }
 
         customNavigationBar.snp.makeConstraints { make in
