@@ -87,6 +87,8 @@ enum Endpoint {
     
     /// 알림 리스트 조회
     case notificationList
+    /// 알림 단일 조회
+    case notification
     /// 알림 삭제
     case deleteNoti
     
@@ -173,9 +175,10 @@ enum Endpoint {
             return "/users/profile"
         case .editProfile:
             return "/users/profile"
+        // MARK: - 알림 관련
         case .notificationList:
             return "/notifications/receive"
-        case .deleteNoti:
+        case .deleteNoti, .notification:
             return "/notifications/receive/"
         case .report:
             return "/reports"
@@ -264,6 +267,8 @@ enum Endpoint {
             return "내 정보 수정 API"
         case .notificationList:
             return "알림 리스트 조회 API"
+        case .notification:
+            return "알림 단일 조회 API"
         case .deleteNoti:
             return "받은 알림 삭제 API"
         case .report:
@@ -339,7 +344,8 @@ enum Endpoint {
             return .get
         case .editProfile:
             return .patch
-        case .notificationList:
+        // MARK: - 알림 관련
+        case .notificationList, .notification:
             return .get
         case .deleteNoti:
             return .delete

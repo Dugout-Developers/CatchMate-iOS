@@ -59,7 +59,13 @@ final class NotificationListReactor: Reactor {
                     return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError($0)))
                 }
         case .selectNoti(let noti):
-            return Observable.just(Mutation.setSelectedNoti(noti))
+            guard let noti = noti, let id = Int(noti.id) else {
+                return Observable.just(Mutation.setSelectedNoti(nil))
+            }
+            return loadNotiUsecase.readNotification(id)
+                .map { _ in
+                    return Mutation.setSelectedNoti(noti)
+                }
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {

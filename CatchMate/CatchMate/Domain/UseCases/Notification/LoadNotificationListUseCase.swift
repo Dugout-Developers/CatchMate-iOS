@@ -8,6 +8,7 @@ import RxSwift
 
 protocol LoadNotificationListUseCase {
     func execute() -> Observable<[NotificationList]>
+    func readNotification(_ id: Int) -> Observable<NotificationList>
 }
 
 final class LoadNotificationListUseCaseImpl: LoadNotificationListUseCase {
@@ -24,5 +25,9 @@ final class LoadNotificationListUseCaseImpl: LoadNotificationListUseCase {
                 LoggerService.shared.errorLog(domainError, domain: "load_notification", message: error.errorDescription)
                 return Observable.error(domainError)
             }
+    }
+    
+    func readNotification(_ id: Int) -> Observable<NotificationList> {
+        return loadNotificationRepository.loadNotification(id)
     }
 }

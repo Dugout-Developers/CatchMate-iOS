@@ -354,6 +354,7 @@
 		538E9AA42D6C3C6600A70A3D /* Notification+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538E9AA22D6C3C5E00A70A3D /* Notification+Extension.swift */; };
 		538EB92F2C3FA27600ABA40E /* CMDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */; };
 		53940F172D7D574C00A57BD3 /* AuthInfoReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53940F162D7D574200A57BD3 /* AuthInfoReactor.swift */; };
+		53940F192D7DE34F00A57BD3 /* LoadNotificationDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53940F182D7DE34100A57BD3 /* LoadNotificationDataSource.swift */; };
 		539BD8632C74F0A5004720B8 /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7ACE2C367008002FC64F /* DateHelper.swift */; };
 		53ACBA1D2C7D8E60004FAF00 /* CMActionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA1C2C7D8E60004FAF00 /* CMActionMenu.swift */; };
 		53ACBA1F2C7DDD36004FAF00 /* SetupResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA1E2C7DDD36004FAF00 /* SetupResult.swift */; };
@@ -786,6 +787,7 @@
 		538E9AA22D6C3C5E00A70A3D /* Notification+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extension.swift"; sourceTree = "<group>"; };
 		538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMDatePicker.swift; sourceTree = "<group>"; };
 		53940F162D7D574200A57BD3 /* AuthInfoReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthInfoReactor.swift; sourceTree = "<group>"; };
+		53940F182D7DE34100A57BD3 /* LoadNotificationDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadNotificationDataSource.swift; sourceTree = "<group>"; };
 		53ACBA1C2C7D8E60004FAF00 /* CMActionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMActionMenu.swift; sourceTree = "<group>"; };
 		53ACBA1E2C7DDD36004FAF00 /* SetupResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupResult.swift; sourceTree = "<group>"; };
 		53ACBA202C7DDD84004FAF00 /* SetupUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupUseCase.swift; sourceTree = "<group>"; };
@@ -1277,6 +1279,7 @@
 		535AA01F2D45FA98007C7690 /* Notification */ = {
 			isa = PBXGroup;
 			children = (
+				53940F182D7DE34100A57BD3 /* LoadNotificationDataSource.swift */,
 				535AA0182D368097007C7690 /* NotificationListDataSource.swift */,
 				535AA0172D368097007C7690 /* DeleteNotificationDataSource.swift */,
 			);
@@ -2477,6 +2480,7 @@
 				533A2B2E2C29B56200A59340 /* CMDefaultBorderedButton.swift in Sources */,
 				53B3CE472C88B0A000116BF7 /* ApplyMapper.swift in Sources */,
 				530994542C4F6CEB00ABE103 /* LoginResult.swift in Sources */,
+				53940F192D7DE34F00A57BD3 /* LoadNotificationDataSource.swift in Sources */,
 				53B8E2462C5E7BF1001D0ADF /* APIService.swift in Sources */,
 				531F83D22D7948210064BBF7 /* WithdrawRepositoryImpl.swift in Sources */,
 				536BDE122C1B51FD0043B1DA /* TabBarController.swift in Sources */,

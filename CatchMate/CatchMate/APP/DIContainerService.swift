@@ -182,7 +182,8 @@ class DIContainerService {
     
     func makeNotiListReactor() -> NotificationListReactor {
         let loadListDS = NotificationListDataSourceImpl(tokenDataSource: tokenDS)
-        let loadListRepository = LoadNotificationListRepositoryImpl(loadNotificationDS: loadListDS)
+        let loadNotiDS = LoadNotificationDataSourceImpl(tokenDataSource: tokenDS)
+        let loadListRepository = LoadNotificationListRepositoryImpl(loadNotificationDS: loadListDS, loadNotiDS: loadNotiDS)
         let loadListUsecase = LoadNotificationListUseCaseImpl(loadNotificationRepository: loadListRepository)
         
         let deleteDS = DeleteNotificationDataSourceImpl(tokenDataSource: tokenDS)
