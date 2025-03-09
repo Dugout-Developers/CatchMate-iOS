@@ -8,7 +8,11 @@
 import Foundation
 import Starscream
 import RxSwift
+import Alamofire
 
+struct TokenResponse: Codable {
+    let accessToken: String
+}
 enum SocketError: LocalizedErrorWithCode {
     case invalidURL
     case notConnected
@@ -17,6 +21,7 @@ enum SocketError: LocalizedErrorWithCode {
     case subscriptionFailed(roomID: String)
     case unsubscriptionFailed(roomID: String)
     case sendFailed(reason: String)
+    case notFoundToken
     
     var statusCode: Int {
         switch self {
@@ -34,6 +39,8 @@ enum SocketError: LocalizedErrorWithCode {
             return -10006
         case .sendFailed:
             return -10007
+        case .notFoundToken:
+            return -10008
         }
     }
     
@@ -53,12 +60,17 @@ enum SocketError: LocalizedErrorWithCode {
             return "채팅방 \(roomID) 구독 해제에 실패했습니다."
         case .sendFailed(let reason):
             return "메시지를 전송할 수 없습니다. (사유: \(reason))"
+        case .notFoundToken:
+            return "토큰 정보를 찾을 수 없습니다."
         }
     }
 }
 final class SocketService {
     static var shared: SocketService?
     
+    private let tokenDS = TokenDataSourceImpl()
+    private let refreshToken: String
+    private var accessToken: String
     private let serverURL: URL
     private var socket: WebSocket?
     private let disposeBag = DisposeBag()
@@ -85,10 +97,28 @@ final class SocketService {
         guard let urlString = Bundle.main.socketURL, let url = URL(string: urlString) else {
             throw SocketError.invalidURL
         }
+        guard let refreshToken = tokenDS.getToken(for: .refreshToken) else {
+            throw SocketError.notFoundToken
+        }
+        guard let accessToken = tokenDS.getToken(for: .accessToken) else {
+            throw SocketError.notFoundToken
+        }
         self.serverURL = url
-        let request = URLRequest(url: serverURL)
-        self.socket = WebSocket(request: request)
-        self.socket?.delegate = self
+        self.refreshToken = refreshToken
+        self.accessToken = accessToken
+        self.socket = nil
+        
+        refreshAccessToken { [weak self] newToken in
+            guard let self = self, let validToken = newToken else {
+                print("🚨 [ERROR] Access Token을 가져오지 못함. WebSocket 연결 중단")
+                self?.errorSubject.onNext(SocketError.notFoundToken) // 🔹 Observable로 에러 전달
+                return
+            }
+            
+            self.accessToken = validToken
+            self.setupWebSocket() // 🔹 최신 Access Token으로 WebSocket 설정
+            self.connect() // 🔹 WebSocket 연결 실행
+        }
         
         messageObservable
             .subscribe(onNext: { (roomId, message) in
@@ -105,8 +135,46 @@ final class SocketService {
         print("💥 [DEBUG] SocketService deinit 호출됨")
     }
     
+    private func setupWebSocket() {
+        var request = URLRequest(url: serverURL)
+        request.timeoutInterval = 5
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization") // 🔹 최신 Access Token 추가
+
+        self.socket = WebSocket(request: request)
+        self.socket?.delegate = self
+    }
+    
+    private func refreshAccessToken(completion: @escaping (String?) -> Void) {
+        guard let base = Bundle.main.baseURL else {
+            LoggerService.shared.log(level: .debug, "Base URL 찾을 수 없음")
+            completion(nil)
+            return
+        }
+        
+        let url = base + "/auth/reissue"
+        let headers: HTTPHeaders = [
+            "RefreshToken": refreshToken
+        ]
+
+        AF.request(url, method: .post, headers: headers)
+            .validate(statusCode: 200..<300)
+            .responseDecodable(of: TokenResponse.self) { response in
+                switch response.result {
+                case .success(let tokenResponse):
+                    let newAccessToken = tokenResponse.accessToken
+                    self.tokenDS.saveToken(token: newAccessToken, for: .accessToken)
+                    print("✅ [DEBUG] Access Token 재발급 성공: \(newAccessToken)")
+                    completion(newAccessToken)
+
+                case .failure(let error):
+                    print("🚨 [ERROR] Access Token 재발급 실패: \(error.localizedDescription)")
+                    completion(nil)
+                }
+            }
+    }
     func connect() {
         print("🔄 WebSocket 연결 시도")
+
         socket?.connect()
     }
     
@@ -117,6 +185,78 @@ final class SocketService {
     }
     
     // MARK: - STOMP Protocol Methods
+    func listSubscribe() {
+        do {
+            let isConnected = try connectionStatusSubject.value()
+            guard isConnected else {
+                print("🔄 WebSocket이 연결되지 않음. 연결 후 구독 요청")
+                connect()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    do {
+                        let reconnected = try self.connectionStatusSubject.value()
+                        if !reconnected {
+                            print("❌ 재연결 실패. 에러 방출")
+                            self.errorSubject.onNext(SocketError.notConnected)
+                        } else {
+                            print("✅ 재연결 성공. 구독 진행")
+                            self.listSubscribe()
+                        }
+                    } catch {
+                        self.errorSubject.onNext(error)
+                    }
+                }
+                return
+            }
+            
+            let subscriptionID = UUID().uuidString
+            subscriptions["0"] = subscriptionID
+            
+            let frame = """
+                SUBSCRIBE
+                id:\(subscriptionID)
+                destination:/topic/chatList
+                
+                \0
+                """
+            socket?.write(string: frame)
+            print("✅ 채팅방 리스트 구독 요청 보냄")
+            
+        } catch {
+            print("⚠️ WebSocket 상태 확인 실패: \(error)")
+        }
+    }
+    
+    func listUnsubscribe() {
+        do {
+            let isConnected = try connectionStatusSubject.value()
+            guard isConnected else {
+                print("⚠️ WebSocket이 연결되지 않음. 구독 해제 불가")
+                errorSubject.onNext(SocketError.notConnected)
+                return
+            }
+
+            guard let subscriptionID = subscriptions["0"] else {
+                print("⚠️ 리스트 구독 정보가 없음.")
+                return
+            }
+            
+            let frame = """
+            UNSUBSCRIBE
+            id:\(subscriptionID)
+
+            \0
+            """
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                self.socket?.write(string: frame)
+                self.subscriptions.removeValue(forKey: "0")
+                print("🚫 채팅방 리스트 구독 해제 요청 전송")
+            }
+
+        } catch {
+            print("⚠️ WebSocket 상태 확인 실패: \(error)")
+            errorSubject.onNext(error)
+        }
+    }
     func subscribe(roomID: String) {
         do {
             let isConnected = try connectionStatusSubject.value()
@@ -173,21 +313,49 @@ final class SocketService {
                 return
             }
 
+            readMessage(roomId: roomID)
+            
             let frame = """
             UNSUBSCRIBE
             id:\(subscriptionID)
 
             \0
             """
-            socket?.write(string: frame)
-            subscriptions.removeValue(forKey: roomID)
-            print("🚫 채팅방 \(roomID) 구독 해제 요청 전송")
-            UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.ChatInfo.chatRoomId)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                self.socket?.write(string: frame)
+                self.subscriptions.removeValue(forKey: roomID)
+                print("🚫 채팅방 \(roomID) 구독 해제 요청 전송")
+                UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.ChatInfo.chatRoomId)
+            }
 
         } catch {
             print("⚠️ WebSocket 상태 확인 실패: \(error)")
             errorSubject.onNext(error)
         }
+    }
+    
+    func readMessage(roomId: String) {
+        guard let userId = SetupInfoService.shared.getUserInfo(type: .id) else { return }
+        let messageData: [String: Any] = [
+            "chatRoomId": roomId,
+            "userId": userId
+        ]
+        
+        // JSON을 문자열로 변환
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: messageData, options: []),
+              let message = String(data: jsonData, encoding: .utf8) else {
+            print("❌ JSON 직렬화 실패")
+            return
+        }
+        let frame = """
+        SEND
+        destination:/app/chat/read
+        content-type:application/json
+
+        \(message)\0
+        """
+        socket?.write(string: frame)
+        print("📩 채팅방 \(roomId) 읽음 메시지 전송 완료: \(frame)")
     }
     
     func sendMessage(to roomID: String, message: String) {
@@ -243,18 +411,27 @@ extension SocketService: WebSocketDelegate {
             connectionStatusSubject.onNext(false)
             print("🔴 WebSocket 연결 해제됨: \(reason) (code: \(code))")
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                do {
-                    let isConnected = try self.connectionStatusSubject.value()
-                    if !isConnected {
-                        self.errorSubject.onNext(SocketError.disconnected(reason: reason, code: Int(code)))
+            connectionStatusSubject.onNext(false)
+            print("🔴 WebSocket 연결 해제됨: \(reason) (code: \(code))")
+            
+            // ✅ 403 Forbidden 발생 시, Access Token 갱신 후 WebSocket 재연결
+            if code == 403 {
+                print("🔄 [DEBUG] Access Token 재발급 후 WebSocket 재연결 중...")
+                refreshAccessToken { [weak self] newToken in
+                    guard let self = self, let validToken = newToken else {
+                        print("🚨 [ERROR] Access Token 재발급 실패. WebSocket 재연결 불가")
+                        return
                     }
-                } catch {
-                    self.errorSubject.onNext(error)
+                    self.accessToken = validToken
+                    self.setupWebSocket() // 🔹 최신 Access Token으로 WebSocket 설정
+                    self.retryConnection()
+                }
+            } else {
+                // ✅ 403 이외의 다른 오류는 일정 시간 후 재연결
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    self.connect()
                 }
             }
-            
-            retryConnection()
             
         case .text(let text):
             print("\(text)")
@@ -263,6 +440,7 @@ extension SocketService: WebSocketDelegate {
         case .error(let error):
             connectionStatusSubject.onNext(false)
             if let error = error {
+                print("🚨 [ERROR] WebSocket 내부 오류 발생: \(error.localizedDescription)")
                 errorSubject.onNext(error)
             }
             retryConnection()
