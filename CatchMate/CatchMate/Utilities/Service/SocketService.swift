@@ -337,8 +337,8 @@ final class SocketService {
     func readMessage(roomId: String) {
         guard let userId = SetupInfoService.shared.getUserInfo(type: .id) else { return }
         let messageData: [String: Any] = [
-            "chatRoomId": roomId,
-            "userId": userId
+            "chatRoomId": Int(roomId)!,
+            "userId": Int(userId)!
         ]
         
         // JSON을 문자열로 변환

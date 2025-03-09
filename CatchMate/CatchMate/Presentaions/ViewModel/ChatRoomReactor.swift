@@ -323,6 +323,9 @@ final class ChatRoomReactor: Reactor {
         // TODO: - Log 추가하기
         SocketService.shared?.messageObservable
             .filter({ [weak self] (roomId, _) in
+                if roomId == "/topic/chatList" {
+                    return false
+                }
                 return Int(roomId) == self?.chat.chatRoomId
             })
             .observe(on: MainScheduler.instance)

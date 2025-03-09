@@ -45,9 +45,9 @@ final class NotiViewController: BaseViewController, View {
     }
     private func setupTableView() {
         tableView.register(NotiViewTableViewCell.self, forCellReuseIdentifier: "NotiViewTableViewCell")
-        tableView.tableHeaderView = UIView()
         tableView.rowHeight = UITableView.automaticDimension
         tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
     }
 }
 // MARK: - Bind

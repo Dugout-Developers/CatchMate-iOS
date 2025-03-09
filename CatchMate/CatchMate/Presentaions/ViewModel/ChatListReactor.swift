@@ -51,7 +51,8 @@ final class ChatListReactor: Reactor {
         // TODO: - Log 추가하기
         SocketService.shared?.messageObservable
             .observe(on: MainScheduler.instance)
-            .map({ (_, message) -> ChatListSocket? in
+            .filter{$0.0 == "/topic/chatList"}
+            .map({ (roomId, message) -> ChatListSocket? in
                 guard let chatMessage = ChatListSocket.decode(from: message) else {
                     print("❌ [DEBUG] 메시지 디코딩 실패")
                     return nil
