@@ -15,6 +15,8 @@ enum Endpoint {
     case login
     /// 로그아웃
     case logout
+    /// 탈퇴하기
+    case withdraw
     /// 회원가입
     case signUp
     /// 게시글 저장
@@ -108,6 +110,8 @@ enum Endpoint {
             return "/auth/login"
         case .logout:
             return "/auth/logout"
+        case .withdraw:
+            return "/users/withdraw"
         case .signUp:
             return "/users/additional-info"
         case .savePost, .tempPost:
@@ -192,6 +196,8 @@ enum Endpoint {
             return "로그인 API"
         case .logout:
             return "로그아웃 API"
+        case .withdraw:
+            return "탈퇴하기 API"
         case .signUp:
             return "회원가입 API"
         case .savePost:
@@ -279,7 +285,7 @@ enum Endpoint {
         switch self {
         case .login:
             return .post
-        case .logout:
+        case .logout, .withdraw:
             return .delete
         case .signUp:
             return .post

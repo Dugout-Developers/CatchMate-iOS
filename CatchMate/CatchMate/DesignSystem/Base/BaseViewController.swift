@@ -26,6 +26,7 @@ class BaseViewController: UIViewController, LayoutConfigurable {
     }
     var disposeBag: DisposeBag = DisposeBag()
     let customNavigationBar = CMNavigationBar()
+    private let navigationBackgroundView = UIView()
     private let navigationBarHeight: CGFloat = 44.0
     var errorView: ErrorPageView?
     private var isNavigationBarHidden: Bool = false
@@ -66,7 +67,15 @@ class BaseViewController: UIViewController, LayoutConfigurable {
         }
     }
     private func setupCustomNavigationBar() {
+        navigationBackgroundView.backgroundColor = .white
+        view.addSubview(navigationBackgroundView)
         view.addSubview(customNavigationBar)
+
+        navigationBackgroundView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(navigationBarHeight)
+        }
+
         customNavigationBar.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(-navigationBarHeight)
             make.leading.trailing.equalToSuperview()
@@ -104,6 +113,7 @@ class BaseViewController: UIViewController, LayoutConfigurable {
     func navigationBarHidden() {
         isNavigationBarHidden = true // 네비게이션 바 숨김 상태로 설정
         customNavigationBar.removeFromSuperview()
+        navigationBackgroundView.removeFromSuperview()
         view.setNeedsLayout() // 레이아웃 강제 업데이트
         view.layoutIfNeeded()
     }
@@ -161,6 +171,9 @@ class BaseViewController: UIViewController, LayoutConfigurable {
         })
     }
 
+    func setNavigationBackgroundColor(_ color: UIColor) {
+        navigationBackgroundView.backgroundColor = color
+    }
 }
 
 extension BaseViewController: UIGestureRecognizerDelegate { 

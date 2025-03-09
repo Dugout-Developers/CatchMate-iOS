@@ -59,7 +59,8 @@ enum MypageMenu: String {
         case .auth:
             return LoginUserDefaultsService.shared.getLoginData()
                 .map { loginData in
-                    let vc = AuthInfoSettingViewController(loginData: loginData)
+                    let reactor = DIContainerService.shared.makeAuthInfoReactor()
+                    let vc = AuthInfoSettingViewController(loginData: loginData, reactor: reactor)
                     return vc
                 }
                 .catch { _ in

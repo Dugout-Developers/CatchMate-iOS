@@ -265,6 +265,14 @@ class DIContainerService {
         return AnnouncementsReactor(loadNoticesUseCase: loadNoticeUS)
     }
     
+    func makeAuthInfoReactor() -> AuthInfoReactor {
+        let logoutUC = makeLogoutUseCase()
+        let withdrawDS = WithdrawDataSourceImpl(tokenDataSource: tokenDS)
+        let withdrawRepo = WithdrawRepositoryImp(withdrawDS: withdrawDS)
+        let withdrawUC = WithdrawUseCaseImpl(withdrawRepo: withdrawRepo)
+        return AuthInfoReactor(logoutUseCase: logoutUC, withdrawUseCase: withdrawUC)
+    }
+    
     // MARK: - 특정 Usecase만 필요할 때
     func makeLogoutUseCase() -> LogoutUseCase {
         let logoutDataSource = LogoutDataSourceImpl(tokenDataSource: tokenDS)
