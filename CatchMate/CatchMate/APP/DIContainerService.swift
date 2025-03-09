@@ -136,17 +136,14 @@ class DIContainerService {
     
     func makeMypageReactor() -> MyPageReactor {
         let userDataSource = UserDataSourceImpl(tokenDataSource: tokenDS)
-        let logoutDataSource = LogoutDataSourceImpl(tokenDataSource: tokenDS)
         let userRepository = UserRepositoryImpl(userDS: userDataSource)
-        let logoutRepository = LogoutRepositoryImpl(logoutDS: logoutDataSource)
         let loadCountDataSource = RecivedCountDataSourceImpl(tokenDataSource: tokenDS)
         let loadCountRepository = ReceivedCountRepositoryIml(loadCountDS: loadCountDataSource)
         
         let userUsecase = UserUseCaseImpl(userRepository: userRepository)
         let countUsecase = LoadReceivedCountUseCaseImpl(loadCountRepository: loadCountRepository)
-        let logoutUsecase = LogoutUseCaseImpl(repository: logoutRepository)
         
-        return MyPageReactor(userUsecase: userUsecase, logoutUsecase: logoutUsecase, loadReceivedCountUsecase: countUsecase)
+        return MyPageReactor(userUsecase: userUsecase, loadReceivedCountUsecase: countUsecase)
     }
     
     func makeSendMateReactor() -> SendMateReactor {
