@@ -434,7 +434,6 @@ extension SocketService: WebSocketDelegate {
             }
             
         case .text(let text):
-            print("\(text)")
             handleIncomingMessage(text)
             
         case .error(let error):

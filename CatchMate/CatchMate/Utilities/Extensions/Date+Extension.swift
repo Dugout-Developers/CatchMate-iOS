@@ -8,7 +8,10 @@
 import UIKit
 
 extension Date {
-    func toString(format: String) -> String {
+    func toString(format: String, timeZone: TimeZone? = nil) -> String {
+        if let tz = timeZone {
+            return DateHelper.shared.toString(from: self, format: format, timeZone: tz)
+        }
         return DateHelper.shared.toString(from: self, format: format)
     }
     

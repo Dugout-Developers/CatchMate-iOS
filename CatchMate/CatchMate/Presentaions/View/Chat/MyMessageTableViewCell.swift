@@ -47,7 +47,12 @@ final class MyMessageTableViewCell: UITableViewCell {
     }
     
     func configData(_ chat: ChatMessage) {
-        let dateString = chat.time.toString(format: "a h:mm")
+        var dateString: String
+        if chat.isSocket {
+            dateString = chat.time.toString(format: "a h:mm", timeZone: TimeZone(identifier: "UTC")!)
+        } else {
+            dateString = chat.time.toString(format: "a h:mm")
+        }
         timeLabel.text = dateString
         timeLabel.applyStyle(textStyle: FontSystem.caption01_medium)
         messageLabel.text = chat.message

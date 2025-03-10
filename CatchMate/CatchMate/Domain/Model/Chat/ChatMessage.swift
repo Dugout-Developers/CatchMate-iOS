@@ -113,7 +113,6 @@ extension ChatSocketMessage {
         return try? JSONDecoder().decode(ChatSocketMessage.self, from: jsonData)
     }
 }
-
 struct ChatMessage {
     let userId: Int
     let nickName: String
@@ -121,6 +120,7 @@ struct ChatMessage {
     let message: String
     let time: Date
     let messageType: ChatMessageType
+    let isSocket: Bool
 }
 
 struct ChatListSocket: Codable {
