@@ -15,6 +15,8 @@ enum Endpoint {
     case login
     /// 로그아웃
     case logout
+    /// 탈퇴하기
+    case withdraw
     /// 회원가입
     case signUp
     /// 게시글 저장
@@ -85,6 +87,8 @@ enum Endpoint {
     
     /// 알림 리스트 조회
     case notificationList
+    /// 알림 단일 조회
+    case notification
     /// 알림 삭제
     case deleteNoti
     
@@ -108,6 +112,8 @@ enum Endpoint {
             return "/auth/login"
         case .logout:
             return "/auth/logout"
+        case .withdraw:
+            return "/users/withdraw"
         case .signUp:
             return "/users/additional-info"
         case .savePost, .tempPost:
@@ -169,9 +175,10 @@ enum Endpoint {
             return "/users/profile"
         case .editProfile:
             return "/users/profile"
+        // MARK: - 알림 관련
         case .notificationList:
             return "/notifications/receive"
-        case .deleteNoti:
+        case .deleteNoti, .notification:
             return "/notifications/receive/"
         case .report:
             return "/reports"
@@ -192,6 +199,8 @@ enum Endpoint {
             return "로그인 API"
         case .logout:
             return "로그아웃 API"
+        case .withdraw:
+            return "탈퇴하기 API"
         case .signUp:
             return "회원가입 API"
         case .savePost:
@@ -258,6 +267,8 @@ enum Endpoint {
             return "내 정보 수정 API"
         case .notificationList:
             return "알림 리스트 조회 API"
+        case .notification:
+            return "알림 단일 조회 API"
         case .deleteNoti:
             return "받은 알림 삭제 API"
         case .report:
@@ -279,7 +290,7 @@ enum Endpoint {
         switch self {
         case .login:
             return .post
-        case .logout:
+        case .logout, .withdraw:
             return .delete
         case .signUp:
             return .post
@@ -333,7 +344,8 @@ enum Endpoint {
             return .get
         case .editProfile:
             return .patch
-        case .notificationList:
+        // MARK: - 알림 관련
+        case .notificationList, .notification:
             return .get
         case .deleteNoti:
             return .delete

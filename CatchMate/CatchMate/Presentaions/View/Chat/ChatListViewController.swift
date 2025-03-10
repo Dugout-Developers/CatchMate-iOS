@@ -29,8 +29,13 @@ final class ChatListViewController: BaseViewController, View {
         tabBarController?.tabBar.isHidden = false
         reactor.action.onNext(.selectChat(nil))
         reactor.action.onNext(.loadChatList)
+        SocketService.shared?.listSubscribe()
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        SocketService.shared?.listUnsubscribe()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

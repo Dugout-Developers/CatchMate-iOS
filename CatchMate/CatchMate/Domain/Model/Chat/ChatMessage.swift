@@ -113,7 +113,6 @@ extension ChatSocketMessage {
         return try? JSONDecoder().decode(ChatSocketMessage.self, from: jsonData)
     }
 }
-
 struct ChatMessage {
     let userId: Int
     let nickName: String
@@ -121,4 +120,18 @@ struct ChatMessage {
     let message: String
     let time: Date
     let messageType: ChatMessageType
+    let isSocket: Bool
+}
+
+struct ChatListSocket: Codable {
+    let chatRoomId: Int
+    let content: String
+    let sendTime: String
+    
+    static func decode(from jsonString: String) -> ChatListSocket? {
+        let cleanedString = jsonString.trimmingCharacters(in: .controlCharacters)
+        
+        guard let jsonData = cleanedString.data(using: .utf8) else { return nil }
+        return try? JSONDecoder().decode(ChatListSocket.self, from: jsonData)
+    }
 }

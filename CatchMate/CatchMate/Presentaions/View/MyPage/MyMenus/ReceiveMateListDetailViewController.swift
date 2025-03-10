@@ -32,6 +32,7 @@ final class ReceiveMateListDetailViewController: BaseViewController, UICollectio
         super.viewDidLoad()
         setupView()
         bind(reactor: reactor)
+        navigationBarHidden()
     }
     
     private func setupView() {

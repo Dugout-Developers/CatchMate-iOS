@@ -60,6 +60,7 @@ final class RecevieMateReactor: Reactor {
                 let list = resetNew(postId)
                 let loadAppiles = receivedAppliesUsecase.execute(boardId: intId)
                     .withUnretained(self)
+                    .filter { _, list in !list.applies.isEmpty }
                     .map({ reactor, list in
                         let applies = list.applies[0].applies
                         var index = indexPath

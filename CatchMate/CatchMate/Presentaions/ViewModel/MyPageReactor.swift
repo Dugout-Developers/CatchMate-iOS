@@ -12,35 +12,30 @@ import ReactorKit
 final class MyPageReactor: Reactor {
     enum Action {
         case loadUser
-        case logout
     }
     enum Mutation {
         case setLoading(Bool)
         case setUser(User)
         case setCount(Int)
         case setError(PresentationError?)
-        case logout(Bool)
     }
     struct State {
         var isLoading: Bool = false
         var user: User?
         var error: PresentationError?
         var count: Int = 0
-        var logoutResult: Bool = false
     }
     
     var initialState: State
     private let userUseCase: LoadMyInfoUseCase
     private let loadReceivedCountUsecase: LoadReceivedCountUseCase
-    private let logoutUseCase: LogoutUseCase
     deinit {
         print("Logout Reactor deinit")
     }
     
-    init(userUsecase: LoadMyInfoUseCase, logoutUsecase: LogoutUseCase, loadReceivedCountUsecase: LoadReceivedCountUseCase) {
+    init(userUsecase: LoadMyInfoUseCase, loadReceivedCountUsecase: LoadReceivedCountUseCase) {
         self.initialState = State()
         self.userUseCase = userUsecase
-        self.logoutUseCase = logoutUsecase
         self.loadReceivedCountUsecase = loadReceivedCountUsecase
     }
     
@@ -61,12 +56,7 @@ final class MyPageReactor: Reactor {
                     },
                 Observable.just(Mutation.setLoading(false))
             ])
-        case .logout:
-            return logoutUseCase.logout()
-                .map { Mutation.logout($0) }
-                .catch { error in
-                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
-                }
+
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
@@ -79,8 +69,6 @@ final class MyPageReactor: Reactor {
             newState.error = nil
         case .setError(let error):
             newState.error = error
-        case .logout(let result):
-            newState.logoutResult = result
         case .setCount(let count):
             newState.count = count
         }

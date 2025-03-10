@@ -136,17 +136,14 @@ class DIContainerService {
     
     func makeMypageReactor() -> MyPageReactor {
         let userDataSource = UserDataSourceImpl(tokenDataSource: tokenDS)
-        let logoutDataSource = LogoutDataSourceImpl(tokenDataSource: tokenDS)
         let userRepository = UserRepositoryImpl(userDS: userDataSource)
-        let logoutRepository = LogoutRepositoryImpl(logoutDS: logoutDataSource)
         let loadCountDataSource = RecivedCountDataSourceImpl(tokenDataSource: tokenDS)
         let loadCountRepository = ReceivedCountRepositoryIml(loadCountDS: loadCountDataSource)
         
         let userUsecase = UserUseCaseImpl(userRepository: userRepository)
         let countUsecase = LoadReceivedCountUseCaseImpl(loadCountRepository: loadCountRepository)
-        let logoutUsecase = LogoutUseCaseImpl(repository: logoutRepository)
         
-        return MyPageReactor(userUsecase: userUsecase, logoutUsecase: logoutUsecase, loadReceivedCountUsecase: countUsecase)
+        return MyPageReactor(userUsecase: userUsecase, loadReceivedCountUsecase: countUsecase)
     }
     
     func makeSendMateReactor() -> SendMateReactor {
@@ -185,7 +182,8 @@ class DIContainerService {
     
     func makeNotiListReactor() -> NotificationListReactor {
         let loadListDS = NotificationListDataSourceImpl(tokenDataSource: tokenDS)
-        let loadListRepository = LoadNotificationListRepositoryImpl(loadNotificationDS: loadListDS)
+        let loadNotiDS = LoadNotificationDataSourceImpl(tokenDataSource: tokenDS)
+        let loadListRepository = LoadNotificationListRepositoryImpl(loadNotificationDS: loadListDS, loadNotiDS: loadNotiDS)
         let loadListUsecase = LoadNotificationListUseCaseImpl(loadNotificationRepository: loadListRepository)
         
         let deleteDS = DeleteNotificationDataSourceImpl(tokenDataSource: tokenDS)
@@ -263,6 +261,14 @@ class DIContainerService {
         let loadNoticeUS = LoadNoticeListUseCaseImpl(loadNoticeRepo: loadNoticeRepo)
         
         return AnnouncementsReactor(loadNoticesUseCase: loadNoticeUS)
+    }
+    
+    func makeAuthInfoReactor() -> AuthInfoReactor {
+        let logoutUC = makeLogoutUseCase()
+        let withdrawDS = WithdrawDataSourceImpl(tokenDataSource: tokenDS)
+        let withdrawRepo = WithdrawRepositoryImp(withdrawDS: withdrawDS)
+        let withdrawUC = WithdrawUseCaseImpl(withdrawRepo: withdrawRepo)
+        return AuthInfoReactor(logoutUseCase: logoutUC, withdrawUseCase: withdrawUC)
     }
     
     // MARK: - 특정 Usecase만 필요할 때

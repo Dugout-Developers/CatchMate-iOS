@@ -7,14 +7,17 @@
 
 import UIKit
 import SnapKit
+import ReactorKit
 
-final class AuthInfoSettingViewController: BaseViewController {
+final class AuthInfoSettingViewController: BaseViewController, View {
+    var reactor: AuthInfoReactor
     override var useSnapKit: Bool {
         return true
     }
     override var buttonContainerExists: Bool {
         return false
     }
+    private let infoContainer = UIView()
     private let loginInfoLabel: UILabel = {
         let label = UILabel()
         label.text = "로그인 정보"
@@ -22,7 +25,7 @@ final class AuthInfoSettingViewController: BaseViewController {
         label.applyStyle(textStyle: FontSystem.body02_medium)
         return label
     }()
-    private let infoContainer = UIView()
+    private let emailContainer = UIView()
     private let emailLabel: UILabel = {
         let label = UILabel()
         label.textColor = .cmNonImportantTextColor
@@ -34,6 +37,7 @@ final class AuthInfoSettingViewController: BaseViewController {
         return imageView
     }()
 
+    
     private let deleteIDButton: UIButton = {
         let button = UIButton()
         button.setTitle("탈퇴하기", for: .normal)
@@ -46,14 +50,20 @@ final class AuthInfoSettingViewController: BaseViewController {
         return button
     }()
     
+    private let logoutButton = CMDefaultFilledButton(title: "로그아웃")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLeftTitle("계정 정보")
         setupUI()
-        bind()
+        bind(reactor: reactor)
+        view.backgroundColor = .cmGrayBackgroundColor
+        emailContainer.backgroundColor = .cmGrayBackgroundColor
+        infoContainer.backgroundColor = .white
     }
     
-    init(loginData: LoginData) {
+    init(loginData: LoginData, reactor: AuthInfoReactor) {
+        self.reactor = reactor
         super.init(nibName: nil, bundle: nil)
         self.emailLabel.text = loginData.email
         self.logoImageView.image = UIImage(named: loginData.loginTypeImageName)
@@ -65,14 +75,19 @@ final class AuthInfoSettingViewController: BaseViewController {
     }
     
     private func setupUI() {
-        view.addSubviews(views: [loginInfoLabel, infoContainer, deleteIDButton])
-        infoContainer.addSubviews(views: [emailLabel, logoImageView])
+        view.addSubviews(views: [infoContainer, deleteIDButton, logoutButton])
+        infoContainer.addSubviews(views: [loginInfoLabel, emailContainer])
+        emailContainer.addSubviews(views: [emailLabel, logoImageView])
+        infoContainer.snp.makeConstraints { make in
+            make.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            make.bottom.equalTo(emailContainer).offset(70)
+        }
         
         loginInfoLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(MainGridSystem.getMargin())
             make.top.equalTo(view.safeAreaLayoutGuide).offset(25)
         }
-        infoContainer.snp.makeConstraints { make in
+        emailContainer.snp.makeConstraints { make in
             make.leading.trailing.equalTo(loginInfoLabel)
             make.top.equalTo(loginInfoLabel.snp.bottom).offset(12)
             make.height.equalTo(52)
@@ -91,21 +106,49 @@ final class AuthInfoSettingViewController: BaseViewController {
         
         deleteIDButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-100)
+            make.bottom.equalTo(logoutButton.snp.top).offset(-20)
+        }
+        
+        logoutButton.snp.makeConstraints { make in
+            make.height.equalTo(52)
+            make.leading.trailing.equalTo(loginInfoLabel)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-34)
         }
 
     }
     
-    private func bind() {
+    func bind(reactor: AuthInfoReactor) {
+        reactor.state.map{$0.error}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe(onNext: { vc, error in
+                vc.handleError(error)
+            })
+            .disposed(by: disposeBag)
+        reactor.state.map{$0.eventTrigger}
+            .subscribe { state in
+                if state {
+                    LoginUserDefaultsService.shared.deleteLoginData()
+                    let reactor = DIContainerService.shared.makeAuthReactor()
+                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(UINavigationController(rootViewController: SignInViewController(reactor: reactor)), animated: true)
+                }
+            }
+            .disposed(by: disposeBag)
         deleteIDButton.rx.tap
             .withUnretained(self)
             .subscribe { vc, _ in
-                vc.showCMAlert(titleText: "탈퇴하시겠습니까?", importantButtonText: "네니오", commonButtonText: "아니요") {
-                    
-                } commonAction: {
-                    
-                }
-
+                vc.showCMAlert(titleText: "탈퇴하시겠습니까?", importantButtonText: "네", commonButtonText: "아니요", importantAction:  {
+                    reactor.action.onNext(.withdraw)
+                })
+            }
+            .disposed(by: disposeBag)
+        
+        logoutButton.rx.tap
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                vc.showCMAlert(titleText: "로그아웃하시겠습니까?", importantButtonText: "네", commonButtonText: "아니요", importantAction:  {
+                    reactor.action.onNext(.logout)
+                })
             }
             .disposed(by: disposeBag)
     }

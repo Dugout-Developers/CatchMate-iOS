@@ -45,6 +45,7 @@ final class FavoriteListViewController: BaseViewController ,View {
         bind(reactor: reactor)
         view.backgroundColor = .grayScale50
         reactor.action.onNext(.loadFavoritePost)
+        setNavigationBackgroundColor(.cmGrayBackgroundColor)
     }
     
     private func setupTableview() {

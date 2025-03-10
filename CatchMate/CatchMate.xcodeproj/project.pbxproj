@@ -111,6 +111,10 @@
 		531E4C2D2C6B5C4A0052E754 /* PostListLoadRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E4C2C2C6B5C4A0052E754 /* PostListLoadRepository.swift */; };
 		531E4C2F2C6B5D5C0052E754 /* SimplePost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E4C2E2C6B5D5C0052E754 /* SimplePost.swift */; };
 		531E4C322C6B62070052E754 /* PostListLoadUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E4C312C6B62070052E754 /* PostListLoadUseCase.swift */; };
+		531F83D02D79475F0064BBF7 /* WithdrawDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531F83CF2D7947580064BBF7 /* WithdrawDataSource.swift */; };
+		531F83D22D7948210064BBF7 /* WithdrawRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531F83D12D79481B0064BBF7 /* WithdrawRepositoryImpl.swift */; };
+		531F83D42D7948300064BBF7 /* WithdrawRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531F83D32D7948280064BBF7 /* WithdrawRepository.swift */; };
+		531F83D62D7948DF0064BBF7 /* WithdrawUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531F83D52D7948D90064BBF7 /* WithdrawUseCase.swift */; };
 		5320B0432D58E63A00897EB7 /* ReceivedAppliesDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320B0422D58E62900897EB7 /* ReceivedAppliesDTO.swift */; };
 		5320B0442D58E63A00897EB7 /* ReceivedAppliesDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320B0422D58E62900897EB7 /* ReceivedAppliesDTO.swift */; };
 		5320B0482D5A39B200897EB7 /* SendApplyDetailDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320B0472D5A39AA00897EB7 /* SendApplyDetailDTO.swift */; };
@@ -349,6 +353,8 @@
 		538E9AA32D6C3C6600A70A3D /* Notification+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538E9AA22D6C3C5E00A70A3D /* Notification+Extension.swift */; };
 		538E9AA42D6C3C6600A70A3D /* Notification+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538E9AA22D6C3C5E00A70A3D /* Notification+Extension.swift */; };
 		538EB92F2C3FA27600ABA40E /* CMDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */; };
+		53940F172D7D574C00A57BD3 /* AuthInfoReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53940F162D7D574200A57BD3 /* AuthInfoReactor.swift */; };
+		53940F192D7DE34F00A57BD3 /* LoadNotificationDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53940F182D7DE34100A57BD3 /* LoadNotificationDataSource.swift */; };
 		539BD8632C74F0A5004720B8 /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7ACE2C367008002FC64F /* DateHelper.swift */; };
 		53ACBA1D2C7D8E60004FAF00 /* CMActionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA1C2C7D8E60004FAF00 /* CMActionMenu.swift */; };
 		53ACBA1F2C7DDD36004FAF00 /* SetupResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA1E2C7DDD36004FAF00 /* SetupResult.swift */; };
@@ -604,6 +610,10 @@
 		531E4C2C2C6B5C4A0052E754 /* PostListLoadRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListLoadRepository.swift; sourceTree = "<group>"; };
 		531E4C2E2C6B5D5C0052E754 /* SimplePost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplePost.swift; sourceTree = "<group>"; };
 		531E4C312C6B62070052E754 /* PostListLoadUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListLoadUseCase.swift; sourceTree = "<group>"; };
+		531F83CF2D7947580064BBF7 /* WithdrawDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawDataSource.swift; sourceTree = "<group>"; };
+		531F83D12D79481B0064BBF7 /* WithdrawRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawRepositoryImpl.swift; sourceTree = "<group>"; };
+		531F83D32D7948280064BBF7 /* WithdrawRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawRepository.swift; sourceTree = "<group>"; };
+		531F83D52D7948D90064BBF7 /* WithdrawUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawUseCase.swift; sourceTree = "<group>"; };
 		5320B0422D58E62900897EB7 /* ReceivedAppliesDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceivedAppliesDTO.swift; sourceTree = "<group>"; };
 		5320B0472D5A39AA00897EB7 /* SendApplyDetailDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendApplyDetailDTO.swift; sourceTree = "<group>"; };
 		5320B04A2D5A4B4500897EB7 /* ApplicationInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationInfoViewController.swift; sourceTree = "<group>"; };
@@ -776,6 +786,8 @@
 		538E9AA02D6C0FF400A70A3D /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		538E9AA22D6C3C5E00A70A3D /* Notification+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extension.swift"; sourceTree = "<group>"; };
 		538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMDatePicker.swift; sourceTree = "<group>"; };
+		53940F162D7D574200A57BD3 /* AuthInfoReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthInfoReactor.swift; sourceTree = "<group>"; };
+		53940F182D7DE34100A57BD3 /* LoadNotificationDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadNotificationDataSource.swift; sourceTree = "<group>"; };
 		53ACBA1C2C7D8E60004FAF00 /* CMActionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMActionMenu.swift; sourceTree = "<group>"; };
 		53ACBA1E2C7DDD36004FAF00 /* SetupResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupResult.swift; sourceTree = "<group>"; };
 		53ACBA202C7DDD84004FAF00 /* SetupUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupUseCase.swift; sourceTree = "<group>"; };
@@ -1267,6 +1279,7 @@
 		535AA01F2D45FA98007C7690 /* Notification */ = {
 			isa = PBXGroup;
 			children = (
+				53940F182D7DE34100A57BD3 /* LoadNotificationDataSource.swift */,
 				535AA0182D368097007C7690 /* NotificationListDataSource.swift */,
 				535AA0172D368097007C7690 /* DeleteNotificationDataSource.swift */,
 			);
@@ -1544,6 +1557,7 @@
 		536BDDE72C1971AF0043B1DA /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				53940F162D7D574200A57BD3 /* AuthInfoReactor.swift */,
 				532333CB2D759B660055ABD3 /* AgreementReactor.swift */,
 				5320B0522D5B155300897EB7 /* CustomerServiceReactor.swift */,
 				536BDDE82C1971C70043B1DA /* SignReactor.swift */,
@@ -1883,6 +1897,7 @@
 		53B8E2362C5C7530001D0ADF /* User */ = {
 			isa = PBXGroup;
 			children = (
+				531F83CF2D7947580064BBF7 /* WithdrawDataSource.swift */,
 				53014A0A2D633B12004C2EE0 /* BlockManageDataSource.swift */,
 				530149FF2D6314D6004C2EE0 /* LoadBlockUsersDataSource.swift */,
 				530149F42D63056F004C2EE0 /* ReportUserDataSource.swift */,
@@ -1897,6 +1912,7 @@
 		53B8E2392C5C7BB8001D0ADF /* User */ = {
 			isa = PBXGroup;
 			children = (
+				531F83D12D79481B0064BBF7 /* WithdrawRepositoryImpl.swift */,
 				53014A0C2D637461004C2EE0 /* BlockManageRepositoryImpl.swift */,
 				53014A042D6318A4004C2EE0 /* LoadBlockUsersRepositoryImpl.swift */,
 				530149F92D63071D004C2EE0 /* ReportUserRepositoryImpl.swift */,
@@ -1911,6 +1927,7 @@
 		53B8E23C2C5C7BD3001D0ADF /* User */ = {
 			isa = PBXGroup;
 			children = (
+				531F83D32D7948280064BBF7 /* WithdrawRepository.swift */,
 				53014A0E2D637477004C2EE0 /* BlockManageRepository.swift */,
 				53014A062D6318C4004C2EE0 /* LoadBlockUsersRepository.swift */,
 				530149FB2D630731004C2EE0 /* ReportUserRepository.swift */,
@@ -1925,6 +1942,7 @@
 		53B8E23F2C5C7BF3001D0ADF /* User */ = {
 			isa = PBXGroup;
 			children = (
+				531F83D52D7948D90064BBF7 /* WithdrawUseCase.swift */,
 				53014A122D6374CC004C2EE0 /* UnBlockUserUseCase.swift */,
 				53014A102D6374C4004C2EE0 /* BlockUserUseCase.swift */,
 				53014A082D631A8B004C2EE0 /* LoadBlockUsersUseCase.swift */,
@@ -2232,6 +2250,7 @@
 				53B8E2632C612341001D0ADF /* PostMapper.swift in Sources */,
 				530149FE2D6307C2004C2EE0 /* ReportUserUseCase.swift in Sources */,
 				53E4A9C02C5009EB00D21B49 /* SignUpRepository.swift in Sources */,
+				531F83D42D7948300064BBF7 /* WithdrawRepository.swift in Sources */,
 				53E4A9C62C500E9B00D21B49 /* SignUpMapper.swift in Sources */,
 				53716BD82C4564700044AD2A /* DefaultsPaddingLabel.swift in Sources */,
 				534E39DA2C63BA26006D180E /* AlarmSettingReactor.swift in Sources */,
@@ -2315,6 +2334,7 @@
 				53E4A9B82C4FF00F00D21B49 /* AuthReactor.swift in Sources */,
 				531288C32C54030D000C2FB1 /* AppleLoginDataSource.swift in Sources */,
 				531E4C2B2C6B5C2E0052E754 /* PostListLoadRepositoryImpl.swift in Sources */,
+				531F83D02D79475F0064BBF7 /* WithdrawDataSource.swift in Sources */,
 				53B8E2442C5D2436001D0ADF /* ProfileEditReactor.swift in Sources */,
 				5320B0482D5A39B200897EB7 /* SendApplyDetailDTO.swift in Sources */,
 				53E4A9BA2C4FFB1300D21B49 /* SignUpDataSource.swift in Sources */,
@@ -2430,6 +2450,7 @@
 				534E39E12C63D10B006D180E /* AnnouncementsListCell.swift in Sources */,
 				533183D72C515C480097F3F1 /* TeamImageView.swift in Sources */,
 				53014A3F2D644BC9004C2EE0 /* InquiriesRepository.swift in Sources */,
+				53940F172D7D574C00A57BD3 /* AuthInfoReactor.swift in Sources */,
 				530149F32D5ED7E9004C2EE0 /* ExportChatUserUseCase.swift in Sources */,
 				53E7DBA62CA5E3A700DC058D /* DeletePostRepository.swift in Sources */,
 				533B87352C86DF2A0058B94B /* ApplyListResponse.swift in Sources */,
@@ -2459,7 +2480,9 @@
 				533A2B2E2C29B56200A59340 /* CMDefaultBorderedButton.swift in Sources */,
 				53B3CE472C88B0A000116BF7 /* ApplyMapper.swift in Sources */,
 				530994542C4F6CEB00ABE103 /* LoginResult.swift in Sources */,
+				53940F192D7DE34F00A57BD3 /* LoadNotificationDataSource.swift in Sources */,
 				53B8E2462C5E7BF1001D0ADF /* APIService.swift in Sources */,
+				531F83D22D7948210064BBF7 /* WithdrawRepositoryImpl.swift in Sources */,
 				536BDE122C1B51FD0043B1DA /* TabBarController.swift in Sources */,
 				53C6DA072CE47A3000918718 /* UpPostDataSource.swift in Sources */,
 				53EECB052D11B07600775FD6 /* LoadReceivedCountUseCase.swift in Sources */,
@@ -2522,6 +2545,7 @@
 				534E39D62C6352EE006D180E /* AuthInfoSettingViewController.swift in Sources */,
 				53ACBA212C7DDD84004FAF00 /* SetupUseCase.swift in Sources */,
 				53E7DBC32CAED2F500DC058D /* EditPostDataSource.swift in Sources */,
+				531F83D62D7948DF0064BBF7 /* WithdrawUseCase.swift in Sources */,
 				53EECAFF2D11502C00775FD6 /* RejectApplyUseCase.swift in Sources */,
 				53B895C72CA254DE00029130 /* UserPostLoadDataSource.swift in Sources */,
 				53B5D5DE2D6EC5F400392634 /* LoadNoticeListRepsitoryImpl.swift in Sources */,

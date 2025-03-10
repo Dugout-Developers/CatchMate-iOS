@@ -9,4 +9,5 @@ import RxSwift
 
 protocol LoadNotificationListRepository {
     func loadNotificationList() -> Observable<[NotificationList]>
+    func loadNotification(_ id: Int) -> Observable<NotificationList>
 }

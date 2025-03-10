@@ -13,6 +13,7 @@ final class ChatListReactor: Reactor {
     enum Action {
         case loadChatList
         case selectChat(ChatListInfo?)
+        case newMessage(Int)
         case loadNextPage
         case deleteChat(Int)
         case setError(PresentationError?)
@@ -38,14 +39,51 @@ final class ChatListReactor: Reactor {
     var initialState: State
     private let loadchatListUsecase: LoadChatListUseCase
     private let deleteChatUsecase: ExitChatRoomUseCase
+    private let disposeBag = DisposeBag()
     init(loadchatListUsecase: LoadChatListUseCase, deleteChatUsecase: ExitChatRoomUseCase) {
         self.initialState = State()
         self.loadchatListUsecase = loadchatListUsecase
         self.deleteChatUsecase = deleteChatUsecase
+        observeIncomingMessage()
+    }
+    
+    private func observeIncomingMessage() {
+        // TODO: - Log 추가하기
+        SocketService.shared?.messageObservable
+            .observe(on: MainScheduler.instance)
+            .filter{$0.0 == "/topic/chatList"}
+            .map({ (roomId, message) -> ChatListSocket? in
+                guard let chatMessage = ChatListSocket.decode(from: message) else {
+                    print("❌ [DEBUG] 메시지 디코딩 실패")
+                    return nil
+                }
+                print("📩 메시지 수신 인코딩: \(chatMessage)")
+                return chatMessage
+            })
+            .delay(.milliseconds(700), scheduler: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] message in
+                if let message = message {
+                    self?.action.onNext(.newMessage(message.chatRoomId))
+                }
+            })
+            .disposed(by: disposeBag)
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+        case .newMessage(let id):
+            return loadchatListUsecase.loadChatList(page: 0)
+                .flatMap { [weak self] list, _ -> Observable<Mutation> in
+                    var newList = self?.currentState.chatList.filter { $0.chatRoomId != id }
+                    newList?.insert(list[0], at: 0)
+                    if let newList = newList {
+                        return Observable.just(.setChatList(list: newList, isAppend: false))
+                    }
+                    return Observable.empty()
+                }
+                .catch { error in
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                }
         case .loadChatList:
             return loadchatListUsecase.loadChatList(page: 0)
                 .flatMap { list, isLast -> Observable<Mutation> in
