@@ -41,6 +41,7 @@ final class ChatRoomReactor: Reactor {
         // 사용자의 입력과 상호작용하는 역할을 한다
         case subscribeRoom
         case unsubscribeRoom
+        case loadNotificationStatus
         case loadMessages
         case loadPeople
         case sendMessage(String)
@@ -51,8 +52,10 @@ final class ChatRoomReactor: Reactor {
         case loadImage(String)
         case changeImage(UIImage)
         case exportUser(Int)
+        case toggleNotification
     }
     enum Mutation {
+        case setNotificationStatus(Bool)
         case setMessages([ChatMessage])
         case setSenderInfo([SenderInfo])
         case addMyMessage(ChatMessage)
@@ -74,6 +77,7 @@ final class ChatRoomReactor: Reactor {
         var currentPage: Int = 0
         var isLast: Bool = false
         var isLoading: Bool = false
+        var isNotification: Bool = false
         var exitTrigger: Void?
         var exportTrigger: Void?
         var error: PresentationError?
@@ -91,13 +95,15 @@ final class ChatRoomReactor: Reactor {
     private let updateImageUS: UpdateChatImageUseCase
     private let exportUS: ExportChatUserUseCase
     private let exitUS: ExitChatRoomUseCase
+    private let notificationUS: SetChatRoomNotificationUseCase
     
-    init(chat: ChatRoomInfo, loadInfoUS: LoadChatInfoUseCase, updateImageUS: UpdateChatImageUseCase, exportUS: ExportChatUserUseCase, exitUS: ExitChatRoomUseCase) {
+    init(chat: ChatRoomInfo, loadInfoUS: LoadChatInfoUseCase, updateImageUS: UpdateChatImageUseCase, exportUS: ExportChatUserUseCase, exitUS: ExitChatRoomUseCase, notificationUS: SetChatRoomNotificationUseCase) {
         self.initialState = State()
         self.loadInfoUS = loadInfoUS
         self.updateImageUS = updateImageUS
         self.exportUS = exportUS
         self.exitUS = exitUS
+        self.notificationUS = notificationUS
         self.chat = chat
         do {
             try setupMyData()
@@ -113,13 +119,29 @@ final class ChatRoomReactor: Reactor {
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+        case .loadNotificationStatus:
+            return loadInfoUS.loadChatNotificationStatus(chatId: chat.chatRoomId)
+                .flatMap { status in
+                    return Observable.just(.setNotificationStatus(status))
+                }
+                .catch { error in
+                    if let chatError = error as? ChatError {
+                        return Observable.just(.setChatError(chatError))
+                    } else {
+                        return Observable.just(.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
         case .subscribeRoom:
             print("✅ 채팅방 \(chat.chatRoomId) 구독 요청")
-            SocketService.shared?.subscribe(roomID: String(chat.chatRoomId))
+            Task {
+                await SocketService.shared?.connect(chatId:String(chat.chatRoomId))
+            }
+
             return .empty()
         case .unsubscribeRoom:
             print("🚫 채팅방 \(chat.chatRoomId) 구독 해제 요청")
-            SocketService.shared?.unsubscribe(roomID: String(chat.chatRoomId))
+            SocketService.shared?.disconnect()
+        
             return .empty()
         case .sendMessage(let message):
             return convertToSendMessage(content: message)
@@ -271,12 +293,27 @@ final class ChatRoomReactor: Reactor {
                         Observable.just(Mutation.clearTrigger).delay(.milliseconds(50), scheduler: MainScheduler.instance)
                     ])
                 }
+        case .toggleNotification:
+            let newState = !currentState.isNotification
+            return notificationUS.setChatRoomNotification(roomId: chat.chatRoomId, isNotification: newState)
+                .flatMap { _ in
+                    return Observable.just(.setNotificationStatus(newState))
+                }
+                .catch { error in
+                    if let chatError = error as? ChatError {
+                        return Observable.just(.setChatError(chatError))
+                    } else {
+                        return Observable.just(.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         newState.error = nil
         switch mutation {
+        case .setNotificationStatus(let state):
+            newState.isNotification = state
         case .addMyMessage(let message):
             newState.messages.append(message)
         case .setMessages(let messages):

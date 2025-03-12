@@ -9,4 +9,5 @@ import RxSwift
 
 protocol LoadChatDetailRepository {
     func loadChat(_ chatId: Int) -> Observable<ChatListInfo>
+    func loadChatNotificationStatus(_ chatId: Int) -> Observable<Bool>
 }

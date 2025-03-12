@@ -210,7 +210,9 @@ class DIContainerService {
         let loadChatUserRepo = LoadChatUsersRepositoryImpl(loadChatUserDS: loadChatUsersDS)
         let loadChatMessageDS = LoadChatMessageDataSourceImpl(tokenDataSource: tokenDS)
         let loadChatMessageRepo = LoadChatMessageRepositoryImpl(loadMessageDS: loadChatMessageDS)
-        let loadChatInfoUS = LoadChatInfoUseCaseImpl(loadChatUsersRP: loadChatUserRepo, loadChatMessageRepo: loadChatMessageRepo)
+        let loadChatInfoDS = LoadChatDetailDataSourceImpl(tokenDataSource: tokenDS)
+        let loadChatInfoRepo = LoadChatDetailRepositoryImpl(loadChatDS: loadChatInfoDS)
+        let loadChatInfoUS = LoadChatInfoUseCaseImpl(loadChatUsersRP: loadChatUserRepo, loadChatMessageRepo: loadChatMessageRepo, loadChatInfoRepo: loadChatInfoRepo)
         
         let updateDataSource = UpdateChatImageDataSourceImpl(tokenDataSource: tokenDS)
         let updateRepository = UpdateChatImageRepositoryImpl(updateImageDS: updateDataSource)
@@ -224,7 +226,11 @@ class DIContainerService {
         let exportRepository = ExportChatUserRepositoryImpl(exportDS: exportDataSource)
         let exportUsecase = ExportChatUserUseCaseImpl(exportRepo: exportRepository)
         
-        return ChatRoomReactor(chat: chat, loadInfoUS: loadChatInfoUS, updateImageUS: updateUsecase, exportUS: exportUsecase, exitUS: exitUsecase)
+        let setNotiDS = SetChatRoomNotificationDataSourceImpl(tokenDataSource: tokenDS)
+        let setNotiRepo = SetChatRoomNotificationRepositoryImpl(setChatRoomNotificationDS: setNotiDS)
+        let setNotiUC = SetChatRoomNotificationUseCaseImpl(setChatRoomNotificationRepo: setNotiRepo)
+        
+        return ChatRoomReactor(chat: chat, loadInfoUS: loadChatInfoUS, updateImageUS: updateUsecase, exportUS: exportUsecase, exitUS: exitUsecase, notificationUS: setNotiUC)
     }
     
     func makeReportUserReactor(_ user: SimpleUser) -> ReportReactor {

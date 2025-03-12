@@ -142,6 +142,24 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         tableView.register(ChatRoomPeopleListCell.self, forCellReuseIdentifier: "ChatRoomPeopleListCell")
     }
    func bind(reactor: ChatRoomReactor) {
+       reactor.state.map{$0.isNotification}
+           .distinctUntilChanged()
+           .withUnretained(self)
+           .subscribe { vc, state in
+               if state {
+                   vc.notiButton.setImage(UIImage(named: "notification")?.withTintColor(.grayScale500, renderingMode: .alwaysOriginal), for: .normal)
+               } else {
+                   vc.notiButton.setImage(UIImage(named: "Mute")?.withTintColor(.grayScale500, renderingMode: .alwaysOriginal), for: .normal)
+               }
+           }
+           .disposed(by: disposeBag)
+       
+       notiButton.rx.tap
+           .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
+           .map { ChatRoomReactor.Action.toggleNotification }
+           .bind(to: reactor.action)
+           .disposed(by: disposeBag)
+       
        exitButton.rx.tap
            .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
            .withUnretained(self)

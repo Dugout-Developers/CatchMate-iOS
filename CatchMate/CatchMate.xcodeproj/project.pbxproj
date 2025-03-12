@@ -101,6 +101,10 @@
 		531786822C21D3F700ACEF6A /* ChatListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786812C21D3F700ACEF6A /* ChatListTableViewCell.swift */; };
 		531786852C23261200ACEF6A /* SheetHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531786842C23261200ACEF6A /* SheetHeight.swift */; };
 		531963F12C645FDE00EE7F23 /* SendMateReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531963F02C645FDE00EE7F23 /* SendMateReactor.swift */; };
+		531CC6382D81DC7500A928F9 /* SetChatRoomNotificationDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531CC6372D81DC5300A928F9 /* SetChatRoomNotificationDataSource.swift */; };
+		531CC63A2D81DD9C00A928F9 /* SetChatRoomNotificationRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531CC6392D81DD9900A928F9 /* SetChatRoomNotificationRepositoryImpl.swift */; };
+		531CC63C2D81DDD400A928F9 /* SetChatRoomNotificationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531CC63B2D81DDD200A928F9 /* SetChatRoomNotificationRepository.swift */; };
+		531CC6402D81DE9900A928F9 /* SetChatRoomNotificationUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531CC63F2D81DE9400A928F9 /* SetChatRoomNotificationUseCase.swift */; };
 		531DCA252C67C5450015AC53 /* ReceiveMateListDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531DCA242C67C5450015AC53 /* ReceiveMateListDetailViewController.swift */; };
 		531DCA292C6905430015AC53 /* OtherUserMyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531DCA282C6905430015AC53 /* OtherUserMyPageViewController.swift */; };
 		531DCA2B2C6A0F540015AC53 /* OtherUserpageReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531DCA2A2C6A0F540015AC53 /* OtherUserpageReactor.swift */; };
@@ -600,6 +604,10 @@
 		531786812C21D3F700ACEF6A /* ChatListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListTableViewCell.swift; sourceTree = "<group>"; };
 		531786842C23261200ACEF6A /* SheetHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetHeight.swift; sourceTree = "<group>"; };
 		531963F02C645FDE00EE7F23 /* SendMateReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMateReactor.swift; sourceTree = "<group>"; };
+		531CC6372D81DC5300A928F9 /* SetChatRoomNotificationDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetChatRoomNotificationDataSource.swift; sourceTree = "<group>"; };
+		531CC6392D81DD9900A928F9 /* SetChatRoomNotificationRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetChatRoomNotificationRepositoryImpl.swift; sourceTree = "<group>"; };
+		531CC63B2D81DDD200A928F9 /* SetChatRoomNotificationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetChatRoomNotificationRepository.swift; sourceTree = "<group>"; };
+		531CC63F2D81DE9400A928F9 /* SetChatRoomNotificationUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetChatRoomNotificationUseCase.swift; sourceTree = "<group>"; };
 		531DCA242C67C5450015AC53 /* ReceiveMateListDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveMateListDetailViewController.swift; sourceTree = "<group>"; };
 		531DCA282C6905430015AC53 /* OtherUserMyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserMyPageViewController.swift; sourceTree = "<group>"; };
 		531DCA2A2C6A0F540015AC53 /* OtherUserpageReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserpageReactor.swift; sourceTree = "<group>"; };
@@ -1265,6 +1273,7 @@
 		535AA01E2D45FA7F007C7690 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				531CC6372D81DC5300A928F9 /* SetChatRoomNotificationDataSource.swift */,
 				53014A512D6AFFF4004C2EE0 /* LoadChatDetailDataSource.swift */,
 				530149E62D5ED416004C2EE0 /* ExportChatUserDataSource.swift */,
 				530149E42D5ED240004C2EE0 /* ExitChatRoomDataSource.swift */,
@@ -1315,6 +1324,7 @@
 		535AA02E2D4602F4007C7690 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				531CC6392D81DD9900A928F9 /* SetChatRoomNotificationRepositoryImpl.swift */,
 				53014A532D6B022F004C2EE0 /* LoadChatDetailRepositoryImpl.swift */,
 				530149EE2D5ED6C6004C2EE0 /* ExitChatRoomRepositoryImpl.swift */,
 				530149EC2D5ED4D8004C2EE0 /* ExportChatUserRepositoryImpl.swift */,
@@ -1329,6 +1339,7 @@
 		535AA0332D460333007C7690 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				531CC63B2D81DDD200A928F9 /* SetChatRoomNotificationRepository.swift */,
 				53014A552D6B0245004C2EE0 /* LoadChatDetailRepository.swift */,
 				530149EA2D5ED4BE004C2EE0 /* ExportChatUserRepository.swift */,
 				530149E82D5ED49A004C2EE0 /* ExitChatRoomRepository.swift */,
@@ -1343,6 +1354,7 @@
 		535AA0362D460484007C7690 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				531CC63F2D81DE9400A928F9 /* SetChatRoomNotificationUseCase.swift */,
 				53014A572D6B032D004C2EE0 /* LoadChatDetailUseCase.swift */,
 				530149F22D5ED7E2004C2EE0 /* ExportChatUserUseCase.swift */,
 				530149F02D5ED768004C2EE0 /* ExitChatRoomUseCase.swift */,
@@ -2446,6 +2458,7 @@
 				535AA0412D4CA346007C7690 /* ChatMessage.swift in Sources */,
 				53E7DBA12CA52BD900DC058D /* DeletePostDataSource.swift in Sources */,
 				5383BE852C327FF9008940F1 /* NonMembersAccessViewController.swift in Sources */,
+				531CC63A2D81DD9C00A928F9 /* SetChatRoomNotificationRepositoryImpl.swift in Sources */,
 				53ACBA542C85AF07004FAF00 /* ApplyDataSource.swift in Sources */,
 				534E39E12C63D10B006D180E /* AnnouncementsListCell.swift in Sources */,
 				533183D72C515C480097F3F1 /* TeamImageView.swift in Sources */,
@@ -2459,6 +2472,7 @@
 				531288D52C554163000C2FB1 /* ChatListReactor.swift in Sources */,
 				531786712C202EF500ACEF6A /* DIContainerService.swift in Sources */,
 				530149FC2D630732004C2EE0 /* ReportUserRepository.swift in Sources */,
+				531CC6402D81DE9900A928F9 /* SetChatRoomNotificationUseCase.swift in Sources */,
 				531288C12C53FE2D000C2FB1 /* NaverLoginDataSource.swift in Sources */,
 				535AA0542D51A603007C7690 /* LoadChatUsersRepository.swift in Sources */,
 				53368C8A2D2FF81F00D129EE /* TempPostRepositoryImpl.swift in Sources */,
@@ -2471,6 +2485,7 @@
 				5301E2A32C5B6B8B0078E910 /* AuthManager.swift in Sources */,
 				535AA00E2D368097007C7690 /* SetAlarmnUseCase.swift in Sources */,
 				53014A0F2D637478004C2EE0 /* BlockManageRepository.swift in Sources */,
+				531CC63C2D81DDD400A928F9 /* SetChatRoomNotificationRepository.swift in Sources */,
 				533A2B3F2C2C5DBC00A59340 /* SNSLoginResponse.swift in Sources */,
 				53014A132D6374D3004C2EE0 /* UnBlockUserUseCase.swift in Sources */,
 				533A2B252C280E0500A59340 /* CMDefaultFilledButton.swift in Sources */,
@@ -2567,6 +2582,7 @@
 				535AA02A2D45FD6C007C7690 /* ChatListInfo.swift in Sources */,
 				53368C962D3028F200D129EE /* LoadTempPostDataSource.swift in Sources */,
 				533B29232C7709C100BFE9F6 /* LoadFavoriteListRepository.swift in Sources */,
+				531CC6382D81DC7500A928F9 /* SetChatRoomNotificationDataSource.swift in Sources */,
 				53EECB092D13E4B000775FD6 /* LoadAlarmInfoUseCase.swift in Sources */,
 				53ACBA272C7EB493004FAF00 /* UserInfoDTO.swift in Sources */,
 				535B3A932D339367003FBBBF /* UpPostResponseDTO.swift in Sources */,
@@ -2802,6 +2818,7 @@
 				DEVELOPMENT_TEAM = 977J65FA28;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CatchMate/APP/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "갤러리 접근 권한 허용";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -3004,6 +3021,7 @@
 				DEVELOPMENT_TEAM = 977J65FA28;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CatchMate/APP/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "갤러리 접근 권한 허용";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -3042,6 +3060,7 @@
 				DEVELOPMENT_TEAM = 977J65FA28;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CatchMate/APP/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "갤러리 접근 권한 허용";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;

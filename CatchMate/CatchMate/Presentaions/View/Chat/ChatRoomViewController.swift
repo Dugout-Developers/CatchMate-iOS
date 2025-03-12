@@ -53,6 +53,7 @@ final class ChatRoomViewController: BaseViewController, View {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reactor.action.onNext(.subscribeRoom)
+        reactor.action.onNext(.loadNotificationStatus)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -61,6 +62,7 @@ final class ChatRoomViewController: BaseViewController, View {
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        print("------------------채팅방 disAppear-------------")
         reactor.action.onNext(.unsubscribeRoom)
     }
     override func viewDidLoad() {

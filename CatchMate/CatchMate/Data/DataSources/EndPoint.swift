@@ -79,6 +79,8 @@ enum Endpoint {
     case exportChatUser
     /// 채팅방 1개 정보 조회
     case chatDetail
+    /// 채팅방 개별 알림 설정
+    case chatRoomNotification
     
     /// 내정보 조회
     case loadMyInfo
@@ -161,12 +163,13 @@ enum Endpoint {
             return "/enrolls/"
         case .chatList:
             return "/chat-rooms/list"
-        case .chatUsers, .chatImage, .exitChat, .exportChatUser, .chatDetail:
+        case .chatUsers, .chatImage, .exitChat, .exportChatUser, .chatDetail, .chatRoomNotification:
             /// chat-rooms/{chatRoomId}/user-list
             /// chat-rooms/{chatRoomId}/image
             /// chat-rooms/{chatRoomId}
             /// chat-rooms/{chatRoomId}/users/{userId}
             /// chat-rooms/{chatRoomId}
+            /// chat-rooms/{chatRoomId}/notification
             return "/chat-rooms/"
         case .chatMessage:
             /// chats/{chatRoomId}
@@ -261,6 +264,8 @@ enum Endpoint {
             return "채팅방 유저 내보내기 API"
         case .chatDetail:
             return "채팅방 1개 정보 조회 API"
+        case .chatRoomNotification:
+            return "채팅방 개별 알림 설정 API"
         case .loadMyInfo:
             return "내 정보 조회 API"
         case .editProfile:
@@ -334,10 +339,13 @@ enum Endpoint {
             return .patch
         case .rejectApply:
             return .patch
+        // MARK: - 채팅 관련
         case .chatList, .chatDetail, .chatUsers, .chatMessage:
             return .get
         case .chatImage:
             return .patch
+        case .chatRoomNotification:
+            return .put
         case .exitChat, .exportChatUser:
             return .delete
         case .loadMyInfo:

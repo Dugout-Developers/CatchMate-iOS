@@ -17,6 +17,7 @@ struct ChatListInfo {
     let newChat: Bool
     let notReadCount: Int
     let chatImage: String
+    let notificationStatus: Bool
    
     var lastTimeAgo: String {
         let now = Date()
