@@ -146,7 +146,6 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
            .distinctUntilChanged()
            .withUnretained(self)
            .subscribe { vc, state in
-               print("🔔 \(state)")
                if state {
                    vc.notiButton.setImage(UIImage(named: "notification")?.withTintColor(.grayScale500, renderingMode: .alwaysOriginal), for: .normal)
                } else {
@@ -154,6 +153,13 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
                }
            }
            .disposed(by: disposeBag)
+       
+       notiButton.rx.tap
+           .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
+           .map { ChatRoomReactor.Action.toggleNotification }
+           .bind(to: reactor.action)
+           .disposed(by: disposeBag)
+       
        exitButton.rx.tap
            .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
            .withUnretained(self)

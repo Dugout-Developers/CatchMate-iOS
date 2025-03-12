@@ -52,6 +52,7 @@ final class ChatRoomReactor: Reactor {
         case loadImage(String)
         case changeImage(UIImage)
         case exportUser(Int)
+        case toggleNotification
     }
     enum Mutation {
         case setNotificationStatus(Bool)
@@ -94,13 +95,15 @@ final class ChatRoomReactor: Reactor {
     private let updateImageUS: UpdateChatImageUseCase
     private let exportUS: ExportChatUserUseCase
     private let exitUS: ExitChatRoomUseCase
+    private let notificationUS: SetChatRoomNotificationUseCase
     
-    init(chat: ChatRoomInfo, loadInfoUS: LoadChatInfoUseCase, updateImageUS: UpdateChatImageUseCase, exportUS: ExportChatUserUseCase, exitUS: ExitChatRoomUseCase) {
+    init(chat: ChatRoomInfo, loadInfoUS: LoadChatInfoUseCase, updateImageUS: UpdateChatImageUseCase, exportUS: ExportChatUserUseCase, exitUS: ExitChatRoomUseCase, notificationUS: SetChatRoomNotificationUseCase) {
         self.initialState = State()
         self.loadInfoUS = loadInfoUS
         self.updateImageUS = updateImageUS
         self.exportUS = exportUS
         self.exitUS = exitUS
+        self.notificationUS = notificationUS
         self.chat = chat
         do {
             try setupMyData()
@@ -289,6 +292,19 @@ final class ChatRoomReactor: Reactor {
                         Observable.just(Mutation.setExportTrigger(())),
                         Observable.just(Mutation.clearTrigger).delay(.milliseconds(50), scheduler: MainScheduler.instance)
                     ])
+                }
+        case .toggleNotification:
+            let newState = !currentState.isNotification
+            return notificationUS.setChatRoomNotification(roomId: chat.chatRoomId, isNotification: newState)
+                .flatMap { _ in
+                    return Observable.just(.setNotificationStatus(newState))
+                }
+                .catch { error in
+                    if let chatError = error as? ChatError {
+                        return Observable.just(.setChatError(chatError))
+                    } else {
+                        return Observable.just(.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
                 }
         }
     }
