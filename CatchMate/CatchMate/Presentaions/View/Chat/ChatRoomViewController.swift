@@ -61,6 +61,7 @@ final class ChatRoomViewController: BaseViewController, View {
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        print("------------------채팅방 disAppear-------------")
         reactor.action.onNext(.unsubscribeRoom)
     }
     override func viewDidLoad() {

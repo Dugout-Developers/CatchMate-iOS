@@ -115,11 +115,15 @@ final class ChatRoomReactor: Reactor {
         switch action {
         case .subscribeRoom:
             print("✅ 채팅방 \(chat.chatRoomId) 구독 요청")
-            SocketService.shared?.subscribe(roomID: String(chat.chatRoomId))
+            Task {
+                await SocketService.shared?.connect(chatId:String(chat.chatRoomId))
+            }
+
             return .empty()
         case .unsubscribeRoom:
             print("🚫 채팅방 \(chat.chatRoomId) 구독 해제 요청")
-            SocketService.shared?.unsubscribe(roomID: String(chat.chatRoomId))
+            SocketService.shared?.disconnect()
+        
             return .empty()
         case .sendMessage(let message):
             return convertToSendMessage(content: message)
