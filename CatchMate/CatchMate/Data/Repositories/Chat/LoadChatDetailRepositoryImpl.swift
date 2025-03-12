@@ -7,6 +7,7 @@
 import RxSwift
 
 final class LoadChatDetailRepositoryImpl: LoadChatDetailRepository {
+    
     private let loadChatDS: LoadChatDetailDataSource
     init(loadChatDS: LoadChatDetailDataSource) {
         self.loadChatDS = loadChatDS
@@ -23,5 +24,11 @@ final class LoadChatDetailRepositoryImpl: LoadChatDetailRepository {
             }
     }
     
+    func loadChatNotificationStatus(_ chatId: Int) -> RxSwift.Observable<Bool> {
+        return loadChatDS.loadChatDetail(chatId)
+            .map { dto in
+                return dto.isNotificationEnabled
+            }
+    }
     
 }

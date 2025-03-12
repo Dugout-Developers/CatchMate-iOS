@@ -210,7 +210,9 @@ class DIContainerService {
         let loadChatUserRepo = LoadChatUsersRepositoryImpl(loadChatUserDS: loadChatUsersDS)
         let loadChatMessageDS = LoadChatMessageDataSourceImpl(tokenDataSource: tokenDS)
         let loadChatMessageRepo = LoadChatMessageRepositoryImpl(loadMessageDS: loadChatMessageDS)
-        let loadChatInfoUS = LoadChatInfoUseCaseImpl(loadChatUsersRP: loadChatUserRepo, loadChatMessageRepo: loadChatMessageRepo)
+        let loadChatInfoDS = LoadChatDetailDataSourceImpl(tokenDataSource: tokenDS)
+        let loadChatInfoRepo = LoadChatDetailRepositoryImpl(loadChatDS: loadChatInfoDS)
+        let loadChatInfoUS = LoadChatInfoUseCaseImpl(loadChatUsersRP: loadChatUserRepo, loadChatMessageRepo: loadChatMessageRepo, loadChatInfoRepo: loadChatInfoRepo)
         
         let updateDataSource = UpdateChatImageDataSourceImpl(tokenDataSource: tokenDS)
         let updateRepository = UpdateChatImageRepositoryImpl(updateImageDS: updateDataSource)

@@ -9,20 +9,37 @@ import UIKit
 import RxSwift
 
 protocol LoadChatInfoUseCase {
+    func loadChatNotificationStatus(chatId: Int) -> Observable<Bool>
     func loadChatRoomUsers(chatId: Int) -> Observable<[SenderInfo]>
     func loadChatMessages(chatId: Int, page: Int) -> Observable<(messages: [ChatMessage], isLast: Bool)>
 }
 
 final class LoadChatInfoUseCaseImpl: LoadChatInfoUseCase {
     
+    private let loadChatInfoRepo: LoadChatDetailRepository
     private let loadChatUsersRepo: LoadChatUsersRepository
     private let loadChatMessageRepo: LoadChatMessageRepository
     
-    init(loadChatUsersRP: LoadChatUsersRepository, loadChatMessageRepo: LoadChatMessageRepository) {
+    init(loadChatUsersRP: LoadChatUsersRepository, loadChatMessageRepo: LoadChatMessageRepository, loadChatInfoRepo: LoadChatDetailRepository) {
+        self.loadChatInfoRepo = loadChatInfoRepo
         self.loadChatUsersRepo = loadChatUsersRP
         self.loadChatMessageRepo = loadChatMessageRepo
     }
-    
+    func loadChatNotificationStatus(chatId: Int) -> RxSwift.Observable<Bool> {
+        LoggerService.shared.log(level: .info, "채팅방 알림 정보 불러오기")
+        return loadChatInfoRepo.loadChatNotificationStatus(chatId)
+            .catch { error in
+                if let localizedError = error as? LocalizedError, -1999...(-1000) ~= localizedError.statusCode {
+                    // TokenError
+                    let domainError = DomainError(error: error, context: .tokenUnavailable)
+                    LoggerService.shared.errorLog(domainError, domain: "load_chat_notification", message: domainError.errorDescription)
+                    return Observable.error(DomainError(error: error, context: .tokenUnavailable))
+                }
+                let domainError = DomainError(error: error, context: .pageLoad, message: "채팅방 정보를 불러오는데 실패했습니다.")
+                LoggerService.shared.errorLog(domainError, domain: "load_chat_notification", message: domainError.errorDescription)
+                return Observable.error(domainError)
+            }
+    }
     func loadChatRoomUsers(chatId: Int) -> Observable<[SenderInfo]> {
         LoggerService.shared.log(level: .info, "채팅방 유저 정보 불러오기")
         return loadChatUsersRepo.loadChatRoomUsers(chatId: chatId)

@@ -26,7 +26,7 @@ final class ChatMapper {
         
         let managerInfo = ManagerInfo(id: dto.boardInfo.userInfo.userId, nickName: dto.boardInfo.userInfo.nickName)
     
-        return ChatListInfo(chatRoomId: dto.chatRoomId, postInfo: postInfo, managerInfo: managerInfo, lastMessage: dto.lastMessageContent ?? "", lastMessageAt: lastMessageAt, currentPerson: dto.participantCount, newChat: dto.isNewChatRoom, notReadCount: dto.unreadMessageCount, chatImage: dto.chatRoomImage)
+        return ChatListInfo(chatRoomId: dto.chatRoomId, postInfo: postInfo, managerInfo: managerInfo, lastMessage: dto.lastMessageContent ?? "", lastMessageAt: lastMessageAt, currentPerson: dto.participantCount, newChat: dto.isNewChatRoom, notReadCount: dto.unreadMessageCount, chatImage: dto.chatRoomImage, notificationStatus: dto.isNotificationEnabled)
     }
     
     func postInfoToDomain(_ dto: ChatPostInfo) -> SimplePost? {

@@ -41,6 +41,7 @@ final class ChatRoomReactor: Reactor {
         // 사용자의 입력과 상호작용하는 역할을 한다
         case subscribeRoom
         case unsubscribeRoom
+        case loadNotificationStatus
         case loadMessages
         case loadPeople
         case sendMessage(String)
@@ -53,6 +54,7 @@ final class ChatRoomReactor: Reactor {
         case exportUser(Int)
     }
     enum Mutation {
+        case setNotificationStatus(Bool)
         case setMessages([ChatMessage])
         case setSenderInfo([SenderInfo])
         case addMyMessage(ChatMessage)
@@ -74,6 +76,7 @@ final class ChatRoomReactor: Reactor {
         var currentPage: Int = 0
         var isLast: Bool = false
         var isLoading: Bool = false
+        var isNotification: Bool = false
         var exitTrigger: Void?
         var exportTrigger: Void?
         var error: PresentationError?
@@ -113,6 +116,18 @@ final class ChatRoomReactor: Reactor {
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+        case .loadNotificationStatus:
+            return loadInfoUS.loadChatNotificationStatus(chatId: chat.chatRoomId)
+                .flatMap { status in
+                    return Observable.just(.setNotificationStatus(status))
+                }
+                .catch { error in
+                    if let chatError = error as? ChatError {
+                        return Observable.just(.setChatError(chatError))
+                    } else {
+                        return Observable.just(.setError(ErrorMapper.mapToPresentationError(error)))
+                    }
+                }
         case .subscribeRoom:
             print("✅ 채팅방 \(chat.chatRoomId) 구독 요청")
             Task {
@@ -281,6 +296,8 @@ final class ChatRoomReactor: Reactor {
         var newState = state
         newState.error = nil
         switch mutation {
+        case .setNotificationStatus(let state):
+            newState.isNotification = state
         case .addMyMessage(let message):
             newState.messages.append(message)
         case .setMessages(let messages):

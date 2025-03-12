@@ -19,6 +19,7 @@ struct ChatRoomInfoDTO: Codable {
     let chatRoomImage: String
     let unreadMessageCount: Int
     let isNewChatRoom: Bool
+    let isNotificationEnabled: Bool
 }
 
 struct ChatPostInfo: Codable {
