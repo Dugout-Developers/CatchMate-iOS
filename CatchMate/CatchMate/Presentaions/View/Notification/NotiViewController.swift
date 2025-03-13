@@ -34,7 +34,10 @@ final class NotiViewController: BaseViewController, View {
         reactor.action.onNext(.loadList)
         reactor.action.onNext(.selectNoti(nil))
     }
-
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.post(name: .reloadUnreadMessageState, object: nil)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .cmBackgroundColor

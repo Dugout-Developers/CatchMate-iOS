@@ -48,6 +48,13 @@ class DIContainerService {
         
         return SignUpReactor(signUpModel: model, loginModel: loginModel, signupUseCase: usecase, isEventAlarm: isEvent)
     }
+    func makeTabbarReactor() -> TabbarReactor {
+        let unreadMessageDS = LoadUnreadMessageDataSourceImpl(tokenDataSource: tokenDS)
+        let unreadMessageRepo = UnreadMessageRepositoryImpl(unreadMessageDS: unreadMessageDS)
+        let unreadMessageUC = UnreadMessageUseCaseImpl(unreadMessageRepo: unreadMessageRepo)
+        
+        return TabbarReactor(unreaMessageUC: unreadMessageUC)
+    }
     func makeHomeReactor() -> HomeReactor {
         let listLoadDataSource = PostListLoadDataSourceImpl(tokenDataSource: tokenDS)
         let listLoadRepository = PostListLoadRepositoryImpl(postListLoadDS: listLoadDataSource)

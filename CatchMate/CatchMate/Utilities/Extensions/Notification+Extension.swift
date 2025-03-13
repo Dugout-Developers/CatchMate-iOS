@@ -9,4 +9,5 @@ import Foundation
 
 extension Notification.Name {
     static let notificationStatusChanged = Notification.Name("notificationStatusChanged")
+    static let reloadUnreadMessageState = Notification.Name("reloadUnreadMessageState")
 }

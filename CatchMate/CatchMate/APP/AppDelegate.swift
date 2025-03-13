@@ -81,6 +81,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let userInfo = notification.request.content.userInfo
         print("푸시 알림 수신 (foreground): \(userInfo)")
         
+        NotificationCenter.default.post(name: .reloadUnreadMessageState, object: nil)
         if userInfo["acceptStatus"] == nil {
             if let chatId = userInfo["chatRoomId"] as? String {
                 if let currentChatRoomId = UserDefaults.standard.string(forKey: UserDefaultsKeys.ChatInfo.chatRoomId) {
@@ -92,6 +93,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 }
             }
         }
+ 
         completionHandler([.list, .banner, .sound])
     }
     
