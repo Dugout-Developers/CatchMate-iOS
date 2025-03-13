@@ -94,13 +94,13 @@ final class HomeViewController: BaseViewController, View {
                 if state {
                     vc.notiButton.setImage(UIImage(named: "notification_active"), for: .normal)
                 } else {
-                    vc.notiButton.setImage(UIImage(named: "notification")?.withTintColor(.cmHeadLineTextColor, renderingMode: .alwaysOriginal), for: .normal)
+                    vc.notiButton.setImage(UIImage(named: "notification")?.withTintColor(.grayScale500, renderingMode: .alwaysOriginal), for: .normal)
                 }
             }
             .disposed(by: disposeBag)
     }
     private func setupNavigation() {
-        notiButton.setImage(UIImage(named: "notification")?.withTintColor(.cmHeadLineTextColor, renderingMode: .alwaysOriginal), for: .normal)
+        notiButton.setImage(UIImage(named: "notification")?.withTintColor(.grayScale500, renderingMode: .alwaysOriginal), for: .normal)
         notiButton.addTarget(self, action: #selector(clickNotiButton), for: .touchUpInside)
         customNavigationBar.addRightItems(items: [notiButton])
     }
