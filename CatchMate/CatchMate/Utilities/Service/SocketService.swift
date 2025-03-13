@@ -179,9 +179,14 @@ final class SocketService {
         self.setupWebSocket(chatId: chatId)
         socket?.connect()
         self.connectionSatus = true
-        
+        if let id = chatId {
+            UserDefaults.standard.set(id, forKey: UserDefaultsKeys.ChatInfo.chatRoomId)
+        }
     }
-    private func socketDisconnect() async {
+    private func socketDisconnect(_ isIdRemove: Bool) async {
+        if isIdRemove {
+            UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.ChatInfo.chatRoomId)
+        }
         socket?.disconnect()
         connectionSatus = false
         print("🔴 WebSocket 연결 종료")
@@ -210,7 +215,7 @@ final class SocketService {
         print("✅ 구독 요청 보냄")
     }
     
-    func disconnect() {
+    func disconnect(isIdRemove: Bool = true) {
         guard connectionSatus else {
             print("⚠️ WebSocket이 연결되지 않음. 구독 해제 불가")
             errorSubject.onNext(SocketError.notConnected)
@@ -226,7 +231,7 @@ final class SocketService {
             await readMessage(roomId: subscription.roomId)
             await unsubscribe(id: subscription.id)
             await sendDisConnectFrame()
-            await socketDisconnect()
+            await socketDisconnect(isIdRemove)
         }
     }
     

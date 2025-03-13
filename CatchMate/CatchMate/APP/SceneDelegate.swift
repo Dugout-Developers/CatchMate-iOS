@@ -132,6 +132,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.makeKeyAndVisible()
     }
     
+    func sceneWillEnterForeground(_ scene: UIScene) {
+        print("🔹 앱이 포그라운드로 돌아옴 → WebSocket 재연결 및 최신 메시지 불러오기")
+        Task {
+            print("Task 실행")
+            if let currentChatRoomId = UserDefaults.standard.string(forKey: UserDefaultsKeys.ChatInfo.chatRoomId) {
+                await SocketService.shared?.connect(chatId: currentChatRoomId)
+            } else {
+                print("\(UserDefaults.standard.string(forKey: UserDefaultsKeys.ChatInfo.chatRoomId) ?? "UserDefailts chatRoomId: nil")")
+            }
+        }
+
+    }
+    
+    func sceneDidEnterBackground(_ scene: UIScene) {
+        print("🔹 앱이 백그라운드로 이동함 → WebSocket 연결 해제")
+        SocketService.shared?.disconnect(isIdRemove: false)
+    }
+    
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
         // This occurs shortly after the scene enters the background, or when its session is discarded.
@@ -150,17 +168,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillResignActive(_ scene: UIScene) {
         // Called when the scene will move from an active state to an inactive state.
         // This may occur due to temporary interruptions (ex. an incoming phone call).
-    }
-    
-    func sceneWillEnterForeground(_ scene: UIScene) {
-        // Called as the scene transitions from the background to the foreground.
-        // Use this method to undo the changes made on entering the background.
-    }
-    
-    func sceneDidEnterBackground(_ scene: UIScene) {
-        // Called as the scene transitions from the foreground to the background.
-        // Use this method to save data, release shared resources, and store enough scene-specific state information
-        // to restore the scene back to its current state.
     }
     
     
