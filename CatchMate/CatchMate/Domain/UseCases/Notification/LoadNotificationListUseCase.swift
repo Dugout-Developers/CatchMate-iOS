@@ -7,7 +7,7 @@
 import RxSwift
 
 protocol LoadNotificationListUseCase {
-    func execute() -> Observable<[NotificationList]>
+    func execute(_ page: Int) -> Observable<(list: [NotificationList], isLast: Bool)>
     func readNotification(_ id: Int) -> Observable<NotificationList>
 }
 
@@ -17,9 +17,9 @@ final class LoadNotificationListUseCaseImpl: LoadNotificationListUseCase {
         self.loadNotificationRepository = loadNotificationRepository
     }
     
-    func execute() -> RxSwift.Observable<[NotificationList]> {
+    func execute(_ page: Int) -> RxSwift.Observable<(list: [NotificationList], isLast: Bool)> {
         LoggerService.shared.log(level: .info, "알림 리스트 불러오기")
-        return loadNotificationRepository.loadNotificationList()
+        return loadNotificationRepository.loadNotificationList(page)
             .catch { error in
                 let domainError = DomainError(error: error, context: .pageLoad, message: "알림 리스트를 불러오는데 문제가 발생했습니다.")
                 LoggerService.shared.errorLog(domainError, domain: "load_notification", message: error.errorDescription)

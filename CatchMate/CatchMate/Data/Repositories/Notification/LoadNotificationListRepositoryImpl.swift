@@ -17,18 +17,18 @@ final class LoadNotificationListRepositoryImpl: LoadNotificationListRepository {
         self.loadNotificationDS = loadNotiDS
     }
     
-    func loadNotificationList() -> RxSwift.Observable<[NotificationList]> {
-        return loadNotificationListDS.loadNotificationList()
-            .map { dtoList in
+    func loadNotificationList(_ page: Int) -> RxSwift.Observable<(list: [NotificationList], isLast: Bool)> {
+        return loadNotificationListDS.loadNotificationList(page)
+            .map { dto in
                 var result = [NotificationList]()
-                for dto in dtoList {
-                    if let notification = NotificationMapper.dtoToDomain(dto) {
-                        result.append(notification)
+                for notification in dto.notificationInfoList {
+                    if let mappingResult = NotificationMapper.dtoToDomain(notification) {
+                        result.append(mappingResult)
                     }  else {
-                        LoggerService.shared.log("\(dto.notificationId) 매핑 실패")
+                        LoggerService.shared.log("\(notification.notificationId) 매핑 실패")
                     }
                 }
-                return result
+                return (result, dto.isLast)
             }
     }
     

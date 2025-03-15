@@ -33,8 +33,8 @@ final class ReceiveMateListViewController: BaseViewController, View {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        reactor.action.onNext(.loadReceiveAppliesAll)
         reactor.action.onNext(.selectPost(nil, nil))
+        reactor.action.onNext(.dismissDetail)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -48,6 +48,7 @@ final class ReceiveMateListViewController: BaseViewController, View {
         setupUI()
         setupTableView()
         bind(reactor: reactor)
+        reactor.action.onNext(.loadReceiveAppliesAll)
     }
     private func setupTableView() {
         tableView.register(ReceiveMateListCell.self, forCellReuseIdentifier: "ReceiveMateListCell")
@@ -81,6 +82,26 @@ extension ReceiveMateListViewController {
                 let apply = reactor.currentState.recivedApplies[indexPath.row]
                 reactor.action.onNext(.selectPost(indexPath.row, apply.post.id))
             }
+            .disposed(by: disposeBag)
+        
+        tableView.rx.contentOffset
+            .skip(1)
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .map { vc, offset in
+                let offsetY = offset.y
+                let contentHeight = vc.tableView.contentSize.height
+                let threshold = contentHeight - vc.tableView.frame.size.height - (vc.tableView.rowHeight * 4)
+                return (vc, offsetY, threshold)
+            }
+            .filter { vc, offsetY, threshold in
+                offsetY > threshold &&
+                !reactor.currentState.isLoading &&
+                !reactor.currentState.isLast
+            }
+            .subscribe(onNext: { vc, _, _ in
+                reactor.action.onNext(.loadNextPage)
+            })
             .disposed(by: disposeBag)
         
         reactor.state.map{$0.selectedPostApplies}

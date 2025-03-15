@@ -67,6 +67,26 @@ final class ReceiveMateListDetailViewController: BaseViewController, UICollectio
         dismiss(animated: false)
     }
     func bind(reactor: RecevieMateReactor) {
+        collectionView.rx.contentOffset
+            .skip(1)
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .map { vc, offset in
+                let offsetX = offset.x
+                let contentWidth = vc.collectionView.contentSize.width
+                let threshold = contentWidth - vc.collectionView.frame.size.width - (vc.collectionView.bounds.width / 4)
+                return (vc, offsetX, threshold)
+            }
+            .filter { vc, offsetX, threshold in
+                offsetX > threshold &&
+                !reactor.currentState.isLoading &&
+                !reactor.currentState.isLast
+            }
+            .subscribe(onNext: { vc, _, _ in
+                reactor.action.onNext(.loadDetailNextPage)
+            })
+            .disposed(by: disposeBag)
+        
         reactor.state.map { $0.selectedPostApplies }
             .compactMap{$0}
             .bind(to: collectionView.rx.items(cellIdentifier: "DetailCardCell", cellType: DetailCardCell.self)) { index, apply, cell in

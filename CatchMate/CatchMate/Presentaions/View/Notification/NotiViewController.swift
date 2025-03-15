@@ -96,6 +96,21 @@ extension NotiViewController {
                 reactor.action.onNext(.selectNoti(noti))
             }
             .disposed(by: disposeBag)
+        
+        tableView.rx.contentOffset
+            .skip(1)
+            .map { [weak self] _ in
+                guard let self = self else { return false }
+                let offsetY = self.tableView.contentOffset.y
+                let contentHeight = self.tableView.contentSize.height
+                let threshold = contentHeight - self.tableView.frame.size.height - (self.tableView.rowHeight * 4)
+                return offsetY > threshold
+            }
+            .distinctUntilChanged()
+            .filter { $0 }
+            .map { _ in NotificationListReactor.Action.loadNextPage }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     
     private func navigateToRootAndSwitchTab() {

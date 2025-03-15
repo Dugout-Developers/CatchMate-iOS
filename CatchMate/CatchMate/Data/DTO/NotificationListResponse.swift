@@ -20,5 +20,6 @@ struct NotificationDTO: Codable {
 
 struct NotificationListResponse: Codable {
     let notificationInfoList: [NotificationDTO]
+    let isLast: Bool
 }
 

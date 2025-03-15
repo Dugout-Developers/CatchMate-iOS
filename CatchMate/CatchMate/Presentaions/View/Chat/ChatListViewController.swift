@@ -91,6 +91,20 @@ extension ChatListViewController {
             }
             .disposed(by: disposeBag)
         
+        chatListTableView.rx.contentOffset
+            .map { [weak self] _ in
+                guard let self = self else { return false }
+                let offsetY = self.chatListTableView.contentOffset.y
+                let contentHeight = self.chatListTableView.contentSize.height
+                let threshold = contentHeight - self.chatListTableView.frame.size.height - (self.chatListTableView.rowHeight * 4)
+                return offsetY > threshold
+            }
+            .distinctUntilChanged()
+            .filter { $0 }
+            .map { _ in ChatListReactor.Action.loadNextPage }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
         chatListTableView.rx.itemSelected
             .map { indexPath in
                 let chat = reactor.currentState.chatList[indexPath.row]

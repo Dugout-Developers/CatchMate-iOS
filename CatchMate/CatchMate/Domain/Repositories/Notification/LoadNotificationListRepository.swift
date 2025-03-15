@@ -8,6 +8,6 @@ import UIKit
 import RxSwift
 
 protocol LoadNotificationListRepository {
-    func loadNotificationList() -> Observable<[NotificationList]>
+    func loadNotificationList(_ page: Int) -> Observable<(list: [NotificationList], isLast: Bool)>
     func loadNotification(_ id: Int) -> Observable<NotificationList>
 }
