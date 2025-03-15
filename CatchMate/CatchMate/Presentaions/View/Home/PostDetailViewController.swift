@@ -241,9 +241,9 @@ final class PostDetailViewController: BaseViewController, View {
                         self?.reactor.action.onNext(.changeFavorite(true))
                     }
                 }),
-                MenuItem(title: "공유하기", action: {
-                    print("공유하기 선택됨")
-                }),
+//                MenuItem(title: "공유하기", action: {
+//                    print("공유하기 선택됨")
+//                }),
                 MenuItem(title: "신고하기", textColor: UIColor.cmSystemRed, action: { [weak self] in
                     if let user = self?.reactor.currentState.post?.writer {
                         let reportVC = UserReportViewController(reportUser: user)
@@ -513,13 +513,7 @@ extension PostDetailViewController {
                 let chatRoomVC = ChatRoomViewController(chat: ChatRoomInfo(chatRoomId: chatId, postInfo: info.postInfo, managerInfo: info.managerInfo, cheerTeam: info.postInfo.cheerTeam), userId: userId, isNew: info.newChat)
                 self?.navigationController?.pushViewController(chatRoomVC, animated: true)
             }
-            .disposed(by: self.disposeBag) // self의 disposeBag 사용
-      
-//        let managerInfo = ManagerInfo(id: post.writer.userId, nickName: post.writer.nickName)
-//        let chatRoomInfo = ChatRoomInfo(chatRoomId: chatId, postInfo: SimplePost(post: post), managerInfo: managerInfo, cheerTeam: post.cheerTeam)
-//        let chatRoomVC = ChatRoomViewController(chat: chatRoomInfo, userId: userId, isNew: <#Bool#>)
-//        
-//        navigationController?.pushViewController(chatRoomVC, animated: true)
+            .disposed(by: disposeBag)
     }
 }
 
