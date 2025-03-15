@@ -61,6 +61,7 @@ final class ChatRoomReactor: Reactor {
         case exportUser(Int)
         case toggleNotification
         case loadMissedMessages
+        case loadPostDetail(Void?)
     }
     enum Mutation {
         case setNotificationStatus(Bool)
@@ -79,6 +80,7 @@ final class ChatRoomReactor: Reactor {
         case updateMissedMessage
         case setPage(Int)
         case setScrollTrigger(ScrollType)
+        case setLoadPostDetailTrigger(Void?)
     }
     struct State {
         // View의 state를 관리한다.
@@ -96,6 +98,7 @@ final class ChatRoomReactor: Reactor {
         var chatError: ChatError?
         var scrollTrigger: ScrollType = .startRoom
         var image: UIImage?
+        var loadPostDetailTrigger: Void?
     }
     
     var initialState: State
@@ -340,6 +343,8 @@ final class ChatRoomReactor: Reactor {
                 return .empty()
             }
             return loadMissedMessages(chatId: chat.chatRoomId, currentPage: 0, firstMessage: firstMessage)
+        case .loadPostDetail(let trigger):
+            return Observable.just(.setLoadPostDetailTrigger(trigger))
         }
     }
 
@@ -427,6 +432,8 @@ final class ChatRoomReactor: Reactor {
             } else {
                 newState.scrollTrigger = type
             }
+        case .setLoadPostDetailTrigger(let trigger):
+            newState.loadPostDetailTrigger = trigger
         }
         return newState
     }

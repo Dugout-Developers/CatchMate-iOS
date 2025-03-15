@@ -49,6 +49,7 @@ final class ChatRoomViewController: BaseViewController, View {
         super.viewWillAppear(animated)
         reactor.action.onNext(.subscribeRoom)
         reactor.action.onNext(.loadNotificationStatus)
+        reactor.action.onNext(.loadPostDetail(nil))
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -240,6 +241,14 @@ extension ChatRoomViewController {
         return contentOffsetY >= (contentHeight - tableHeight - bottomInset - 10) // 여유값 10 추가
     }
     func bind(reactor: ChatRoomReactor) {
+        reactor.state.map{$0.loadPostDetailTrigger}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                let postDetailVC = PostDetailViewController(postID: vc.chat.postInfo.id)
+                vc.navigationController?.pushViewController(postDetailVC, animated: true)
+            }
+            .disposed(by: disposeBag)
         tableView.rx.didScroll
             .throttle(.milliseconds(200), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] _ in
