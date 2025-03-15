@@ -27,12 +27,12 @@ final class ChatListViewController: BaseViewController, View {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = false
+        reactor.action.onNext(.loadChatList)
         reactor.action.onNext(.selectChat(nil))
     }
     
     
     override func viewDidAppear(_ animated: Bool) {
-        reactor.action.onNext(.loadChatList)
         Task {
             await SocketService.shared?.connect(chatId: nil)
         }
