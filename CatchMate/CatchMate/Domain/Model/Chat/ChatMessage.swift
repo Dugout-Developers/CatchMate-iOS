@@ -123,6 +123,12 @@ struct ChatMessage {
     let isSocket: Bool
 }
 
+extension ChatMessage: Equatable {
+    static func == (lhs: ChatMessage, rhs: ChatMessage) -> Bool {
+        return lhs.message == rhs.message && lhs.time == rhs.time
+    }
+}
+
 struct ChatListSocket: Codable {
     let chatRoomId: Int
     let content: String

@@ -133,20 +133,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func sceneWillEnterForeground(_ scene: UIScene) {
-        print("🔹 앱이 포그라운드로 돌아옴 → WebSocket 재연결 및 최신 메시지 불러오기")
         Task {
-            print("Task 실행")
             if let currentChatRoomId = UserDefaults.standard.string(forKey: UserDefaultsKeys.ChatInfo.chatRoomId) {
                 await SocketService.shared?.connect(chatId: currentChatRoomId)
-            } else {
-                print("\(UserDefaults.standard.string(forKey: UserDefaultsKeys.ChatInfo.chatRoomId) ?? "UserDefailts chatRoomId: nil")")
+                NotificationCenter.default.post(name: .loadMissedMessage, object: nil)
             }
         }
 
     }
     
     func sceneDidEnterBackground(_ scene: UIScene) {
-        print("🔹 앱이 백그라운드로 이동함 → WebSocket 연결 해제")
         SocketService.shared?.disconnect(isIdRemove: false)
     }
     

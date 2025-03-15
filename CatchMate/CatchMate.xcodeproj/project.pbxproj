@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		53002D052D855D9E0057CB9A /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53002D042D855D980057CB9A /* Array+Extension.swift */; };
+		53002D062D855D9E0057CB9A /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53002D042D855D980057CB9A /* Array+Extension.swift */; };
 		530149D52D5C690A004C2EE0 /* ChatSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530149D42D5C6905004C2EE0 /* ChatSettingViewController.swift */; };
 		530149DB2D5E288C004C2EE0 /* UpdateChatImageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530149DA2D5E2878004C2EE0 /* UpdateChatImageDataSource.swift */; };
 		530149DD2D5E2DB1004C2EE0 /* UpdateChatImageRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530149DC2D5E2DA4004C2EE0 /* UpdateChatImageRepositoryImpl.swift */; };
@@ -520,6 +522,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		53002D042D855D980057CB9A /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		530149D42D5C6905004C2EE0 /* ChatSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSettingViewController.swift; sourceTree = "<group>"; };
 		530149DA2D5E2878004C2EE0 /* UpdateChatImageDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateChatImageDataSource.swift; sourceTree = "<group>"; };
 		530149DC2D5E2DA4004C2EE0 /* UpdateChatImageRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateChatImageRepositoryImpl.swift; sourceTree = "<group>"; };
@@ -1537,6 +1540,7 @@
 		536BDDE42C196FFD0043B1DA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				53002D042D855D980057CB9A /* Array+Extension.swift */,
 				538E9AA22D6C3C5E00A70A3D /* Notification+Extension.swift */,
 				536BDDE12C196F510043B1DA /* Bundle+Extension.swift */,
 				536BDE262C1B53150043B1DA /* UIColor+Extension.swift */,
@@ -2450,6 +2454,7 @@
 				53C6DA0B2CE7233100918718 /* CheerStylePickerViewController.swift in Sources */,
 				535AA0272D45FBC4007C7690 /* ChatListDTO.swift in Sources */,
 				53014A372D644A8B004C2EE0 /* InquiriesDataSource.swift in Sources */,
+				53002D052D855D9E0057CB9A /* Array+Extension.swift in Sources */,
 				536BDE2B2C1B54C80043B1DA /* ChatListViewController.swift in Sources */,
 				53716BD22C45567C0044AD2A /* PostDetailViewController.swift in Sources */,
 				533183D52C5150B60097F3F1 /* OtherMessageTableViewCell.swift in Sources */,
@@ -2720,6 +2725,7 @@
 				53ACBA332C81A4C0004FAF00 /* AddPostDataSourceTest.swift in Sources */,
 				535AA0262D45FBC4007C7690 /* ChatListDTO.swift in Sources */,
 				533B29442C771F2E00BFE9F6 /* PostRequsetDTO.swift in Sources */,
+				53002D062D855D9E0057CB9A /* Array+Extension.swift in Sources */,
 				53014A382D644A8B004C2EE0 /* InquiriesDataSource.swift in Sources */,
 				53ACBA392C8330C9004FAF00 /* LoadPostDetailDataSourceTests.swift in Sources */,
 				533B29302C771C8F00BFE9F6 /* LoadFavoriteListUseCase.swift in Sources */,

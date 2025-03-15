@@ -32,7 +32,6 @@ final class ChatListViewController: BaseViewController, View {
     
     
     override func viewDidAppear(_ animated: Bool) {
-        print("----------------viewDidAppear-------------")
         reactor.action.onNext(.loadChatList)
         Task {
             await SocketService.shared?.connect(chatId: nil)
@@ -41,7 +40,6 @@ final class ChatListViewController: BaseViewController, View {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        print("----------------disappear-------------")
         SocketService.shared?.disconnect()
     }
     

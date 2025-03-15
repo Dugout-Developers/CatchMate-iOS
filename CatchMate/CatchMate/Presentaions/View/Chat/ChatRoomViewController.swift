@@ -37,13 +37,8 @@ final class ChatRoomViewController: BaseViewController, View {
     private var keyboardManager: KeyboardManager?
     private var bottomConstraint: Constraint?
     private var inputViewHeightConstraint: Constraint?
-   
-    private let refreshControl: UIRefreshControl = {
-        let control = UIRefreshControl()
-        control.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
-        control.tintColor = .cmPrimaryColor
-        return control
-    }()
+    private var lastTopMessage: ChatMessage?
+
     private let numberLabel: UILabel = {
         let label = UILabel()
         label.textColor = .cmNonImportantTextColor
@@ -65,7 +60,7 @@ final class ChatRoomViewController: BaseViewController, View {
         NotificationCenter.default.post(name: .reloadUnreadMessageState, object: nil)
         reactor.action.onNext(.unsubscribeRoom)
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -78,9 +73,9 @@ final class ChatRoomViewController: BaseViewController, View {
         })
         view.backgroundColor = .white
         reactor.action.onNext(.loadPeople)
-        reactor.action.onNext(.loadMessages)
+        reactor.action.onNext(.loadMessages(isStart: true))
     }
-
+    
     init(chat: ChatRoomInfo, userId: Int) {
         self.reactor = DIContainerService.shared.makeChatRoomReactor(chat)
         self.chat = chat
@@ -107,13 +102,12 @@ final class ChatRoomViewController: BaseViewController, View {
         tableView.register(DateChatInfoCell.self, forCellReuseIdentifier: "DateChatInfoCell")
         tableView.register(EnterUserCell.self, forCellReuseIdentifier: "EnterUserCell")
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
-        tableView.refreshControl = refreshControl
         view.backgroundColor = .white
         tableView.separatorStyle = .none
         tableView.keyboardDismissMode = .onDrag
         tableView.tableHeaderView = UIView()
         tableView.rowHeight = UITableView.automaticDimension
-//        tableView.estimatedRowHeight = 44
+        //        tableView.estimatedRowHeight = 44
         tableView.backgroundColor = .grayScale50
     }
     private func setupNavigation() {
@@ -181,10 +175,10 @@ extension ChatRoomViewController {
                 vc.inputview.textField.isScrollEnabled = false
                 let size = CGSize(width: vc.inputview.textField.frame.width, height: .infinity)
                 let estimatedSize = vc.inputview.textField.sizeThatFits(size)
-
+                
                 // 최대 높이를 넘어가는지 여부 확인
                 let isMaxHeight = estimatedSize.height >= 90
-
+                
                 if isMaxHeight {
                     vc.inputview.textField.isScrollEnabled = true
                     vc.updateInputViewHeight(newHeight: 90)
@@ -201,18 +195,70 @@ extension ChatRoomViewController {
         view.layoutIfNeeded()
     }
     
+    private func scrollTableview() {
+        tableView.beginUpdates()
+        if let index = reactor.currentState.messages.firstIndex(where: {$0 == lastTopMessage}) {
+            let indexPath = IndexPath(row: index, section: 0)
+            tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+        } else {
+            scrollToBottom(animated: true)
+        }
+        tableView.endUpdates()
+    }
     
-    func bind(reactor: ChatRoomReactor) {
+    func scrollToTableViewBottom(_ animate: Bool) {
+        tableView.beginUpdates()
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            let lastSection = max(self.tableView.numberOfSections - 1, 0)
+            let lastRow = max(self.tableView.numberOfRows(inSection: lastSection) - 1, 0)
+            if self.tableView.numberOfRows(inSection: lastSection) == 0 { return }
 
-        refreshControl.rx.controlEvent(.valueChanged)
-            .withLatestFrom(reactor.state.map { $0.isLast })
-            .subscribe(onNext: { [weak self] isLast in
-                guard let self = self else { return }
-                if isLast {
-                    self.refreshControl.endRefreshing()
-                } else {
-                    reactor.action.onNext(.loadMessages)
+            // 데이터가 존재하는지 확인 후 스크롤 실행
+            if lastRow >= 0 {
+                let indexPath = IndexPath(row: lastRow, section: lastSection)
+                self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: animate)
+            }
+        }
+        tableView.endUpdates()
+    }
+    
+    private func isTableViewAtBottom() -> Bool {
+        let contentHeight = tableView.contentSize.height
+        let tableHeight = tableView.bounds.height
+        let contentOffsetY = tableView.contentOffset.y
+        let bottomInset = tableView.adjustedContentInset.bottom
+
+        return contentOffsetY >= (contentHeight - tableHeight - bottomInset - 10) // 여유값 10 추가
+    }
+    func bind(reactor: ChatRoomReactor) {
+        tableView.rx.didScroll
+            .throttle(.milliseconds(200), scheduler: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] _ in
+                if let topIndexPath = self?.tableView.indexPathsForVisibleRows?.first,
+                   let message = reactor.currentState.messages[safe: topIndexPath.row] {
+                    if self?.lastTopMessage != message {
+                        self?.lastTopMessage = message
+                    }
                 }
+            })
+            .disposed(by: disposeBag)
+        tableView.rx.contentOffset
+            .filter { [weak self] _ in
+                guard let self = self else { return false }
+                return self.tableView.isDragging || self.tableView.isDecelerating //  사용자가 스크롤한 경우만 감지
+            }
+            .map { [weak self] offset -> Bool in
+                guard let self = self else { return false }
+                return offset.y <= 0 // 천장에 닿았을 때 true 반환
+            }
+            .distinctUntilChanged()
+            .filter { $0 } 
+            .withLatestFrom(reactor.state.map { $0.isLast })
+            .filter { !$0 }
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                reactor.action.onNext(.loadMessages(isStart: false))
             })
             .disposed(by: disposeBag)
         
@@ -223,54 +269,31 @@ extension ChatRoomViewController {
                 vc.navigationController?.popViewController(animated: true)
             }
             .disposed(by: disposeBag)
- 
-        reactor.state.map { !$0.isLoading }
-            .distinctUntilChanged()
-            .filter { $0 }
-            .subscribe(onNext: { [weak self] _ in
-                self?.refreshControl.endRefreshing()
-            })
-            .disposed(by: disposeBag)
         
+        reactor.state.map{$0.scrollTrigger}
+            .withUnretained(self)
+            .subscribe { vc, type in
+                print("----------------Type: \(type)")
+                switch type {
         
-        
-        reactor.state.map { $0.messages }
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] messages in
-                guard let self = self else { return }
-
-                let isFirstLoad = self.tableView.contentSize.height == 0 // 처음 로드 확인
-                let previousContentHeight = self.tableView.contentSize.height // 기존 높이 저장
-                let previousOffsetY = self.tableView.contentOffset.y // 기존 오프셋 저장
-
-                DispatchQueue.main.async {
-                    self.tableView.beginUpdates()
-                    self.tableView.endUpdates()
-                    
-                    self.tableView.reloadData()
-
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                        let newContentHeight = self.tableView.contentSize.height // 새로운 높이 가져오기
-
-                        if isFirstLoad {
-                            // ✅ 채팅방 처음 입장 시 가장 아래로 이동 (강제)
-                            self.scrollToBottom(animated: false)
-                        } else if messages.count > 0, previousContentHeight > 0 {
-                            // ✅ 위로 스크롤 후 메시지를 보냈을 때, 올바르게 하단 이동
-                            let offsetYDifference = newContentHeight - previousContentHeight
-                            if offsetYDifference > 0 {
-                                // 새로운 메시지가 추가될 때만 아래로 이동
-                                self.scrollToBottom(animated: true)
-                            } else {
-                                // 일반적인 경우에는 기존 위치 유지
-                                self.tableView.contentOffset.y = previousOffsetY
-                            }
-                        }
+                case .startRoom:
+                    vc.scrollToTableViewBottom(false)
+                case .sendMyMessage:
+                    vc.scrollToTableViewBottom(true)
+                case .nextPage, .background:
+                    vc.scrollTableview()
+                case .receivedMessage:
+                    let isAtBottom = vc.isTableViewAtBottom()
+                    print(isAtBottom)
+                    if isAtBottom {
+                        vc.scrollToTableViewBottom(true)
+                    } else {
+                        vc.scrollTableview()
                     }
                 }
-            })
+            }
             .disposed(by: disposeBag)
-
+        
         reactor.state.map{$0.messages}
             .observe(on: MainScheduler.instance)
             .bind(to: tableView.rx.items) { [weak self] tableView, index, item in
@@ -317,7 +340,7 @@ extension ChatRoomViewController {
                     cell.backgroundColor = .clear
                     return cell
                 case .startChat:
-                   guard let cell = tableView.dequeueReusableCell(withIdentifier: "StartChatInfoCell", for: indexPath) as? StartChatInfoCell else { return UITableViewCell() }
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "StartChatInfoCell", for: indexPath) as? StartChatInfoCell else { return UITableViewCell() }
                     cell.configData(chat.postInfo)
                     cell.selectionStyle = .none
                     cell.backgroundColor = .clear
@@ -369,7 +392,7 @@ class KeyboardManager {
     private var bottomConstraint: Constraint?
     private var keyboardWillShowHandler: (() -> Void)?
     private var keyboardWillHideHandler: (() -> Void)?
-
+    
     init(view: UIView, bottomConstraint: Constraint?, keyboardWillShowHandler: (() -> Void)? = nil, keyboardWillHideHandler: (() -> Void)? = nil) {
         self.view = view
         self.bottomConstraint = bottomConstraint
@@ -411,9 +434,9 @@ class KeyboardManager {
         }
         
         let changeInHeight = keyboardWillShow ? -keyboardFrame.height + view.safeAreaInsets.bottom : 0
-
+        
         bottomConstraint?.update(offset: changeInHeight)
-
+        
         UIView.animate(withDuration: animationDuration) {
             view.layoutIfNeeded()
         }
