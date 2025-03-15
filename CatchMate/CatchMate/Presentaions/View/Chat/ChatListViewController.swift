@@ -117,7 +117,7 @@ extension ChatListViewController {
             .subscribe(onNext: { [weak self] chatInfo in
                 if let userId = SetupInfoService.shared.getUserInfo(type: .id), let id = Int(userId) {
                     let chatRoomInfo = ChatRoomInfo(chatRoomId: chatInfo.chatRoomId, postInfo: chatInfo.postInfo, managerInfo: chatInfo.managerInfo, cheerTeam: chatInfo.postInfo.cheerTeam)
-                    let roomVC = ChatRoomViewController(chat: chatRoomInfo, userId: id)
+                    let roomVC = ChatRoomViewController(chat: chatRoomInfo, userId: id, isNew: chatInfo.newChat)
                     roomVC.hidesBottomBarWhenPushed = true
                     self?.navigationController?.pushViewController(roomVC, animated: true)
                 } else {

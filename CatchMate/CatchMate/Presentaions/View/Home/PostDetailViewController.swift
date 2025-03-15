@@ -504,11 +504,22 @@ extension PostDetailViewController {
             reactor.action.onNext(.setError(.unauthorized))
             return
         }
-        let managerInfo = ManagerInfo(id: post.writer.userId, nickName: post.writer.nickName)
-        let chatRoomInfo = ChatRoomInfo(chatRoomId: chatId, postInfo: SimplePost(post: post), managerInfo: managerInfo, cheerTeam: post.cheerTeam)
-        let chatRoomVC = ChatRoomViewController(chat: chatRoomInfo, userId: userId)
         
-        navigationController?.pushViewController(chatRoomVC, animated: true)
+        let chatInfoUC = DIContainerService.shared.makeChatDetailUseCase()
+        
+        chatInfoUC.loadChat(chatId)
+            .observe(on: MainScheduler.instance)
+            .subscribe { [weak self] info in
+                let chatRoomVC = ChatRoomViewController(chat: ChatRoomInfo(chatRoomId: chatId, postInfo: info.postInfo, managerInfo: info.managerInfo, cheerTeam: info.postInfo.cheerTeam), userId: userId, isNew: info.newChat)
+                self?.navigationController?.pushViewController(chatRoomVC, animated: true)
+            }
+            .disposed(by: self.disposeBag) // self의 disposeBag 사용
+      
+//        let managerInfo = ManagerInfo(id: post.writer.userId, nickName: post.writer.nickName)
+//        let chatRoomInfo = ChatRoomInfo(chatRoomId: chatId, postInfo: SimplePost(post: post), managerInfo: managerInfo, cheerTeam: post.cheerTeam)
+//        let chatRoomVC = ChatRoomViewController(chat: chatRoomInfo, userId: userId, isNew: <#Bool#>)
+//        
+//        navigationController?.pushViewController(chatRoomVC, animated: true)
     }
 }
 

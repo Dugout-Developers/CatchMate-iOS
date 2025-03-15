@@ -38,7 +38,7 @@ final class ChatRoomViewController: BaseViewController, View {
     private var bottomConstraint: Constraint?
     private var inputViewHeightConstraint: Constraint?
     private var lastTopMessage: ChatMessage?
-
+    private let isNew: Bool
     private let numberLabel: UILabel = {
         let label = UILabel()
         label.textColor = .cmNonImportantTextColor
@@ -49,6 +49,13 @@ final class ChatRoomViewController: BaseViewController, View {
         super.viewWillAppear(animated)
         reactor.action.onNext(.subscribeRoom)
         reactor.action.onNext(.loadNotificationStatus)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if isNew {
+            showCMAlert(titleText: "경기 종료 후 7일이 지나면\n채팅방이 자동으로 삭제됩니다\n참고해주세요", importantButtonText: "확인", commonButtonText: nil)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -76,10 +83,11 @@ final class ChatRoomViewController: BaseViewController, View {
         reactor.action.onNext(.loadMessages(isStart: true))
     }
     
-    init(chat: ChatRoomInfo, userId: Int) {
+    init(chat: ChatRoomInfo, userId: Int, isNew: Bool) {
         self.reactor = DIContainerService.shared.makeChatRoomReactor(chat)
         self.chat = chat
         self.userId = userId
+        self.isNew = isNew
         super.init(nibName: nil, bundle: nil)
     }
     
