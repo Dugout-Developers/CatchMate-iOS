@@ -80,6 +80,7 @@ final class CustomerServiceAddViewController: BaseViewController, View {
             .filter{$0}
             .withUnretained(self)
             .subscribe { vc, _ in
+                NotificationCenter.default.post(name: .submitContact, object: nil)
                 vc.navigationController?.popToRootViewController(animated: true)
             }
             .disposed(by: disposeBag)

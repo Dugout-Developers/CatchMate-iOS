@@ -27,7 +27,6 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = false
         reactor.action.onNext(.loadUser)
-        
     }
     
     override func viewDidLoad() {
@@ -36,6 +35,7 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
         setupTableView()
         setupUI()
         bind(reactor: reactor)
+        notificationBinding()
     }
     
     init(reactor: MyPageReactor) {
@@ -47,7 +47,14 @@ class MyPageViewController: BaseViewController, UITableViewDelegate, UITableView
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+    private func notificationBinding() {
+        NotificationCenter.default.rx.notification(.submitContact)
+            .withUnretained(self)
+            .subscribe(onNext: { vc, _ in
+                vc.showToast(message: "문의가 접수되었습니다", buttonContainerExists: false, isTab: true)
+            })
+            .disposed(by: disposeBag)
+    }
     private func setupNavigation() {
         setupLeftTitle("내 정보")
         let settingButton = UIButton()

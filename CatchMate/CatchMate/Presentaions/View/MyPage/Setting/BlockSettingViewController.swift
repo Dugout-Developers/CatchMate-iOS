@@ -56,7 +56,6 @@ final class BlockSettingViewController: BaseViewController, View {
     
     private func setupTableView() {
         tableView.register(BlockUserProfileCell.self, forCellReuseIdentifier: "BlockUserProfileCell")
-//        tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 56
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
