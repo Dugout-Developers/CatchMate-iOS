@@ -83,12 +83,12 @@ extension NotiViewController {
             .disposed(by: disposeBag)
         
         tableView.rx.itemDeleted
-          .observe(on: MainScheduler.asyncInstance)
-          .withUnretained(self)
-          .bind { vc, indexPath in
-              vc.reactor.action.onNext(.deleteNoti(indexPath.row))
-          }
-          .disposed(by: disposeBag)
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .bind { vc, indexPath in
+                vc.reactor.action.onNext(.deleteNoti(indexPath.row))
+            }
+            .disposed(by: disposeBag)
         
         tableView.rx.itemSelected
             .subscribe { indexPath in
@@ -98,7 +98,9 @@ extension NotiViewController {
             .disposed(by: disposeBag)
         
         tableView.rx.contentOffset
-            .skip(1)
+            .filter { _ in
+                return reactor.currentState.notifications.isEmpty == false
+            }
             .map { [weak self] _ in
                 guard let self = self else { return false }
                 let offsetY = self.tableView.contentOffset.y

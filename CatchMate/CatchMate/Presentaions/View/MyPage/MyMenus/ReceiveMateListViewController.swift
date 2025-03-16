@@ -85,7 +85,7 @@ extension ReceiveMateListViewController {
             .disposed(by: disposeBag)
         
         tableView.rx.contentOffset
-            .skip(1)
+            .filter { _ in !reactor.currentState.recivedApplies.isEmpty }
             .distinctUntilChanged()
             .withUnretained(self)
             .map { vc, offset in

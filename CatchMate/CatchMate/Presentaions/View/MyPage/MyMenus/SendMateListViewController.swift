@@ -81,7 +81,7 @@ extension SendMateListViewController {
             .disposed(by: disposeBag)
         
         tableView.rx.contentOffset
-            .skip(1)
+            .filter { _ in !reactor.currentState.sendMates.isEmpty }
             .distinctUntilChanged()
             .withUnretained(self)
             .map { vc, offset in

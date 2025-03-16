@@ -108,6 +108,9 @@ final class ChatListReactor: Reactor {
                 return Observable.empty()
             }
             
+            if currentState.chatList.isEmpty {
+                return Observable.empty()
+            }
             return loadchatListUsecase.loadChatList(page: nextPage)
                 .flatMap { list, isLast -> Observable<Mutation> in
                     return Observable.concat([

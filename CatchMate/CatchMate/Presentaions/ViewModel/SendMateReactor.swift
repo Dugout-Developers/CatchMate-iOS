@@ -58,7 +58,9 @@ final class SendMateReactor: Reactor {
             if !currentState.isLoading || currentState.isLast {
                 return Observable.empty()
             }
-            print("loadNextPage")
+            if currentState.sendMates.isEmpty {
+                return Observable.empty()
+            }
             return sendAppliesUsecase.execute(page: nextPage)
                 .flatMap { data -> Observable<Mutation> in
                     let posts = data.applys.map { $0.post }

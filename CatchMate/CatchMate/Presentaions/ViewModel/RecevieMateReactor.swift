@@ -78,7 +78,7 @@ final class RecevieMateReactor: Reactor {
                 return Observable.just(Mutation.setSelectedPostApplies(nil, nil))
             }
             if let postId = postId, let intId = Int(postId) {
-                let list = resetNew(postId)
+                resetNew(postId)
                 let loadAppiles = receivedAppliesUsecase.execute(boardId: intId, page: 0)
                     .withUnretained(self)
                     .filter { _, list in !list.applies.isEmpty }
@@ -138,7 +138,9 @@ final class RecevieMateReactor: Reactor {
             if currentState.isLast || currentState.isLoading {
                 return Observable.empty()
             }
-            
+            if currentState.recivedApplies.isEmpty {
+                return Observable.empty()
+            }
             return receivedAllAppliesUsecase.execute(nextPage)
                 .flatMap { result in
                     return Observable.concat([
@@ -153,9 +155,13 @@ final class RecevieMateReactor: Reactor {
                     return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
         case .loadDetailNextPage:
-            let nextPage = currentState.currentPage + 1
+            let nextPage = currentState.detailCurrentPage + 1
             
             if currentState.detailIsLast || currentState.isLoading {
+                return Observable.empty()
+            }
+            
+            if (currentState.selectedPostApplies ?? []).isEmpty {
                 return Observable.empty()
             }
             guard let selectedIndex = currentState.selectedIndex else {
@@ -166,8 +172,8 @@ final class RecevieMateReactor: Reactor {
                 return Observable.just(Mutation.setSelectedPostApplies(nil, nil))
             }
             if let postId = postId, let intId = Int(postId) {
-                let list = resetNew(postId)
-                let loadAppiles = receivedAppliesUsecase.execute(boardId: intId, page: 0)
+                resetNew(postId)
+                let loadAppiles = receivedAppliesUsecase.execute(boardId: intId, page: nextPage)
                     .withUnretained(self)
                     .filter { _, list in !list.applies.isEmpty }
                     .flatMap({ reactor, list in
@@ -240,11 +246,10 @@ final class RecevieMateReactor: Reactor {
         }
         return newState
     }
-    private func resetNew(_ id: String) -> [RecivedApplies] {
+    private func resetNew(_ id: String) {
         var list = currentState.recivedApplies
         if let index = list.firstIndex(where: {$0.post.id == id}) {
             list[index].changeNew()
         }
-        return list
     }
 }

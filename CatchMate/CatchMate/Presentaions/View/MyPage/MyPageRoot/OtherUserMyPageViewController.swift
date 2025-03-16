@@ -172,7 +172,7 @@ extension OtherUserMyPageViewController {
         
         // Pagenation
         tableview.rx.contentOffset
-            .skip(1)
+            .filter { _ in !reactor.currentState.posts.isEmpty }
             .withUnretained(self)
             .map { vc, offset in
                 let offsetY = offset.y

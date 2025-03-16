@@ -68,7 +68,7 @@ final class ReceiveMateListDetailViewController: BaseViewController, UICollectio
     }
     func bind(reactor: RecevieMateReactor) {
         collectionView.rx.contentOffset
-            .skip(1)
+            .filter { _ in reactor.currentState.selectedPostApplies?.isEmpty == false }
             .distinctUntilChanged()
             .withUnretained(self)
             .map { vc, offset in

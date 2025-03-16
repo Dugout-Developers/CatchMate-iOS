@@ -85,6 +85,9 @@ final class NotificationListReactor: Reactor {
             if currentState.isLast || currentState.isLoading {
                 return Observable.empty()
             }
+            if currentState.notifications.isEmpty {
+                return Observable.empty()
+            }
             return loadNotiUsecase.execute(nextPage)
                 .flatMap { list, isLast in
                     return Observable.concat([
@@ -105,7 +108,7 @@ final class NotificationListReactor: Reactor {
         newState.error = nil
         switch mutation {
         case .setList(let list):
-            newState.notifications = list
+            newState.notifications.append(contentsOf: list)
         case .setError(let error):
             newState.error = error
         case .setSelectedNoti(let noti):
