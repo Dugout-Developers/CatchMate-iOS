@@ -199,7 +199,6 @@ final class SocketService {
         
         let newSubscription = Subscription(roomId: roomID ?? "0", id: UUID().uuidString)
         currentSubscription = newSubscription
-        print(roomID)
         let destination = roomID == nil ? "/topic/chatList" : "/topic/chat.\(roomID!)"
         
         let frame = """

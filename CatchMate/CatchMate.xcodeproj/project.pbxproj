@@ -494,6 +494,9 @@
 		53EECB122D14F06300775FD6 /* SetNotificationResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECB102D14F04B00775FD6 /* SetNotificationResponseDTO.swift */; };
 		53EECB142D14F10200775FD6 /* SetAlarmRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EECB132D14F0F000775FD6 /* SetAlarmRepository.swift */; };
 		53F1E8C62C47A46400A962F3 /* Apply.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F1E8C52C47A46400A962F3 /* Apply.swift */; };
+		53F885012D87E6E90069B401 /* Inquiry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F885002D87E6D80069B401 /* Inquiry.swift */; };
+		53F885022D87E6E90069B401 /* Inquiry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F885002D87E6D80069B401 /* Inquiry.swift */; };
+		53F885042D87E8300069B401 /* InquiryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F885032D87E8250069B401 /* InquiryDetailViewController.swift */; };
 		53FC69DB2C58C65700B97AEA /* RefreshTokenResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69DA2C58C65700B97AEA /* RefreshTokenResponseDTO.swift */; };
 		53FC69DD2C58DB8D00B97AEA /* TokenDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69DC2C58DB8D00B97AEA /* TokenDataSource.swift */; };
 		53FC69DF2C58E00A00B97AEA /* UserDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC69DE2C58E00A00B97AEA /* UserDataSource.swift */; };
@@ -916,6 +919,8 @@
 		53EECB102D14F04B00775FD6 /* SetNotificationResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNotificationResponseDTO.swift; sourceTree = "<group>"; };
 		53EECB132D14F0F000775FD6 /* SetAlarmRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetAlarmRepository.swift; sourceTree = "<group>"; };
 		53F1E8C52C47A46400A962F3 /* Apply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Apply.swift; sourceTree = "<group>"; };
+		53F885002D87E6D80069B401 /* Inquiry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inquiry.swift; sourceTree = "<group>"; };
+		53F885032D87E8250069B401 /* InquiryDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InquiryDetailViewController.swift; sourceTree = "<group>"; };
 		53FC69DA2C58C65700B97AEA /* RefreshTokenResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenResponseDTO.swift; sourceTree = "<group>"; };
 		53FC69DC2C58DB8D00B97AEA /* TokenDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDataSource.swift; sourceTree = "<group>"; };
 		53FC69DE2C58E00A00B97AEA /* UserDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataSource.swift; sourceTree = "<group>"; };
@@ -1105,6 +1110,7 @@
 		531786792C20777000ACEF6A /* Notification */ = {
 			isa = PBXGroup;
 			children = (
+				53F885032D87E8250069B401 /* InquiryDetailViewController.swift */,
 				536BDE2E2C1B55240043B1DA /* NotiViewController.swift */,
 				5317867A2C2077EC00ACEF6A /* NotiViewTableViewCell.swift */,
 			);
@@ -1623,6 +1629,7 @@
 		536BDDED2C1972120043B1DA /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				53F885002D87E6D80069B401 /* Inquiry.swift */,
 				5375B13C2D1A85EA000581B3 /* DomainError.swift */,
 				53ACBA1E2C7DDD36004FAF00 /* SetupResult.swift */,
 				535AA0452D4F4F38007C7690 /* Sign */,
@@ -2460,6 +2467,7 @@
 				533183D52C5150B60097F3F1 /* OtherMessageTableViewCell.swift in Sources */,
 				533183D12C5141EB0097F3F1 /* UILabel+Extension.swift in Sources */,
 				533B29292C770F0700BFE9F6 /* SetFavoriteRepository.swift in Sources */,
+				53F885042D87E8300069B401 /* InquiryDetailViewController.swift in Sources */,
 				533A2B302C2AC5C400A59340 /* InputFavoriteTeamViewContoller.swift in Sources */,
 				530149E52D5ED255004C2EE0 /* ExitChatRoomDataSource.swift in Sources */,
 				5320B04B2D5A4B5900897EB7 /* ApplicationInfoViewController.swift in Sources */,
@@ -2496,6 +2504,7 @@
 				530149FC2D630732004C2EE0 /* ReportUserRepository.swift in Sources */,
 				531CC6402D81DE9900A928F9 /* SetChatRoomNotificationUseCase.swift in Sources */,
 				531288C12C53FE2D000C2FB1 /* NaverLoginDataSource.swift in Sources */,
+				53F885022D87E6E90069B401 /* Inquiry.swift in Sources */,
 				535AA0542D51A603007C7690 /* LoadChatUsersRepository.swift in Sources */,
 				53368C8A2D2FF81F00D129EE /* TempPostRepositoryImpl.swift in Sources */,
 				53B8E25B2C612171001D0ADF /* AddPostUseCase.swift in Sources */,
@@ -2659,6 +2668,7 @@
 				53EECAED2D0B304A00775FD6 /* ProfileEditRequestDTO.swift in Sources */,
 				533B29352C771E6000BFE9F6 /* Post.swift in Sources */,
 				533B292E2C771C7D00BFE9F6 /* SetFavoriteRepositoryImpl.swift in Sources */,
+				53F885012D87E6E90069B401 /* Inquiry.swift in Sources */,
 				533B873D2C86E5C80058B94B /* RecivedAppiesDataSource.swift in Sources */,
 				533B293C2C771ED500BFE9F6 /* PresentationError.swift in Sources */,
 				5375B1472D1AEECE000581B3 /* ImageLoadHelper.swift in Sources */,
