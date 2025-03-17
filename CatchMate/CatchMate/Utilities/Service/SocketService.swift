@@ -81,6 +81,7 @@ final class SocketService {
     
     private var currentSubscription: Subscription? = nil
     private var preRoomId: String? = nil
+    private var socketHeaderId: String? = nil
     private var retryCount = 0
     private let messageSubject = PublishSubject<(String, String)>() // (roomID, message)
     private let errorSubject = PublishSubject<Error>()
@@ -135,11 +136,6 @@ final class SocketService {
     private func setupWebSocket(chatId: String?) {
         var request = URLRequest(url: serverURL)
         request.timeoutInterval = 5
-        request.setValue("\(accessToken)", forHTTPHeaderField: "AccessToken")
-        if let chatId = chatId {
-            request.setValue(chatId, forHTTPHeaderField: "ChatRoomId")
-        }
-
         self.socket = WebSocket(request: request)
         self.socket?.delegate = self
     }
@@ -177,6 +173,7 @@ final class SocketService {
         print("🔄 WebSocket 연결 시도")
         self.preRoomId = chatId
         self.setupWebSocket(chatId: chatId)
+        socketHeaderId = chatId
         socket?.connect()
         self.connectionSatus = true
         if let id = chatId {
@@ -202,6 +199,7 @@ final class SocketService {
         
         let newSubscription = Subscription(roomId: roomID ?? "0", id: UUID().uuidString)
         currentSubscription = newSubscription
+        print(roomID)
         let destination = roomID == nil ? "/topic/chatList" : "/topic/chat.\(roomID!)"
         
         let frame = """
@@ -227,6 +225,7 @@ final class SocketService {
             return
         }
         retryCount = 0
+        socketHeaderId = nil
         Task {
             await readMessage(roomId: subscription.roomId)
             await unsubscribe(id: subscription.id)
@@ -319,7 +318,7 @@ extension SocketService: WebSocketDelegate {
             print("✅ WebSocket 연결 성공")
             Task {
                 await sendConnectFrame()
-                await subscribe(roomID: preRoomId)
+                await subscribe(roomID: socketHeaderId)
             }
             
         case .disconnected(let reason, let code):
@@ -345,6 +344,7 @@ extension SocketService: WebSocketDelegate {
         case .error(let error):
             connectionSatus = false
             if let error = error {
+                print(error.statusCode)
                 print("🚨 [ERROR] WebSocket 내부 오류 발생: \(error.localizedDescription)")
                 errorSubject.onNext(error)
             }
@@ -354,16 +354,25 @@ extension SocketService: WebSocketDelegate {
             break
         }
     }
-    
-    
+
     private func sendConnectFrame() async {
-        let frame = """
+        
+        let frame = socketHeaderId != nil ? """
+           CONNECT
+           accept-version:1.2
+           AccessToken:\(accessToken)
+           ChatRoomId:\(socketHeaderId!)
+           host:\(serverURL.host ?? "localhost")
+           
+           \0
+           """ : """
            CONNECT
            accept-version:1.2
            host:\(serverURL.host ?? "localhost")
            
            \0
            """
+        print(frame)
         socket?.write(string: frame)
     }
     
