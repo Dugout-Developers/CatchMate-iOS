@@ -49,7 +49,7 @@ final class ChatRoomReactor: Reactor {
         case subscribeRoom
         case unsubscribeRoom
         case loadNotificationStatus
-        case loadMessages(isStart: Bool = false)
+        case loadMessages
         case loadPeople
         case sendMessage(String)
         case receiveMessage(ChatMessage)
@@ -78,7 +78,6 @@ final class ChatRoomReactor: Reactor {
         case setError(PresentationError?)
         case setImage(UIImage?)
         case updateMissedMessage
-        case setPage(Int)
         case setScrollTrigger(ScrollType)
         case setLoadPostDetailTrigger(Void?)
     }
@@ -88,7 +87,6 @@ final class ChatRoomReactor: Reactor {
         var missedMessages: [ChatMessage] = []
 //        var sendMessage: [ChatMessage] = [] // 보내는 중 메시지 -> 다시 전송 등 기능 필요
         var senderProfiles: [SenderInfo] = []
-        var currentPage: Int = 0
         var isLast: Bool = false
         var isLoading: Bool = false
         var isNotification: Bool = false
@@ -138,7 +136,7 @@ final class ChatRoomReactor: Reactor {
         reloadChat
             .withUnretained(self)
             .subscribe { reactor, _ in
-                reactor.action.onNext(.loadMessages(isStart: true))
+                reactor.action.onNext(.loadMessages)
             }
             .disposed(by: disposeBag)
     }
@@ -220,18 +218,19 @@ final class ChatRoomReactor: Reactor {
                     Observable.just(Mutation.setScrollTrigger(.receivedMessage))
                 ])
             }
-        case .loadMessages(let isStart):
+        case .loadMessages:
             if currentState.isLast || currentState.isLoading {
                 return Observable.empty()
             } else {
-                return loadInfoUS.loadChatMessages(chatId: chat.chatRoomId, page: currentState.currentPage)
+                print("id: \(currentState.messages.first?.id)")
+                return loadInfoUS.loadChatMessages(chatId: chat.chatRoomId, id: currentState.messages.first?.id)
                     .map({ [weak self] messages, isLast in
                         if isLast {
                             var newMessages: [ChatMessage] = []
-                            let startMessage = ChatMessage(userId: 0, nickName: "", imageUrl: "", message: "", time: Date(), messageType: .startChat, isSocket: false)
+                            let startMessage = ChatMessage(userId: 0, nickName: "", imageUrl: "", message: "", time: Date(), messageType: .startChat, isSocket: false, id: "")
                             newMessages.append(startMessage)
                             if let managerInfo = self?.chat.managerInfo {
-                                let managerInfoMessage = ChatMessage(userId: managerInfo.id, nickName: managerInfo.nickName, imageUrl: "", message: "\(managerInfo.nickName) 님이 채팅에 참여했어요", time: Date(), messageType: .enterUser, isSocket: false)
+                                let managerInfoMessage = ChatMessage(userId: managerInfo.id, nickName: managerInfo.nickName, imageUrl: "", message: "\(managerInfo.nickName) 님이 채팅에 참여했어요", time: Date(), messageType: .enterUser, isSocket: false, id: "")
                                 newMessages.append(managerInfoMessage)
                             }
                             return (newMessages + messages, true)
@@ -350,15 +349,15 @@ final class ChatRoomReactor: Reactor {
     }
 
     private func loadMissedMessages(chatId: Int, currentPage: Int, firstMessage: ChatMessage) -> Observable<Mutation> {
-        return loadInfoUS.loadChatMessages(chatId: chatId, page: currentPage)
+        return loadInfoUS.loadChatMessages(chatId: chatId, id: nil)
             .flatMap { messageInfo -> Observable<Mutation> in
                 var messages = messageInfo.messages
                 if messageInfo.isLast {
                     var newMessages: [ChatMessage] = []
-                    let startMessage = ChatMessage(userId: 0, nickName: "", imageUrl: "", message: "", time: Date(), messageType: .startChat, isSocket: false)
+                    let startMessage = ChatMessage(userId: 0, nickName: "", imageUrl: "", message: "", time: Date(), messageType: .startChat, isSocket: false, id: "")
                     newMessages.append(startMessage)
                     let managerInfo = self.chat.managerInfo
-                    let managerInfoMessage = ChatMessage(userId: managerInfo.id, nickName: managerInfo.nickName, imageUrl: "", message: "\(managerInfo.nickName) 님이 채팅에 참여했어요", time: Date(), messageType: .enterUser, isSocket: false)
+                    let managerInfoMessage = ChatMessage(userId: managerInfo.id, nickName: managerInfo.nickName, imageUrl: "", message: "\(managerInfo.nickName) 님이 채팅에 참여했어요", time: Date(), messageType: .enterUser, isSocket: false, id: "")
                     newMessages.append(managerInfoMessage)
                     messages = newMessages + messages
                 }
@@ -367,7 +366,6 @@ final class ChatRoomReactor: Reactor {
                     return Observable.concat([
                         Observable.just(.addMissedMessages(messages)),
                         Observable.just(.setIsLast(messageInfo.isLast)),
-                        Observable.just(.setPage(currentPage+1)),
                         Observable.just(.updateMissedMessage),
                         Observable.just(.setScrollTrigger(.background))
                     ])
@@ -389,7 +387,6 @@ final class ChatRoomReactor: Reactor {
             newState.messages.append(message)
         case .setMessages(let messages): // 이전 메시지 로드
             newState.messages.insert(contentsOf: messages, at: 0)
-            newState.currentPage += 1
         case .setSenderInfo(let infos):
             newState.senderProfiles = infos
         case .setError(let error):
@@ -416,9 +413,6 @@ final class ChatRoomReactor: Reactor {
             newState.exportTrigger = ()
         case .addMissedMessages(let messages):
             newState.missedMessages.insert(contentsOf: messages, at: 0)
-            
-        case .setPage(let page):
-            newState.currentPage = page
         case .updateMissedMessage:
             let newMessage = currentState.missedMessages
             newState.messages = newMessage
@@ -477,7 +471,7 @@ final class ChatRoomReactor: Reactor {
                 }
                 let senderInfo: SenderInfo? = (type == .date) ? nil : self?.currentState.senderProfiles.first { $0.senderId == chatMessage.senderId }
                 
-                let newMessage = ChatMessage(userId: chatMessage.senderId, nickName: senderInfo?.nickName ?? "", imageUrl: senderInfo?.imageUrl, message: chatMessage.content, time: time, messageType: type, isSocket: true)
+                let newMessage = ChatMessage(userId: chatMessage.senderId, nickName: senderInfo?.nickName ?? "", imageUrl: senderInfo?.imageUrl, message: chatMessage.content, time: time, messageType: type, isSocket: true, id: chatMessage.chatMessageId)
                 print("✅ [DEBUG] 메시지 파싱 성공 - \(newMessage)")
                 self?.action.onNext(.receiveMessage(newMessage))
             })

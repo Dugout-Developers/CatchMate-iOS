@@ -68,21 +68,24 @@ struct ChatSocketMessage: Codable {
     let senderId: Int
     let content: String
     let sendTime: String // "2025-01-31T15:20:00" - ISO8601 포맷
+    let chatMessageId: String
     
     static let timeFormat = "yyyy-MM-dd'T'HH:mm:ss"
-    init(messageType: ChatMessageType, senderId: Int, content: String) {
+    init(messageType: ChatMessageType, senderId: Int, content: String, chatMessageId: String) {
         self.messageType = messageType.serverRequest
         self.senderId = senderId
         self.content = content
         self.sendTime = ChatSocketMessage.currentISO8601Time()
+        self.chatMessageId = chatMessageId
     }
     
-    init(messageType: ChatMessageType, senderId: Int, content: String, date: String) {
+    init(messageType: ChatMessageType, senderId: Int, content: String, date: String, chatMessageId: String) {
         self.messageType = messageType.serverRequest
         self.senderId = senderId
         self.content = content
         let newDate = date.replacingOccurrences(of: "\\.\\d+", with: "", options: .regularExpression)
         self.sendTime = newDate
+        self.chatMessageId = chatMessageId
     }
     
     init(from decoder: Decoder) throws {
@@ -91,6 +94,7 @@ struct ChatSocketMessage: Codable {
         self.messageType = try container.decode(String.self, forKey: .messageType)
         self.senderId = try container.decode(Int.self, forKey: .senderId)
         self.content = try container.decode(String.self, forKey: .content)
+        self.chatMessageId = try container.decode(String.self, forKey: .chatMessageId)
         
         // ✅ sendTime이 없으면 현재 시간으로 대체
         self.sendTime = (try? container.decode(String.self, forKey: .sendTime)) ?? ChatSocketMessage.currentISO8601Time()
@@ -121,6 +125,7 @@ struct ChatMessage {
     let time: Date
     let messageType: ChatMessageType
     let isSocket: Bool
+    let id: String
 }
 
 extension ChatMessage: Equatable {

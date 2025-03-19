@@ -87,7 +87,7 @@ final class ChatRoomViewController: BaseViewController, View {
         })
         view.backgroundColor = .white
         reactor.action.onNext(.loadPeople)
-        reactor.action.onNext(.loadMessages(isStart: true))
+        reactor.action.onNext(.loadMessages)
     }
     
     init(chat: ChatRoomInfo, userId: Int, isNew: Bool) {
@@ -285,7 +285,7 @@ extension ChatRoomViewController {
             .withLatestFrom(reactor.state.map { $0.isLast })
             .filter { !$0 }
             .subscribe(onNext: { _ in
-                reactor.action.onNext(.loadMessages(isStart: false))
+                reactor.action.onNext(.loadMessages)
             })
             .disposed(by: disposeBag)
         

@@ -14,8 +14,8 @@ final class LoadChatMessageRepositoryImpl: LoadChatMessageRepository {
         self.loadMessageDS = loadMessageDS
     }
     
-    func loadChatMessage(_ chatId: Int, page: Int) -> RxSwift.Observable<(messages: [ChatSocketMessage], isLast: Bool)> {
-        return loadMessageDS.loadMessage(chatId, page: page)
+    func loadChatMessage(_ chatId: Int, id: String?) -> RxSwift.Observable<(messages: [ChatSocketMessage], isLast: Bool)> {
+        return loadMessageDS.loadMessage(chatId, id: id)
             .map { dto in
                 let dtoMessages = dto.chatMessageInfoList
                 var messages = [ChatSocketMessage]()
@@ -24,7 +24,7 @@ final class LoadChatMessageRepositoryImpl: LoadChatMessageRepository {
                         LoggerService.shared.errorLog(MappingError.invalidData, domain: "chatmessage", message: "메시지 타입 변환 실패")
                         continue
                     }
-                    let chatMessage = ChatSocketMessage(messageType: mesageType, senderId: message.senderId, content: message.content, date: message.timeInfo.date)
+                    let chatMessage = ChatSocketMessage(messageType: mesageType, senderId: message.senderId, content: message.content, date: message.timeInfo.date, chatMessageId: message.chatMessageId)
                     messages.append(chatMessage)
                 }
                 return (messages, dto.isLast)
