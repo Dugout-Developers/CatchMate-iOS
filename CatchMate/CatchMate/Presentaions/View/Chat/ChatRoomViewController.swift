@@ -61,6 +61,9 @@ final class ChatRoomViewController: BaseViewController, View {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+
+        SocketService.shared?.readMessage(roomId: String(chat.chatRoomId))
+
         NotificationCenter.default.removeObserver(self)
     }
     override func viewDidDisappear(_ animated: Bool) {
@@ -116,7 +119,6 @@ final class ChatRoomViewController: BaseViewController, View {
         tableView.keyboardDismissMode = .onDrag
         tableView.tableHeaderView = UIView()
         tableView.rowHeight = UITableView.automaticDimension
-        //        tableView.estimatedRowHeight = 44
         tableView.backgroundColor = .grayScale50
     }
     private func setupNavigation() {
@@ -208,9 +210,8 @@ extension ChatRoomViewController {
         tableView.beginUpdates()
         if let index = reactor.currentState.messages.firstIndex(where: {$0 == lastTopMessage}) {
             let indexPath = IndexPath(row: index, section: 0)
+            print(reactor.currentState.messages.count)
             tableView.scrollToRow(at: indexPath, at: .top, animated: false)
-        } else {
-            scrollToBottom(animated: true)
         }
         tableView.endUpdates()
     }
@@ -250,7 +251,7 @@ extension ChatRoomViewController {
             }
             .disposed(by: disposeBag)
         tableView.rx.didScroll
-            .throttle(.milliseconds(200), scheduler: MainScheduler.instance)
+//            .throttle(.milliseconds(200), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] _ in
                 if let topIndexPath = self?.tableView.indexPathsForVisibleRows?.first,
                    let message = reactor.currentState.messages[safe: topIndexPath.row] {
@@ -286,13 +287,12 @@ extension ChatRoomViewController {
                 vc.navigationController?.popViewController(animated: true)
             }
             .disposed(by: disposeBag)
-        
+
         reactor.state.map{$0.scrollTrigger}
+            .compactMap{$0}
             .withUnretained(self)
             .subscribe { vc, type in
-                print("----------------Type: \(type)")
                 switch type {
-        
                 case .startRoom:
                     vc.scrollToTableViewBottom(false)
                 case .sendMyMessage:
@@ -332,7 +332,7 @@ extension ChatRoomViewController {
                         guard let cell = tableView.dequeueReusableCell(withIdentifier: "OtherMessageTableViewCell", for: indexPath) as? OtherMessageTableViewCell else {
                             return UITableViewCell()
                         }
-                        let isHiddenTime = index == 0 ? false : (reactor.currentState.messages[index-1].messageType == .talk && reactor.currentState.messages[index-1].userId == item.userId && reactor.currentState.messages[index-1].time == item.time)
+                        let isHiddenTime = index == 0 ? false : (reactor.currentState.messages[index-1].messageType == .talk && reactor.currentState.messages[index-1].userId == item.userId && item.isEqualTime(reactor.currentState.messages[index-1]))
                         let isHiddenProfile = index == 0 ? false : (reactor.currentState.messages[index-1].messageType == .talk && reactor.currentState.messages[index-1].userId == item.userId)
                         cell.configData(item, isHiddenTime: isHiddenTime, isHiddenProfile: isHiddenProfile)
                         cell.messageLabel.setNeedsLayout()

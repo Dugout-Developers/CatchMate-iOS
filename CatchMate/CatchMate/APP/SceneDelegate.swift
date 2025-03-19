@@ -85,8 +85,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 if result {
                     do {
                         SocketService.shared = try SocketService()
-//                        print("✅ SocketService 인스턴스 생성 성공")
-//                        SocketService.shared?.connect()  // WebSocket 연결
                     } catch {
                         print("❌ SocketService 초기화 실패: \(error)")
                     }
@@ -134,12 +132,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func sceneWillEnterForeground(_ scene: UIScene) {
         Task {
-            if let currentChatRoomId = UserDefaults.standard.string(forKey: UserDefaultsKeys.ChatInfo.chatRoomId) {
-                await SocketService.shared?.connect(chatId: currentChatRoomId)
+            let currentChatRoomId = UserDefaults.standard.string(forKey: UserDefaultsKeys.ChatInfo.chatRoomId)
+            await SocketService.shared?.connect(chatId: currentChatRoomId)
+            if currentChatRoomId != nil {
                 NotificationCenter.default.post(name: .loadMissedMessage, object: nil)
             }
+            
         }
-
     }
     
     func sceneDidEnterBackground(_ scene: UIScene) {

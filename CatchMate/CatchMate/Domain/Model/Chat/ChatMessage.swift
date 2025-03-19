@@ -127,6 +127,14 @@ extension ChatMessage: Equatable {
     static func == (lhs: ChatMessage, rhs: ChatMessage) -> Bool {
         return lhs.message == rhs.message && lhs.time == rhs.time
     }
+    
+    func isEqualTime(_ otherMessage: ChatMessage) -> Bool {
+        let calendar = Calendar.current
+        let selfComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: self.time)
+        let otherComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: otherMessage.time)
+        
+        return selfComponents == otherComponents
+    }
 }
 
 struct ChatListSocket: Codable {

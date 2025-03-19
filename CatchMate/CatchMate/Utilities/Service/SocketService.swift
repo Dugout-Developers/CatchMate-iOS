@@ -87,10 +87,16 @@ final class SocketService {
     private let errorSubject = PublishSubject<Error>()
     private var connectionSatus = false
     
-    var messageObservable: Observable<(String, String)> {
-        return messageSubject.asObservable()
-    }
-    
+//    var messageObservable: Observable<(String, String)> {
+//        return messageSubject
+//            .do(onSubscribe: { print("✅ [DEBUG] messageObservable 구독 시작") },
+//                onDispose: { print("❌ [DEBUG] messageObservable 구독 해제") })
+//    }
+    lazy var messageObservable: Observable<(String, String)> = {
+        return messageSubject
+            .publish()
+            .refCount()
+    }()
     var errorObservable: Observable<Error> {
         return errorSubject.asObservable()
     }
@@ -99,6 +105,7 @@ final class SocketService {
     var reconnectTrigger = PublishSubject<String?>()
 
     init() throws {
+        print("✅ [DEBUG] SocketService 초기화 시작")
         guard let urlString = Bundle.main.socketURL, let url = URL(string: urlString) else {
             throw SocketError.invalidURL
         }
@@ -127,6 +134,7 @@ final class SocketService {
                 }
             }
             .disposed(by: disposeBag)
+        print("✅ [DEBUG] SocketService 초기화 완료")
     }
     
     deinit {
@@ -224,9 +232,7 @@ final class SocketService {
             return
         }
         retryCount = 0
-        socketHeaderId = nil
         Task {
-            await readMessage(roomId: subscription.roomId)
             await unsubscribe(id: subscription.id)
             await sendDisConnectFrame()
             await socketDisconnect(isIdRemove)
@@ -240,13 +246,13 @@ final class SocketService {
             
             \0
             """
-        
+        socketHeaderId = nil
         self.socket?.write(string: frame)
         self.currentSubscription = nil
         print("🚫 구독 해제 요청 전송 완료")
     }
     
-    func readMessage(roomId: String) async {
+    func readMessage(roomId: String) {
         if roomId == "0" {
             return
         }

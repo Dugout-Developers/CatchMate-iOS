@@ -88,6 +88,7 @@ final class ChatListReactor: Reactor {
                     return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
         case .loadChatList:
+
             return loadchatListUsecase.loadChatList(page: 0)
                 .flatMap { list, isLast -> Observable<Mutation> in
                     return Observable.concat([

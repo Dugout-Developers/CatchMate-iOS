@@ -16,6 +16,15 @@ final class MessageBoxLabel: UILabel {
             layoutIfNeeded()
         }
     }
+    
+    override var bounds: CGRect {
+        didSet {
+            if preferredMaxLayoutWidth != bounds.width - (padding.left + padding.right) {
+                preferredMaxLayoutWidth = bounds.width - (padding.left + padding.right)
+                invalidateIntrinsicContentSize() // 크기 갱신
+            }
+        }
+    }
 
     override func drawText(in rect: CGRect) {
         let insets = padding
