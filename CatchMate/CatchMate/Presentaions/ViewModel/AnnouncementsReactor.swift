@@ -65,6 +65,9 @@ final class AnnouncementsReactor: Reactor {
             if !currentState.isLoading || currentState.isLast {
                 return Observable.empty()
             }
+            if currentState.announcements.isEmpty {
+                return Observable.empty()
+            }
             return loadNoticesUseCase.loadNotices(nextPage)
                 .flatMap { notice, isLast in
                     return Observable.concat([

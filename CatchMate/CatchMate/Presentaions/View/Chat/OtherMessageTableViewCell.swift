@@ -9,8 +9,6 @@ import UIKit
 import SnapKit
 
 final class OtherMessageTableViewCell: UITableViewCell {
-    private var isHiddenTime: Bool = false
-    private var isHiddenProfile: Bool = false
     private let containerView = UIView()
     private let profileImageView: UIImageView = {
         let imageView = UIImageView()
@@ -56,8 +54,9 @@ final class OtherMessageTableViewCell: UITableViewCell {
         timeLabel.text = ""
         nickNameLabel.text = ""
         profileImageView.image = nil
-        isHiddenTime = false
-        isHiddenProfile = false
+        messageLabel.invalidateIntrinsicContentSize()
+        setNeedsLayout()
+        layoutIfNeeded()
     }
     
     override func layoutSubviews() {
@@ -79,11 +78,16 @@ final class OtherMessageTableViewCell: UITableViewCell {
         timeLabel.applyStyle(textStyle: FontSystem.caption01_medium)
         messageLabel.text = chat.message
         messageLabel.applyStyle(textStyle: FontSystem.body02_medium)
-        self.isHiddenTime = isHiddenTime
-        self.isHiddenProfile = isHiddenProfile
-        updateUI()
-        containerView.setNeedsLayout()
-        containerView.layoutIfNeeded()
+        timeLabel.isHidden = isHiddenTime
+        profileImageView.isHidden = isHiddenProfile
+        nickNameLabel.isHidden = isHiddenProfile
+        self.updateUI(isHiddenProfile)
+        DispatchQueue.main.async {
+            self.messageLabel.setNeedsLayout()
+            self.messageLabel.layoutIfNeeded()
+            self.setNeedsLayout()
+            self.layoutIfNeeded()
+        }
     }
     
     private func setupUI() {
@@ -111,10 +115,14 @@ final class OtherMessageTableViewCell: UITableViewCell {
             make.top.equalTo(nickNameLabel.snp.bottom).offset(8)
             make.bottom.equalToSuperview()
         }
-        messageLabel.setContentHuggingPriority(.required, for: .horizontal)
-        messageLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        timeLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
-        messageLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
+//        messageLabel.setContentHuggingPriority(.required, for: .horizontal)
+//        messageLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+//        timeLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+
+        timeLabel.setContentCompressionResistancePriority(.init(997), for: .horizontal)
+        timeLabel.setContentHuggingPriority(.init(997), for: .horizontal)
+        messageLabel.setContentCompressionResistancePriority(.init(998), for: .horizontal)
+        messageLabel.setContentHuggingPriority(.init(998), for: .horizontal)
         timeLabel.snp.makeConstraints { make in
             make.leading.equalTo(messageLabel.snp.trailing).offset(8)
             make.trailing.bottom.equalToSuperview()
@@ -122,38 +130,20 @@ final class OtherMessageTableViewCell: UITableViewCell {
 
     }
     
-    private func updateUI() {
+    private func updateUI(_ isHiddenProfile: Bool) {
         if isHiddenProfile {
-            profileImageView.image = nil
             nickNameLabel.snp.remakeConstraints { make in
                 make.leading.equalTo(profileImageView.snp.trailing).offset(8)
                 make.top.equalTo(profileImageView).offset(-4)
                 make.size.equalTo(0)
             }
         } else {
-            profileImageView.snp.remakeConstraints { make in
-                make.size.equalTo(40)
-                make.leading.top.equalToSuperview()
-            }
             nickNameLabel.snp.remakeConstraints { make in
                 make.top.equalTo(profileImageView).offset(-4)
                 make.leading.equalTo(profileImageView.snp.trailing).offset(8)
                 make.trailing.equalToSuperview()
             }
         }
-        
-        if isHiddenTime {
-            timeLabel.snp.remakeConstraints { make in
-                make.leading.equalTo(messageLabel.snp.trailing)
-                make.bottom.trailing.equalToSuperview()
-                make.size.equalTo(1)
-            }
-        }else {
-            timeLabel.snp.remakeConstraints { make in
-                make.leading.equalTo(messageLabel.snp.trailing).offset(8)
-                make.bottom.equalToSuperview()
-                make.trailing.equalToSuperview()
-            }
-        }
+
     }
 }

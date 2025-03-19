@@ -86,6 +86,8 @@ enum Endpoint {
     case loadMyInfo
     /// 내정보 수정
     case editProfile
+    /// 안읽은 메시지 여부
+    case unreadMessage
     
     /// 알림 리스트 조회
     case notificationList
@@ -178,6 +180,8 @@ enum Endpoint {
             return "/users/profile"
         case .editProfile:
             return "/users/profile"
+        case .unreadMessage:
+            return "/users/has-unread"
         // MARK: - 알림 관련
         case .notificationList:
             return "/notifications/receive"
@@ -270,6 +274,8 @@ enum Endpoint {
             return "내 정보 조회 API"
         case .editProfile:
             return "내 정보 수정 API"
+        case .unreadMessage:
+            return "안 읽은 알림 및 채팅 여부"
         case .notificationList:
             return "알림 리스트 조회 API"
         case .notification:
@@ -348,7 +354,8 @@ enum Endpoint {
             return .put
         case .exitChat, .exportChatUser:
             return .delete
-        case .loadMyInfo:
+        // MARK: - 유저 정보 관련
+        case .loadMyInfo, .unreadMessage:
             return .get
         case .editProfile:
             return .patch

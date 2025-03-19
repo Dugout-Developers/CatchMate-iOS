@@ -14,8 +14,8 @@ final class RecivedAppliesRepositoryImpl: RecivedAppiesRepository {
         self.recivedAppliesDS = recivedAppliesDS
     }
     
-    func loadRecivedApplies(boardId: Int) -> RxSwift.Observable<ReceivedAppliesList> {
-        return recivedAppliesDS.loadRecivedApplies(boardId: boardId)
+    func loadRecivedApplies(boardId: Int, page: Int) -> RxSwift.Observable<ReceivedAppliesList> {
+        return recivedAppliesDS.loadRecivedApplies(boardId: boardId, page: page)
             .map { dto in
                 let mapper = ApplyMapper()
                 var mappingList = [RecivedApplies]()
@@ -28,8 +28,8 @@ final class RecivedAppliesRepositoryImpl: RecivedAppiesRepository {
             }
     }
     
-    func loadReceivedAppliesAll() -> RxSwift.Observable<ReceivedAppliesList> {
-        return recivedAppliesDS.loadReceivedAppliesAll()
+    func loadReceivedAppliesAll(_ page: Int) -> RxSwift.Observable<ReceivedAppliesList> {
+        return recivedAppliesDS.loadReceivedAppliesAll(page)
             .map { dto in
                 let mapper = ApplyMapper()
                 var mappingList = [RecivedApplies]()

@@ -12,7 +12,7 @@ import PinLayout
 
 extension UIViewController {
     
-    func showToast(message: String, buttonContainerExists: Bool = false, completion: (() -> Void)? = nil) {
+    func showToast(message: String, buttonContainerExists: Bool = false, isTab: Bool = false, completion: (() -> Void)? = nil) {
         let toastLabel = CMToastMessageLabel(message: message)
         
         // 토스트 메시지의 최대 너비를 설정
@@ -35,7 +35,8 @@ extension UIViewController {
         if buttonContainerExists {
             toastContainerView.frame.origin.y = self.view.frame.height - containerHeight - 72 - safeAreaBottom
         } else {
-            toastContainerView.frame.origin.y = self.view.safeAreaInsets.bottom + self.view.frame.height - containerHeight - 12 - safeAreaBottom
+            let tabHeight = isTab ? (self.tabBarController?.tabBar.frame.height ?? 0) : 0
+            toastContainerView.frame.origin.y = self.view.safeAreaInsets.bottom + self.view.frame.height - containerHeight - 12 - safeAreaBottom - tabHeight
         }
         
         // 컨테이너 뷰를 메인 뷰에 추가

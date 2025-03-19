@@ -27,13 +27,12 @@ final class ChatListViewController: BaseViewController, View {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = false
+        reactor.action.onNext(.loadChatList)
         reactor.action.onNext(.selectChat(nil))
     }
     
     
     override func viewDidAppear(_ animated: Bool) {
-        print("----------------viewDidAppear-------------")
-        reactor.action.onNext(.loadChatList)
         Task {
             await SocketService.shared?.connect(chatId: nil)
         }
@@ -41,7 +40,6 @@ final class ChatListViewController: BaseViewController, View {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        print("----------------disappear-------------")
         SocketService.shared?.disconnect()
     }
     
@@ -93,6 +91,20 @@ extension ChatListViewController {
             }
             .disposed(by: disposeBag)
         
+        chatListTableView.rx.contentOffset
+            .map { [weak self] _ in
+                guard let self = self else { return false }
+                let offsetY = self.chatListTableView.contentOffset.y
+                let contentHeight = self.chatListTableView.contentSize.height
+                let threshold = contentHeight - self.chatListTableView.frame.size.height - (self.chatListTableView.rowHeight * 4)
+                return offsetY > threshold
+            }
+            .distinctUntilChanged()
+            .filter { $0 }
+            .map { _ in ChatListReactor.Action.loadNextPage }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
         chatListTableView.rx.itemSelected
             .map { indexPath in
                 let chat = reactor.currentState.chatList[indexPath.row]
@@ -105,7 +117,7 @@ extension ChatListViewController {
             .subscribe(onNext: { [weak self] chatInfo in
                 if let userId = SetupInfoService.shared.getUserInfo(type: .id), let id = Int(userId) {
                     let chatRoomInfo = ChatRoomInfo(chatRoomId: chatInfo.chatRoomId, postInfo: chatInfo.postInfo, managerInfo: chatInfo.managerInfo, cheerTeam: chatInfo.postInfo.cheerTeam)
-                    let roomVC = ChatRoomViewController(chat: chatRoomInfo, userId: id)
+                    let roomVC = ChatRoomViewController(chat: chatRoomInfo, userId: id, isNew: chatInfo.newChat)
                     roomVC.hidesBottomBarWhenPushed = true
                     self?.navigationController?.pushViewController(roomVC, animated: true)
                 } else {

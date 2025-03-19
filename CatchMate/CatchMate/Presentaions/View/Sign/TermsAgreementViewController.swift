@@ -11,6 +11,7 @@ import PinLayout
 import ReactorKit
 import RxSwift
 import RxCocoa
+import SafariServices
 
 enum AgreementMenu: CaseIterable {
     case terms
@@ -36,6 +37,17 @@ enum AgreementMenu: CaseIterable {
             return true
         case .adsPush:
             return false
+        }
+    }
+    
+    var siteURL: String {
+        switch self {
+        case .personalInfo:
+            return "https://catchmate.notion.site/19690504ec15804ba163fcf8fa0ab937?pvs=4"
+        case .terms:
+            return "https://catchmate.notion.site/19690504ec15803588a7ca69b306bf3e?pvs=4"
+        case .adsPush:
+            return "https://catchmate.notion.site/1b890504ec15805fa95ef55c252d53e6?pvs=4"
         }
     }
 }
@@ -231,13 +243,28 @@ extension TermsAgreementViewController {
                     .disposed(by: cell.disposeBag)
                 
                 cell.navgatorSubject
-                    .subscribe(onNext: {
-                        print("\(item.title) 네비게이터 클릭")
+                    .withUnretained(self)
+                    .subscribe(onNext: { vc, _ in
+                        let urlString = item.siteURL
+                        vc.openSafari(urlString)
                     })
                     .disposed(by: cell.disposeBag)
                 
             }
             .disposed(by: disposeBag)
+    }
+}
+
+extension TermsAgreementViewController: SFSafariViewControllerDelegate {
+    private func openSafari(_ urlString: String) {
+        guard let url = URL(string: urlString) else { return }
+        let safariVC = SFSafariViewController(url: url)
+        safariVC.delegate = self
+        present(safariVC, animated: true)
+    }
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        // Safari 뷰가 닫힐 때 호출됨
+        dismiss(animated: true)
     }
 }
 

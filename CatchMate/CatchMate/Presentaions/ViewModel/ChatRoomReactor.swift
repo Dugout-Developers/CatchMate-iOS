@@ -9,6 +9,13 @@ import UIKit
 import RxSwift
 import ReactorKit
 
+enum ScrollType {
+    case startRoom
+    case sendMyMessage
+    case nextPage
+    case receivedMessage
+    case background
+}
 enum ChatError: LocalizedErrorWithCode {
     case failedLoadUsersData
     case failedStringToIntId
@@ -42,7 +49,7 @@ final class ChatRoomReactor: Reactor {
         case subscribeRoom
         case unsubscribeRoom
         case loadNotificationStatus
-        case loadMessages
+        case loadMessages(isStart: Bool = false)
         case loadPeople
         case sendMessage(String)
         case receiveMessage(ChatMessage)
@@ -53,10 +60,13 @@ final class ChatRoomReactor: Reactor {
         case changeImage(UIImage)
         case exportUser(Int)
         case toggleNotification
+        case loadMissedMessages
+        case loadPostDetail(Void?)
     }
     enum Mutation {
         case setNotificationStatus(Bool)
         case setMessages([ChatMessage])
+        case addMissedMessages([ChatMessage])
         case setSenderInfo([SenderInfo])
         case addMyMessage(ChatMessage)
         case setIsLoading(Bool)
@@ -66,12 +76,16 @@ final class ChatRoomReactor: Reactor {
         case clearTrigger
         case setChatError(ChatError?)
         case setError(PresentationError?)
-        
         case setImage(UIImage?)
+        case updateMissedMessage
+        case setPage(Int)
+        case setScrollTrigger(ScrollType)
+        case setLoadPostDetailTrigger(Void?)
     }
     struct State {
         // View의 state를 관리한다.
         var messages: [ChatMessage] = []
+        var missedMessages: [ChatMessage] = []
 //        var sendMessage: [ChatMessage] = [] // 보내는 중 메시지 -> 다시 전송 등 기능 필요
         var senderProfiles: [SenderInfo] = []
         var currentPage: Int = 0
@@ -82,7 +96,9 @@ final class ChatRoomReactor: Reactor {
         var exportTrigger: Void?
         var error: PresentationError?
         var chatError: ChatError?
+        var scrollTrigger: ScrollType = .startRoom
         var image: UIImage?
+        var loadPostDetailTrigger: Void?
     }
     
     var initialState: State
@@ -96,7 +112,7 @@ final class ChatRoomReactor: Reactor {
     private let exportUS: ExportChatUserUseCase
     private let exitUS: ExitChatRoomUseCase
     private let notificationUS: SetChatRoomNotificationUseCase
-    
+    private let reloadChat = PublishSubject<Void>()
     init(chat: ChatRoomInfo, loadInfoUS: LoadChatInfoUseCase, updateImageUS: UpdateChatImageUseCase, exportUS: ExportChatUserUseCase, exitUS: ExitChatRoomUseCase, notificationUS: SetChatRoomNotificationUseCase) {
         self.initialState = State()
         self.loadInfoUS = loadInfoUS
@@ -115,6 +131,16 @@ final class ChatRoomReactor: Reactor {
             }
         }
         observeIncomingMessage()
+        NotificationCenter.default.rx.notification(.loadMissedMessage)
+            .map { _ in ChatRoomReactor.Action.loadMissedMessages }
+            .bind(to: action)
+            .disposed(by: disposeBag)
+        reloadChat
+            .withUnretained(self)
+            .subscribe { reactor, _ in
+                reactor.action.onNext(.loadMessages(isStart: true))
+            }
+            .disposed(by: disposeBag)
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
@@ -177,8 +203,9 @@ final class ChatRoomReactor: Reactor {
             
             if message.messageType == .enterUser || message.messageType == .leaveUser {
                 return Observable.concat([
+                    loadUser,
                     Observable.just(Mutation.addMyMessage(message)),
-                    loadUser
+                    Observable.just(Mutation.setScrollTrigger(.receivedMessage))
                 ])
                 .catch { error in
                     if let chatError = error as? ChatError {
@@ -188,9 +215,12 @@ final class ChatRoomReactor: Reactor {
                     }
                 }
             } else {
-                return Observable.just(Mutation.addMyMessage(message))
+                return Observable.concat([
+                    Observable.just(Mutation.addMyMessage(message)),
+                    Observable.just(Mutation.setScrollTrigger(.receivedMessage))
+                ])
             }
-        case .loadMessages:
+        case .loadMessages(let isStart):
             if currentState.isLast || currentState.isLoading {
                 return Observable.empty()
             } else {
@@ -213,7 +243,9 @@ final class ChatRoomReactor: Reactor {
                             Observable.just(.setIsLoading(true)),
                             Observable.just(.setMessages(messages)),
                             Observable.just(.setIsLast(isLast)),
-                            Observable.just(.setIsLoading(false))
+                            Observable.just(.setIsLoading(false)),
+                            Observable.just(.setScrollTrigger(.nextPage))
+//                            Observable.just(.setScrollTrigger(isStart ? .startRoom : .nextPage))
                         ])
                     }
                     .catch { error in
@@ -306,7 +338,46 @@ final class ChatRoomReactor: Reactor {
                         return Observable.just(.setError(ErrorMapper.mapToPresentationError(error)))
                     }
                 }
+        case .loadMissedMessages:
+            guard let firstMessage = currentState.messages.first else {
+                reloadChat.onNext(())
+                return .empty()
+            }
+            return loadMissedMessages(chatId: chat.chatRoomId, currentPage: 0, firstMessage: firstMessage)
+        case .loadPostDetail(let trigger):
+            return Observable.just(.setLoadPostDetailTrigger(trigger))
         }
+    }
+
+    private func loadMissedMessages(chatId: Int, currentPage: Int, firstMessage: ChatMessage) -> Observable<Mutation> {
+        return loadInfoUS.loadChatMessages(chatId: chatId, page: currentPage)
+            .flatMap { messageInfo -> Observable<Mutation> in
+                var messages = messageInfo.messages
+                if messageInfo.isLast {
+                    var newMessages: [ChatMessage] = []
+                    let startMessage = ChatMessage(userId: 0, nickName: "", imageUrl: "", message: "", time: Date(), messageType: .startChat, isSocket: false)
+                    newMessages.append(startMessage)
+                    let managerInfo = self.chat.managerInfo
+                    let managerInfoMessage = ChatMessage(userId: managerInfo.id, nickName: managerInfo.nickName, imageUrl: "", message: "\(managerInfo.nickName) 님이 채팅에 참여했어요", time: Date(), messageType: .enterUser, isSocket: false)
+                    newMessages.append(managerInfoMessage)
+                    messages = newMessages + messages
+                }
+                // 현재 페이지가 마지막 페이지거나 처음 메시지가 포함된 메시지일 경우, 추가 후 종료 (더 이상 다음 페이지 요청 X)
+                if messageInfo.isLast || messages.contains(where: {$0 == firstMessage}) {
+                    return Observable.concat([
+                        Observable.just(.addMissedMessages(messages)),
+                        Observable.just(.setIsLast(messageInfo.isLast)),
+                        Observable.just(.setPage(currentPage+1)),
+                        Observable.just(.updateMissedMessage),
+                        Observable.just(.setScrollTrigger(.background))
+                    ])
+                }
+                // 처음 메시지를 못 찾았으므로 현재 메시지를 추가하고, 다음 페이지 로드
+                return Observable.concat([
+                    Observable.just(.addMissedMessages(messages)),  // 현재 페이지 메시지 추가
+                    self.loadMissedMessages(chatId: chatId, currentPage: currentPage + 1, firstMessage: firstMessage) // 다음 페이지 요청
+                ])
+            }
     }
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
@@ -316,7 +387,7 @@ final class ChatRoomReactor: Reactor {
             newState.isNotification = state
         case .addMyMessage(let message):
             newState.messages.append(message)
-        case .setMessages(let messages):
+        case .setMessages(let messages): // 이전 메시지 로드
             newState.messages.insert(contentsOf: messages, at: 0)
             newState.currentPage += 1
         case .setSenderInfo(let infos):
@@ -343,6 +414,27 @@ final class ChatRoomReactor: Reactor {
             newState.exportTrigger = nil
         case .setExportTrigger():
             newState.exportTrigger = ()
+        case .addMissedMessages(let messages):
+            newState.missedMessages.insert(contentsOf: messages, at: 0)
+            
+        case .setPage(let page):
+            newState.currentPage = page
+        case .updateMissedMessage:
+            let newMessage = currentState.missedMessages
+            newState.messages = newMessage
+            newState.missedMessages.removeAll()
+        case .setScrollTrigger(let type):
+            if type == .receivedMessage {
+                if currentState.messages.last?.userId == myData?.senderId {
+                    newState.scrollTrigger = .sendMyMessage
+                } else {
+                    newState.scrollTrigger = .receivedMessage
+                }
+            } else {
+                newState.scrollTrigger = type
+            }
+        case .setLoadPostDetailTrigger(let trigger):
+            newState.loadPostDetailTrigger = trigger
         }
         return newState
     }
@@ -384,7 +476,7 @@ final class ChatRoomReactor: Reactor {
                     return
                 }
                 let senderInfo: SenderInfo? = (type == .date) ? nil : self?.currentState.senderProfiles.first { $0.senderId == chatMessage.senderId }
-                   
+                
                 let newMessage = ChatMessage(userId: chatMessage.senderId, nickName: senderInfo?.nickName ?? "", imageUrl: senderInfo?.imageUrl, message: chatMessage.content, time: time, messageType: type, isSocket: true)
                 print("✅ [DEBUG] 메시지 파싱 성공 - \(newMessage)")
                 self?.action.onNext(.receiveMessage(newMessage))

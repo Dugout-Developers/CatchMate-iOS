@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 
 protocol RecivedAppiesRepository {
-    func loadRecivedApplies(boardId: Int) -> Observable<ReceivedAppliesList>
-    func loadReceivedAppliesAll() -> Observable<ReceivedAppliesList> 
+    func loadRecivedApplies(boardId: Int, page: Int) -> Observable<ReceivedAppliesList>
+    func loadReceivedAppliesAll(_ page: Int) -> Observable<ReceivedAppliesList> 
 }
 

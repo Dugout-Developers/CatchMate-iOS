@@ -128,7 +128,7 @@ class BaseViewController: UIViewController, LayoutConfigurable {
     func setupLogo() {
         let logoImageView = UIImageView(image: UIImage(named: "navigationLogo"))
         logoImageView.snp.makeConstraints { make in
-            make.width.equalTo(logoImageView.image!.getRatio(height: 27))
+            make.width.equalTo(logoImageView.image!.getRatio(height: 20))
         }
         logoImageView.contentMode = .scaleAspectFit
         customNavigationBar.addLeftItems(items: [logoImageView])

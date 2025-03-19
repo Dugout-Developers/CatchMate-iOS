@@ -39,6 +39,9 @@ final class MyMessageTableViewCell: UITableViewCell {
         super.prepareForReuse()
         messageLabel.text = ""
         timeLabel.text = ""
+        messageLabel.invalidateIntrinsicContentSize()
+        setNeedsLayout()
+        layoutIfNeeded()
     }
 
     override func layoutSubviews() {
@@ -58,6 +61,13 @@ final class MyMessageTableViewCell: UITableViewCell {
         messageLabel.text = chat.message
         messageLabel.applyStyle(textStyle: FontSystem.body02_medium)
         timeLabel.textAlignment = .right
+        
+        DispatchQueue.main.async {
+              self.messageLabel.setNeedsLayout()
+              self.messageLabel.layoutIfNeeded()
+              self.setNeedsLayout()
+              self.layoutIfNeeded()
+          }
     }
     
     private func setupUI() {

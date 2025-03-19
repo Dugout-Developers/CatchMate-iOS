@@ -17,6 +17,7 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
     override var buttonContainerExists: Bool {
         return false
     }
+    private let tapGesture = UITapGestureRecognizer()
     private let userId: Int
     private let chat: ChatRoomInfo
     private let people: [SenderInfo]
@@ -134,6 +135,8 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         navigationBarHidden()
         bind(reactor: reactor)
         settingButton.isHidden = !isManager
+        infoView.addGestureRecognizer(tapGesture)
+        infoView.isUserInteractionEnabled = true
     }
     private func setupTableView() {
         tableView.delegate = self
@@ -153,7 +156,14 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
                }
            }
            .disposed(by: disposeBag)
-       
+       tapGesture.rx.event
+           .withUnretained(self)
+           .subscribe { vc, _ in
+               vc.dismiss(animated: false) {
+                   reactor.action.onNext(.loadPostDetail(()))
+               }
+           }
+           .disposed(by: disposeBag)
        notiButton.rx.tap
            .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
            .map { ChatRoomReactor.Action.toggleNotification }
@@ -165,7 +175,11 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
            .withUnretained(self)
            .flatMapLatest { vc, _ -> Single<Bool> in
                return Single.create { single in
-                   vc.showCMAlert(titleText: "채팅방을 나갈까요?", importantButtonText: "나가기", commonButtonText: "취소") {
+                   var message = "채팅방을 나갈까요?"
+                   if vc.userId == vc.chat.managerInfo.id {
+                       message += "\n방장일 경우 모든 참여자에게\n채팅방이 사라집니다."
+                   }
+                   vc.showCMAlert(titleText: message, importantButtonText: "나가기", commonButtonText: "취소") {
                        single(.success(true))  // "나가기" 선택 시 true 방출
                    } commonAction: {
                        single(.success(false)) // "취소" 선택 시 false 방출

@@ -59,7 +59,7 @@ final class CustomerServiceViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLeftTitle("고객센터")
-        view.backgroundColor = .grayScale50
+        view.backgroundColor = .cmBackgroundColor
         setupNickName()
         setupTableView()
         setupUI()

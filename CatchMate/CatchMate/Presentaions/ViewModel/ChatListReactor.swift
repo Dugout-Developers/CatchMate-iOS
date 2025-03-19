@@ -50,8 +50,11 @@ final class ChatListReactor: Reactor {
     private func observeIncomingMessage() {
         // TODO: - Log 추가하기
         SocketService.shared?.messageObservable
+            .filter{
+                print($0)
+                return $0.0 == "/topic/chatList"
+            }
             .observe(on: MainScheduler.instance)
-            .filter{$0.0 == "/topic/chatList"}
             .map({ (roomId, message) -> ChatListSocket? in
                 guard let chatMessage = ChatListSocket.decode(from: message) else {
                     print("❌ [DEBUG] 메시지 디코딩 실패")
@@ -85,6 +88,7 @@ final class ChatListReactor: Reactor {
                     return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
         case .loadChatList:
+
             return loadchatListUsecase.loadChatList(page: 0)
                 .flatMap { list, isLast -> Observable<Mutation> in
                     return Observable.concat([
@@ -108,6 +112,9 @@ final class ChatListReactor: Reactor {
                 return Observable.empty()
             }
             
+            if currentState.chatList.isEmpty {
+                return Observable.empty()
+            }
             return loadchatListUsecase.loadChatList(page: nextPage)
                 .flatMap { list, isLast -> Observable<Mutation> in
                     return Observable.concat([

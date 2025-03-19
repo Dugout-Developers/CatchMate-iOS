@@ -19,6 +19,7 @@ enum Filter {
 
 final class HomeViewController: BaseViewController, View {
     private let reactor: HomeReactor
+    private let tabbarReactor: TabbarReactor
     override var useSnapKit: Bool {
         return false
     }
@@ -35,14 +36,16 @@ final class HomeViewController: BaseViewController, View {
     private let tableView = UITableView()
     private let footerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
     private let activityIndicator = UIActivityIndicatorView(style: .medium)
+    private let notiButton = UIButton()
     private let refreshControl: UIRefreshControl = {
         let control = UIRefreshControl()
         control.tintColor = .cmPrimaryColor
         return control
     }()
     
-    init(reactor: HomeReactor) {
+    init(reactor: HomeReactor, tabbarReactor: TabbarReactor) {
         self.reactor = reactor
+        self.tabbarReactor = tabbarReactor
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -76,13 +79,28 @@ final class HomeViewController: BaseViewController, View {
         setupButton()
         setupLogo()
         bind(reactor: self.reactor)
+        notificationBind(reactor: tabbarReactor)
         reactor.action.onNext(.setupUserInfo)
         filterScrollView.showsHorizontalScrollIndicator = false
         setNavigationBackgroundColor(.cmGrayBackgroundColor)
     }
+    
+    func notificationBind(reactor: TabbarReactor) {
+        reactor.state.map{$0.hasUnreadNotification}
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .subscribe { vc, state in
+                print("NotificationBind: \(state)")
+                if state {
+                    vc.notiButton.setImage(UIImage(named: "notification_active"), for: .normal)
+                } else {
+                    vc.notiButton.setImage(UIImage(named: "notification")?.withTintColor(.grayScale500, renderingMode: .alwaysOriginal), for: .normal)
+                }
+            }
+            .disposed(by: disposeBag)
+    }
     private func setupNavigation() {
-        let notiButton = UIButton()
-        notiButton.setImage(UIImage(named: "notification")?.withTintColor(.cmHeadLineTextColor, renderingMode: .alwaysOriginal), for: .normal)
+        notiButton.setImage(UIImage(named: "notification")?.withTintColor(.grayScale500, renderingMode: .alwaysOriginal), for: .normal)
         notiButton.addTarget(self, action: #selector(clickNotiButton), for: .touchUpInside)
         customNavigationBar.addRightItems(items: [notiButton])
     }

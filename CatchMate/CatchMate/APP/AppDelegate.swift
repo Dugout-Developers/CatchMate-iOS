@@ -81,17 +81,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let userInfo = notification.request.content.userInfo
         print("푸시 알림 수신 (foreground): \(userInfo)")
         
-        if userInfo["acceptStatus"] == nil {
-            if let chatId = userInfo["chatRoomId"] as? String {
-                if let currentChatRoomId = UserDefaults.standard.string(forKey: UserDefaultsKeys.ChatInfo.chatRoomId) {
-                    print(currentChatRoomId)
-                    if currentChatRoomId == chatId {
-                        completionHandler([])
-                        return
-                    }
-                }
-            }
-        }
+        NotificationCenter.default.post(name: .reloadUnreadMessageState, object: nil)
+//        if userInfo["acceptStatus"] == nil {
+//            if let chatId = userInfo["chatRoomId"] as? String {
+//                if let currentChatRoomId = UserDefaults.standard.string(forKey: UserDefaultsKeys.ChatInfo.chatRoomId) {
+//                    print(currentChatRoomId)
+//                    if currentChatRoomId == chatId {
+//                        completionHandler([])
+//                        return
+//                    }
+//                }
+//            }
+//        }
+ 
         completionHandler([.list, .banner, .sound])
     }
     
@@ -161,7 +163,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 chatInfoUC.loadChat(chatId)
                     .observe(on: MainScheduler.instance)
                     .subscribe { info in
-                        let chatRoomVC = ChatRoomViewController(chat: ChatRoomInfo(chatRoomId: chatId, postInfo: info.postInfo, managerInfo: info.managerInfo, cheerTeam: info.postInfo.cheerTeam), userId: userId)
+                        let chatRoomVC = ChatRoomViewController(chat: ChatRoomInfo(chatRoomId: chatId, postInfo: info.postInfo, managerInfo: info.managerInfo, cheerTeam: info.postInfo.cheerTeam), userId: userId, isNew: info.newChat)
                         navigationController.pushViewController(chatRoomVC, animated: true)
                     }
                     .disposed(by: self.disposeBag) // self의 disposeBag 사용

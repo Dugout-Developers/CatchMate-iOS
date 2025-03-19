@@ -14,16 +14,24 @@ final class NotificationListReactor: Reactor {
         case loadList
         case deleteNoti(Int) // indexPath 전달
         case selectNoti(NotificationList?)
+        case loadNextPage
     }
     enum Mutation {
         case setList([NotificationList])
         case setSelectedNoti(NotificationList?)
         case setError(PresentationError?)
+        case incrementPage
+        case resetPage
+        case setIsLast(Bool)
+        case setIsLoading(Bool)
     }
     struct State {
         var notifications: [NotificationList] = []
         var selectedNoti: NotificationList?
         var error: PresentationError?
+        var currentPage: Int = 0
+        var isLast: Bool = false
+        var isLoading: Bool = false
     }
     
     var initialState: State
@@ -39,9 +47,15 @@ final class NotificationListReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadList:
-            return loadNotiUsecase.execute()
-                .map {
-                    Mutation.setList($0)
+            return loadNotiUsecase.execute(0)
+                .flatMap { data in
+                    return Observable.concat([
+                        Observable.just(.setIsLoading(true)),
+                        Observable.just(.setList(data.list)),
+                        Observable.just(.resetPage),
+                        Observable.just(.setIsLast(data.isLast)),
+                        Observable.just(.setIsLoading(false))
+                    ])
                 }
                 .catch {
                     return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError($0)))
@@ -66,6 +80,27 @@ final class NotificationListReactor: Reactor {
                 .map { _ in
                     return Mutation.setSelectedNoti(noti)
                 }
+        case .loadNextPage:
+            let nextPage = currentState.currentPage + 1
+            if currentState.isLast || currentState.isLoading {
+                return Observable.empty()
+            }
+            if currentState.notifications.isEmpty {
+                return Observable.empty()
+            }
+            return loadNotiUsecase.execute(nextPage)
+                .flatMap { list, isLast in
+                    return Observable.concat([
+                        Observable.just(.setIsLoading(true)),
+                        Observable.just(.setList(list)),
+                        Observable.just(.incrementPage),
+                        Observable.just(.setIsLast(isLast)),
+                        Observable.just(.setIsLoading(false))
+                    ])
+                }
+                .catch { error in
+                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
+                }
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
@@ -73,11 +108,19 @@ final class NotificationListReactor: Reactor {
         newState.error = nil
         switch mutation {
         case .setList(let list):
-            newState.notifications = list
+            newState.notifications.append(contentsOf: list)
         case .setError(let error):
             newState.error = error
         case .setSelectedNoti(let noti):
             newState.selectedNoti = noti
+        case .incrementPage:
+            newState.currentPage += 1
+        case .resetPage:
+            newState.currentPage = 0
+        case .setIsLast(let isLast):
+            newState.isLast = isLast
+        case .setIsLoading(let isLoading):
+            newState.isLoading = isLoading
         }
         return newState
     }

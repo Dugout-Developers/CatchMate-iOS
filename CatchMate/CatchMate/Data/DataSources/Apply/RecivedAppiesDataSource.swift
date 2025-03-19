@@ -11,8 +11,8 @@ import RxAlamofire
 import Alamofire
 
 protocol RecivedAppiesDataSource {
-    func loadRecivedApplies(boardId: Int) -> Observable<ReceivedAppliesDTO>
-    func loadReceivedAppliesAll() -> Observable<ReceivedAppliesDTO>
+    func loadRecivedApplies(boardId: Int, page: Int) -> Observable<ReceivedAppliesDTO>
+    func loadReceivedAppliesAll(_ page: Int) -> Observable<ReceivedAppliesDTO>
 }
 
 final class RecivedAppiesDataSourceImpl: RecivedAppiesDataSource {
@@ -22,7 +22,7 @@ final class RecivedAppiesDataSourceImpl: RecivedAppiesDataSource {
         self.tokenDataSource = tokenDataSource
     }
     
-    func loadRecivedApplies(boardId: Int) -> RxSwift.Observable<ReceivedAppliesDTO> {
+    func loadRecivedApplies(boardId: Int, page: Int) -> RxSwift.Observable<ReceivedAppliesDTO> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
@@ -36,7 +36,8 @@ final class RecivedAppiesDataSourceImpl: RecivedAppiesDataSource {
         ]
         
         let parameters: [String: Any] = [
-            "boardId": boardId
+            "boardId": boardId,
+            "page": page
         ]
         
         return APIService.shared.performRequest(type: .receivedApply, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: ReceivedAppliesDTO.self, refreshToken: refreshToken)
@@ -49,7 +50,7 @@ final class RecivedAppiesDataSourceImpl: RecivedAppiesDataSource {
             }
     }
     
-    func loadReceivedAppliesAll() -> Observable<ReceivedAppliesDTO> {
+    func loadReceivedAppliesAll(_ page: Int) -> Observable<ReceivedAppliesDTO> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
@@ -61,9 +62,12 @@ final class RecivedAppiesDataSourceImpl: RecivedAppiesDataSource {
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
+        let parameters: [String: Any] = [
+            "page": page
+        ]
         LoggerService.shared.log("토큰 확인: \(headers)")
         
-        return APIService.shared.performRequest(type: .receivedApplyAll, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: ReceivedAppliesDTO.self, refreshToken: refreshToken)
+        return APIService.shared.performRequest(type: .receivedApplyAll, parameters: parameters, headers: headers, encoding: URLEncoding.default, dataType: ReceivedAppliesDTO.self, refreshToken: refreshToken)
             .map { response in
                 return response
             }

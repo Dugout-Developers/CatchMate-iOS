@@ -1,8 +1,8 @@
 //
-//  NotificationListDataSource.swift
+//  LoadUnreadMessageDataSource.swift
 //  CatchMate
 //
-//  Created by 방유빈 on 10/8/24.
+//  Created by 방유빈 on 3/13/25.
 //
 
 import UIKit
@@ -10,18 +10,21 @@ import RxSwift
 import RxAlamofire
 import Alamofire
 
-protocol NotificationListDataSource {
-    func loadNotificationList(_ page: Int) -> Observable<NotificationListResponse>
+struct UnreadMessageDTO: Codable {
+    let hasUnreadChat: Bool
+    let hasUnreadNotification: Bool
+}
+protocol LoadUnreadMessageDataSource {
+    func loadUnreadMessage() -> Observable<UnreadMessageDTO>
 }
 
-final class NotificationListDataSourceImpl: NotificationListDataSource {
+final class LoadUnreadMessageDataSourceImpl: LoadUnreadMessageDataSource {
     private let tokenDataSource: TokenDataSource
-   
     init(tokenDataSource: TokenDataSource) {
         self.tokenDataSource = tokenDataSource
     }
-    
-    func loadNotificationList(_ page: Int) -> RxSwift.Observable<NotificationListResponse> {
+
+    func loadUnreadMessage() -> RxSwift.Observable<UnreadMessageDTO> {
         guard let token = tokenDataSource.getToken(for: .accessToken) else {
             LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundAccessToken)
@@ -30,19 +33,20 @@ final class NotificationListDataSourceImpl: NotificationListDataSource {
             LoggerService.shared.log(level: .debug, "리프레시 토큰 찾기 실패")
             return Observable.error(TokenError.notFoundRefreshToken)
         }
+        
         let headers: HTTPHeaders = [
             "AccessToken": token
         ]
-        let paramerters: [String: Any] = [
-            "page": page
-        ]
-        return APIService.shared.performRequest(type: .notificationList, parameters: paramerters, headers: headers, encoding: URLEncoding.default, dataType: NotificationListResponse.self, refreshToken: refreshToken)
-            .map { response in
-                return response
+        
+        return  APIService.shared.performRequest(type: .unreadMessage, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: UnreadMessageDTO.self, refreshToken: refreshToken)
+            .do { dto in
+                LoggerService.shared.log("UnreadMessage DTO: \(dto)")
             }
             .catch { error in
-                LoggerService.shared.log("NotificationList Load 실패 - \(error)")
+                LoggerService.shared.log("안읽은 알림 여부 조회 실패: \(error)")
                 return Observable.error(error)
             }
     }
+    
+    
 }

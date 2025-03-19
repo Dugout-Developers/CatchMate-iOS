@@ -7,14 +7,18 @@
 
 import UIKit
 import SnapKit
-
-final class TabBarController: UITabBarController, UITabBarControllerDelegate {
+import RxSwift
+import ReactorKit
+final class TabBarController: UITabBarController, UITabBarControllerDelegate, View {
+    var disposeBag = DisposeBag()
+    
     private let isNonMember: Bool
     private(set) var preViewControllerIndex: Int = 0
     var isAddView: Bool = false
-    
+    var reactor: TabbarReactor
     init(isNonMember: Bool = false) {
         self.isNonMember = isNonMember
+        self.reactor = DIContainerService.shared.makeTabbarReactor()
         super.init(nibName: nil, bundle: nil)
         self.delegate = self
     }
@@ -28,9 +32,21 @@ final class TabBarController: UITabBarController, UITabBarControllerDelegate {
         super.viewDidLoad()
         setupTabbarLayout()
         settupTabbar()
-        checkUnreadMessages()
+        if !isNonMember {
+            bind(reactor: reactor)
+            reactor.action.onNext(.loadHasUnread)
+        }
     }
+
     
+    func bind(reactor: TabbarReactor) {
+        reactor.state.map{$0.hasUnreadChat}
+            .withUnretained(self)
+            .subscribe { vc, state in
+                vc.checkUnreadMessages(state: state)
+            }
+            .disposed(by: disposeBag)
+    }
     private func setupTabbarLayout() {
         tabBar.backgroundColor = .white
         tabBar.layer.cornerRadius = 8
@@ -39,7 +55,7 @@ final class TabBarController: UITabBarController, UITabBarControllerDelegate {
     }
     
     private func settupTabbar() {
-        let homeViewController = isNonMember ? UINavigationController(rootViewController: NonMembersAccessViewController(title: "홈")) : UINavigationController(rootViewController: HomeViewController(reactor: DIContainerService.shared.makeHomeReactor()))
+        let homeViewController = isNonMember ? UINavigationController(rootViewController: NonMembersAccessViewController(title: "홈")) : UINavigationController(rootViewController: HomeViewController(reactor: DIContainerService.shared.makeHomeReactor(), tabbarReactor: reactor))
         let favoriteViewController = isNonMember ? UINavigationController(rootViewController: NonMembersAccessViewController(title: "찜 목록")) : UINavigationController(rootViewController: FavoriteListViewController(reactor: DIContainerService.shared.makeFavoriteReactor()))
     
         let addViewController = UINavigationController(rootViewController: NonMembersAccessViewController(title: "등록 하기")) // 네비게이션으로 연결할거기에 탭에는 빈 뷰컨트롤러 연결
@@ -64,16 +80,11 @@ final class TabBarController: UITabBarController, UITabBarControllerDelegate {
         chatViewController.navigationBar.prefersLargeTitles = false
         mypageViewController.navigationBar.prefersLargeTitles = false
         setViewControllers([homeViewController, favoriteViewController, addViewController, chatViewController, mypageViewController], animated: true)
-//        viewControllers = [homeViewController, favoriteViewController, addViewController, chatViewController, mypageViewController]
     }
     
-    func checkUnreadMessages() {
-        // MARK: - 임시 랜덤값 집어넣기
-        let hasUnreadMessages = randomBoolean()
-        print(hasUnreadMessages)
-        
+    func checkUnreadMessages(state: Bool) {
         if let chatTabBarItem = tabBar.items?[3] {
-            if hasUnreadMessages {
+            if state {
                 chatTabBarItem.image = UIImage(named: "chatTab_active")?.withTintColor(.grayScale200, renderingMode: .alwaysOriginal)
                 chatTabBarItem.selectedImage = UIImage(named: "chatTab_active_filled")?.withRenderingMode(.alwaysOriginal)
             } else {

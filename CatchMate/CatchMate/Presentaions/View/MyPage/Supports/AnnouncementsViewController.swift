@@ -69,7 +69,7 @@ extension AnnouncementsViewController {
             }
             .disposed(by: disposeBag)
         tableView.rx.contentOffset
-            .skip(1)
+            .filter { _ in !reactor.currentState.announcements.isEmpty }
             .distinctUntilChanged()
             .withUnretained(self)
             .map { vc, offset in

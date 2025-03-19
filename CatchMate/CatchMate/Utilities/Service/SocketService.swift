@@ -81,15 +81,22 @@ final class SocketService {
     
     private var currentSubscription: Subscription? = nil
     private var preRoomId: String? = nil
+    private var socketHeaderId: String? = nil
     private var retryCount = 0
     private let messageSubject = PublishSubject<(String, String)>() // (roomID, message)
     private let errorSubject = PublishSubject<Error>()
     private var connectionSatus = false
     
-    var messageObservable: Observable<(String, String)> {
-        return messageSubject.asObservable()
-    }
-    
+//    var messageObservable: Observable<(String, String)> {
+//        return messageSubject
+//            .do(onSubscribe: { print("✅ [DEBUG] messageObservable 구독 시작") },
+//                onDispose: { print("❌ [DEBUG] messageObservable 구독 해제") })
+//    }
+    lazy var messageObservable: Observable<(String, String)> = {
+        return messageSubject
+            .publish()
+            .refCount()
+    }()
     var errorObservable: Observable<Error> {
         return errorSubject.asObservable()
     }
@@ -98,6 +105,7 @@ final class SocketService {
     var reconnectTrigger = PublishSubject<String?>()
 
     init() throws {
+        print("✅ [DEBUG] SocketService 초기화 시작")
         guard let urlString = Bundle.main.socketURL, let url = URL(string: urlString) else {
             throw SocketError.invalidURL
         }
@@ -126,6 +134,7 @@ final class SocketService {
                 }
             }
             .disposed(by: disposeBag)
+        print("✅ [DEBUG] SocketService 초기화 완료")
     }
     
     deinit {
@@ -135,11 +144,6 @@ final class SocketService {
     private func setupWebSocket(chatId: String?) {
         var request = URLRequest(url: serverURL)
         request.timeoutInterval = 5
-        request.setValue("\(accessToken)", forHTTPHeaderField: "AccessToken")
-        if let chatId = chatId {
-            request.setValue(chatId, forHTTPHeaderField: "ChatRoomId")
-        }
-
         self.socket = WebSocket(request: request)
         self.socket?.delegate = self
     }
@@ -177,11 +181,17 @@ final class SocketService {
         print("🔄 WebSocket 연결 시도")
         self.preRoomId = chatId
         self.setupWebSocket(chatId: chatId)
+        socketHeaderId = chatId
         socket?.connect()
         self.connectionSatus = true
-        
+        if let id = chatId {
+            UserDefaults.standard.set(id, forKey: UserDefaultsKeys.ChatInfo.chatRoomId)
+        }
     }
-    private func socketDisconnect() async {
+    private func socketDisconnect(_ isIdRemove: Bool) async {
+        if isIdRemove {
+            UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.ChatInfo.chatRoomId)
+        }
         socket?.disconnect()
         connectionSatus = false
         print("🔴 WebSocket 연결 종료")
@@ -210,7 +220,7 @@ final class SocketService {
         print("✅ 구독 요청 보냄")
     }
     
-    func disconnect() {
+    func disconnect(isIdRemove: Bool = true) {
         guard connectionSatus else {
             print("⚠️ WebSocket이 연결되지 않음. 구독 해제 불가")
             errorSubject.onNext(SocketError.notConnected)
@@ -223,10 +233,9 @@ final class SocketService {
         }
         retryCount = 0
         Task {
-            await readMessage(roomId: subscription.roomId)
             await unsubscribe(id: subscription.id)
             await sendDisConnectFrame()
-            await socketDisconnect()
+            await socketDisconnect(isIdRemove)
         }
     }
     
@@ -237,13 +246,13 @@ final class SocketService {
             
             \0
             """
-        
+        socketHeaderId = nil
         self.socket?.write(string: frame)
         self.currentSubscription = nil
         print("🚫 구독 해제 요청 전송 완료")
     }
     
-    func readMessage(roomId: String) async {
+    func readMessage(roomId: String) {
         if roomId == "0" {
             return
         }
@@ -314,7 +323,7 @@ extension SocketService: WebSocketDelegate {
             print("✅ WebSocket 연결 성공")
             Task {
                 await sendConnectFrame()
-                await subscribe(roomID: preRoomId)
+                await subscribe(roomID: socketHeaderId)
             }
             
         case .disconnected(let reason, let code):
@@ -340,6 +349,7 @@ extension SocketService: WebSocketDelegate {
         case .error(let error):
             connectionSatus = false
             if let error = error {
+                print(error.statusCode)
                 print("🚨 [ERROR] WebSocket 내부 오류 발생: \(error.localizedDescription)")
                 errorSubject.onNext(error)
             }
@@ -349,16 +359,25 @@ extension SocketService: WebSocketDelegate {
             break
         }
     }
-    
-    
+
     private func sendConnectFrame() async {
-        let frame = """
+        
+        let frame = socketHeaderId != nil ? """
+           CONNECT
+           accept-version:1.2
+           AccessToken:\(accessToken)
+           ChatRoomId:\(socketHeaderId!)
+           host:\(serverURL.host ?? "localhost")
+           
+           \0
+           """ : """
            CONNECT
            accept-version:1.2
            host:\(serverURL.host ?? "localhost")
            
            \0
            """
+        print(frame)
         socket?.write(string: frame)
     }
     
