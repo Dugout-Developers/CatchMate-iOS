@@ -10,10 +10,18 @@ import SnapKit
 import RxSwift
 import ReactorKit
 
-final class InquiryDetailViewController: BaseViewController {
+final class InquiryDetailViewController: BaseViewController, View {
+    override var useSnapKit: Bool {
+        return true
+    }
+    override var buttonContainerExists: Bool {
+        return false
+    }
+    var reactor: InquiryReactor
     private let inquiryId: Int
     private let scrollView = UIScrollView()
     private let containerView = UIView()
+    
     private let titleView = UIView()
     private let contentView = UIView()
     private let answerView = UIView()
@@ -43,6 +51,7 @@ final class InquiryDetailViewController: BaseViewController {
     private let contentLabel = {
         let label = UILabel()
         label.textColor = .grayScale800
+        label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
@@ -57,11 +66,13 @@ final class InquiryDetailViewController: BaseViewController {
     private let answerLabel = {
         let label = UILabel()
         label.textColor = .grayScale800
+        label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
     init(inquiryId: Int) {
         self.inquiryId = inquiryId
+        self.reactor = InquiryReactor(inquiryId: inquiryId)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -70,6 +81,24 @@ final class InquiryDetailViewController: BaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupLeftTitle("알림")
+        bind(reactor: reactor)
+        reactor.action.onNext(.loadInquiryDetail)
+        
+    }
+    
+    func bind(reactor: InquiryReactor) {
+        reactor.state.map{$0.inquiryDetail}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, inquiry in
+                vc.setupUI()
+                vc.setupStyle(inquiry: inquiry)
+            }
+            .disposed(by: disposeBag)
+    }
     private func setupStyle(inquiry: Inquiry) {
         titleLabel.text = "\(inquiry.nickName) 님의 문의에 대한 답변입니다"
         titleLabel.applyStyle(textStyle: FontSystem.headline03_medium)
@@ -86,16 +115,16 @@ final class InquiryDetailViewController: BaseViewController {
         scrollView.addSubview(containerView)
         containerView.addSubviews(views: [titleView, contentView, answerView])
         titleView.addSubviews(views: [titleLabel, dateLabel])
-        contentView.addSubviews(views: [contentView, contentTitleLabel])
+        contentView.addSubviews(views: [contentTitleLabel, contentLabel])
         answerView.addSubviews(views: [answerTitleLabel, answerLabel])
-        
+
         scrollView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
 
         containerView.snp.makeConstraints { make in
             make.edges.equalTo(scrollView.contentLayoutGuide)
-            make.width.equalTo(scrollView.frameLayoutGuide)
+            make.width.equalTo(view.snp.width)
         }
         
         titleView.snp.makeConstraints { make in
@@ -126,15 +155,16 @@ final class InquiryDetailViewController: BaseViewController {
         answerView.snp.makeConstraints { make in
             make.top.equalTo(contentView.snp.bottom).offset(8)
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            make.bottom.equalToSuperview().inset(16)
         }
         answerTitleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(16)
             make.leading.trailing.equalToSuperview().inset(18)
         }
-       answerLabel.snp.makeConstraints { make in
-            make.top.equalTo(contentTitleLabel.snp.bottom).offset(12)
-            make.leading.trailing.equalTo(contentTitleLabel)
-            make.bottom.equalToSuperview().inset(16)
+        answerLabel.snp.makeConstraints { make in
+            make.top.equalTo(answerTitleLabel.snp.bottom).offset(12)
+            make.leading.trailing.equalTo(answerTitleLabel)
+            make.bottom.equalToSuperview()
         }
     }
 }

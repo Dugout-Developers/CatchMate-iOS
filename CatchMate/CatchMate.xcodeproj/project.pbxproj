@@ -67,6 +67,7 @@
 		5301E2B62C5BE6AF0078E910 /* LogoutUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2B52C5BE6AF0078E910 /* LogoutUseCase.swift */; };
 		5301E2B82C5BECBB0078E910 /* MyPageReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2B72C5BECBB0078E910 /* MyPageReactor.swift */; };
 		5301E2BA2C5BED8D0078E910 /* UserMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2B92C5BED8D0078E910 /* UserMapper.swift */; };
+		5306D4962D8A7C8D00E65B05 /* InquiryReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5306D4952D8A7C8500E65B05 /* InquiryReactor.swift */; };
 		5306F7BD2C9057D200292C6E /* LoadReceivedAppliesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5306F7BC2C9057D200292C6E /* LoadReceivedAppliesUseCase.swift */; };
 		5306F7BF2C9081C000292C6E /* ReceivedAppliesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5306F7BE2C9081C000292C6E /* ReceivedAppliesTest.swift */; };
 		530994542C4F6CEB00ABE103 /* LoginResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530994532C4F6CEB00ABE103 /* LoginResult.swift */; };
@@ -580,6 +581,7 @@
 		5301E2B52C5BE6AF0078E910 /* LogoutUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoutUseCase.swift; sourceTree = "<group>"; };
 		5301E2B72C5BECBB0078E910 /* MyPageReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageReactor.swift; sourceTree = "<group>"; };
 		5301E2B92C5BED8D0078E910 /* UserMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMapper.swift; sourceTree = "<group>"; };
+		5306D4952D8A7C8500E65B05 /* InquiryReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InquiryReactor.swift; sourceTree = "<group>"; };
 		5306F7BC2C9057D200292C6E /* LoadReceivedAppliesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadReceivedAppliesUseCase.swift; sourceTree = "<group>"; };
 		5306F7BE2C9081C000292C6E /* ReceivedAppliesTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceivedAppliesTest.swift; sourceTree = "<group>"; };
 		530994532C4F6CEB00ABE103 /* LoginResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResult.swift; sourceTree = "<group>"; };
@@ -1589,6 +1591,7 @@
 		536BDDE72C1971AF0043B1DA /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				5306D4952D8A7C8500E65B05 /* InquiryReactor.swift */,
 				531CC6412D82760200A928F9 /* TabbarReactor.swift */,
 				53940F162D7D574200A57BD3 /* AuthInfoReactor.swift */,
 				532333CB2D759B660055ABD3 /* AgreementReactor.swift */,
@@ -2314,6 +2317,7 @@
 				531963F12C645FDE00EE7F23 /* SendMateReactor.swift in Sources */,
 				534E39DC2C63CE78006D180E /* AnnouncementsViewController.swift in Sources */,
 				5320B0512D5B147400897EB7 /* CustomerServiceAddViewController.swift in Sources */,
+				5306D4962D8A7C8D00E65B05 /* InquiryReactor.swift in Sources */,
 				53C4FEB42C8AA68A00337431 /* BottomMargin.swift in Sources */,
 				532333CA2D7596B70055ABD3 /* TermsAgreementViewController.swift in Sources */,
 				5301E2B62C5BE6AF0078E910 /* LogoutUseCase.swift in Sources */,
