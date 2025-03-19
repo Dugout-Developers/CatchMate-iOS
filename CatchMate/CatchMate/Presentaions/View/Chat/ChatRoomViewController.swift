@@ -33,12 +33,15 @@ final class ChatRoomViewController: BaseViewController, View {
     private let inputview: ChatingInputField = ChatingInputField()
     private var chat: ChatRoomInfo
     private var userId: Int
+    private var isUserScrolling = false
+    private var isMessageUpdate = false
     var reactor: ChatRoomReactor
     private var keyboardManager: KeyboardManager?
     private var bottomConstraint: Constraint?
     private var inputViewHeightConstraint: Constraint?
     private var lastTopMessage: ChatMessage?
     private let isNew: Bool
+    private var isStart: Bool = true
     private let numberLabel: UILabel = {
         let label = UILabel()
         label.textColor = .cmNonImportantTextColor
@@ -206,14 +209,21 @@ extension ChatRoomViewController {
         view.layoutIfNeeded()
     }
     
+    
     private func scrollTableview() {
         tableView.beginUpdates()
         if let index = reactor.currentState.messages.firstIndex(where: {$0 == lastTopMessage}) {
+            guard index >= 0, index < tableView.numberOfRows(inSection: 0) else {
+                tableView.endUpdates()
+                return
+            }
+
             let indexPath = IndexPath(row: index, section: 0)
             print(reactor.currentState.messages.count)
             tableView.scrollToRow(at: indexPath, at: .top, animated: false)
         }
         tableView.endUpdates()
+        isMessageUpdate = false
     }
     
     func scrollToTableViewBottom(_ animate: Bool) {
@@ -231,6 +241,7 @@ extension ChatRoomViewController {
             }
         }
         tableView.endUpdates()
+        isMessageUpdate = false
     }
     
     private func isTableViewAtBottom() -> Bool {
@@ -250,8 +261,8 @@ extension ChatRoomViewController {
                 vc.navigationController?.pushViewController(postDetailVC, animated: true)
             }
             .disposed(by: disposeBag)
+        
         tableView.rx.didScroll
-//            .throttle(.milliseconds(200), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] _ in
                 if let topIndexPath = self?.tableView.indexPathsForVisibleRows?.first,
                    let message = reactor.currentState.messages[safe: topIndexPath.row] {
@@ -266,16 +277,14 @@ extension ChatRoomViewController {
                 guard let self = self else { return false }
                 return self.tableView.isDragging || self.tableView.isDecelerating //  사용자가 스크롤한 경우만 감지
             }
-            .map { [weak self] offset -> Bool in
-                guard let self = self else { return false }
+            .map { offset -> Bool in
                 return offset.y <= 0 // 천장에 닿았을 때 true 반환
             }
             .distinctUntilChanged()
             .filter { $0 } 
             .withLatestFrom(reactor.state.map { $0.isLast })
             .filter { !$0 }
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
+            .subscribe(onNext: { _ in
                 reactor.action.onNext(.loadMessages(isStart: false))
             })
             .disposed(by: disposeBag)
@@ -289,7 +298,9 @@ extension ChatRoomViewController {
             .disposed(by: disposeBag)
 
         reactor.state.map{$0.scrollTrigger}
-            .compactMap{$0}
+            .filter { [weak self] _ in
+                self?.isMessageUpdate == true
+            }
             .withUnretained(self)
             .subscribe { vc, type in
                 switch type {
@@ -313,6 +324,9 @@ extension ChatRoomViewController {
         
         reactor.state.map{$0.messages}
             .observe(on: MainScheduler.instance)
+            .do(afterNext: { _ in
+                self.isMessageUpdate = true
+            })
             .bind(to: tableView.rx.items) { [weak self] tableView, index, item in
                 guard let self = self else { return UITableViewCell() }
                 let indexPath = IndexPath(row: index, section: 0)

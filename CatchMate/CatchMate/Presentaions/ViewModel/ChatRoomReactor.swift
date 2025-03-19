@@ -244,7 +244,8 @@ final class ChatRoomReactor: Reactor {
                             Observable.just(.setMessages(messages)),
                             Observable.just(.setIsLast(isLast)),
                             Observable.just(.setIsLoading(false)),
-                            Observable.just(.setScrollTrigger(isStart ? .startRoom : .nextPage))
+                            Observable.just(.setScrollTrigger(.nextPage))
+//                            Observable.just(.setScrollTrigger(isStart ? .startRoom : .nextPage))
                         ])
                     }
                     .catch { error in
