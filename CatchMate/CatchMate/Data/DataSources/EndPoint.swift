@@ -107,6 +107,8 @@ enum Endpoint {
     
     /// 문의하기
     case inquiries
+    /// 문의하기 답변 디테일
+    case inquiryDetail
     /// 공지사항 리스트
     case noticesList
     
@@ -196,6 +198,8 @@ enum Endpoint {
             return "/users/block/"
         case .inquiries:
             return "/inquiries"
+        case .inquiryDetail:
+            return "/inquiries/"
         case .noticesList:
             return "/notices/list"
         }
@@ -292,6 +296,8 @@ enum Endpoint {
             return "유저 차단 해제 API"
         case .inquiries:
             return "고객센터 문의 API"
+        case .inquiryDetail:
+            return "문의하기 답변 확인 API"
         case .noticesList:
             return "공지사항 리스트 조회 API"
         }
@@ -374,6 +380,8 @@ enum Endpoint {
             return .delete
             
         // MARK: - 고객센터 관련
+        case .inquiryDetail:
+            return .get
         case .inquiries:
             return .post
         case .noticesList:

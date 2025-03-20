@@ -23,26 +23,29 @@ final class InquiryReactor: Reactor {
     }
     
     var initialState: State
-    private var inquiryId: Int
-    init(inquiryId: Int) {
+    private let inquiryId: Int
+    private let inquiryUsecase: InquiryDetailUseCase
+    init(inquiryId: Int, inquiryUsecase: InquiryDetailUseCase) {
         self.inquiryId = inquiryId
+        self.inquiryUsecase = inquiryUsecase
         self.initialState = State()
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadInquiryDetail:
-            return Observable.just(.setInquiryDetail(Inquiry(id: 1,
-                                                             content: "ㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\n",
-                                                             nickName: "방가방가 해ㅔㅁ토리",
-                                                             answer: "ㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\nㅇㅁㄴ라ㅓㅁ나ㅣ러ㅏㅣㅁ넝리ㅏㅓㅁ닝러ㅣㅏ\n",
-                                                             createAt: "2025-03-22")))
+            return inquiryUsecase.getInquiriyDetail(inquiriyId: inquiryId)
+                .flatMap { inquiry in
+                    return Observable.just(.setInquiryDetail(inquiry))
+                }
+                .catch { error in
+                    return Observable.just(.serError(ErrorMapper.mapToPresentationError(error)))
+                }
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
-            
         case .setInquiryDetail(let detail):
             newState.inquiryDetail = detail
         case .serError(let error):
