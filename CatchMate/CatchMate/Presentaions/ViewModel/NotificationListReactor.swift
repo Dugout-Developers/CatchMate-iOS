@@ -18,6 +18,7 @@ final class NotificationListReactor: Reactor {
     }
     enum Mutation {
         case setList([NotificationList])
+        case updateList([NotificationList])
         case setSelectedNoti(NotificationList?)
         case setError(PresentationError?)
         case incrementPage
@@ -47,6 +48,9 @@ final class NotificationListReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadList:
+            if !currentState.notifications.isEmpty {
+                return Observable.empty()
+            }
             return loadNotiUsecase.execute(0)
                 .flatMap { data in
                     return Observable.concat([
@@ -67,12 +71,15 @@ final class NotificationListReactor: Reactor {
                 .map { vc, _ in
                     var list = vc.currentState.notifications
                     list.remove(at: indexPath)
-                    return Mutation.setList(list)
+                    return Mutation.updateList(list)
                 }
                 .catch {
                     return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError($0)))
                 }
         case .selectNoti(let noti):
+            if noti?.type == .inquiry {
+                return Observable.just(Mutation.setSelectedNoti(noti))
+            }
             guard let noti = noti, let id = Int(noti.id) else {
                 return Observable.just(Mutation.setSelectedNoti(nil))
             }
@@ -107,6 +114,8 @@ final class NotificationListReactor: Reactor {
         var newState = state
         newState.error = nil
         switch mutation {
+        case .updateList(let list):
+            newState.notifications = list
         case .setList(let list):
             newState.notifications.append(contentsOf: list)
         case .setError(let error):

@@ -71,13 +71,24 @@ extension NotiViewController {
             .subscribe { vc, noti in
                 switch noti.type {
                 case .receivedView:
-                    let receivedVC = ReceiveMateListViewController(reactor: DIContainerService.shared.makeReciveMateReactor(), id: String(noti.boardId))
-                    
-                    vc.navigationController?.pushViewController(receivedVC, animated: true)
+                    if let boardId = noti.boardId {
+                        let receivedVC = ReceiveMateListViewController(reactor: DIContainerService.shared.makeReciveMateReactor(), id: String(boardId))
+                        
+                        vc.navigationController?.pushViewController(receivedVC, animated: true)
+                    } else {
+                        vc.showToast(message: "문제가 발생했어요")
+                    }
                 case .chatRoom:
                     vc.navigateToRootAndSwitchTab()
                 case .none:
                     vc.showCMAlert(titleText: "이미 처리된 알림이에요", importantButtonText: "확인", commonButtonText: nil)
+                case .inquiry:
+                    if let inquiryId = noti.inquiryId {
+                        let inquiryDetailVC = InquiryDetailViewController(inquiryId: inquiryId)
+                        vc.navigationController?.pushViewController(inquiryDetailVC, animated: true)
+                    } else {
+                        vc.showToast(message: "문제가 발생했어요")
+                    }
                 }
             }
             .disposed(by: disposeBag)

@@ -12,7 +12,8 @@ struct NotificationList: Equatable {
     let read: Bool
     let imgUrl: String
     let type: NotificationNavigationType
-    let boardId: Int
+    let boardId: Int?
+    let inquiryId: Int?
     
     static func == (lhs: NotificationList, rhs: NotificationList) -> Bool {
         lhs.id == rhs.id
@@ -22,6 +23,7 @@ struct NotificationList: Equatable {
 enum NotificationNavigationType {
     case receivedView
     case chatRoom
+    case inquiry
     case none
     
     init(serverValue: String) {
@@ -29,6 +31,8 @@ enum NotificationNavigationType {
             self = .receivedView
         } else if serverValue == "ACCEPTED" {
             self = .chatRoom
+        } else if serverValue == "INQUIRY"{
+            self = .inquiry
         } else {
             self = .none
         }

@@ -52,7 +52,11 @@ final class NotiViewTableViewCell: UITableViewCell {
         containerView.backgroundColor = noti.read ? .grayScale50 : .white
         notiLabel.text = noti.title
         subinfoLabel.text = noti.gameInfo
-        ImageLoadHelper.loadImage(profileImageView, pictureString: noti.imgUrl)
+        if noti.imgUrl == "catchmate" {
+            profileImageView.image = UIImage(named: "logo_white")
+        } else {
+            ImageLoadHelper.loadImage(profileImageView, pictureString: noti.imgUrl)
+        }
         
         notiLabel.applyStyle(textStyle: FontSystem.body01_medium)
         subinfoLabel.applyStyle(textStyle: FontSystem.body02_semiBold)

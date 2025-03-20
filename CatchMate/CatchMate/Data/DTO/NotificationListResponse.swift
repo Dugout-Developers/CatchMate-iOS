@@ -9,13 +9,14 @@ import Foundation
 
 struct NotificationDTO: Codable {
     let notificationId: Int
-    let boardInfo: PostDTO
-    let senderProfileImageUrl: String
+    let boardInfo: PostDTO?
+    let senderProfileImageUrl: String?
     let title: String
     let body: String
     let createdAt: String
     let read: Bool
-    let acceptStatus: String
+    let acceptStatus: String?
+    let inquiryInfo: InquiryDTO?
 }
 
 struct NotificationListResponse: Codable {
