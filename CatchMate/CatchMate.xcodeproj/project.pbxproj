@@ -372,6 +372,7 @@
 		538EE3652D8BB2800008C487 /* InquiriyDetailRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538EE3642D8BB2770008C487 /* InquiriyDetailRepositoryImpl.swift */; };
 		538EE3672D8BB2900008C487 /* InquiryDetailRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538EE3662D8BB28F0008C487 /* InquiryDetailRepository.swift */; };
 		538EE3692D8BB39C0008C487 /* InquiryDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538EE3682D8BB3990008C487 /* InquiryDetailUseCase.swift */; };
+		538EE36D2D8D10D60008C487 /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 538EE36C2D8D10D60008C487 /* Release.xcconfig */; };
 		53940F172D7D574C00A57BD3 /* AuthInfoReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53940F162D7D574200A57BD3 /* AuthInfoReactor.swift */; };
 		53940F192D7DE34F00A57BD3 /* LoadNotificationDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53940F182D7DE34100A57BD3 /* LoadNotificationDataSource.swift */; };
 		539BD8632C74F0A5004720B8 /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7ACE2C367008002FC64F /* DateHelper.swift */; };
@@ -824,6 +825,7 @@
 		538EE3642D8BB2770008C487 /* InquiriyDetailRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InquiriyDetailRepositoryImpl.swift; sourceTree = "<group>"; };
 		538EE3662D8BB28F0008C487 /* InquiryDetailRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InquiryDetailRepository.swift; sourceTree = "<group>"; };
 		538EE3682D8BB3990008C487 /* InquiryDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InquiryDetailUseCase.swift; sourceTree = "<group>"; };
+		538EE36C2D8D10D60008C487 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		53940F162D7D574200A57BD3 /* AuthInfoReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthInfoReactor.swift; sourceTree = "<group>"; };
 		53940F182D7DE34100A57BD3 /* LoadNotificationDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadNotificationDataSource.swift; sourceTree = "<group>"; };
 		53ACBA1C2C7D8E60004FAF00 /* CMActionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMActionMenu.swift; sourceTree = "<group>"; };
@@ -1526,6 +1528,7 @@
 			isa = PBXGroup;
 			children = (
 				533183C72C50DE8D0097F3F1 /* Config.xcconfig */,
+				538EE36C2D8D10D60008C487 /* Release.xcconfig */,
 				533183C92C50DE8D0097F3F1 /* APIKeys.plist */,
 				533183C62C50DE8D0097F3F1 /* GoogleService-Info.plist */,
 				533183C82C50DE8D0097F3F1 /* Info.plist */,
@@ -2230,6 +2233,7 @@
 			files = (
 				53014A2F2D643B14004C2EE0 /* open_source_licenses.json in Resources */,
 				53241F3E2C3C589100F468E1 /* DesignAssets.xcassets in Resources */,
+				538EE36D2D8D10D60008C487 /* Release.xcconfig in Resources */,
 				5383BE902C34ECD1008940F1 /* PretendardVariable.ttf in Resources */,
 				533183CA2C50DE8D0097F3F1 /* GoogleService-Info.plist in Resources */,
 				533183CB2C50DE8D0097F3F1 /* Config.xcconfig in Resources */,
@@ -3015,7 +3019,7 @@
 		};
 		536BDDD32C189B240043B1DA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 533183C72C50DE8D0097F3F1 /* Config.xcconfig */;
+			baseConfigurationReference = 538EE36C2D8D10D60008C487 /* Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -3113,7 +3117,7 @@
 		};
 		536BDDD62C189B240043B1DA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 533183C72C50DE8D0097F3F1 /* Config.xcconfig */;
+			baseConfigurationReference = 538EE36C2D8D10D60008C487 /* Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -3173,7 +3177,7 @@
 		};
 		536BDDD92C189B240043B1DA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 533183C72C50DE8D0097F3F1 /* Config.xcconfig */;
+			baseConfigurationReference = 538EE36C2D8D10D60008C487 /* Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -3213,7 +3217,7 @@
 		};
 		536BDDDC2C189B240043B1DA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 533183C72C50DE8D0097F3F1 /* Config.xcconfig */;
+			baseConfigurationReference = 538EE36C2D8D10D60008C487 /* Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
