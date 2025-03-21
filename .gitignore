@@ -95,10 +95,12 @@ iOSInjectionProject/
 # .env 파일 제외
 **/.env
 
-# 프로젝트의 모든 경로에서 .plist 파일을 포함하지 않도록 함
-/**/*.plist
+**/GoogleService-Info.plist
 
-/**/*.xcconfig
+# 프로젝트의 모든 경로에서 .plist 파일을 포함하지 않도록 함
+*.plist
+
+*.xcconfig
 
 /**/MockTokenDataSource.swift
 /CatchMate/Config/
