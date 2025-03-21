@@ -77,9 +77,6 @@ final class NotificationListReactor: Reactor {
                     return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError($0)))
                 }
         case .selectNoti(let noti):
-            if noti?.type == .inquiry {
-                return Observable.just(Mutation.setSelectedNoti(noti))
-            }
             guard let noti = noti, let id = Int(noti.id) else {
                 return Observable.just(Mutation.setSelectedNoti(nil))
             }

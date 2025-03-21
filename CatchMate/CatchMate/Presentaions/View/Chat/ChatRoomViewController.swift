@@ -34,7 +34,6 @@ final class ChatRoomViewController: BaseViewController, View {
     private var chat: ChatRoomInfo
     private var userId: Int
     private var isUserScrolling = false
-    private var isMessageUpdate = false
     var reactor: ChatRoomReactor
     private var keyboardManager: KeyboardManager?
     private var bottomConstraint: Constraint?
@@ -211,6 +210,7 @@ extension ChatRoomViewController {
     
     
     private func scrollTableview() {
+//        print("-----------lastTopMessage: \(lastTopMessage)")
         tableView.beginUpdates()
         if let index = reactor.currentState.messages.firstIndex(where: {$0 == lastTopMessage}) {
             guard index >= 0, index < tableView.numberOfRows(inSection: 0) else {
@@ -223,7 +223,6 @@ extension ChatRoomViewController {
             tableView.scrollToRow(at: indexPath, at: .top, animated: false)
         }
         tableView.endUpdates()
-        isMessageUpdate = false
     }
     
     func scrollToTableViewBottom(_ animate: Bool) {
@@ -241,7 +240,6 @@ extension ChatRoomViewController {
             }
         }
         tableView.endUpdates()
-        isMessageUpdate = false
     }
     
     private func isTableViewAtBottom() -> Bool {
@@ -298,9 +296,7 @@ extension ChatRoomViewController {
             .disposed(by: disposeBag)
 
         reactor.state.map{$0.scrollTrigger}
-            .filter { [weak self] _ in
-                self?.isMessageUpdate == true
-            }
+            .compactMap{$0}
             .withUnretained(self)
             .subscribe { vc, type in
                 switch type {
@@ -318,15 +314,13 @@ extension ChatRoomViewController {
                     } else {
                         vc.scrollTableview()
                     }
+                    reactor.action.onNext(.resetScrollType)
                 }
             }
             .disposed(by: disposeBag)
         
         reactor.state.map{$0.messages}
             .observe(on: MainScheduler.instance)
-            .do(afterNext: { _ in
-                self.isMessageUpdate = true
-            })
             .bind(to: tableView.rx.items) { [weak self] tableView, index, item in
                 guard let self = self else { return UITableViewCell() }
                 let indexPath = IndexPath(row: index, section: 0)
