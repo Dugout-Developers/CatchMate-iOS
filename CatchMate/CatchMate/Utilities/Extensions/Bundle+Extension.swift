@@ -18,21 +18,17 @@ extension Bundle {
         return key
     }
     var baseURL: String? {
-           guard let file = self.path(forResource: "APIKeys", ofType: "plist"),
-                 let resource = NSDictionary(contentsOfFile: file),
-                 let key = resource["BASE_URL"] as? String else {
-               LoggerService.shared.log("baseURL 얻기 실패")
-               return nil
-           }
-           return key
-       }
-    var socketURL: String? {
-        guard let file = self.path(forResource: "APIKeys", ofType: "plist"),
-              let resource = NSDictionary(contentsOfFile: file),
-              let key = resource["SOCKET_URL"] as? String else {
-            LoggerService.shared.log("Socket URL 얻기 실패")
+        guard let key = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String else {
             return nil
         }
+        print("base_Url: \(key)")
+        return key
+    }
+    var socketURL: String? {
+        guard let key = Bundle.main.object(forInfoDictionaryKey: "SOCKET_URL") as? String else {
+            return nil
+        }
+        print("socketURL: \(key)")
         return key
     }
     var kakaoLoginAPPKey: String? {
