@@ -8,5 +8,5 @@
 import RxSwift
 
 protocol LoadChatMessageRepository {
-    func loadChatMessage(_ chatId: Int, page: Int) -> Observable<(messages: [ChatSocketMessage], isLast: Bool)>
+    func loadChatMessage(_ chatId: Int, id: String?) -> Observable<(messages: [ChatSocketMessage], isLast: Bool)>
 }

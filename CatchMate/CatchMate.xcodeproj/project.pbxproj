@@ -67,6 +67,7 @@
 		5301E2B62C5BE6AF0078E910 /* LogoutUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2B52C5BE6AF0078E910 /* LogoutUseCase.swift */; };
 		5301E2B82C5BECBB0078E910 /* MyPageReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2B72C5BECBB0078E910 /* MyPageReactor.swift */; };
 		5301E2BA2C5BED8D0078E910 /* UserMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2B92C5BED8D0078E910 /* UserMapper.swift */; };
+		5306D4962D8A7C8D00E65B05 /* InquiryReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5306D4952D8A7C8500E65B05 /* InquiryReactor.swift */; };
 		5306F7BD2C9057D200292C6E /* LoadReceivedAppliesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5306F7BC2C9057D200292C6E /* LoadReceivedAppliesUseCase.swift */; };
 		5306F7BF2C9081C000292C6E /* ReceivedAppliesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5306F7BE2C9081C000292C6E /* ReceivedAppliesTest.swift */; };
 		530994542C4F6CEB00ABE103 /* LoginResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530994532C4F6CEB00ABE103 /* LoginResult.swift */; };
@@ -364,6 +365,13 @@
 		538E9AA32D6C3C6600A70A3D /* Notification+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538E9AA22D6C3C5E00A70A3D /* Notification+Extension.swift */; };
 		538E9AA42D6C3C6600A70A3D /* Notification+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538E9AA22D6C3C5E00A70A3D /* Notification+Extension.swift */; };
 		538EB92F2C3FA27600ABA40E /* CMDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */; };
+		538EE35F2D8BB1920008C487 /* InquiryDetailDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538EE35E2D8BB1870008C487 /* InquiryDetailDataSource.swift */; };
+		538EE3602D8BB1920008C487 /* InquiryDetailDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538EE35E2D8BB1870008C487 /* InquiryDetailDataSource.swift */; };
+		538EE3622D8BB1E90008C487 /* InquiryDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538EE3612D8BB1E20008C487 /* InquiryDTO.swift */; };
+		538EE3632D8BB1E90008C487 /* InquiryDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538EE3612D8BB1E20008C487 /* InquiryDTO.swift */; };
+		538EE3652D8BB2800008C487 /* InquiriyDetailRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538EE3642D8BB2770008C487 /* InquiriyDetailRepositoryImpl.swift */; };
+		538EE3672D8BB2900008C487 /* InquiryDetailRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538EE3662D8BB28F0008C487 /* InquiryDetailRepository.swift */; };
+		538EE3692D8BB39C0008C487 /* InquiryDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538EE3682D8BB3990008C487 /* InquiryDetailUseCase.swift */; };
 		53940F172D7D574C00A57BD3 /* AuthInfoReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53940F162D7D574200A57BD3 /* AuthInfoReactor.swift */; };
 		53940F192D7DE34F00A57BD3 /* LoadNotificationDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53940F182D7DE34100A57BD3 /* LoadNotificationDataSource.swift */; };
 		539BD8632C74F0A5004720B8 /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BE7ACE2C367008002FC64F /* DateHelper.swift */; };
@@ -580,6 +588,7 @@
 		5301E2B52C5BE6AF0078E910 /* LogoutUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoutUseCase.swift; sourceTree = "<group>"; };
 		5301E2B72C5BECBB0078E910 /* MyPageReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageReactor.swift; sourceTree = "<group>"; };
 		5301E2B92C5BED8D0078E910 /* UserMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMapper.swift; sourceTree = "<group>"; };
+		5306D4952D8A7C8500E65B05 /* InquiryReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InquiryReactor.swift; sourceTree = "<group>"; };
 		5306F7BC2C9057D200292C6E /* LoadReceivedAppliesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadReceivedAppliesUseCase.swift; sourceTree = "<group>"; };
 		5306F7BE2C9081C000292C6E /* ReceivedAppliesTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceivedAppliesTest.swift; sourceTree = "<group>"; };
 		530994532C4F6CEB00ABE103 /* LoginResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResult.swift; sourceTree = "<group>"; };
@@ -810,6 +819,11 @@
 		538E9AA02D6C0FF400A70A3D /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		538E9AA22D6C3C5E00A70A3D /* Notification+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extension.swift"; sourceTree = "<group>"; };
 		538EB92E2C3FA27600ABA40E /* CMDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMDatePicker.swift; sourceTree = "<group>"; };
+		538EE35E2D8BB1870008C487 /* InquiryDetailDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InquiryDetailDataSource.swift; sourceTree = "<group>"; };
+		538EE3612D8BB1E20008C487 /* InquiryDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InquiryDTO.swift; sourceTree = "<group>"; };
+		538EE3642D8BB2770008C487 /* InquiriyDetailRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InquiriyDetailRepositoryImpl.swift; sourceTree = "<group>"; };
+		538EE3662D8BB28F0008C487 /* InquiryDetailRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InquiryDetailRepository.swift; sourceTree = "<group>"; };
+		538EE3682D8BB3990008C487 /* InquiryDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InquiryDetailUseCase.swift; sourceTree = "<group>"; };
 		53940F162D7D574200A57BD3 /* AuthInfoReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthInfoReactor.swift; sourceTree = "<group>"; };
 		53940F182D7DE34100A57BD3 /* LoadNotificationDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadNotificationDataSource.swift; sourceTree = "<group>"; };
 		53ACBA1C2C7D8E60004FAF00 /* CMActionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMActionMenu.swift; sourceTree = "<group>"; };
@@ -976,6 +990,7 @@
 		53014A392D644A90004C2EE0 /* CustomerService */ = {
 			isa = PBXGroup;
 			children = (
+				538EE35E2D8BB1870008C487 /* InquiryDetailDataSource.swift */,
 				53B5D5D52D6EB99F00392634 /* LoadNoticeListDataSource.swift */,
 				53014A362D644A7D004C2EE0 /* InquiriesDataSource.swift */,
 			);
@@ -985,6 +1000,7 @@
 		53014A422D644BD5004C2EE0 /* CustomerService */ = {
 			isa = PBXGroup;
 			children = (
+				538EE3682D8BB3990008C487 /* InquiryDetailUseCase.swift */,
 				53B5D5E12D6EC75E00392634 /* LoadNoticeListUseCase.swift */,
 				53014A402D644BCC004C2EE0 /* InquiriesUseCase.swift */,
 			);
@@ -994,6 +1010,7 @@
 		53014A432D644BE2004C2EE0 /* CustomerService */ = {
 			isa = PBXGroup;
 			children = (
+				538EE3662D8BB28F0008C487 /* InquiryDetailRepository.swift */,
 				53B5D5DF2D6EC5FD00392634 /* LoadNoticeListRepsitory.swift */,
 				53014A3E2D644BC5004C2EE0 /* InquiriesRepository.swift */,
 			);
@@ -1003,6 +1020,7 @@
 		53014A442D644BE7004C2EE0 /* CustomerService */ = {
 			isa = PBXGroup;
 			children = (
+				538EE3642D8BB2770008C487 /* InquiriyDetailRepositoryImpl.swift */,
 				53B5D5DD2D6EC5EC00392634 /* LoadNoticeListRepsitoryImpl.swift */,
 				53014A3C2D644BB6004C2EE0 /* InquiriesRepositoryImpl.swift */,
 			);
@@ -1589,6 +1607,7 @@
 		536BDDE72C1971AF0043B1DA /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				5306D4952D8A7C8500E65B05 /* InquiryReactor.swift */,
 				531CC6412D82760200A928F9 /* TabbarReactor.swift */,
 				53940F162D7D574200A57BD3 /* AuthInfoReactor.swift */,
 				532333CB2D759B660055ABD3 /* AgreementReactor.swift */,
@@ -1689,6 +1708,7 @@
 		536BDDF72C1972780043B1DA /* DTO */ = {
 			isa = PBXGroup;
 			children = (
+				538EE3612D8BB1E20008C487 /* InquiryDTO.swift */,
 				53B5D5D82D6EC35900392634 /* NoticesListDTO.swift */,
 				53014A012D6316FD004C2EE0 /* BlockUserInfoDTO.swift */,
 				530149F62D630596004C2EE0 /* ReportUserDTO.swift */,
@@ -2292,6 +2312,7 @@
 				53E4A9C62C500E9B00D21B49 /* SignUpMapper.swift in Sources */,
 				53716BD82C4564700044AD2A /* DefaultsPaddingLabel.swift in Sources */,
 				534E39DA2C63BA26006D180E /* AlarmSettingReactor.swift in Sources */,
+				538EE3632D8BB1E90008C487 /* InquiryDTO.swift in Sources */,
 				535AA0562D51A744007C7690 /* LoadChatInfoUseCase.swift in Sources */,
 				536BDDF92C1972880043B1DA /* LoginMapper.swift in Sources */,
 				534E39DF2C63CF65006D180E /* Announcements.swift in Sources */,
@@ -2314,6 +2335,7 @@
 				531963F12C645FDE00EE7F23 /* SendMateReactor.swift in Sources */,
 				534E39DC2C63CE78006D180E /* AnnouncementsViewController.swift in Sources */,
 				5320B0512D5B147400897EB7 /* CustomerServiceAddViewController.swift in Sources */,
+				5306D4962D8A7C8D00E65B05 /* InquiryReactor.swift in Sources */,
 				53C4FEB42C8AA68A00337431 /* BottomMargin.swift in Sources */,
 				532333CA2D7596B70055ABD3 /* TermsAgreementViewController.swift in Sources */,
 				5301E2B62C5BE6AF0078E910 /* LogoutUseCase.swift in Sources */,
@@ -2381,6 +2403,7 @@
 				535AA01A2D368097007C7690 /* NotificationListDataSource.swift in Sources */,
 				53FC69E72C58F9E700B97AEA /* NicknameCheckUseCase.swift in Sources */,
 				536BDDEC2C19720E0043B1DA /* User.swift in Sources */,
+				538EE3672D8BB2900008C487 /* InquiryDetailRepository.swift in Sources */,
 				5301E2AB2C5B82AA0078E910 /* MypageMenu.swift in Sources */,
 				53241F3C2C3C517600F468E1 /* GridSystem.swift in Sources */,
 				53B8E25F2C61228A001D0ADF /* PostRequsetDTO.swift in Sources */,
@@ -2395,6 +2418,7 @@
 				531288C92C540751000C2FB1 /* FCMRepositoryImpl.swift in Sources */,
 				53014A052D6318AE004C2EE0 /* LoadBlockUsersRepositoryImpl.swift in Sources */,
 				534E39D82C637FD3006D180E /* NotificationSettingViewController.swift in Sources */,
+				538EE3692D8BB39C0008C487 /* InquiryDetailUseCase.swift in Sources */,
 				5375B1DB2D2E1977000581B3 /* DeleteNotificationRepository.swift in Sources */,
 				533A2B322C2BE7E600A59340 /* CheerStyles.swift in Sources */,
 				53014A542D6B0239004C2EE0 /* LoadChatDetailRepositoryImpl.swift in Sources */,
@@ -2510,6 +2534,7 @@
 				53B8E25B2C612171001D0ADF /* AddPostUseCase.swift in Sources */,
 				533183D32C51429B0097F3F1 /* MessageBoxLabel.swift in Sources */,
 				531CC64A2D827BD400A928F9 /* UnreadMessageUseCase.swift in Sources */,
+				538EE3652D8BB2800008C487 /* InquiriyDetailRepositoryImpl.swift in Sources */,
 				53C6DA022CE3A90F00918718 /* ReceivedCountRepositoryImpl.swift in Sources */,
 				5375B1A22D2CD381000581B3 /* NotificationList.swift in Sources */,
 				53F1E8C62C47A46400A962F3 /* Apply.swift in Sources */,
@@ -2578,6 +2603,7 @@
 				531DCA252C67C5450015AC53 /* ReceiveMateListDetailViewController.swift in Sources */,
 				5375B1AE2D2CD697000581B3 /* LoadNotificationListRepository.swift in Sources */,
 				5317867F2C217CB900ACEF6A /* TeamFilterCollectionViewCell.swift in Sources */,
+				538EE35F2D8BB1920008C487 /* InquiryDetailDataSource.swift in Sources */,
 				5375B1CE2D2D8D94000581B3 /* UpPostRepositoryImpl.swift in Sources */,
 				5375B1D52D2E15DF000581B3 /* StateResponseDTO.swift in Sources */,
 				53B8E23B2C5C7BCF001D0ADF /* UserRepository.swift in Sources */,
@@ -2688,6 +2714,7 @@
 				5375B13D2D1A85F6000581B3 /* DomainError.swift in Sources */,
 				53ACBA312C80B6C0004FAF00 /* PostListLoadDataSource.swift in Sources */,
 				533B29482C771F5E00BFE9F6 /* UIColor+Extension.swift in Sources */,
+				538EE3602D8BB1920008C487 /* InquiryDetailDataSource.swift in Sources */,
 				53B5D5D92D6EC36200392634 /* NoticesListDTO.swift in Sources */,
 				5375B1E12D2F7CDA000581B3 /* EndPoint.swift in Sources */,
 				533B873B2C86E5970058B94B /* ApplyListDataSoueceTest.swift in Sources */,
@@ -2726,6 +2753,7 @@
 				53B5D5D72D6EB9BD00392634 /* LoadNoticeListDataSource.swift in Sources */,
 				5306F7BF2C9081C000292C6E /* ReceivedAppliesTest.swift in Sources */,
 				535AA0402D4CA346007C7690 /* ChatMessage.swift in Sources */,
+				538EE3622D8BB1E90008C487 /* InquiryDTO.swift in Sources */,
 				53EECB0B2D13E4CF00775FD6 /* AlarmInfo.swift in Sources */,
 				53E7DBB62CAB3CB200DC058D /* ApplyList.swift in Sources */,
 				533B29422C771F1000BFE9F6 /* Announcements.swift in Sources */,

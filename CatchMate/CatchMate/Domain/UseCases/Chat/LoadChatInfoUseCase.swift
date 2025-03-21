@@ -11,7 +11,7 @@ import RxSwift
 protocol LoadChatInfoUseCase {
     func loadChatNotificationStatus(chatId: Int) -> Observable<Bool>
     func loadChatRoomUsers(chatId: Int) -> Observable<[SenderInfo]>
-    func loadChatMessages(chatId: Int, page: Int) -> Observable<(messages: [ChatMessage], isLast: Bool)>
+    func loadChatMessages(chatId: Int, id: String?) -> Observable<(messages: [ChatMessage], isLast: Bool)>
 }
 
 final class LoadChatInfoUseCaseImpl: LoadChatInfoUseCase {
@@ -56,7 +56,7 @@ final class LoadChatInfoUseCaseImpl: LoadChatInfoUseCase {
             }
     }
     
-    func loadChatMessages(chatId: Int, page: Int) -> RxSwift.Observable<(messages: [ChatMessage], isLast: Bool)> {
+    func loadChatMessages(chatId: Int, id: String?) -> RxSwift.Observable<(messages: [ChatMessage], isLast: Bool)> {
         return loadChatRoomUsers(chatId: chatId)
             .map { infos -> [Int: SenderInfo] in
                 var senders: [Int: SenderInfo] = [:]
@@ -67,8 +67,8 @@ final class LoadChatInfoUseCaseImpl: LoadChatInfoUseCase {
             }
             .withUnretained(self)
             .flatMap { uc, senders -> Observable<(messages: [ChatMessage], isLast: Bool)> in
-                LoggerService.shared.log(level: .info, "채팅방 이전 메시지 불러오기: \(page)페이지")
-                return uc.loadChatMessageRepo.loadChatMessage(chatId, page: page)
+                LoggerService.shared.log(level: .info, "채팅방 이전 메시지 불러오기")
+                return uc.loadChatMessageRepo.loadChatMessage(chatId, id: id)
                     .map { messages, isLast in
                         var newMessages = [ChatMessage]()
                         for message in messages {
@@ -81,7 +81,7 @@ final class LoadChatInfoUseCaseImpl: LoadChatInfoUseCase {
                                 LoggerService.shared.log(level: .error, "메시지 타입 디코딩 실패")
                                 continue
                             }
-                            let newMessage = ChatMessage(userId: senderInfo.senderId, nickName: senderInfo.nickName, imageUrl: senderInfo.imageUrl, message: message.content, time: date, messageType: type, isSocket: false)
+                            let newMessage = ChatMessage(userId: senderInfo.senderId, nickName: senderInfo.nickName, imageUrl: senderInfo.imageUrl, message: message.content, time: date, messageType: type, isSocket: false, id: message.chatMessageId)
                             newMessages.insert(newMessage, at: 0)
                         }
                         return (newMessages, isLast)

@@ -313,4 +313,10 @@ class DIContainerService {
         
         return chatDetailUC
     }
+    
+    func makeInquiryUseCase() -> InquiryDetailUseCase {
+        let datasource = InquiryDetailDataSourceImpl(tokenDataSource: tokenDS)
+        let repository = InquiryDetailRepositoryImpl(inquiryDS: datasource)
+        return InquiryDetailUseCaseImpl(inquiryRepository: repository)
+    }
 }

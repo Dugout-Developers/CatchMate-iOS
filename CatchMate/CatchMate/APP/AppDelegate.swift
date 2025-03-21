@@ -127,6 +127,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
               let navigationController = tabBarController.selectedViewController as? UINavigationController else {
             return
         }
+        navigationController.popToRootViewController(animated: false)
         // 이동
         let reactor = DIContainerService.shared.makeReciveMateReactor()
         let applyVC = ReceiveMateListViewController(reactor: reactor, id: String(boardId))
@@ -153,7 +154,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 print("탭 변경 후 NavigationController를 찾을 수 없음")
                 return
             }
-            
+            navigationController.popToRootViewController(animated: false)
             guard let id = SetupInfoService.shared.getUserInfo(type: .id), let userId = Int(id) else {
                 return
             }
