@@ -122,7 +122,7 @@ final class SignUpViewController: BaseViewController, View {
         setupNavigation()
         setupButton()
         bind(reactor: reactor)
-        showCMAlert(titleText: "성별과 연령 정보는\n프로필을 보고 함께할 사람을\n직접 선택할 수 있도록 돕는 용도입니다\n앱 외부로 공개되지 않으며\n이 외 목적으로 사용되지 않습니다.", importantButtonText: "확인", commonButtonText: nil)
+        showCMAlert(titleText: "성별과 연령 정보는\n프로필을 보고 함께할 사람을\n직접 선택할 수 있도록 돕는 용도입니다\n앱 외부로 공개되지 않으며\n이 외 목적으로 사용되지 않습니다", importantButtonText: "확인", commonButtonText: nil)
         
     }
     

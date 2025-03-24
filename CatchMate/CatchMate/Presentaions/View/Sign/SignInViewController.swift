@@ -7,10 +7,12 @@
 
 import UIKit
 import RxSwift
+import RxRelay
 import ReactorKit
 import RxKakaoSDKUser
 import FlexLayout
 import PinLayout
+import AuthenticationServices
 
 final class SignInViewController: BaseViewController, View {
     var reactor: AuthReactor
@@ -36,15 +38,13 @@ final class SignInViewController: BaseViewController, View {
     
     private let kakaoLoginButton = CMImageButton(frame: .zero, image: UIImage(named: "kakaoLoginBtn"))
     private let naverLoginButton = CMImageButton(frame: .zero, image: UIImage(named: "naverLoginBtn"))
-    private let appleLoginButton = CMImageButton(frame: .zero, image: UIImage(named: "appleLoginBtn"))
+    private let appleLoginButton = ASAuthorizationAppleIDButton(
+        type: .signIn,
+        style: .black
+    )
+    
+    private let appleLoginTapRelay = PublishRelay<Void>()
 
-    private let orLabel: UILabel = {
-        let label = UILabel()
-        label.text = "또는"
-        label.applyStyle(textStyle: FontSystem.body03_medium)
-        label.textColor = .cmNonImportantTextColor
-        return label
-    }()
     private let exploreButton: UIButton = {
         let button = UIButton(configuration: .plain())
         button.setTitle("일단 둘러볼게요.", for: .normal)
@@ -93,6 +93,12 @@ final class SignInViewController: BaseViewController, View {
                 (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(TabBarController(isNonMember: true), animated: true)
             })
             .disposed(by: disposeBag)
+        
+        appleLoginButton.addTarget(self, action: #selector(didTapAppleLogin), for: .touchUpInside)
+    }
+
+    @objc private func didTapAppleLogin() {
+        appleLoginTapRelay.accept(())
     }
 }
 // MARK: - Bind
@@ -116,7 +122,7 @@ extension SignInViewController {
             }
             .disposed(by: disposeBag)
         
-        appleLoginButton.rx.tap
+        appleLoginTapRelay
             .map { Reactor.Action.appleLogin }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -179,22 +185,15 @@ extension SignInViewController {
         view.addSubview(containerView)
         
         containerView.flex.direction(.column).justifyContent(.start).alignItems(.center).marginHorizontal(24).define { flex in
-            flex.addItem(logoContainerView).width(100%).height(Screen.height / 2-60).justifyContent(.center).alignItems(.center).define { flex in
+            flex.addItem(logoContainerView).width(100%).height(Screen.height / 2-100).justifyContent(.center).alignItems(.center).define { flex in
                 flex.addItem(logoImageView).size(120)
             }
-            flex.addItem(simpleLoginLabelImageView).width(134).height(33).marginBottom(9)
-            flex.addItem(kakaoLoginButton).height(50).marginBottom(25)
-            flex.addItem().direction(.row).justifyContent(.spaceBetween).alignItems(.center).width(100%).define { flex in
-                flex.addItem().backgroundColor(.cmStrokeColor).height(1).grow(1)
-                flex.addItem(orLabel).marginHorizontal(16)
-                flex.addItem().backgroundColor(.cmStrokeColor).height(1).grow(1)
-            }.marginBottom(17)
-            flex.addItem().direction(.row).justifyContent(.spaceBetween).alignItems(.center).define { flex in
-                flex.addItem(naverLoginButton).size(48)
-                flex.addItem().backgroundColor(.cmStrokeColor).height(16).width(1).marginHorizontal(24)
-                flex.addItem(appleLoginButton).size(48)
-            }
-            flex.addItem(exploreButton).marginTop(24)
+            flex.addItem(simpleLoginLabelImageView).width(134).height(33).marginBottom(12)
+            flex.addItem(kakaoLoginButton).height(50).marginBottom(12).width(100%).cornerRadius(8)
+            flex.addItem(naverLoginButton).height(50).marginBottom(12).width(100%).cornerRadius(8)
+            flex.addItem(appleLoginButton).height(50).width(100%).cornerRadius(8)
+            flex.addItem().grow(1)
+            flex.addItem(exploreButton).marginBottom(46.5)
         }
     }
 }
