@@ -1,0 +1,5 @@
+git_url(ENV['GIT_URL'])  # GitHub 리포지토리 URL
+username(ENV['FASTLANE_USER']) 
+type("adhoc")  # 배포 유형 (appstore, adhoc, development, enterprise)
+app_identifier([ENV['APP_IDENTIFIER']])  # 앱 ID
+team_id(ENV['TEAM_ID'])  # 애플 개발자 팀 ID

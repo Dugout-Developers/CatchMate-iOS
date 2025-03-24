@@ -7,22 +7,29 @@
 
 import UIKit
 import RxSwift
+import RxRelay
 import ReactorKit
 import RxKakaoSDKUser
 import FlexLayout
 import PinLayout
+import AuthenticationServices
 
 final class SignInViewController: BaseViewController, View {
-    var reactor: SignReactor
-    
+    var reactor: AuthReactor
+    override var useSnapKit: Bool {
+        return false
+    }
+    override var buttonContainerExists: Bool {
+        return false
+    }
     private let containerView = UIView()
     private let logoContainerView = UIView()
     private let logoImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "EmptyPrimary")
+        imageView.image = UIImage(named: "logo")
         return imageView
     }()
-    
+
     private let simpleLoginLabelImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "Simplelogin")
@@ -31,15 +38,13 @@ final class SignInViewController: BaseViewController, View {
     
     private let kakaoLoginButton = CMImageButton(frame: .zero, image: UIImage(named: "kakaoLoginBtn"))
     private let naverLoginButton = CMImageButton(frame: .zero, image: UIImage(named: "naverLoginBtn"))
-    private let appleLoginButton = CMImageButton(frame: .zero, image: UIImage(named: "appleLoginBtn"))
+    private let appleLoginButton = ASAuthorizationAppleIDButton(
+        type: .signIn,
+        style: .black
+    )
+    
+    private let appleLoginTapRelay = PublishRelay<Void>()
 
-    private let orLabel: UILabel = {
-        let label = UILabel()
-        label.text = "또는"
-        label.applyStyle(textStyle: FontSystem.body03_medium)
-        label.textColor = .cmNonImportantTextColor
-        return label
-    }()
     private let exploreButton: UIButton = {
         let button = UIButton(configuration: .plain())
         button.setTitle("일단 둘러볼게요.", for: .normal)
@@ -52,7 +57,7 @@ final class SignInViewController: BaseViewController, View {
         return button
     }()
     
-    init (reactor: SignReactor) {
+    init (reactor: AuthReactor) {
         self.reactor = reactor
         super.init(nibName: nil, bundle: nil)
     }
@@ -69,9 +74,14 @@ final class SignInViewController: BaseViewController, View {
         bind(reactor: reactor)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        reactor.action.onNext(.resetState)
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        containerView.pin.all()
+        containerView.pin.all(view.pin.safeArea)
         containerView.flex.layout()
     }
     
@@ -83,49 +93,91 @@ final class SignInViewController: BaseViewController, View {
                 (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(TabBarController(isNonMember: true), animated: true)
             })
             .disposed(by: disposeBag)
+        
+        appleLoginButton.addTarget(self, action: #selector(didTapAppleLogin), for: .touchUpInside)
+    }
+
+    @objc private func didTapAppleLogin() {
+        appleLoginTapRelay.accept(())
     }
 }
 // MARK: - Bind
 extension SignInViewController {
-    func bind(reactor: SignReactor) {
+    func bind(reactor: AuthReactor) {
         kakaoLoginButton.rx.tap
             .map{ Reactor.Action.kakaoLogin }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
         naverLoginButton.rx.tap
-            .map { Reactor.Action.naverLogin }
+            .map{ Reactor.Action.naverLogin }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        appleLoginButton.rx.tap
+        reactor.state.map{$0.error}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, error in
+                vc.handleError(error)
+            }
+            .disposed(by: disposeBag)
+        
+        appleLoginTapRelay
             .map { Reactor.Action.appleLogin }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
+        // !! 로그인 바인딩 부분
         reactor.state
-            .map { state -> Bool in
-                if state.loginModel != nil {
-                    return true
-                } else {
-                    return false
+            .map { state -> LoginModel? in
+                if let loginModel = state.loginModel {
+                    return loginModel
                 }
+                return nil
             }
-            .distinctUntilChanged()
-            .filter { $0 }
+            .compactMap{$0}
             .withUnretained(self)
-            .bind { vc, _ in
-                vc.pushNextView()
-            }
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { vc, model in
+                print("\(model)")
+                vc.pushNextView(model)
+            })
             .disposed(by: disposeBag)
     }
     
-    private func pushNextView() {
-        let signUpViewController = SignUpViewController(reactor: reactor)
-        navigationController?.pushViewController(signUpViewController, animated: true)
+    private func pushNextView(_ model: LoginModel) {
+        let state = model.isFirstLogin
+        if !state {
+            // 회원가입 이미한 유저일 경우
+            let tabViewController = TabBarController()
+            do {
+                SocketService.shared = try SocketService()
+//                print("✅ SocketService 인스턴스 생성 성공")
+//                SocketService.shared?.connect()  // WebSocket 연결
+            } catch {
+                print("❌ SocketService 초기화 실패: \(error)")
+            }
+            DispatchQueue.main.async {
+                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(tabViewController, animated: true)
+            }
+
+        } else {
+            let signReactor = DIContainerService.shared.makeSignReactor(model)
+            let termsAgreeVC = TermsAgreementViewController(signReactor: signReactor)
+            DispatchQueue.main.async { [weak self] in
+                guard let self else {
+                    LoggerService.shared.log(level: .error, "회원가입 화면 전환 self 없음")
+                    return
+                }
+                guard let navigationController = navigationController else {
+                    LoggerService.shared.log(level: .error, "회원가입 화면 전환 navigation 없음")
+                    return
+                }
+                navigationController.pushViewController(termsAgreeVC, animated: true)
+            }
+        }
     }
 }
-
 
 // MARK: - UI
 extension SignInViewController {
@@ -133,22 +185,15 @@ extension SignInViewController {
         view.addSubview(containerView)
         
         containerView.flex.direction(.column).justifyContent(.start).alignItems(.center).marginHorizontal(24).define { flex in
-            flex.addItem(logoContainerView).width(100%).height(Screen.height / 2).justifyContent(.center).alignItems(.center).define { flex in
-                flex.addItem(logoImageView).size(80)
-            }.marginBottom(19)
-            flex.addItem(simpleLoginLabelImageView).width(134).height(33).marginBottom(9)
-            flex.addItem(kakaoLoginButton).height(50).marginBottom(25)
-            flex.addItem().direction(.row).justifyContent(.spaceBetween).alignItems(.center).width(100%).define { flex in
-                flex.addItem().backgroundColor(.cmStrokeColor).height(1).grow(1)
-                flex.addItem(orLabel).marginHorizontal(16)
-                flex.addItem().backgroundColor(.cmStrokeColor).height(1).grow(1)
-            }.marginBottom(17)
-            flex.addItem().direction(.row).justifyContent(.spaceBetween).alignItems(.center).define { flex in
-                flex.addItem(naverLoginButton).size(48)
-                flex.addItem().backgroundColor(.cmStrokeColor).height(16).width(1).marginHorizontal(24)
-                flex.addItem(appleLoginButton).size(48)
+            flex.addItem(logoContainerView).width(100%).height(Screen.height / 2-100).justifyContent(.center).alignItems(.center).define { flex in
+                flex.addItem(logoImageView).size(120)
             }
-            flex.addItem(exploreButton).marginTop(24)
+            flex.addItem(simpleLoginLabelImageView).width(134).height(33).marginBottom(12)
+            flex.addItem(kakaoLoginButton).height(50).marginBottom(12).width(100%).cornerRadius(8)
+            flex.addItem(naverLoginButton).height(50).marginBottom(12).width(100%).cornerRadius(8)
+            flex.addItem(appleLoginButton).height(50).width(100%).cornerRadius(8)
+            flex.addItem().grow(1)
+            flex.addItem(exploreButton).marginBottom(46.5)
         }
     }
 }

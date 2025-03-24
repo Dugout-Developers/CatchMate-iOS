@@ -7,48 +7,139 @@
 
 import UIKit
 import RxSwift
+import ReactorKit
 
-final class NotiViewController: BaseViewController {
+final class NotiViewController: BaseViewController, View {
+    private let reactor: NotificationListReactor
+    
+    override var useSnapKit: Bool {
+        return true
+    }
+    override var buttonContainerExists: Bool {
+        return false
+    }
     private let tableView = UITableView()
     
+    init(reactor: NotificationListReactor) {
+        self.reactor = reactor
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        reactor.action.onNext(.loadList)
+        reactor.action.onNext(.selectNoti(nil))
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.post(name: .reloadUnreadMessageState, object: nil)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .cmBackgroundColor
         setupUI()
         setupTableView()
-        setupEditTableView()
         setupLeftTitle("알림")
+        bind(reactor: reactor)
     }
-}
-
-// MARK: - TableView 임시: 와이어프레임 확인용 테이블 뷰 데이터소스 및 델리게이트 -> Rx 적용 후 수정 필수
-extension NotiViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "NotiViewTableViewCell", for: indexPath) as? NotiViewTableViewCell else { return UITableViewCell() }
-        return cell
-    }
-    
     private func setupTableView() {
-        tableView.delegate = self
-        tableView.dataSource = self
         tableView.register(NotiViewTableViewCell.self, forCellReuseIdentifier: "NotiViewTableViewCell")
-        tableView.tableHeaderView = UIView()
         tableView.rowHeight = UITableView.automaticDimension
         tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
+    }
+}
+// MARK: - Bind
+extension NotiViewController {
+    func bind(reactor: NotificationListReactor) {
+        reactor.state.map{$0.notifications}
+            .bind(to: tableView.rx.items(cellIdentifier: "NotiViewTableViewCell", cellType: NotiViewTableViewCell.self)) { (row, item, cell) in
+                cell.selectionStyle = .none
+                cell.configData(noti: item)
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.selectedNoti}
+            .compactMap{$0}
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .subscribe { vc, noti in
+                switch noti.type {
+                case .receivedView:
+                    if let boardId = noti.boardId {
+                        let receivedVC = ReceiveMateListViewController(reactor: DIContainerService.shared.makeReciveMateReactor(), id: String(boardId))
+                        
+                        vc.navigationController?.pushViewController(receivedVC, animated: true)
+                    } else {
+                        vc.showToast(message: "문제가 발생했어요")
+                    }
+                case .chatRoom:
+                    vc.navigateToRootAndSwitchTab()
+                case .none:
+                    vc.showCMAlert(titleText: "이미 처리된 알림이에요", importantButtonText: "확인", commonButtonText: nil)
+                case .inquiry:
+                    if let inquiryId = noti.inquiryId {
+                        let inquiryDetailVC = InquiryDetailViewController(inquiryId: inquiryId)
+                        vc.navigationController?.pushViewController(inquiryDetailVC, animated: true)
+                    } else {
+                        vc.showToast(message: "문제가 발생했어요")
+                    }
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        tableView.rx.itemDeleted
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .bind { vc, indexPath in
+                vc.reactor.action.onNext(.deleteNoti(indexPath.row))
+            }
+            .disposed(by: disposeBag)
+        
+        tableView.rx.itemSelected
+            .subscribe { indexPath in
+                let noti = reactor.currentState.notifications[indexPath.row]
+                reactor.action.onNext(.selectNoti(noti))
+            }
+            .disposed(by: disposeBag)
+        
+        tableView.rx.contentOffset
+            .filter { _ in
+                return reactor.currentState.notifications.isEmpty == false
+            }
+            .map { [weak self] _ in
+                guard let self = self else { return false }
+                let offsetY = self.tableView.contentOffset.y
+                let contentHeight = self.tableView.contentSize.height
+                let threshold = contentHeight - self.tableView.frame.size.height - (self.tableView.rowHeight * 4)
+                return offsetY > threshold
+            }
+            .distinctUntilChanged()
+            .filter { $0 }
+            .map { _ in NotificationListReactor.Action.loadNextPage }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     
-    private func setupEditTableView() {
-        tableView.rx.itemDeleted
-          .observe(on: MainScheduler.asyncInstance)
-          .withUnretained(self)
-          .bind { _, indexPath in
-              print("remove \(indexPath.row+1) item")
-          }
-          .disposed(by: self.disposeBag)
+    private func navigateToRootAndSwitchTab() {
+        guard let tabBarController = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .flatMap({ $0.windows })
+            .first(where: { $0.isKeyWindow })?.rootViewController as? UITabBarController else {
+            print("탭바 컨트롤러를 찾을 수 없습니다.")
+            return
+        }
+
+        tabBarController.selectedIndex = 3
+
+        if let navigationController = tabBarController.viewControllers?[3] as? UINavigationController {
+            navigationController.popToRootViewController(animated: false)
+        }
     }
 }
 // MARK: - UI

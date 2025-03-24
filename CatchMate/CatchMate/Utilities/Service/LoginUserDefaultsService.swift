@@ -2,59 +2,71 @@
 //  LoginUserDefaultsService.swift
 //  CatchMate
 //
-//  Created by 방유빈 on 6/30/24.
+//  Created by 방유빈 on 8/7/24.
 //
 
-import Foundation
+import UIKit
+import RxSwift
 
-/// LOGIN 정보 임시 저장 서비스 파일
-final class LoginUserDefaultsService {
-    static let shared = LoginUserDefaultsService()
-   
-    /// 로그인 정보 가져올 시 임시데이터 세팅
-    func setTempStorage(type: LoginType, id: String, email: String) {
-        UserDefaults.standard.setValue(type.rawValue, forKey: LoginKey.typeKey.rawValue)
-        UserDefaults.standard.setValue(id, forKey: LoginKey.id.rawValue)
-        UserDefaults.standard.setValue(email, forKey: LoginKey.email.rawValue)
-    }
-    
-    /// 회원가입 후 정상적으로 서버에 User 정보 저장 시 임시 저장 데이터 삭제
-    func removeTempData(type: LoginType) {
-        UserDefaults.standard.removeObject(forKey: LoginKey.typeKey.rawValue)
-        LoginKey.allCases.forEach { key in
-            UserDefaults.standard.removeObject(forKey: key.rawValue)
-        }
-    }
-    
-    /// 저장된 로그인 정보 가져오기 (nil = 저장된 정보 없거나 온전하지 않음 -> 새로 로그인)
-    func getLoginData() -> LoginData? {
-        guard let typeString = UserDefaults.standard.string(forKey: LoginKey.typeKey.rawValue),
-              let type = LoginType(rawValue: typeString),
-              let id = UserDefaults.standard.string(forKey: LoginKey.id.rawValue),
-              let email = UserDefaults.standard.string(forKey: LoginKey.email.rawValue) else {
-            return nil
-        }
-
-        return LoginData(type: type, id: id, email: email)
-    }
+struct LoginData {
+    let email: String
+    let loginTypeImageName: String
 }
 
-extension LoginUserDefaultsService {
-    struct LoginData {
-        let type: LoginType
-        let id: String
-        let email: String
-    }
-    
-    enum LoginType: String {
-        case kakao
-        case naver
-        case apple
-    }
-    
-    enum LoginKey: String, CaseIterable {
-        case typeKey
-        case id
+final class LoginUserDefaultsService {
+    enum LoginUserDataKeys: String {
         case email
+        case loginTypeImage
+    }
+    
+    enum LoginDataError: LocalizedError {
+        case noLoginData
+        
+        var statusCode: Int {
+            switch self {
+            case .noLoginData:
+                return -9000
+            }
+        }
+        
+        var errorDescription: String? {
+            switch self {
+            case .noLoginData:
+                return "저장된 로그인 데이터가 없음. 재로그인 시도 필요"
+            }
+        }
+    }
+
+    static let shared = LoginUserDefaultsService()
+    
+    func saveLoginData(email: String, loginType: LoginType) {
+        LoggerService.shared.log(level: .debug, "UserData 저장: \(email), \(loginType.rawValue)")
+        UserDefaults.standard.setValue(email, forKey: LoginUserDataKeys.email.rawValue)
+        switch loginType {
+        case .kakao:
+            UserDefaults.standard.setValue("kakaoLogo", forKey: LoginUserDataKeys.loginTypeImage.rawValue)
+        case .naver:
+            UserDefaults.standard.setValue("naverLogo", forKey: LoginUserDataKeys.loginTypeImage.rawValue)
+        case .apple:
+            UserDefaults.standard.setValue("appleLogo", forKey: LoginUserDataKeys.loginTypeImage.rawValue)
+        }
+    }
+    
+    func deleteLoginData() {
+        LoggerService.shared.log(level: .debug, "UserData 삭제")
+        UserDefaults.standard.removeObject(forKey: LoginUserDataKeys.email.rawValue)
+        UserDefaults.standard.removeObject(forKey: LoginUserDataKeys.loginTypeImage.rawValue)
+    }
+    
+    func getLoginData() -> Observable<LoginData> {
+        Observable.create { observer in
+            if let email = UserDefaults.standard.string(forKey: LoginUserDataKeys.email.rawValue), let imageName = UserDefaults.standard.string(forKey: LoginUserDataKeys.loginTypeImage.rawValue) {
+                observer.onNext(LoginData(email: email, loginTypeImageName: imageName))
+                observer.onCompleted()
+            } else {
+                observer.onError(LoginDataError.noLoginData)
+            }
+            return Disposables.create()
+        }
     }
 }

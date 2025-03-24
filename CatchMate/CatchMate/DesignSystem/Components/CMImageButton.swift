@@ -25,5 +25,6 @@ final class CMImageButton: UIButton {
         setAttributedTitle(nil, for: .normal)
         contentVerticalAlignment = .fill
         contentHorizontalAlignment = .fill
+        clipsToBounds = true
     }
 }

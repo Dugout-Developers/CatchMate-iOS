@@ -6,58 +6,102 @@
 //
 
 import UIKit
+import RxSwift
+import ReactorKit
 
-final class AddViewController: BaseViewController {
-    private var selectedGenderLabel: PaddingLabel?
-    private var seletedAgeLabel: PaddingLabel?
+extension Reactive where Base: AddViewController {
+    var selectedDate: Observable<Gender?> {
+        return base._selectedGender.asObservable()
+    }
+    var selectedAge: Observable<[Int]> {
+        return base._selectedAges.asObservable()
+    }
+}
+final class AddViewController: BaseViewController, View {
+    override var useSnapKit: Bool {
+        return false
+    }
+    override var buttonContainerExists: Bool {
+        return true
+    }
+    private let reactor: AddReactor
+    private var isSaved: Bool = false
+    private var placeCount = 0 {
+        didSet {
+            placePicker.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.tiny - CGFloat((2-placeCount)*50), identifier: "PlaceFilter")
+        }
+    }
+    fileprivate var _selectedGender = PublishSubject<Gender?>()
+    fileprivate var _selectedAges = PublishSubject<[Int]>()
+    private var selectedGenderLabel: PaddingLabel? {
+        didSet {
+            if selectedGenderLabel == manButton {
+                _selectedGender.onNext(.man)
+            } else if selectedGenderLabel == womanButton {
+                _selectedGender.onNext(.woman)
+            } else if selectedGenderLabel == noGenderButton {
+                _selectedGender.onNext(Gender.none)
+            } else {
+                _selectedGender.onNext(nil)
+            }
+        }
+    }
+    private var selectedAges: [Int] = [] {
+        didSet {
+            _selectedAges.onNext(selectedAges)
+        }
+    }
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
-    private let titleTextField = CMTextField(placeHolder: "제목을 입력해주세요.")
+    private let infoLabel: UILabel = {
+        let label = UILabel()
+        label.text = "기본 정보"
+        label.textColor = .cmNonImportantTextColor
+        label.applyStyle(textStyle: FontSystem.body02_medium)
+        return label
+    }()
+    private let titleTextField = CMTextField(placeHolder: "제목을 입력해주세요")
     private let numberPickerTextField = CMPickerTextField(rightAccessoryView: {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16)
         label.text = "명"
         label.textColor = UIColor.lightGray
         return label
-    }(), placeHolder: "최대 8", isFlex: true)
+    }(), placeHolder: "본인 포함 인원", isFlex: true)
     
     private let matchInfoLabel: UILabel = {
         let label = UILabel()
         label.text = "경기 정보"
-        label.textColor = .cmTextGray
-        label.font = .systemFont(ofSize: 16)
+        label.textColor = .cmNonImportantTextColor
+        label.applyStyle(textStyle: FontSystem.body02_medium)
         return label
     }()
-    private let datePickerTextField = CMPickerTextField(rightAccessoryView: UIImageView(image: UIImage(systemName: "calendar")), placeHolder: "날짜 선택", isFlex: true)
+    private let datePickerTextField = CMPickerTextField(placeHolder: "경기 날짜 및 시간을 입력해주세요", isFlex: true)
     private let teamSelectedContainerView = UIView()
-    private let homeTeamPicker = CMPickerTextField(placeHolder: "홈 팀",isFlex: true)
-    private let vsLabel: UILabel = {
-        let label = UILabel()
-        label.text = "VS"
-        label.font = .systemFont(ofSize: 14, weight: .semibold)
-        label.textColor = .lightGray
-        return label
-    }()
-    private let awayTeamPicker = CMPickerTextField(placeHolder: "원정 팀",isFlex: true)
-    private let placePicker = CMPickerTextField(placeHolder: "위치", isFlex: true)
+    private let homeTeamPicker = CMPickerTextField(placeHolder: "홈 구단",isFlex: true)
+    private let awayTeamPicker = CMPickerTextField(placeHolder: "원정 구단",isFlex: true)
+    private let cheerTeamPicker = CMPickerTextField(placeHolder: "응원 구단 선택", isFlex: true)
+    private let placePicker = CMPickerTextField(placeHolder: "구장 위치", isFlex: true)
     
     private let textInfoLabel: UILabel = {
         let label = UILabel()
-        let text = "추가 정보 *"
-        let attributedString = NSMutableAttributedString(string: text)
-        attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 16), range: NSRange(location: 0, length: attributedString.length))
-        attributedString.addAttribute(.foregroundColor, value: UIColor.cmTextGray, range: NSRange(location: 0, length: text.count-1))
-        if let lastCharacterRange = text.range(of: String(text.last!)) {
-            let nsRange = NSRange(lastCharacterRange, in: text)
-            attributedString.addAttribute(.foregroundColor, value: UIColor.cmPrimaryColor, range: nsRange)
-        }
-        label.attributedText = attributedString
+        label.text = "추가 정보"
+        label.applyStyle(textStyle: FontSystem.body02_medium)
+        label.textColor = .cmNonImportantTextColor
+        return label
+    }()
+    
+    private let addTextCount: UILabel = {
+        let label = UILabel()
+        label.text = "0/300"
+        label.textColor = .cmNonImportantTextColor
+        label.applyStyle(textStyle: FontSystem.body02_medium)
         return label
     }()
     private let textview: CMTextView = {
         let textView = CMTextView()
-        textView.placeholder = "내용을 입력해주세요."
+        textView.placeholder = "내용을 입력해주세요"
         return textView
     }()
     
@@ -69,28 +113,9 @@ final class AddViewController: BaseViewController {
         return label
     }()
     private let genderButtonContainer = UIView()
-    private let womanButton: PaddingLabel = {
-        let label = PaddingLabel()
-        label.backgroundColor = UIColor(hex: "#F7F8FA")
-        label.textColor = .cmTextGray
-        label.text = "여성"
-        label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        label.layer.cornerRadius = 15
-        label.clipsToBounds = true
-        label.isUserInteractionEnabled = true
-        return label
-    }()
-    private let manButton: PaddingLabel = {
-        let label = PaddingLabel()
-        label.backgroundColor = UIColor(hex: "#F7F8FA")
-        label.textColor = .cmTextGray
-        label.text = "남성"
-        label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        label.layer.cornerRadius = 15
-        label.clipsToBounds = true
-        label.isUserInteractionEnabled = true
-        return label
-    }()
+    private let noGenderButton: PaddingLabel = PaddingLabel(title: "성별 무관")
+    private let womanButton: PaddingLabel = PaddingLabel(title: "여성")
+    private let manButton: PaddingLabel = PaddingLabel(title: "남성")
     
     private let ageLabel: UILabel = {
         let label = UILabel()
@@ -102,21 +127,40 @@ final class AddViewController: BaseViewController {
     private let ageContainer = UIView()
     private let ageButtons: [PaddingLabel] = {
         var labels = [PaddingLabel]()
-        ["10대", "20대", "30대", "40대", "50대 이상"].forEach { age in
-            let label = PaddingLabel()
-            label.backgroundColor = UIColor(hex: "#F7F8FA")
-            label.textColor = .cmTextGray
-            label.text = age
-            label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-            label.layer.cornerRadius = 15
-            label.clipsToBounds = true
-            label.isUserInteractionEnabled = true
+        ["전연령", "10대", "20대", "30대", "40대", "50대 이상"].enumerated().forEach { i, age in
+            let label = PaddingLabel(title: age)
+            label.tag = i
             labels.append(label)
         }
         return labels
     }()
+    private let buttonContainer = UIView()
+    private let registerButton = CMDefaultFilledButton(title: "작성 완료")
     
-    private let registerButton = CMDefaultFilledButton(title: "등록")
+    private let editPost: Post?
+    init(reactor: AddReactor, editPost: Post? = nil) {
+        self.reactor = reactor
+        self.editPost = editPost
+        super.init(nibName: nil, bundle: nil)
+    }
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        if !isSaved{
+            reactor.action.onNext(.loadUser)
+        }
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if isSaved {
+            isSaved.toggle()
+            navigationController?.popViewController(animated: false)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -127,14 +171,27 @@ final class AddViewController: BaseViewController {
         setupGenderButton()
         setupAgeButton()
         setupNavigationBar()
+        bind(reactor: reactor)
+        if let editPost = editPost {
+            reactor.action.onNext(.setupEditPost(post: editPost))
+        }
+        reactor.action.onNext(.loadTempPost)
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if let tabBarController = tabBarController as? TabBarController, !isSaved {
+            tabBarController.isAddView = false
+            tabBarController.selectedIndex = tabBarController.preViewControllerIndex
+        }
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        scrollView.pin.all()
+        scrollView.pin.left().right().top(view.pin.safeArea).above(of: buttonContainer)
+        buttonContainer.pin.left().right().bottom(view.pin.safeArea).height(72)
         contentView.pin.top().left().right()
-        
         contentView.flex.layout(mode: .adjustHeight)
+        buttonContainer.flex.layout()
         scrollView.contentSize = contentView.frame.size
     }
     
@@ -146,110 +203,400 @@ final class AddViewController: BaseViewController {
     private func setupPickerView() {
         // datePicker Setup
         datePickerTextField.parentViewController = self
-        datePickerTextField.pickerViewController = DateFilterViewController(reactor: HomeReactor(), disposeBag: disposeBag)
-        datePickerTextField.customDetent = BasePickerViewController.returnCustomDetent(height: Screen.height / 2.0 + 50.0, identifier: "DateFilter")
+        datePickerTextField.pickerViewController = DateFilterViewController(reactor: reactor, disposeBag: disposeBag, isAddView: true)
+        datePickerTextField.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.dateFilter+90, identifier: "DateFilter")
         
         // numberPicker Setup
         numberPickerTextField.parentViewController = self
-        numberPickerTextField.pickerViewController = NumberPickerViewController()
-        numberPickerTextField.customDetent = BasePickerViewController.returnCustomDetent(height: Screen.height / 3.0 + 10.0, identifier: "NumberFilter")
+        numberPickerTextField.pickerViewController = NumberPickerViewController(reactor: reactor)
+        numberPickerTextField.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.numberFilter, identifier: "NumberFilter")
         
+        // TeamPicker Setup
+        homeTeamPicker.parentViewController = self
+        let homeTeamPickerView = TeamFilterViewController(reactor: reactor)
+        homeTeamPickerView.isHomeTeam = true
+        homeTeamPicker.pickerViewController = homeTeamPickerView
+        homeTeamPicker.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.large, identifier: "HomeTeamFilter")
+        
+        // TeamPicker Setup
+        awayTeamPicker.parentViewController = self
+        let awayteamPickerView = TeamFilterViewController(reactor: reactor)
+        awayteamPickerView.isHomeTeam = false
+        awayTeamPicker.pickerViewController = awayteamPickerView
+        awayTeamPicker.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.large, identifier: "AwayTeamFilter")
+        
+        // PlacePicker Setup
+        placePicker.parentViewController = self
+        placePicker.pickerViewController = PlaceFilterViewController(reactor: reactor)
+        placePicker.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.tiny, identifier: "PlaceFilter")
+    }
+    
+    func cheerTeamPickerSetup(homeTeam: Team, awayTeam: Team) {
+        // PlacePicker Setup
+        cheerTeamPicker.parentViewController = self
+        cheerTeamPicker.pickerViewController = CheerTeamPickerViewController(reactor: reactor, home: homeTeam, away: awayTeam)
+        cheerTeamPicker.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.tiny+65, identifier: "CheerTeamFilter")
     }
     
     private func setupView() {
         view.backgroundColor = .white
-        registerButton.addTarget(self, action: #selector(clickRegisterButton), for: .touchUpInside)
     }
     
     private func setupNavigationBar() {
-        let saveButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.down"), style: .plain, target: self, action: #selector(clickSaveButton))
-        title = "등록"
-        navigationItem.rightBarButtonItem = saveButton
+        if editPost == nil {
+            let saveButton = UIButton()
+            saveButton.setTitle("임시저장", for: .normal)
+            saveButton.applyStyle(textStyle: FontSystem.body02_medium)
+            saveButton.setTitleColor(.cmHeadLineTextColor, for: .normal)
+            saveButton.addTarget(self, action: #selector(clickSaveButton), for: .touchUpInside)
+            customNavigationBar.addRightItems(items: [saveButton])
+        }
+    }
+}
+// MARK: - Bind
+extension AddViewController {
+    private func updateAddTextCount(_ count: Int) {
+        addTextCount.text = "\(count)/300"
+        addTextCount.applyStyle(textStyle: FontSystem.body02_medium)
+        addTextCount.flex.markDirty()
+        contentView.flex.layout(mode: .adjustHeight)
+    }
+    func bind(reactor: AddReactor) {
+        _selectedGender
+            .map{Reactor.Action.changeGender($0)}
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        _selectedAges
+            .map{Reactor.Action.changeAge($0)}
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        registerButton.rx.tap
+            .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
+            .withUnretained(self)
+            .subscribe(onNext: { vc, _ in
+                if vc.editPost != nil {
+                    reactor.action.onNext(.updateEditPost)
+                } else {
+                    reactor.action.onNext(.updatePost)
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        titleTextField.rx.text.orEmpty
+            .map { Reactor.Action.changeTitle($0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        textview.rx.text.orEmpty
+            .distinctUntilChanged()
+            .map { text in
+                let string = String(text.prefix(300))
+                return string
+            }
+            .map { Reactor.Action.changeAddText($0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.savePostResult}
+            .distinctUntilChanged()
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, postId in
+                vc.postSavedSuccessfully(postId: "\(postId)")
+            }
+            .disposed(by: disposeBag)
+
+        reactor.state.map{$0.dateInfoString}
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .subscribe { vc, text in
+                vc.datePickerTextField.updateDateText(text)
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.homeTeam}
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .subscribe { vc, team in
+                if let team = team {
+                    vc.placePicker.isDisable = false
+                    vc.homeTeamPicker.didSelectItem(team.rawValue)
+                    vc.placePicker.didSelectItem(team.place?[0] ?? "")
+                    if let count = team.place?.count{
+                        vc.placeCount = count
+                    }
+                } else {
+                    vc.placePicker.isDisable = true
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.awayTeam}
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .subscribe { vc, team in
+                if let team = team {
+                    vc.awayTeamPicker.didSelectItem(team.rawValue)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.cheerTeam}
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .subscribe { vc, team in
+                if let team = team {
+                    vc.cheerTeamPicker.didSelectItem(team.rawValue)
+                } else {
+                    vc.cheerTeamPicker.didSelectItem("")
+                }
+            }
+            .disposed(by: disposeBag)
+        reactor.state.map{$0.isDisableCheerTeamPicker}
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .subscribe { vc, state in
+                vc.cheerTeamPicker.isDisable = state
+                if let home = reactor.currentState.homeTeam, let away = reactor.currentState.awayTeam {
+                    vc.cheerTeamPickerSetup(homeTeam: home, awayTeam: away)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.place}
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .subscribe { vc, place in
+                if let place = place {
+                    vc.placePicker.didSelectItem(place)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.partyNumber}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, num in
+                vc.numberPickerTextField.didSelectItem(String(num))
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.title}
+            .distinctUntilChanged()
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, text in
+                vc.titleTextField.text = text
+                vc.titleTextField.updateTextStyle()
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.addText}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, text in
+                vc.textview.text = text
+                vc.textview.updateTextStyle()
+                vc.updateAddTextCount(text.count)
+                
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.selectedAge}
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .subscribe { vc, ages in
+                vc.ageButtons.forEach { label in
+                    label.isSelected = ages.contains(label.tag * 10)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.selectedGender}
+            .distinctUntilChanged()
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, gender in
+                switch gender {
+                case .woman:
+                    vc.noGenderButton.isSelected = false
+                    vc.manButton.isSelected = false
+                    vc.womanButton.isSelected = true
+                case .man:
+                    vc.noGenderButton.isSelected = false
+                    vc.manButton.isSelected = true
+                    vc.womanButton.isSelected = false
+                case .none:
+                    vc.noGenderButton.isSelected = true
+                    vc.manButton.isSelected = false
+                    vc.womanButton.isSelected = false
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.tempPostResult}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                vc.dismiss(animated: true) { [weak self] in
+                    guard let self = self else { return }
+                    showToast(message: "임시저장이 완료되었어요", buttonContainerExists: true) { [weak self] in
+                        self?.navigationController?.popViewController(animated: true)
+                    }
+                }
+            }
+            .disposed(by: disposeBag)
+        reactor.state.map{$0.error}
+            .compactMap{$0}
+            .withUnretained(self)
+            .subscribe { vc, error in
+                vc.handleError(error)
+            }
+            .disposed(by: disposeBag)
+        reactor.state.map{ $0.loadTempPost != nil }
+            .distinctUntilChanged()
+            .filter { $0 }
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                vc.showCMAlert(titleText: "임시저장된 글을 불러올까요?", importantButtonText: "불러오기", commonButtonText: "새로작성", importantAction:  { [weak self] in
+                    self?.reactor.action.onNext(.setTempPost)
+                })
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    // 작성 완료 후 호출되는 메소드
+    private func postSavedSuccessfully(postId: String) {
+        let postDetailVC = PostDetailViewController(postID: postId, isAddView: true)
+        if let navigationController = self.navigationController {
+            isSaved = true
+            if reactor.currentState.editPost != nil {
+                var viewControllers = navigationController.viewControllers
+                if let index = viewControllers.firstIndex(where: { $0 is AddViewController }), let detail = viewControllers.firstIndex(where: { $0 is PostDetailViewController }) {
+                    viewControllers.remove(at: index)
+                    viewControllers.remove(at: detail)
+                }
+                navigationController.viewControllers = viewControllers
+            }
+            navigationController.pushViewController(postDetailVC, animated: true)
+        }
     }
 }
 // MARK: - Button
 extension AddViewController {
-    @objc
-    private func clickSaveButton(_ sender: UIBarButtonItem) {
-        print("임시 저장")
+    @objc private func clickSaveButton(_ sender: UIButton) {
+        showCMAlert(titleText: "작성 중인 글을 임시저장할까요?", importantButtonText: "임시저장", commonButtonText: "나가기") { [weak self] in
+            self?.reactor.action.onNext(.tempPost)
+        } commonAction: { [weak self] in
+            self?.dismiss(animated: true, completion: {
+                self?.navigationController?.popViewController(animated: true)
+            })
+        }
     }
-    
-    @objc
-    func clickRegisterButton(_ sender: UIButton) {
-        print("등록")
-    }
+
     private func setupGenderButton() {
         let tapGesture1 = UITapGestureRecognizer(target: self, action: #selector(clickGenderButton))
-        womanButton.addGestureRecognizer(tapGesture1)
-        
         let tapGesture2 = UITapGestureRecognizer(target: self, action: #selector(clickGenderButton))
-        manButton.addGestureRecognizer(tapGesture2)
+        let tapGesture3 = UITapGestureRecognizer(target: self, action: #selector(clickGenderButton))
+        noGenderButton.addGestureRecognizer(tapGesture1)
+        womanButton.addGestureRecognizer(tapGesture2)
+        manButton.addGestureRecognizer(tapGesture3)
     }
     
     @objc private func clickGenderButton(_ gesture: UITapGestureRecognizer) {
         guard let tappedLabel = gesture.view as? PaddingLabel else { return }
-        
-        if selectedGenderLabel != nil {
-            selectedGenderLabel?.backgroundColor = UIColor(hex: "#F7F8FA")
-            selectedGenderLabel?.textColor = .cmTextGray
-        }
-        
-        if selectedGenderLabel == tappedLabel {
+        if tappedLabel == selectedGenderLabel {
             selectedGenderLabel = nil
         } else {
-            tappedLabel.backgroundColor = .cmPrimaryColor
-            tappedLabel.textColor = .white
             selectedGenderLabel = tappedLabel
         }
     }
     
     private func setupAgeButton() {
         ageButtons.forEach { ageButton in
-            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(clickGenderButton))
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(clickAgeButton))
             ageButton.addGestureRecognizer(tapGesture)
         }
     }
     
-    @objc private func clicAgeButton(_ gesture: UITapGestureRecognizer) {
+    @objc private func clickAgeButton(_ gesture: UITapGestureRecognizer) {
         guard let tappedLabel = gesture.view as? PaddingLabel else { return }
-        
-        if selectedGenderLabel != nil {
-            selectedGenderLabel?.backgroundColor = UIColor(hex: "#F7F8FA")
-            selectedGenderLabel?.textColor = .cmTextGray
-        }
-        
-        if selectedGenderLabel == tappedLabel {
-            selectedGenderLabel = nil
-        } else {
-            tappedLabel.backgroundColor = .cmPrimaryColor
-            tappedLabel.textColor = .white
-            selectedGenderLabel = tappedLabel
+        if tappedLabel.tag == 0 {
+            if ageButtons[0].isSelected {
+                selectedAges = []
+                ageButtons[0].isSelected = false
+            } else {
+                selectedAges = [0]
+                ageButtons[0].isSelected = true
+                ageButtons[1...].forEach { label in
+                    label.isSelected = false
+                }
+            }
+        }else {
+            ageButtons[0].isSelected = false
+            if let index = selectedAges.firstIndex(of: tappedLabel.tag * 10) {
+                tappedLabel.isSelected = false
+                selectedAges.remove(at: index)
+            } else {
+                tappedLabel.isSelected = true
+                selectedAges.append(tappedLabel.tag * 10)
+                if selectedAges.count == 5 {
+                    selectedAges = []
+                    ageButtons[0].isSelected = true
+                    ageButtons[1...].forEach { label in
+                        label.isSelected = false
+                    }
+                }
+            }
         }
     }
 }
 // MARK: - UI
 extension AddViewController {
     private func setupUI() {
-        view.addSubview(scrollView)
+        view.addSubviews(views: [scrollView, buttonContainer])
         scrollView.addSubview(contentView)
         contentView.flex.paddingHorizontal(18).define { flex in
             flex.addItem().direction(.column).define { flex in
+                flex.addItem().direction(.row).justifyContent(.start).alignItems(.center).define { flex in
+                    let requiredMark = UIImageView(image: UIImage(named: "requiredMark"))
+                    requiredMark.contentMode = .scaleAspectFit
+                    flex.addItem(infoLabel).marginRight(3)
+                    flex.addItem(requiredMark).size(6)
+                }
                 flex.addItem(titleTextField).marginVertical(12)
                 flex.addItem(numberPickerTextField).marginBottom(32)
                 flex.addItem(numberPickerTextField).marginBottom(32)
                 
-                flex.addItem(matchInfoLabel).marginBottom(16)
-                flex.addItem(datePickerTextField).marginBottom(12)
+                flex.addItem().direction(.row).justifyContent(.start).alignItems(.center).define { flex in
+                    let requiredMark = UIImageView(image: UIImage(named: "requiredMark"))
+                    requiredMark.contentMode = .scaleAspectFit
+                    flex.addItem(matchInfoLabel).marginRight(3)
+                    flex.addItem(requiredMark).size(6)
+                }.marginBottom(12)
+                flex.addItem(datePickerTextField).marginBottom(8)
                 flex.addItem(teamSelectedContainerView).direction(.row).justifyContent(.spaceBetween).alignItems(.center).define { flex in
-                    flex.addItem(homeTeamPicker).grow(1)
-                    flex.addItem(vsLabel).marginHorizontal(17)
+                    flex.addItem(homeTeamPicker).grow(1).marginRight(9)
                     flex.addItem(awayTeamPicker).grow(1)
-                }.marginBottom(32)
-                flex.addItem(textInfoLabel).marginBottom(12)
+                }.marginBottom(8)
+                flex.addItem(cheerTeamPicker).marginBottom(8)
+                flex.addItem(placePicker).marginBottom(32)
+                flex.addItem().direction(.row).justifyContent(.spaceBetween).alignItems(.center).define {flex in
+                    flex.addItem().direction(.row).justifyContent(.start).alignItems(.center).define { flex in
+                        let requiredMark = UIImageView(image: UIImage(named: "requiredMark"))
+                        requiredMark.contentMode = .scaleAspectFit
+                        flex.addItem(textInfoLabel).marginRight(3)
+                        flex.addItem(requiredMark).size(6)
+                    }
+                    flex.addItem(addTextCount)
+                }.marginBottom(12)
                 flex.addItem(textview).height(156).marginBottom(16)
                 flex.addItem(genderLabel).marginBottom(12)
                 flex.addItem(genderButtonContainer).direction(.row).justifyContent(.start).alignItems(.start).define { flex in
-                    flex.addItem(womanButton).marginRight(12)
+                    flex.addItem(noGenderButton)
+                    flex.addItem(womanButton).marginHorizontal(12)
                     flex.addItem(manButton)
                 }.marginBottom(32)
                 flex.addItem(ageLabel).marginBottom(12)
@@ -258,8 +605,10 @@ extension AddViewController {
                         flex.addItem(ageButton).marginRight(12).marginBottom(12)
                     }
                 }.marginBottom(60)
-                flex.addItem(registerButton).height(50).marginBottom(27)
             }
+        }
+        buttonContainer.flex.direction(.row).marginHorizontal(ButtonGridSystem.getMargin()).alignItems(.center).justifyContent(.center).paddingBottom(34).define { flex in
+            flex.addItem(registerButton).grow(1).height(52)
         }
     }
 }

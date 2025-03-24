@@ -10,10 +10,15 @@ import RxSwift
 import FlexLayout
 import PinLayout
 
-class NonMembersAccessViewController: UIViewController {
-    private let disposeBag = DisposeBag()
+class NonMembersAccessViewController: BaseViewController {
+    private let navTitle: String
     private let containerView = UIView()
-    
+    override var useSnapKit: Bool {
+        return false
+    }
+    override var buttonContainerExists: Bool {
+        return false
+    }
     private let infoLabel: UILabel = {
         let label = UILabel()
         label.text = "회원 전용 페이지 입니다.\n로그인을 진행해주세요."
@@ -31,10 +36,11 @@ class NonMembersAccessViewController: UIViewController {
         button.tintColor = .clear
         return button
     }()
-    
+
+
     init(title: String) {
+        self.navTitle = title
         super.init(nibName: nil, bundle: nil)
-        setupView(title: title)
     }
     
     @available(*, unavailable)
@@ -44,13 +50,14 @@ class NonMembersAccessViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupView()
         setupUI()
         bind()
     }
     
-    private func setupView(title: String) {
+    private func setupView() {
         view.backgroundColor = .cmBackgroundColor
-        configNavigationLeftTitle(title)
+        setupLeftTitle(navTitle)
     }
     
     override func viewDidLayoutSubviews() {
@@ -63,8 +70,9 @@ class NonMembersAccessViewController: UIViewController {
         signInPageButton.rx.tap
             .withUnretained(self)
             .subscribe { _, _ in
-                let reactor = DIContainerService.shared.makeSignReactor()
-                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(SignInViewController(reactor: reactor), animated: true)
+                let signReactorResult = DIContainerService.shared.makeAuthReactor()
+                let signInViewController = SignInViewController(reactor: signReactorResult)
+                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(signInViewController, animated: true)
             }
             .disposed(by: disposeBag)
     }

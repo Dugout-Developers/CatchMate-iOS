@@ -10,73 +10,46 @@ import PinLayout
 import FlexLayout
 
 final class ChatListTableViewCell: UITableViewCell {
-    private var newMessageCount: Int = 2
-    
-    private let containerView = UIView()
+    private var newChat: Bool = false
+    private var newMessageCount: Int = 0
+    let containerView = UIView()
     private let chatImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.layer.cornerRadius = 6
         imageView.clipsToBounds = true
-        imageView.image = UIImage(named: "profile")
+        imageView.layer.cornerRadius = 8
         return imageView
     }()
     
-    private let chatInfoContainerView = UIView()
     private let postTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "카리나 시구 보러 같이 가실 분"
-        label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 1
-        label.font = .systemFont(ofSize: 16)
-        label.textColor = .cmTextGray
+        label.textColor = .cmHeadLineTextColor
         return label
     }()
     
     private let lastChatLabel: UILabel = {
         let label = UILabel()
-        label.text = "저 롯데팬은 아니고 카리나만 보러 가고 싶은데 혹시 괜찮으실까요?"
         label.numberOfLines = 1
-        label.font = .systemFont(ofSize: 12)
-        label.textColor = UIColor(hex: "#9F9F9F")
-        label.lineBreakMode = .byTruncatingTail
+        label.textColor = .grayScale600
         return label
     }()
     
-    private let subInfoContainerView = UIView()
     private let peopleNumLabel: UILabel = {
         let label = UILabel()
-        label.text = "3명"
-        label.numberOfLines = 1
-        label.font = .systemFont(ofSize: 12)
-        label.textColor = UIColor(hex: "#9F9F9F")
+        label.textColor = .cmNonImportantTextColor
         return label
     }()
-    private let dotView: UIView = {
-        let view = UIView()
-        view.clipsToBounds = true
-        view.backgroundColor = UIColor(hex: "#9F9F9F")
-        view.layer.cornerRadius = 1
-        return view
-    }()
+
     private let lastChatDateLabel: UILabel = {
         let label = UILabel()
-        label.text = "59분전"
         label.numberOfLines = 1
-        label.font = .systemFont(ofSize: 12)
-        label.textColor = UIColor(hex: "#9F9F9F")
+        label.textColor = .cmNonImportantTextColor
         return label
     }()
-    private let notiBadge: UILabel = {
-        let label = UILabel()
-        label.text = "2"
-        label.font = .systemFont(ofSize: 10)
-        label.textColor = .white
-        label.backgroundColor = .cmPrimaryColor
-        label.textAlignment = .center
-        label.clipsToBounds = true
-        return label
-    }()
+
+    private let notiBadge: BadgeLabel = BadgeLabel()
+    private let divider = UIView()
     
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -85,44 +58,140 @@ final class ChatListTableViewCell: UITableViewCell {
         setupUI()
         
     }
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        containerView.pin.all()
+        containerView.flex.layout(mode: .adjustHeight)
+    }
+    
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
+        containerView.pin.width(size.width)
+        containerView.flex.layout(mode: .adjustHeight)
+        return CGSize(width: size.width, height: containerView.frame.height)
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        postTitleLabel.text = ""
+        peopleNumLabel.text = ""
+        lastChatDateLabel.text = ""
+        lastChatLabel.text = ""
+        notiBadge.isHidden = false
+        notiBadge.text = ""
+
+        containerView.flex.layout(mode: .adjustHeight)
+    }
     
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        containerView.pin.all()
-        containerView.flex.layout()
-    }
-    override func sizeThatFits(_ size: CGSize) -> CGSize {
-        containerView.pin.width(size.width)
+  
+    func configData(chat: ChatListInfo) {
+        let defaultImage = chat.postInfo.cheerTeam.getFillImage
+        ImageLoadHelper.loadImage(chatImageView, pictureString: chat.chatImage, defaultImage: defaultImage)
+        postTitleLabel.text = chat.postInfo.title
+        newChat = chat.newChat
+        lastChatLabel.text = (chat.lastMessage.isEmpty ? "채팅을 시작해보세요." : chat.lastMessage)
+        newMessageCount = chat.notReadCount
+        notiBadge.setBadgeCount(newMessageCount)
+        notiBadge.isHidden = newMessageCount == 0 ? true : false
+        lastChatDateLabel.text = chat.lastTimeAgo
+        
+        // Style
+        postTitleLabel.applyStyle(textStyle: FontSystem.body01_medium)
+        postTitleLabel.lineBreakMode = .byTruncatingTail
+        lastChatLabel.applyStyle(textStyle: FontSystem.body02_medium)
+        lastChatLabel.lineBreakMode = .byTruncatingTail
+        notiBadge.applyStyle(textStyle: FontSystem.bedgeText)
+        lastChatDateLabel.applyStyle(textStyle: FontSystem.caption01_medium)
+        if newChat {
+            peopleNumLabel.text = "New"
+            peopleNumLabel.textColor = .cmPrimaryColor
+        } else {
+            peopleNumLabel.text = String(chat.currentPerson)
+            peopleNumLabel.textColor = .cmNonImportantTextColor
+        }
+        peopleNumLabel.applyStyle(textStyle: FontSystem.caption01_medium)
+        postTitleLabel.flex.markDirty()
+        peopleNumLabel.flex.markDirty()
+        lastChatDateLabel.flex.markDirty()
+        lastChatLabel.flex.markDirty()
+        notiBadge.flex.markDirty()
         containerView.flex.layout(mode: .adjustHeight)
-        return CGSize(width: size.width, height: containerView.frame.height)
     }
 }
 
 // MARK: - UI
 extension ChatListTableViewCell {
     private func setupUI() {
-        addSubview(containerView)
-        
-        containerView.flex.direction(.row).paddingVertical(16).justifyContent(.spaceBetween).alignItems(.center).define { flex in
-            flex.addItem(chatImageView).size(64).marginRight(10)
-            flex.addItem(chatInfoContainerView).direction(.column).justifyContent(.start).alignItems(.start).grow(1).shrink(1).define { flex in
-                flex.addItem(postTitleLabel)
-                flex.addItem(lastChatLabel).marginTop(4).marginBottom(12)
-                flex.addItem(subInfoContainerView).direction(.row).justifyContent(.start).alignItems(.center).define { flex in
-                    flex.addItem(peopleNumLabel)
-                    flex.addItem(dotView).size(2).marginHorizontal(4)
-                    flex.addItem(lastChatDateLabel)
+        contentView.addSubview(containerView)
+        containerView.flex.direction(.column).width(100%).paddingTop(16).define { flex in
+            flex.addItem().direction(.row).width(100%).alignItems(.center).define { flex in
+                flex.addItem(chatImageView).size(52)
+                flex.addItem().direction(.column).grow(1).shrink(1).marginLeft(12).define { flex in
+                    flex.addItem().direction(.row).define { flex in
+                        flex.addItem().direction(.row).define { flex in
+                            flex.addItem(postTitleLabel).shrink(1)
+                            flex.addItem(peopleNumLabel).grow(1).marginLeft(5)
+                        }.grow(1).shrink(1)
+                        flex.addItem(lastChatDateLabel).marginLeft(35)
+                    }.marginBottom(5)
+                    flex.addItem().direction(.row).define { (flex) in
+                        flex.addItem(lastChatLabel).grow(1).shrink(1)
+                        
+                        flex.addItem(notiBadge).alignSelf(.center).marginLeft(35)
+                        
+                    }
                 }
-            }
-            if newMessageCount > 0 {
-                flex.addItem(notiBadge).size(18).cornerRadius(9).marginLeft(10)
-            }
+            }.marginBottom(12)
+            flex.addItem(divider).height(1).width(100%).backgroundColor(.cmStrokeColor)
         }
     }
 }
 
+class BadgeLabel: UILabel {
+    let height: CGFloat = 20
+    override var text: String? {
+        didSet {
+            self.applyStyle(textStyle: FontSystem.bedgeText)
+            layoutIfNeeded()
+        }
+    }
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupUI()
+    }
+
+    private func setupUI() {
+        self.textAlignment = .center
+        self.textColor = .white
+        self.backgroundColor = .cmPrimaryColor
+        self.layer.masksToBounds = true
+    }
+
+    /// 읽지 않은 메시지 개수 설정
+    func setBadgeCount(_ count: Int) {
+        let badgeText = count > 999 ? "999+" : "\(count)"
+        self.text = badgeText
+        if count < 10 {
+            // 1~9: 원형 유지
+            self.flex.width(height).height(height)
+            self.layer.cornerRadius = height / 2
+        } else {
+            // 10 이상: 가로로 늘어난 타원
+            self.sizeToFit()
+            let width = max(self.frame.width + 14, height) // 최소 가로 길이 유지
+            self.flex.width(width).height(height)
+            self.layer.cornerRadius = height / 2
+        }
+        
+        self.flex.markDirty()
+    }
+}
 

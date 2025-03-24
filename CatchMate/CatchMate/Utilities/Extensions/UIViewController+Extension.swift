@@ -6,83 +6,49 @@
 //
 
 import UIKit
+import SnapKit
+import FlexLayout
+import PinLayout
 
 extension UIViewController {
-    /// Title leftBarButton
-    func configNavigationLeftTitle(_ title: String) {
-        let label = UILabel()
-        label.text = title
-        label.font = .systemFont(ofSize: 20)
-        label.textColor = .cmTextGray
-        
-        let leftItem = UIBarButtonItem(customView: label)
-        let height: CGFloat = 24
-        leftItem.customView?.snp.makeConstraints({ make in
-            make.height.equalTo(height)
-        })
-        
-        self.navigationItem.leftBarButtonItem = leftItem
-    }
-    /// logo leftBarButton
-    func configNavigationLogo() {
-        let image = UIImage(named: "navigationLogo")
-        let logoView = UIImageView(image: image)
-        
-        
-        let leftItem = UIBarButtonItem(customView: logoView)
-        let height: CGFloat = 24
-        leftItem.customView?.snp.makeConstraints({ make in
-            make.height.equalTo(height)
-            make.width.equalTo(image?.getRatio(height: height) ?? 0)
-        })
-        
-        leftItem.isEnabled = false
-        self.navigationItem.leftBarButtonItem = leftItem
-    }
     
-    /// 네비게이션 뒤로가기 버튼
-    /// -> 사용방법: a에서 b로 이동한다면 a에서 선언
-    func configNavigationBackButton(_ text: String = "") {
-        let backImage = UIImage(named: "left")
-        let backButton = UIButton(type: .custom)
-        backButton.setImage(backImage, for: .normal)
-        backButton.setTitle(text, for: .normal)
-        backButton.setTitleColor(.cmHeadLineTextColor, for: .normal)
-        backButton.sizeToFit()
+    func showToast(message: String, buttonContainerExists: Bool = false, isTab: Bool = false, completion: (() -> Void)? = nil) {
+        let toastLabel = CMToastMessageLabel(message: message)
         
-        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        // 토스트 메시지의 최대 너비를 설정
+        let maxWidth = self.view.frame.width - 32 // 좌우 여백 16씩
 
-        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: backButton.frame.width + 18, height: 20))
-        backButton.frame.origin.x = 18
-        // 기본 바버튼 여백 제거 = 기본 iOS 백버튼 여백 16
-        let negativeSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        negativeSpacer.width = -16
-        containerView.addSubview(backButton)
+        let containerWidth = maxWidth
+        let labelSize = toastLabel.sizeThatFits(CGSize(width: maxWidth - 20, height: CGFloat.greatestFiniteMagnitude)) // 20은 레이블 좌우 여백
+        let containerHeight = labelSize.height + 24 // 레이블 상하 여백 12씩 추가
         
-        let backBarButtonItem = UIBarButtonItem(customView: containerView)
+        // 컨테이너 뷰의 프레임 설정
+        let toastContainerView = UIView(frame: CGRect(x: 0, y: 0, width: containerWidth, height: containerHeight))
+        toastContainerView.backgroundColor = .clear
+        toastContainerView.addSubview(toastLabel)
         
-        self.navigationItem.leftBarButtonItems = [negativeSpacer, backBarButtonItem]
-    }
-    // 백 버튼의 액션
-    @objc func backButtonTapped() {
-        self.navigationController?.popViewController(animated: true)
-    }
+        // 레이블의 프레임 설정
+        toastLabel.frame = CGRect(x: 16, y: 0, width: maxWidth, height: labelSize.height)
 
-    
-    /// 네비게이션 뒤로가기 버튼 숨기기
-    /// -> 사용방법: a에서 b로 이동한다면 a에서 선언
-    func hideNavigationBackButton() {
-        self.navigationItem.hidesBackButton = true
-    }
-    
-    /// 네비게이션 safeArea 까지의 배경색 설정
-    func configNavigationBgColor(backgroundColor: UIColor = .cmBackgroundColor) {
-        let navigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.backgroundColor = backgroundColor
-        navigationBarAppearance.shadowColor = .clear // 밑줄 제거
-        navigationBarAppearance.shadowImage = UIImage() // 밑줄 제거
-        navigationController?.navigationBar.standardAppearance = navigationBarAppearance
-        navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        let safeAreaBottom = self.view.safeAreaInsets.bottom
+        // 토스트 메시지의 위치 설정
+        if buttonContainerExists {
+            toastContainerView.frame.origin.y = self.view.frame.height - containerHeight - 72 - safeAreaBottom
+        } else {
+            let tabHeight = isTab ? (self.tabBarController?.tabBar.frame.height ?? 0) : 0
+            toastContainerView.frame.origin.y = self.view.safeAreaInsets.bottom + self.view.frame.height - containerHeight - 12 - safeAreaBottom - tabHeight
+        }
+        
+        // 컨테이너 뷰를 메인 뷰에 추가
+        self.view.addSubview(toastContainerView)
+        
+        // 애니메이션을 통해 1초 후에 사라지게 설정
+        UIView.animate(withDuration: 0.5, delay: 1.0, options: .curveEaseOut, animations: {
+            toastContainerView.alpha = 0.0
+        }) { (_) in
+            toastContainerView.removeFromSuperview()
+            completion?()
+        }
     }
     
     /// 알림창 띄우기
@@ -99,6 +65,44 @@ extension UIViewController {
         alert.addAction(yes)
         
         present(alert, animated: true, completion: nil)
+    }
+    
+    // MARK: - 키보드 올라갈 때 뷰 설정 관련
+    // 키보드 노티피케이션 등록
+    func registerKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    // 키보드 노티피케이션 해제
+    func unregisterKeyboardNotifications() {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    // 키보드가 나타날 때 호출되는 함수
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        adjustViewForKeyboard(notification: notification, isShowing: true)
+    }
+    
+    // 키보드가 사라질 때 호출되는 함수
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        adjustViewForKeyboard(notification: notification, isShowing: false)
+    }
+    
+    // 뷰 위치 조정 함수
+    private func adjustViewForKeyboard(notification: Notification, isShowing: Bool) {
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+              let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double else {
+            return
+        }
+        
+        let changeInHeight = isShowing ? keyboardFrame.height : 0
+        
+        UIView.animate(withDuration: animationDuration) {
+            self.view.frame.origin.y = -changeInHeight
+        }
     }
 }
 

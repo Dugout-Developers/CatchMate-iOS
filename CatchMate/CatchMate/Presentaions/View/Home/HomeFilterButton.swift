@@ -9,20 +9,21 @@ import UIKit
 import FlexLayout
 import PinLayout
 
-final class HomeFilterButton: UIButton {
+final class OptionButtonView: UIButton {
     private let containerView = UIView()
     private let iconImageView = UIImageView()
+    private let titleText: String
     private let filterTitleLabel = UILabel()
-    private let valueLabel = UILabel()
     var filterValue: String? {
         didSet {
-            setupValue(filterValue)
+            updateView(filterValue)
         }
     }
     private(set) var filterType: Filter
     
-    init(icon: UIImage?, title: String, filter: Filter) {
+    init(icon: UIImage? = UIImage(named: "cm20down_filled"), title: String, filter: Filter) {
         self.filterType = filter
+        self.titleText = title
         super.init(frame: .zero)
         setupButton()
         setupData(icon: icon, title: title)
@@ -32,35 +33,54 @@ final class HomeFilterButton: UIButton {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         self.filterType = .none
+        self.titleText = ""
         super.init(coder: coder)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        if let value = filterValue, !value.isEmpty {
+            filterTitleLabel.textColor = .cmPrimaryColor
+        } else {
+            filterTitleLabel.textColor = .cmBodyTextColor
+        }
         containerView.pin.all()
         containerView.flex.layout()
     }
     
-    private func setupValue(_ value: String?) {
-        valueLabel.text = value
-        valueLabel.textColor = .cmPrimaryColor
-        valueLabel.applyStyle(textStyle: FontSystem.body03_medium)
-        setNeedsLayout()
-        layoutIfNeeded()
+    private func updateView(_ value: String?) {
+        if let value = value, !value.isEmpty {
+            filterTitleLabel.text = value
+            filterTitleLabel.textColor = .cmPrimaryColor
+            filterTitleLabel.applyStyle(textStyle: FontSystem.body03_medium)
+            iconImageView.image = UIImage(named: "cm20down_filled")?.withTintColor(.cmPrimaryColor, renderingMode: .alwaysOriginal)
+            backgroundColor = .clear
+            layer.borderWidth = 1
+        } else {
+            filterTitleLabel.text = titleText
+            filterTitleLabel.textColor = .cmBodyTextColor
+            filterTitleLabel.applyStyle(textStyle: FontSystem.body03_medium)
+            iconImageView.image = UIImage(named: "cm20down_filled")?.withTintColor(.cmBodyTextColor, renderingMode: .alwaysOriginal)
+            backgroundColor = .white
+            layer.borderWidth = 0
+        }
+        filterTitleLabel.flex.markDirty()
+        containerView.flex.layout()
     }
     
     private func setupButton() {
         // 버튼 스타일 설정
         backgroundColor = UIColor.white
         layer.cornerRadius = 8
-        tintColor = .cmPrimaryColor
+        layer.borderColor = UIColor.cmPrimaryColor.cgColor
+        layer.borderWidth = 0
         self.addTarget(self, action: #selector(buttonPressed), for: [.touchDown, .touchDragInside])
         self.addTarget(self, action: #selector(buttonReleased), for: [.touchUpInside, .touchUpOutside, .touchCancel])
     }
     
     private func setupData(icon: UIImage?, title: String) {
         // 아이콘 설정
-        iconImageView.image = icon
+        iconImageView.image = icon?.withTintColor(.grayScale700, renderingMode: .alwaysOriginal)
         iconImageView.contentMode = .scaleAspectFit
         iconImageView.tintColor = .grayScale700
         
@@ -73,10 +93,9 @@ final class HomeFilterButton: UIButton {
     private func setupUI() {
         addSubview(containerView)
         containerView.isUserInteractionEnabled = false
-        containerView.flex.direction(.row).alignItems(.center).paddingHorizontal(10).paddingVertical(11).define { flex in
+        containerView.flex.direction(.row).alignItems(.center).paddingHorizontal(16).paddingVertical(12).define { flex in
+            flex.addItem(filterTitleLabel).marginRight(4)
             flex.addItem(iconImageView).size(20)
-            flex.addItem(filterTitleLabel).marginLeft(8)
-            flex.addItem(valueLabel).marginLeft(8)
         }
     }
     

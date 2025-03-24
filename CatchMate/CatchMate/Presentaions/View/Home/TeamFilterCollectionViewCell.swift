@@ -7,21 +7,28 @@
 
 import UIKit
 import SnapKit
+import RxSwift
 
 final class TeamFilterCollectionViewCell: UICollectionViewCell {
-    private var team: Team?
-    private var isSelect: Bool = false
+    var team: Team?
+    var isSelect: Bool = false {
+        didSet {
+            clickImage()
+        }
+    }
     private let teamLogoImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = .clear
-        imageView.contentMode = .scaleToFill
+        imageView.backgroundColor = .grayScale50
+        imageView.contentMode = .scaleAspectFit
+        imageView.layer.cornerRadius = 8
+        imageView.clipsToBounds = true
+        imageView.layer.borderColor = UIColor.cmPrimaryColor.cgColor
         return imageView
     }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(clickImage))
-        addGestureRecognizer(tapGesture)
     }
     
     @available(*, unavailable)
@@ -29,17 +36,17 @@ final class TeamFilterCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupData(team: Team) {
+    func setupData(team: Team, isSelect: Bool) {
         self.team = team
-        teamLogoImage.image = team.getDefaultsImage
+        teamLogoImage.image = team.getLogoImage
+        self.isSelect = isSelect
     }
-    @objc
-    private func clickImage() {
-        isSelect.toggle()
+    
+   private func clickImage() {
         if isSelect {
-            teamLogoImage.image = team?.getFillImage
+            teamLogoImage.layer.borderWidth = 1
         } else {
-            teamLogoImage.image = team?.getDefaultsImage
+            teamLogoImage.layer.borderWidth = 0
         }
     }
     

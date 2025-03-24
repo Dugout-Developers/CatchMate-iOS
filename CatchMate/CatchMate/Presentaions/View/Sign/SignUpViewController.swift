@@ -14,13 +14,18 @@ import RxCocoa
 
 final class SignUpViewController: BaseViewController, View {
     var reactor: SignReactor
-
+    override var useSnapKit: Bool {
+        return false
+    }
+    override var buttonContainerExists: Bool {
+        return true
+    }
     private let containerView = UIView()
     private let titleLabel1: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
         label.text = "딱맞는 직관 친구를 구하기 위해"
-        label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
         label.applyStyle(textStyle: FontSystem.highlight)
         label.textColor = .cmHeadLineTextColor
         return label
@@ -29,7 +34,7 @@ final class SignUpViewController: BaseViewController, View {
         let label = UILabel()
         label.numberOfLines = 1
         label.text = "정보를 입력해주세요."
-        label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
         label.applyStyle(textStyle: FontSystem.highlight)
         label.textColor = .cmHeadLineTextColor
         return label
@@ -114,15 +119,32 @@ final class SignUpViewController: BaseViewController, View {
         super.viewDidLoad()
         setupView()
         setupUI()
+        setupNavigation()
         setupButton()
         bind(reactor: reactor)
-
+        showCMAlert(titleText: "성별과 연령 정보는\n프로필을 보고 함께할 사람을\n직접 선택할 수 있도록 돕는 용도입니다\n앱 외부로 공개되지 않으며\n이 외 목적으로 사용되지 않습니다", importantButtonText: "확인", commonButtonText: nil)
+        
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        containerView.pin.all(view.pin.safeArea)
+        containerView.pin.all(view.pin.safeArea).marginBottom(BottomMargin.safeArea-view.safeAreaInsets.bottom)
         containerView.flex.layout()
+    }
+    
+    private func setupNavigation() {
+        let indicatorImage = UIImage(named: "indicator02")
+        let indicatorImageView = UIImageView(image: indicatorImage)
+        indicatorImageView.contentMode = .scaleAspectFit
+        
+        indicatorImageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            indicatorImageView.heightAnchor.constraint(equalToConstant: 6),
+            indicatorImageView.widthAnchor.constraint(equalToConstant: indicatorImage?.getRatio(height: 6) ?? 30.0)
+        ])
+        
+        customNavigationBar.addRightItems(items: [indicatorImageView])
     }
     
     private func setupView() {
@@ -159,9 +181,12 @@ final class SignUpViewController: BaseViewController, View {
                 case .man:
                     vc.manButton.isSelecte = true
                     vc.womanButton.isSelecte = false
+                case .none:
+                    break
                 }
             })
             .disposed(by: disposeBag)
+        
     }
 }
 // MARK: - Button
@@ -189,6 +214,14 @@ extension SignUpViewController {
             .map { Reactor.Action.updateNickname($0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        nickNameTextField.rx.text.orEmpty
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
+            .distinctUntilChanged()
+            .map { _ in Reactor.Action.endEditNickname }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
         nickNameTextField.rx.controlEvent(.editingDidEnd)
             .map { Reactor.Action.endEditNickname }
             .bind(to: reactor.action)
@@ -228,14 +261,14 @@ extension SignUpViewController {
             .disposed(by: disposeBag)
         // 텍스트 필드 폰트 바인딩
         reactor.state
-                .map { $0.nickName }
-                .compactMap { $0 }
-                .withUnretained(self)
-                .bind(onNext: { vc, nickName in
-                    vc.nickNameTextField.text = nickName
-                    vc.nickNameTextField.applyStyle(textStyle: FontSystem.body02_semiBold)
-                })
-                .disposed(by: disposeBag)
+            .map { $0.nickName }
+            .compactMap { $0 }
+            .withUnretained(self)
+            .bind(onNext: { vc, nickName in
+                vc.nickNameTextField.text = nickName
+                vc.nickNameTextField.applyStyle(textStyle: FontSystem.body02_semiBold)
+            })
+            .disposed(by: disposeBag)
         reactor.state
             .map { $0.birth }
             .compactMap{ $0 }
@@ -255,8 +288,9 @@ extension SignUpViewController {
         reactor.state.map { $0.isFormValid }
             .bind(to: nextButton.rx.isEnabled)
             .disposed(by: disposeBag)
-
+        
         reactor.state.map { $0.nickNameValidate}
+            .distinctUntilChanged()
             .withUnretained(self)
             .bind (onNext: { vc, validateCase in
                 vc.vaildateLabel.text = validateCase.rawValue
@@ -271,7 +305,7 @@ extension SignUpViewController {
                 vc.vaildateLabel.applyStyle(textStyle: FontSystem.caption01_semiBold)
             })
             .disposed(by: disposeBag)
-            
+        
     }
 }
 
@@ -301,7 +335,8 @@ extension SignUpViewController {
                 flex.addItem(womanButton).grow(1).marginRight(9)
                 flex.addItem(manButton).grow(1)
             }
-            flex.addItem().width(100%).grow(1).direction(.column).justifyContent(.end).define { flex in
+            flex.addItem().grow(1)
+            flex.addItem().width(100%).direction(.column).justifyContent(.end).define { flex in
                 flex.addItem(nextButton).width(100%).height(50)
             }
         }

@@ -49,6 +49,9 @@ extension UIFont {
     static let caption01_medium = FontUtility.loadPretendardFont(size: 11, weight: .medium)
     /// 11 - regular
     static let caption01_reguler = FontUtility.loadPretendardFont(size: 11, weight: .regular)
+    
+    /// 10 - medium
+    static let bedgeText = FontUtility.loadPretendardFont(size: 10, weight: .medium)
 }
 
 
@@ -102,6 +105,8 @@ final class FontSystem {
     static let caption01_medium = TextStyle(font: .caption01_medium, kern: 0, lineHeight: 15)
     /// size/lineHeight/kern = 11/15/0
     static let caption01_reguler = TextStyle(font: .caption01_reguler, kern: 0, lineHeight: 15)
+    /// size/lineHeight/kern = 10/nil/0
+    static let bedgeText = TextStyle(font: .bedgeText)
     
     // MARK: - Semantic 폰트 스타일
     /// headline03_medium (20)

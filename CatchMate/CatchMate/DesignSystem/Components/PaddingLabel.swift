@@ -8,12 +8,22 @@
 import UIKit
 
 class PaddingLabel: UILabel {
-
     private var padding = UIEdgeInsets(top: 8.0, left: 16.0, bottom: 8.0, right: 16.0)
+    var isSelected: Bool = false {
+        didSet {
+            updateClicked()
+        }
+    }
 
-    convenience init(padding: UIEdgeInsets) {
+    convenience init(title: String) {
         self.init()
-        self.padding = padding
+        self.text = title
+        self.backgroundColor = .grayScale50
+        self.textColor = .cmNonImportantTextColor
+        self.applyStyle(textStyle: FontSystem.body02_semiBold)
+        self.layer.cornerRadius = 16
+        self.clipsToBounds = true
+        self.isUserInteractionEnabled = true
     }
 
     override func drawText(in rect: CGRect) {
@@ -43,6 +53,15 @@ class PaddingLabel: UILabel {
             if bounds.size != oldValue.size {
                 invalidateIntrinsicContentSize()
             }
+        }
+    }
+    private func updateClicked() {
+        if isSelected {
+            backgroundColor = .cmPrimaryColor
+            textColor = .white
+        } else {
+            backgroundColor = .grayScale50
+            textColor = .cmNonImportantTextColor
         }
     }
 }

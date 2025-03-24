@@ -68,6 +68,10 @@ class CMTextField: UITextField {
     
     @objc private func textFieldDidChange() {
         updateClearButtonVisibility()
+        updateTextStyle()
+    }
+    
+    func updateTextStyle() {
         if let currentText = self.text {
             self.attributedText = NSAttributedString(string: currentText, attributes: FontSystem.body02_semiBold.getAttributes())
         }
@@ -76,13 +80,30 @@ class CMTextField: UITextField {
     @objc private func textFieldDidBeginEditing() {
         layer.borderColor = UIColor.cmPrimaryColor.cgColor
         updateClearButtonVisibility()
+        resignOtherResponders(in: superview, except: self)
     }
     
     @objc private func textFieldDidEndEditing() {
-        layer.borderColor = UIColor.lightGray.cgColor
+        layer.borderColor = UIColor.cmBorderColor.cgColor
         updateClearButtonVisibility()
         if let currentText = self.text {
             self.attributedText = NSAttributedString(string: currentText, attributes: FontSystem.body02_semiBold.getAttributes())
+        }
+    }
+    // 다른 응답자 포기
+    private func resignOtherResponders(in view: UIView?, except responder: UIResponder) {
+        guard let view = view else { return }
+        
+        for subview in view.subviews {
+            if let textView = subview as? UITextView, textView != responder {
+                textView.resignFirstResponder()
+            } else if let textField = subview as? UITextField, textField != responder {
+                textField.resignFirstResponder()
+            } else if let pickerview = subview as? CMPickerTextField, pickerview != responder {
+                pickerview.unFocusing()
+            } else {
+                resignOtherResponders(in: subview, except: responder)
+            }
         }
     }
     

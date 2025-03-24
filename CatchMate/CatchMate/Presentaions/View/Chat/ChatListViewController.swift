@@ -8,73 +8,164 @@
 import UIKit
 import RxSwift
 import SnapKit
+import ReactorKit
+import FlexLayout
+import Alamofire
+import RxAlamofire
 
-final class ChatListViewController: BaseViewController {
+final class ChatListViewController: BaseViewController, View {
+    override var useSnapKit: Bool {
+        return true
+    }
+    override var buttonContainerExists: Bool {
+        return false
+    }
     private let chatListTableView = UITableView()
+    private let emptyView = EmptyView(type: .chat)
+    var reactor: ChatListReactor
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = false
+        reactor.action.onNext(.loadChatList)
+        reactor.action.onNext(.selectChat(nil))
+    }
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        Task {
+            await SocketService.shared?.connect(chatId: nil)
+        }
+    }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        SocketService.shared?.disconnect()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupUI()
         setupTableView()
-        setupEditTableView()
         setupNavigationBar()
+        bind(reactor: reactor)
     }
     
     private func setupView() {
         view.backgroundColor = .cmBackgroundColor
     }
     
+    init(reactor: ChatListReactor) {
+        self.reactor = reactor
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     private func setupNavigationBar() {
-        let editButton = UIBarButtonItem(image: UIImage(systemName: "slider.horizontal.3"), style: .plain, target: self, action: #selector(clickEditButton))
-        navigationItem.rightBarButtonItem = editButton
-        setupLeftTitle("채팅목록")
+        setupLeftTitle("채팅")
     }
     
     private func setupTableView() {
-        chatListTableView.delegate = self
-        chatListTableView.dataSource = self
         chatListTableView.register(ChatListTableViewCell.self, forCellReuseIdentifier: "ChatListTableViewCell")
         chatListTableView.tableHeaderView = UIView()
         chatListTableView.rowHeight = UITableView.automaticDimension
         chatListTableView.backgroundColor = .clear
+        chatListTableView.separatorStyle = .none
     }
     
-    @objc
-    private func clickEditButton(_ sender: UIBarButtonItem) {
-        print("편집버튼 클릭")
-    }
 
 }
-// MARK: - TableView
-extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ChatListTableViewCell", for: indexPath) as? ChatListTableViewCell else { return UITableViewCell() }
-        return cell
-    }
-    
-    private func setupEditTableView() {
+// MARK: - Bind
+extension ChatListViewController {
+    func bind(reactor: ChatListReactor) {
+        reactor.state.map{$0.chatList}
+            .bind(to: chatListTableView.rx.items(cellIdentifier: "ChatListTableViewCell", cellType: ChatListTableViewCell.self)) { (row, item, cell) in
+                cell.selectionStyle = .none
+                cell.configData(chat: item)
+                cell.updateConstraints()
+            }
+            .disposed(by: disposeBag)
+        
+        chatListTableView.rx.contentOffset
+            .map { [weak self] _ in
+                guard let self = self else { return false }
+                let offsetY = self.chatListTableView.contentOffset.y
+                let contentHeight = self.chatListTableView.contentSize.height
+                let threshold = contentHeight - self.chatListTableView.frame.size.height - (self.chatListTableView.rowHeight * 4)
+                return offsetY > threshold
+            }
+            .distinctUntilChanged()
+            .filter { $0 }
+            .map { _ in ChatListReactor.Action.loadNextPage }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        chatListTableView.rx.itemSelected
+            .map { indexPath in
+                let chat = reactor.currentState.chatList[indexPath.row]
+                return Reactor.Action.selectChat(chat)
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        reactor.state.compactMap{$0.selectedChat}
+            .subscribe(onNext: { [weak self] chatInfo in
+                if let userId = SetupInfoService.shared.getUserInfo(type: .id), let id = Int(userId) {
+                    let chatRoomInfo = ChatRoomInfo(chatRoomId: chatInfo.chatRoomId, postInfo: chatInfo.postInfo, managerInfo: chatInfo.managerInfo, cheerTeam: chatInfo.postInfo.cheerTeam)
+                    let roomVC = ChatRoomViewController(chat: chatRoomInfo, userId: id, isNew: chatInfo.newChat)
+                    roomVC.hidesBottomBarWhenPushed = true
+                    self?.navigationController?.pushViewController(roomVC, animated: true)
+                } else {
+                    reactor.action.onNext(.setError(.unauthorized))
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.chatList.isEmpty}
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .subscribe { vc, isEmpty in
+                vc.changeView(isEmpty)
+            }
+            .disposed(by: disposeBag)
+        
         chatListTableView.rx.itemDeleted
           .observe(on: MainScheduler.asyncInstance)
           .withUnretained(self)
-          .bind { _, indexPath in
-              print("remove \(indexPath.row+1) item")
+          .bind { vc, indexPath in
+              vc.showCMAlert(titleText: "채팅방을 나갈까요?", importantButtonText: "나가기", commonButtonText: "취소", importantAction: {
+                  vc.reactor.action.onNext(.deleteChat(indexPath.row))
+              })
           }
-          .disposed(by: self.disposeBag)
+          .disposed(by: disposeBag)
     }
-    
 }
 // MARK: - UI
 extension ChatListViewController {
+    
+    private func changeView(_ isEmpty: Bool) {
+        if isEmpty {
+            chatListTableView.isHidden = true
+            emptyView.isHidden = false
+        } else {
+            chatListTableView.isHidden = false
+            emptyView.isHidden = true
+        }
+    }
+    
     private func setupUI() {
-        view.addSubview(chatListTableView)
+        view.addSubviews(views: [chatListTableView, emptyView])
         chatListTableView.snp.makeConstraints { make in
             make.top.bottom.equalTo(view.safeAreaLayoutGuide)
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(18)
+        }
+        emptyView.snp.makeConstraints { make in
+            make.center.equalTo(view.safeAreaLayoutGuide)
         }
     }
 }
