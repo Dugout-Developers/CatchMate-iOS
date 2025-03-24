@@ -67,10 +67,6 @@
 		5301E2B62C5BE6AF0078E910 /* LogoutUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2B52C5BE6AF0078E910 /* LogoutUseCase.swift */; };
 		5301E2B82C5BECBB0078E910 /* MyPageReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2B72C5BECBB0078E910 /* MyPageReactor.swift */; };
 		5301E2BA2C5BED8D0078E910 /* UserMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5301E2B92C5BED8D0078E910 /* UserMapper.swift */; };
-		5303466B2D8D1CD700745C91 /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 530346652D8D1CD700745C91 /* APIKeys.plist */; };
-		5303466C2D8D1CD700745C91 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 530346662D8D1CD700745C91 /* Config.xcconfig */; };
-		530346722D8D1D3900745C91 /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 530346702D8D1D3900745C91 /* Release.xcconfig */; };
-		530346762D8D1DA400745C91 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 530346752D8D1DA400745C91 /* GoogleService-Info.plist */; };
 		5306D4962D8A7C8D00E65B05 /* InquiryReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5306D4952D8A7C8500E65B05 /* InquiryReactor.swift */; };
 		5306F7BD2C9057D200292C6E /* LoadReceivedAppliesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5306F7BC2C9057D200292C6E /* LoadReceivedAppliesUseCase.swift */; };
 		5306F7BF2C9081C000292C6E /* ReceivedAppliesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5306F7BE2C9081C000292C6E /* ReceivedAppliesTest.swift */; };
@@ -444,6 +440,10 @@
 		53C6DA072CE47A3000918718 /* UpPostDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C6DA052CE47A2800918718 /* UpPostDataSource.swift */; };
 		53C6DA092CE5D08C00918718 /* UpPostDataSourceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C6DA082CE5D08000918718 /* UpPostDataSourceTest.swift */; };
 		53C6DA0B2CE7233100918718 /* CheerStylePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C6DA0A2CE7232100918718 /* CheerStylePickerViewController.swift */; };
+		53CCAB5F2D8EF7E30092DBC9 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 53CCAB5B2D8EF7E30092DBC9 /* Config.xcconfig */; };
+		53CCAB612D8EF7E30092DBC9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53CCAB5C2D8EF7E30092DBC9 /* GoogleService-Info.plist */; };
+		53CCAB622D8EF7E30092DBC9 /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53CCAB5A2D8EF7E30092DBC9 /* APIKeys.plist */; };
+		53CCAB632D8EF7E30092DBC9 /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 53CCAB5E2D8EF7E30092DBC9 /* Release.xcconfig */; };
 		53E4A9B82C4FF00F00D21B49 /* AuthReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E4A9B72C4FF00F00D21B49 /* AuthReactor.swift */; };
 		53E4A9BA2C4FFB1300D21B49 /* SignUpDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E4A9B92C4FFB1300D21B49 /* SignUpDataSource.swift */; };
 		53E4A9BC2C4FFB8400D21B49 /* SignUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E4A9BB2C4FFB8400D21B49 /* SignUp.swift */; };
@@ -589,11 +589,6 @@
 		5301E2B52C5BE6AF0078E910 /* LogoutUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoutUseCase.swift; sourceTree = "<group>"; };
 		5301E2B72C5BECBB0078E910 /* MyPageReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageReactor.swift; sourceTree = "<group>"; };
 		5301E2B92C5BED8D0078E910 /* UserMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMapper.swift; sourceTree = "<group>"; };
-		530346652D8D1CD700745C91 /* APIKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
-		530346662D8D1CD700745C91 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
-		530346682D8D1CD700745C91 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		530346702D8D1D3900745C91 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
-		530346752D8D1DA400745C91 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5306D4952D8A7C8500E65B05 /* InquiryReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InquiryReactor.swift; sourceTree = "<group>"; };
 		5306F7BC2C9057D200292C6E /* LoadReceivedAppliesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadReceivedAppliesUseCase.swift; sourceTree = "<group>"; };
 		5306F7BE2C9081C000292C6E /* ReceivedAppliesTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceivedAppliesTest.swift; sourceTree = "<group>"; };
@@ -886,6 +881,11 @@
 		53C6DA052CE47A2800918718 /* UpPostDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpPostDataSource.swift; sourceTree = "<group>"; };
 		53C6DA082CE5D08000918718 /* UpPostDataSourceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpPostDataSourceTest.swift; sourceTree = "<group>"; };
 		53C6DA0A2CE7232100918718 /* CheerStylePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheerStylePickerViewController.swift; sourceTree = "<group>"; };
+		53CCAB5A2D8EF7E30092DBC9 /* APIKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
+		53CCAB5B2D8EF7E30092DBC9 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		53CCAB5C2D8EF7E30092DBC9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		53CCAB5D2D8EF7E30092DBC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		53CCAB5E2D8EF7E30092DBC9 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		53E4A9B72C4FF00F00D21B49 /* AuthReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthReactor.swift; sourceTree = "<group>"; };
 		53E4A9B92C4FFB1300D21B49 /* SignUpDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpDataSource.swift; sourceTree = "<group>"; };
 		53E4A9BB2C4FFB8400D21B49 /* SignUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUp.swift; sourceTree = "<group>"; };
@@ -1527,11 +1527,11 @@
 		536BDDDD2C1969370043B1DA /* APP */ = {
 			isa = PBXGroup;
 			children = (
-				530346652D8D1CD700745C91 /* APIKeys.plist */,
-				530346662D8D1CD700745C91 /* Config.xcconfig */,
-				530346752D8D1DA400745C91 /* GoogleService-Info.plist */,
-				530346702D8D1D3900745C91 /* Release.xcconfig */,
-				530346682D8D1CD700745C91 /* Info.plist */,
+				53CCAB5A2D8EF7E30092DBC9 /* APIKeys.plist */,
+				53CCAB5B2D8EF7E30092DBC9 /* Config.xcconfig */,
+				53CCAB5C2D8EF7E30092DBC9 /* GoogleService-Info.plist */,
+				53CCAB5D2D8EF7E30092DBC9 /* Info.plist */,
+				53CCAB5E2D8EF7E30092DBC9 /* Release.xcconfig */,
 				536BDDAD2C189B230043B1DA /* AppDelegate.swift */,
 				536BDDAF2C189B230043B1DA /* SceneDelegate.swift */,
 				5301E2A22C5B6B8B0078E910 /* AuthManager.swift */,
@@ -2233,12 +2233,12 @@
 			files = (
 				53014A2F2D643B14004C2EE0 /* open_source_licenses.json in Resources */,
 				53241F3E2C3C589100F468E1 /* DesignAssets.xcassets in Resources */,
+				53CCAB5F2D8EF7E30092DBC9 /* Config.xcconfig in Resources */,
+				53CCAB612D8EF7E30092DBC9 /* GoogleService-Info.plist in Resources */,
+				53CCAB622D8EF7E30092DBC9 /* APIKeys.plist in Resources */,
+				53CCAB632D8EF7E30092DBC9 /* Release.xcconfig in Resources */,
 				5383BE902C34ECD1008940F1 /* PretendardVariable.ttf in Resources */,
 				536BDDB72C189B240043B1DA /* Assets.xcassets in Resources */,
-				530346722D8D1D3900745C91 /* Release.xcconfig in Resources */,
-				5303466B2D8D1CD700745C91 /* APIKeys.plist in Resources */,
-				530346762D8D1DA400745C91 /* GoogleService-Info.plist in Resources */,
-				5303466C2D8D1CD700745C91 /* Config.xcconfig in Resources */,
 				536BDDBA2C189B240043B1DA /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2817,7 +2817,7 @@
 /* Begin XCBuildConfiguration section */
 		53577B422D5324C100769533 /* Dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 530346662D8D1CD700745C91 /* Config.xcconfig */;
+			baseConfigurationReference = 53CCAB5B2D8EF7E30092DBC9 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -2875,7 +2875,7 @@
 		};
 		53577B432D5324C100769533 /* Dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 530346662D8D1CD700745C91 /* Config.xcconfig */;
+			baseConfigurationReference = 53CCAB5B2D8EF7E30092DBC9 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -2908,13 +2908,13 @@
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Dev;
 		};
 		53577B442D5324C100769533 /* Dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 530346662D8D1CD700745C91 /* Config.xcconfig */;
+			baseConfigurationReference = 53CCAB5B2D8EF7E30092DBC9 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -2935,7 +2935,7 @@
 		};
 		53577B452D5324C100769533 /* Dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 530346662D8D1CD700745C91 /* Config.xcconfig */;
+			baseConfigurationReference = 53CCAB5B2D8EF7E30092DBC9 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -2954,7 +2954,7 @@
 		};
 		536BDDD22C189B240043B1DA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 530346662D8D1CD700745C91 /* Config.xcconfig */;
+			baseConfigurationReference = 53CCAB5B2D8EF7E30092DBC9 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -2987,7 +2987,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -3019,7 +3019,7 @@
 		};
 		536BDDD32C189B240043B1DA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 530346702D8D1D3900745C91 /* Release.xcconfig */;
+			baseConfigurationReference = 53CCAB5E2D8EF7E30092DBC9 /* Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -3077,7 +3077,7 @@
 		};
 		536BDDD52C189B240043B1DA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 530346662D8D1CD700745C91 /* Config.xcconfig */;
+			baseConfigurationReference = 53CCAB5B2D8EF7E30092DBC9 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -3111,13 +3111,13 @@
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		536BDDD62C189B240043B1DA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 530346702D8D1D3900745C91 /* Release.xcconfig */;
+			baseConfigurationReference = 53CCAB5E2D8EF7E30092DBC9 /* Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -3150,13 +3150,13 @@
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
 		536BDDD82C189B240043B1DA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 530346662D8D1CD700745C91 /* Config.xcconfig */;
+			baseConfigurationReference = 53CCAB5B2D8EF7E30092DBC9 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -3177,7 +3177,7 @@
 		};
 		536BDDD92C189B240043B1DA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 530346702D8D1D3900745C91 /* Release.xcconfig */;
+			baseConfigurationReference = 53CCAB5E2D8EF7E30092DBC9 /* Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -3198,7 +3198,7 @@
 		};
 		536BDDDB2C189B240043B1DA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 530346662D8D1CD700745C91 /* Config.xcconfig */;
+			baseConfigurationReference = 53CCAB5B2D8EF7E30092DBC9 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -3217,7 +3217,7 @@
 		};
 		536BDDDC2C189B240043B1DA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 530346702D8D1D3900745C91 /* Release.xcconfig */;
+			baseConfigurationReference = 53CCAB5E2D8EF7E30092DBC9 /* Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
