@@ -42,10 +42,11 @@ final class HomeViewController: BaseViewController, View {
         control.tintColor = .cmPrimaryColor
         return control
     }()
-    
-    init(reactor: HomeReactor, tabbarReactor: TabbarReactor) {
+    private let isGuest: Bool
+    init(reactor: HomeReactor, tabbarReactor: TabbarReactor, isGuest: Bool) {
         self.reactor = reactor
         self.tabbarReactor = tabbarReactor
+        self.isGuest = isGuest
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -65,9 +66,11 @@ final class HomeViewController: BaseViewController, View {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        NotificationService.shared.requestNotificationPermission { granted in
-            let message = granted ? "✅ 알림 권한이 허용되었습니다." : "❌ 알림 권한이 거부되었습니다."
-            LoggerService.shared.log(level: .info, message)
+        if !isGuest {
+            NotificationService.shared.requestNotificationPermission { granted in
+                let message = granted ? "✅ 알림 권한이 허용되었습니다." : "❌ 알림 권한이 거부되었습니다."
+                LoggerService.shared.log(level: .info, message)
+            }
         }
     }
     override func viewDidLoad() {
@@ -79,7 +82,9 @@ final class HomeViewController: BaseViewController, View {
         setupButton()
         setupLogo()
         bind(reactor: self.reactor)
-        notificationBind(reactor: tabbarReactor)
+        if !isGuest {
+            notificationBind(reactor: tabbarReactor)
+        }
         reactor.action.onNext(.setupUserInfo)
         filterScrollView.showsHorizontalScrollIndicator = false
         setNavigationBackgroundColor(.cmGrayBackgroundColor)
@@ -183,9 +188,14 @@ extension HomeViewController {
             .compactMap{$0}
             .withUnretained(self)
             .subscribe { vc, postId in
-                let postDetailVC = PostDetailViewController(postID: postId)
-                postDetailVC.hidesBottomBarWhenPushed = true
-                vc.navigationController?.pushViewController(postDetailVC, animated: true)
+                if vc.isGuest {
+                    vc.showCMAlert(titleText: "게시물은 로그인 후 확인해주세요", importantButtonText: "확인", commonButtonText: nil, importantAction:  {
+                        reactor.action.onNext(.selectPost(nil))
+                    })
+                } else {
+                    let postDetailVC = PostDetailViewController(postID: postId)
+                    postDetailVC.hidesBottomBarWhenPushed = true
+                    vc.navigationController?.pushViewController(postDetailVC, animated: true)}
             }
             .disposed(by: disposeBag)
         reactor.state.map{$0.dateFilterValue}

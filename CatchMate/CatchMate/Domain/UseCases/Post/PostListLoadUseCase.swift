@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 
 protocol PostListLoadUseCase {
-    func loadPostList(pageNum: Int, gudan: [Int], gameDate: String, people: Int) -> Observable<PostList>
+    func loadPostList(pageNum: Int, gudan: [Int], gameDate: String, people: Int, isGuest: Bool) -> Observable<PostList>
 }
 
 final class PostListLoadUseCaseImpl: PostListLoadUseCase {
@@ -18,9 +18,9 @@ final class PostListLoadUseCaseImpl: PostListLoadUseCase {
     init(postListRepository: PostListLoadRepository) {
         self.postListRepository = postListRepository
     }
-    func loadPostList(pageNum: Int, gudan: [Int], gameDate: String, people: Int = 0) -> Observable<PostList> {
+    func loadPostList(pageNum: Int, gudan: [Int], gameDate: String, people: Int = 0, isGuest: Bool = false) -> Observable<PostList> {
         LoggerService.shared.log(level: .info, "게시물 불러오기 \(pageNum)페이지, 구단필터: \(gudan.map{Team(serverId: $0)?.rawValue}), 게임 일자: \(gameDate), 필터 인원: \(people)")
-        return postListRepository.loadPostList(pageNum: pageNum, gudan: gudan, gameDate: gameDate, people: people)
+        return postListRepository.loadPostList(pageNum: pageNum, gudan: gudan, gameDate: gameDate, people: people, isGuest: isGuest)
             .catch { error in
                 if let localizedError = error as? LocalizedError, -1999...(-1000) ~= localizedError.statusCode {
                     // TokenError
