@@ -2890,7 +2890,7 @@
 				DEVELOPMENT_TEAM = 977J65FA28;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CatchMate/APP/Info.plist;
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "갤러리 접근 권한 허용";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "프로필 사진을 변경하거나, 채팅 이미지를 변경하기 위해 갤러리 접근 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -3095,7 +3095,7 @@
 				DEVELOPMENT_TEAM = 977J65FA28;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CatchMate/APP/Info.plist;
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "갤러리 접근 권한 허용";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "프로필 사진을 변경하거나, 채팅 이미지를 변경하기 위해 갤러리 접근 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -3134,7 +3134,7 @@
 				DEVELOPMENT_TEAM = 977J65FA28;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CatchMate/APP/Info.plist;
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "갤러리 접근 권한 허용";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "프로필 사진을 변경하거나, 채팅 이미지를 변경하기 위해 갤러리 접근 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
