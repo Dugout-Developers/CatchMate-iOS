@@ -12,6 +12,7 @@ import ReactorKit
 final class HomeReactor: Reactor {
     enum Action {
         case setupUserInfo
+        case loadGuestPosts
         case updateDateFilter(Date?)
         case updateTeamFilter([Team])
         case updateNumberFilter(Int?)
@@ -48,8 +49,9 @@ final class HomeReactor: Reactor {
     var initialState: State
     private let loadPostListUsecase: PostListLoadUseCase
     private let setupUseCase: SetupUseCase
-    
-    init(loadPostListUsecase: PostListLoadUseCase, setupUsecase: SetupUseCase) {
+    private let isGuest: Bool
+    init(loadPostListUsecase: PostListLoadUseCase, setupUsecase: SetupUseCase, isGuest: Bool) {
+        self.isGuest = isGuest
         self.initialState = State()
         self.loadPostListUsecase = loadPostListUsecase
         self.setupUseCase = setupUsecase
@@ -94,14 +96,18 @@ final class HomeReactor: Reactor {
                 .catch { error in
                     return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
-            
+        case .loadGuestPosts:
+            let date = currentState.dateFilterValue
+            let teams = currentState.selectedTeams
+            let number = currentState.seletedNumberFilter
+            return updateFiltersAndLoadPosts(date: date, teams: teams, number: number)
         case .loadNextPage:
             guard !currentState.isLoadingNextPage else { return .empty() }  // 중복 로딩 방지
             guard !currentState.isLast else {
                 // 마지막 페이지면 로딩X
                 return .empty()
             }
-            return loadPostListUsecase.loadPostList(pageNum: currentState.page, gudan: currentState.selectedTeams.map { $0.serverId }, gameDate: currentState.dateFilterValue?.toString(format: "YYYY-MM-dd") ?? "", people: currentState.seletedNumberFilter ?? 0)
+            return loadPostListUsecase.loadPostList(pageNum: currentState.page, gudan: currentState.selectedTeams.map { $0.serverId }, gameDate: currentState.dateFilterValue?.toString(format: "YYYY-MM-dd") ?? "", people: currentState.seletedNumberFilter ?? 0, isGuest: isGuest)
                 .flatMap { data -> Observable<Mutation> in
                     let list = data.post
                     if !list.isEmpty {
@@ -185,7 +191,7 @@ final class HomeReactor: Reactor {
         let gudan = (teams ?? currentState.selectedTeams).map { $0.serverId }
         let requestDate = date?.toString(format: "YYYY-MM-dd") ?? ""
         let requestNumber = number ?? 0
-        let loadList = loadPostListUsecase.loadPostList(pageNum: 0, gudan: gudan, gameDate: requestDate, people: requestNumber)
+        let loadList = loadPostListUsecase.loadPostList(pageNum: 0, gudan: gudan, gameDate: requestDate, people: requestNumber, isGuest: isGuest)
             .map { data in
                 let list = data.post
                 return Mutation.loadPost(list, append: false)

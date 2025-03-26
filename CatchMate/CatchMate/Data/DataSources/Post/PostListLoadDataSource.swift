@@ -11,7 +11,7 @@ import RxAlamofire
 import Alamofire
 
 protocol PostListLoadDataSource {
-    func loadPostList(pageNum: Int, gudan: [Int], gameDate: String, people: Int) ->  Observable<PostListDTO>
+    func loadPostList(pageNum: Int, gudan: [Int], gameDate: String, people: Int, isGuest: Bool) ->  Observable<PostListDTO>
 }
 final class PostListLoadDataSourceImpl: PostListLoadDataSource {
     private let tokenDataSource: TokenDataSource
@@ -20,16 +20,10 @@ final class PostListLoadDataSourceImpl: PostListLoadDataSource {
         self.tokenDataSource = tokenDataSource
     }
     
-    func loadPostList(pageNum: Int, gudan: [Int], gameDate: String, people: Int) -> RxSwift.Observable<PostListDTO> {
+    func loadPostList(pageNum: Int, gudan: [Int], gameDate: String, people: Int, isGuest: Bool = false) -> RxSwift.Observable<PostListDTO> {
         LoggerService.shared.log(level: .debug, "<필터값> 구단: \(gudan), 날짜: \(gameDate), 페이지: \(pageNum)")
-        guard let token = tokenDataSource.getToken(for: .accessToken) else {
-            LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
-            return Observable.error(TokenError.notFoundAccessToken)
-        }
-        guard let refreshToken = self.tokenDataSource.getToken(for: .refreshToken) else {
-            LoggerService.shared.log(level: .debug, "리프레시 토큰 찾기 실패")
-            return Observable.error(TokenError.notFoundRefreshToken)
-        }
+
+        let refreshToken = self.tokenDataSource.getToken(for: .refreshToken)
         var parameters: [String: Any] = [:]
         parameters["page"] = pageNum
         if !gameDate.isEmpty {
@@ -45,11 +39,15 @@ final class PostListLoadDataSourceImpl: PostListLoadDataSource {
         }
         
         
-        let headers: HTTPHeaders = [
-            "AccessToken": token
-        ]
-    
-        return APIService.shared.performRequest(type: .postlist, parameters: parameters, headers: headers, encoding: CustomURLEncoding.default, dataType: PostListDTO.self, refreshToken: refreshToken)
+        var headers: HTTPHeaders = []
+        if !isGuest {
+            guard let token = tokenDataSource.getToken(for: .accessToken) else {
+                LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
+                return Observable.error(TokenError.notFoundAccessToken)
+            }
+            headers["AccessToken"] = token
+        }
+        return APIService.shared.performRequest(type: .postlist, parameters: parameters, headers: isGuest ? nil : headers, encoding: CustomURLEncoding.default, dataType: PostListDTO.self, refreshToken: refreshToken)
             .catch { error in
                 LoggerService.shared.log(level: .debug, "PostList Load 실패 - \(error)")
                 return Observable.error(error)

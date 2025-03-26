@@ -55,7 +55,7 @@ class DIContainerService {
         
         return TabbarReactor(unreaMessageUC: unreadMessageUC)
     }
-    func makeHomeReactor() -> HomeReactor {
+    func makeHomeReactor(isGuest: Bool) -> HomeReactor {
         let listLoadDataSource = PostListLoadDataSourceImpl(tokenDataSource: tokenDS)
         let listLoadRepository = PostListLoadRepositoryImpl(postListLoadDS: listLoadDataSource)
         let listLoadUsecase = PostListLoadUseCaseImpl(postListRepository: listLoadRepository)
@@ -63,7 +63,7 @@ class DIContainerService {
         let userDS = UserDataSourceImpl(tokenDataSource: tokenDS)
         let userRepositorty = UserRepositoryImpl(userDS: userDS)
         let setupUsecase = SetupUseCaseImpl(userRepository: userRepositorty)
-        return HomeReactor(loadPostListUsecase: listLoadUsecase, setupUsecase: setupUsecase)
+        return HomeReactor(loadPostListUsecase: listLoadUsecase, setupUsecase: setupUsecase, isGuest: isGuest)
     }
     func makeAddReactor() -> AddReactor {
         let addDataSource = AddPostDataSourceImpl(tokenDataSource: tokenDS)

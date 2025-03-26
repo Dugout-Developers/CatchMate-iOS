@@ -13,8 +13,8 @@ final class PostListLoadRepositoryImpl: PostListLoadRepository {
     init(postListLoadDS: PostListLoadDataSource) {
         self.postListLoadDS = postListLoadDS
     }
-    func loadPostList(pageNum: Int, gudan: [Int], gameDate: String, people: Int) -> RxSwift.Observable<PostList> {
-        return postListLoadDS.loadPostList(pageNum: pageNum, gudan: gudan, gameDate: gameDate, people: people)
+    func loadPostList(pageNum: Int, gudan: [Int], gameDate: String, people: Int, isGuest: Bool = false) -> RxSwift.Observable<PostList> {
+        return postListLoadDS.loadPostList(pageNum: pageNum, gudan: gudan, gameDate: gameDate, people: people, isGuest: isGuest)
             .flatMap { dto -> Observable<PostList> in
                 var list = [SimplePost]()
                 dto.boardInfoList.forEach { dto in

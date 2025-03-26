@@ -55,7 +55,7 @@ final class TabBarController: UITabBarController, UITabBarControllerDelegate, Vi
     }
     
     private func settupTabbar() {
-        let homeViewController = isNonMember ? UINavigationController(rootViewController: NonMembersAccessViewController(title: "홈")) : UINavigationController(rootViewController: HomeViewController(reactor: DIContainerService.shared.makeHomeReactor(), tabbarReactor: reactor))
+        let homeViewController = UINavigationController(rootViewController: HomeViewController(reactor: DIContainerService.shared.makeHomeReactor(isGuest: isNonMember), tabbarReactor: reactor, isGuest: isNonMember))
         let favoriteViewController = isNonMember ? UINavigationController(rootViewController: NonMembersAccessViewController(title: "찜 목록")) : UINavigationController(rootViewController: FavoriteListViewController(reactor: DIContainerService.shared.makeFavoriteReactor()))
     
         let addViewController = UINavigationController(rootViewController: NonMembersAccessViewController(title: "등록 하기")) // 네비게이션으로 연결할거기에 탭에는 빈 뷰컨트롤러 연결

@@ -23,6 +23,9 @@ final class SetFavoriteUseCaseImpl: SetFavoriteUseCase {
         return setFavoriteRepository.setFavorite(state, boardId)
             .catch { error in
                 if state {
+                    if error.statusCode == 400 {
+                        return Observable.error(DomainError(error: error, context: .action, message: "자신의 게시물은 찜할 수 없어요"))
+                    }
                     LoggerService.shared.log(level: .info, "\(boardId)번 찜하기")
                     let domainError = DomainError(error: error, context: .action, message: "찜하기 과정에서 문제가 발생했습니다.")
                     LoggerService.shared.errorLog(domainError, domain: "set_favorite", message: error.errorDescription)
