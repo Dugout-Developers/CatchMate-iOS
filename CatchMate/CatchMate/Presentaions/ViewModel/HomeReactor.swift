@@ -12,6 +12,7 @@ import ReactorKit
 final class HomeReactor: Reactor {
     enum Action {
         case setupUserInfo
+        case loadGuestPosts
         case updateDateFilter(Date?)
         case updateTeamFilter([Team])
         case updateNumberFilter(Int?)
@@ -95,7 +96,11 @@ final class HomeReactor: Reactor {
                 .catch { error in
                     return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
                 }
-            
+        case .loadGuestPosts:
+            let date = currentState.dateFilterValue
+            let teams = currentState.selectedTeams
+            let number = currentState.seletedNumberFilter
+            return updateFiltersAndLoadPosts(date: date, teams: teams, number: number)
         case .loadNextPage:
             guard !currentState.isLoadingNextPage else { return .empty() }  // 중복 로딩 방지
             guard !currentState.isLast else {

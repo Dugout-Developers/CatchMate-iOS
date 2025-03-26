@@ -60,7 +60,11 @@ final class HomeViewController: BaseViewController, View {
         tabBarController?.tabBar.isHidden = false
         reactor.action.onNext(.selectPost(nil))
         if reactor.currentState.posts.isEmpty {
-            reactor.action.onNext(.setupUserInfo)
+            if isGuest {
+                reactor.action.onNext(.loadGuestPosts)
+            } else {
+                reactor.action.onNext(.setupUserInfo)
+            }
         }
     }
     
@@ -85,7 +89,11 @@ final class HomeViewController: BaseViewController, View {
         if !isGuest {
             notificationBind(reactor: tabbarReactor)
         }
-        reactor.action.onNext(.setupUserInfo)
+        if isGuest {
+            reactor.action.onNext(.loadGuestPosts)
+        } else {
+            reactor.action.onNext(.setupUserInfo)
+        }
         filterScrollView.showsHorizontalScrollIndicator = false
         setNavigationBackgroundColor(.cmGrayBackgroundColor)
     }
