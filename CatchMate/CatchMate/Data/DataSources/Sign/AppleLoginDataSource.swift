@@ -55,6 +55,7 @@ final class AppleLoginDataSourceImpl: NSObject, AppleLoginDataSource,  ASAuthori
                     }
                     let response = SNSLoginResponse(id: userId, email: email, loginType: .apple)
                     LoggerService.shared.log(level: .debug, "APPLE Login Response(User Defaults) : \(response)")
+                    LoginUserDefaultsService.shared.saveLoginData(email: response.email, loginType: .apple)
                     loginSubject.onNext(response)
                 } else {
                     LoggerService.shared.log(level: .debug, "인증 실패")
