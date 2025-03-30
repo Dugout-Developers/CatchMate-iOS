@@ -124,7 +124,6 @@ struct ChatMessage {
     let message: String
     let time: Date
     let messageType: ChatMessageType
-    let isSocket: Bool
     let id: String
 }
 

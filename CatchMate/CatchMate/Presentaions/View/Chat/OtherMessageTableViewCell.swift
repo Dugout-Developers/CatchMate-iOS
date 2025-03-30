@@ -69,11 +69,7 @@ final class OtherMessageTableViewCell: UITableViewCell {
         nickNameLabel.text = chat.nickName
         nickNameLabel.applyStyle(textStyle: FontSystem.body03_semiBold)
         var dateString: String
-        if chat.isSocket {
-            dateString = chat.time.toString(format: "a h:mm", timeZone: TimeZone(identifier: "UTC")!)
-        } else {
-            dateString = chat.time.toString(format: "a h:mm")
-        }
+        dateString = chat.time.toString(format: "a h:mm")
         timeLabel.text = dateString
         timeLabel.applyStyle(textStyle: FontSystem.caption01_medium)
         messageLabel.text = chat.message

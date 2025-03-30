@@ -227,10 +227,10 @@ final class ChatRoomReactor: Reactor {
                     .map({ [weak self] messages, isLast in
                         if isLast {
                             var newMessages: [ChatMessage] = []
-                            let startMessage = ChatMessage(userId: 0, nickName: "", imageUrl: "", message: "", time: Date(), messageType: .startChat, isSocket: false, id: "")
+                            let startMessage = ChatMessage(userId: 0, nickName: "", imageUrl: "", message: "", time: Date(), messageType: .startChat, id: "")
                             newMessages.append(startMessage)
                             if let managerInfo = self?.chat.managerInfo {
-                                let managerInfoMessage = ChatMessage(userId: managerInfo.id, nickName: managerInfo.nickName, imageUrl: "", message: "\(managerInfo.nickName) 님이 채팅에 참여했어요", time: Date(), messageType: .enterUser, isSocket: false, id: "")
+                                let managerInfoMessage = ChatMessage(userId: managerInfo.id, nickName: managerInfo.nickName, imageUrl: "", message: "\(managerInfo.nickName) 님이 채팅에 참여했어요", time: Date(), messageType: .enterUser, id: "")
                                 newMessages.append(managerInfoMessage)
                             }
                             return (newMessages + messages, true)
@@ -355,10 +355,10 @@ final class ChatRoomReactor: Reactor {
                 var messages = messageInfo.messages
                 if messageInfo.isLast {
                     var newMessages: [ChatMessage] = []
-                    let startMessage = ChatMessage(userId: 0, nickName: "", imageUrl: "", message: "", time: Date(), messageType: .startChat, isSocket: false, id: "")
+                    let startMessage = ChatMessage(userId: 0, nickName: "", imageUrl: "", message: "", time: Date(), messageType: .startChat, id: "")
                     newMessages.append(startMessage)
                     let managerInfo = self.chat.managerInfo
-                    let managerInfoMessage = ChatMessage(userId: managerInfo.id, nickName: managerInfo.nickName, imageUrl: "", message: "\(managerInfo.nickName) 님이 채팅에 참여했어요", time: Date(), messageType: .enterUser, isSocket: false, id: "")
+                    let managerInfoMessage = ChatMessage(userId: managerInfo.id, nickName: managerInfo.nickName, imageUrl: "", message: "\(managerInfo.nickName) 님이 채팅에 참여했어요", time: Date(), messageType: .enterUser, id: "")
                     newMessages.append(managerInfoMessage)
                     messages = newMessages + messages
                 }
@@ -478,7 +478,7 @@ final class ChatRoomReactor: Reactor {
                 }
                 let senderInfo: SenderInfo? = (type == .date) ? nil : self?.currentState.senderProfiles.first { $0.senderId == chatMessage.senderId }
                 
-                let newMessage = ChatMessage(userId: chatMessage.senderId, nickName: senderInfo?.nickName ?? "", imageUrl: senderInfo?.imageUrl, message: chatMessage.content, time: time, messageType: type, isSocket: true, id: chatMessage.chatMessageId)
+                let newMessage = ChatMessage(userId: chatMessage.senderId, nickName: senderInfo?.nickName ?? "", imageUrl: senderInfo?.imageUrl, message: chatMessage.content, time: time, messageType: type, id: chatMessage.chatMessageId)
                 print("✅ [DEBUG] 메시지 파싱 성공 - \(newMessage)")
                 self?.action.onNext(.receiveMessage(newMessage))
             })

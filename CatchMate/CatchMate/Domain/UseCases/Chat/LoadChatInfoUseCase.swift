@@ -81,7 +81,7 @@ final class LoadChatInfoUseCaseImpl: LoadChatInfoUseCase {
                                 LoggerService.shared.log(level: .error, "메시지 타입 디코딩 실패")
                                 continue
                             }
-                            let newMessage = ChatMessage(userId: senderInfo.senderId, nickName: senderInfo.nickName, imageUrl: senderInfo.imageUrl, message: message.content, time: date, messageType: type, isSocket: false, id: message.chatMessageId)
+                            let newMessage = ChatMessage(userId: senderInfo.senderId, nickName: senderInfo.nickName, imageUrl: senderInfo.imageUrl, message: message.content, time: date, messageType: type, id: message.chatMessageId)
                             newMessages.insert(newMessage, at: 0)
                         }
                         return (newMessages, isLast)
