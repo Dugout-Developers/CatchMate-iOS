@@ -210,7 +210,6 @@ extension ChatRoomViewController {
     
     
     private func scrollTableview() {
-//        print("-----------lastTopMessage: \(lastTopMessage)")
         tableView.beginUpdates()
         if let index = reactor.currentState.messages.firstIndex(where: {$0 == lastTopMessage}) {
             guard index >= 0, index < tableView.numberOfRows(inSection: 0) else {
