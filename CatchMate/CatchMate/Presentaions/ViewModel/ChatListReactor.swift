@@ -54,7 +54,7 @@ final class ChatListReactor: Reactor {
                 print($0)
                 return $0.0 == "/topic/chatList"
             }
-            .observe(on: MainScheduler.instance)
+            .observe(on: MainScheduler.asyncInstance)
             .map({ (roomId, message) -> ChatListSocket? in
                 guard let chatMessage = ChatListSocket.decode(from: message) else {
                     print("❌ [DEBUG] 메시지 디코딩 실패")

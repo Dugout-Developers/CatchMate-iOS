@@ -227,10 +227,10 @@ final class ChatRoomReactor: Reactor {
                     .map({ [weak self] messages, isLast in
                         if isLast {
                             var newMessages: [ChatMessage] = []
-                            let startMessage = ChatMessage(userId: 0, nickName: "", imageUrl: "", message: "", time: Date(), messageType: .startChat, isSocket: false, id: "")
+                            let startMessage = ChatMessage(userId: 0, nickName: "", imageUrl: "", message: "", time: Date(), messageType: .startChat, id: "")
                             newMessages.append(startMessage)
                             if let managerInfo = self?.chat.managerInfo {
-                                let managerInfoMessage = ChatMessage(userId: managerInfo.id, nickName: managerInfo.nickName, imageUrl: "", message: "\(managerInfo.nickName) 님이 채팅에 참여했어요", time: Date(), messageType: .enterUser, isSocket: false, id: "")
+                                let managerInfoMessage = ChatMessage(userId: managerInfo.id, nickName: managerInfo.nickName, imageUrl: "", message: "\(managerInfo.nickName) 님이 채팅에 참여했어요", time: Date(), messageType: .enterUser, id: "")
                                 newMessages.append(managerInfoMessage)
                             }
                             return (newMessages + messages, true)
@@ -355,16 +355,16 @@ final class ChatRoomReactor: Reactor {
                 var messages = messageInfo.messages
                 if messageInfo.isLast {
                     var newMessages: [ChatMessage] = []
-                    let startMessage = ChatMessage(userId: 0, nickName: "", imageUrl: "", message: "", time: Date(), messageType: .startChat, isSocket: false, id: "")
+                    let startMessage = ChatMessage(userId: 0, nickName: "", imageUrl: "", message: "", time: Date(), messageType: .startChat, id: "")
                     newMessages.append(startMessage)
                     let managerInfo = self.chat.managerInfo
-                    let managerInfoMessage = ChatMessage(userId: managerInfo.id, nickName: managerInfo.nickName, imageUrl: "", message: "\(managerInfo.nickName) 님이 채팅에 참여했어요", time: Date(), messageType: .enterUser, isSocket: false, id: "")
+                    let managerInfoMessage = ChatMessage(userId: managerInfo.id, nickName: managerInfo.nickName, imageUrl: "", message: "\(managerInfo.nickName) 님이 채팅에 참여했어요", time: Date(), messageType: .enterUser, id: "")
                     newMessages.append(managerInfoMessage)
                     messages = newMessages + messages
                 }
                 // 현재 페이지가 마지막 페이지거나 마지막 메시지가 포함된 메시지일 경우, 추가 후 종료 (더 이상 다음 페이지 요청 X)
                 if messageInfo.isLast || messages.contains(where: {$0.id == targetMessage.id}) {
-                    var newMessage = messages
+                    let newMessage = messages
                     return Observable.concat([
                         Observable.just(.addMissedMessages(newMessage)),
                         Observable.just(.setIsLast(messageInfo.isLast)),
@@ -458,7 +458,7 @@ final class ChatRoomReactor: Reactor {
                 }
                 return Int(roomId) == self?.chat.chatRoomId
             })
-            .observe(on: MainScheduler.instance)
+            .observe(on: MainScheduler.asyncInstance)
             .subscribe(onNext: { [weak self] (_, message) in
                 print("📩 메시지 수신: \(message)")
                 guard let chatMessage = ChatSocketMessage.decode(from: message) else {
@@ -478,7 +478,7 @@ final class ChatRoomReactor: Reactor {
                 }
                 let senderInfo: SenderInfo? = (type == .date) ? nil : self?.currentState.senderProfiles.first { $0.senderId == chatMessage.senderId }
                 
-                let newMessage = ChatMessage(userId: chatMessage.senderId, nickName: senderInfo?.nickName ?? "", imageUrl: senderInfo?.imageUrl, message: chatMessage.content, time: time, messageType: type, isSocket: true, id: chatMessage.chatMessageId)
+                let newMessage = ChatMessage(userId: chatMessage.senderId, nickName: senderInfo?.nickName ?? "", imageUrl: senderInfo?.imageUrl, message: chatMessage.content, time: time, messageType: type, id: chatMessage.chatMessageId)
                 print("✅ [DEBUG] 메시지 파싱 성공 - \(newMessage)")
                 self?.action.onNext(.receiveMessage(newMessage))
             })

@@ -84,22 +84,23 @@ final class SocketService {
     private var socketHeaderId: String? = nil
     private var retryCount = 0
     private let messageSubject = PublishSubject<(String, String)>() // (roomID, message)
-    private let errorSubject = PublishSubject<Error>()
-    private var connectionSatus = false
+    private let errorSubject = PublishSubject<Error?>()
+    private var connectionStatusSubject = BehaviorSubject<Bool>(value: false)
+
+//    private var connectionStatus = false
     
-//    var messageObservable: Observable<(String, String)> {
-//        return messageSubject
-//            .do(onSubscribe: { print("✅ [DEBUG] messageObservable 구독 시작") },
-//                onDispose: { print("❌ [DEBUG] messageObservable 구독 해제") })
-//    }
+    private var pingTimer: Timer?
+    
     lazy var messageObservable: Observable<(String, String)> = {
         return messageSubject
             .publish()
             .refCount()
     }()
-    var errorObservable: Observable<Error> {
-        return errorSubject.asObservable()
-    }
+    lazy var errorObservable: Observable<Error?> =  {
+        return errorSubject
+            .publish()
+            .refCount()
+    }()
     
     
     var reconnectTrigger = PublishSubject<String?>()
@@ -121,6 +122,7 @@ final class SocketService {
         self.socket = nil
         
         reconnectTrigger
+            .observe(on: MainScheduler.asyncInstance) 
             .map {
                 self.retryCount += 1
                 return $0
@@ -134,11 +136,47 @@ final class SocketService {
                 }
             }
             .disposed(by: disposeBag)
+        
+        connectionStatusSubject
+            .observe(on: MainScheduler.asyncInstance)
+            .subscribe(onNext: { [weak self] isConnected in
+                if isConnected {
+                    self?.startPingTimer()
+                } else {
+                    self?.stopPingTimer()
+                }
+            })
+            .disposed(by: disposeBag)
         print("✅ [DEBUG] SocketService 초기화 완료")
     }
     
     deinit {
         print("💥 [DEBUG] SocketService deinit 호출됨")
+    }
+    
+    private func startPingTimer() {
+          pingTimer?.invalidate() // 기존 타이머가 있으면 종료
+        guard let isConnected = try? connectionStatusSubject.value(), isConnected else {
+            print("⚠️ WebSocket 연결이 끊어졌습니다. Ping 타이머 시작을 중지합니다.")
+            return
+        }
+          pingTimer = Timer.scheduledTimer(timeInterval: 30.0, target: self, selector: #selector(sendPing), userInfo: nil, repeats: true)
+          print("✅ Ping 타이머 시작됨")
+      }
+    @objc private func sendPing() {
+        guard let isConnected = try? connectionStatusSubject.value(), isConnected else {
+            print("⚠️ WebSocket 연결이 끊어졌습니다. Ping 메시지 전송을 중지합니다.")
+            pingTimer?.invalidate()
+            return
+        }
+        
+        socket?.write(ping: Data())
+        print("📩 Ping 메시지 전송")
+    }
+    
+    private func stopPingTimer() {
+        pingTimer?.invalidate()
+        print("❌ Ping 타이머 중지됨")
     }
     
     private func setupWebSocket(chatId: String?) {
@@ -183,7 +221,8 @@ final class SocketService {
         self.setupWebSocket(chatId: chatId)
         socketHeaderId = chatId
         socket?.connect()
-        self.connectionSatus = true
+//        connectionStatusSubject.onNext(true)
+//        self.connectionStatus = true
         if let id = chatId {
             UserDefaults.standard.set(id, forKey: UserDefaultsKeys.ChatInfo.chatRoomId)
         }
@@ -193,13 +232,14 @@ final class SocketService {
             UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.ChatInfo.chatRoomId)
         }
         socket?.disconnect()
-        connectionSatus = false
+        connectionStatusSubject.onNext(false)
+//        connectionStatus = false
         print("🔴 WebSocket 연결 종료")
     }
     
     // MARK: - STOMP Protocol Methods
     private func subscribe(roomID: String?) async {
-        guard connectionSatus else {
+        guard let isConnected = try? connectionStatusSubject.value(), isConnected else {
             print("❌ [ERROR] WebSocket 연결 실패. 채팅방 구독 재시도 요청")
             reconnectTrigger.onNext(roomID)
             return
@@ -221,7 +261,7 @@ final class SocketService {
     }
     
     func disconnect(isIdRemove: Bool = true) {
-        guard connectionSatus else {
+        guard let isConnected = try? connectionStatusSubject.value(), isConnected else {
             print("⚠️ WebSocket이 연결되지 않음. 구독 해제 불가")
             errorSubject.onNext(SocketError.notConnected)
             return
@@ -281,7 +321,7 @@ final class SocketService {
     }
     
     func sendMessage(to roomID: String, message: String) {
-        guard connectionSatus else {
+        guard let isConnected = try? connectionStatusSubject.value(), isConnected else {
             print("⚠️ WebSocket이 연결되지 않음. 메시지 전송 불가")
             errorSubject.onNext(SocketError.notConnected)
             
@@ -319,7 +359,7 @@ extension SocketService: WebSocketDelegate {
         print("⚡️ WebSocket 이벤트 수신: \(event)")
         switch event {
         case .connected:
-            connectionSatus = true
+            connectionStatusSubject.onNext(true)
             print("✅ WebSocket 연결 성공")
             Task {
                 await sendConnectFrame()
@@ -327,7 +367,7 @@ extension SocketService: WebSocketDelegate {
             }
             
         case .disconnected(let reason, let code):
-            connectionSatus = false
+            connectionStatusSubject.onNext(false)
             print("🔴 WebSocket 연결 해제됨: \(reason) (code: \(code))")
             
             // ✅ 403 Forbidden 발생 시, Access Token 갱신 후 WebSocket 재연결
@@ -347,14 +387,20 @@ extension SocketService: WebSocketDelegate {
             handleIncomingMessage(text)
             
         case .error(let error):
-            connectionSatus = false
+            connectionStatusSubject.onNext(false)
             if let error = error {
                 print(error.statusCode)
                 print("🚨 [ERROR] WebSocket 내부 오류 발생: \(error.localizedDescription)")
                 errorSubject.onNext(error)
             }
             self.reconnectTrigger.onNext(preRoomId)
-            
+        case .ping(let data):
+            print("✅ 서버에서 ping 메시지 수신: \(data)")
+        case .pong:
+            print("✅ 서버에서 pong 메시지 수신")
+        case .peerClosed:
+            connectionStatusSubject.onNext(false)
+            self.reconnectTrigger.onNext(preRoomId)
         default:
             break
         }
@@ -409,6 +455,7 @@ extension SocketService: WebSocketDelegate {
                let roomID = destination.split(separator: ".").last.map(String.init) {
                 print("✅ [DEBUG] WebSocket 메시지 정상 파싱 완료! roomID: \(roomID), messageBody: \(messageBody)")
                 messageSubject.onNext((roomID, messageBody))
+                errorSubject.onNext(nil)
             } else {
                 print("❌ [DEBUG] 메시지 파싱 실패")
                 errorSubject.onNext(SocketError.invalidMessage)

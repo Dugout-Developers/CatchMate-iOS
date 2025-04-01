@@ -11,7 +11,7 @@ import ReactorKit
 
 final class NumberPickerViewController: BasePickerViewController , View {
     private let picker: UIPickerView = UIPickerView()
-    private var selectedNum: Int = 1
+    private var selectedNum: Int = 2
     private let numberArr: [Int] = [2,3,4,5,6,7,8]
     private let resetButton: UIButton = {
         let button = UIButton()
@@ -83,7 +83,8 @@ extension NumberPickerViewController {
             .withUnretained(self)
             .subscribe(onNext: { vc, number in
                 vc.selectedNum = number
-                vc.picker.selectRow(number-1, inComponent: 0, animated: false)
+                let index = vc.numberArr.firstIndex(of: number) ?? 0
+                vc.picker.selectRow(index, inComponent: 0, animated: false)
             })
             .disposed(by: disposeBag)
         saveButton.rx.tap
@@ -110,7 +111,8 @@ extension NumberPickerViewController {
             .withUnretained(self)
             .subscribe(onNext: { vc, number in
                 vc.selectedNum = number
-                vc.picker.selectRow(number-1, inComponent: 0, animated: false)
+                let index = vc.numberArr.firstIndex(of: number) ?? 0
+                vc.picker.selectRow(index, inComponent: 0, animated: false)
             })
             .disposed(by: disposeBag)
         
