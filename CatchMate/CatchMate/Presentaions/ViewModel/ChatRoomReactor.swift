@@ -364,7 +364,7 @@ final class ChatRoomReactor: Reactor {
                 }
                 // 현재 페이지가 마지막 페이지거나 마지막 메시지가 포함된 메시지일 경우, 추가 후 종료 (더 이상 다음 페이지 요청 X)
                 if messageInfo.isLast || messages.contains(where: {$0.id == targetMessage.id}) {
-                    var newMessage = messages
+                    let newMessage = messages
                     return Observable.concat([
                         Observable.just(.addMissedMessages(newMessage)),
                         Observable.just(.setIsLast(messageInfo.isLast)),
@@ -458,7 +458,7 @@ final class ChatRoomReactor: Reactor {
                 }
                 return Int(roomId) == self?.chat.chatRoomId
             })
-            .observe(on: MainScheduler.instance)
+            .observe(on: MainScheduler.asyncInstance)
             .subscribe(onNext: { [weak self] (_, message) in
                 print("📩 메시지 수신: \(message)")
                 guard let chatMessage = ChatSocketMessage.decode(from: message) else {
