@@ -69,11 +69,7 @@ final class OtherMessageTableViewCell: UITableViewCell {
         nickNameLabel.text = chat.nickName
         nickNameLabel.applyStyle(textStyle: FontSystem.body03_semiBold)
         var dateString: String
-        if chat.isSocket {
-            dateString = chat.time.toString(format: "a h:mm", timeZone: TimeZone(identifier: "UTC")!)
-        } else {
-            dateString = chat.time.toString(format: "a h:mm")
-        }
+        dateString = chat.time.toString(format: "a h:mm")
         timeLabel.text = dateString
         timeLabel.applyStyle(textStyle: FontSystem.caption01_medium)
         messageLabel.text = chat.message
@@ -114,20 +110,16 @@ final class OtherMessageTableViewCell: UITableViewCell {
             make.leading.equalTo(nickNameLabel)
             make.top.equalTo(nickNameLabel.snp.bottom).offset(8)
             make.bottom.equalToSuperview()
+            make.height.greaterThanOrEqualTo(40).priority(.medium)
         }
-//        messageLabel.setContentHuggingPriority(.required, for: .horizontal)
-//        messageLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-//        timeLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
-
-        timeLabel.setContentCompressionResistancePriority(.init(997), for: .horizontal)
-        timeLabel.setContentHuggingPriority(.init(997), for: .horizontal)
-        messageLabel.setContentCompressionResistancePriority(.init(998), for: .horizontal)
-        messageLabel.setContentHuggingPriority(.init(998), for: .horizontal)
         timeLabel.snp.makeConstraints { make in
             make.leading.equalTo(messageLabel.snp.trailing).offset(8)
             make.trailing.bottom.equalToSuperview()
         }
-
+        timeLabel.setContentCompressionResistancePriority(.init(998), for: .horizontal)
+        timeLabel.setContentHuggingPriority(.init(997), for: .horizontal)
+        messageLabel.setContentCompressionResistancePriority(.init(997), for: .horizontal)
+        messageLabel.setContentHuggingPriority(.init(998), for: .horizontal)
     }
     
     private func updateUI(_ isHiddenProfile: Bool) {
