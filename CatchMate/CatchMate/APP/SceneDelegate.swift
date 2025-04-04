@@ -58,7 +58,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
     private func openAppStore() {
-        let appID = "1234567890" // TODO: - 실제 앱 ID로 변경
+        let appID = "6504273234"
         let appStoreURL = "itms-apps://itunes.apple.com/app/id\(appID)"
         let appStoreWebURL = "https://apps.apple.com/app/id\(appID)"
         

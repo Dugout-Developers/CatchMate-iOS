@@ -108,6 +108,11 @@ extension ReceiveMateListViewController {
             .withUnretained(self)
             .subscribe { vc, dataList in
                 if let list = dataList, !list.isEmpty {
+                    if let presentedViewController = self.presentedViewController {
+                        if presentedViewController is ReceiveMateListDetailViewController {
+                            return // 이미 표시 중인 경우, 추가로 표시하지 않음
+                        }
+                    }
                     let detailPopupVC = ReceiveMateListDetailViewController(reactor: reactor)
                     detailPopupVC.modalPresentationStyle = .overFullScreen
                     vc.present(detailPopupVC, animated: false)
