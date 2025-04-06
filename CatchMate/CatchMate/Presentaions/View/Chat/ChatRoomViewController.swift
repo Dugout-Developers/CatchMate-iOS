@@ -374,8 +374,7 @@ extension ChatRoomViewController {
             .disposed(by: disposeBag)
         
         inputview.rx.sendTap
-            .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
-            .compactMap { $0 }
+            .compactMap { $0?.isEmpty == false ? $0 : nil }
             .distinctUntilChanged()
             .withUnretained(self)
             .map { (vc, text) -> String in
