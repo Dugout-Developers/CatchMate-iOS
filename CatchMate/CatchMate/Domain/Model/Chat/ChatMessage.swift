@@ -92,9 +92,9 @@ struct ChatSocketMessage: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         self.messageType = try container.decode(String.self, forKey: .messageType)
-        self.senderId = try container.decode(Int.self, forKey: .senderId)
-        self.content = try container.decode(String.self, forKey: .content)
-        self.chatMessageId = try container.decode(String.self, forKey: .chatMessageId)
+        self.senderId = (try? container.decode(Int.self, forKey: .senderId)) ?? -1
+        self.content = (try? container.decode(String.self, forKey: .content)) ?? ""
+        self.chatMessageId = (try? container.decode(String.self, forKey: .chatMessageId)) ?? ""
         
         // ✅ sendTime이 없으면 현재 시간으로 대체
         self.sendTime = (try? container.decode(String.self, forKey: .sendTime)) ?? ChatSocketMessage.currentISO8601Time()
