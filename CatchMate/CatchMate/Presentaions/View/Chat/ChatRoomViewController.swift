@@ -399,7 +399,9 @@ extension ChatRoomViewController {
             }
             .disposed(by: disposeBag)
         reactor.state.map {$0.chatError}
-            .map{ $0 == nil }
+            .map{
+                return $0 == nil
+            }
             .distinctUntilChanged()
             .withUnretained(self)
             .subscribe { vc, state in

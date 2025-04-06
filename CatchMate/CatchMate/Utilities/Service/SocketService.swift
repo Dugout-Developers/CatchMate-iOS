@@ -400,7 +400,6 @@ extension SocketService: WebSocketDelegate {
             print("✅ 서버에서 pong 메시지 수신")
         case .peerClosed:
             connectionStatusSubject.onNext(false)
-            self.reconnectTrigger.onNext(preRoomId)
         default:
             break
         }
