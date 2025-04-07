@@ -179,7 +179,7 @@ extension InputFavoriteTeamViewContoller {
             flex.addItem().direction(.column).justifyContent(.start).alignItems(.start).define { flex in
                 flex.addItem(titleLabel1).marginTop(48).marginBottom(4)
                 flex.addItem().direction(.row).alignItems(.center).define { flex in
-                    flex.addItem(titleLabel2).marginRight(6)
+                    flex.addItem(titleLabel2).marginRight(6).shrink(1)
                     flex.addItem(requiredMark).size(6)
                 }.marginBottom(40)
                 for i in stride(from: 0, to: teamButtons.count, by: 3) {

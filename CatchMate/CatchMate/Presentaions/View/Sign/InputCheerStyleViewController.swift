@@ -43,7 +43,7 @@ final class InputCheerStyleViewController: BaseViewController, View {
         return label
     }()
     
-    private let requiredMark: UILabel = {
+    private let optionalLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
         label.text = "선택"
@@ -207,8 +207,8 @@ extension InputCheerStyleViewController {
             flex.addItem().direction(.column).justifyContent(.start).alignItems(.start).define { flex in
                 flex.addItem(titleLabel1).marginTop(48).marginBottom(4)
                 flex.addItem().direction(.row).alignItems(.center).define { flex in
-                    flex.addItem(titleLabel2).marginRight(6)
-                    flex.addItem(requiredMark)
+                    flex.addItem(titleLabel2).marginRight(6).shrink(1) 
+                    flex.addItem(optionalLabel)
                 }.marginBottom(40)
                 for i in stride(from: 0, to: styleButtons.count, by: 2) {
                     flex.addItem().width(100%).direction(.row).justifyContent(.spaceBetween).define { flex in

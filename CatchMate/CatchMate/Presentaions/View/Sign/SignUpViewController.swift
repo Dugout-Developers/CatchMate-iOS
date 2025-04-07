@@ -342,7 +342,7 @@ extension SignUpViewController {
         containerView.flex.direction(.column).marginHorizontal(24).justifyContent(.start).alignItems(.start).define { flex in
             flex.addItem(titleLabel1).marginTop(48).marginBottom(4)
             flex.addItem().direction(.row).alignItems(.center).define { flex in
-                flex.addItem(titleLabel2).marginRight(6)
+                flex.addItem(titleLabel2).marginRight(6).shrink(1) 
                 flex.addItem(requiredMark).size(6)
             }.marginBottom(40)
             flex.addItem().direction(.row).width(100%).justifyContent(.spaceBetween).define { flex in
