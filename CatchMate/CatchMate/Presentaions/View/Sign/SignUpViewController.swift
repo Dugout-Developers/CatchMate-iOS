@@ -197,7 +197,30 @@ extension SignUpViewController {
     
     @objc
     private func clickNextButton(_ sender: UIButton) {
+        if !isValidBirthdate(reactor.currentState.birth) {
+            showCMAlert(titleText: "올바른 생년월일이 아니에요", importantButtonText: "확인", commonButtonText: nil)
+            return
+        }
         navigationController?.pushViewController(InputFavoriteTeamViewContoller(reactor: reactor), animated: true)
+    }
+    
+    
+    func isValidBirthdate(_ input: String) -> Bool {
+        // 길이 체크
+        guard input.count == 6 else { return false }
+
+        // DateFormatter를 사용해서 날짜 파싱
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyMMdd"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+
+        // 문자열을 날짜로 변환 시도
+        if let _ = formatter.date(from: input) {
+            return true // 날짜로 변환 성공 → 형식에 맞음
+        } else {
+            return false // 날짜로 변환 실패 → 형식에 안 맞음
+        }
     }
 }
 // MARK: - bind
