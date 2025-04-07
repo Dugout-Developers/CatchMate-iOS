@@ -460,6 +460,16 @@ extension PostDetailViewController {
             }
             .disposed(by: disposeBag)
         
+        reactor.state.map{$0.applyToastTrigger}
+            .distinctUntilChanged()
+            .filter{$0}
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                vc.showToast(message: "직관 신청을 보냈어요", buttonContainerExists: true)
+                reactor.action.onNext(.resetApplyTrigger)
+            }
+            .disposed(by: disposeBag)
+        
     }
     
     private func setupFavoriteButton(_ state: Bool) {

@@ -45,6 +45,7 @@ final class PostReactor: Reactor {
         case deletePost
         case setError(PresentationError?)
         case upPost
+        case resetApplyTrigger
         case resetUpPostResult
     }
     enum Mutation {
@@ -54,6 +55,7 @@ final class PostReactor: Reactor {
         case setApplyInfo(MyApplyInfo?)
         case deletePost
         case setError(PresentationError?)
+        case setApplyTrigger(Bool)
         case setIsLoadSetting
         case setUpPostResult((result: Bool, message: String?)?)
     }
@@ -66,6 +68,7 @@ final class PostReactor: Reactor {
         var isDelete: Bool = false
         var upPostResult: (result: Bool, message: String?)?
         var isLoadSetting: Bool = false
+        var applyToastTrigger: Bool = false
         var error: PresentationError?
     }
     var postId: String
@@ -131,7 +134,8 @@ final class PostReactor: Reactor {
                     if id > 0 {
                         return Observable.concat([
                             Observable.just(Mutation.setApplyInfo(MyApplyInfo(enrollId: id, addInfo: text ?? ""))),
-                            Observable.just(Mutation.setApplyButtonState(.applied))
+                            Observable.just(Mutation.setApplyButtonState(.applied)),
+                            Observable.just(Mutation.setApplyTrigger(true))
                         ])
                     } else {
                         return Observable.just(Mutation.setError(.showToastMessage(message: "이미 보낸 신청입니다.")))
@@ -174,6 +178,8 @@ final class PostReactor: Reactor {
                 }
         case .resetUpPostResult:
             return Observable.just(Mutation.setUpPostResult(nil))
+        case .resetApplyTrigger:
+            return Observable.just(.setApplyTrigger(false))
         }
     }
     
@@ -204,6 +210,8 @@ final class PostReactor: Reactor {
             newState.upPostResult = result
         case .setIsLoadSetting:
             newState.isLoadSetting = true
+        case .setApplyTrigger(let state):
+            newState.applyToastTrigger = state
         }
         return newState
     }
