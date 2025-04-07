@@ -37,6 +37,7 @@ class BaseViewController: UIViewController, LayoutConfigurable {
         setupViewController()
         setupCustomNavigationBar()
         setupbackButton()
+        setupKeyboardObservers()
         view.backgroundColor = .cmBackgroundColor
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         navigationController?.interactivePopGestureRecognizer?.delegate = self
@@ -53,6 +54,45 @@ class BaseViewController: UIViewController, LayoutConfigurable {
                 additionalSafeAreaInsets.top = 0 // Safe Area 복원
             }
         }
+    }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    private func setupKeyboardObservers() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleKeyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleKeyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+    }
+    @objc private func handleKeyboardWillShow(_ notification: Notification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        
+        // 현재 FirstResponder가 누군지 찾기
+        if let currentResponder = UIResponder.currentFirstResponder as? UIView {
+            let responderFrameInWindow = currentResponder.convert(currentResponder.bounds, to: view.window)
+            let keyboardOriginY = keyboardFrame.origin.y
+
+            // 텍스트필드 하단이 키보드보다 아래에 있으면 -> 겹치는 부분 만큼 올림
+            let overlap = responderFrameInWindow.maxY - keyboardOriginY + 20 // 여유 padding
+
+            if overlap > 0 {
+                UIView.animate(withDuration: 0.3) {
+                    self.view.transform = CGAffineTransform(translationX: 0, y: -overlap)
+                }
+            }
+        }
+    }
+
+    @objc private func handleKeyboardWillHide(_ notification: Notification) {
+        view.transform = .identity
     }
     private func setupErrorView() {
         errorView = ErrorPageView(useSnapKit: useSnapKit)
@@ -184,5 +224,21 @@ extension BaseViewController: UIGestureRecognizerDelegate {
             return false
         }
         return true
+    }
+}
+
+extension UIResponder {
+    private static weak var _currentFirstResponder: UIResponder?
+
+    static var currentFirstResponder: UIResponder? {
+        _currentFirstResponder = nil
+
+        // UIResponder 체인에 있는 모든 객체에 액션을 전달하여 FirstResponder 찾기
+        UIApplication.shared.sendAction(#selector(findFirstResponder(_:)), to: nil, from: nil, for: nil)
+        return _currentFirstResponder
+    }
+
+    @objc private func findFirstResponder(_ sender: Any) {
+        UIResponder._currentFirstResponder = self
     }
 }
