@@ -279,6 +279,8 @@
 		535B3A902D32AC03003FBBBF /* PostList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B3A8E2D32ABFE003FBBBF /* PostList.swift */; };
 		535B3A922D339367003FBBBF /* UpPostResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B3A912D33935F003FBBBF /* UpPostResponseDTO.swift */; };
 		535B3A932D339367003FBBBF /* UpPostResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B3A912D33935F003FBBBF /* UpPostResponseDTO.swift */; };
+		535C5EC42DA4A72C00948209 /* Reactive+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535C5EC32DA4A72200948209 /* Reactive+Extension.swift */; };
+		535C5EC52DA4A72C00948209 /* Reactive+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535C5EC32DA4A72200948209 /* Reactive+Extension.swift */; };
 		536548A32C3EF3B700C2309A /* FavoriteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536548A22C3EF3B700C2309A /* FavoriteListViewController.swift */; };
 		536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAD2C189B230043B1DA /* AppDelegate.swift */; };
 		536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAF2C189B230043B1DA /* SceneDelegate.swift */; };
@@ -747,6 +749,7 @@
 		535AA0672D51BCE2007C7690 /* LoadChatMessageRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadChatMessageRepositoryImpl.swift; sourceTree = "<group>"; };
 		535B3A8E2D32ABFE003FBBBF /* PostList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostList.swift; sourceTree = "<group>"; };
 		535B3A912D33935F003FBBBF /* UpPostResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpPostResponseDTO.swift; sourceTree = "<group>"; };
+		535C5EC32DA4A72200948209 /* Reactive+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Reactive+Extension.swift"; sourceTree = "<group>"; };
 		536548A22C3EF3B700C2309A /* FavoriteListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteListViewController.swift; sourceTree = "<group>"; };
 		536BDDAA2C189B230043B1DA /* CatchMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CatchMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		536BDDAD2C189B230043B1DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -1568,6 +1571,7 @@
 		536BDDE42C196FFD0043B1DA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				535C5EC32DA4A72200948209 /* Reactive+Extension.swift */,
 				53002D042D855D980057CB9A /* Array+Extension.swift */,
 				538E9AA22D6C3C5E00A70A3D /* Notification+Extension.swift */,
 				536BDDE12C196F510043B1DA /* Bundle+Extension.swift */,
@@ -2296,6 +2300,7 @@
 				536BDDB22C189B230043B1DA /* HomeViewController.swift in Sources */,
 				531DCA292C6905430015AC53 /* OtherUserMyPageViewController.swift in Sources */,
 				53EECB012D1150C100775FD6 /* ApplyManageUseCase.swift in Sources */,
+				535C5EC52DA4A72C00948209 /* Reactive+Extension.swift in Sources */,
 				53EECAEB2D0B2FFE00775FD6 /* ProfileEditRepository.swift in Sources */,
 				531288CD2C5408FF000C2FB1 /* LoginModel.swift in Sources */,
 				53577B492D55AEAA00769533 /* ChatSystemCell.swift in Sources */,
@@ -2697,6 +2702,7 @@
 				533B293D2C771EEA00BFE9F6 /* DataError.swift in Sources */,
 				53C6DA062CE47A3000918718 /* UpPostDataSource.swift in Sources */,
 				5375B1A52D2CD43C000581B3 /* NotificationMapper.swift in Sources */,
+				535C5EC42DA4A72C00948209 /* Reactive+Extension.swift in Sources */,
 				53EECAED2D0B304A00775FD6 /* ProfileEditRequestDTO.swift in Sources */,
 				533B29352C771E6000BFE9F6 /* Post.swift in Sources */,
 				533B292E2C771C7D00BFE9F6 /* SetFavoriteRepositoryImpl.swift in Sources */,
