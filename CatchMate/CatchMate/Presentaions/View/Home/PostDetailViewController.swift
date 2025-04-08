@@ -407,7 +407,13 @@ extension PostDetailViewController {
             .subscribe { vc, _ in
                 switch vc.applyButton.type {
                 case .none:
-                    vc.showApplyPopup()
+                    if let post = reactor.currentState.post, post.isFinishGame {
+                        vc.showCMAlert(titleText: "이미 시작된 게임이에요.\n그래도 신청할까요?", importantButtonText: "신청", commonButtonText: "취소", importantAction:  {
+                            vc.showApplyPopup()
+                        })
+                    } else {
+                        vc.showApplyPopup()
+                    }
                 case .applied:
                     vc.showCancelApplyPopup()
                 case .finished:

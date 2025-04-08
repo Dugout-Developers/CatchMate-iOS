@@ -9,12 +9,7 @@ import UIKit
 import RxSwift
 import ReactorKit
 
-enum PlayTime: String, CaseIterable {
-    case two = "14:00"
-    case five = "17:00"
-    case six = "18:00"
-    case sixMiddle = "18:30"
-}
+
 final class AddReactor: Reactor {
     enum Action {
         case setupEditPost(post: Post)
