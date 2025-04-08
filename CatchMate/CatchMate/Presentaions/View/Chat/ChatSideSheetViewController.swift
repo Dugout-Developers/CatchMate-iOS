@@ -45,7 +45,6 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
-        label.lineBreakMode = .byTruncatingTail
         return label
     }()
     private let indicatorImageView: UIImageView = {
@@ -109,6 +108,7 @@ final class ChatSideSheetViewController: BaseViewController, UITableViewDelegate
         titleLabel.lineBreakMode = .byTruncatingTail
         titleLabel.textColor = .cmHeadLineTextColor
         titleLabel.applyStyle(textStyle: FontSystem.body01_medium)
+        titleLabel.lineBreakMode = .byTruncatingTail
         homeTeamImageView.setupTeam(team: chat.postInfo.homeTeam, isMyTeam: chat.postInfo.cheerTeam == chat.postInfo.homeTeam)
         awayTeamImageView.setupTeam(team: chat.postInfo.awayTeam, isMyTeam: chat.postInfo.cheerTeam == chat.postInfo.awayTeam)
     }

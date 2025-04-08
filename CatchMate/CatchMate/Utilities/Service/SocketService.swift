@@ -84,6 +84,7 @@ final class SocketService {
     private var socketHeaderId: String? = nil
     private var retryCount = 0
     private let messageSubject = PublishSubject<(String, String)>() // (roomID, message)
+    private let chatListMessageSubject = PublishSubject<String>()
     private let errorSubject = PublishSubject<Error?>()
     private var connectionStatusSubject = BehaviorSubject<Bool>(value: false)
 
@@ -91,6 +92,11 @@ final class SocketService {
     
     private var pingTimer: Timer?
     
+    lazy var chatListObservable: Observable<String> = {
+        return chatListMessageSubject
+            .publish()
+            .refCount()
+    }()
     lazy var messageObservable: Observable<(String, String)> = {
         return messageSubject
             .publish()
@@ -400,7 +406,6 @@ extension SocketService: WebSocketDelegate {
             print("✅ 서버에서 pong 메시지 수신")
         case .peerClosed:
             connectionStatusSubject.onNext(false)
-            self.reconnectTrigger.onNext(preRoomId)
         default:
             break
         }
@@ -454,7 +459,11 @@ extension SocketService: WebSocketDelegate {
                let messageBody = extractBody(from: text),
                let roomID = destination.split(separator: ".").last.map(String.init) {
                 print("✅ [DEBUG] WebSocket 메시지 정상 파싱 완료! roomID: \(roomID), messageBody: \(messageBody)")
-                messageSubject.onNext((roomID, messageBody))
+                if roomID == "/topic/chatList" {
+                    chatListMessageSubject.onNext(messageBody)
+                } else {
+                    messageSubject.onNext((roomID, messageBody))
+                }
                 errorSubject.onNext(nil)
             } else {
                 print("❌ [DEBUG] 메시지 파싱 실패")

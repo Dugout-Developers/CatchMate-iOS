@@ -374,8 +374,7 @@ extension ChatRoomViewController {
             .disposed(by: disposeBag)
         
         inputview.rx.sendTap
-            .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
-            .compactMap { $0 }
+            .compactMap { $0?.isEmpty == false ? $0 : nil }
             .distinctUntilChanged()
             .withUnretained(self)
             .map { (vc, text) -> String in
@@ -400,7 +399,9 @@ extension ChatRoomViewController {
             }
             .disposed(by: disposeBag)
         reactor.state.map {$0.chatError}
-            .map{ $0 == nil }
+            .map{
+                return $0 == nil
+            }
             .distinctUntilChanged()
             .withUnretained(self)
             .subscribe { vc, state in

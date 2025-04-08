@@ -15,20 +15,36 @@ enum CheerStyles: String, CaseIterable, Codable {
     case silent = "돌하르방"
     case bodhisattva = "보살"
     
-    var subInfo: String {
+    var subInfo1: String {
         switch self {
         case .director:
-            return "여기선 이렇게 하고 저기선\n저렇게 했어야지"
+            return "여기선 이렇게 하고 저기선"
         case .mom:
-            return "못해도 너는 내 새끼\n무조건적 애정과 박수"
+            return "못해도 너는 내 새끼"
         case .eatLove:
-            return "그래서 여기 구장 맛집이\n어디라구요?"
+            return "그래서 여기 구장 맛집이"
         case .cheerleader:
-            return "내가 바로 응원단장이고\n내가 치어리더다"
+            return "내가 바로 응원단장이고"
         case .silent:
-            return "...\n"
+            return "..."
         case .bodhisattva:
-            return "그래 그럴 수 있지\n그래도 잘했다"
+            return "그래 그럴 수 있지"
+        }
+    }
+    var subInfo2: String {
+        switch self {
+        case .director:
+            return "저렇게 했어야지"
+        case .mom:
+            return "무조건적 애정과 박수"
+        case .eatLove:
+            return "어디라구요?"
+        case .cheerleader:
+            return "내가 치어리더다"
+        case .silent:
+            return ""
+        case .bodhisattva:
+            return "그래도 잘했다"
         }
     }
     

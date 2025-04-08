@@ -61,7 +61,7 @@ final class AddViewController: BaseViewController, View {
         label.applyStyle(textStyle: FontSystem.body02_medium)
         return label
     }()
-    private let titleTextField = CMTextField(placeHolder: "제목을 입력해주세요")
+    private let titleTextField = CMTextField(placeHolder: "제목을 입력해주세요 (20자 제한)")
     private let numberPickerTextField = CMPickerTextField(rightAccessoryView: {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16)
@@ -285,9 +285,16 @@ extension AddViewController {
             .disposed(by: disposeBag)
         
         titleTextField.rx.text.orEmpty
-            .map { Reactor.Action.changeTitle($0) }
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .map { vc, text in
+                let string = String(text.prefix(20))
+                vc.titleTextField.text = string
+                return Reactor.Action.changeTitle(string)
+            }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
         
         textview.rx.text.orEmpty
             .distinctUntilChanged()
@@ -382,16 +389,30 @@ extension AddViewController {
                 vc.numberPickerTextField.didSelectItem(String(num))
             }
             .disposed(by: disposeBag)
-        
-        reactor.state.map{$0.title}
-            .distinctUntilChanged()
-            .compactMap{$0}
-            .withUnretained(self)
-            .subscribe { vc, text in
-                vc.titleTextField.text = text
-                vc.titleTextField.updateTextStyle()
-            }
-            .disposed(by: disposeBag)
+//        
+//        reactor.state.map{$0.title}
+//            .distinctUntilChanged()
+//            .compactMap{$0}
+//            .withUnretained(self)
+//            .subscribe { vc, text in
+//                vc.titleTextField.updateTextStyle()
+//            }
+//            .disposed(by: disposeBag)
+        Observable.merge(
+            reactor.state
+                .map { $0.title }
+                .distinctUntilChanged()
+                .compactMap { $0 }
+                .map { _ in }, // 값은 필요 없고 이벤트만 넘기기 위해 Void로 변환
+
+            titleTextField.rx.endEditing
+                .map { _ in } // Void 이벤트로 맞춰줌
+        )
+        .withUnretained(self)
+        .subscribe { vc, _ in
+            vc.titleTextField.updateTextStyle()
+        }
+        .disposed(by: disposeBag)
         
         reactor.state.map{$0.addText}
             .compactMap{$0}

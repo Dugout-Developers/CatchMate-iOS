@@ -112,6 +112,7 @@ final class UserReportViewController: BaseViewController, View {
         let height: CGFloat = 100
         textView.frame = CGRect(x: 0, y: 0, width: width, height: height)
         tableView.tableFooterView = textView
+        tableView.showsVerticalScrollIndicator = false
     }
 
 }
