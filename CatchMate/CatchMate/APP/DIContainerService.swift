@@ -209,7 +209,10 @@ class DIContainerService {
         let exitRepository = ExitChatRoomRepositoryImpl(exitDS: exitDataSource)
         let exitUsecase = ExitChatRoomUseCaseImpl(exitRepo: exitRepository)
         
-        return ChatListReactor(loadchatListUsecase: loadChatListUC, deleteChatUsecase: exitUsecase)
+        let loadChatDS = LoadChatDetailDataSourceImpl(tokenDataSource: tokenDS)
+        let loadChatRepo = LoadChatDetailRepositoryImpl(loadChatDS: loadChatDS)
+        let loadChatUC = LoadChatDetailUseCaseImpl(loadChatRepo: loadChatRepo)
+        return ChatListReactor(loadchatListUsecase: loadChatListUC, deleteChatUsecase: exitUsecase, loadCahtUsecase: loadChatUC)
     }
     
     func makeChatRoomReactor(_ chat: ChatRoomInfo) -> ChatRoomReactor {
