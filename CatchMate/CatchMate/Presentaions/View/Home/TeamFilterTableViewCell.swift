@@ -80,10 +80,12 @@ final class TeamFilterTableViewCell: UITableViewCell{
     func checkUnable() {
         if isUnable {
             checkButton.isEnabled = false
+            contentView.isUserInteractionEnabled = false
             teamNameLabel.textColor = .cmNonImportantTextColor
             self.isClicked = false
         } else {
             checkButton.isEnabled = true
+            contentView.isUserInteractionEnabled = true
             teamNameLabel.textColor = .cmHeadLineTextColor
         }
     }

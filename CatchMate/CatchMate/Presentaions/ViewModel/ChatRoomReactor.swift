@@ -451,6 +451,17 @@ final class ChatRoomReactor: Reactor {
     
     private func observeIncomingMessage() {
         // TODO: - Log 추가하기
+        SocketService.shared?.errorObservable
+            .observe(on: MainScheduler.asyncInstance)
+            .subscribe(onNext: { [weak self] error in
+                if let error = error {
+                    self?.action.onNext(.setChatError(.failedListenToMessages))
+                } else {
+                    self?.action.onNext(.setChatError(nil))
+                }
+            })
+            .disposed(by: disposeBag)
+        
         SocketService.shared?.messageObservable
             .filter({ [weak self] (roomId, _) in
                 if roomId == "/topic/chatList" {

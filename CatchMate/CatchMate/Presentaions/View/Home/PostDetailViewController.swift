@@ -407,7 +407,13 @@ extension PostDetailViewController {
             .subscribe { vc, _ in
                 switch vc.applyButton.type {
                 case .none:
-                    vc.showApplyPopup()
+                    if let post = reactor.currentState.post, post.isFinishGame {
+                        vc.showCMAlert(titleText: "이미 시작된 게임이에요.\n그래도 신청할까요?", importantButtonText: "신청", commonButtonText: "취소", importantAction:  {
+                            vc.showApplyPopup()
+                        })
+                    } else {
+                        vc.showApplyPopup()
+                    }
                 case .applied:
                     vc.showCancelApplyPopup()
                 case .finished:
@@ -457,6 +463,16 @@ extension PostDetailViewController {
                     }
                 }
                 vc.reactor.action.onNext(.resetUpPostResult)
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map{$0.applyToastTrigger}
+            .distinctUntilChanged()
+            .filter{$0}
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                vc.showToast(message: "직관 신청을 보냈어요", buttonContainerExists: true)
+                reactor.action.onNext(.resetApplyTrigger)
             }
             .disposed(by: disposeBag)
         

@@ -105,12 +105,21 @@ final class CheerStyleButton: UIView {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
+        label.adjustsFontSizeToFitWidth = true
         label.textColor = .cmHeadLineTextColor
         return label
     }()
-    private let subInfoLabel: UILabel = {
+    private let subInfoLabel1: UILabel = {
         let label = UILabel()
-        label.numberOfLines = 0
+        label.numberOfLines = 1
+        label.adjustsFontSizeToFitWidth = true
+        label.textColor = .cmNonImportantTextColor
+        return label
+    }()
+    private let subInfoLabel2: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 1
+        label.adjustsFontSizeToFitWidth = true
         label.textColor = .cmNonImportantTextColor
         return label
     }()
@@ -147,7 +156,8 @@ final class CheerStyleButton: UIView {
         self.item = item
         setupData()
         titleLabel.flex.markDirty()
-        subInfoLabel.flex.markDirty()
+        subInfoLabel1.flex.markDirty()
+        subInfoLabel2.flex.markDirty()
         itemImage.flex.markDirty()
         containerView.flex.layout()
     }
@@ -156,14 +166,18 @@ final class CheerStyleButton: UIView {
         if let item {
             titleLabel.text = item.rawValue + " 스타일"
             titleLabel.applyStyle(textStyle: FontSystem.body01_medium)
-            subInfoLabel.text = item.subInfo
-            subInfoLabel.applyStyle(textStyle: FontSystem.body03_medium)
+            subInfoLabel1.text = item.subInfo1
+            subInfoLabel1.applyStyle(textStyle: FontSystem.body03_medium)
+            subInfoLabel2.text = item.subInfo2
+            subInfoLabel2.applyStyle(textStyle: FontSystem.body03_medium)
             itemImage.image = item.iconImage
         } else {
             titleLabel.text = "스타일"
             titleLabel.applyStyle(textStyle: FontSystem.body01_medium)
-            subInfoLabel.text = "스타일을 선택해주세요."
-            subInfoLabel.applyStyle(textStyle: FontSystem.body03_medium)
+            subInfoLabel1.text = "스타일을 선택해주세요."
+            subInfoLabel1.applyStyle(textStyle: FontSystem.body03_medium)
+            subInfoLabel2.text = ""
+            subInfoLabel2.applyStyle(textStyle: FontSystem.body03_medium)
             itemImage.image = UIImage(named: "logo")
         }
 
@@ -172,7 +186,8 @@ final class CheerStyleButton: UIView {
         addSubview(containerView)
         containerView.flex.direction(.column).justifyContent(.start).alignItems(.start).paddingVertical(20).paddingHorizontal(16).define { flex in
             flex.addItem(titleLabel).marginBottom(6)
-            flex.addItem(subInfoLabel).marginBottom(29)
+            flex.addItem(subInfoLabel1)
+            flex.addItem(subInfoLabel2).marginBottom(29)
             flex.addItem(itemImage).size(72).cornerRadius(6).alignSelf(.end)
         }
     }

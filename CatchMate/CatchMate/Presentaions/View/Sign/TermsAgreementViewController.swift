@@ -277,7 +277,7 @@ extension TermsAgreementViewController {
             .justifyContent(.start).alignItems(.start).define { flex in
                 flex.addItem(titleLabel1).marginTop(52)
                 flex.addItem(allAgreeView).direction(.row).alignItems(.center).define { flex in
-                    flex.addItem(titleLabel2).marginRight(6)
+                    flex.addItem(titleLabel2).marginRight(6).shrink(1)
                     flex.addItem(requiredMark).size(6)
                 }.marginBottom(40)
                 flex.addItem().backgroundColor(.grayScale50).cornerRadius(8).direction(.row).width(100%).justifyContent(.start).alignItems(.center).padding(17, 16).define { flex in
