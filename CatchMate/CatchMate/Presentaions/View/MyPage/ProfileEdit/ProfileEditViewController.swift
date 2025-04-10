@@ -148,10 +148,23 @@ extension ProfileEditViewController {
         imageEditButton.rx.tap
             .withUnretained(self)
             .subscribe { vc, _ in
-                PhotoPermissionService.shared.checkPermission(from: self) { result in
-                    if result {
-                        self.openLibrary()
+                let alert = UIAlertController(title: "프로필 사진 설정", message: nil, preferredStyle: .actionSheet)
+                let defaultImage = UIAlertAction(title: "기본 이미지 적용", style: .default) { _ in
+                    reactor.action.onNext(.changeImage(UIImage(named: "defaultImg")))
+                }
+                let gallery = UIAlertAction(title: "앨범에서 사진 선택", style: .default) { _ in
+                    PhotoPermissionService.shared.checkPermission(from: self) { result in
+                        if result {
+                            self.openLibrary()
+                        }
                     }
+                }
+                let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+                alert.addAction(defaultImage)
+                alert.addAction(gallery)
+                alert.addAction(cancel)
+                if vc.presentedViewController == nil {
+                    vc.present(alert, animated: true, completion: nil)
                 }
             }
             .disposed(by: disposeBag)
