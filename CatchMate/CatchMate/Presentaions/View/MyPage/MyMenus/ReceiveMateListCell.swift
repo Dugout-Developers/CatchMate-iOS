@@ -170,7 +170,7 @@ final class ReceiveCollectionViewCell: UICollectionViewCell {
         if let urlString = user.picture, let url = URL(string: urlString) {
             profileImageView.kf.setImage(with: url)
         } else {
-            profileImageView.image = UIImage(named: "defaultImg")
+            profileImageView.image = UIImage(named: "defaultImage")
         }
         nicknameLabel.text = user.nickName
         nicknameLabel.applyStyle(textStyle: FontSystem.body02_medium)

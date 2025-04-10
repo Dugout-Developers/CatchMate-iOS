@@ -56,8 +56,8 @@ final class ChatRoomReactor: Reactor {
         case exitRoom
         case setError(PresentationError?)
         case setChatError(ChatError?)
-        case loadImage(String)
-        case changeImage(UIImage)
+        case loadImage
+        case changeImage(UIImage?)
         case exportUser(Int)
         case toggleNotification
         case loadMissedMessages
@@ -287,6 +287,9 @@ final class ChatRoomReactor: Reactor {
             return Observable.just(.setChatError(chatError))
             
         case .changeImage(let image):
+            guard let image = image ?? chat.postInfo.homeTeam.getFillImage else {
+                return Observable.just(.setError(.showToastMessage(message: "이미지 변경에 실패했어요")))
+            }
             return updateImageUS.execute(chatId: chat.chatRoomId, image)
                 .map { state in
                     if state {
@@ -302,14 +305,20 @@ final class ChatRoomReactor: Reactor {
                         return Observable.just(.setError(ErrorMapper.mapToPresentationError(error)))
                     }
                 }
-        case .loadImage(let urlString):
-            return Observable.create { observer in
-                ImageLoadHelper.urlToUIImage(urlString) { image in
-                    observer.onNext(.setImage(image))
-                    observer.onCompleted()
+        case .loadImage:
+            return loadInfoUS.loadChatImage(chatId: chat.chatRoomId)
+                .flatMap { imageUrl in
+                    ImageLoadHelper.urlToUIImage(imageUrl)
+                        .asObservable()
                 }
-                return Disposables.create()
-            }
+                .withUnretained(self)
+                .map { reactor, image in
+                    let image = image ?? reactor.chat.postInfo.homeTeam.getFillImage
+                    return Mutation.setImage(image)
+                }
+                .catch { _ in
+                    Observable.empty()
+                }
         case .exportUser(let userId):
             return exportUS.exportUser(chatId: chat.chatRoomId, userId: userId)
                 .withUnretained(self)

@@ -150,7 +150,7 @@ extension ProfileEditViewController {
             .subscribe { vc, _ in
                 let alert = UIAlertController(title: "프로필 사진 설정", message: nil, preferredStyle: .actionSheet)
                 let defaultImage = UIAlertAction(title: "기본 이미지 적용", style: .default) { _ in
-                    reactor.action.onNext(.changeImage(UIImage(named: "defaultImg")))
+                    reactor.action.onNext(.changeImage(UIImage(named: "defaultImage")))
                 }
                 let gallery = UIAlertAction(title: "앨범에서 사진 선택", style: .default) { _ in
                     PhotoPermissionService.shared.checkPermission(from: self) { result in

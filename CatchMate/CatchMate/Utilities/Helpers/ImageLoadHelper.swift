@@ -7,9 +7,10 @@
 
 import UIKit
 import Kingfisher
+import RxSwift
 
 final class ImageLoadHelper {
-    static func loadImage(_ profileImageView: UIImageView, pictureString: String?, defaultImage: UIImage? = UIImage(named: "defaultImg")!) {
+    static func loadImage(_ profileImageView: UIImageView, pictureString: String?, defaultImage: UIImage? = UIImage(named: "defaultImage")!) {
         if let string = pictureString,
            let processedString = processString(string),
            let url = URL(string: processedString) {
@@ -41,6 +42,27 @@ final class ImageLoadHelper {
             case .failure:
                 completion(nil)
             }
+        }
+    }
+    
+    static func urlToUIImage(_ imageString: String) -> Single<UIImage?> {
+        return Single<UIImage?>.create { single in
+            guard let url = URL(string: imageString) else {
+                print("잘못된 URL")
+                single(.success(nil))
+                return Disposables.create()
+            }
+
+            KingfisherManager.shared.retrieveImage(with: url) { result in
+                switch result {
+                case .success(let value):
+                    single(.success(value.image))
+                case .failure:
+                    single(.success(nil))
+                }
+            }
+
+            return Disposables.create()
         }
     }
 

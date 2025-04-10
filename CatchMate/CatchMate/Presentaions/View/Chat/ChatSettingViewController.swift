@@ -46,8 +46,8 @@ final class ChatSettingViewController: BaseViewController, View {
         label.applyStyle(textStyle: FontSystem.headline03_medium)
         return label
     }()
-    private let profileImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "profile"))
+    private let chatImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "defaultImage"))
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 34
         imageView.contentMode = .scaleAspectFill
@@ -83,6 +83,7 @@ final class ChatSettingViewController: BaseViewController, View {
         setupUI()
         setupTableView()
         bind(reactor: reactor)
+        reactor.action.onNext(.loadImage)
     }
     
     init(reactor: ChatRoomReactor, chat: ChatRoomInfo, people: [SenderInfo]) throws {
@@ -102,7 +103,7 @@ final class ChatSettingViewController: BaseViewController, View {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
@@ -146,7 +147,7 @@ extension ChatSettingViewController {
         reactor.state.map{$0.image}
             .withUnretained(self)
             .subscribe { vc, image in
-                vc.profileImageView.image = image
+                vc.chatImageView.image = image
             }
             .disposed(by: disposeBag)
         
@@ -169,7 +170,25 @@ extension ChatSettingViewController {
             .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
             .withUnretained(self)
             .subscribe { vc, _ in
-                vc.openLibrary()
+                let teamImage = vc.chat.postInfo.homeTeam.getFillImage
+                let alert = UIAlertController(title: "채팅방 사진 설정", message: nil, preferredStyle: .actionSheet)
+                let defaultImage = UIAlertAction(title: "기본 이미지 적용", style: .default) { _ in
+                    reactor.action.onNext(.changeImage(teamImage))
+                }
+                let gallery = UIAlertAction(title: "앨범에서 사진 선택", style: .default) { _ in
+                    PhotoPermissionService.shared.checkPermission(from: self) { result in
+                        if result {
+                            self.openLibrary()
+                        }
+                    }
+                }
+                let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+                alert.addAction(defaultImage)
+                alert.addAction(gallery)
+                alert.addAction(cancel)
+                if vc.presentedViewController == nil {
+                    vc.present(alert, animated: true, completion: nil)
+                }
             }
             .disposed(by: disposeBag)
         
@@ -197,7 +216,7 @@ extension ChatSettingViewController {
         view.addSubviews(views: [navBarView, changeImageView, partyInfoView, tableView])
         partyInfoView.addSubview(partyInfoLabel)
         navBarView.addSubviews(views: [exitButton, navTitleLabel])
-        changeImageView.addSubviews(views: [profileImageView, imageEditButton])
+        changeImageView.addSubviews(views: [chatImageView, imageEditButton])
         navBarView.snp.makeConstraints { make in
             make.leading.trailing.top.equalTo(view.safeAreaLayoutGuide)
         }
@@ -214,13 +233,13 @@ extension ChatSettingViewController {
             make.top.equalTo(navBarView.snp.bottom)
             make.leading.trailing.equalToSuperview()
         }
-        profileImageView.snp.makeConstraints { make in
+        chatImageView.snp.makeConstraints { make in
             make.size.equalTo(68)
             make.center.equalToSuperview()
             make.top.bottom.equalToSuperview().inset(16)
         }
         imageEditButton.snp.makeConstraints { make in
-            make.edges.equalTo(profileImageView)
+            make.edges.equalTo(chatImageView)
         }
         partyInfoView.snp.makeConstraints { make in
             make.top.equalTo(changeImageView.snp.bottom).offset(8)
