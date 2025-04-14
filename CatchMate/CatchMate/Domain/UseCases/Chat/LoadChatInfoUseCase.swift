@@ -12,6 +12,7 @@ protocol LoadChatInfoUseCase {
     func loadChatNotificationStatus(chatId: Int) -> Observable<Bool>
     func loadChatRoomUsers(chatId: Int) -> Observable<[SenderInfo]>
     func loadChatMessages(chatId: Int, id: String?) -> Observable<(messages: [ChatMessage], isLast: Bool)>
+    func loadChatImage(chatId: Int) -> Observable<String>
 }
 
 final class LoadChatInfoUseCaseImpl: LoadChatInfoUseCase {
@@ -25,6 +26,22 @@ final class LoadChatInfoUseCaseImpl: LoadChatInfoUseCase {
         self.loadChatUsersRepo = loadChatUsersRP
         self.loadChatMessageRepo = loadChatMessageRepo
     }
+    
+    func loadChatImage(chatId: Int) -> RxSwift.Observable<String> {
+        LoggerService.shared.log(level: .info, "채팅방 이미지 정보 불러오기")
+        return loadChatInfoRepo.loadChatImage(chatId)
+            .catch { error in
+                if let localizedError = error as? LocalizedError, -1999...(-1000) ~= localizedError.statusCode {
+                    // TokenError
+                    let domainError = DomainError(error: error, context: .tokenUnavailable)
+                    LoggerService.shared.errorLog(domainError, domain: "load_chat_image", message: domainError.errorDescription)
+                    return Observable.error(DomainError(error: error, context: .tokenUnavailable))
+                }
+                return Observable.just("")
+            }
+    }
+    
+    
     func loadChatNotificationStatus(chatId: Int) -> RxSwift.Observable<Bool> {
         LoggerService.shared.log(level: .info, "채팅방 알림 정보 불러오기")
         return loadChatInfoRepo.loadChatNotificationStatus(chatId)

@@ -31,4 +31,12 @@ final class LoadChatDetailRepositoryImpl: LoadChatDetailRepository {
             }
     }
     
+    func loadChatImage(_ chatId: Int) -> RxSwift.Observable<String> {
+        return loadChatDS.loadChatDetail(chatId)
+            .map { dto in
+                return dto.chatRoomImage
+            }
+    }
+    
+    
 }

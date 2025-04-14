@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct SimplePost: Identifiable, Equatable {
+struct SimplePost: Identifiable, Equatable, Codable {
     var id: String
     let title: String
     let homeTeam: Team

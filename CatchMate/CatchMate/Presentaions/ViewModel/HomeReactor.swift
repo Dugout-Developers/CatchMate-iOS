@@ -82,20 +82,62 @@ final class HomeReactor: Reactor {
             return Observable.just(Mutation.setSelectedPost(post))
             
         case .setupUserInfo:
-            return setupUseCase.setupInfo()
-                .do(onNext: { result in
-                    SetupInfoService.shared.saveUserInfo(UserInfoDTO(id: String(result.id), email: result.email, team: result.team.rawValue, nickname: result.nickName, imageUrl: result.imageUrl))
-                })
-                .withUnretained(self)
-                .flatMap({ reactor, _ in
-                    let date = reactor.currentState.dateFilterValue
-                    let teams = reactor.currentState.selectedTeams
-                    let number = reactor.currentState.seletedNumberFilter
-                    return reactor.updateFiltersAndLoadPosts(date: date, teams: teams, number: number)
-                })
-                .catch { error in
-                    return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
-                }
+            let cachedPosts: [SimplePost]? = CacheService.shared?.load(from: .postList)
+             let isValid = CacheService.shared?.isCacheValid(for: .postList) ?? false
+
+             // Step 1. 캐시가 있다면 바로 보여줌
+             let cacheMutation: Observable<Mutation> = {
+                 if let cached = cachedPosts {
+                     return .just(.loadPost(cached, append: false))
+                 } else {
+                     return .empty()
+                 }
+             }()
+
+             // Step 2. 유저 정보 세팅 (항상 필요)
+             let userSetup = setupUseCase.setupInfo()
+                 .do(onNext: { result in
+                     SetupInfoService.shared.saveUserInfo(
+                         UserInfoDTO(
+                             id: String(result.id),
+                             email: result.email,
+                             team: result.team.rawValue,
+                             nickname: result.nickName,
+                             imageUrl: result.imageUrl
+                         )
+                     )
+                 })
+                 .map { _ in () }
+
+             // Step 3. API 호출이 필요한 경우만 진행
+             let apiFetchIfNeeded: Observable<Mutation> = {
+                 // 캐시가 없거나 유효하지 않을 경우에만 호출
+                 if cachedPosts == nil || !isValid {
+                     return loadPostListUsecase.loadPostList(
+                         pageNum: 0,
+                         gudan: currentState.selectedTeams.map { $0.serverId },
+                         gameDate: currentState.dateFilterValue?.toString(format: "YYYY-MM-dd") ?? "",
+                         people: currentState.seletedNumberFilter ?? 0,
+                         isGuest: isGuest
+                     )
+                     .map { data in
+                         CacheService.shared?.save(data.post, to: .postList)
+                         return .loadPost(data.post, append: false)
+                     }
+                     .catch { error in
+                         return .just(.setError(ErrorMapper.mapToPresentationError(error)))
+                     }
+                 } else {
+                     // 캐시가 유효하므로 API 호출 생략
+                     return .empty()
+                 }
+             }()
+
+             return Observable.concat([
+                 cacheMutation,  // 보여주고
+                 userSetup.flatMap { _ in apiFetchIfNeeded },  // 필요 시에만 새로 호출
+                 .just(.incrementPage)
+             ])
         case .loadGuestPosts:
             let date = currentState.dateFilterValue
             let teams = currentState.selectedTeams
@@ -139,7 +181,12 @@ final class HomeReactor: Reactor {
             return Observable.concat([
                 Observable.just(Mutation.setRefreshing(true)),
                 Observable.just(Mutation.resetPage),
-                updateFiltersAndLoadPosts(date: currentState.dateFilterValue, teams: currentState.selectedTeams, number: currentState.seletedNumberFilter),
+                updateFiltersAndLoadPosts(
+                    date: currentState.dateFilterValue,
+                    teams: currentState.selectedTeams,
+                    number: currentState.seletedNumberFilter,
+                    shouldSaveCache: true 
+                ),
                 Observable.just(Mutation.setIsLast(false)),
                 Observable.just(Mutation.setRefreshing(false))
             ])
@@ -187,14 +234,17 @@ final class HomeReactor: Reactor {
     }
     
     // Helper Method: 필터 업데이트 및 포스트 로딩 처리
-    private func updateFiltersAndLoadPosts(date: Date?, teams: [Team]?, number: Int?) -> Observable<Mutation> {
+    private func updateFiltersAndLoadPosts(date: Date?, teams: [Team]?, number: Int?, shouldSaveCache: Bool = false) -> Observable<Mutation> {
         let gudan = (teams ?? currentState.selectedTeams).map { $0.serverId }
         let requestDate = date?.toString(format: "YYYY-MM-dd") ?? ""
         let requestNumber = number ?? 0
         let loadList = loadPostListUsecase.loadPostList(pageNum: 0, gudan: gudan, gameDate: requestDate, people: requestNumber, isGuest: isGuest)
             .map { data in
-                let list = data.post
-                return Mutation.loadPost(list, append: false)
+                let posts = data.post
+                if shouldSaveCache {
+                    CacheService.shared?.save(posts, to: .postList)
+                }
+                return Mutation.loadPost(posts, append: false)
             }
             .catch { error in
                 return Observable.just(Mutation.setError(ErrorMapper.mapToPresentationError(error)))
