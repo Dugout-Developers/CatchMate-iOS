@@ -68,7 +68,7 @@ final class PostMapper {
             return nil
         }
         
-        guard let gameDate = DateHelper.shared.convertISODateToCustomStrings(isoDateString: gameInfo.gameStartDate ?? "") else {
+        guard let gameDate = DateHelper.shared.convertISODateToCustomStrings(isoDateString: gameInfo.gameStartDate ?? "", dateFormat: "M월 d일 EEEE") else {
             LoggerService.shared.log("Post DTO -> Post Mapping Error: Game Date 변환 실패")
             return nil
         }

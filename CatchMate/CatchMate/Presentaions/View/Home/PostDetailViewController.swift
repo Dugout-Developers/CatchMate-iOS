@@ -262,12 +262,7 @@ final class PostDetailViewController: BaseViewController, View {
     
     private func setupData(post: Post) {
         print(post)
-        if let date = DateHelper.shared.toDate(from: post.date, format: "MM.dd") {
-            let dateString = DateHelper.shared.toString(from: date, format: "M월 d일 EEEE")
-            dateValueLabel.text = "\(dateString) | \(post.playTime)"
-        } else {
-            dateValueLabel.text = "\(post.date) | \(post.playTime)"
-        }
+        dateValueLabel.text = "\(post.date) | \(post.playTime)"
         titleLabel.text = post.title
         placeValueLabel.text = post.location
         partynumValueLabel.text = "\(post.maxPerson)명"

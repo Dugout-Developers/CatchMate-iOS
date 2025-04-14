@@ -286,6 +286,7 @@
 		535C5ED02DA4BAF900948209 /* SetupInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA222C7EACB1004FAF00 /* SetupInfoService.swift */; };
 		535C5ED12DA4BB1600948209 /* UserInfoDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA262C7EB493004FAF00 /* UserInfoDTO.swift */; };
 		535C5ED22DA4BB1F00948209 /* UserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBA242C7EAE1B004FAF00 /* UserDefaultsKeys.swift */; };
+		535C5ED82DA7A29500948209 /* CacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535C5ED72DA7A28A00948209 /* CacheService.swift */; };
 		536548A32C3EF3B700C2309A /* FavoriteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536548A22C3EF3B700C2309A /* FavoriteListViewController.swift */; };
 		536BDDAE2C189B230043B1DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAD2C189B230043B1DA /* AppDelegate.swift */; };
 		536BDDB02C189B230043B1DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536BDDAF2C189B230043B1DA /* SceneDelegate.swift */; };
@@ -745,6 +746,7 @@
 		535C5EC32DA4A72200948209 /* Reactive+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Reactive+Extension.swift"; sourceTree = "<group>"; };
 		535C5EC62DA4B70400948209 /* PostIsFinishGameTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostIsFinishGameTest.swift; sourceTree = "<group>"; };
 		535C5ECC2DA4BA6900948209 /* PlayTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTime.swift; sourceTree = "<group>"; };
+		535C5ED72DA7A28A00948209 /* CacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheService.swift; sourceTree = "<group>"; };
 		536548A22C3EF3B700C2309A /* FavoriteListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteListViewController.swift; sourceTree = "<group>"; };
 		536BDDAA2C189B230043B1DA /* CatchMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CatchMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		536BDDAD2C189B230043B1DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -1104,6 +1106,7 @@
 		531786722C202F0300ACEF6A /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				535C5ED72DA7A28A00948209 /* CacheService.swift */,
 				537B8A9F2D6D887800C0499E /* PhotoPermissionService.swift */,
 				537B8A992D6D67B100C0499E /* AppVersionService.swift */,
 				538E9AA02D6C0FF400A70A3D /* NotificationService.swift */,
@@ -2325,6 +2328,7 @@
 				534E39D32C634E26006D180E /* LoginUserDefaultsService.swift in Sources */,
 				53B8E2422C5D0A2D001D0ADF /* ProfileEditViewController.swift in Sources */,
 				53014A352D6442F8004C2EE0 /* OpenSourceLibraryDetailViewController.swift in Sources */,
+				535C5ED82DA7A29500948209 /* CacheService.swift in Sources */,
 				535AA0352D460480007C7690 /* LoadChatListUseCase.swift in Sources */,
 				53E4A9BC2C4FFB8400D21B49 /* SignUp.swift in Sources */,
 				5301E2A72C5B7F740078E910 /* MypageListCell.swift in Sources */,
