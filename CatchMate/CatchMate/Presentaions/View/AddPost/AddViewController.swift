@@ -174,8 +174,9 @@ final class AddViewController: BaseViewController, View {
         bind(reactor: reactor)
         if let editPost = editPost {
             reactor.action.onNext(.setupEditPost(post: editPost))
+        } else {
+            reactor.action.onNext(.loadTempPost)
         }
-        reactor.action.onNext(.loadTempPost)
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -208,7 +209,8 @@ final class AddViewController: BaseViewController, View {
         
         // numberPicker Setup
         numberPickerTextField.parentViewController = self
-        numberPickerTextField.pickerViewController = NumberPickerViewController(reactor: reactor)
+        let currentPerson: Int? = editPost == nil ? nil : editPost!.currentPerson - 1
+        numberPickerTextField.pickerViewController = NumberPickerViewController(reactor: reactor, disableMaxNumber: currentPerson)
         numberPickerTextField.customDetent = BasePickerViewController.returnCustomDetent(height: SheetHeight.numberFilter, identifier: "NumberFilter")
         
         // TeamPicker Setup
@@ -389,7 +391,15 @@ extension AddViewController {
                 vc.numberPickerTextField.didSelectItem(String(num))
             }
             .disposed(by: disposeBag)
-//        
+        
+        reactor.state.map{$0.validationMemberCount}
+            .distinctUntilChanged()
+            .filter{$0}
+            .withUnretained(self)
+            .subscribe { vc, _ in
+                vc.showToast(message: "현재 참여한 인원보다 적은 인원은 선택할 수 없어요", buttonContainerExists: true)
+            }
+            .disposed(by: disposeBag)
 //        reactor.state.map{$0.title}
 //            .distinctUntilChanged()
 //            .compactMap{$0}

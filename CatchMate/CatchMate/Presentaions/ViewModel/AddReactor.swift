@@ -80,6 +80,7 @@ final class AddReactor: Reactor {
         var loadTempPost: Void?
         var isLoadTempPost: Bool = false
         var tempPost: TempPost?
+        var validationMemberCount: Bool = false
         var error: PresentationError?
     }
     
@@ -279,6 +280,8 @@ final class AddReactor: Reactor {
     
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
+        newState.validationMemberCount = false
+        newState.error = nil
         switch mutation {
         case .updateGender(let gender):
             newState.selectedGender = gender
@@ -303,7 +306,15 @@ final class AddReactor: Reactor {
         case .updateAddText(let text):
             newState.addText = text
         case .updatePartyNumber(let num):
-            newState.partyNumber = num
+            if let currentPerson = currentState.editPost?.currentPerson {
+                if num ?? 0 >= currentPerson {
+                    newState.partyNumber = num
+                } else {
+                    newState.validationMemberCount = true
+                }
+            } else {
+                newState.partyNumber = num
+            }
         case .savePost(let postId):
             newState.savePostResult = postId
             
