@@ -25,6 +25,7 @@ final class AddReactor: Reactor {
         case changePartyNumber(Int)
         case changePlcase(String)
         case changeCheerTeam(Team)
+        case updateDateString
         case updatePost
         case updateEditPost
         case tempPost
@@ -40,6 +41,7 @@ final class AddReactor: Reactor {
         case updateTime(PlayTime?)
         case updateGender(Gender?)
         case updateAge([Int])
+        case updateDateLabel(String)
         case updateDatePickerSaveButton
         case updateHomeTeam(Team?)
         case updageAwayTeam(Team?)
@@ -200,7 +202,8 @@ final class AddReactor: Reactor {
                 return Observable.concat([
                     Observable.just(Mutation.updateTitle(post.title)),
                     Observable.just(Mutation.updatePartyNumber(post.maxPerson)),
-                    Observable.just(Mutation.updateDate(DateHelper.shared.toDate(from: post.date, format: "MM.dd"))),
+                    Observable.just(Mutation.updateDateLabel("\(post.date) | \(playTime.rawValue)")),
+                    Observable.just(Mutation.updateDate(DateHelper.shared.toDate(from: post.gameDateString, format: "yyyy-MM-dd'T'HH:mm:ss"))),
                     Observable.just(Mutation.updateTime(playTime)),
                     Observable.just(Mutation.updateHomeTeam(post.homeTeam)),
                     Observable.just(Mutation.updageAwayTeam(post.awayTeam)),
@@ -275,6 +278,11 @@ final class AddReactor: Reactor {
                 }
         case .setIsLoadTempPost:
             return Observable.just(Mutation.setIsLoadTempPost)
+        case .updateDateString:
+            return Observable.concat([
+                Observable.just(Mutation.updateDateLabel(updateDateString(currentState))),
+                Observable.just(Mutation.updateSaveButton)
+            ])
         }
     }
     
@@ -292,8 +300,7 @@ final class AddReactor: Reactor {
         case .updateTime(let time):
             newState.selecteTime = time
         case .updateDatePickerSaveButton:
-            if let date = newState.selecteDate, let time = newState.selecteTime {
-                newState.dateInfoString = "\(DateHelper.shared.toString(from: date, format: "M월d일 EEEE")) | \(time.rawValue)"
+            if newState.selecteDate != nil && newState.selecteTime != nil {
                 newState.datePickerSaveButtonState = true
             } else {
                 newState.datePickerSaveButtonState = false
@@ -357,8 +364,21 @@ final class AddReactor: Reactor {
         case .setTempPost(let post):
             newState.tempPost = post
             newState.loadTempPost = ()
+        case .updateDateLabel(let dateString):
+            newState.dateInfoString = dateString
+            newState.datePickerSaveButtonState = true
         }
         return newState
+    }
+    private func updateDateString(_ state: State) -> String {
+        if let date = state.selecteDate, let time = state.selecteTime {
+            let dateString = DateHelper.shared.toString(from: date, format: "M월d일 EEEE")
+            if dateString == "" {
+                return ""
+            }
+            return "\(dateString) | \(time.rawValue)"
+        }
+        return ""
     }
     private func validatePost(_ state: State) -> (RequestPost, SimpleUser)? {
         if let user = writer, let homeTeam = state.homeTeam, let awayTeam = state.awayTeam, let cheerTeam = state.cheerTeam, let place = state.place, let maxNum = state.partyNumber, let date = state.selecteDate, let time = state.selecteTime,

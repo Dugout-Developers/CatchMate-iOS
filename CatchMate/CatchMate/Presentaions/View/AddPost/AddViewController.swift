@@ -400,14 +400,16 @@ extension AddViewController {
                 vc.showToast(message: "현재 참여한 인원보다 적은 인원은 선택할 수 없어요", buttonContainerExists: true)
             }
             .disposed(by: disposeBag)
-//        reactor.state.map{$0.title}
-//            .distinctUntilChanged()
-//            .compactMap{$0}
-//            .withUnretained(self)
-//            .subscribe { vc, text in
-//                vc.titleTextField.updateTextStyle()
-//            }
-//            .disposed(by: disposeBag)
+
+        reactor.state.map{$0.editPost}
+            .distinctUntilChanged()
+            .compactMap{$0?.title}
+            .withUnretained(self)
+            .subscribe(onNext: { vc, title in
+                vc.titleTextField.text = title
+                vc.titleTextField.updateTextStyle()
+            })
+            .disposed(by: disposeBag)
         Observable.merge(
             reactor.state
                 .map { $0.title }
