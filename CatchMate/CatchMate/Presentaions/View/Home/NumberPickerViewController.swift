@@ -28,8 +28,8 @@ final class NumberPickerViewController: BasePickerViewController , View {
     var reactor: HomeReactor?
     var addReactor: AddReactor?
     var disposeBag = DisposeBag()
-    
-    init(reactor: any Reactor) {
+    var disableMaxNumber: Int?
+    init(reactor: any Reactor, disableMaxNumber: Int? = nil) {
         super.init(nibName: nil, bundle: nil)
         
         if let homeReactor = reactor as? HomeReactor {
@@ -37,6 +37,8 @@ final class NumberPickerViewController: BasePickerViewController , View {
         } else if let addReactor = reactor as? AddReactor {
             self.addReactor = addReactor
         }
+        
+        self.disableMaxNumber = disableMaxNumber
     }
     @available(*, unavailable)
     required init?(coder: NSCoder) {
@@ -138,13 +140,22 @@ extension NumberPickerViewController: UIPickerViewDelegate, UIPickerViewDataSour
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         selectedNum = numberArr[row]
     }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return "\(numberArr[row])명"
-    }
-    
+
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
         return 40.0
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        let title = "\(numberArr[row])명"
+        if let disableMaxNumber = disableMaxNumber {
+            if numberArr[row] <= disableMaxNumber {
+                // 비활성화 처리
+                return NSAttributedString(string: title, attributes: [.foregroundColor: UIColor.grayScale300])
+            } else {
+                return NSAttributedString(string: title, attributes: [.foregroundColor: UIColor.black])
+            }
+        }
+        return NSAttributedString(string: title, attributes: [.foregroundColor: UIColor.black])
     }
 }
 // MARK: - UI

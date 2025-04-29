@@ -137,7 +137,7 @@ final class AuthInfoSettingViewController: BaseViewController, View {
         deleteIDButton.rx.tap
             .withUnretained(self)
             .subscribe { vc, _ in
-                vc.showCMAlert(titleText: "탈퇴하시겠습니까?", importantButtonText: "네", commonButtonText: "아니요", importantAction:  {
+                vc.showCMAlert(titleText: "아직 함께할 경기가 많이 남았어요\n정말 떠나시겠어요?", importantButtonText: "네", commonButtonText: "아니요", importantAction:  {
                     reactor.action.onNext(.withdraw)
                 })
             }

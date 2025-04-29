@@ -261,7 +261,6 @@ final class PostDetailViewController: BaseViewController, View {
     }
     
     private func setupData(post: Post) {
-        print(post)
         dateValueLabel.text = "\(post.date) | \(post.playTime)"
         titleLabel.text = post.title
         placeValueLabel.text = post.location

@@ -104,7 +104,6 @@ final class DateFilterViewController: BasePickerViewController, View {
             }
         } else {
             saveButton.isEnabled = true
-            saveButton.addTarget(self, action: #selector(clickSaveButton), for: .touchUpInside)
         }
     }
     @objc private func clickTimeButton(_ gesture: UITapGestureRecognizer) {
@@ -112,13 +111,7 @@ final class DateFilterViewController: BasePickerViewController, View {
         selectedTimeIndex = tapLabel.tag
     }
 
-    @objc private func clickSaveButton(_ sender: UIButton) {
-        if let selectedDate = cmDatePicker.selectedDate {
-            itemSelected(DateHelper.shared.toString(from: selectedDate, format: "M월 d일 EEEE"))
-        } else {
-            itemSelected("")
-        }
-    }
+
 }
 
 // MARK: -
@@ -170,6 +163,14 @@ extension DateFilterViewController {
             .map{AddReactor.Action.changeDate($0)}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        saveButton.rx.tap
+            .do(onNext: { [weak self] in
+                guard let self = self, self.presentingViewController != nil else { return }
+                self.dismiss(animated: true)
+            })
+            .map { AddReactor.Action.updateDateString }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     
     func bind(reactor: HomeReactor) {
@@ -190,6 +191,10 @@ extension DateFilterViewController {
             }
             .disposed(by: disposeBag)
         saveButton.rx.tap
+            .do(onNext: { [weak self] in
+                guard let self = self, self.presentingViewController != nil else { return }
+                self.dismiss(animated: true)
+            })
             .withUnretained(self)
             .map { ( vc, _ ) -> Date? in
                 return vc.cmDatePicker.selectedDate
