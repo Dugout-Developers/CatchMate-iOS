@@ -29,8 +29,8 @@ final class ServerLoginDataSourceImpl: ServerLoginDataSource {
         let parameters: [String: Any] = [
             "providerId": request.providerId,
             "provider": request.provider,
-            "email": request.email,
-            "picture": request.picture,
+//            "email": request.email,
+//            "picture": request.picture,
             "fcmToken": request.fcmToken
         ]
         

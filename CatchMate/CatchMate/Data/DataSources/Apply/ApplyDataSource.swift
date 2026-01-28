@@ -32,7 +32,7 @@ final class ApplyDataSourceImpl: ApplyDataSource {
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         let parameters: [String: Any] = ["description": addInfo]
 
@@ -55,7 +55,7 @@ final class ApplyDataSourceImpl: ApplyDataSource {
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         LoggerService.shared.log("토큰 확인: \(headers)")
         

@@ -33,7 +33,7 @@ final class BlockManageDataSourceImpl: BlockManageDataSource {
         }
 
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         
         let addEndPoint = "\(userId)"
@@ -61,7 +61,7 @@ final class BlockManageDataSourceImpl: BlockManageDataSource {
         }
         
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         
         let addEndPoint = "\(userId)"

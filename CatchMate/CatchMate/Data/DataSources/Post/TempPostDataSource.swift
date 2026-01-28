@@ -31,7 +31,7 @@ final class TempPostDataSourceImpl: TempPostDataSource {
         }
         
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         
         let jsonDictionary = encodingData(post)

@@ -31,7 +31,7 @@ final class ExitChatRoomDataSourceImpl: ExitChatRoomDataSource {
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         let addEndPoint = "\(roomId)"
         

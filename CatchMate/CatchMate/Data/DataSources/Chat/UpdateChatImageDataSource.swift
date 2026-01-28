@@ -33,7 +33,7 @@ final class UpdateChatImageDataSourceImpl: UpdateChatImageDataSource {
         }
     
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         
         return Observable.create { observer in

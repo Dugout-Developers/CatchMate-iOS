@@ -31,7 +31,7 @@ final class UserPostLoadDataSourceImpl: UserPostLoadDataSource {
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         
         let paramters: [String: Any] = [

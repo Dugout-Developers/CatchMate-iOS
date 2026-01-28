@@ -32,7 +32,7 @@ final class LoadBlockUsersDataSourceImpl: LoadBlockUsersDataSource {
         }
 
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         
         let parameters: [String: Any] = [

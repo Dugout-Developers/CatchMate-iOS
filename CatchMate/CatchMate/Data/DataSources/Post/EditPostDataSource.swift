@@ -30,7 +30,7 @@ final class EditPostDataSourceImpl: EditPostDataSource {
         }
         
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
 
         guard let parameters = post.encodingData() else {

@@ -31,7 +31,7 @@ final class DeletePostDataSourceImpl: DeletePostDataSource {
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         
         return APIService.shared.performRequest(addEndPoint: "\(postId)", type: .removePost, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: DeletePostResponseDTO.self, refreshToken: refreshToken)

@@ -31,7 +31,7 @@ final class NotificationListDataSourceImpl: NotificationListDataSource {
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         let paramerters: [String: Any] = [
             "page": page

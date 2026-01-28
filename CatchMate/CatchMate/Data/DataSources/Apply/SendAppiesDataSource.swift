@@ -32,7 +32,7 @@ final class SendAppiesDataSourceImpl: SendAppiesDataSource {
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
 
         let parameters: [String: Any] = [
@@ -55,7 +55,7 @@ final class SendAppiesDataSourceImpl: SendAppiesDataSource {
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         
         let addEndPoint = "\(boardId)/description"

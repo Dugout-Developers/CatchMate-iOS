@@ -32,7 +32,7 @@ final class SetFavoriteDataSourceImpl: SetFavoriteDataSource {
         }
         
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         
         
@@ -57,7 +57,7 @@ final class SetFavoriteDataSourceImpl: SetFavoriteDataSource {
         }
         
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
 
         return APIService.shared.performRequest(addEndPoint: boardID, type: .deleteFavorite, parameters: nil, headers: headers, encoding: URLEncoding.queryString, dataType: FavoriteResponse.self, refreshToken: refreshToken)

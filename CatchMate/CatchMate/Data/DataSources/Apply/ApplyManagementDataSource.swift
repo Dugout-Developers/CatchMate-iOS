@@ -32,7 +32,7 @@ final class ApplyManagementDataSourceImpl: ApplyManagementDataSource {
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         let addEndpoint = "\(enrollId)/accept"
         return APIService.shared.performRequest(addEndPoint: addEndpoint, type: .acceptApply, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: ApplyManagementResponse.self, refreshToken: refreshToken)
@@ -59,7 +59,7 @@ final class ApplyManagementDataSourceImpl: ApplyManagementDataSource {
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         let addEndpoint = "\(enrollId)/reject"
         return APIService.shared.performRequest(addEndPoint: addEndpoint, type: .rejectApply, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: ApplyManagementResponse.self, refreshToken: refreshToken)

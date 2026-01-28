@@ -32,7 +32,7 @@ final class RecivedCountDataSourceImpl: ReceivedCountDataSource {
         }
         
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         return APIService.shared.performRequest(type: .receivedCount, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: RecivedCountResultDTO.self, refreshToken: refreshToken)
             .catch { error in

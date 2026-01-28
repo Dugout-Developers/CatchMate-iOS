@@ -31,7 +31,7 @@ final class LoadFavoriteListDataSourceImpl: LoadFavoriteListDataSource {
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         
         var parameters: [String: Any] = [:]
