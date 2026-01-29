@@ -10,13 +10,13 @@ import UIKit
 struct UserDTO: Codable {
     let userId: Int
     let email, profileImageUrl, gender, nickName, birthDate: String
-    let favoriteClub: FavoriteClub
+    let club: FavoriteClub
     let watchStyle: String?
-    let allAlarm, chatAlarm, enrollAlarm, eventAlarm: String
+//    let allAlarm, chatAlarm, enrollAlarm, eventAlarm: String
 }
 
 struct FavoriteClub: Codable {
-    let id: Int
+    let clubId: Int
     let name: String
     let homeStadium: String
     let region: String

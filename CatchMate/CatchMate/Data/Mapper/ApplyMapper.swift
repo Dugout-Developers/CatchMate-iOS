@@ -17,7 +17,7 @@ final class ApplyMapper {
     }
     
     func userInfoMapping(_ dto: UserInfo) -> SimpleUser? {
-        guard let favoriteClub = Team(serverId: dto.favoriteClub.id) else {
+        guard let favoriteClub = Team(serverId: dto.favoriteClub.clubId) else {
             LoggerService.shared.log("Apply UserInfo - 응원 구단 매칭 실패")
             return nil
         }

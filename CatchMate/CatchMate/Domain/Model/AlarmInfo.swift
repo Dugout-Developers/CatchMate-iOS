@@ -38,9 +38,13 @@ struct AlarmInfo {
     }
     
     init(user: User) {
-        self.all = user.allAlarm
-        self.apply = user.enrollAlarm
-        self.chat = user.chatAlarm
-        self.event = user.eventAlarm
+//        self.all = user.allAlarm
+//        self.apply = user.enrollAlarm
+//        self.chat = user.chatAlarm
+//        self.event = user.eventAlarm
+        self.all = false
+        self.apply = false
+        self.chat = false
+        self.event = false
     }
 }
