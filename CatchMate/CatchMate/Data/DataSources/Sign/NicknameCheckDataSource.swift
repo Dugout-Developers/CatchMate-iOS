@@ -19,7 +19,7 @@ final class NicknameCheckDataSourceImpl: NicknameCheckDataSource {
         guard let base = Bundle.main.baseURL else {
             return Observable.error(NetworkError.notFoundBaseURL)
         }
-        let url = base + "/auth/check-nickname"
+        let url = base + "/api/users/check-nickname"
         let urlString = url + "?" + "nickName=\(nickname)"
 
         return RxAlamofire.requestJSON(.get, urlString)

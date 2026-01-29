@@ -11,7 +11,7 @@ enum Team: String, CaseIterable, Codable {
     case nc = "다이노스"
     case samsung = "라이온즈"
     case ssg = "랜더스"
-    case dosun = "베어스"
+    case doosan = "베어스"
     case kt = "위즈"
     case hanhwa = "이글스"
     case lotte = "자이언츠"
@@ -30,7 +30,7 @@ enum Team: String, CaseIterable, Codable {
         case "신세계":
             self = .ssg
         case "두산":
-            self = .dosun
+            self = .doosan
         case "케이티":
             self = .kt
         case "한화":
@@ -55,23 +55,23 @@ enum Team: String, CaseIterable, Codable {
     init?(serverId: Int) {
         switch serverId {
         case 1:
-            self = .kia
-        case 2:
-            self = .samsung
-        case 3:
             self = .lg
-        case 4:
-            self = .dosun
-        case 5:
+        case 2:
             self = .kt
-        case 6:
+        case 3:
             self = .ssg
+        case 4:
+            self = .nc
+        case 5:
+            self = .doosan
+        case 6:
+            self = .kia
         case 7:
             self = .lotte
         case 8:
-            self = .hanhwa
+            self = .samsung
         case 9:
-            self = .nc
+            self = .hanhwa
         case 10:
             self = .kiwoom
         case 11:
@@ -86,23 +86,23 @@ enum Team: String, CaseIterable, Codable {
     var serverId: Int {
         switch self {
         case .nc:
-            return 9
-        case .samsung:
-            return 2
-        case .ssg:
-            return 6
-        case .dosun:
             return 4
-        case .kt:
-            return 5
-        case .hanhwa:
+        case .samsung:
             return 8
+        case .ssg:
+            return 3
+        case .doosan:
+            return 5
+        case .kt:
+            return 2
+        case .hanhwa:
+            return 9
         case .lotte:
             return 7
         case .kia:
-            return 1
+            return 6
         case .lg:
-            return 3
+            return 1
         case .kiwoom:
             return 10
         case .allTeamLove:
@@ -119,7 +119,7 @@ enum Team: String, CaseIterable, Codable {
             "삼성라이온즈"
         case .ssg:
             "신세계랜더스"
-        case .dosun:
+        case .doosan:
             "두산베어스"
         case .kt:
             "케이티위즈"
@@ -148,7 +148,7 @@ enum Team: String, CaseIterable, Codable {
             "삼성"
         case .ssg:
             "신세계"
-        case .dosun:
+        case .doosan:
             "두산"
         case .kt:
             "케이티"
@@ -176,7 +176,7 @@ enum Team: String, CaseIterable, Codable {
             return ["대구", "포항"]
         case .ssg:
             return ["인천"]
-        case .dosun:
+        case .doosan:
             return ["잠실"]
         case .kt:
             return ["수원"]
@@ -204,7 +204,7 @@ enum Team: String, CaseIterable, Codable {
             return UIImage(named: "landers")
         case .kia:
             return UIImage(named: "tigers")
-        case .dosun:
+        case .doosan:
             return UIImage(named: "bears")
         case .hanhwa:
             return UIImage(named: "eagles")
@@ -233,7 +233,7 @@ enum Team: String, CaseIterable, Codable {
             return UIImage(named: "landers_fill")
         case .kia:
             return UIImage(named: "tigers_fill")
-        case .dosun:
+        case .doosan:
             return UIImage(named: "bears_fill")
         case .hanhwa:
             return UIImage(named: "eagles_fill")
@@ -262,7 +262,7 @@ enum Team: String, CaseIterable, Codable {
             return UIImage(named: "landers_logo")
         case .kia:
             return UIImage(named: "tigers_logo")
-        case .dosun:
+        case .doosan:
             return UIImage(named: "bears_logo")
         case .hanhwa:
             return UIImage(named: "eagles_logo")
@@ -291,7 +291,7 @@ enum Team: String, CaseIterable, Codable {
             return UIColor(hex: "#BD272C")
         case .kia:
             return UIColor(hex: "#D62E34")
-        case .dosun:
+        case .doosan:
             return UIColor(hex: "#12122E")
         case .hanhwa:
             return UIColor(hex: "#ED702D")

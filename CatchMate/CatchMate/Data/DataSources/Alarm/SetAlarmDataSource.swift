@@ -30,7 +30,7 @@ final class SetAlarmDataSourceImpl: SetAlarmDataSource {
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         let parameters: [String: Any] = [
             "alarmType": type,

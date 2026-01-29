@@ -51,7 +51,7 @@ final class NotificationService {
         }
 
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         let parmeters: [String: Any] = [
             "alarmType": "ALL",

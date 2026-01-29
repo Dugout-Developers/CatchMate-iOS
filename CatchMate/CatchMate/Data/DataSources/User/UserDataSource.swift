@@ -33,7 +33,7 @@ final class UserDataSourceImpl: UserDataSource {
         }
 
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         
         return APIService.shared.performRequest(type: .loadMyInfo, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: UserDTO.self, refreshToken: refreshToken)

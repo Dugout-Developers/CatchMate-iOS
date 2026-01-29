@@ -31,7 +31,7 @@ final class DeleteNotificationDataSourceImpl: DeleteNotificationDataSource {
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         
         return APIService.shared.performRequest(addEndPoint: "\(notificationId)", type: .deleteNoti, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: StateResponseDTO.self, refreshToken: refreshToken)

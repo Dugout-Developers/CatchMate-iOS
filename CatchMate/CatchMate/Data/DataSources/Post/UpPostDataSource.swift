@@ -32,7 +32,7 @@ final class UpPostDataSourceImpl: UpPostDataSource {
         }
         
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         let addEndPoint = "\(postId)/lift-up"
         

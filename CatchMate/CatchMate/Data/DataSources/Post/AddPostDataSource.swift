@@ -31,7 +31,7 @@ final class AddPostDataSourceImpl: AddPostDataSource {
         }
         
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         
         guard let jsonDictionary = post.encodingData() else {

@@ -16,7 +16,7 @@ struct User: Codable, Equatable {
     let gener: Gender
     let cheerStyle: CheerStyles?
     let profilePicture: String?
-    let allAlarm, chatAlarm, enrollAlarm, eventAlarm: Bool
+//    let allAlarm, chatAlarm, enrollAlarm, eventAlarm: Bool
     
     var age: UInt {
         guard let birthdate = DateHelper.shared.toDate(from: birth, format: "yyyy-MM-dd") else {

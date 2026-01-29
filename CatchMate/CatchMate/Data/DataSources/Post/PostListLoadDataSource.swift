@@ -45,7 +45,8 @@ final class PostListLoadDataSourceImpl: PostListLoadDataSource {
                 LoggerService.shared.log(level: .debug, "엑세스 토큰 찾기 실패")
                 return Observable.error(TokenError.notFoundAccessToken)
             }
-            headers["AccessToken"] = token
+            LoggerService.shared.log(level: .debug, "엑세스 토큰 있음: \(token)")
+            headers["Authorization"] = token
         }
         return APIService.shared.performRequest(type: .postlist, parameters: parameters, headers: isGuest ? nil : headers, encoding: CustomURLEncoding.default, dataType: PostListDTO.self, refreshToken: refreshToken)
             .catch { error in

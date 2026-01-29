@@ -31,7 +31,7 @@ final class ExportChatUserDataSourceImpl: ExportChatUserDataSource {
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         let addEndPoint = "\(roomId)/users/\(userId)"
         

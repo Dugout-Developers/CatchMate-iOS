@@ -33,7 +33,7 @@ final class LoadChatUsersDataSourceImpl: LoadChatUsersDataSource {
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         let addEndPoint = "\(chatId)/user-list"
         

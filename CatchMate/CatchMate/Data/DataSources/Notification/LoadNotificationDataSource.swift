@@ -31,7 +31,7 @@ final class LoadNotificationDataSourceImpl: LoadNotificationDataSource {
             return Observable.error(TokenError.notFoundRefreshToken)
         }
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
      
         return APIService.shared.performRequest(addEndPoint: "\(id)", type: .notification, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: NotificationDTO.self, refreshToken: refreshToken)

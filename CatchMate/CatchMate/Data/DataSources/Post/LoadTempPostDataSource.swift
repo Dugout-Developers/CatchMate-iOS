@@ -30,7 +30,7 @@ final class LoadTempPostDataSourceImpl: LoadTempPostDataSource {
         }
         
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         
         return APIService.shared.performRequest(type: .loadTempPost, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: PostDTO?.self, refreshToken: refreshToken)

@@ -8,9 +8,9 @@
 import UIKit
 
 enum LoginType: String {
-    case kakao
-    case naver
-    case apple
+    case kakao = "KAKAO"
+    case naver = "NAVER"
+    case apple = "APPLE"
 }
 
 struct SNSLoginResponse {

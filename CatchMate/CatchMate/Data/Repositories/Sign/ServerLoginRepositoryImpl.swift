@@ -20,7 +20,7 @@ final class ServerLoginRepositoryImpl: ServerLoginRepository {
             .map({ response in
                 if let provider = LoginType(rawValue: snsModel.loginType) {
                     let gender = Gender(rawValue: snsModel.gender ?? "")
-                    return LoginModel(email: snsModel.email, provider: provider, providerId: snsModel.id, accessToken: response.accessToken, refreshToken: response.refreshToken, isFirstLogin: response.isFirstLogin, fcmToken: token, imageString: snsModel.imageUrl, nickName: snsModel.nickName, birth: snsModel.birth, gender: gender)
+                    return LoginModel(email: snsModel.email, provider: provider, providerId: snsModel.id, accessToken: response.accessToken, refreshToken: response.refreshToken, isFirstLogin: response.signupRequired, fcmToken: token, imageString: snsModel.imageUrl, nickName: snsModel.nickName, birth: snsModel.birth, gender: gender)
                 } else {
                     throw CodableError.decodingFailed 
                 }

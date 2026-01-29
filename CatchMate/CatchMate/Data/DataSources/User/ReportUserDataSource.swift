@@ -32,7 +32,7 @@ final class ReportUserDataSourceImpl: ReportUserDataSource {
         }
 
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         guard let parameters = APIService.shared.convertToDictionary(reportInfo) else {
             LoggerService.shared.log(level: .debug, "파라미터 인코딩 실패")

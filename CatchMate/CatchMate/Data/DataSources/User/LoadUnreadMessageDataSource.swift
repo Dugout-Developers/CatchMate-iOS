@@ -35,7 +35,7 @@ final class LoadUnreadMessageDataSourceImpl: LoadUnreadMessageDataSource {
         }
         
         let headers: HTTPHeaders = [
-            "AccessToken": token
+            "Authorization": token
         ]
         
         return  APIService.shared.performRequest(type: .unreadMessage, parameters: nil, headers: headers, encoding: URLEncoding.default, dataType: UnreadMessageDTO.self, refreshToken: refreshToken)

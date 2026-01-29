@@ -14,6 +14,7 @@ final class APIService {
     
     private let maxRetryCount = 1
     private var baseURL = Bundle.main.baseURL
+    private let apiPrefix = "/api"
     private let disposeBag = DisposeBag()
     
     func convertToDictionary<T: Encodable>(_ encodable: T) -> [String: Any]? {
@@ -36,6 +37,7 @@ final class APIService {
         return requestAPI(addEndPoint: addEndPoint, type: type, parameters: parameters, headers: headers, encoding: encoding, dataType: dataType)
             .timeout(.seconds(10), scheduler: MainScheduler.instance)
             .catch { [weak self] error in
+                LoggerService.shared.log("\(error)")
                 guard let self = self else {
                     return Observable.error(OtherError.notFoundSelf(location: "APIService-performRequest"))
                 }
@@ -68,7 +70,7 @@ final class APIService {
             LoggerService.shared.log(level: .debug, "Base URL 찾을 수 없음")
             return Observable.error(NetworkError.notFoundBaseURL)
         }
-        var url = base + type.endPoint
+        var url = base + apiPrefix + type.endPoint
         if let addEndPoint = addEndPoint {
             url += addEndPoint
         }
@@ -110,7 +112,7 @@ final class APIService {
         }
 
         LoggerService.shared.log(level: .debug, "Refresh Token: \(refreshToken)")
-        let url = base + "/auth/reissue"
+        let url = base + "/api/auth/reissue"
         let headers: HTTPHeaders = [
             "RefreshToken": refreshToken
         ]
