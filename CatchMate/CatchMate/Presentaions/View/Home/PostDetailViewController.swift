@@ -476,7 +476,7 @@ extension PostDetailViewController {
         if state {
             favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withTintColor(.cmPrimaryColor, renderingMode: .alwaysOriginal), for: .normal)
             if reactor.currentState.isLoadSetting {
-                showToast(message: "게시물을 저장했어요", buttonContainerExists: true)
+                showToast(message: "관심 목록에 추가했어요", buttonContainerExists: true)
             }
         } else {
             favoriteButton.setImage(UIImage(named: "favoriteGray_filled")?.withRenderingMode(.alwaysOriginal), for: .normal)

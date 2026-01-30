@@ -39,7 +39,7 @@ final class FavoriteListViewController: BaseViewController ,View {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupLeftTitle("찜 목록")
+        setupLeftTitle("관심 목록")
         setupTableview()
         setupUI()
         bind(reactor: reactor)
